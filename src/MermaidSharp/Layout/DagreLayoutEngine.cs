@@ -1,4 +1,4 @@
-namespace MermaidSharp.Layout;
+namespace MermaidSharp;
 
 public class DagreLayoutEngine : ILayoutEngine
 {

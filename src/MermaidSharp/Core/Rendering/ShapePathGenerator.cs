@@ -1,4 +1,4 @@
-namespace MermaidSharp.Rendering;
+namespace MermaidSharp;
 
 public static class ShapePathGenerator
 {

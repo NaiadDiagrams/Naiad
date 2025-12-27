@@ -27,6 +27,5 @@ global using MermaidSharp.Diagrams.XYChart;
 global using MermaidSharp.Layout;
 global using MermaidSharp.Layout.Dagre;
 global using MermaidSharp.Models;
-global using MermaidSharp.Parsing;
 global using MermaidSharp.Rendering;
 global using Pidgin;
