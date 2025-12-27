@@ -1,7 +1,3 @@
-using System.Globalization;
-using MermaidSharp;
-using MermaidSharp.Models;
-using MermaidSharp.Rendering;
 using MermaidSharp.Layout;
 
 namespace MermaidSharp.Diagrams.Flowchart;

@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Pie;
 
 public class PieModel : DiagramBase

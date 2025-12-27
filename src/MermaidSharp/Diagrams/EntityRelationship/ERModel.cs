@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.EntityRelationship;
 
 public class ERModel : DiagramBase

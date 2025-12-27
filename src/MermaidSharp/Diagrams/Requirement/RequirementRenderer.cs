@@ -1,7 +1,3 @@
-using System.Globalization;
-using MermaidSharp;
-using MermaidSharp.Rendering;
-
 namespace MermaidSharp.Diagrams.Requirement;
 
 public class RequirementRenderer : IDiagramRenderer<RequirementModel>

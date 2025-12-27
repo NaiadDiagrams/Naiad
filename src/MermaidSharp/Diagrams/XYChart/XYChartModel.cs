@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.XYChart;
 
 public class XYChartModel : DiagramBase

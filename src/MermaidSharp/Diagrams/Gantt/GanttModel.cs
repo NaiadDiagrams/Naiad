@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Gantt;
 
 public class GanttModel : DiagramBase

@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Mindmap;
 
 public class MindmapModel : DiagramBase

@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Treemap;
 
 public class TreemapModel : DiagramBase

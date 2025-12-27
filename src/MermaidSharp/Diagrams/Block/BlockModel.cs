@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Block;
 
 public class BlockModel : DiagramBase

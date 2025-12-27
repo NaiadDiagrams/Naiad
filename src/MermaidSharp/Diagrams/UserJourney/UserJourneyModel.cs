@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.UserJourney;
 
 public class UserJourneyModel : DiagramBase

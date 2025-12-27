@@ -1,6 +1,3 @@
-using System.Globalization;
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Rendering;
 
 public static class ShapePathGenerator

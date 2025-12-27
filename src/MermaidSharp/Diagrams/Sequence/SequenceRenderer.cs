@@ -1,7 +1,3 @@
-using System.Globalization;
-using MermaidSharp;
-using MermaidSharp.Rendering;
-
 namespace MermaidSharp.Diagrams.Sequence;
 
 public class SequenceRenderer : IDiagramRenderer<SequenceModel>

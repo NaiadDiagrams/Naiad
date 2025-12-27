@@ -1,8 +1,3 @@
-using System.Globalization;
-using MermaidSharp;
-using MermaidSharp.Models;
-using MermaidSharp.Rendering;
-
 namespace MermaidSharp.Diagrams.GitGraph;
 
 public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>

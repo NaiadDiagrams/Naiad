@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Architecture;
 
 public class ArchitectureModel : DiagramBase

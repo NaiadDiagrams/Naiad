@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.GitGraph;
 
 public class GitGraphModel : DiagramBase

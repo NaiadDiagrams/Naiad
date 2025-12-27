@@ -1,4 +1,3 @@
-using MermaidSharp.Rendering;
 using MermaidSharp.Diagrams.Class;
 using MermaidSharp.Diagrams.EntityRelationship;
 using MermaidSharp.Diagrams.Flowchart;

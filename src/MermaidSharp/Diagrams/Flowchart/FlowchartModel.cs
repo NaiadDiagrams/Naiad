@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Flowchart;
 
 public class FlowchartModel : GraphDiagramBase

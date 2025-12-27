@@ -1,5 +1,3 @@
-using MermaidSharp;
-
 namespace MermaidSharp.Layout.Dagre;
 
 internal static class Ranker

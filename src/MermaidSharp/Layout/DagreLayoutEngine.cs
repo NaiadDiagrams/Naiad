@@ -1,5 +1,3 @@
-using MermaidSharp;
-using MermaidSharp.Models;
 using MermaidSharp.Layout.Dagre;
 
 namespace MermaidSharp.Layout;

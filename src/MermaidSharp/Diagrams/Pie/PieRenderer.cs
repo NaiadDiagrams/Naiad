@@ -1,8 +1,3 @@
-using System.Globalization;
-using MermaidSharp;
-using MermaidSharp.Models;
-using MermaidSharp.Rendering;
-
 namespace MermaidSharp.Diagrams.Pie;
 
 public class PieRenderer : IDiagramRenderer<PieModel>

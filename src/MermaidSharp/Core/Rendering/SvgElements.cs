@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.Text;
-using MermaidSharp.Models;
 
 namespace MermaidSharp.Rendering;
 

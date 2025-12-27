@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Quadrant;
 
 public class QuadrantModel : DiagramBase

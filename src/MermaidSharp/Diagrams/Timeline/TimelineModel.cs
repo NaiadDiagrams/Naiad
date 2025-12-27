@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Timeline;
 
 public class TimelineModel : DiagramBase

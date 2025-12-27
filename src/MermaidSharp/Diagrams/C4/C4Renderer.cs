@@ -1,7 +1,3 @@
-using System.Globalization;
-using MermaidSharp;
-using MermaidSharp.Rendering;
-
 namespace MermaidSharp.Diagrams.C4;
 
 public class C4Renderer : IDiagramRenderer<C4Model>

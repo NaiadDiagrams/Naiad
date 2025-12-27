@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Layout.Dagre;
 
 internal static class CoordinateAssignment

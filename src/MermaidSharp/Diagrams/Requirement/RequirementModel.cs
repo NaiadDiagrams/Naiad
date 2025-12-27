@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Requirement;
 
 public class RequirementModel : DiagramBase

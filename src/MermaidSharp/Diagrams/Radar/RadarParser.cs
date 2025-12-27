@@ -1,6 +1,3 @@
-using MermaidSharp;
-using MermaidSharp.Parsing;
-using Pidgin;
 using static Pidgin.Parser;
 using static Pidgin.Parser<char>;
 

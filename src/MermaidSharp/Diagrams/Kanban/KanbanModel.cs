@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Kanban;
 
 public class KanbanModel : DiagramBase

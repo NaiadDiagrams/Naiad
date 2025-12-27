@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Sequence;
 
 public class SequenceModel : DiagramBase

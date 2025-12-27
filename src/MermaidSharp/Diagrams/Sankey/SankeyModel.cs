@@ -1,5 +1,3 @@
-using MermaidSharp.Models;
-
 namespace MermaidSharp.Diagrams.Sankey;
 
 public class SankeyModel : DiagramBase
