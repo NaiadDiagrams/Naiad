@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.GitGraph;
-
 public class GitGraphRendererTests
 {
     [Test]

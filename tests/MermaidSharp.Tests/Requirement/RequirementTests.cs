@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Requirement;
-
 public class RequirementTests
 {
     [Test]

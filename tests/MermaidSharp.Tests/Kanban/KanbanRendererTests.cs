@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Kanban;
-
 public class KanbanRendererTests
 {
     [Test]

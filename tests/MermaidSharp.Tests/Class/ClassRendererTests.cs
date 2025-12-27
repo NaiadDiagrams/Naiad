@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Class;
-
 public class ClassRendererTests
 {
     [Test]

@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Gantt;
-
 public class GanttRendererTests
 {
     [Test]

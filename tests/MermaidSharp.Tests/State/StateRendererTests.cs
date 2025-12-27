@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.State;
-
 public class StateRendererTests
 {
     [Test]

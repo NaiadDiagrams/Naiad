@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.EntityRelationship;
-
 public class ERRendererTests
 {
     [Test]

@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Sankey;
-
 public class SankeyRendererTests
 {
     [Test]

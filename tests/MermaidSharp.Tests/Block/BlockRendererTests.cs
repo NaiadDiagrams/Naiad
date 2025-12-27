@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Block;
-
 public class BlockRendererTests
 {
     [Test]

@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.C4;
-
 public class C4RendererTests
 {
     [Test]

@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Pie;
-
 public class PieRendererTests
 {
     [Test]

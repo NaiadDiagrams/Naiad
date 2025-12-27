@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Treemap;
-
 public class TreemapTests
 {
     [Test]

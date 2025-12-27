@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Quadrant;
-
 public class QuadrantRendererTests
 {
     [Test]

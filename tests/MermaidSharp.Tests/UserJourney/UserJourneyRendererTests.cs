@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.UserJourney;
-
 public class UserJourneyRendererTests
 {
     [Test]

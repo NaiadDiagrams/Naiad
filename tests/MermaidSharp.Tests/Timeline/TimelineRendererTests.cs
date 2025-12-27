@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Timeline;
-
 public class TimelineRendererTests
 {
     [Test]

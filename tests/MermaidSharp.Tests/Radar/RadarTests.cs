@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Radar;
-
 public class RadarTests
 {
     [Test]

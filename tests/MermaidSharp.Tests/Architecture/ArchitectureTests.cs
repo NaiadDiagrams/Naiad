@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Architecture;
-
 public class ArchitectureTests
 {
     [Test]

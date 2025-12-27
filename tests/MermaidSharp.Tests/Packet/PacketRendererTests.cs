@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Packet;
-
 public class PacketRendererTests
 {
     [Test]

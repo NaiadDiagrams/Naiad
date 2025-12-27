@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Flowchart;
-
 public class FlowchartRendererTests
 {
     [Test]

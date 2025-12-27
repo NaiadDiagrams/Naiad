@@ -1,5 +1,3 @@
-namespace MermaidSharp.Tests.Mindmap;
-
 public class MindmapRendererTests
 {
     [Test]
