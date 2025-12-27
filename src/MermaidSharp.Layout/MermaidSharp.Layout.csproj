@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MermaidSharp.Layout</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MermaidSharp.Core\MermaidSharp.Core.csproj" />
+  </ItemGroup>
+
+</Project>

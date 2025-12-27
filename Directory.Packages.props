@@ -1,0 +1,10 @@
+<Project>
+  <ItemGroup>
+    <!-- Parsing -->
+    <PackageVersion Include="Pidgin" Version="3.5.1" />
+
+    <!-- Testing -->
+    <PackageVersion Include="TUnit" Version="1.6.28" />
+    <PackageVersion Include="Verify.TUnit" Version="31.9.3" />
+  </ItemGroup>
+</Project>
