@@ -1,26 +1,3 @@
-using MermaidSharp.Diagrams.Class;
-using MermaidSharp.Diagrams.EntityRelationship;
-using MermaidSharp.Diagrams.Flowchart;
-using MermaidSharp.Diagrams.Gantt;
-using MermaidSharp.Diagrams.GitGraph;
-using MermaidSharp.Diagrams.Mindmap;
-using MermaidSharp.Diagrams.Pie;
-using MermaidSharp.Diagrams.Sequence;
-using MermaidSharp.Diagrams.State;
-using MermaidSharp.Diagrams.Timeline;
-using MermaidSharp.Diagrams.UserJourney;
-using MermaidSharp.Diagrams.Quadrant;
-using MermaidSharp.Diagrams.XYChart;
-using MermaidSharp.Diagrams.Sankey;
-using MermaidSharp.Diagrams.Block;
-using MermaidSharp.Diagrams.Kanban;
-using MermaidSharp.Diagrams.Packet;
-using MermaidSharp.Diagrams.C4;
-using MermaidSharp.Diagrams.Requirement;
-using MermaidSharp.Diagrams.Architecture;
-using MermaidSharp.Diagrams.Radar;
-using MermaidSharp.Diagrams.Treemap;
-
 namespace MermaidSharp;
 
 public static class Mermaid

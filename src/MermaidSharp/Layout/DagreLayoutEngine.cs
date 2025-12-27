@@ -1,5 +1,3 @@
-using MermaidSharp.Layout.Dagre;
-
 namespace MermaidSharp.Layout;
 
 public class DagreLayoutEngine : ILayoutEngine

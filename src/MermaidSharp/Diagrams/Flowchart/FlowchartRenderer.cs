@@ -1,5 +1,3 @@
-using MermaidSharp.Layout;
-
 namespace MermaidSharp.Diagrams.Flowchart;
 
 public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
