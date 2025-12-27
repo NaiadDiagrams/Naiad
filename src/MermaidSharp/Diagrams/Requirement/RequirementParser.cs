@@ -1,6 +1,3 @@
-using static Pidgin.Parser;
-using static Pidgin.Parser<char>;
-
 namespace MermaidSharp.Diagrams.Requirement;
 
 public class RequirementParser : IDiagramParser<RequirementModel>

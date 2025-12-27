@@ -1,6 +1,3 @@
-using static Pidgin.Parser;
-using static Pidgin.Parser<char>;
-
 namespace MermaidSharp.Diagrams.Radar;
 
 public class RadarParser : IDiagramParser<RadarModel>

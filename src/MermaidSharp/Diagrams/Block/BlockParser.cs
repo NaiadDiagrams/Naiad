@@ -1,6 +1,3 @@
-using static Pidgin.Parser;
-using static Pidgin.Parser<char>;
-
 namespace MermaidSharp.Diagrams.Block;
 
 public class BlockParser : IDiagramParser<BlockModel>

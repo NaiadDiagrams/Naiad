@@ -1,4 +1,4 @@
-namespace MermaidSharp;
+namespace MermaidSharp.Rendering;
 
 public class SvgBuilder
 {

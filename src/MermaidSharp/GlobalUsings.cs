@@ -1,6 +1,7 @@
 ﻿// Global using directives
 
 global using System.Globalization;
+global using System.Text;
 global using MermaidSharp;
 global using MermaidSharp.Diagrams.Architecture;
 global using MermaidSharp.Diagrams.Block;
@@ -27,3 +28,5 @@ global using MermaidSharp.Diagrams.XYChart;
 global using MermaidSharp.Models;
 global using MermaidSharp.Rendering;
 global using Pidgin;
+global using static Pidgin.Parser;
+global using static Pidgin.Parser<char>;

@@ -1,6 +1,3 @@
-using static Pidgin.Parser;
-using static Pidgin.Parser<char>;
-
 namespace MermaidSharp.Diagrams.Treemap;
 
 public class TreemapParser : IDiagramParser<TreemapModel>

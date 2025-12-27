@@ -1,6 +1,3 @@
-using static Pidgin.Parser;
-using static Pidgin.Parser<char>;
-
 namespace MermaidSharp.Diagrams.EntityRelationship;
 
 public class ERParser : IDiagramParser<ERModel>

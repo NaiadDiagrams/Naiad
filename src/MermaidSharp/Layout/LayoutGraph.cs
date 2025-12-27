@@ -1,4 +1,4 @@
-namespace MermaidSharp;
+namespace MermaidSharp.Layout;
 
 class LayoutGraph
 {

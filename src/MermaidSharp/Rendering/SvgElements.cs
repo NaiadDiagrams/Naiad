@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace MermaidSharp.Rendering;
 
 public abstract class SvgElement
@@ -79,14 +77,14 @@ public class SvgCircle : SvgElement
 
     public override string ToXml()
     {
-        var sb = new StringBuilder();
-        sb.Append($"<circle cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" r=\"{Fmt(R)}\"");
-        if (Fill is not null) sb.Append($" fill=\"{Fill}\"");
-        if (Stroke is not null) sb.Append($" stroke=\"{Stroke}\"");
-        if (StrokeWidth.HasValue) sb.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
-        sb.Append(CommonAttributes());
-        sb.Append(" />");
-        return sb.ToString();
+        var builder = new StringBuilder();
+        builder.Append($"<circle cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" r=\"{Fmt(R)}\"");
+        if (Fill is not null) builder.Append($" fill=\"{Fill}\"");
+        if (Stroke is not null) builder.Append($" stroke=\"{Stroke}\"");
+        if (StrokeWidth.HasValue) builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
+        builder.Append(CommonAttributes());
+        builder.Append(" />");
+        return builder.ToString();
     }
 }
 
