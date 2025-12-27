@@ -11,7 +11,7 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -60,7 +60,7 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -76,7 +76,7 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -121,6 +121,6 @@ public class TimelineRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 }

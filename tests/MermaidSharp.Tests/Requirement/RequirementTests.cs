@@ -15,7 +15,7 @@ public class RequirementTests
             """;
 
         var svg = Mermaid.Render(input);
-        await Verify(svg);
+        await Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -33,7 +33,7 @@ public class RequirementTests
             """;
 
         var svg = Mermaid.Render(input);
-        await Verify(svg);
+        await Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class RequirementTests
             """;
 
         var svg = Mermaid.Render(input);
-        await Verify(svg);
+        await Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class RequirementTests
             """;
 
         var svg = Mermaid.Render(input);
-        await Verify(svg);
+        await Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -122,7 +122,7 @@ public class RequirementTests
             """;
 
         var svg = Mermaid.Render(input);
-        await Verify(svg);
+        await Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -151,6 +151,6 @@ public class RequirementTests
             """;
 
         var svg = Mermaid.Render(input);
-        await Verify(svg);
+        await Verify(svg, extension: "svg");
     }
 }

@@ -10,7 +10,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -40,7 +40,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -100,7 +100,7 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -114,6 +114,6 @@ public class SequenceRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 }

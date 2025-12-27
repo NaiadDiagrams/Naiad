@@ -12,7 +12,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -29,7 +29,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -71,7 +71,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -101,7 +101,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -118,7 +118,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -136,7 +136,7 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -161,6 +161,6 @@ public class MindmapRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 }

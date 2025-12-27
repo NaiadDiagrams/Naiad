@@ -9,7 +9,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -69,7 +69,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -82,7 +82,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -106,7 +106,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -121,7 +121,7 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 
     [Test]
@@ -144,6 +144,6 @@ public class ClassRendererTests
             """;
 
         var svg = Mermaid.Render(input);
-        return Verify(svg);
+        return Verify(svg, extension: "svg");
     }
 }
