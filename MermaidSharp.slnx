@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MermaidSharp/MermaidSharp.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MermaidSharp.Tests/MermaidSharp.Tests.csproj" />
+  </Folder>
+</Solution>
