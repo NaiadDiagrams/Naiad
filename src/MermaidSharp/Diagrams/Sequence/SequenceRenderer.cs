@@ -93,9 +93,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     {
         return element switch
         {
-            Message => MessageSpacing,
-            Note => NoteHeight + 10,
-            Activation => 0, // Activations don't add height
+            MessageElement => MessageSpacing,
+            NoteElement => NoteHeight + 10,
+            ActivationElement => 0, // Activations don't add height
             _ => MessageSpacing
         };
     }
@@ -217,7 +217,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
             switch (element)
             {
-                case Message msg:
+                case MessageElement msg:
                     messageNumber++;
                     DrawMessage(builder, msg, positions, y, options,
                         model.AutoNumber ? messageNumber : null);
@@ -236,11 +236,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                     }
                     break;
 
-                case Note note:
+                case NoteElement note:
                     DrawNote(builder, note, positions, y, options);
                     break;
 
-                case Activation activation:
+                case ActivationElement activation:
                     if (activation.IsActivate)
                     {
                         activeLifelines[activation.ParticipantId] = y;
@@ -266,7 +266,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawMessage(SvgBuilder builder, Message msg,
+    void DrawMessage(SvgBuilder builder, MessageElement msg,
         Dictionary<string, double> positions, double y,
         RenderOptions options, int? number)
     {
@@ -383,13 +383,13 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawNote(SvgBuilder builder, Note note,
+    void DrawNote(SvgBuilder builder, NoteElement noteElement,
         Dictionary<string, double> positions, double y, RenderOptions options)
     {
-        var participantX = positions[note.ParticipantId];
+        var participantX = positions[noteElement.ParticipantId];
         double noteX;
 
-        switch (note.Position)
+        switch (noteElement.Position)
         {
             case NotePosition.RightOf:
                 noteX = participantX + ParticipantWidth / 2 + 10;
@@ -399,8 +399,8 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                 break;
             case NotePosition.Over:
             default:
-                if (!string.IsNullOrEmpty(note.OverParticipantId2) &&
-                    positions.TryGetValue(note.OverParticipantId2, out var participant2X))
+                if (!string.IsNullOrEmpty(noteElement.OverParticipantId2) &&
+                    positions.TryGetValue(noteElement.OverParticipantId2, out var participant2X))
                 {
                     noteX = (participantX + participant2X) / 2 - NoteWidth / 2;
                 }
@@ -430,7 +430,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                        stroke: "#AAAA33", strokeWidth: 1);
 
         // Note text
-        builder.AddText(noteX + NoteWidth / 2, y + NoteHeight / 2, note.Text,
+        builder.AddText(noteX + NoteWidth / 2, y + NoteHeight / 2, noteElement.Text,
             anchor: "middle",
             baseline: "middle",
             fontSize: $"{options.FontSize}px",

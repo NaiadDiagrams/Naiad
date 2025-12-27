@@ -50,7 +50,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         );
 
     // Message: From->>To: Text
-    static readonly Parser<char, Message> MessageParser =
+    static readonly Parser<char, MessageElement> MessageParser =
         from _ in CommonParsers.InlineWhitespace
         from fromId in SeqIdentifier
         from __ in CommonParsers.InlineWhitespace
@@ -66,7 +66,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
                 .Then(Token(c => c != '\r' && c != '\n').ManyString())
         ).Optional()
         from _____ in CommonParsers.LineEnd
-        select new Message
+        select new MessageElement
         {
             FromId = fromId,
             ToId = toId,
@@ -77,7 +77,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Note: Note right of/left of/over Participant: Text
-    static readonly Parser<char, Note> NoteParser =
+    static readonly Parser<char, NoteElement> NoteParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("Note")).Or(String("note"))
         from __ in CommonParsers.RequiredWhitespace
@@ -98,7 +98,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from _____ in CommonParsers.InlineWhitespace
         from text in Token(c => c != '\r' && c != '\n').ManyString()
         from ______ in CommonParsers.LineEnd
-        select new Note
+        select new NoteElement
         {
             Text = text,
             Position = position,
@@ -107,7 +107,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Activate/Deactivate
-    static readonly Parser<char, Activation> ActivationParser =
+    static readonly Parser<char, ActivationElement> ActivationParser =
         from _ in CommonParsers.InlineWhitespace
         from isActivate in OneOf(
             String("activate").ThenReturn(true),
@@ -116,7 +116,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from __ in CommonParsers.RequiredWhitespace
         from participantId in SeqIdentifier
         from ___ in CommonParsers.LineEnd
-        select new Activation
+        select new ActivationElement
         {
             ParticipantId = participantId,
             IsActivate = isActivate
@@ -179,7 +179,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
                     participantIds.Add(p.Id);
                     break;
 
-                case Message m:
+                case MessageElement m:
                     // Auto-add participants from messages
                     if (!participantIds.Contains(m.FromId))
                     {
@@ -194,11 +194,11 @@ public class SequenceParser : IDiagramParser<SequenceModel>
                     model.Elements.Add(m);
                     break;
 
-                case Note n:
+                case NoteElement n:
                     model.Elements.Add(n);
                     break;
 
-                case Activation a:
+                case ActivationElement a:
                     model.Elements.Add(a);
                     break;
 
