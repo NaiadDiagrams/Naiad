@@ -1,4 +1,4 @@
-using MermaidSharp.Core.Models;
+using MermaidSharp.Models;
 using MermaidSharp.Diagrams.Flowchart;
 using TUnit.Core;
 

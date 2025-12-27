@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MermaidSharp.Core\MermaidSharp.Core.csproj" />
-    <ProjectReference Include="..\MermaidSharp.Layout\MermaidSharp.Layout.csproj" />
-    <ProjectReference Include="..\MermaidSharp.Diagrams\MermaidSharp.Diagrams.csproj" />
+    <PackageReference Include="Pidgin" />
   </ItemGroup>
 
 </Project>
