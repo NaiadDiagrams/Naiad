@@ -24,7 +24,7 @@ public enum ParticipantType
 
 public abstract class SequenceElement { }
 
-public class MessageElement : SequenceElement
+public class Message : SequenceElement
 {
     public required string FromId { get; init; }
     public required string ToId { get; init; }
@@ -48,7 +48,7 @@ public enum MessageType
     DottedAsync      // --)
 }
 
-public class NoteElement : SequenceElement
+public class Note : SequenceElement
 {
     public required string Text { get; init; }
     public NotePosition Position { get; set; } = NotePosition.RightOf;
@@ -63,19 +63,19 @@ public enum NotePosition
     Over
 }
 
-public class ActivationElement : SequenceElement
+public class Activation : SequenceElement
 {
     public required string ParticipantId { get; init; }
     public bool IsActivate { get; set; }
 }
 
-public class LoopElement : SequenceElement
+public class Loop : SequenceElement
 {
     public string? Label { get; set; }
     public List<SequenceElement> Elements { get; } = [];
 }
 
-public class AltElement : SequenceElement
+public class Alt : SequenceElement
 {
     public string? Condition { get; set; }
     public List<SequenceElement> Elements { get; } = [];
@@ -88,13 +88,13 @@ public class AltElse
     public List<SequenceElement> Elements { get; } = [];
 }
 
-public class OptElement : SequenceElement
+public class Opt : SequenceElement
 {
     public string? Condition { get; set; }
     public List<SequenceElement> Elements { get; } = [];
 }
 
-public class ParElement : SequenceElement
+public class Par : SequenceElement
 {
     public string? Label { get; set; }
     public List<SequenceElement> Elements { get; } = [];
@@ -107,19 +107,19 @@ public class ParAnd
     public List<SequenceElement> Elements { get; } = [];
 }
 
-public class CriticalElement : SequenceElement
+public class Critical : SequenceElement
 {
     public string? Label { get; set; }
     public List<SequenceElement> Elements { get; } = [];
 }
 
-public class BreakElement : SequenceElement
+public class Break : SequenceElement
 {
     public string? Label { get; set; }
     public List<SequenceElement> Elements { get; } = [];
 }
 
-public class RectElement : SequenceElement
+public class Rect : SequenceElement
 {
     public string? Color { get; set; }
     public List<SequenceElement> Elements { get; } = [];
