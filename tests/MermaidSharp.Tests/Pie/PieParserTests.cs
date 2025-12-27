@@ -1,5 +1,4 @@
 using MermaidSharp.Diagrams.Pie;
-using TUnit.Core;
 
 namespace MermaidSharp.Tests.Pie;
 

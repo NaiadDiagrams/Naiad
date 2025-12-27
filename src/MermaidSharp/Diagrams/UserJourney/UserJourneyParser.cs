@@ -84,16 +84,16 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
         {
             switch (item)
             {
-                case (string and "title", string value):
+                case ("title", string value):
                     model.Title = value;
                     break;
 
-                case (string and "section", string sectionName):
+                case ("section", string sectionName):
                     currentSection = new JourneySection { Name = sectionName };
                     model.Sections.Add(currentSection);
                     break;
 
-                case (string and "task", JourneyTask task):
+                case ("task", JourneyTask task):
                     if (currentSection == null)
                     {
                         currentSection = new JourneySection();
