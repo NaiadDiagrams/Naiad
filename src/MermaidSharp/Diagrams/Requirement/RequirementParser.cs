@@ -194,15 +194,15 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         {
             switch (item)
             {
-                case (string key, Requirement req) when key == "requirement":
+                case ("requirement", Requirement req):
                     model.Requirements.Add(req);
                     break;
 
-                case (string key, RequirementElement elem) when key == "element":
+                case ("element", RequirementElement elem):
                     model.Elements.Add(elem);
                     break;
 
-                case (string key, RequirementRelation rel) when key == "relation":
+                case ("relation", RequirementRelation rel):
                     model.Relations.Add(rel);
                     break;
             }

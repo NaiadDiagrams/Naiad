@@ -1,6 +1,6 @@
-namespace MermaidSharp.Layout.Dagre;
+namespace MermaidSharp;
 
-internal static class Acyclic
+static class Acyclic
 {
     public static void Run(LayoutGraph graph)
     {

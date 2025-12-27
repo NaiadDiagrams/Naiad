@@ -13,7 +13,7 @@ public static class CommonParsers
         Token(char.IsWhiteSpace).SkipAtLeastOnce();
 
     public static Parser<char, Unit> InlineWhitespace =>
-        Token(c => c == ' ' || c == '\t').SkipMany();
+        Token(c => c is ' ' or '\t').SkipMany();
 
     // Line handling
     public static Parser<char, Unit> Newline =>
@@ -140,7 +140,7 @@ public static class CommonParsers
 
     // Indentation for hierarchical diagrams (mindmap, timeline)
     public static Parser<char, int> Indentation =>
-        Token(c => c == ' ' || c == '\t')
+        Token(c => c is ' ' or '\t')
             .Many()
             .Select(chars => chars.Count(c => c == '\t') * 4 + chars.Count(c => c == ' '));
 

@@ -82,17 +82,17 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         {
             switch (item)
             {
-                case (string key, string value) when key == "title":
+                case ("title", string value):
                     model.Title = value;
                     break;
 
-                case (string key, string sectionName) when key == "section":
+                case ("section", string sectionName):
                     currentSection = new TimelineSection { Name = sectionName };
                     model.Sections.Add(currentSection);
                     currentPeriod = null;
                     break;
 
-                case (string key, string period, string eventText) when key == "period":
+                case ("period", string period, string eventText):
                     if (currentSection == null)
                     {
                         currentSection = new TimelineSection();
@@ -106,7 +106,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
                     currentSection.Periods.Add(currentPeriod);
                     break;
 
-                case (string key, string eventText) when key == "continuation":
+                case ("continuation", string eventText):
                     if (currentPeriod != null && !string.IsNullOrEmpty(eventText))
                     {
                         currentPeriod.Events.Add(eventText);

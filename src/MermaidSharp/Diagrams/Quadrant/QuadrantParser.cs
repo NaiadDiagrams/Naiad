@@ -25,7 +25,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
-        from left in Token(c => c != '-' || c == ' ').AtLeastOnceString()
+        from left in Token(c => c is not '-' or ' ').AtLeastOnceString()
             .Where(s => !s.TrimEnd().EndsWith("-"))
             .Or(Token(c => c != '\r' && c != '\n' && c != '-').ManyString())
         from arrow in String("-->")
@@ -39,7 +39,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
-        from bottom in Token(c => c != '-' || c == ' ').AtLeastOnceString()
+        from bottom in Token(c => c is not '-' or ' ').AtLeastOnceString()
             .Where(s => !s.TrimEnd().EndsWith("-"))
             .Or(Token(c => c != '\r' && c != '\n' && c != '-').ManyString())
         from arrow in String("-->")
@@ -123,21 +123,21 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         {
             switch (item)
             {
-                case (string key, string value) when key == "title":
+                case ("title", string value):
                     model.Title = value;
                     break;
 
-                case (string key, string left, string right) when key == "x-axis":
+                case ("x-axis", string left, string right):
                     model.XAxisLeft = left;
                     model.XAxisRight = right;
                     break;
 
-                case (string key, string bottom, string top) when key == "y-axis":
+                case ("y-axis", string bottom, string top):
                     model.YAxisBottom = bottom;
                     model.YAxisTop = top;
                     break;
 
-                case (string key, int quadrant, string label) when key == "quadrant":
+                case ("quadrant", int quadrant, string label):
                     switch (quadrant)
                     {
                         case 1: model.Quadrant1Label = label; break;
@@ -147,7 +147,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
                     }
                     break;
 
-                case (string key, QuadrantPoint point) when key == "point":
+                case ("point", QuadrantPoint point):
                     model.Points.Add(point);
                     break;
             }

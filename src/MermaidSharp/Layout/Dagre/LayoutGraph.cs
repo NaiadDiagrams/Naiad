@@ -1,6 +1,6 @@
-namespace MermaidSharp.Layout.Dagre;
+namespace MermaidSharp;
 
-internal class LayoutGraph
+class LayoutGraph
 {
     public Dictionary<string, LayoutNode> Nodes { get; } = [];
     public List<LayoutEdge> Edges { get; } = [];

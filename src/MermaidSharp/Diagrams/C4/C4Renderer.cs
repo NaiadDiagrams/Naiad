@@ -31,9 +31,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var persons = model.Elements.Where(e => e.Type == C4ElementType.Person).ToList();
         var systems = model.Elements.Where(e => e.Type == C4ElementType.System).ToList();
         var containers = model.Elements.Where(e =>
-            e.Type == C4ElementType.Container ||
-            e.Type == C4ElementType.ContainerDb ||
-            e.Type == C4ElementType.ContainerQueue).ToList();
+            e.Type is C4ElementType.Container or C4ElementType.ContainerDb or C4ElementType.ContainerQueue).ToList();
         var components = model.Elements.Where(e => e.Type == C4ElementType.Component).ToList();
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;

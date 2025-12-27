@@ -251,19 +251,19 @@ public class GanttParser : IDiagramParser<GanttModel>
         {
             switch (item)
             {
-                case (string key, string value) when key == "title":
+                case ("title", string value):
                     model.Title = value;
                     break;
 
-                case (string key, string value) when key == "dateFormat":
+                case ("dateFormat", string value):
                     model.DateFormat = value;
                     break;
 
-                case (string key, string value) when key == "axisFormat":
+                case ("axisFormat", string value):
                     model.AxisFormat = value;
                     break;
 
-                case (string key, List<string> excludes) when key == "excludes":
+                case ("excludes", List<string> excludes):
                     foreach (var ex in excludes)
                     {
                         if (ex.ToLowerInvariant() == "weekends")
@@ -273,7 +273,7 @@ public class GanttParser : IDiagramParser<GanttModel>
                     }
                     break;
 
-                case (string key, string sectionName) when key == "section":
+                case ("section", string sectionName):
                     currentSection = new GanttSection { Name = sectionName };
                     model.Sections.Add(currentSection);
                     break;

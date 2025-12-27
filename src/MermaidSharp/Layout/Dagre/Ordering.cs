@@ -1,4 +1,4 @@
-namespace MermaidSharp.Layout.Dagre;
+namespace MermaidSharp;
 
 internal static class Ordering
 {

@@ -202,15 +202,15 @@ public class C4Parser : IDiagramParser<C4Model>
         {
             switch (item)
             {
-                case (string key, string title) when key == "title":
+                case ("title", string title):
                     model.Title = title;
                     break;
 
-                case (string key, C4Element element) when key == "element":
+                case ("element", C4Element element):
                     model.Elements.Add(element);
                     break;
 
-                case (string key, C4Relationship rel) when key == "rel":
+                case ("rel", C4Relationship rel):
                     model.Relationships.Add(rel);
                     break;
             }

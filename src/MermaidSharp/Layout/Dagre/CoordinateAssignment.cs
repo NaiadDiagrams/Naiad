@@ -1,6 +1,6 @@
-namespace MermaidSharp.Layout.Dagre;
+namespace MermaidSharp;
 
-internal static class CoordinateAssignment
+static class CoordinateAssignment
 {
     public static void Run(LayoutGraph graph, double nodeSep, double rankSep, Direction direction)
     {

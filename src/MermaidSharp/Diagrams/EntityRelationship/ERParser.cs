@@ -166,17 +166,17 @@ public class ERParser : IDiagramParser<ERModel>
             switch (item)
             {
                 case Entity e:
-                    if (!entityMap.ContainsKey(e.Name))
+                    if (entityMap.TryGetValue(e.Name, out var existing))
+                    {
+                        // Merge attributes into existing entity
+                        existing.Attributes.AddRange(e.Attributes);
+                    }
+                    else
                     {
                         entityMap[e.Name] = e;
                         model.Entities.Add(e);
                     }
-                    else
-                    {
-                        // Merge attributes into existing entity
-                        var existing = entityMap[e.Name];
-                        existing.Attributes.AddRange(e.Attributes);
-                    }
+
                     break;
 
                 case Relationship r:

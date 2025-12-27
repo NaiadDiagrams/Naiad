@@ -1,5 +1,3 @@
-using MermaidSharp.Diagrams.Treemap;
-
 namespace MermaidSharp.Tests.Treemap;
 
 public class TreemapTests

@@ -1,5 +1,3 @@
-using MermaidSharp.Diagrams.Requirement;
-
 namespace MermaidSharp.Tests.Requirement;
 
 public class RequirementTests

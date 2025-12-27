@@ -1,5 +1,3 @@
-using TUnit.Core;
-
 namespace MermaidSharp.Tests.Flowchart;
 
 public class FlowchartRendererTests

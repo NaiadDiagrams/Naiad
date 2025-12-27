@@ -210,7 +210,15 @@ public class StateParser : IDiagramParser<StateModel>
                     break;
 
                 case State s:
-                    if (!stateMap.ContainsKey(s.Id))
+                    if (stateMap.TryGetValue(s.Id, out var existing))
+                    {
+                        // Update existing state with description/type
+                        if (!string.IsNullOrEmpty(s.Description))
+                            existing.Description = s.Description;
+                        if (s.Type != StateType.Normal)
+                            existing.Type = s.Type;
+                    }
+                    else
                     {
                         stateMap[s.Id] = s;
                         if (compositeStack.Count > 0)
@@ -218,15 +226,7 @@ public class StateParser : IDiagramParser<StateModel>
                         else
                             model.States.Add(s);
                     }
-                    else
-                    {
-                        // Update existing state with description/type
-                        var existing = stateMap[s.Id];
-                        if (!string.IsNullOrEmpty(s.Description))
-                            existing.Description = s.Description;
-                        if (s.Type != StateType.Normal)
-                            existing.Type = s.Type;
-                    }
+
                     break;
 
                 case StateTransition t:
@@ -257,7 +257,7 @@ public class StateParser : IDiagramParser<StateModel>
                     compositeStack.Push(compositeState);
                     break;
 
-                case string s when s == "end_composite":
+                case "end_composite":
                     if (compositeStack.Count > 0)
                         compositeStack.Pop();
                     break;

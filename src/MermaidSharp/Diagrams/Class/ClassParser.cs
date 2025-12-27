@@ -75,7 +75,7 @@ public class ClassParser : IDiagramParser<ClassModel>
         ).Or(
             // Name only or name : Type format
             from typeAnnotation in TypeAnnotation.Optional()
-            select (Type: typeAnnotation.HasValue ? typeAnnotation.Value : (string?)null, Name: firstWord)
+            select (Type: typeAnnotation.HasValue ? typeAnnotation.Value : null, Name: firstWord)
         )
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd

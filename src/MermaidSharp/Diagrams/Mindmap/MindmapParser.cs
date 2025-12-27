@@ -9,7 +9,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
 
     // Parse indentation (spaces or tabs)
     static readonly Parser<char, int> IndentationParser =
-        Token(c => c == ' ' || c == '\t')
+        Token(c => c is ' ' or '\t')
             .Many()
             .Select(chars => chars.Count(c => c == '\t') * 4 + chars.Count(c => c == ' '));
 

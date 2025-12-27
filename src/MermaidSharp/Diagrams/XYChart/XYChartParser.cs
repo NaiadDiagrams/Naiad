@@ -142,22 +142,22 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         {
             switch (item)
             {
-                case (string key, string value) when key == "title":
+                case ("title", string value):
                     model.Title = value;
                     break;
 
-                case (string key, string label, List<string> categories) when key == "x-axis":
+                case ("x-axis", string label, List<string> categories):
                     model.XAxisLabel = string.IsNullOrEmpty(label) ? null : label;
                     model.XAxisCategories.AddRange(categories);
                     break;
 
-                case (string key, string label, double min, double max) when key == "y-axis":
+                case ("y-axis", string label, double min, double max):
                     model.YAxisLabel = string.IsNullOrEmpty(label) ? null : label;
                     model.YAxisMin = min;
                     model.YAxisMax = max;
                     break;
 
-                case (string key, ChartSeries series) when key == "series":
+                case ("series", ChartSeries series):
                     model.Series.Add(series);
                     break;
             }

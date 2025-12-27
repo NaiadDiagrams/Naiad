@@ -1,6 +1,6 @@
-namespace MermaidSharp.Layout.Dagre;
+namespace MermaidSharp;
 
-internal static class Ranker
+static class Ranker
 {
     public static void Run(LayoutGraph graph, RankerType rankerType)
     {

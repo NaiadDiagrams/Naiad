@@ -139,11 +139,11 @@ public class BlockParser : IDiagramParser<BlockModel>
         {
             switch (item)
             {
-                case (string key, int columns) when key == "columns":
+                case ("columns", int columns):
                     model.Columns = columns;
                     break;
 
-                case (string key, List<BlockElement> elements) when key == "elements":
+                case ("elements", List<BlockElement> elements):
                     model.Elements.AddRange(elements);
                     break;
             }

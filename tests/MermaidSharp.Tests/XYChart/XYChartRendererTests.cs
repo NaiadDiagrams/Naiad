@@ -1,5 +1,3 @@
-using TUnit.Core;
-
 namespace MermaidSharp.Tests.XYChart;
 
 public class XYChartRendererTests

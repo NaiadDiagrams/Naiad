@@ -1,5 +1,3 @@
-using MermaidSharp.Diagrams.Radar;
-
 namespace MermaidSharp.Tests.Radar;
 
 public class RadarTests
