@@ -11,8 +11,8 @@ public class UserJourneyRendererTests
                     Check emails: 3: Me
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -32,8 +32,8 @@ public class UserJourneyRendererTests
                     Receive package: 5: Customer
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -53,8 +53,8 @@ public class UserJourneyRendererTests
                     Fix bugs: 2: Dev
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -71,8 +71,8 @@ public class UserJourneyRendererTests
                     Great: 5: User
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -85,8 +85,8 @@ public class UserJourneyRendererTests
                     Second task: 5: Bob
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -101,8 +101,8 @@ public class UserJourneyRendererTests
                     End: 5: User
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -118,8 +118,8 @@ public class UserJourneyRendererTests
                     Testing: 4: QA
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -160,7 +160,7 @@ public class UserJourneyRendererTests
                     Receive refund: 3: Customer, Finance
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

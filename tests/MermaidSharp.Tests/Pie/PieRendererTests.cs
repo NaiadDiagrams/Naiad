@@ -11,8 +11,8 @@ public class PieRendererTests
                 "Fish" : 10
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -26,8 +26,8 @@ public class PieRendererTests
                 "Birds" : 30
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class PieRendererTests
                 "Costs" : 35
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

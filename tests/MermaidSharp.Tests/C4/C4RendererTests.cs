@@ -11,8 +11,8 @@ public class C4RendererTests
                 Rel(user, system, "Uses")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -28,8 +28,8 @@ public class C4RendererTests
                 Rel(banking, email, "Sends emails", "SMTP")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -47,8 +47,8 @@ public class C4RendererTests
                 Rel(api, db, "Reads/Writes", "SQL")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -64,8 +64,8 @@ public class C4RendererTests
                 Rel(user, service, "Uses")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -85,8 +85,8 @@ public class C4RendererTests
                 Rel(platform, shipping, "Ships orders")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -100,8 +100,8 @@ public class C4RendererTests
                 System(c, "System C", "Third system")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -131,7 +131,7 @@ public class C4RendererTests
                 Rel(core, cdn, "Serves assets", "HTTPS")
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

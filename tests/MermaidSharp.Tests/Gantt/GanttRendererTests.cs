@@ -10,8 +10,8 @@ public class GanttRendererTests
                 Task B :b1, 2024-01-15, 20d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -24,8 +24,8 @@ public class GanttRendererTests
                 Task B :b1, after a1, 15d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -42,8 +42,8 @@ public class GanttRendererTests
                     Testing :b2, after b1, 14d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -57,8 +57,8 @@ public class GanttRendererTests
                 Normal Task :n1, 2024-01-21, 10d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -72,8 +72,8 @@ public class GanttRendererTests
                 Also Critical :crit, c2, after c1, 10d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -86,8 +86,8 @@ public class GanttRendererTests
                 Release :milestone, m1, 2024-01-31, 0d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -109,8 +109,8 @@ public class GanttRendererTests
                     Go Live :milestone, m1, after t2, 0d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -123,7 +123,7 @@ public class GanttRendererTests
                 Day Task :d1, after w1, 5d
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

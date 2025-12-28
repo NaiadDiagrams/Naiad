@@ -9,8 +9,8 @@ public class SankeyRendererTests
             A,C,20
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -22,8 +22,8 @@ public class SankeyRendererTests
             Middle,Target,30
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -39,8 +39,8 @@ public class SankeyRendererTests
             Electricity,Commercial,40
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -56,8 +56,8 @@ public class SankeyRendererTests
             Expenses,Other,300
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -72,8 +72,8 @@ public class SankeyRendererTests
             B,Z,5
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -84,7 +84,7 @@ public class SankeyRendererTests
             Input,Output,100
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

@@ -1,3 +1,4 @@
+
 public static partial class ModuleInitializer
 {
     [ModuleInitializer]
@@ -44,8 +45,13 @@ public static partial class ModuleInitializer
         try
         {
             using var svg = new SKSvg();
+
+            // Configure typeface providers to ensure system fonts are found
+            svg.Settings.TypefaceProviders ??= new List<Svg.Skia.TypefaceProviders.ITypefaceProvider>();
+            svg.Settings.TypefaceProviders.Insert(0, new SystemFontTypefaceProvider());
+
             using var svgStream = new MemoryStream(Encoding.UTF8.GetBytes(svgContent));
-            
+
             if (svg.Load(svgStream) is { } picture)
             {
                 var pngStream = new MemoryStream();
@@ -104,4 +110,42 @@ public static partial class ModuleInitializer
 
     [GeneratedRegex(@"-?\d+\.\d{5,}")]
     private static partial Regex FloatRegex();
+}
+
+/// <summary>
+/// Custom typeface provider that uses SKFontManager.Default to resolve system fonts.
+/// </summary>
+public class SystemFontTypefaceProvider : Svg.Skia.TypefaceProviders.ITypefaceProvider
+{
+    private static readonly SKFontManager s_fontManager = SKFontManager.Default;
+
+    public SKTypeface? FromFamilyName(string fontFamily, SKFontStyleWeight fontWeight, SKFontStyleWidth fontWidth, SKFontStyleSlant fontStyle)
+    {
+        // Try each font in the comma-separated list
+        var families = fontFamily.Split(',');
+        foreach (var family in families)
+        {
+            var trimmed = family.Trim().Trim('"', '\'');
+            if (string.IsNullOrEmpty(trimmed))
+                continue;
+
+            // Handle generic font families
+            var familyName = trimmed.ToLowerInvariant() switch
+            {
+                "sans-serif" => "Arial",
+                "serif" => "Times New Roman",
+                "monospace" => "Consolas",
+                _ => trimmed
+            };
+
+            var typeface = s_fontManager.MatchFamily(familyName, new SKFontStyle(fontWeight, fontWidth, fontStyle));
+            if (typeface != null && !string.IsNullOrEmpty(typeface.FamilyName))
+            {
+                return typeface;
+            }
+        }
+
+        // Fallback to Arial if nothing else works
+        return s_fontManager.MatchFamily("Arial", new SKFontStyle(fontWeight, fontWidth, fontStyle));
+    }
 }

@@ -8,8 +8,8 @@ public class ERRendererTests
                 CUSTOMER ||--o{ ORDER : places
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -22,8 +22,8 @@ public class ERRendererTests
                 PRODUCT ||--o{ LINE-ITEM : includes
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -38,8 +38,8 @@ public class ERRendererTests
                 }
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -54,8 +54,8 @@ public class ERRendererTests
                 }
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -69,8 +69,8 @@ public class ERRendererTests
                 }
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -81,8 +81,8 @@ public class ERRendererTests
                 PERSON ||--|| PASSPORT : has
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -93,8 +93,8 @@ public class ERRendererTests
                 EMPLOYEE |o--o| PARKING-SPACE : uses
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -105,8 +105,8 @@ public class ERRendererTests
                 CUSTOMER ||..o{ ORDER : places
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -127,8 +127,8 @@ public class ERRendererTests
                 CUSTOMER ||--o{ ORDER : places
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -204,7 +204,7 @@ public class ERRendererTests
                 CATEGORY |o--o| CATEGORY : "parent of"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

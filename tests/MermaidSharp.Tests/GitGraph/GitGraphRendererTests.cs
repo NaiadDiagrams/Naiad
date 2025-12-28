@@ -10,8 +10,8 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -24,8 +24,8 @@ public class GitGraphRendererTests
                 commit id: "gamma"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -38,8 +38,8 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -51,8 +51,8 @@ public class GitGraphRendererTests
                 commit id: "feat" msg: "Add feature"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -65,8 +65,8 @@ public class GitGraphRendererTests
                 commit type: HIGHLIGHT
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -81,8 +81,8 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -101,8 +101,8 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -119,8 +119,8 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -135,8 +135,8 @@ public class GitGraphRendererTests
                 merge develop tag: "v2.0.0"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -151,8 +151,8 @@ public class GitGraphRendererTests
                 cherry-pick id: "two"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class GitGraphRendererTests
                 commit id: "hotfix" type: HIGHLIGHT
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

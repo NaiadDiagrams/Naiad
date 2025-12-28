@@ -8,8 +8,8 @@ public class FlowchartRendererTests
                 A[Start] --> B[Process] --> C[End]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -24,8 +24,8 @@ public class FlowchartRendererTests
                 C -->|Three| F[fa:fa-car Car]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -39,8 +39,8 @@ public class FlowchartRendererTests
                 D((Circle))
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -52,8 +52,8 @@ public class FlowchartRendererTests
                 A --> |No| C
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -64,7 +64,6 @@ public class FlowchartRendererTests
                 A --> B --> C
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 }

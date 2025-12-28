@@ -10,8 +10,8 @@ public class TimelineRendererTests
                 2022 : Event Three
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -25,8 +25,8 @@ public class TimelineRendererTests
                 2000 : Internet Era
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -41,8 +41,8 @@ public class TimelineRendererTests
                      : Spotify
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -59,8 +59,8 @@ public class TimelineRendererTests
                     2010 : iPad
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -75,8 +75,8 @@ public class TimelineRendererTests
                 Testing : Quality assurance
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -95,8 +95,8 @@ public class TimelineRendererTests
                     2000 : Digital Age
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class TimelineRendererTests
                     2016 : TikTok
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

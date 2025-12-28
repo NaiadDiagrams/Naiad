@@ -1,7 +1,5 @@
-using System.Text;
 using System.Text.RegularExpressions;
 using MermaidSharp.Layout;
-using MermaidSharp.Rendering;
 
 namespace MermaidSharp.Diagrams.Flowchart;
 
@@ -16,7 +14,7 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
     const string LabelBackground = "rgba(232,232,232,0.8)";
 
     // FontAwesome icon pattern: fa:fa-icon-name or fab:fa-icon-name
-    static readonly Regex IconPattern = new(@"(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled);
+    static readonly Regex IconPattern = new("(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled);
 
     public FlowchartRenderer(ILayoutEngine? layoutEngine = null)
     {

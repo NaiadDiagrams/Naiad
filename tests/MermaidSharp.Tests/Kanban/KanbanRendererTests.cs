@@ -12,8 +12,8 @@ public class KanbanRendererTests
                 task3[Completed Task]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -31,8 +31,8 @@ public class KanbanRendererTests
                 t5[Review]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -46,8 +46,8 @@ public class KanbanRendererTests
                 t1[Task 1]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -71,8 +71,8 @@ public class KanbanRendererTests
                 t10[Configuration]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class KanbanRendererTests
                 t3[Task Three]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

@@ -9,8 +9,8 @@ public class SequenceRendererTests
                 Bob-->>Alice: Hi Alice
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -24,8 +24,8 @@ public class SequenceRendererTests
                 B->>A: Hi
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -39,8 +39,8 @@ public class SequenceRendererTests
                 Server-->>User: Response
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -52,8 +52,8 @@ public class SequenceRendererTests
                 Bob-->>-Alice: Hi
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -67,8 +67,8 @@ public class SequenceRendererTests
                 Note over Alice,Bob: Conversation
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -82,8 +82,8 @@ public class SequenceRendererTests
                 Alice->>Bob: How are you?
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -99,8 +99,8 @@ public class SequenceRendererTests
                 A--xB: Dotted cross
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -113,8 +113,8 @@ public class SequenceRendererTests
                 Server-->>Client: Token
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -145,7 +145,7 @@ public class SequenceRendererTests
                 Note over User,DB: Session established
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

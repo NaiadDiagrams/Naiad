@@ -9,8 +9,7 @@ public class PacketRendererTests
             16-31: "Destination Port"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+        return SvgVerify. Verify(input);
     }
 
     [Test]
@@ -36,8 +35,8 @@ public class PacketRendererTests
             112-127: "Window Size"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -60,8 +59,8 @@ public class PacketRendererTests
             128-159: "Destination IP Address"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -75,8 +74,8 @@ public class PacketRendererTests
             24-31: "Byte 4"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -89,7 +88,7 @@ public class PacketRendererTests
             64-95: "Third Word"
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

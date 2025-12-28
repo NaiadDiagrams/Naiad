@@ -11,8 +11,8 @@ public class XYChartRendererTests
                 bar [50, 60, 75, 80, 90]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -26,8 +26,8 @@ public class XYChartRendererTests
                 line [20, 22, 25, 23, 28]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -42,8 +42,8 @@ public class XYChartRendererTests
                 line [100, 140, 170, 190]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -58,8 +58,8 @@ public class XYChartRendererTests
                 bar [80, 120, 180, 220]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -71,8 +71,8 @@ public class XYChartRendererTests
                 bar [10, 20, 30, 40]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -86,8 +86,8 @@ public class XYChartRendererTests
                 bar [85, 72, 90]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -102,7 +102,7 @@ public class XYChartRendererTests
                 line [40, 48, 58, 55, 70, 82, 88, 85, 73, 62, 52, 45]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

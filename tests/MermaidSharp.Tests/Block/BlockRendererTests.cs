@@ -9,8 +9,8 @@ public class BlockRendererTests
                 a["Block A"] b["Block B"] c["Block C"]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -23,8 +23,8 @@ public class BlockRendererTests
                 c["Full Width"]:3
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -37,8 +37,8 @@ public class BlockRendererTests
                 d(("Circle")) e{"Diamond"} f{{"Hexagon"}}
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -52,8 +52,8 @@ public class BlockRendererTests
                 c["Third"]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -65,8 +65,8 @@ public class BlockRendererTests
                 a b c d e
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class BlockRendererTests
                 footer["Footer"]:4
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

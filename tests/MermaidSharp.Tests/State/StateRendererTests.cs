@@ -9,8 +9,8 @@ public class StateRendererTests
                 Still --> [*]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -25,8 +25,8 @@ public class StateRendererTests
                 Crash --> [*]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -40,8 +40,8 @@ public class StateRendererTests
                 Active --> [*] : shutdown
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -54,8 +54,8 @@ public class StateRendererTests
                 s1 --> [*]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -69,8 +69,8 @@ public class StateRendererTests
                 fork_state --> State3
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -85,8 +85,8 @@ public class StateRendererTests
                 choice_state --> Negative : if n < 0
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -99,8 +99,8 @@ public class StateRendererTests
                 note right of Active : Important note
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -112,8 +112,8 @@ public class StateRendererTests
                 Still --> [*]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -145,7 +145,7 @@ public class StateRendererTests
                 note left of Error : Error handling
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

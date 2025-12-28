@@ -12,8 +12,8 @@ public class QuadrantRendererTests
                 Campaign B: [0.7, 0.8]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -34,8 +34,8 @@ public class QuadrantRendererTests
                 Task D: [0.9, 0.3]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -54,8 +54,8 @@ public class QuadrantRendererTests
                 Product F: [0.3, 0.7]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -67,8 +67,8 @@ public class QuadrantRendererTests
                 Point 2: [0.75, 0.25]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -84,8 +84,8 @@ public class QuadrantRendererTests
                 Rust: [0.3, 0.5]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 
     [Test]
@@ -104,7 +104,7 @@ public class QuadrantRendererTests
                 Center: [0.5, 0.5]
             """;
 
-        var svg = Mermaid.Render(input);
-        return Verify(svg, extension: "svg");
+
+        return SvgVerify.Verify(input);
     }
 }

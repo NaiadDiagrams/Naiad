@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -83,12 +82,7 @@ public class VerifiedFileRegenerator
                     {
                         inputValue = ExtractInterpolatedString(interpolated);
                     }
-                    else if (initializer.IsKind(SyntaxKind.StringLiteralExpression))
-                    {
-                        var literal = (LiteralExpressionSyntax)initializer;
-                        inputValue = literal.Token.ValueText;
-                    }
-                    else if (initializer.IsKind(SyntaxKind.Utf8StringLiteralExpression))
+                    else if (initializer.IsKind(SyntaxKind.StringLiteralExpression) || initializer.IsKind(SyntaxKind.Utf8StringLiteralExpression))
                     {
                         var literal = (LiteralExpressionSyntax)initializer;
                         inputValue = literal.Token.ValueText;
