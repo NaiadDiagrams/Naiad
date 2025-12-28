@@ -115,4 +115,37 @@ public class StateRendererTests
         var svg = Mermaid.Render(input);
         return Verify(svg, extension: "svg");
     }
+
+    [Test]
+    public Task Render_CompleteStateDiagram()
+    {
+        const string input = """
+            stateDiagram-v2
+                [*] --> Idle
+
+                state "Processing State" as Processing
+                state fork_state <<fork>>
+                state join_state <<join>>
+                state choice_state <<choice>>
+
+                Idle --> Processing : start
+                Processing --> fork_state
+                fork_state --> TaskA
+                fork_state --> TaskB
+                TaskA --> join_state
+                TaskB --> join_state
+                join_state --> choice_state
+                choice_state --> Success : if valid
+                choice_state --> Error : if invalid
+                Success --> Idle : reset
+                Error --> Idle : retry
+                Success --> [*] : complete
+
+                note right of Processing : This is a processing note
+                note left of Error : Error handling
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
 }

@@ -121,4 +121,46 @@ public class UserJourneyRendererTests
         var svg = Mermaid.Render(input);
         return Verify(svg, extension: "svg");
     }
+
+    [Test]
+    public Task Render_CompleteUserJourney()
+    {
+        const string input = """
+            journey
+                title Complete E-commerce Experience
+                
+                section Discovery
+                    Search for product: 4: Customer
+                    Browse categories: 3: Customer
+                    Read reviews: 5: Customer
+                    Compare prices: 4: Customer
+                
+                section Shopping
+                    Add to wishlist: 5: Customer
+                    Add to cart: 4: Customer
+                    Apply coupon: 2: Customer, Support
+                    Update quantity: 3: Customer
+                
+                section Checkout
+                    Enter shipping: 3: Customer
+                    Select payment: 4: Customer
+                    Confirm order: 5: Customer
+                    Receive confirmation: 5: Customer, System
+                
+                section Fulfillment
+                    Order processing: 4: Warehouse, System
+                    Package shipping: 4: Warehouse, Courier
+                    Track delivery: 5: Customer, Courier
+                    Receive package: 5: Customer, Courier
+                
+                section Post-Purchase
+                    Leave review: 4: Customer
+                    Contact support: 2: Customer, Support
+                    Request return: 1: Customer, Support
+                    Receive refund: 3: Customer, Finance
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
 }

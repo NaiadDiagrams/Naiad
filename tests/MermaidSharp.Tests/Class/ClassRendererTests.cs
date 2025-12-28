@@ -146,4 +146,80 @@ public class ClassRendererTests
         var svg = Mermaid.Render(input);
         return Verify(svg, extension: "svg");
     }
+
+    [Test]
+    public Task Render_FullClassDiagram()
+    {
+        const string input = """
+            classDiagram
+                class IRepository~T~ {
+                    <<interface>>
+                    +get(id: int) T
+                    +save(entity: T) void
+                    +delete(id: int) void
+                }
+
+                class AbstractEntity {
+                    <<abstract>>
+                    #int id
+                    #DateTime createdAt
+                    #DateTime updatedAt
+                    +getId() int
+                }
+
+                class UserService {
+                    <<service>>
+                    -IUserRepository repository
+                    -ILogger logger
+                    +createUser(name: String) User
+                    +findUser(id: int) User
+                    +deleteUser(id: int) void
+                }
+
+                class Status {
+                    <<enumeration>>
+                    ACTIVE
+                    INACTIVE
+                    PENDING
+                    DELETED
+                }
+
+                class User {
+                    +String name
+                    +String email
+                    -String passwordHash
+                    ~Status status
+                    +validate()$ bool
+                    +hashPassword(password: String)$ String
+                }
+
+                class Address {
+                    +String street
+                    +String city
+                    +String zipCode
+                }
+
+                class Order {
+                    +int orderId
+                    +List~Item~ items
+                    +calculateTotal() Decimal
+                }
+
+                class Item {
+                    +String name
+                    +Decimal price
+                    +int quantity
+                }
+
+                IRepository~T~ <|.. UserRepository : implements
+                AbstractEntity <|-- User : extends
+                UserService ..> IRepository~T~ : uses
+                User "1" --> "1..*" Address : has
+                User "1" o-- "*" Order : places
+                Order "1" *-- "1..*" Item : contains
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
 }

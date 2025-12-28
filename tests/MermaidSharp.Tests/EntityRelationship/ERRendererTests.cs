@@ -130,4 +130,81 @@ public class ERRendererTests
         var svg = Mermaid.Render(input);
         return Verify(svg, extension: "svg");
     }
+
+    [Test]
+    public Task Render_FullERDiagram()
+    {
+        const string input = """
+            erDiagram
+                CUSTOMER {
+                    int customer_id PK "Primary key"
+                    string first_name "Customer first name"
+                    string last_name "Customer last name"
+                    string email UK "Unique email address"
+                    date date_of_birth
+                    string phone
+                    boolean is_active
+                }
+                
+                ADDRESS {
+                    int address_id PK
+                    int customer_id FK
+                    string street
+                    string city
+                    string state
+                    string postal_code
+                    string country
+                    string address_type "billing or shipping"
+                }
+                
+                ORDER {
+                    int order_id PK
+                    int customer_id FK
+                    int shipping_address_id FK
+                    int billing_address_id FK
+                    datetime order_date
+                    datetime shipped_date
+                    string status
+                    decimal total_amount
+                }
+                
+                ORDER_ITEM {
+                    int item_id PK
+                    int order_id FK
+                    int product_id FK
+                    int quantity
+                    decimal unit_price
+                    decimal discount
+                }
+                
+                PRODUCT {
+                    int product_id PK
+                    int category_id FK
+                    string name
+                    string description
+                    decimal price
+                    int stock_quantity
+                    string sku UK
+                }
+                
+                CATEGORY {
+                    int category_id PK
+                    int parent_id FK "Self-referencing"
+                    string name
+                    string description
+                }
+                
+                CUSTOMER ||--o{ ORDER : places
+                CUSTOMER ||--o{ ADDRESS : has
+                ORDER ||--|{ ORDER_ITEM : contains
+                ORDER }o--|| ADDRESS : "ships to"
+                ORDER }o--|| ADDRESS : "bills to"
+                PRODUCT ||--o{ ORDER_ITEM : "included in"
+                CATEGORY ||--o{ PRODUCT : categorizes
+                CATEGORY |o--o| CATEGORY : "parent of"
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
 }

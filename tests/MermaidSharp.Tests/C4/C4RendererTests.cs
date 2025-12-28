@@ -103,4 +103,35 @@ public class C4RendererTests
         var svg = Mermaid.Render(input);
         return Verify(svg, extension: "svg");
     }
+
+    [Test]
+    public Task Render_CompleteC4()
+    {
+        const string input = """
+            C4Context
+                title Enterprise Architecture Overview
+
+                Person(admin, "Administrator", "System administrator with full access")
+                Person(user, "Regular User", "End user of the application")
+
+                System(core, "Core System", "Main application server")
+                System(auth, "Auth Service", "Authentication and authorization")
+                System(db, "Database", "PostgreSQL database cluster")
+
+                System_Ext(payment, "Payment Gateway", "Third-party payment processor")
+                System_Ext(email, "Email Service", "SendGrid email delivery")
+                System_Ext(cdn, "CDN", "Content delivery network")
+
+                Rel(admin, core, "Manages", "HTTPS")
+                Rel(user, core, "Uses", "HTTPS")
+                Rel(core, auth, "Authenticates via")
+                Rel(core, db, "Reads/Writes", "TCP/5432")
+                Rel(core, payment, "Processes payments", "HTTPS")
+                Rel(core, email, "Sends notifications", "SMTP")
+                Rel(core, cdn, "Serves assets", "HTTPS")
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
 }

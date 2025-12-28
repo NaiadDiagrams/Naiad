@@ -116,4 +116,36 @@ public class SequenceRendererTests
         var svg = Mermaid.Render(input);
         return Verify(svg, extension: "svg");
     }
+
+    [Test]
+    public Task Render_CompleteSequence()
+    {
+        const string input = """
+            sequenceDiagram
+                title Complete Authentication Flow
+                autonumber
+
+                actor User
+                participant Client as Web Client
+                participant Auth as Auth Service
+                participant DB as Database
+                participant Email as Email Service
+
+                User->>+Client: Enter credentials
+                Client->>+Auth: POST /login
+                Auth->>+DB: Query user
+                DB-->>-Auth: User data
+                Note right of Auth: Validate credentials
+                Auth->>Auth: Generate JWT
+                Note right of Auth: Token expires in 24h
+                Auth-->>-Client: 200 OK + Token
+                Client->>+Email: Send welcome email
+                Email-->>-Client: Email sent
+                Client-->>-User: Show dashboard
+                Note over User,DB: Session established
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
 }
