@@ -8,5 +8,7 @@
     <PackageVersion Include="Verify.TUnit" Version="31.9.3" />
     <!-- Code Analysis -->
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+    <!-- SVG to PNG conversion -->
+    <PackageVersion Include="Svg.Skia" Version="3.2.1" />
   </ItemGroup>
 </Project>
