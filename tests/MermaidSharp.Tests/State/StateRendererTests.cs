@@ -3,12 +3,12 @@ public class StateRendererTests
     [Test]
     public Task Render_SimpleState()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 [*] --> Still
                 Still --> [*]
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -16,7 +16,8 @@ public class StateRendererTests
     [Test]
     public Task Render_MultipleStates()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 [*] --> Still
                 Still --> Moving
@@ -25,14 +26,14 @@ public class StateRendererTests
                 Crash --> [*]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_StateWithTransitionLabels()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 [*] --> Active
                 Active --> Inactive : timeout
@@ -40,20 +41,19 @@ public class StateRendererTests
                 Active --> [*] : shutdown
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_StateWithDescription()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 state "This is a state description" as s1
                 [*] --> s1
                 s1 --> [*]
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -61,7 +61,8 @@ public class StateRendererTests
     [Test]
     public Task Render_ForkJoinState()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 state fork_state <<fork>>
                 [*] --> fork_state
@@ -69,14 +70,14 @@ public class StateRendererTests
                 fork_state --> State3
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ChoiceState()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 state choice_state <<choice>>
                 [*] --> IsPositive
@@ -85,20 +86,19 @@ public class StateRendererTests
                 choice_state --> Negative : if n < 0
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_StateWithNote()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 [*] --> Active
                 Active --> [*]
                 note right of Active : Important note
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -106,12 +106,12 @@ public class StateRendererTests
     [Test]
     public Task Render_StateDiagramV1()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram
                 [*] --> Still
                 Still --> [*]
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -119,7 +119,8 @@ public class StateRendererTests
     [Test]
     public Task Render_CompleteStateDiagram()
     {
-        const string input = """
+        const string input =
+            """
             stateDiagram-v2
                 [*] --> Idle
 
@@ -144,7 +145,6 @@ public class StateRendererTests
                 note right of Processing : This is a processing note
                 note left of Error : Error handling
             """;
-
 
         return SvgVerify.Verify(input);
     }

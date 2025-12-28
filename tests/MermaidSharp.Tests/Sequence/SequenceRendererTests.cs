@@ -3,12 +3,12 @@ public class SequenceRendererTests
     [Test]
     public Task Render_SimpleSequence()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 Alice->>Bob: Hello Bob
                 Bob-->>Alice: Hi Alice
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -16,7 +16,8 @@ public class SequenceRendererTests
     [Test]
     public Task Render_SequenceWithParticipants()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 participant A as Alice
                 participant B as Bob
@@ -24,14 +25,14 @@ public class SequenceRendererTests
                 B->>A: Hi
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SequenceWithActors()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 actor User
                 participant Server
@@ -39,19 +40,18 @@ public class SequenceRendererTests
                 Server-->>User: Response
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SequenceWithActivation()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 Alice->>+Bob: Hello
                 Bob-->>-Alice: Hi
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -59,7 +59,8 @@ public class SequenceRendererTests
     [Test]
     public Task Render_SequenceWithNotes()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 Alice->>Bob: Hello
                 Note right of Bob: Bob thinks
@@ -67,14 +68,14 @@ public class SequenceRendererTests
                 Note over Alice,Bob: Conversation
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SequenceWithAutoNumber()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 autonumber
                 Alice->>Bob: Hello
@@ -82,14 +83,14 @@ public class SequenceRendererTests
                 Alice->>Bob: How are you?
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SequenceWithDifferentArrows()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 A->>B: Solid arrow
                 A-->>B: Dotted arrow
@@ -99,20 +100,19 @@ public class SequenceRendererTests
                 A--xB: Dotted cross
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SequenceWithTitle()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 title Authentication Flow
                 Client->>Server: Login request
                 Server-->>Client: Token
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -120,7 +120,8 @@ public class SequenceRendererTests
     [Test]
     public Task Render_CompleteSequence()
     {
-        const string input = """
+        const string input =
+            """
             sequenceDiagram
                 title Complete Authentication Flow
                 autonumber
@@ -144,7 +145,6 @@ public class SequenceRendererTests
                 Client-->>-User: Show dashboard
                 Note over User,DB: Session established
             """;
-
 
         return SvgVerify.Verify(input);
     }

@@ -18,7 +18,7 @@
     <PackageReference Include="ProjectFiles" />
     <PackageReference Include="Verify.NUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-    <PackageReference Include="Svg.Skia" />
+    <PackageReference Include="Microsoft.Playwright" />
     <ProjectReference Include="..\..\src\MermaidSharp\MermaidSharp.csproj" />
   </ItemGroup>
 

@@ -1,21 +1,22 @@
 public class ArchitectureTests
 {
     [Test]
-    public async Task BasicService()
+    public Task BasicService()
     {
-        var input = """
+        var input =
+            """
             architecture-beta
             service db(database)[Database]
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 
     [Test]
-    public async Task ServiceWithDifferentIcons()
+    public Task ServiceWithDifferentIcons()
     {
-        var input = """
+        var input =
+            """
             architecture-beta
             service db(database)[Database]
             service srv(server)[Server]
@@ -23,42 +24,41 @@ public class ArchitectureTests
             service cloud1(cloud)[Cloud]
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 
     [Test]
-    public async Task ServiceWithGroup()
+    public Task ServiceWithGroup()
     {
-        var input = """
+        var input =
+            """
             architecture-beta
             group api(cloud)[API]
             service db(database)[Database] in api
             service server(server)[Server] in api
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 
     [Test]
-    public async Task ServicesWithEdge()
+    public Task ServicesWithEdge()
     {
         var input = """
-            architecture-beta
-            service db(database)[Database]
-            service server(server)[Server]
-            db:R -- L:server
-            """;
+                    architecture-beta
+                    service db(database)[Database]
+                    service server(server)[Server]
+                    db:R -- L:server
+                    """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 
     [Test]
-    public async Task ComplexDiagram()
+    public Task ComplexDiagram()
     {
-        var input = """
+        var input =
+            """
             architecture-beta
             group api(cloud)[API Layer]
             service server(server)[API Server] in api
@@ -68,15 +68,15 @@ public class ArchitectureTests
             server:R -- L:disk1
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 
     [Test]
     [Explicit("Uses arrow syntax not supported by mermaid.ink/kroki.io")]
-    public async Task EdgeWithArrows()
+    public Task EdgeWithArrows()
     {
-        var input = """
+        var input =
+            """
             architecture-beta
             service client(internet)[Client]
             service server(server)[Server]
@@ -85,7 +85,6 @@ public class ArchitectureTests
             server:B -- T>:db
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return SvgVerify.Verify(input);
     }
 }

@@ -3,7 +3,8 @@ public class QuadrantRendererTests
     [Test]
     public Task Render_SimpleQuadrant()
     {
-        const string input = """
+        const string input =
+            """
             quadrantChart
                 title Campaign Analysis
                 x-axis Low Reach --> High Reach
@@ -12,14 +13,14 @@ public class QuadrantRendererTests
                 Campaign B: [0.7, 0.8]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_WithQuadrantLabels()
     {
-        const string input = """
+        const string input =
+            """
             quadrantChart
                 title Priority Matrix
                 x-axis Low Urgency --> High Urgency
@@ -34,14 +35,14 @@ public class QuadrantRendererTests
                 Task D: [0.9, 0.3]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ManyPoints()
     {
-        const string input = """
+        const string input =
+            """
             quadrantChart
                 title Product Portfolio
                 x-axis Low Growth --> High Growth
@@ -54,19 +55,18 @@ public class QuadrantRendererTests
                 Product F: [0.3, 0.7]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MinimalQuadrant()
     {
-        const string input = """
+        const string input =
+            """
             quadrantChart
                 Point 1: [0.25, 0.75]
                 Point 2: [0.75, 0.25]
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -74,7 +74,8 @@ public class QuadrantRendererTests
     [Test]
     public Task Render_WithTitleOnly()
     {
-        const string input = """
+        const string input =
+            """
             quadrantChart
                 title Skills Assessment
                 x-axis Beginner --> Expert
@@ -84,7 +85,6 @@ public class QuadrantRendererTests
                 Rust: [0.3, 0.5]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
@@ -92,7 +92,8 @@ public class QuadrantRendererTests
     [Explicit("Uses edge coordinates not supported by mermaid.ink/kroki.io")]
     public Task Render_EdgePositions()
     {
-        const string input = """
+        const string input =
+            """
             quadrantChart
                 title Edge Cases
                 x-axis Left --> Right
@@ -103,7 +104,6 @@ public class QuadrantRendererTests
                 Bottom Right: [1.0, 0.0]
                 Center: [0.5, 0.5]
             """;
-
 
         return SvgVerify.Verify(input);
     }

@@ -3,7 +3,8 @@ public class PacketRendererTests
     [Test]
     public Task Render_SimplePacket()
     {
-        const string input = """
+        const string input =
+            """
             packet-beta
             0-15: "Source Port"
             16-31: "Destination Port"
@@ -15,7 +16,8 @@ public class PacketRendererTests
     [Test]
     public Task Render_TCPHeader()
     {
-        const string input = """
+        const string input =
+            """
             packet-beta
             0-15: "Source Port"
             16-31: "Destination Port"
@@ -35,14 +37,14 @@ public class PacketRendererTests
             112-127: "Window Size"
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_IPv4Header()
     {
-        const string input = """
+        const string input =
+            """
             packet-beta
             0-3: "Version"
             4-7: "IHL"
@@ -59,14 +61,14 @@ public class PacketRendererTests
             128-159: "Destination IP Address"
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SingleRow()
     {
-        const string input = """
+        const string input =
+            """
             packet-beta
             0-7: "Byte 1"
             8-15: "Byte 2"
@@ -74,20 +76,19 @@ public class PacketRendererTests
             24-31: "Byte 4"
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_WideFields()
     {
-        const string input = """
+        const string input =
+            """
             packet-beta
             0-31: "First Word"
             32-63: "Second Word"
             64-95: "Third Word"
             """;
-
 
         return SvgVerify.Verify(input);
     }

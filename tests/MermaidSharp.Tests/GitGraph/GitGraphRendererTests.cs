@@ -3,13 +3,13 @@ public class GitGraphRendererTests
     [Test]
     public Task Render_SimpleCommits()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit
                 commit
                 commit
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -17,13 +17,13 @@ public class GitGraphRendererTests
     [Test]
     public Task Render_CommitWithId()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit id: "alpha"
                 commit id: "beta"
                 commit id: "gamma"
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -31,13 +31,13 @@ public class GitGraphRendererTests
     [Test]
     public Task Render_CommitWithTag()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit
                 commit tag: "v1.0.0"
                 commit
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -45,12 +45,12 @@ public class GitGraphRendererTests
     [Test]
     public Task Render_CommitWithMessage()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit id: "init" msg: "Initial commit"
                 commit id: "feat" msg: "Add feature"
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -58,13 +58,13 @@ public class GitGraphRendererTests
     [Test]
     public Task Render_CommitTypes()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit type: NORMAL
                 commit type: REVERSE
                 commit type: HIGHLIGHT
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -72,7 +72,8 @@ public class GitGraphRendererTests
     [Test]
     public Task Render_BranchAndCheckout()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit
                 branch develop
@@ -81,14 +82,14 @@ public class GitGraphRendererTests
                 commit
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MultipleBranches()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit
                 branch develop
@@ -101,14 +102,14 @@ public class GitGraphRendererTests
                 commit
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MergeBranch()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit
                 branch develop
@@ -119,14 +120,14 @@ public class GitGraphRendererTests
                 commit
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MergeWithTag()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit
                 branch develop
@@ -135,14 +136,14 @@ public class GitGraphRendererTests
                 merge develop tag: "v2.0.0"
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CherryPick()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit id: "one"
                 branch develop
@@ -151,14 +152,14 @@ public class GitGraphRendererTests
                 cherry-pick id: "two"
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CompleteGitGraph()
     {
-        const string input = """
+        const string input =
+            """
             gitGraph
                 commit id: "init" tag: "v1.0"
                 branch develop
@@ -172,7 +173,6 @@ public class GitGraphRendererTests
                 merge develop tag: "v2.0"
                 commit id: "hotfix" type: HIGHLIGHT
             """;
-
 
         return SvgVerify.Verify(input);
     }

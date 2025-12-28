@@ -3,7 +3,8 @@ public class C4RendererTests
     [Test]
     public Task Render_SimpleContext()
     {
-        const string input = """
+        const string input =
+            """
             C4Context
                 title System Context diagram
                 Person(user, "User", "A user of the system")
@@ -11,14 +12,14 @@ public class C4RendererTests
                 Rel(user, system, "Uses")
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ContextWithExternal()
     {
-        const string input = """
+        const string input =
+            """
             C4Context
                 title Banking System Context
                 Person(customer, "Banking Customer", "A customer of the bank")
@@ -28,14 +29,14 @@ public class C4RendererTests
                 Rel(banking, email, "Sends emails", "SMTP")
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ContainerDiagram()
     {
-        const string input = """
+        const string input =
+            """
             C4Container
                 title Container diagram for Banking System
                 Person(customer, "Customer", "Bank customer")
@@ -47,14 +48,14 @@ public class C4RendererTests
                 Rel(api, db, "Reads/Writes", "SQL")
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ComponentDiagram()
     {
-        const string input = """
+        const string input =
+            """
             C4Component
                 title Component diagram for API
                 Component(auth, "Auth Controller", "Express", "Handles authentication")
@@ -64,14 +65,14 @@ public class C4RendererTests
                 Rel(user, service, "Uses")
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MixedElements()
     {
-        const string input = """
+        const string input =
+            """
             C4Context
                 title E-commerce Platform
                 Person(buyer, "Buyer", "Online shopper")
@@ -85,14 +86,14 @@ public class C4RendererTests
                 Rel(platform, shipping, "Ships orders")
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_NoRelationships()
     {
-        const string input = """
+        const string input =
+            """
             C4Context
                 title Standalone Systems
                 System(a, "System A", "First system")
@@ -100,14 +101,14 @@ public class C4RendererTests
                 System(c, "System C", "Third system")
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CompleteC4()
     {
-        const string input = """
+        const string input =
+            """
             C4Context
                 title Enterprise Architecture Overview
 
@@ -130,7 +131,6 @@ public class C4RendererTests
                 Rel(core, email, "Sends notifications", "SMTP")
                 Rel(core, cdn, "Serves assets", "HTTPS")
             """;
-
 
         return SvgVerify.Verify(input);
     }

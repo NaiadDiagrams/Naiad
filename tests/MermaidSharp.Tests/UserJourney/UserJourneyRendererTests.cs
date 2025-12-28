@@ -3,7 +3,8 @@ public class UserJourneyRendererTests
     [Test]
     public Task Render_SimpleJourney()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title My Working Day
                 section Morning
@@ -11,14 +12,14 @@ public class UserJourneyRendererTests
                     Check emails: 3: Me
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MultipleSections()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title Customer Journey
                 section Discovery
@@ -32,14 +33,14 @@ public class UserJourneyRendererTests
                     Receive package: 5: Customer
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MultipleActors()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title Team Collaboration
                 section Planning
@@ -53,14 +54,14 @@ public class UserJourneyRendererTests
                     Fix bugs: 2: Dev
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_AllScores()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title Score Examples
                 section Experience
@@ -71,20 +72,19 @@ public class UserJourneyRendererTests
                     Great: 5: User
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_WithoutTitle()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 section Tasks
                     First task: 4: Alice
                     Second task: 5: Bob
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -92,7 +92,8 @@ public class UserJourneyRendererTests
     [Test]
     public Task Render_SingleSection()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title Quick Journey
                 section Main
@@ -101,14 +102,14 @@ public class UserJourneyRendererTests
                     End: 5: User
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ManyActors()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title Big Team Project
                 section Kickoff
@@ -118,14 +119,14 @@ public class UserJourneyRendererTests
                     Testing: 4: QA
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CompleteUserJourney()
     {
-        const string input = """
+        const string input =
+            """
             journey
                 title Complete E-commerce Experience
                 
@@ -159,7 +160,6 @@ public class UserJourneyRendererTests
                     Request return: 1: Customer, Support
                     Receive refund: 3: Customer, Finance
             """;
-
 
         return SvgVerify.Verify(input);
     }

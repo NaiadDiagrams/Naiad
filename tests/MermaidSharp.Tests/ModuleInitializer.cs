@@ -1,6 +1,9 @@
-
 public static partial class ModuleInitializer
 {
+    private static IPlaywright? _playwright;
+    private static IBrowser? _browser;
+    private static readonly SemaphoreSlim _browserLock = new(1, 1);
+
     [ModuleInitializer]
     public static void Init()
     {
@@ -9,10 +12,10 @@ public static partial class ModuleInitializer
 
         // Normalize floating point values to 4 decimal places for visual equivalence
         VerifierSettings.AddScrubber(NormalizeFloatingPoint);
-        
+
         // Remove SVG from text extensions so we can use RegisterStreamConverter
         EmptyFiles.FileExtensions.RemoveTextExtension("svg");
-        
+
         // Register SVG converter that produces both SVG and PNG outputs
         VerifierSettings.RegisterStreamConverter(
             "svg",
@@ -21,78 +24,88 @@ public static partial class ModuleInitializer
                 // Read the SVG content
                 using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
                 var svgContent = reader.ReadToEnd();
-                
+
                 // Create targets list with both SVG and PNG
                 var targets = new List<Target>();
-                
+
                 // Add original SVG
                 var svgStream = new MemoryStream(Encoding.UTF8.GetBytes(svgContent));
                 targets.Add(new Target("svg", svgStream));
-                
-                // Convert to PNG using Svg.Skia
-                var pngStream = ConvertSvgToPng(svgContent);
+
+                // Convert to PNG using Playwright (browser-based rendering)
+                var pngStream = ConvertSvgToPngAsync(svgContent).GetAwaiter().GetResult();
                 if (pngStream != null)
                 {
                     targets.Add(new Target("png", pngStream));
                 }
-                
+
                 return new ConversionResult(null, targets);
             });
     }
 
-    static MemoryStream? ConvertSvgToPng(string svgContent)
+    static async Task<MemoryStream?> ConvertSvgToPngAsync(string svgContent)
     {
         try
         {
-            using var svg = new SKSvg();
+            var page = await GetBrowserPageAsync();
 
-            // Configure typeface providers to ensure system fonts are found
-            svg.Settings.TypefaceProviders ??= new List<Svg.Skia.TypefaceProviders.ITypefaceProvider>();
-            svg.Settings.TypefaceProviders.Insert(0, new SystemFontTypefaceProvider());
+            // Create an HTML page with the SVG
+            var html = $@"<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""UTF-8"">
+    <style>
+        * {{ margin: 0; padding: 0; }}
+        body {{ background: white; display: inline-block; }}
+    </style>
+    <link rel=""stylesheet"" href=""https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"">
+</head>
+<body>
+{svgContent}
+</body>
+</html>";
 
-            using var svgStream = new MemoryStream(Encoding.UTF8.GetBytes(svgContent));
+            await page.SetContentAsync(html, new() { WaitUntil = WaitUntilState.NetworkIdle });
 
-            if (svg.Load(svgStream) is { } picture)
+            // Get the SVG element and take a screenshot
+            var svg = await page.QuerySelectorAsync("svg");
+            if (svg == null) return null;
+
+            var screenshot = await svg.ScreenshotAsync(new()
             {
-                var pngStream = new MemoryStream();
-                
-                // Get the bounds of the SVG
-                var bounds = picture.CullRect;
-                var width = (int)Math.Ceiling(bounds.Width);
-                var height = (int)Math.Ceiling(bounds.Height);
-                
-                if (width <= 0 || height <= 0)
-                {
-                    // Use default size if bounds are invalid
-                    width = 800;
-                    height = 600;
-                }
-                
-                // Create bitmap and canvas
-                using var bitmap = new SKBitmap(width, height);
-                using var canvas = new SKCanvas(bitmap);
-                
-                // Clear with white background
-                canvas.Clear(SKColors.White);
-                
-                // Draw the SVG
-                canvas.DrawPicture(picture);
-                
-                // Encode to PNG
-                using var image = SKImage.FromBitmap(bitmap);
-                using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-                data.SaveTo(pngStream);
-                
-                pngStream.Position = 0;
-                return pngStream;
-            }
+                Type = ScreenshotType.Png,
+                OmitBackground = false
+            });
+
+            return new MemoryStream(screenshot);
         }
         catch
         {
-            // If conversion fails, just skip the PNG
+            // If conversion fails, skip the PNG
+            return null;
         }
-        
-        return null;
+    }
+
+    static async Task<IPage> GetBrowserPageAsync()
+    {
+        await _browserLock.WaitAsync();
+        try
+        {
+            if (_playwright == null)
+            {
+                _playwright = await Playwright.CreateAsync();
+                _browser = await _playwright.Chromium.LaunchAsync(new()
+                {
+                    Headless = true
+                });
+            }
+
+            return await _browser!.NewPageAsync();
+        }
+        finally
+        {
+            _browserLock.Release();
+        }
     }
 
     static void NormalizeFloatingPoint(StringBuilder sb)
@@ -110,42 +123,4 @@ public static partial class ModuleInitializer
 
     [GeneratedRegex(@"-?\d+\.\d{5,}")]
     private static partial Regex FloatRegex();
-}
-
-/// <summary>
-/// Custom typeface provider that uses SKFontManager.Default to resolve system fonts.
-/// </summary>
-public class SystemFontTypefaceProvider : Svg.Skia.TypefaceProviders.ITypefaceProvider
-{
-    private static readonly SKFontManager s_fontManager = SKFontManager.Default;
-
-    public SKTypeface? FromFamilyName(string fontFamily, SKFontStyleWeight fontWeight, SKFontStyleWidth fontWidth, SKFontStyleSlant fontStyle)
-    {
-        // Try each font in the comma-separated list
-        var families = fontFamily.Split(',');
-        foreach (var family in families)
-        {
-            var trimmed = family.Trim().Trim('"', '\'');
-            if (string.IsNullOrEmpty(trimmed))
-                continue;
-
-            // Handle generic font families
-            var familyName = trimmed.ToLowerInvariant() switch
-            {
-                "sans-serif" => "Arial",
-                "serif" => "Times New Roman",
-                "monospace" => "Consolas",
-                _ => trimmed
-            };
-
-            var typeface = s_fontManager.MatchFamily(familyName, new SKFontStyle(fontWeight, fontWidth, fontStyle));
-            if (typeface != null && !string.IsNullOrEmpty(typeface.FamilyName))
-            {
-                return typeface;
-            }
-        }
-
-        // Fallback to Arial if nothing else works
-        return s_fontManager.MatchFamily("Arial", new SKFontStyle(fontWeight, fontWidth, fontStyle));
-    }
 }

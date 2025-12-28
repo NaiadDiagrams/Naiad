@@ -3,13 +3,13 @@ public class TimelineRendererTests
     [Test]
     public Task Render_SimpleTimeline()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 2020 : Event One
                 2021 : Event Two
                 2022 : Event Three
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -17,7 +17,8 @@ public class TimelineRendererTests
     [Test]
     public Task Render_TimelineWithTitle()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 title History of Computing
                 1940 : First Computer
@@ -25,14 +26,14 @@ public class TimelineRendererTests
                 2000 : Internet Era
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MultipleEventsPerPeriod()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 2004 : Facebook
                      : Gmail
@@ -41,14 +42,14 @@ public class TimelineRendererTests
                      : Spotify
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_WithSections()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 title Technology Timeline
                 section Early Era
@@ -59,14 +60,14 @@ public class TimelineRendererTests
                     2010 : iPad
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_TextPeriods()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 title Project Phases
                 Planning : Define scope
@@ -75,14 +76,14 @@ public class TimelineRendererTests
                 Testing : Quality assurance
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MultipleSections()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 section Ancient History
                     3000 BC : Writing invented
@@ -95,14 +96,14 @@ public class TimelineRendererTests
                     2000 : Digital Age
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CompleteTimeline()
     {
-        const string input = """
+        const string input =
+            """
             timeline
                 title Social Media Evolution
                 section Web 1.0
@@ -119,7 +120,6 @@ public class TimelineRendererTests
                     2011 : Snapchat
                     2016 : TikTok
             """;
-
 
         return SvgVerify.Verify(input);
     }

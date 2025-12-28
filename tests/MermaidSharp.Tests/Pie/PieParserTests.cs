@@ -5,7 +5,8 @@ public class PieParserTests
     [Test]
     public void Parse_SimplePie_ReturnsSections()
     {
-        const string input = """
+        const string input =
+            """
             pie
                 "Dogs" : 40
                 "Cats" : 30
@@ -24,7 +25,8 @@ public class PieParserTests
     [Test]
     public void Parse_PieWithTitle_ParsesTitle()
     {
-        const string input = """
+        const string input =
+            """
             pie
                 title Pet Distribution
                 "Dogs" : 40
@@ -42,7 +44,8 @@ public class PieParserTests
     [Test]
     public void Parse_PieWithShowData_SetsShowDataFlag()
     {
-        const string input = """
+        const string input =
+            """
             pie showData
                 "A" : 50
                 "B" : 50
@@ -58,7 +61,8 @@ public class PieParserTests
     [Test]
     public void Parse_PieWithDecimalValues_ParsesCorrectly()
     {
-        const string input = """
+        const string input =
+            """
             pie
                 "Section A" : 33.33
                 "Section B" : 66.67

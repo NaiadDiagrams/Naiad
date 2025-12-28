@@ -3,12 +3,12 @@ public class SankeyRendererTests
     [Test]
     public Task Render_SimpleSankey()
     {
-        const string input = """
+        const string input =
+            """
             sankey-beta
             A,B,10
             A,C,20
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -16,12 +16,12 @@ public class SankeyRendererTests
     [Test]
     public Task Render_ThreeColumns()
     {
-        const string input = """
+        const string input =
+            """
             sankey-beta
             Source,Middle,30
             Middle,Target,30
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -29,7 +29,8 @@ public class SankeyRendererTests
     [Test]
     public Task Render_EnergyFlow()
     {
-        const string input = """
+        const string input =
+            """
             sankey-beta
             Coal,Electricity,100
             Gas,Electricity,50
@@ -39,14 +40,14 @@ public class SankeyRendererTests
             Electricity,Commercial,40
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_BudgetFlow()
     {
-        const string input = """
+        const string input =
+            """
             sankey-beta
             Salary,Savings,1000
             Salary,Expenses,3000
@@ -56,14 +57,14 @@ public class SankeyRendererTests
             Expenses,Other,300
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_MultipleSourcesAndTargets()
     {
-        const string input = """
+        const string input =
+            """
             sankey-beta
             A,X,10
             A,Y,15
@@ -72,18 +73,17 @@ public class SankeyRendererTests
             B,Z,5
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SingleLink()
     {
-        const string input = """
+        const string input =
+            """
             sankey-beta
             Input,Output,100
             """;
-
 
         return SvgVerify.Verify(input);
     }

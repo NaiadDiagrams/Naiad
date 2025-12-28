@@ -6,7 +6,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_SimpleFlowchart_ReturnsNodes()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A[Start] --> B[End]
             """;
@@ -22,7 +23,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_FlowchartWithDirection_ParsesDirection()
     {
-        const string input = """
+        const string input =
+            """
             flowchart TD
                 A --> B
             """;
@@ -37,7 +39,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_FlowchartWithRoundedNodes_ParsesShape()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A(Rounded)
             """;
@@ -53,7 +56,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_FlowchartWithDiamond_ParsesShape()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A{Decision}
             """;
@@ -68,7 +72,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_FlowchartWithCircle_ParsesShape()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A((Circle))
             """;
@@ -83,7 +88,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_ChainedNodes_CreatesMultipleEdges()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A --> B --> C --> D
             """;
@@ -99,7 +105,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_DottedArrow_ParsesEdgeStyle()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A -.-> B
             """;
@@ -114,7 +121,8 @@ public class FlowchartParserTests
     [Test]
     public void Parse_ThickArrow_ParsesEdgeStyle()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A ==> B
             """;

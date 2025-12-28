@@ -3,11 +3,11 @@ public class FlowchartRendererTests
     [Test]
     public Task Render_SimpleFlowchart()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A[Start] --> B[Process] --> C[End]
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -15,7 +15,8 @@ public class FlowchartRendererTests
     [Test]
     public Task Complex()
     {
-        const string input = """
+        const string input =
+            """
             flowchart TD
                 A[Christmas] -->|Get money| B(Go shopping)
                 B --> C{Let me think}
@@ -24,14 +25,14 @@ public class FlowchartRendererTests
                 C -->|Three| F[fa:fa-car Car]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_FlowchartWithShapes()
     {
-        const string input = """
+        const string input =
+            """
             flowchart TD
                 A[Rectangle]
                 B(Rounded)
@@ -39,19 +40,18 @@ public class FlowchartRendererTests
                 D((Circle))
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_FlowchartWithEdgeLabels()
     {
-        const string input = """
+        const string input =
+            """
             flowchart LR
                 A --> |Yes| B
                 A --> |No| C
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -59,7 +59,8 @@ public class FlowchartRendererTests
     [Test]
     public Task Render_GraphKeyword()
     {
-        const string input = """
+        const string input =
+            """
             graph TD
                 A --> B --> C
             """;

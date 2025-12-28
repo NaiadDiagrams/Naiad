@@ -3,7 +3,8 @@ public class MindmapRendererTests
     [Test]
     public Task Render_SimpleHierarchy()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               Root
                 Branch A
@@ -11,14 +12,14 @@ public class MindmapRendererTests
                 Branch C
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_NestedHierarchy()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               Root
                 Branch 1
@@ -28,20 +29,19 @@ public class MindmapRendererTests
                   Sub 2.1
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CircleShape()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               ((Central))
                 Child 1
                 Child 2
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -49,13 +49,13 @@ public class MindmapRendererTests
     [Test]
     public Task Render_SquareShape()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               [Square Root]
                 [Square Child]
                 Normal Child
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -63,13 +63,13 @@ public class MindmapRendererTests
     [Test]
     public Task Render_RoundedShape()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               (Rounded Root)
                 (Rounded Child)
                 Normal Child
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -77,13 +77,13 @@ public class MindmapRendererTests
     [Test]
     public Task Render_HexagonShape()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               {{Hexagon}}
                 Child A
                 Child B
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -91,7 +91,8 @@ public class MindmapRendererTests
     [Test]
     public Task Render_MixedShapes()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               ((Center))
                 [Square]
@@ -100,14 +101,14 @@ public class MindmapRendererTests
                   {{Hex}}
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_DeepHierarchy()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               Root
                 Level 1
@@ -117,14 +118,14 @@ public class MindmapRendererTests
                         Level 5
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_WideTree()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               Center
                 A
@@ -135,14 +136,14 @@ public class MindmapRendererTests
                 F
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CompleteMindmap()
     {
-        const string input = """
+        const string input =
+            """
             mindmap
               ((Project))
                 [Planning]
@@ -159,7 +160,6 @@ public class MindmapRendererTests
                   Staging
                   Production
             """;
-
 
         return SvgVerify.Verify(input);
     }

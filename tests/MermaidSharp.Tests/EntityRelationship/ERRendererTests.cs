@@ -3,11 +3,11 @@ public class ERRendererTests
     [Test]
     public Task Render_SimpleRelationship()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER ||--o{ ORDER : places
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -15,13 +15,13 @@ public class ERRendererTests
     [Test]
     public Task Render_MultipleRelationships()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER ||--o{ ORDER : places
                 ORDER ||--|{ LINE-ITEM : contains
                 PRODUCT ||--o{ LINE-ITEM : includes
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -29,7 +29,8 @@ public class ERRendererTests
     [Test]
     public Task Render_EntityWithAttributes()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER {
                     string name
@@ -38,14 +39,14 @@ public class ERRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_EntityWithKeyTypes()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER {
                     int id PK
@@ -54,14 +55,14 @@ public class ERRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_EntityWithComments()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER {
                     int id PK "Primary key"
@@ -69,18 +70,17 @@ public class ERRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_OneToOne()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 PERSON ||--|| PASSPORT : has
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -88,11 +88,11 @@ public class ERRendererTests
     [Test]
     public Task Render_ZeroOrOne()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 EMPLOYEE |o--o| PARKING-SPACE : uses
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -100,11 +100,11 @@ public class ERRendererTests
     [Test]
     public Task Render_NonIdentifying()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER ||..o{ ORDER : places
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -112,7 +112,8 @@ public class ERRendererTests
     [Test]
     public Task Render_CompleteERDiagram()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER {
                     int id PK
@@ -127,14 +128,14 @@ public class ERRendererTests
                 CUSTOMER ||--o{ ORDER : places
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_FullERDiagram()
     {
-        const string input = """
+        const string input =
+            """
             erDiagram
                 CUSTOMER {
                     int customer_id PK "Primary key"
@@ -203,7 +204,6 @@ public class ERRendererTests
                 CATEGORY ||--o{ PRODUCT : categorizes
                 CATEGORY |o--o| CATEGORY : "parent of"
             """;
-
 
         return SvgVerify.Verify(input);
     }

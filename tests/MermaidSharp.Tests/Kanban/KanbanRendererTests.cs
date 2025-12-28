@@ -3,7 +3,8 @@ public class KanbanRendererTests
     [Test]
     public Task Render_SimpleKanban()
     {
-        const string input = """
+        const string input =
+            """
             kanban
             todo[Todo]
                 task1[First Task]
@@ -12,14 +13,14 @@ public class KanbanRendererTests
                 task3[Completed Task]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ThreeColumns()
     {
-        const string input = """
+        const string input =
+            """
             kanban
             todo[To Do]
                 t1[Research]
@@ -31,14 +32,14 @@ public class KanbanRendererTests
                 t5[Review]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_EmptyColumns()
     {
-        const string input = """
+        const string input =
+            """
             kanban
             backlog[Backlog]
             todo[To Do]
@@ -46,14 +47,14 @@ public class KanbanRendererTests
                 t1[Task 1]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ManyTasks()
     {
-        const string input = """
+        const string input =
+            """
             kanban
             col1[Sprint Backlog]
                 t1[User Story 1]
@@ -71,21 +72,20 @@ public class KanbanRendererTests
                 t10[Configuration]
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_SingleColumn()
     {
-        const string input = """
+        const string input =
+            """
             kanban
             tasks[All Tasks]
                 t1[Task One]
                 t2[Task Two]
                 t3[Task Three]
             """;
-
 
         return SvgVerify.Verify(input);
     }

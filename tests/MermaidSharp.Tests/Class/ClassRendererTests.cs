@@ -3,11 +3,11 @@ public class ClassRendererTests
     [Test]
     public Task Render_SimpleClass()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class Animal
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -15,7 +15,8 @@ public class ClassRendererTests
     [Test]
     public Task Render_ClassWithMembers()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class Animal {
                     +String name
@@ -23,14 +24,14 @@ public class ClassRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ClassWithMethods()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class Animal {
                     +makeSound()
@@ -38,14 +39,14 @@ public class ClassRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_ClassWithMembersAndMethods()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class Animal {
                     +String name
@@ -55,19 +56,18 @@ public class ClassRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_Inheritance()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 Animal <|-- Dog
                 Animal <|-- Cat
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -75,12 +75,12 @@ public class ClassRendererTests
     [Test]
     public Task Render_Composition()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 Car *-- Engine
                 Car *-- Wheel
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -88,11 +88,11 @@ public class ClassRendererTests
     [Test]
     public Task Render_Aggregation()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 Library o-- Book
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -100,11 +100,11 @@ public class ClassRendererTests
     [Test]
     public Task Render_Association()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 Student --> Course : enrolls
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -112,7 +112,8 @@ public class ClassRendererTests
     [Test]
     public Task Render_InterfaceAnnotation()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class IFlyable {
                     <<interface>>
@@ -120,14 +121,14 @@ public class ClassRendererTests
                 }
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CompleteClassDiagram()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class Animal {
                     +String name
@@ -143,14 +144,14 @@ public class ClassRendererTests
                 Animal <|-- Cat
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_FullClassDiagram()
     {
-        const string input = """
+        const string input =
+            """
             classDiagram
                 class IRepository~T~ {
                     <<interface>>
@@ -218,7 +219,6 @@ public class ClassRendererTests
                 User "1" o-- "*" Order : places
                 Order "1" *-- "1..*" Item : contains
             """;
-
 
         return SvgVerify.Verify(input);
     }

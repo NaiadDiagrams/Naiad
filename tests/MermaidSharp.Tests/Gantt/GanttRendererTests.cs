@@ -3,13 +3,13 @@ public class GanttRendererTests
     [Test]
     public Task Render_SimpleTasks()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Simple Gantt
                 Task A :a1, 2024-01-01, 30d
                 Task B :b1, 2024-01-15, 20d
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -17,13 +17,13 @@ public class GanttRendererTests
     [Test]
     public Task Render_TaskWithDependency()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Dependent Tasks
                 Task A :a1, 2024-01-01, 10d
                 Task B :b1, after a1, 15d
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -31,7 +31,8 @@ public class GanttRendererTests
     [Test]
     public Task Render_WithSections()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Project Timeline
                 section Planning
@@ -42,14 +43,14 @@ public class GanttRendererTests
                     Testing :b2, after b1, 14d
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_TaskStatuses()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Task Statuses
                 Done Task :done, d1, 2024-01-01, 10d
@@ -57,14 +58,14 @@ public class GanttRendererTests
                 Normal Task :n1, 2024-01-21, 10d
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_CriticalTasks()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Critical Path
                 Normal :n1, 2024-01-01, 10d
@@ -72,20 +73,19 @@ public class GanttRendererTests
                 Also Critical :crit, c2, after c1, 10d
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_Milestones()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title With Milestones
                 Development :d1, 2024-01-01, 30d
                 Release :milestone, m1, 2024-01-31, 0d
             """;
-
 
         return SvgVerify.Verify(input);
     }
@@ -93,7 +93,8 @@ public class GanttRendererTests
     [Test]
     public Task Render_CompleteGantt()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Complete Project
                 dateFormat YYYY-MM-DD
@@ -109,20 +110,19 @@ public class GanttRendererTests
                     Go Live :milestone, m1, after t2, 0d
             """;
 
-
         return SvgVerify.Verify(input);
     }
 
     [Test]
     public Task Render_WeeklyDuration()
     {
-        const string input = """
+        const string input =
+            """
             gantt
                 title Weekly Tasks
                 Week Task :w1, 2024-01-01, 2w
                 Day Task :d1, after w1, 5d
             """;
-
 
         return SvgVerify.Verify(input);
     }
