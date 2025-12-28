@@ -29,12 +29,20 @@ public class SvgGroup : SvgElement
     public override string ToXml()
     {
         var sb = new StringBuilder();
-        sb.Append($"<g{CommonAttributes()}>");
-        foreach (var child in Children)
+        sb.Append($"<g{CommonAttributes()}");
+        if (Children.Count == 0)
         {
-            sb.Append(child.ToXml());
+            sb.Append("/>");
         }
-        sb.Append("</g>");
+        else
+        {
+            sb.Append('>');
+            foreach (var child in Children)
+            {
+                sb.Append(child.ToXml());
+            }
+            sb.Append("</g>");
+        }
         return sb.ToString();
     }
 }
@@ -61,7 +69,22 @@ public class SvgRect : SvgElement
         if (Stroke is not null) sb.Append($" stroke=\"{Stroke}\"");
         if (StrokeWidth.HasValue) sb.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
         sb.Append(CommonAttributes());
-        sb.Append(" />");
+        sb.Append("/>");
+        return sb.ToString();
+    }
+}
+
+public class SvgRectNoXY : SvgElement
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+
+    public override string ToXml()
+    {
+        var sb = new StringBuilder();
+        sb.Append($"<rect width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
+        sb.Append(CommonAttributes());
+        sb.Append("/>");
         return sb.ToString();
     }
 }
@@ -83,7 +106,7 @@ public class SvgCircle : SvgElement
         if (Stroke is not null) builder.Append($" stroke=\"{Stroke}\"");
         if (StrokeWidth.HasValue) builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
         builder.Append(CommonAttributes());
-        builder.Append(" />");
+        builder.Append("/>");
         return builder.ToString();
     }
 }
@@ -104,7 +127,7 @@ public class SvgEllipse : SvgElement
         if (Fill is not null) sb.Append($" fill=\"{Fill}\"");
         if (Stroke is not null) sb.Append($" stroke=\"{Stroke}\"");
         sb.Append(CommonAttributes());
-        sb.Append(" />");
+        sb.Append("/>");
         return sb.ToString();
     }
 }
@@ -127,7 +150,7 @@ public class SvgLine : SvgElement
         if (StrokeWidth.HasValue) sb.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
         if (StrokeDasharray is not null) sb.Append($" stroke-dasharray=\"{StrokeDasharray}\"");
         sb.Append(CommonAttributes());
-        sb.Append(" />");
+        sb.Append("/>");
         return sb.ToString();
     }
 }
@@ -141,6 +164,7 @@ public class SvgPath : SvgElement
     public string? StrokeDasharray { get; set; }
     public string? MarkerStart { get; set; }
     public string? MarkerEnd { get; set; }
+    public double? Opacity { get; set; }
 
     public override string ToXml()
     {
@@ -152,8 +176,9 @@ public class SvgPath : SvgElement
         if (StrokeDasharray is not null) sb.Append($" stroke-dasharray=\"{StrokeDasharray}\"");
         if (MarkerStart is not null) sb.Append($" marker-start=\"{MarkerStart}\"");
         if (MarkerEnd is not null) sb.Append($" marker-end=\"{MarkerEnd}\"");
+        if (Opacity.HasValue) sb.Append($" opacity=\"{Fmt(Opacity.Value)}\"");
         sb.Append(CommonAttributes());
-        sb.Append(" />");
+        sb.Append("/>");
         return sb.ToString();
     }
 }
@@ -172,7 +197,7 @@ public class SvgPolygon : SvgElement
         if (Fill is not null) sb.Append($" fill=\"{Fill}\"");
         if (Stroke is not null) sb.Append($" stroke=\"{Stroke}\"");
         sb.Append(CommonAttributes());
-        sb.Append(" />");
+        sb.Append("/>");
         return sb.ToString();
     }
 }
@@ -197,7 +222,7 @@ public class SvgPolyline : SvgElement
         if (StrokeDasharray is not null) sb.Append($" stroke-dasharray=\"{StrokeDasharray}\"");
         if (MarkerEnd is not null) sb.Append($" marker-end=\"{MarkerEnd}\"");
         sb.Append(CommonAttributes());
-        sb.Append(" />");
+        sb.Append("/>");
         return sb.ToString();
     }
 }
@@ -206,6 +231,7 @@ public class SvgText : SvgElement
 {
     public double X { get; set; }
     public double Y { get; set; }
+    public bool OmitXY { get; set; } // When true, don't output x/y attributes (for transformed text)
     public required string Content { get; set; }
     public string? TextAnchor { get; set; }
     public string? DominantBaseline { get; set; }
@@ -217,15 +243,35 @@ public class SvgText : SvgElement
     public override string ToXml()
     {
         var sb = new StringBuilder();
-        sb.Append($"<text x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\"");
-        if (TextAnchor is not null) sb.Append($" text-anchor=\"{TextAnchor}\"");
-        if (DominantBaseline is not null) sb.Append($" dominant-baseline=\"{DominantBaseline}\"");
-        if (FontSize is not null) sb.Append($" font-size=\"{FontSize}\"");
-        if (FontFamily is not null) sb.Append($" font-family=\"{FontFamily}\"");
-        if (FontWeight is not null) sb.Append($" font-weight=\"{FontWeight}\"");
-        if (Fill is not null) sb.Append($" fill=\"{Fill}\"");
-        sb.Append(CommonAttributes());
-        sb.Append($">{EscapeXml(Content)}</text>");
+        sb.Append("<text");
+
+        // For transformed text (OmitXY=true), mermaid.ink uses: transform, class, style order
+        if (OmitXY)
+        {
+            if (Transform is not null) sb.Append($" transform=\"{Transform}\"");
+            if (Class is not null) sb.Append($" class=\"{Class}\"");
+            if (Style is not null) sb.Append($" style=\"{Style}\"");
+        }
+        else
+        {
+            sb.Append($" x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\"");
+            if (TextAnchor is not null) sb.Append($" text-anchor=\"{TextAnchor}\"");
+            if (DominantBaseline is not null) sb.Append($" dominant-baseline=\"{DominantBaseline}\"");
+            if (FontSize is not null) sb.Append($" font-size=\"{FontSize}\"");
+            if (FontFamily is not null) sb.Append($" font-family=\"{FontFamily}\"");
+            if (FontWeight is not null) sb.Append($" font-weight=\"{FontWeight}\"");
+            if (Fill is not null) sb.Append($" fill=\"{Fill}\"");
+            sb.Append(CommonAttributes());
+        }
+
+        if (string.IsNullOrEmpty(Content))
+        {
+            sb.Append("/>");
+        }
+        else
+        {
+            sb.Append($">{EscapeXml(Content)}</text>");
+        }
         return sb.ToString();
     }
 

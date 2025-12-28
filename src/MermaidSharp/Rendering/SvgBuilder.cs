@@ -3,12 +3,25 @@ namespace MermaidSharp.Rendering;
 public class SvgBuilder
 {
     readonly SvgDocument _document = new();
-    SvgGroup? _currentGroup;
+    readonly Stack<SvgGroup> _groupStack = new();
 
     public SvgBuilder Size(double width, double height)
     {
         _document.Width = width;
         _document.Height = height;
+        return this;
+    }
+
+    public SvgBuilder ViewBox(string viewBox)
+    {
+        _document.ViewBoxOverride = viewBox;
+        return this;
+    }
+
+    public SvgBuilder DiagramType(string diagramClass, string ariaRoledescription)
+    {
+        _document.DiagramClass = diagramClass;
+        _document.AriaRoledescription = ariaRoledescription;
         return this;
     }
 
@@ -78,28 +91,31 @@ public class SvgBuilder
             Transform = transform
         };
 
-        if (_currentGroup is not null)
+        if (_groupStack.Count > 0)
         {
-            _currentGroup.Children.Add(group);
+            _groupStack.Peek().Children.Add(group);
         }
         else
         {
             _document.Elements.Add(group);
         }
 
-        _currentGroup = group;
+        _groupStack.Push(group);
         return this;
     }
 
     public SvgBuilder EndGroup()
     {
-        _currentGroup = null;
+        if (_groupStack.Count > 0)
+        {
+            _groupStack.Pop();
+        }
         return this;
     }
 
     public SvgBuilder AddRect(double x, double y, double width, double height,
         double rx = 0, string? fill = null, string? stroke = null, double? strokeWidth = null,
-        string? id = null, string? cssClass = null)
+        string? id = null, string? cssClass = null, string? style = null)
     {
         var rect = new SvgRect
         {
@@ -113,14 +129,27 @@ public class SvgBuilder
             Stroke = stroke,
             StrokeWidth = strokeWidth,
             Id = id,
-            Class = cssClass
+            Class = cssClass,
+            Style = style
+        };
+        AddElement(rect);
+        return this;
+    }
+
+    public SvgBuilder AddRectNoXY(double width, double height, string? style = null)
+    {
+        var rect = new SvgRectNoXY
+        {
+            Width = width,
+            Height = height,
+            Style = style
         };
         AddElement(rect);
         return this;
     }
 
     public SvgBuilder AddCircle(double cx, double cy, double r,
-        string? fill = null, string? stroke = null, double? strokeWidth = null)
+        string? fill = null, string? stroke = null, double? strokeWidth = null, string? cssClass = null)
     {
         var circle = new SvgCircle
         {
@@ -129,7 +158,8 @@ public class SvgBuilder
             R = r,
             Fill = fill,
             Stroke = stroke,
-            StrokeWidth = strokeWidth
+            StrokeWidth = strokeWidth,
+            Class = cssClass
         };
         AddElement(circle);
         return this;
@@ -170,7 +200,8 @@ public class SvgBuilder
 
     public SvgBuilder AddPath(string d, string? fill = null, string? stroke = null,
         double? strokeWidth = null, string? strokeDasharray = null,
-        string? markerStart = null, string? markerEnd = null)
+        string? markerStart = null, string? markerEnd = null, double? opacity = null,
+        string? cssClass = null)
     {
         var path = new SvgPath
         {
@@ -180,7 +211,9 @@ public class SvgBuilder
             StrokeWidth = strokeWidth,
             StrokeDasharray = strokeDasharray,
             MarkerStart = markerStart,
-            MarkerEnd = markerEnd
+            MarkerEnd = markerEnd,
+            Opacity = opacity,
+            Class = cssClass
         };
         AddElement(path);
         return this;
@@ -215,12 +248,14 @@ public class SvgBuilder
     public SvgBuilder AddText(double x, double y, string content,
         string? anchor = null, string? baseline = null,
         string? fontSize = null, string? fontFamily = null, string? fontWeight = null,
-        string? fill = null, string? id = null, string? cssClass = null)
+        string? fill = null, string? id = null, string? cssClass = null,
+        string? transform = null, string? style = null, bool omitXY = false)
     {
         var text = new SvgText
         {
             X = x,
             Y = y,
+            OmitXY = omitXY,
             Content = content,
             TextAnchor = anchor,
             DominantBaseline = baseline,
@@ -229,7 +264,9 @@ public class SvgBuilder
             FontWeight = fontWeight,
             Fill = fill,
             Id = id,
-            Class = cssClass
+            Class = cssClass,
+            Transform = transform,
+            Style = style
         };
         AddElement(text);
         return this;
@@ -237,9 +274,9 @@ public class SvgBuilder
 
     void AddElement(SvgElement element)
     {
-        if (_currentGroup is not null)
+        if (_groupStack.Count > 0)
         {
-            _currentGroup.Children.Add(element);
+            _groupStack.Peek().Children.Add(element);
         }
         else
         {

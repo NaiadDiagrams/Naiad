@@ -73,6 +73,7 @@ public class ArchitectureTests
     }
 
     [Test]
+    [Explicit("Uses arrow syntax not supported by mermaid.ink/kroki.io")]
     public async Task EdgeWithArrows()
     {
         var input = """

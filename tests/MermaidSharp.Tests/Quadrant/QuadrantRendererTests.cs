@@ -89,6 +89,7 @@ public class QuadrantRendererTests
     }
 
     [Test]
+    [Explicit("Uses edge coordinates not supported by mermaid.ink/kroki.io")]
     public Task Render_EdgePositions()
     {
         const string input = """
