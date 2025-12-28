@@ -13,6 +13,22 @@ public class FlowchartRendererTests
     }
 
     [Test]
+    public Task Complex()
+    {
+        const string input = """
+            flowchart TD
+                A[Christmas] -->|Get money| B(Go shopping)
+                B --> C{Let me think}
+                C -->|One| D[Laptop]
+                C -->|Two| E[iPhone]
+                C -->|Three| F[fa:fa-car Car]
+            """;
+
+        var svg = Mermaid.Render(input);
+        return Verify(svg, extension: "svg");
+    }
+
+    [Test]
     public Task Render_FlowchartWithShapes()
     {
         const string input = """

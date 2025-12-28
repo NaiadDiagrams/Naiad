@@ -82,6 +82,109 @@ public class SvgBuilder
         return this;
     }
 
+    public SvgBuilder AddMermaidArrowMarker()
+    {
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-pointEnd",
+            Path = "M 0 0 L 10 5 L 0 10 z",
+            MarkerWidth = 8,
+            MarkerHeight = 8,
+            RefX = 5,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-pointStart",
+            Path = "M 0 5 L 10 10 L 10 0 z",
+            MarkerWidth = 8,
+            MarkerHeight = 8,
+            RefX = 4.5,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        return this;
+    }
+
+    public SvgBuilder AddMermaidCircleMarker()
+    {
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-circleEnd",
+            Path = "M5,5 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0",
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = 11,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-circleStart",
+            Path = "M5,5 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0",
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = -1,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        return this;
+    }
+
+    public SvgBuilder AddMermaidCrossMarker()
+    {
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-crossEnd",
+            Path = "M 1,1 l 9,9 M 10,1 l -9,9",
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = 12,
+            RefY = 5.2,
+            ViewBox = "0 0 11 11",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker cross flowchart-v2"
+        });
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-crossStart",
+            Path = "M 1,1 l 9,9 M 10,1 l -9,9",
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = -1,
+            RefY = 5.2,
+            ViewBox = "0 0 11 11",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker cross flowchart-v2"
+        });
+        return this;
+    }
+
+    public SvgBuilder AddForeignObject(double x, double y, double width, double height,
+        string htmlContent, string? className = null)
+    {
+        var foreignObject = new SvgForeignObject
+        {
+            X = x,
+            Y = y,
+            Width = width,
+            Height = height,
+            HtmlContent = htmlContent,
+            Class = className
+        };
+        AddElement(foreignObject);
+        return this;
+    }
+
     public SvgBuilder BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
     {
         var group = new SvgGroup

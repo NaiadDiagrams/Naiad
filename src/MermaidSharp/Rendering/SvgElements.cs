@@ -285,3 +285,25 @@ public class SvgText : SvgElement
             .Replace("'", "&apos;");
     }
 }
+
+public class SvgForeignObject : SvgElement
+{
+    public double X { get; set; }
+    public double Y { get; set; }
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public required string HtmlContent { get; set; }
+
+    public override string ToXml()
+    {
+        var sb = new StringBuilder();
+        sb.Append($"<foreignObject x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\" width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
+        sb.Append(CommonAttributes());
+        sb.Append(">");
+        sb.Append($"<div xmlns=\"http://www.w3.org/1999/xhtml\" style=\"display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: {Fmt(Width)}px; height: {Fmt(Height)}px;\">");
+        sb.Append($"<span class=\"nodeLabel\">{HtmlContent}</span>");
+        sb.Append("</div>");
+        sb.Append("</foreignObject>");
+        return sb.ToString();
+    }
+}
