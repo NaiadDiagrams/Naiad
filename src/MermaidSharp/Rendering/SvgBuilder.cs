@@ -116,7 +116,11 @@ public class SvgBuilder
         _document.Defs.Markers.Add(new SvgMarker
         {
             Id = "mermaid-svg_flowchart-v2-circleEnd",
-            Path = "M5,5 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0",
+            Path = "",
+            UseCircle = true,
+            CircleCx = 5,
+            CircleCy = 5,
+            CircleR = 5,
             MarkerWidth = 11,
             MarkerHeight = 11,
             RefX = 11,
@@ -128,7 +132,11 @@ public class SvgBuilder
         _document.Defs.Markers.Add(new SvgMarker
         {
             Id = "mermaid-svg_flowchart-v2-circleStart",
-            Path = "M5,5 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0",
+            Path = "",
+            UseCircle = true,
+            CircleCx = 5,
+            CircleCy = 5,
+            CircleR = 5,
             MarkerWidth = 11,
             MarkerHeight = 11,
             RefX = -1,
@@ -152,7 +160,8 @@ public class SvgBuilder
             RefY = 5.2,
             ViewBox = "0 0 11 11",
             MarkerUnits = "userSpaceOnUse",
-            ClassName = "marker cross flowchart-v2"
+            ClassName = "marker cross flowchart-v2",
+            StrokeWidth = 2
         });
         _document.Defs.Markers.Add(new SvgMarker
         {
@@ -164,7 +173,8 @@ public class SvgBuilder
             RefY = 5.2,
             ViewBox = "0 0 11 11",
             MarkerUnits = "userSpaceOnUse",
-            ClassName = "marker cross flowchart-v2"
+            ClassName = "marker cross flowchart-v2",
+            StrokeWidth = 2
         });
         return this;
     }

@@ -13,6 +13,11 @@ public class SvgMarker
     public string? ViewBox { get; set; }
     public string? MarkerUnits { get; set; }
     public string? ClassName { get; set; }
+    public bool UseCircle { get; set; }
+    public double CircleCx { get; set; } = 5;
+    public double CircleCy { get; set; } = 5;
+    public double CircleR { get; set; } = 5;
+    public int StrokeWidth { get; set; } = 1;
 
     public string ToXml()
     {
@@ -24,7 +29,16 @@ public class SvgMarker
         if (MarkerUnits is not null) sb.Append($" markerUnits=\"{MarkerUnits}\"");
         sb.Append($" markerWidth=\"{Fmt(MarkerWidth)}\" markerHeight=\"{Fmt(MarkerHeight)}\"");
         sb.Append($" orient=\"{Orient}\">");
-        sb.Append($"<path d=\"{Path}\" class=\"arrowMarkerPath\" style=\"stroke-width: 1; stroke-dasharray: 1, 0;\"/>");
+
+        if (UseCircle)
+        {
+            sb.Append($"<circle cx=\"{Fmt(CircleCx)}\" cy=\"{Fmt(CircleCy)}\" r=\"{Fmt(CircleR)}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+        }
+        else
+        {
+            sb.Append($"<path d=\"{Path}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+        }
+
         sb.Append("</marker>");
         return sb.ToString();
     }

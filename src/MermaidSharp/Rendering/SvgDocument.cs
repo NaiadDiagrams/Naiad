@@ -71,7 +71,7 @@ public class SvgDocument
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
-    static string FmtWidth(double value) => value.ToString("0.####", CultureInfo.InvariantCulture);
+    static string FmtWidth(double value) => value.ToString("0.######", CultureInfo.InvariantCulture);
 }
 
 public class SvgDefs

@@ -36,8 +36,12 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         var total = model.Sections.Sum(s => s.Value);
         if (total == 0) total = 1;
 
-        // Match mermaid.ink exact dimensions (must use same precision as mermaid)
-        double width = 551.6875;
+        // Calculate legend labels (with values if showData is enabled)
+        var legendLabels = model.Sections.Select(s =>
+            model.ShowData ? $"{s.Label} [{(int)s.Value}]" : s.Label).ToList();
+
+        // Match mermaid.ink exact dimensions - width varies based on legend text
+        double width = model.ShowData ? 613.140625 : 551.6875;
         var height = 450.0;
         var cx = 225.0;
         var cy = 225.0;
@@ -107,7 +111,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
             builder.BeginGroup(cssClass: "legend", transform: $"translate(216,{itemY})");
             builder.AddRectNoXY(18, 18, style: $"fill: {colorRgb}; stroke: {colorRgb};");
-            builder.AddText(22, 14, section.Label);
+            builder.AddText(22, 14, legendLabels[i]);
             builder.EndGroup();
         }
 
