@@ -1,7 +1,7 @@
 public class SequenceRendererTests
 {
     [Test]
-    public Task Render_SimpleSequence()
+    public Task SimpleSequence()
     {
         const string input =
             """
@@ -14,7 +14,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithParticipants()
+    public Task SequenceWithParticipants()
     {
         const string input =
             """
@@ -29,7 +29,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithActors()
+    public Task SequenceWithActors()
     {
         const string input =
             """
@@ -44,7 +44,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithActivation()
+    public Task SequenceWithActivation()
     {
         const string input =
             """
@@ -57,7 +57,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithNotes()
+    public Task SequenceWithNotes()
     {
         const string input =
             """
@@ -72,7 +72,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithAutoNumber()
+    public Task SequenceWithAutoNumber()
     {
         const string input =
             """
@@ -87,7 +87,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithDifferentArrows()
+    public Task SequenceWithDifferentArrows()
     {
         const string input =
             """
@@ -104,7 +104,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_SequenceWithTitle()
+    public Task SequenceWithTitle()
     {
         const string input =
             """
@@ -118,7 +118,7 @@ public class SequenceRendererTests
     }
 
     [Test]
-    public Task Render_CompleteSequence()
+    public Task CompleteSequence()
     {
         const string input =
             """

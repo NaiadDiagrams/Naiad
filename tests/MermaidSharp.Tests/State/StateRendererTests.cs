@@ -1,7 +1,7 @@
 public class StateRendererTests
 {
     [Test]
-    public Task Render_SimpleState()
+    public Task SimpleState()
     {
         const string input =
             """
@@ -14,7 +14,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_MultipleStates()
+    public Task MultipleStates()
     {
         const string input =
             """
@@ -30,7 +30,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_StateWithTransitionLabels()
+    public Task StateWithTransitionLabels()
     {
         const string input =
             """
@@ -45,7 +45,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_StateWithDescription()
+    public Task StateWithDescription()
     {
         const string input =
             """
@@ -59,7 +59,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_ForkJoinState()
+    public Task ForkJoinState()
     {
         const string input =
             """
@@ -74,7 +74,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_ChoiceState()
+    public Task ChoiceState()
     {
         const string input =
             """
@@ -90,7 +90,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_StateWithNote()
+    public Task StateWithNote()
     {
         const string input =
             """
@@ -104,7 +104,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_StateDiagramV1()
+    public Task StateDiagramV1()
     {
         const string input =
             """
@@ -117,7 +117,7 @@ public class StateRendererTests
     }
 
     [Test]
-    public Task Render_CompleteStateDiagram()
+    public Task CompleteStateDiagram()
     {
         const string input =
             """

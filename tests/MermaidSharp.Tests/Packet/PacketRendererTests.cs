@@ -1,7 +1,7 @@
 public class PacketRendererTests
 {
     [Test]
-    public Task Render_SimplePacket()
+    public Task SimplePacket()
     {
         const string input =
             """
@@ -14,7 +14,7 @@ public class PacketRendererTests
     }
 
     [Test]
-    public Task Render_TCPHeader()
+    public Task TCPHeader()
     {
         const string input =
             """
@@ -41,7 +41,7 @@ public class PacketRendererTests
     }
 
     [Test]
-    public Task Render_IPv4Header()
+    public Task IPv4Header()
     {
         const string input =
             """
@@ -65,7 +65,7 @@ public class PacketRendererTests
     }
 
     [Test]
-    public Task Render_SingleRow()
+    public Task SingleRow()
     {
         const string input =
             """
@@ -80,7 +80,7 @@ public class PacketRendererTests
     }
 
     [Test]
-    public Task Render_WideFields()
+    public Task WideFields()
     {
         const string input =
             """

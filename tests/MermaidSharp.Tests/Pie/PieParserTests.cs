@@ -3,7 +3,7 @@ using MermaidSharp.Diagrams.Pie;
 public class PieParserTests
 {
     [Test]
-    public void Parse_SimplePie_ReturnsSections()
+    public void SimplePie_ReturnsSections()
     {
         const string input =
             """
@@ -23,7 +23,7 @@ public class PieParserTests
     }
 
     [Test]
-    public void Parse_PieWithTitle_ParsesTitle()
+    public void PieWithTitle_ParsesTitle()
     {
         const string input =
             """
@@ -42,7 +42,7 @@ public class PieParserTests
     }
 
     [Test]
-    public void Parse_PieWithShowData_SetsShowDataFlag()
+    public void PieWithShowData_SetsShowDataFlag()
     {
         const string input =
             """
@@ -59,7 +59,7 @@ public class PieParserTests
     }
 
     [Test]
-    public void Parse_PieWithDecimalValues_ParsesCorrectly()
+    public void PieWithDecimalValues_ParsesCorrectly()
     {
         const string input =
             """

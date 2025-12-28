@@ -1,7 +1,7 @@
 public class GanttRendererTests
 {
     [Test]
-    public Task Render_SimpleTasks()
+    public Task SimpleTasks()
     {
         const string input =
             """
@@ -15,7 +15,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_TaskWithDependency()
+    public Task TaskWithDependency()
     {
         const string input =
             """
@@ -29,7 +29,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_WithSections()
+    public Task WithSections()
     {
         const string input =
             """
@@ -47,7 +47,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_TaskStatuses()
+    public Task TaskStatuses()
     {
         const string input =
             """
@@ -62,7 +62,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_CriticalTasks()
+    public Task CriticalTasks()
     {
         const string input =
             """
@@ -77,7 +77,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_Milestones()
+    public Task Milestones()
     {
         const string input =
             """
@@ -91,7 +91,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_CompleteGantt()
+    public Task CompleteGantt()
     {
         const string input =
             """
@@ -114,7 +114,7 @@ public class GanttRendererTests
     }
 
     [Test]
-    public Task Render_WeeklyDuration()
+    public Task WeeklyDuration()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class MindmapRendererTests
 {
     [Test]
-    public Task Render_SimpleHierarchy()
+    public Task SimpleHierarchy()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_NestedHierarchy()
+    public Task NestedHierarchy()
     {
         const string input =
             """
@@ -33,7 +33,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_CircleShape()
+    public Task CircleShape()
     {
         const string input =
             """
@@ -47,7 +47,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_SquareShape()
+    public Task SquareShape()
     {
         const string input =
             """
@@ -61,7 +61,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_RoundedShape()
+    public Task RoundedShape()
     {
         const string input =
             """
@@ -75,7 +75,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_HexagonShape()
+    public Task HexagonShape()
     {
         const string input =
             """
@@ -89,7 +89,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_MixedShapes()
+    public Task MixedShapes()
     {
         const string input =
             """
@@ -105,7 +105,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_DeepHierarchy()
+    public Task DeepHierarchy()
     {
         const string input =
             """
@@ -122,7 +122,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_WideTree()
+    public Task WideTree()
     {
         const string input =
             """
@@ -140,7 +140,7 @@ public class MindmapRendererTests
     }
 
     [Test]
-    public Task Render_CompleteMindmap()
+    public Task CompleteMindmap()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class C4RendererTests
 {
     [Test]
-    public Task Render_SimpleContext()
+    public Task SimpleContext()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class C4RendererTests
     }
 
     [Test]
-    public Task Render_ContextWithExternal()
+    public Task ContextWithExternal()
     {
         const string input =
             """
@@ -33,7 +33,7 @@ public class C4RendererTests
     }
 
     [Test]
-    public Task Render_ContainerDiagram()
+    public Task ContainerDiagram()
     {
         const string input =
             """
@@ -52,7 +52,7 @@ public class C4RendererTests
     }
 
     [Test]
-    public Task Render_ComponentDiagram()
+    public Task ComponentDiagram()
     {
         const string input =
             """
@@ -69,7 +69,7 @@ public class C4RendererTests
     }
 
     [Test]
-    public Task Render_MixedElements()
+    public Task MixedElements()
     {
         const string input =
             """
@@ -90,7 +90,7 @@ public class C4RendererTests
     }
 
     [Test]
-    public Task Render_NoRelationships()
+    public Task NoRelationships()
     {
         const string input =
             """
@@ -105,7 +105,7 @@ public class C4RendererTests
     }
 
     [Test]
-    public Task Render_CompleteC4()
+    public Task CompleteC4()
     {
         const string input =
             """

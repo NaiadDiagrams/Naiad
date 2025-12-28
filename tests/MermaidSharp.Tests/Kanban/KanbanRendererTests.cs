@@ -1,7 +1,7 @@
 public class KanbanRendererTests
 {
     [Test]
-    public Task Render_SimpleKanban()
+    public Task SimpleKanban()
     {
         const string input =
             """
@@ -17,7 +17,7 @@ public class KanbanRendererTests
     }
 
     [Test]
-    public Task Render_ThreeColumns()
+    public Task ThreeColumns()
     {
         const string input =
             """
@@ -36,7 +36,7 @@ public class KanbanRendererTests
     }
 
     [Test]
-    public Task Render_EmptyColumns()
+    public Task EmptyColumns()
     {
         const string input =
             """
@@ -51,7 +51,7 @@ public class KanbanRendererTests
     }
 
     [Test]
-    public Task Render_ManyTasks()
+    public Task ManyTasks()
     {
         const string input =
             """
@@ -76,7 +76,7 @@ public class KanbanRendererTests
     }
 
     [Test]
-    public Task Render_SingleColumn()
+    public Task SingleColumn()
     {
         const string input =
             """

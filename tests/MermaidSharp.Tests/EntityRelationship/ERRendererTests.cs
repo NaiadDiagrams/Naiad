@@ -1,7 +1,7 @@
 public class ERRendererTests
 {
     [Test]
-    public Task Render_SimpleRelationship()
+    public Task SimpleRelationship()
     {
         const string input =
             """
@@ -13,7 +13,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_MultipleRelationships()
+    public Task MultipleRelationships()
     {
         const string input =
             """
@@ -27,7 +27,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_EntityWithAttributes()
+    public Task EntityWithAttributes()
     {
         const string input =
             """
@@ -43,7 +43,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_EntityWithKeyTypes()
+    public Task EntityWithKeyTypes()
     {
         const string input =
             """
@@ -59,7 +59,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_EntityWithComments()
+    public Task EntityWithComments()
     {
         const string input =
             """
@@ -74,7 +74,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_OneToOne()
+    public Task OneToOne()
     {
         const string input =
             """
@@ -86,7 +86,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_ZeroOrOne()
+    public Task ZeroOrOne()
     {
         const string input =
             """
@@ -98,7 +98,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_NonIdentifying()
+    public Task NonIdentifying()
     {
         const string input =
             """
@@ -110,7 +110,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_CompleteERDiagram()
+    public Task CompleteERDiagram()
     {
         const string input =
             """
@@ -132,7 +132,7 @@ public class ERRendererTests
     }
 
     [Test]
-    public Task Render_FullERDiagram()
+    public Task FullERDiagram()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class BlockRendererTests
 {
     [Test]
-    public Task Render_SimpleBlock()
+    public Task SimpleBlock()
     {
         const string input =
             """
@@ -14,7 +14,7 @@ public class BlockRendererTests
     }
 
     [Test]
-    public Task Render_WithSpan()
+    public Task WithSpan()
     {
         const string input =
             """
@@ -28,7 +28,7 @@ public class BlockRendererTests
     }
 
     [Test]
-    public Task Render_DifferentShapes()
+    public Task DifferentShapes()
     {
         const string input =
             """
@@ -42,7 +42,7 @@ public class BlockRendererTests
     }
 
     [Test]
-    public Task Render_SingleColumn()
+    public Task SingleColumn()
     {
         const string input =
             """
@@ -57,7 +57,7 @@ public class BlockRendererTests
     }
 
     [Test]
-    public Task Render_ManyColumns()
+    public Task ManyColumns()
     {
         const string input =
             """
@@ -70,7 +70,7 @@ public class BlockRendererTests
     }
 
     [Test]
-    public Task Render_MixedLayout()
+    public Task MixedLayout()
     {
         const string input =
             """

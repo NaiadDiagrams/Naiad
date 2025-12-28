@@ -1,7 +1,7 @@
 public class ClassRendererTests
 {
     [Test]
-    public Task Render_SimpleClass()
+    public Task SimpleClass()
     {
         const string input =
             """
@@ -13,7 +13,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_ClassWithMembers()
+    public Task ClassWithMembers()
     {
         const string input =
             """
@@ -28,7 +28,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_ClassWithMethods()
+    public Task ClassWithMethods()
     {
         const string input =
             """
@@ -43,7 +43,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_ClassWithMembersAndMethods()
+    public Task ClassWithMembersAndMethods()
     {
         const string input =
             """
@@ -60,7 +60,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_Inheritance()
+    public Task Inheritance()
     {
         const string input =
             """
@@ -73,7 +73,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_Composition()
+    public Task Composition()
     {
         const string input =
             """
@@ -86,7 +86,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_Aggregation()
+    public Task Aggregation()
     {
         const string input =
             """
@@ -98,7 +98,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_Association()
+    public Task Association()
     {
         const string input =
             """
@@ -110,7 +110,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_InterfaceAnnotation()
+    public Task InterfaceAnnotation()
     {
         const string input =
             """
@@ -125,7 +125,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_CompleteClassDiagram()
+    public Task CompleteClassDiagram()
     {
         const string input =
             """
@@ -148,7 +148,7 @@ public class ClassRendererTests
     }
 
     [Test]
-    public Task Render_FullClassDiagram()
+    public Task FullClassDiagram()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class SankeyRendererTests
 {
     [Test]
-    public Task Render_SimpleSankey()
+    public Task SimpleSankey()
     {
         const string input =
             """
@@ -14,7 +14,7 @@ public class SankeyRendererTests
     }
 
     [Test]
-    public Task Render_ThreeColumns()
+    public Task ThreeColumns()
     {
         const string input =
             """
@@ -27,7 +27,7 @@ public class SankeyRendererTests
     }
 
     [Test]
-    public Task Render_EnergyFlow()
+    public Task EnergyFlow()
     {
         const string input =
             """
@@ -44,7 +44,7 @@ public class SankeyRendererTests
     }
 
     [Test]
-    public Task Render_BudgetFlow()
+    public Task BudgetFlow()
     {
         const string input =
             """
@@ -61,7 +61,7 @@ public class SankeyRendererTests
     }
 
     [Test]
-    public Task Render_MultipleSourcesAndTargets()
+    public Task MultipleSourcesAndTargets()
     {
         const string input =
             """
@@ -77,7 +77,7 @@ public class SankeyRendererTests
     }
 
     [Test]
-    public Task Render_SingleLink()
+    public Task SingleLink()
     {
         const string input =
             """

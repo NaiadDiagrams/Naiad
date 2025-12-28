@@ -1,7 +1,7 @@
 public class XYChartRendererTests
 {
     [Test]
-    public Task Render_SimpleBarChart()
+    public Task SimpleBarChart()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class XYChartRendererTests
     }
 
     [Test]
-    public Task Render_SimpleLineChart()
+    public Task SimpleLineChart()
     {
         const string input =
             """
@@ -31,7 +31,7 @@ public class XYChartRendererTests
     }
 
     [Test]
-    public Task Render_BarAndLine()
+    public Task BarAndLine()
     {
         const string input =
             """
@@ -47,7 +47,7 @@ public class XYChartRendererTests
     }
 
     [Test]
-    public Task Render_MultipleBarSeries()
+    public Task MultipleBarSeries()
     {
         const string input =
             """
@@ -63,7 +63,7 @@ public class XYChartRendererTests
     }
 
     [Test]
-    public Task Render_WithoutTitle()
+    public Task WithoutTitle()
     {
         const string input =
             """
@@ -76,7 +76,7 @@ public class XYChartRendererTests
     }
 
     [Test]
-    public Task Render_WithQuotedCategories()
+    public Task WithQuotedCategories()
     {
         const string input =
             """
@@ -91,7 +91,7 @@ public class XYChartRendererTests
     }
 
     [Test]
-    public Task Render_LargeDataset()
+    public Task LargeDataset()
     {
         const string input =
             """

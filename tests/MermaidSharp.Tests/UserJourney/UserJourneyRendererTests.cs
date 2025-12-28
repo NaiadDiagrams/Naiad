@@ -1,7 +1,7 @@
 public class UserJourneyRendererTests
 {
     [Test]
-    public Task Render_SimpleJourney()
+    public Task SimpleJourney()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_MultipleSections()
+    public Task MultipleSections()
     {
         const string input =
             """
@@ -37,7 +37,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_MultipleActors()
+    public Task MultipleActors()
     {
         const string input =
             """
@@ -58,7 +58,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_AllScores()
+    public Task AllScores()
     {
         const string input =
             """
@@ -76,7 +76,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_WithoutTitle()
+    public Task WithoutTitle()
     {
         const string input =
             """
@@ -90,7 +90,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_SingleSection()
+    public Task SingleSection()
     {
         const string input =
             """
@@ -106,7 +106,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_ManyActors()
+    public Task ManyActors()
     {
         const string input =
             """
@@ -123,7 +123,7 @@ public class UserJourneyRendererTests
     }
 
     [Test]
-    public Task Render_CompleteUserJourney()
+    public Task CompleteUserJourney()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class PieRendererTests
 {
     [Test]
-    public Task Render_SimplePie()
+    public Task SimplePie()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class PieRendererTests
     }
 
     [Test]
-    public Task Render_PieWithTitle()
+    public Task PieWithTitle()
     {
         const string input =
             """
@@ -31,7 +31,7 @@ public class PieRendererTests
     }
 
     [Test]
-    public Task Render_PieWithShowData()
+    public Task PieWithShowData()
     {
         const string input =
             """

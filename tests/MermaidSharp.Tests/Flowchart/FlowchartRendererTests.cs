@@ -1,7 +1,7 @@
 public class FlowchartRendererTests
 {
     [Test]
-    public Task Render_SimpleFlowchart()
+    public Task SimpleFlowchart()
     {
         const string input =
             """
@@ -29,7 +29,7 @@ public class FlowchartRendererTests
     }
 
     [Test]
-    public Task Render_FlowchartWithShapes()
+    public Task Shapes()
     {
         const string input =
             """
@@ -44,7 +44,7 @@ public class FlowchartRendererTests
     }
 
     [Test]
-    public Task Render_FlowchartWithEdgeLabels()
+    public Task EdgeLabels()
     {
         const string input =
             """
@@ -57,7 +57,7 @@ public class FlowchartRendererTests
     }
 
     [Test]
-    public Task Render_GraphKeyword()
+    public Task GraphKeyword()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class GitGraphRendererTests
 {
     [Test]
-    public Task Render_SimpleCommits()
+    public Task SimpleCommits()
     {
         const string input =
             """
@@ -15,7 +15,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_CommitWithId()
+    public Task CommitWithId()
     {
         const string input =
             """
@@ -29,7 +29,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_CommitWithTag()
+    public Task CommitWithTag()
     {
         const string input =
             """
@@ -43,7 +43,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_CommitWithMessage()
+    public Task CommitWithMessage()
     {
         const string input =
             """
@@ -56,7 +56,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_CommitTypes()
+    public Task CommitTypes()
     {
         const string input =
             """
@@ -70,7 +70,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_BranchAndCheckout()
+    public Task BranchAndCheckout()
     {
         const string input =
             """
@@ -86,7 +86,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_MultipleBranches()
+    public Task MultipleBranches()
     {
         const string input =
             """
@@ -106,7 +106,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_MergeBranch()
+    public Task MergeBranch()
     {
         const string input =
             """
@@ -124,7 +124,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_MergeWithTag()
+    public Task MergeWithTag()
     {
         const string input =
             """
@@ -140,7 +140,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_CherryPick()
+    public Task CherryPick()
     {
         const string input =
             """
@@ -156,7 +156,7 @@ public class GitGraphRendererTests
     }
 
     [Test]
-    public Task Render_CompleteGitGraph()
+    public Task CompleteGitGraph()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
 public class QuadrantRendererTests
 {
     [Test]
-    public Task Render_SimpleQuadrant()
+    public Task SimpleQuadrant()
     {
         const string input =
             """
@@ -17,7 +17,7 @@ public class QuadrantRendererTests
     }
 
     [Test]
-    public Task Render_WithQuadrantLabels()
+    public Task WithQuadrantLabels()
     {
         const string input =
             """
@@ -39,7 +39,7 @@ public class QuadrantRendererTests
     }
 
     [Test]
-    public Task Render_ManyPoints()
+    public Task ManyPoints()
     {
         const string input =
             """
@@ -59,7 +59,7 @@ public class QuadrantRendererTests
     }
 
     [Test]
-    public Task Render_MinimalQuadrant()
+    public Task MinimalQuadrant()
     {
         const string input =
             """
@@ -72,7 +72,7 @@ public class QuadrantRendererTests
     }
 
     [Test]
-    public Task Render_WithTitleOnly()
+    public Task WithTitleOnly()
     {
         const string input =
             """
@@ -90,7 +90,7 @@ public class QuadrantRendererTests
 
     [Test]
     [Explicit("Uses edge coordinates not supported by mermaid.ink/kroki.io")]
-    public Task Render_EdgePositions()
+    public Task EdgePositions()
     {
         const string input =
             """

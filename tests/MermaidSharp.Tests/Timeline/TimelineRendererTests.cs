@@ -1,7 +1,7 @@
 public class TimelineRendererTests
 {
     [Test]
-    public Task Render_SimpleTimeline()
+    public Task SimpleTimeline()
     {
         const string input =
             """
@@ -15,7 +15,7 @@ public class TimelineRendererTests
     }
 
     [Test]
-    public Task Render_TimelineWithTitle()
+    public Task TimelineWithTitle()
     {
         const string input =
             """
@@ -30,7 +30,7 @@ public class TimelineRendererTests
     }
 
     [Test]
-    public Task Render_MultipleEventsPerPeriod()
+    public Task MultipleEventsPerPeriod()
     {
         const string input =
             """
@@ -46,7 +46,7 @@ public class TimelineRendererTests
     }
 
     [Test]
-    public Task Render_WithSections()
+    public Task WithSections()
     {
         const string input =
             """
@@ -64,7 +64,7 @@ public class TimelineRendererTests
     }
 
     [Test]
-    public Task Render_TextPeriods()
+    public Task TextPeriods()
     {
         const string input =
             """
@@ -80,7 +80,7 @@ public class TimelineRendererTests
     }
 
     [Test]
-    public Task Render_MultipleSections()
+    public Task MultipleSections()
     {
         const string input =
             """
@@ -100,7 +100,7 @@ public class TimelineRendererTests
     }
 
     [Test]
-    public Task Render_CompleteTimeline()
+    public Task CompleteTimeline()
     {
         const string input =
             """

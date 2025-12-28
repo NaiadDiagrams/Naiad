@@ -4,7 +4,7 @@ using MermaidSharp.Diagrams.Flowchart;
 public class FlowchartParserTests
 {
     [Test]
-    public void Parse_SimpleFlowchart_ReturnsNodes()
+    public void Simple_ReturnsNodes()
     {
         const string input =
             """
@@ -21,7 +21,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_FlowchartWithDirection_ParsesDirection()
+    public void Direction_ParsesDirection()
     {
         const string input =
             """
@@ -37,7 +37,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_FlowchartWithRoundedNodes_ParsesShape()
+    public void RoundedNodes_ParsesShape()
     {
         const string input =
             """
@@ -54,7 +54,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_FlowchartWithDiamond_ParsesShape()
+    public void Diamond_ParsesShape()
     {
         const string input =
             """
@@ -70,7 +70,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_FlowchartWithCircle_ParsesShape()
+    public void Circle_ParsesShape()
     {
         const string input =
             """
@@ -86,7 +86,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_ChainedNodes_CreatesMultipleEdges()
+    public void ChainedNodes_CreatesMultipleEdges()
     {
         const string input =
             """
@@ -103,7 +103,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_DottedArrow_ParsesEdgeStyle()
+    public void DottedArrow_ParsesEdgeStyle()
     {
         const string input =
             """
@@ -119,7 +119,7 @@ public class FlowchartParserTests
     }
 
     [Test]
-    public void Parse_ThickArrow_ParsesEdgeStyle()
+    public void ThickArrow_ParsesEdgeStyle()
     {
         const string input =
             """
