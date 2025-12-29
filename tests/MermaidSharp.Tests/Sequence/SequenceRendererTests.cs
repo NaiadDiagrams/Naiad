@@ -1,4 +1,4 @@
-public class SequenceRendererTests
+public class SequenceRendererTests : TestBase
 {
     [Test]
     public Task SimpleSequence()
@@ -10,7 +10,7 @@ public class SequenceRendererTests
                 Bob-->>Alice: Hi Alice
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class SequenceRendererTests
                 B->>A: Hi
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -40,7 +40,7 @@ public class SequenceRendererTests
                 Server-->>User: Response
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class SequenceRendererTests
                 Bob-->>-Alice: Hi
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class SequenceRendererTests
                 Note over Alice,Bob: Conversation
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class SequenceRendererTests
                 Alice->>Bob: How are you?
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -100,7 +100,7 @@ public class SequenceRendererTests
                 A--xB: Dotted cross
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public class SequenceRendererTests
                 Server-->>Client: Token
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -146,6 +146,6 @@ public class SequenceRendererTests
                 Note over User,DB: Session established
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

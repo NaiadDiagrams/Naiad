@@ -1,4 +1,4 @@
-public class TreemapTests
+public class TreemapTests : TestBase
 {
     [Test]
     public Task BasicTreemap()
@@ -12,7 +12,7 @@ public class TreemapTests
                         "Item 3": 50
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class TreemapTests
                     "Delta": 10
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class TreemapTests
                             "Leaf 2.3": 20
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class TreemapTests
                     "Other": 20
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -75,7 +75,7 @@ public class TreemapTests
                         "Sub B2": 250
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -97,6 +97,6 @@ public class TreemapTests
                         "I": 8
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

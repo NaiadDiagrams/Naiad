@@ -1,4 +1,4 @@
-public class PacketRendererTests
+public class PacketRendererTests : TestBase
 {
     [Test]
     public Task SimplePacket()
@@ -10,7 +10,7 @@ public class PacketRendererTests
             16-31: "Destination Port"
             """;
 
-        return SvgVerify. Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -37,7 +37,7 @@ public class PacketRendererTests
             112-127: "Window Size"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -61,7 +61,7 @@ public class PacketRendererTests
             128-159: "Destination IP Address"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -76,7 +76,7 @@ public class PacketRendererTests
             24-31: "Byte 4"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -90,6 +90,6 @@ public class PacketRendererTests
             64-95: "Third Word"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

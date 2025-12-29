@@ -1,4 +1,4 @@
-public class SankeyRendererTests
+public class SankeyRendererTests : TestBase
 {
     [Test]
     public Task SimpleSankey()
@@ -10,7 +10,7 @@ public class SankeyRendererTests
             A,C,20
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -23,7 +23,7 @@ public class SankeyRendererTests
             Middle,Target,30
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -40,7 +40,7 @@ public class SankeyRendererTests
             Electricity,Commercial,40
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class SankeyRendererTests
             Expenses,Other,300
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class SankeyRendererTests
             B,Z,5
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -85,6 +85,6 @@ public class SankeyRendererTests
             Input,Output,100
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

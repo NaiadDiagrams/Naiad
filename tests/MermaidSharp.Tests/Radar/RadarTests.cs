@@ -1,4 +1,4 @@
-public class RadarTests
+public class RadarTests : TestBase
 {
     [Test]
     public Task BasicRadar()
@@ -9,7 +9,7 @@ public class RadarTests
                     curve data1["Series1"]{20, 40, 60, 80, 50}
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -22,7 +22,7 @@ public class RadarTests
                     curve a["Project A"]{80, 60, 40, 70, 90}
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -36,7 +36,7 @@ public class RadarTests
                     curve villain["Villain"]{75, 80, 65, 85, 90}
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -51,7 +51,7 @@ public class RadarTests
                     curve c["User3"]{60, 60, 80, 70}
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class RadarTests
                     curve data["Values"]{100, 80, 60}
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -76,6 +76,6 @@ public class RadarTests
                     curve data["Metrics"]{50, 80, 60, 90, 40, 70}
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

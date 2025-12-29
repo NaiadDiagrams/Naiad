@@ -1,4 +1,4 @@
-public class FlowchartRendererTests
+public class FlowchartRendererTests : TestBase
 {
     [Test]
     public Task SimpleFlowchart()
@@ -9,7 +9,7 @@ public class FlowchartRendererTests
                 A[Start] --> B[Process] --> C[End]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class FlowchartRendererTests
                 C -->|Three| F[fa:fa-car Car]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -40,7 +40,7 @@ public class FlowchartRendererTests
                 D((Circle))
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class FlowchartRendererTests
                 A --> |No| C
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -65,6 +65,6 @@ public class FlowchartRendererTests
                 A --> B --> C
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

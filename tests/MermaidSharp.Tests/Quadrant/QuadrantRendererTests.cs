@@ -1,4 +1,4 @@
-public class QuadrantRendererTests
+public class QuadrantRendererTests : TestBase
 {
     [Test]
     public Task SimpleQuadrant()
@@ -13,7 +13,7 @@ public class QuadrantRendererTests
                 Campaign B: [0.7, 0.8]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class QuadrantRendererTests
                 Task D: [0.9, 0.3]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class QuadrantRendererTests
                 Product F: [0.3, 0.7]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class QuadrantRendererTests
                 Point 2: [0.75, 0.25]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class QuadrantRendererTests
                 Rust: [0.3, 0.5]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -105,6 +105,6 @@ public class QuadrantRendererTests
                 Center: [0.5, 0.5]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

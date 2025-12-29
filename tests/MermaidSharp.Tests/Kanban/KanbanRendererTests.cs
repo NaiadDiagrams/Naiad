@@ -1,4 +1,4 @@
-public class KanbanRendererTests
+public class KanbanRendererTests : TestBase
 {
     [Test]
     public Task SimpleKanban()
@@ -13,7 +13,7 @@ public class KanbanRendererTests
                 task3[Completed Task]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class KanbanRendererTests
                 t5[Review]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -47,7 +47,7 @@ public class KanbanRendererTests
                 t1[Task 1]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -72,7 +72,7 @@ public class KanbanRendererTests
                 t10[Configuration]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -87,6 +87,6 @@ public class KanbanRendererTests
                 t3[Task Three]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

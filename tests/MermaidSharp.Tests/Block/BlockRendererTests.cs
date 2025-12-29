@@ -1,4 +1,4 @@
-public class BlockRendererTests
+public class BlockRendererTests : TestBase
 {
     [Test]
     public Task SimpleBlock()
@@ -10,7 +10,7 @@ public class BlockRendererTests
                                  a["Block A"] b["Block B"] c["Block C"]
                              """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class BlockRendererTests
                                  c["Full Width"]:3
                              """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class BlockRendererTests
                                  d(("Circle")) e{"Diamond"} f{{"Hexagon"}}
                              """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class BlockRendererTests
                                  c["Third"]
                              """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -66,7 +66,7 @@ public class BlockRendererTests
                 a b c d e
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -81,6 +81,6 @@ public class BlockRendererTests
                 footer["Footer"]:4
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

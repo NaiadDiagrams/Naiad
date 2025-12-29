@@ -1,4 +1,4 @@
-public class ArchitectureTests
+public class ArchitectureTests : TestBase
 {
     [Test]
     public Task BasicService()
@@ -9,7 +9,7 @@ public class ArchitectureTests
             service db(database)[Database]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class ArchitectureTests
             service cloud1(cloud)[Cloud]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class ArchitectureTests
             service server(server)[Server] in api
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -51,7 +51,7 @@ public class ArchitectureTests
                     db:R -- L:server
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class ArchitectureTests
             server:R -- L:disk1
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -85,6 +85,6 @@ public class ArchitectureTests
             server:B -- T>:db
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

@@ -1,4 +1,4 @@
-public class ClassRendererTests
+public class ClassRendererTests : TestBase
 {
     [Test]
     public Task SimpleClass()
@@ -9,7 +9,7 @@ public class ClassRendererTests
                 class Animal
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class ClassRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class ClassRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class ClassRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -69,7 +69,7 @@ public class ClassRendererTests
                 Animal <|-- Cat
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public class ClassRendererTests
                 Car *-- Wheel
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class ClassRendererTests
                 Library o-- Book
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -106,7 +106,7 @@ public class ClassRendererTests
                 Student --> Course : enrolls
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -121,7 +121,7 @@ public class ClassRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -144,7 +144,7 @@ public class ClassRendererTests
                 Animal <|-- Cat
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -220,6 +220,6 @@ public class ClassRendererTests
                 Order "1" *-- "1..*" Item : contains
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

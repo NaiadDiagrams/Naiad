@@ -1,4 +1,4 @@
-public class GanttRendererTests
+public class GanttRendererTests : TestBase
 {
     [Test]
     public Task SimpleTasks()
@@ -11,7 +11,7 @@ public class GanttRendererTests
                 Task B :b1, 2024-01-15, 20d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class GanttRendererTests
                 Task B :b1, after a1, 15d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class GanttRendererTests
                     Testing :b2, after b1, 14d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -58,7 +58,7 @@ public class GanttRendererTests
                 Normal Task :n1, 2024-01-21, 10d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class GanttRendererTests
                 Also Critical :crit, c2, after c1, 10d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -87,7 +87,7 @@ public class GanttRendererTests
                 Release :milestone, m1, 2024-01-31, 0d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -110,7 +110,7 @@ public class GanttRendererTests
                     Go Live :milestone, m1, after t2, 0d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -124,6 +124,6 @@ public class GanttRendererTests
                 Day Task :d1, after w1, 5d
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

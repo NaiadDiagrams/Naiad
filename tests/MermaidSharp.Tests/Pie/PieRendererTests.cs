@@ -1,4 +1,4 @@
-public class PieRendererTests
+public class PieRendererTests : TestBase
 {
     [Test]
     public Task SimplePie()
@@ -12,7 +12,7 @@ public class PieRendererTests
                 "Fish" : 10
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -27,7 +27,7 @@ public class PieRendererTests
                 "Birds" : 30
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -40,6 +40,6 @@ public class PieRendererTests
                 "Costs" : 35
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

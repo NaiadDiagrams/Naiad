@@ -1,4 +1,4 @@
-public class UserJourneyRendererTests
+public class UserJourneyRendererTests: TestBase
 {
     [Test]
     public Task SimpleJourney()
@@ -12,7 +12,7 @@ public class UserJourneyRendererTests
                     Check emails: 3: Me
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -33,7 +33,7 @@ public class UserJourneyRendererTests
                     Receive package: 5: Customer
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -54,7 +54,7 @@ public class UserJourneyRendererTests
                     Fix bugs: 2: Dev
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -72,7 +72,7 @@ public class UserJourneyRendererTests
                     Great: 5: User
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class UserJourneyRendererTests
                     Second task: 5: Bob
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -102,7 +102,7 @@ public class UserJourneyRendererTests
                     End: 5: User
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -119,7 +119,7 @@ public class UserJourneyRendererTests
                     Testing: 4: QA
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -161,6 +161,6 @@ public class UserJourneyRendererTests
                     Receive refund: 3: Customer, Finance
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

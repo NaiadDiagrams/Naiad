@@ -1,4 +1,4 @@
-public class ERRendererTests
+public class ERRendererTests : TestBase
 {
     [Test]
     public Task SimpleRelationship()
@@ -9,7 +9,7 @@ public class ERRendererTests
                 CUSTOMER ||--o{ ORDER : places
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -23,7 +23,7 @@ public class ERRendererTests
                 PRODUCT ||--o{ LINE-ITEM : includes
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class ERRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class ERRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class ERRendererTests
                 }
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public class ERRendererTests
                 PERSON ||--|| PASSPORT : has
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class ERRendererTests
                 EMPLOYEE |o--o| PARKING-SPACE : uses
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -106,7 +106,7 @@ public class ERRendererTests
                 CUSTOMER ||..o{ ORDER : places
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -128,7 +128,7 @@ public class ERRendererTests
                 CUSTOMER ||--o{ ORDER : places
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -205,6 +205,6 @@ public class ERRendererTests
                 CATEGORY |o--o| CATEGORY : "parent of"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

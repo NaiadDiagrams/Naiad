@@ -1,4 +1,4 @@
-public class StateRendererTests
+public class StateRendererTests : TestBase
 {
     [Test]
     public Task SimpleState()
@@ -10,7 +10,7 @@ public class StateRendererTests
                 Still --> [*]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class StateRendererTests
                 Crash --> [*]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class StateRendererTests
                 Active --> [*] : shutdown
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class StateRendererTests
                 s1 --> [*]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class StateRendererTests
                 fork_state --> State3
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class StateRendererTests
                 choice_state --> Negative : if n < 0
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -100,7 +100,7 @@ public class StateRendererTests
                 note right of Active : Important note
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -113,7 +113,7 @@ public class StateRendererTests
                 Still --> [*]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -146,6 +146,6 @@ public class StateRendererTests
                 note left of Error : Error handling
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

@@ -1,4 +1,4 @@
-public class TimelineRendererTests
+public class TimelineRendererTests : TestBase
 {
     [Test]
     public Task SimpleTimeline()
@@ -11,7 +11,7 @@ public class TimelineRendererTests
                 2022 : Event Three
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class TimelineRendererTests
                 2000 : Internet Era
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class TimelineRendererTests
                      : Spotify
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -60,7 +60,7 @@ public class TimelineRendererTests
                     2010 : iPad
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -76,7 +76,7 @@ public class TimelineRendererTests
                 Testing : Quality assurance
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class TimelineRendererTests
                     2000 : Digital Age
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -121,6 +121,6 @@ public class TimelineRendererTests
                     2016 : TikTok
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

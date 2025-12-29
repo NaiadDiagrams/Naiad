@@ -1,4 +1,4 @@
-public class XYChartRendererTests
+public class XYChartRendererTests: TestBase
 {
     [Test]
     public Task SimpleBarChart()
@@ -12,7 +12,7 @@ public class XYChartRendererTests
                 bar [50, 60, 75, 80, 90]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -27,7 +27,7 @@ public class XYChartRendererTests
                 line [20, 22, 25, 23, 28]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class XYChartRendererTests
                 line [100, 140, 170, 190]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class XYChartRendererTests
                 bar [80, 120, 180, 220]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -72,7 +72,7 @@ public class XYChartRendererTests
                 bar [10, 20, 30, 40]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -87,7 +87,7 @@ public class XYChartRendererTests
                 bar [85, 72, 90]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -103,6 +103,6 @@ public class XYChartRendererTests
                 line [40, 48, 58, 55, 70, 82, 88, 85, 73, 62, 52, 45]
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

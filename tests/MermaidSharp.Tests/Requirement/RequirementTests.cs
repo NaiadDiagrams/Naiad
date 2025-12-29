@@ -1,4 +1,4 @@
-public class RequirementTests
+public class RequirementTests : TestBase
 {
     [Test]
     public Task BasicRequirement()
@@ -14,7 +14,7 @@ public class RequirementTests
                     }
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class RequirementTests
                     }
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -54,7 +54,7 @@ public class RequirementTests
                     test_entity - satisfies -> test_req
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class RequirementTests
                     }
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class RequirementTests
                     login_page - derives -> user_auth
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -148,6 +148,6 @@ public class RequirementTests
                     elem1 - verifies -> req2
                     """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

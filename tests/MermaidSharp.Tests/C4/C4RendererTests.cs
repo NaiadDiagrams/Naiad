@@ -1,4 +1,4 @@
-public class C4RendererTests
+public class C4RendererTests : TestBase
 {
     [Test]
     public Task SimpleContext()
@@ -12,7 +12,7 @@ public class C4RendererTests
                 Rel(user, system, "Uses")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -29,7 +29,7 @@ public class C4RendererTests
                 Rel(banking, email, "Sends emails", "SMTP")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class C4RendererTests
                 Rel(api, db, "Reads/Writes", "SQL")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -65,7 +65,7 @@ public class C4RendererTests
                 Rel(user, service, "Uses")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class C4RendererTests
                 Rel(platform, shipping, "Ships orders")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -101,7 +101,7 @@ public class C4RendererTests
                 System(c, "System C", "Third system")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -132,6 +132,6 @@ public class C4RendererTests
                 Rel(core, cdn, "Serves assets", "HTTPS")
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

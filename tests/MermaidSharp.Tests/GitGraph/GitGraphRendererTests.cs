@@ -1,4 +1,4 @@
-public class GitGraphRendererTests
+public class GitGraphRendererTests : TestBase
 {
     [Test]
     public Task SimpleCommits()
@@ -11,7 +11,7 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class GitGraphRendererTests
                 commit id: "gamma"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -52,7 +52,7 @@ public class GitGraphRendererTests
                 commit id: "feat" msg: "Add feature"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -66,7 +66,7 @@ public class GitGraphRendererTests
                 commit type: HIGHLIGHT
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -102,7 +102,7 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class GitGraphRendererTests
                 commit
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -136,7 +136,7 @@ public class GitGraphRendererTests
                 merge develop tag: "v2.0.0"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -152,7 +152,7 @@ public class GitGraphRendererTests
                 cherry-pick id: "two"
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -174,6 +174,6 @@ public class GitGraphRendererTests
                 commit id: "hotfix" type: HIGHLIGHT
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }

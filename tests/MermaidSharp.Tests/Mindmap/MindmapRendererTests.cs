@@ -1,4 +1,4 @@
-public class MindmapRendererTests
+public class MindmapRendererTests : TestBase
 {
     [Test]
     public Task SimpleHierarchy()
@@ -12,7 +12,7 @@ public class MindmapRendererTests
                 Branch C
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -29,7 +29,7 @@ public class MindmapRendererTests
                   Sub 2.1
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class MindmapRendererTests
                 Child 2
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class MindmapRendererTests
                 Normal Child
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -71,7 +71,7 @@ public class MindmapRendererTests
                 Normal Child
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class MindmapRendererTests
                 Child B
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -101,7 +101,7 @@ public class MindmapRendererTests
                   {{Hex}}
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -118,7 +118,7 @@ public class MindmapRendererTests
                         Level 5
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -136,7 +136,7 @@ public class MindmapRendererTests
                 F
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 
     [Test]
@@ -161,6 +161,6 @@ public class MindmapRendererTests
                   Production
             """;
 
-        return SvgVerify.Verify(input);
+        return VerifySvg(input);
     }
 }
