@@ -31,11 +31,9 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
 
         // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
-
         var builder = new SvgBuilder()
-            .Size(width, height)
+            .Size(layoutResult.Width, layoutResult.Height)
+            .Padding(options.Padding)
             .AddArrowMarker("arrowhead", "#333")
             .AddArrowMarker("arrowhead-open", "#333");
 
@@ -151,8 +149,8 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
 
     void RenderClassBox(SvgBuilder builder, ClassDefinition classDef, Node node, RenderOptions options)
     {
-        var x = node.Position.X - node.Width / 2 + options.Padding;
-        var y = node.Position.Y - node.Height / 2 + options.Padding;
+        var x = node.Position.X - node.Width / 2;
+        var y = node.Position.Y - node.Height / 2;
         var width = node.Width;
         var height = node.Height;
 
@@ -169,7 +167,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
             fill: fillColor, stroke: "#333", strokeWidth: 1);
 
         var currentY = y + ClassPadding;
-        var centerX = node.Position.X + options.Padding;
+        var centerX = node.Position.X;
 
         // Annotation
         if (classDef.Annotation.HasValue)
@@ -236,12 +234,6 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         // Calculate connection points
         var (startX, startY) = GetConnectionPoint(fromNode, toNode);
         var (endX, endY) = GetConnectionPoint(toNode, fromNode);
-
-        // Apply padding offset
-        startX += options.Padding;
-        startY += options.Padding;
-        endX += options.Padding;
-        endY += options.Padding;
 
         var isDotted = rel.Type is RelationshipType.DependencyLeft or RelationshipType.DependencyRight or RelationshipType.Realization;
         var dashArray = isDotted ? "5,5" : null;

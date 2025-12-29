@@ -35,10 +35,9 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         CopyPositionsToModel(model, graphModel);
 
         // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
-
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder()
+            .Size(layoutResult.Width, layoutResult.Height)
+            .Padding(options.Padding);
 
         // Render relationships first (behind entities)
         foreach (var relationship in model.Relationships)
@@ -126,9 +125,9 @@ public class ERRenderer : IDiagramRenderer<ERModel>
 
     void RenderEntity(SvgBuilder builder, Entity entity, RenderOptions options)
     {
-        var x = entity.Position.X - entity.Width / 2 + options.Padding;
-        var y = entity.Position.Y - entity.Height / 2 + options.Padding;
-        var centerX = entity.Position.X + options.Padding;
+        var x = entity.Position.X - entity.Width / 2;
+        var y = entity.Position.Y - entity.Height / 2;
+        var centerX = entity.Position.X;
 
         // Entity box
         builder.AddRect(x, y, entity.Width, entity.Height,
@@ -195,12 +194,6 @@ public class ERRenderer : IDiagramRenderer<ERModel>
 
         var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
         var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
-
-        // Apply padding offset
-        startX += options.Padding;
-        startY += options.Padding;
-        endX += options.Padding;
-        endY += options.Padding;
 
         var dashArray = rel.Identifying ? null : "5,5";
 

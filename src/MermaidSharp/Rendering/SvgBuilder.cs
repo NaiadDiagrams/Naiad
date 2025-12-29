@@ -4,11 +4,25 @@ public class SvgBuilder
 {
     readonly SvgDocument _document = new();
     readonly Stack<SvgGroup> _groupStack = new();
+    double _padding;
+    double _contentWidth;
+    double _contentHeight;
 
     public SvgBuilder Size(double width, double height)
     {
+        _contentWidth = width;
+        _contentHeight = height;
         _document.Width = width;
         _document.Height = height;
+        return this;
+    }
+
+    public SvgBuilder Padding(double padding)
+    {
+        _padding = padding;
+        // Adjust document size to include padding on all sides
+        _document.Width = _contentWidth + padding * 2;
+        _document.Height = _contentHeight + padding * 2;
         return this;
     }
 
@@ -397,5 +411,21 @@ public class SvgBuilder
         }
     }
 
-    public SvgDocument Build() => _document;
+    public SvgDocument Build()
+    {
+        // If padding is set, wrap all elements in a transform group
+        if (_padding > 0 && _document.Elements.Count > 0)
+        {
+            var paddingGroup = new SvgGroup
+            {
+                Transform = $"translate({Fmt(_padding)},{Fmt(_padding)})"
+            };
+            paddingGroup.Children.AddRange(_document.Elements);
+            _document.Elements.Clear();
+            _document.Elements.Add(paddingGroup);
+        }
+        return _document;
+    }
+
+    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

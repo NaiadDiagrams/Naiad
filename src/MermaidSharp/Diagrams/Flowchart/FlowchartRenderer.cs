@@ -59,11 +59,9 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         var layoutResult = _layoutEngine.Layout(model, layoutOptions);
 
         // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
-
         var builder = new SvgBuilder()
-            .Size(width, height)
+            .Size(layoutResult.Width, layoutResult.Height)
+            .Padding(options.Padding)
             .AddMermaidArrowMarker()
             .AddMermaidCircleMarker()
             .AddMermaidCrossMarker();
@@ -88,10 +86,8 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
 
     void RenderNode(SvgBuilder builder, Node node, RenderOptions options)
     {
-        var x = node.Position.X - node.Width / 2 + options.Padding;
-        var y = node.Position.Y - node.Height / 2 + options.Padding;
-        var cx = node.Position.X + options.Padding;
-        var cy = node.Position.Y + options.Padding;
+        var x = node.Position.X - node.Width / 2;
+        var y = node.Position.Y - node.Height / 2;
 
         var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
 
@@ -114,20 +110,20 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
     {
         if (edge.Points.Count < 2) return;
 
-        // Build path from points, offset by padding
+        // Build path from points
         var points = edge.Points;
-        var pathData = $"M{Fmt(points[0].X + options.Padding)},{Fmt(points[0].Y + options.Padding)}";
+        var pathData = $"M{Fmt(points[0].X)},{Fmt(points[0].Y)}";
 
         if (points.Count == 2)
         {
-            pathData += $" L{Fmt(points[1].X + options.Padding)},{Fmt(points[1].Y + options.Padding)}";
+            pathData += $" L{Fmt(points[1].X)},{Fmt(points[1].Y)}";
         }
         else
         {
             // Use curve for smoother edges
             for (int i = 1; i < points.Count; i++)
             {
-                pathData += $" L{Fmt(points[i].X + options.Padding)},{Fmt(points[i].Y + options.Padding)}";
+                pathData += $" L{Fmt(points[i].X)},{Fmt(points[i].Y)}";
             }
         }
 
@@ -161,8 +157,8 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         // Render edge label if present
         if (!string.IsNullOrEmpty(edge.Label))
         {
-            var labelX = edge.LabelPosition.X + options.Padding;
-            var labelY = edge.LabelPosition.Y + options.Padding;
+            var labelX = edge.LabelPosition.X;
+            var labelY = edge.LabelPosition.Y;
             var labelWidth = edge.Label.Length * 8 + 16;
             var labelHeight = 24;
 
