@@ -115,17 +115,23 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         // Draw label if there's enough space
         if (width > 40 && height > 20)
         {
-            var label = TruncateLabel(node.Name, width, options.FontSize);
-            builder.AddText(x + width / 2, y + height / 2 - 6, label,
+            // Scale font size based on cell dimensions (similar to Mermaid's approach)
+            var minDimension = Math.Min(width, height);
+            var labelFontSize = Math.Clamp(minDimension * 0.15, 12, 48);
+            var valueFontSize = labelFontSize * 0.6;
+            var spacing = labelFontSize * 0.6;
+
+            var label = TruncateLabel(node.Name, width - 20, labelFontSize);
+            builder.AddText(x + width / 2, y + height / 2 - spacing / 2, label,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{Math.Min(options.FontSize, 12)}px", fontFamily: options.FontFamily,
+                fontSize: $"{labelFontSize:0}px", fontFamily: options.FontFamily,
                 fill: "#333");
 
-            if (node.Value.HasValue && height > 35)
+            if (node.Value.HasValue && height > labelFontSize + valueFontSize + 10)
             {
-                builder.AddText(x + width / 2, y + height / 2 + 8, node.Value.Value.ToString("0.#"),
+                builder.AddText(x + width / 2, y + height / 2 + spacing, node.Value.Value.ToString("0.#"),
                     anchor: "middle", baseline: "middle",
-                    fontSize: $"{Math.Min(options.FontSize - 2, 10)}px", fontFamily: options.FontFamily,
+                    fontSize: $"{valueFontSize:0}px", fontFamily: options.FontFamily,
                     fill: "#666");
             }
         }
