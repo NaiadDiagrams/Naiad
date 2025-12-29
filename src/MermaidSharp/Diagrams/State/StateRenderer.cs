@@ -39,9 +39,13 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         // Adjust fork/join bar widths to span connected nodes
         AdjustForkJoinWidths(model);
 
+        // Calculate extra width needed for back-edge curves
+        var stateMap = BuildStateMap(model.States);
+        var extraWidth = CalculateBackEdgeWidth(model.Transitions, stateMap);
+
         // Build SVG
         var builder = new SvgBuilder()
-            .Size(layoutResult.Width, layoutResult.Height)
+            .Size(layoutResult.Width + extraWidth, layoutResult.Height)
             .Padding(options.Padding)
             .AddArrowMarker("arrowhead", "#333");
 
@@ -55,6 +59,25 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         RenderNotes(builder, model, options);
 
         return builder.Build();
+    }
+
+    double CalculateBackEdgeWidth(List<StateTransition> transitions, Dictionary<string, State> stateMap)
+    {
+        var bidirectionalPairs = FindBidirectionalPairs(transitions);
+        double maxExtraWidth = 0;
+
+        foreach (var transition in transitions)
+        {
+            var pairKey = GetPairKey(transition.FromId, transition.ToId);
+            var hasCurve = bidirectionalPairs.Contains(pairKey) || IsBackEdge(transition, stateMap);
+
+            if (hasCurve)
+            {
+                // Curves need extra space (40px offset + margin)
+                maxExtraWidth = Math.Max(maxExtraWidth, 60);
+            }
+        }
+        return maxExtraWidth;
     }
 
     GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
@@ -311,9 +334,28 @@ public class StateRenderer : IDiagramRenderer<StateModel>
     {
         var stateMap = BuildStateMap(model.States);
 
+        // Build set of bidirectional pairs (where A->B and B->A both exist)
+        var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
+
         foreach (var transition in model.Transitions)
         {
-            RenderTransition(builder, transition, stateMap, options);
+            var pairKey = GetPairKey(transition.FromId, transition.ToId);
+            if (bidirectionalPairs.Contains(pairKey))
+            {
+                // This is part of a bidirectional pair - curve it
+                var isBackEdge = IsBackEdge(transition, stateMap);
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge, options);
+            }
+            else if (IsBackEdge(transition, stateMap))
+            {
+                // Single back-edge (no forward counterpart) - curve to the right
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, options);
+            }
+            else
+            {
+                // Regular forward transition with no back-edge - straight line
+                RenderTransition(builder, transition, stateMap, options);
+            }
         }
 
         // Render nested transitions
@@ -325,11 +367,114 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                 foreach (var map in stateMap)
                     nestedMap.TryAdd(map.Key, map.Value);
 
+                var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
+
                 foreach (var transition in state.NestedTransitions)
                 {
-                    RenderTransition(builder, transition, nestedMap, options);
+                    var pairKey = GetPairKey(transition.FromId, transition.ToId);
+                    if (nestedBidirectional.Contains(pairKey))
+                    {
+                        var isBackEdge = IsBackEdge(transition, nestedMap);
+                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, options);
+                    }
+                    else if (IsBackEdge(transition, nestedMap))
+                    {
+                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, options);
+                    }
+                    else
+                    {
+                        RenderTransition(builder, transition, nestedMap, options);
+                    }
                 }
             }
+        }
+    }
+
+    HashSet<string> FindBidirectionalPairs(List<StateTransition> transitions)
+    {
+        var pairs = new HashSet<string>();
+        var edgeSet = new HashSet<string>();
+
+        foreach (var t in transitions)
+        {
+            var forward = $"{t.FromId}->{t.ToId}";
+            var reverse = $"{t.ToId}->{t.FromId}";
+
+            if (edgeSet.Contains(reverse))
+            {
+                // Found bidirectional pair
+                pairs.Add(GetPairKey(t.FromId, t.ToId));
+            }
+            edgeSet.Add(forward);
+        }
+
+        return pairs;
+    }
+
+    string GetPairKey(string a, string b)
+    {
+        return string.Compare(a, b, StringComparison.Ordinal) < 0 ? $"{a}|{b}" : $"{b}|{a}";
+    }
+
+    bool IsBackEdge(StateTransition transition, Dictionary<string, State> stateMap)
+    {
+        if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
+            !stateMap.TryGetValue(transition.ToId, out var toState))
+            return false;
+
+        // Back-edge: source is below target (going upward in the diagram)
+        return fromState.Position.Y > toState.Position.Y + 20;
+    }
+
+    void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
+        Dictionary<string, State> stateMap, bool isBackEdge, RenderOptions options)
+    {
+        if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
+            !stateMap.TryGetValue(transition.ToId, out var toState))
+            return;
+
+        // Back-edge curves to the RIGHT, forward edge curves to the LEFT
+        var curveDirection = isBackEdge ? 1 : -1;
+        var curveOffset = 15 * curveDirection; // Tighter curve
+
+        // Offset connection points to create gap between arrows
+        var connectionOffset = 8 * curveDirection;
+
+        // Start and end with horizontal offset for gap
+        var startX = fromState.Position.X + connectionOffset;
+        var startY = fromState.Position.Y + (isBackEdge ? -fromState.Height / 2 : fromState.Height / 2);
+
+        var endX = toState.Position.X + connectionOffset;
+        var endY = toState.Position.Y + (isBackEdge ? toState.Height / 2 : -toState.Height / 2);
+
+        // Control points - use midpoint Y for smoother curve
+        var midY = (startY + endY) / 2;
+
+        var path = $"M {Fmt(startX)} {Fmt(startY)} " +
+                   $"C {Fmt(startX + curveOffset)} {Fmt(midY)}, " +
+                   $"{Fmt(endX + curveOffset)} {Fmt(midY)}, " +
+                   $"{Fmt(endX)} {Fmt(endY)}";
+
+        builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
+
+        // Draw arrowhead - calculate direction from control point to end
+        var arrowFromX = endX + curveOffset;
+        var arrowFromY = midY;
+        DrawArrowhead(builder, arrowFromX, arrowFromY, endX, endY);
+
+        // Draw label if present
+        if (!string.IsNullOrEmpty(transition.Label))
+        {
+            var labelX = startX + curveOffset * 2;
+            var labelY = midY;
+
+            builder.AddRect(labelX - 30, labelY - 8, 60, 16,
+                fill: "#fff", stroke: "none");
+            builder.AddText(labelX, labelY, transition.Label,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 2}px",
+                fontFamily: options.FontFamily);
         }
     }
 
