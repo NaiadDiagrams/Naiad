@@ -66,8 +66,9 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var cols = (int)Math.Ceiling(Math.Sqrt(model.Services.Count + model.Junctions.Count));
         var rows = (int)Math.Ceiling((double)(model.Services.Count + model.Junctions.Count) / cols);
 
-        var width = cols * (ServiceWidth + ServiceSpacing) + options.Padding * 2;
-        var height = rows * (ServiceHeight + ServiceSpacing) + options.Padding * 2;
+        // Don't include spacing after the last column/row
+        var width = cols * ServiceWidth + Math.Max(0, cols - 1) * ServiceSpacing + options.Padding * 2;
+        var height = rows * ServiceHeight + Math.Max(0, rows - 1) * ServiceSpacing + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);
 
