@@ -5,6 +5,8 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
     const double ChartRadius = 120;
     const double TitleHeight = 30;
     const double LegendHeight = 25;
+    const double LabelOffsetX = 60;  // Space for horizontal labels
+    const double LabelOffsetY = 30;  // Space for vertical labels (including text height)
 
     static readonly string[] CurveColors =
     [
@@ -26,18 +28,20 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var legendOffset = model.ShowLegend && model.Curves.Count > 0 ? LegendHeight * model.Curves.Count : 0;
 
-        var centerX = ChartRadius + options.Padding + 60;
-        var centerY = ChartRadius + options.Padding + titleOffset;
+        var contentWidth = (ChartRadius + LabelOffsetX) * 2;
+        var contentHeight = (ChartRadius + LabelOffsetY) * 2 + titleOffset + legendOffset;
 
-        var width = (ChartRadius + 60) * 2 + options.Padding * 2;
-        var height = ChartRadius * 2 + options.Padding * 2 + titleOffset + legendOffset;
+        var centerX = ChartRadius + LabelOffsetX;
+        var centerY = ChartRadius + LabelOffsetY + titleOffset;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder()
+            .Size(contentWidth, contentHeight)
+            .Padding(options.Padding);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(contentWidth / 2, TitleHeight / 2, model.Title,
                 anchor: "middle", baseline: "middle",
                 fontSize: $"{options.FontSize + 4}px", fontFamily: options.FontFamily,
                 fontWeight: "bold");
@@ -63,7 +67,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         // Draw legend
         if (model.ShowLegend && model.Curves.Count > 0)
         {
-            DrawLegend(builder, model.Curves, options.Padding, height - legendOffset + 10, options);
+            DrawLegend(builder, model.Curves, 0, contentHeight - legendOffset + 10, options);
         }
 
         return builder.Build();
