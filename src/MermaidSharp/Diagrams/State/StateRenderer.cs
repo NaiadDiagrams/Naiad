@@ -63,21 +63,8 @@ public class StateRenderer : IDiagramRenderer<StateModel>
 
     double CalculateBackEdgeWidth(List<StateTransition> transitions, Dictionary<string, State> stateMap)
     {
-        var bidirectionalPairs = FindBidirectionalPairs(transitions);
-        double maxExtraWidth = 0;
-
-        foreach (var transition in transitions)
-        {
-            var pairKey = GetPairKey(transition.FromId, transition.ToId);
-            var hasCurve = bidirectionalPairs.Contains(pairKey) || IsBackEdge(transition, stateMap);
-
-            if (hasCurve)
-            {
-                // Curves need extra space (40px offset + margin)
-                maxExtraWidth = Math.Max(maxExtraWidth, 60);
-            }
-        }
-        return maxExtraWidth;
+        // Curves are tight and fit within normal bounds - no extra width needed
+        return 0;
     }
 
     GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
