@@ -142,9 +142,16 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
 
         if (width > 40)
         {
-            var label = TruncateLabel(node.Name, width - 10, options.FontSize - 2);
+            // Section name (left-aligned)
+            var label = TruncateLabel(node.Name, width - 50, options.FontSize - 2);
             builder.AddText(x + 5, y + headerHeight / 2, label,
                 anchor: "start", baseline: "middle",
+                fontSize: $"{Math.Min(options.FontSize - 2, 10)}px", fontFamily: options.FontFamily,
+                fill: "#333", fontWeight: "bold");
+
+            // Section total (right-aligned)
+            builder.AddText(x + width - 5, y + headerHeight / 2, node.TotalValue.ToString("0.#"),
+                anchor: "end", baseline: "middle",
                 fontSize: $"{Math.Min(options.FontSize - 2, 10)}px", fontFamily: options.FontFamily,
                 fill: "#333", fontWeight: "bold");
         }
