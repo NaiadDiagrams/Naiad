@@ -227,14 +227,35 @@ public class StateParser : IDiagramParser<StateModel>
                     break;
 
                 case StateTransition t:
-                    // Auto-create states from transitions
-                    EnsureState(t.FromId, stateMap, model, compositeStack);
-                    EnsureState(t.ToId, stateMap, model, compositeStack);
+                    // Handle [*] - create separate start and end states
+                    var fromId = t.FromId;
+                    var toId = t.ToId;
 
-                    if (compositeStack.Count > 0)
-                        compositeStack.Peek().NestedTransitions.Add(t);
+                    if (fromId == "[*]")
+                    {
+                        fromId = "[*]_start";
+                        EnsureSpecialState(fromId, StateType.Start, stateMap, model, compositeStack);
+                    }
                     else
-                        model.Transitions.Add(t);
+                    {
+                        EnsureState(fromId, stateMap, model, compositeStack);
+                    }
+
+                    if (toId == "[*]")
+                    {
+                        toId = "[*]_end";
+                        EnsureSpecialState(toId, StateType.End, stateMap, model, compositeStack);
+                    }
+                    else
+                    {
+                        EnsureState(toId, stateMap, model, compositeStack);
+                    }
+
+                    var transition = new StateTransition { FromId = fromId, ToId = toId, Label = t.Label };
+                    if (compositeStack.Count > 0)
+                        compositeStack.Peek().NestedTransitions.Add(transition);
+                    else
+                        model.Transitions.Add(transition);
                     break;
 
                 case StateNote n:
@@ -274,6 +295,20 @@ public class StateParser : IDiagramParser<StateModel>
             : StateType.Normal;
 
         var state = new State { Id = id, Type = stateType };
+        stateMap[id] = state;
+
+        if (compositeStack.Count > 0)
+            compositeStack.Peek().NestedStates.Add(state);
+        else
+            model.States.Add(state);
+    }
+
+    static void EnsureSpecialState(string id, StateType type, Dictionary<string, State> stateMap, StateModel model, Stack<State> compositeStack)
+    {
+        if (stateMap.ContainsKey(id))
+            return;
+
+        var state = new State { Id = id, Type = type };
         stateMap[id] = state;
 
         if (compositeStack.Count > 0)

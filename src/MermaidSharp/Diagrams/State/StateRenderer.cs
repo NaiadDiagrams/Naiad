@@ -28,13 +28,16 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         var layoutOptions = new LayoutOptions
         {
             Direction = model.Direction,
-            NodeSeparation = 50,
-            RankSeparation = 60
+            NodeSeparation = 80,
+            RankSeparation = 80
         };
         var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
 
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
+
+        // Adjust fork/join bar widths to span connected nodes
+        AdjustForkJoinWidths(model);
 
         // Build SVG
         var builder = new SvgBuilder()
@@ -150,6 +153,45 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
+    void AdjustForkJoinWidths(StateModel model)
+    {
+        var stateMap = BuildStateMap(model.States);
+
+        foreach (var state in model.States)
+        {
+            if (state.Type is StateType.Fork or StateType.Join)
+            {
+                // Find all connected states
+                var connectedStates = new List<State>();
+
+                foreach (var transition in model.Transitions)
+                {
+                    // Fork: outgoing transitions (fork --> target)
+                    if (state.Type == StateType.Fork && transition.FromId == state.Id)
+                    {
+                        if (stateMap.TryGetValue(transition.ToId, out var target))
+                            connectedStates.Add(target);
+                    }
+                    // Join: incoming transitions (source --> join)
+                    if (state.Type == StateType.Join && transition.ToId == state.Id)
+                    {
+                        if (stateMap.TryGetValue(transition.FromId, out var source))
+                            connectedStates.Add(source);
+                    }
+                }
+
+                if (connectedStates.Count >= 2)
+                {
+                    // Calculate width to span from leftmost to rightmost connected state
+                    var minX = connectedStates.Min(s => s.Position.X - s.Width / 2);
+                    var maxX = connectedStates.Max(s => s.Position.X + s.Width / 2);
+                    state.Width = maxX - minX;
+                    state.Position = new Position((minX + maxX) / 2, state.Position.Y);
+                }
+            }
+        }
+    }
+
     void RenderStates(SvgBuilder builder, List<State> states, RenderOptions options)
     {
         foreach (var state in states)
@@ -226,7 +268,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
             strokeWidth: 1);
 
         var label = state.Description ?? state.Id;
-        if (state.Id != "[*]")
+        if (state.Type == StateType.Normal)
         {
             builder.AddText(state.Position.X, state.Position.Y, label,
                 anchor: "middle",
@@ -394,32 +436,35 @@ public class StateRenderer : IDiagramRenderer<StateModel>
             if (!stateMap.TryGetValue(note.StateId, out var state))
                 continue;
 
+            // Calculate note width based on text
+            var noteWidth = Math.Max(NoteWidth, MeasureText(note.Text, options.FontSize - 2) + 20);
+
             var noteX = note.Position == NotePosition.RightOf
                 ? state.Position.X + state.Width / 2 + NotePadding
-                : state.Position.X - state.Width / 2 - NoteWidth - NotePadding;
+                : state.Position.X - state.Width / 2 - noteWidth - NotePadding;
 
             var noteY = state.Position.Y - NoteHeight / 2;
 
             // Note box with folded corner
             var foldSize = 8;
             var path = $"M{Fmt(noteX)},{Fmt(noteY)} " +
-                       $"L{Fmt(noteX + NoteWidth - foldSize)},{Fmt(noteY)} " +
-                       $"L{Fmt(noteX + NoteWidth)},{Fmt(noteY + foldSize)} " +
-                       $"L{Fmt(noteX + NoteWidth)},{Fmt(noteY + NoteHeight)} " +
+                       $"L{Fmt(noteX + noteWidth - foldSize)},{Fmt(noteY)} " +
+                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + foldSize)} " +
+                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + NoteHeight)} " +
                        $"L{Fmt(noteX)},{Fmt(noteY + NoteHeight)} Z";
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
             // Fold corner
-            builder.AddLine(noteX + NoteWidth - foldSize, noteY,
-                           noteX + NoteWidth - foldSize, noteY + foldSize,
+            builder.AddLine(noteX + noteWidth - foldSize, noteY,
+                           noteX + noteWidth - foldSize, noteY + foldSize,
                            stroke: "#AAAA33", strokeWidth: 1);
-            builder.AddLine(noteX + NoteWidth - foldSize, noteY + foldSize,
-                           noteX + NoteWidth, noteY + foldSize,
+            builder.AddLine(noteX + noteWidth - foldSize, noteY + foldSize,
+                           noteX + noteWidth, noteY + foldSize,
                            stroke: "#AAAA33", strokeWidth: 1);
 
             // Note text
-            builder.AddText(noteX + NoteWidth / 2, noteY + NoteHeight / 2, note.Text,
+            builder.AddText(noteX + noteWidth / 2, noteY + NoteHeight / 2, note.Text,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
