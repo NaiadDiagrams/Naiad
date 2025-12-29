@@ -126,8 +126,9 @@ public class ERRenderer : IDiagramRenderer<ERModel>
 
     void RenderEntity(SvgBuilder builder, Entity entity, RenderOptions options)
     {
-        var x = entity.Position.X - entity.Width / 2;
-        var y = entity.Position.Y - entity.Height / 2;
+        var x = entity.Position.X - entity.Width / 2 + options.Padding;
+        var y = entity.Position.Y - entity.Height / 2 + options.Padding;
+        var centerX = entity.Position.X + options.Padding;
 
         // Entity box
         builder.AddRect(x, y, entity.Width, entity.Height,
@@ -142,7 +143,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        builder.AddText(entity.Position.X, y + HeaderHeight / 2, entity.Name,
+        builder.AddText(centerX, y + HeaderHeight / 2, entity.Name,
             anchor: "middle",
             baseline: "middle",
             fontSize: $"{options.FontSize}px",
@@ -194,6 +195,12 @@ public class ERRenderer : IDiagramRenderer<ERModel>
 
         var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
         var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
+
+        // Apply padding offset
+        startX += options.Padding;
+        startY += options.Padding;
+        endX += options.Padding;
+        endY += options.Padding;
 
         var dashArray = rel.Identifying ? null : "5,5";
 

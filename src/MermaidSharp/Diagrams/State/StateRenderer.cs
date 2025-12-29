@@ -162,8 +162,8 @@ public class StateRenderer : IDiagramRenderer<StateModel>
 
     void RenderState(SvgBuilder builder, State state, RenderOptions options)
     {
-        var x = state.Position.X;
-        var y = state.Position.Y;
+        var x = state.Position.X + options.Padding;
+        var y = state.Position.Y + options.Padding;
 
         switch (state.Type)
         {
@@ -218,8 +218,8 @@ public class StateRenderer : IDiagramRenderer<StateModel>
 
     void RenderNormalState(SvgBuilder builder, State state, RenderOptions options)
     {
-        var x = state.Position.X - state.Width / 2;
-        var y = state.Position.Y - state.Height / 2;
+        var x = state.Position.X - state.Width / 2 + options.Padding;
+        var y = state.Position.Y - state.Height / 2 + options.Padding;
 
         builder.AddRect(x, y, state.Width, state.Height,
             rx: StateRadius,
@@ -230,7 +230,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         var label = state.Description ?? state.Id;
         if (state.Id != "[*]")
         {
-            builder.AddText(state.Position.X, state.Position.Y, label,
+            builder.AddText(state.Position.X + options.Padding, state.Position.Y + options.Padding, label,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize}px",
@@ -242,8 +242,8 @@ public class StateRenderer : IDiagramRenderer<StateModel>
     {
         // For now, render as a larger box with nested states inside
         // In a full implementation, we'd calculate the bounding box of nested states
-        var x = state.Position.X - state.Width / 2;
-        var y = state.Position.Y - state.Height / 2;
+        var x = state.Position.X - state.Width / 2 + options.Padding;
+        var y = state.Position.Y - state.Height / 2 + options.Padding;
 
         builder.AddRect(x, y, state.Width, state.Height,
             rx: StateRadius,
@@ -252,7 +252,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
             strokeWidth: 2);
 
         // Title
-        builder.AddText(state.Position.X, y + 15, state.Id,
+        builder.AddText(state.Position.X + options.Padding, y + 15, state.Id,
             anchor: "middle",
             baseline: "middle",
             fontSize: $"{options.FontSize}px",
@@ -319,6 +319,12 @@ public class StateRenderer : IDiagramRenderer<StateModel>
 
         var (startX, startY) = GetConnectionPoint(fromState, toState);
         var (endX, endY) = GetConnectionPoint(toState, fromState);
+
+        // Apply padding offset
+        startX += options.Padding;
+        startY += options.Padding;
+        endX += options.Padding;
+        endY += options.Padding;
 
         // Draw arrow line
         builder.AddLine(startX, startY, endX, endY,
@@ -397,10 +403,10 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                 continue;
 
             var noteX = note.Position == NotePosition.RightOf
-                ? state.Position.X + state.Width / 2 + NotePadding
-                : state.Position.X - state.Width / 2 - NoteWidth - NotePadding;
+                ? state.Position.X + state.Width / 2 + NotePadding + options.Padding
+                : state.Position.X - state.Width / 2 - NoteWidth - NotePadding + options.Padding;
 
-            var noteY = state.Position.Y - NoteHeight / 2;
+            var noteY = state.Position.Y - NoteHeight / 2 + options.Padding;
 
             // Note box with folded corner
             var foldSize = 8;

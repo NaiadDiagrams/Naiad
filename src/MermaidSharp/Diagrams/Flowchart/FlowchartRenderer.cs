@@ -88,10 +88,10 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
 
     void RenderNode(SvgBuilder builder, Node node, RenderOptions options)
     {
-        var x = node.Position.X - node.Width / 2;
-        var y = node.Position.Y - node.Height / 2;
-        var cx = node.Position.X;
-        var cy = node.Position.Y;
+        var x = node.Position.X - node.Width / 2 + options.Padding;
+        var y = node.Position.Y - node.Height / 2 + options.Padding;
+        var cx = node.Position.X + options.Padding;
+        var cy = node.Position.Y + options.Padding;
 
         var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
 
@@ -114,20 +114,20 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
     {
         if (edge.Points.Count < 2) return;
 
-        // Build path from points
+        // Build path from points, offset by padding
         var points = edge.Points;
-        var pathData = $"M{Fmt(points[0].X)},{Fmt(points[0].Y)}";
+        var pathData = $"M{Fmt(points[0].X + options.Padding)},{Fmt(points[0].Y + options.Padding)}";
 
         if (points.Count == 2)
         {
-            pathData += $" L{Fmt(points[1].X)},{Fmt(points[1].Y)}";
+            pathData += $" L{Fmt(points[1].X + options.Padding)},{Fmt(points[1].Y + options.Padding)}";
         }
         else
         {
             // Use curve for smoother edges
             for (int i = 1; i < points.Count; i++)
             {
-                pathData += $" L{Fmt(points[i].X)},{Fmt(points[i].Y)}";
+                pathData += $" L{Fmt(points[i].X + options.Padding)},{Fmt(points[i].Y + options.Padding)}";
             }
         }
 
@@ -161,18 +161,19 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         // Render edge label if present
         if (!string.IsNullOrEmpty(edge.Label))
         {
-            var labelPos = edge.LabelPosition;
+            var labelX = edge.LabelPosition.X + options.Padding;
+            var labelY = edge.LabelPosition.Y + options.Padding;
             var labelWidth = edge.Label.Length * 8 + 16;
             var labelHeight = 24;
 
             builder.AddRect(
-                labelPos.X - labelWidth / 2, labelPos.Y - labelHeight / 2,
+                labelX - labelWidth / 2, labelY - labelHeight / 2,
                 labelWidth, labelHeight,
                 fill: LabelBackground, stroke: "none",
                 cssClass: "edgeLabel");
 
             builder.AddForeignObject(
-                labelPos.X - labelWidth / 2, labelPos.Y - labelHeight / 2,
+                labelX - labelWidth / 2, labelY - labelHeight / 2,
                 labelWidth, labelHeight,
                 $"<p>{System.Net.WebUtility.HtmlEncode(edge.Label)}</p>",
                 className: "edgeLabel");
