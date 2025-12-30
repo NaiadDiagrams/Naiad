@@ -21,7 +21,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/GitGraph/GitGraphTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.Simple.verified.png" />
+</p>
 
 ## Id
 
@@ -44,7 +46,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![Id](../Tests/GitGraph/GitGraphTests.Id.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.Id.verified.png" />
+</p>
 
 ## Tag
 
@@ -67,7 +71,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![Tag](../Tests/GitGraph/GitGraphTests.Tag.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.Tag.verified.png" />
+</p>
 
 ## Message
 
@@ -88,7 +94,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![Message](../Tests/GitGraph/GitGraphTests.Message.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.Message.verified.png" />
+</p>
 
 ## Types
 
@@ -111,7 +119,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![Types](../Tests/GitGraph/GitGraphTests.Types.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.Types.verified.png" />
+</p>
 
 ## BranchAndCheckout
 
@@ -138,7 +148,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![BranchAndCheckout](../Tests/GitGraph/GitGraphTests.BranchAndCheckout.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.BranchAndCheckout.verified.png" />
+</p>
 
 ## MultipleBranches
 
@@ -173,7 +185,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![MultipleBranches](../Tests/GitGraph/GitGraphTests.MultipleBranches.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.MultipleBranches.verified.png" />
+</p>
 
 ## MergeBranch
 
@@ -204,7 +218,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![MergeBranch](../Tests/GitGraph/GitGraphTests.MergeBranch.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.MergeBranch.verified.png" />
+</p>
 
 ## MergeWithTag
 
@@ -231,7 +247,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![MergeWithTag](../Tests/GitGraph/GitGraphTests.MergeWithTag.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.MergeWithTag.verified.png" />
+</p>
 
 ## CherryPick
 
@@ -258,7 +276,9 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![CherryPick](../Tests/GitGraph/GitGraphTests.CherryPick.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.CherryPick.verified.png" />
+</p>
 
 ## Complex
 
@@ -297,5 +317,7 @@ gitGraph
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/GitGraph/GitGraphTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/GitGraph/GitGraphTests.Complex.verified.png" />
+</p>
 

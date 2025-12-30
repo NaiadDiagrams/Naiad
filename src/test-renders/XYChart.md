@@ -15,7 +15,9 @@ xychart-beta
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/XYChart/XYChartTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.Simple.verified.png" />
+</p>
 
 ## BarAndLine
 
@@ -33,7 +35,9 @@ xychart-beta
 
 **Rendered by Naiad:**
 
-![BarAndLine](../Tests/XYChart/XYChartTests.BarAndLine.verified.png)
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.BarAndLine.verified.png" />
+</p>
 
 ## MultipleBarSeries
 
@@ -51,7 +55,9 @@ xychart-beta
 
 **Rendered by Naiad:**
 
-![MultipleBarSeries](../Tests/XYChart/XYChartTests.MultipleBarSeries.verified.png)
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.MultipleBarSeries.verified.png" />
+</p>
 
 ## WithoutTitle
 
@@ -66,7 +72,9 @@ xychart-beta
 
 **Rendered by Naiad:**
 
-![WithoutTitle](../Tests/XYChart/XYChartTests.WithoutTitle.verified.png)
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.WithoutTitle.verified.png" />
+</p>
 
 ## QuotedCategories
 
@@ -83,7 +91,9 @@ xychart-beta
 
 **Rendered by Naiad:**
 
-![QuotedCategories](../Tests/XYChart/XYChartTests.QuotedCategories.verified.png)
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.QuotedCategories.verified.png" />
+</p>
 
 ## Complex
 
@@ -101,5 +111,7 @@ xychart-beta
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/XYChart/XYChartTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.Complex.verified.png" />
+</p>
 

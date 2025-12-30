@@ -17,7 +17,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/EntityRelationship/ErTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.Simple.verified.png" />
+</p>
 
 ## MultipleRelationships
 
@@ -40,7 +42,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![MultipleRelationships](../Tests/EntityRelationship/ErTests.MultipleRelationships.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.MultipleRelationships.verified.png" />
+</p>
 
 ## Attributes
 
@@ -67,7 +71,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![Attributes](../Tests/EntityRelationship/ErTests.Attributes.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.Attributes.verified.png" />
+</p>
 
 ## KeyTypes
 
@@ -94,7 +100,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![KeyTypes](../Tests/EntityRelationship/ErTests.KeyTypes.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.KeyTypes.verified.png" />
+</p>
 
 ## Comments
 
@@ -119,7 +127,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![Comments](../Tests/EntityRelationship/ErTests.Comments.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.Comments.verified.png" />
+</p>
 
 ## OneToOne
 
@@ -138,7 +148,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![OneToOne](../Tests/EntityRelationship/ErTests.OneToOne.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.OneToOne.verified.png" />
+</p>
 
 ## ZeroOrOne
 
@@ -157,7 +169,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![ZeroOrOne](../Tests/EntityRelationship/ErTests.ZeroOrOne.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.ZeroOrOne.verified.png" />
+</p>
 
 ## NonIdentifying
 
@@ -176,7 +190,9 @@ erDiagram
 
 **Rendered by Naiad:**
 
-![NonIdentifying](../Tests/EntityRelationship/ErTests.NonIdentifying.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.NonIdentifying.verified.png" />
+</p>
 
 ## Compelx
 
@@ -325,5 +341,7 @@ CATEGORY |o--o| CATEGORY : "parent of"
 
 **Rendered by Naiad:**
 
-![Compelx](../Tests/EntityRelationship/ErTests.Compelx.verified.png)
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.Compelx.verified.png" />
+</p>
 

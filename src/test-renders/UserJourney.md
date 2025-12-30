@@ -23,7 +23,9 @@ journey
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/UserJourney/UserJourneyTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.Simple.verified.png" />
+</p>
 
 ## MultipleSections
 
@@ -60,7 +62,9 @@ journey
 
 **Rendered by Naiad:**
 
-![MultipleSections](../Tests/UserJourney/UserJourneyTests.MultipleSections.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.MultipleSections.verified.png" />
+</p>
 
 ## MultipleActors
 
@@ -97,7 +101,9 @@ journey
 
 **Rendered by Naiad:**
 
-![MultipleActors](../Tests/UserJourney/UserJourneyTests.MultipleActors.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.MultipleActors.verified.png" />
+</p>
 
 ## AllScores
 
@@ -128,7 +134,9 @@ journey
 
 **Rendered by Naiad:**
 
-![AllScores](../Tests/UserJourney/UserJourneyTests.AllScores.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.AllScores.verified.png" />
+</p>
 
 ## WithoutTitle
 
@@ -151,7 +159,9 @@ journey
 
 **Rendered by Naiad:**
 
-![WithoutTitle](../Tests/UserJourney/UserJourneyTests.WithoutTitle.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.WithoutTitle.verified.png" />
+</p>
 
 ## ManyActors
 
@@ -180,7 +190,9 @@ journey
 
 **Rendered by Naiad:**
 
-![ManyActors](../Tests/UserJourney/UserJourneyTests.ManyActors.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.ManyActors.verified.png" />
+</p>
 
 ## Complex
 
@@ -259,5 +271,7 @@ journey
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/UserJourney/UserJourneyTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.Complex.verified.png" />
+</p>
 

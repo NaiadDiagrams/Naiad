@@ -17,7 +17,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Class/ClassTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Simple.verified.png" />
+</p>
 
 ## Members
 
@@ -42,7 +44,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Members](../Tests/Class/ClassTests.Members.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Members.verified.png" />
+</p>
 
 ## Methods
 
@@ -67,7 +71,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Methods](../Tests/Class/ClassTests.Methods.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Methods.verified.png" />
+</p>
 
 ## MembersAndMethods
 
@@ -96,7 +102,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![MembersAndMethods](../Tests/Class/ClassTests.MembersAndMethods.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.MembersAndMethods.verified.png" />
+</p>
 
 ## Inheritance
 
@@ -117,7 +125,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Inheritance](../Tests/Class/ClassTests.Inheritance.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Inheritance.verified.png" />
+</p>
 
 ## Composition
 
@@ -138,7 +148,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Composition](../Tests/Class/ClassTests.Composition.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Composition.verified.png" />
+</p>
 
 ## Aggregation
 
@@ -157,7 +169,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Aggregation](../Tests/Class/ClassTests.Aggregation.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Aggregation.verified.png" />
+</p>
 
 ## Association
 
@@ -176,7 +190,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![Association](../Tests/Class/ClassTests.Association.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Association.verified.png" />
+</p>
 
 ## InterfaceAnnotation
 
@@ -201,7 +217,9 @@ classDiagram
 
 **Rendered by Naiad:**
 
-![InterfaceAnnotation](../Tests/Class/ClassTests.InterfaceAnnotation.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.InterfaceAnnotation.verified.png" />
+</p>
 
 ## Complex
 
@@ -348,5 +366,7 @@ Order "1" *-- "1..*" Item : contains
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Class/ClassTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Class/ClassTests.Complex.verified.png" />
+</p>
 

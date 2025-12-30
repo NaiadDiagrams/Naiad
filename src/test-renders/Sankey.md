@@ -13,7 +13,9 @@ A,C,20
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Sankey/SankeyTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Sankey/SankeyTests.Simple.verified.png" />
+</p>
 
 ## ThreeColumns
 
@@ -28,7 +30,9 @@ Middle,Target,30
 
 **Rendered by Naiad:**
 
-![ThreeColumns](../Tests/Sankey/SankeyTests.ThreeColumns.verified.png)
+<p align="center">
+  <img src="../Tests/Sankey/SankeyTests.ThreeColumns.verified.png" />
+</p>
 
 ## EnergyFlow
 
@@ -47,7 +51,9 @@ Electricity,Commercial,40
 
 **Rendered by Naiad:**
 
-![EnergyFlow](../Tests/Sankey/SankeyTests.EnergyFlow.verified.png)
+<p align="center">
+  <img src="../Tests/Sankey/SankeyTests.EnergyFlow.verified.png" />
+</p>
 
 ## BudgetFlow
 
@@ -66,7 +72,9 @@ Expenses,Other,300
 
 **Rendered by Naiad:**
 
-![BudgetFlow](../Tests/Sankey/SankeyTests.BudgetFlow.verified.png)
+<p align="center">
+  <img src="../Tests/Sankey/SankeyTests.BudgetFlow.verified.png" />
+</p>
 
 ## MultipleSourcesAndTargets
 
@@ -84,7 +92,9 @@ B,Z,5
 
 **Rendered by Naiad:**
 
-![MultipleSourcesAndTargets](../Tests/Sankey/SankeyTests.MultipleSourcesAndTargets.verified.png)
+<p align="center">
+  <img src="../Tests/Sankey/SankeyTests.MultipleSourcesAndTargets.verified.png" />
+</p>
 
 ## SingleLink
 
@@ -98,5 +108,7 @@ Input,Output,100
 
 **Rendered by Naiad:**
 
-![SingleLink](../Tests/Sankey/SankeyTests.SingleLink.verified.png)
+<p align="center">
+  <img src="../Tests/Sankey/SankeyTests.SingleLink.verified.png" />
+</p>
 

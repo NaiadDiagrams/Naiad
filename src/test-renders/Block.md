@@ -13,7 +13,9 @@ block-beta
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Block/BlockTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Block/BlockTests.Simple.verified.png" />
+</p>
 
 ## Span
 
@@ -29,7 +31,9 @@ block-beta
 
 **Rendered by Naiad:**
 
-![Span](../Tests/Block/BlockTests.Span.verified.png)
+<p align="center">
+  <img src="../Tests/Block/BlockTests.Span.verified.png" />
+</p>
 
 ## DifferentShapes
 
@@ -45,7 +49,9 @@ block-beta
 
 **Rendered by Naiad:**
 
-![DifferentShapes](../Tests/Block/BlockTests.DifferentShapes.verified.png)
+<p align="center">
+  <img src="../Tests/Block/BlockTests.DifferentShapes.verified.png" />
+</p>
 
 ## Column
 
@@ -62,7 +68,9 @@ block-beta
 
 **Rendered by Naiad:**
 
-![Column](../Tests/Block/BlockTests.Column.verified.png)
+<p align="center">
+  <img src="../Tests/Block/BlockTests.Column.verified.png" />
+</p>
 
 ## ManyColumns
 
@@ -77,7 +85,9 @@ block-beta
 
 **Rendered by Naiad:**
 
-![ManyColumns](../Tests/Block/BlockTests.ManyColumns.verified.png)
+<p align="center">
+  <img src="../Tests/Block/BlockTests.ManyColumns.verified.png" />
+</p>
 
 ## MixedLayout
 
@@ -94,5 +104,7 @@ block-beta
 
 **Rendered by Naiad:**
 
-![MixedLayout](../Tests/Block/BlockTests.MixedLayout.verified.png)
+<p align="center">
+  <img src="../Tests/Block/BlockTests.MixedLayout.verified.png" />
+</p>
 

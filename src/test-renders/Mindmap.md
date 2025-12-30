@@ -23,7 +23,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Mindmap/MindmapTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Simple.verified.png" />
+</p>
 
 ## Nested
 
@@ -52,7 +54,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![Nested](../Tests/Mindmap/MindmapTests.Nested.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Nested.verified.png" />
+</p>
 
 ## CircleShape
 
@@ -75,7 +79,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![CircleShape](../Tests/Mindmap/MindmapTests.CircleShape.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.CircleShape.verified.png" />
+</p>
 
 ## SquareShape
 
@@ -98,7 +104,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![SquareShape](../Tests/Mindmap/MindmapTests.SquareShape.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.SquareShape.verified.png" />
+</p>
 
 ## RoundedShape
 
@@ -121,7 +129,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![RoundedShape](../Tests/Mindmap/MindmapTests.RoundedShape.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.RoundedShape.verified.png" />
+</p>
 
 ## HexagonShape
 
@@ -144,7 +154,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![HexagonShape](../Tests/Mindmap/MindmapTests.HexagonShape.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.HexagonShape.verified.png" />
+</p>
 
 ## MixedShapes
 
@@ -171,7 +183,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![MixedShapes](../Tests/Mindmap/MindmapTests.MixedShapes.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.MixedShapes.verified.png" />
+</p>
 
 ## DeepHierarchy
 
@@ -200,7 +214,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![DeepHierarchy](../Tests/Mindmap/MindmapTests.DeepHierarchy.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.DeepHierarchy.verified.png" />
+</p>
 
 ## WideTree
 
@@ -231,7 +247,9 @@ mindmap
 
 **Rendered by Naiad:**
 
-![WideTree](../Tests/Mindmap/MindmapTests.WideTree.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.WideTree.verified.png" />
+</p>
 
 ## Complex
 
@@ -276,5 +294,7 @@ mindmap
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Mindmap/MindmapTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Complex.verified.png" />
+</p>
 

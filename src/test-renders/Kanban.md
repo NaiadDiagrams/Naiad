@@ -25,7 +25,9 @@ done[Done]
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Kanban/KanbanTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.Simple.verified.png" />
+</p>
 
 ## ThreeColumns
 
@@ -58,7 +60,9 @@ done[Done]
 
 **Rendered by Naiad:**
 
-![ThreeColumns](../Tests/Kanban/KanbanTests.ThreeColumns.verified.png)
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.ThreeColumns.verified.png" />
+</p>
 
 ## EmptyColumns
 
@@ -83,7 +87,9 @@ done[Done]
 
 **Rendered by Naiad:**
 
-![EmptyColumns](../Tests/Kanban/KanbanTests.EmptyColumns.verified.png)
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.EmptyColumns.verified.png" />
+</p>
 
 ## ManyTasks
 
@@ -128,7 +134,9 @@ col4[Done]
 
 **Rendered by Naiad:**
 
-![ManyTasks](../Tests/Kanban/KanbanTests.ManyTasks.verified.png)
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.ManyTasks.verified.png" />
+</p>
 
 ## SingleColumn
 
@@ -153,5 +161,7 @@ tasks[All Tasks]
 
 **Rendered by Naiad:**
 
-![SingleColumn](../Tests/Kanban/KanbanTests.SingleColumn.verified.png)
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.SingleColumn.verified.png" />
+</p>
 

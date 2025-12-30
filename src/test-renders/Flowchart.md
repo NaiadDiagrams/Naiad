@@ -17,7 +17,9 @@ flowchart LR
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Flowchart/FlowchartTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.Simple.verified.png" />
+</p>
 
 ## Complex
 
@@ -44,7 +46,9 @@ flowchart TD
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Flowchart/FlowchartTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.Complex.verified.png" />
+</p>
 
 ## Shapes
 
@@ -69,7 +73,9 @@ flowchart TD
 
 **Rendered by Naiad:**
 
-![Shapes](../Tests/Flowchart/FlowchartTests.Shapes.verified.png)
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.Shapes.verified.png" />
+</p>
 
 ## EdgeLabels
 
@@ -90,7 +96,9 @@ flowchart LR
 
 **Rendered by Naiad:**
 
-![EdgeLabels](../Tests/Flowchart/FlowchartTests.EdgeLabels.verified.png)
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.EdgeLabels.verified.png" />
+</p>
 
 ## GraphKeyword
 
@@ -109,5 +117,7 @@ graph TD
 
 **Rendered by Naiad:**
 
-![GraphKeyword](../Tests/Flowchart/FlowchartTests.GraphKeyword.verified.png)
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.GraphKeyword.verified.png" />
+</p>
 

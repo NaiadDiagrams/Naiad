@@ -19,7 +19,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Sequence/SequenceTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Simple.verified.png" />
+</p>
 
 ## Participants
 
@@ -44,7 +46,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Participants](../Tests/Sequence/SequenceTests.Participants.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Participants.verified.png" />
+</p>
 
 ## Actors
 
@@ -69,7 +73,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Actors](../Tests/Sequence/SequenceTests.Actors.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Actors.verified.png" />
+</p>
 
 ## Activation
 
@@ -90,7 +96,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Activation](../Tests/Sequence/SequenceTests.Activation.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Activation.verified.png" />
+</p>
 
 ## Notes
 
@@ -115,7 +123,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Notes](../Tests/Sequence/SequenceTests.Notes.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Notes.verified.png" />
+</p>
 
 ## AutoNumber
 
@@ -140,7 +150,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![AutoNumber](../Tests/Sequence/SequenceTests.AutoNumber.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.AutoNumber.verified.png" />
+</p>
 
 ## DifferentArrows
 
@@ -169,7 +181,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![DifferentArrows](../Tests/Sequence/SequenceTests.DifferentArrows.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.DifferentArrows.verified.png" />
+</p>
 
 ## Title
 
@@ -192,7 +206,9 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Title](../Tests/Sequence/SequenceTests.Title.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Title.verified.png" />
+</p>
 
 ## Complex
 
@@ -251,5 +267,7 @@ sequenceDiagram
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Sequence/SequenceTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.Complex.verified.png" />
+</p>
 

@@ -77,16 +77,18 @@ public class DocGeneratorTests
                 markdown.AppendLine($"[Open in Mermaid Live]({GetMermaidLiveUrl(test.Input)})");
                 markdown.AppendLine();
 
-                if (!string.IsNullOrEmpty(test.VerifiedPngPath))
-                {
-                    var relativePngPath = Path
-                        .GetRelativePath(outputDir, test.VerifiedPngPath)
-                        .Replace("\\", "/");
-                    markdown.AppendLine("**Rendered by Naiad:**");
-                    markdown.AppendLine();
-                    markdown.AppendLine($"![{test.Name}]({relativePngPath})");
-                    markdown.AppendLine();
-                }
+                var relativePngPath = Path
+                    .GetRelativePath(outputDir, test.VerifiedPngPath)
+                    .Replace("\\", "/");
+                markdown.AppendLine("**Rendered by Naiad:**");
+                markdown.AppendLine(
+                    $"""
+
+                     <p align="center">
+                       <img src="{relativePngPath}" />
+                     </p>
+
+                     """);
             }
 
             var outputPath = Path.Combine(outputDir, $"{category}.md");

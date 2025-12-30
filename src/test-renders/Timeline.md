@@ -21,7 +21,9 @@ timeline
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Timeline/TimelineTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.Simple.verified.png" />
+</p>
 
 ## Title
 
@@ -46,7 +48,9 @@ timeline
 
 **Rendered by Naiad:**
 
-![Title](../Tests/Timeline/TimelineTests.Title.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.Title.verified.png" />
+</p>
 
 ## MultipleEventsPerPeriod
 
@@ -73,7 +77,9 @@ timeline
 
 **Rendered by Naiad:**
 
-![MultipleEventsPerPeriod](../Tests/Timeline/TimelineTests.MultipleEventsPerPeriod.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.MultipleEventsPerPeriod.verified.png" />
+</p>
 
 ## Sections
 
@@ -104,7 +110,9 @@ timeline
 
 **Rendered by Naiad:**
 
-![Sections](../Tests/Timeline/TimelineTests.Sections.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.Sections.verified.png" />
+</p>
 
 ## TextPeriods
 
@@ -131,7 +139,9 @@ timeline
 
 **Rendered by Naiad:**
 
-![TextPeriods](../Tests/Timeline/TimelineTests.TextPeriods.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.TextPeriods.verified.png" />
+</p>
 
 ## MultipleSections
 
@@ -166,7 +176,9 @@ timeline
 
 **Rendered by Naiad:**
 
-![MultipleSections](../Tests/Timeline/TimelineTests.MultipleSections.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.MultipleSections.verified.png" />
+</p>
 
 ## Complex
 
@@ -211,5 +223,7 @@ timeline
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Timeline/TimelineTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.Complex.verified.png" />
+</p>
 

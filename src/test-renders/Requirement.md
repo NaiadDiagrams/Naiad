@@ -29,7 +29,9 @@ requirement test_req {
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Requirement/RequirementTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.Simple.verified.png" />
+</p>
 
 ## Functional
 
@@ -60,7 +62,9 @@ functionalRequirement login_req {
 
 **Rendered by Naiad:**
 
-![Functional](../Tests/Requirement/RequirementTests.Functional.verified.png)
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.Functional.verified.png" />
+</p>
 
 ## Element
 
@@ -101,7 +105,9 @@ test_entity - satisfies -> test_req
 
 **Rendered by Naiad:**
 
-![Element](../Tests/Requirement/RequirementTests.Element.verified.png)
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.Element.verified.png" />
+</p>
 
 ## Multiple
 
@@ -154,7 +160,9 @@ performanceRequirement perf1 {
 
 **Rendered by Naiad:**
 
-![Multiple](../Tests/Requirement/RequirementTests.Multiple.verified.png)
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.Multiple.verified.png" />
+</p>
 
 ## Complex
 
@@ -223,7 +231,9 @@ login_page - derives -> user_auth
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Requirement/RequirementTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.Complex.verified.png" />
+</p>
 
 ## AllTypes
 
@@ -276,5 +286,7 @@ elem1 - verifies -> req2
 
 **Rendered by Naiad:**
 
-![AllTypes](../Tests/Requirement/RequirementTests.AllTypes.verified.png)
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.AllTypes.verified.png" />
+</p>
 

@@ -25,7 +25,9 @@ quadrantChart
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Quadrant/QuadrantTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Quadrant/QuadrantTests.Simple.verified.png" />
+</p>
 
 ## Labels
 
@@ -64,7 +66,9 @@ quadrantChart
 
 **Rendered by Naiad:**
 
-![Labels](../Tests/Quadrant/QuadrantTests.Labels.verified.png)
+<p align="center">
+  <img src="../Tests/Quadrant/QuadrantTests.Labels.verified.png" />
+</p>
 
 ## ManyPoints
 
@@ -99,7 +103,9 @@ quadrantChart
 
 **Rendered by Naiad:**
 
-![ManyPoints](../Tests/Quadrant/QuadrantTests.ManyPoints.verified.png)
+<p align="center">
+  <img src="../Tests/Quadrant/QuadrantTests.ManyPoints.verified.png" />
+</p>
 
 ## TitleOnly
 
@@ -128,7 +134,9 @@ quadrantChart
 
 **Rendered by Naiad:**
 
-![TitleOnly](../Tests/Quadrant/QuadrantTests.TitleOnly.verified.png)
+<p align="center">
+  <img src="../Tests/Quadrant/QuadrantTests.TitleOnly.verified.png" />
+</p>
 
 ## EdgePositions
 
@@ -161,5 +169,7 @@ quadrantChart
 
 **Rendered by Naiad:**
 
-![EdgePositions](../Tests/Quadrant/QuadrantTests.EdgePositions.verified.png)
+<p align="center">
+  <img src="../Tests/Quadrant/QuadrantTests.EdgePositions.verified.png" />
+</p>
 

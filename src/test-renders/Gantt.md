@@ -21,7 +21,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Gantt/GanttTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.Simple.verified.png" />
+</p>
 
 ## TaskWithDependency
 
@@ -44,7 +46,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![TaskWithDependency](../Tests/Gantt/GanttTests.TaskWithDependency.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.TaskWithDependency.verified.png" />
+</p>
 
 ## Sections
 
@@ -75,7 +79,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![Sections](../Tests/Gantt/GanttTests.Sections.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.Sections.verified.png" />
+</p>
 
 ## Statuses
 
@@ -100,7 +106,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![Statuses](../Tests/Gantt/GanttTests.Statuses.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.Statuses.verified.png" />
+</p>
 
 ## Critical
 
@@ -125,7 +133,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![Critical](../Tests/Gantt/GanttTests.Critical.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.Critical.verified.png" />
+</p>
 
 ## Milestones
 
@@ -148,7 +158,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![Milestones](../Tests/Gantt/GanttTests.Milestones.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.Milestones.verified.png" />
+</p>
 
 ## Complex
 
@@ -189,7 +201,9 @@ gantt
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Gantt/GanttTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.Complex.verified.png" />
+</p>
 
 ## WeeklyDuration
 
@@ -212,5 +226,7 @@ gantt
 
 **Rendered by Naiad:**
 
-![WeeklyDuration](../Tests/Gantt/GanttTests.WeeklyDuration.verified.png)
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.WeeklyDuration.verified.png" />
+</p>
 

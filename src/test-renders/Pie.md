@@ -23,7 +23,9 @@ pie
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Pie/PieTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Pie/PieTests.Simple.verified.png" />
+</p>
 
 ## Title
 
@@ -48,7 +50,9 @@ pie
 
 **Rendered by Naiad:**
 
-![Title](../Tests/Pie/PieTests.Title.verified.png)
+<p align="center">
+  <img src="../Tests/Pie/PieTests.Title.verified.png" />
+</p>
 
 ## ShowData
 
@@ -69,5 +73,7 @@ pie showData
 
 **Rendered by Naiad:**
 
-![ShowData](../Tests/Pie/PieTests.ShowData.verified.png)
+<p align="center">
+  <img src="../Tests/Pie/PieTests.ShowData.verified.png" />
+</p>
 

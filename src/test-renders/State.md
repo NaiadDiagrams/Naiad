@@ -19,7 +19,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/State/StateTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.Simple.verified.png" />
+</p>
 
 ## MultipleStates
 
@@ -46,7 +48,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![MultipleStates](../Tests/State/StateTests.MultipleStates.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.MultipleStates.verified.png" />
+</p>
 
 ## TransitionLabels
 
@@ -71,7 +75,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![TransitionLabels](../Tests/State/StateTests.TransitionLabels.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.TransitionLabels.verified.png" />
+</p>
 
 ## Description
 
@@ -94,7 +100,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![Description](../Tests/State/StateTests.Description.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.Description.verified.png" />
+</p>
 
 ## ForkJoinState
 
@@ -119,7 +127,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![ForkJoinState](../Tests/State/StateTests.ForkJoinState.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.ForkJoinState.verified.png" />
+</p>
 
 ## ChoiceState
 
@@ -146,7 +156,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![ChoiceState](../Tests/State/StateTests.ChoiceState.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.ChoiceState.verified.png" />
+</p>
 
 ## StateWithNote
 
@@ -169,7 +181,9 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![StateWithNote](../Tests/State/StateTests.StateWithNote.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.StateWithNote.verified.png" />
+</p>
 
 ## StateDiagramV1
 
@@ -190,7 +204,9 @@ stateDiagram
 
 **Rendered by Naiad:**
 
-![StateDiagramV1](../Tests/State/StateTests.StateDiagramV1.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.StateDiagramV1.verified.png" />
+</p>
 
 ## Complex
 
@@ -251,5 +267,7 @@ stateDiagram-v2
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/State/StateTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/State/StateTests.Complex.verified.png" />
+</p>
 

@@ -13,7 +13,9 @@ packet-beta
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Packet/PacketTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.Simple.verified.png" />
+</p>
 
 ## TCPHeader
 
@@ -42,7 +44,9 @@ packet-beta
 
 **Rendered by Naiad:**
 
-![TCPHeader](../Tests/Packet/PacketTests.TCPHeader.verified.png)
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.TCPHeader.verified.png" />
+</p>
 
 ## IPv4Header
 
@@ -68,7 +72,9 @@ packet-beta
 
 **Rendered by Naiad:**
 
-![IPv4Header](../Tests/Packet/PacketTests.IPv4Header.verified.png)
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.IPv4Header.verified.png" />
+</p>
 
 ## SingleRow
 
@@ -85,7 +91,9 @@ packet-beta
 
 **Rendered by Naiad:**
 
-![SingleRow](../Tests/Packet/PacketTests.SingleRow.verified.png)
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.SingleRow.verified.png" />
+</p>
 
 ## Fields
 
@@ -101,5 +109,7 @@ packet-beta
 
 **Rendered by Naiad:**
 
-![Fields](../Tests/Packet/PacketTests.Fields.verified.png)
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.Fields.verified.png" />
+</p>
 

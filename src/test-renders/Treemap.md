@@ -16,7 +16,9 @@ treemap-beta
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Treemap/TreemapTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Treemap/TreemapTests.Simple.verified.png" />
+</p>
 
 ## SingleLevel
 
@@ -33,7 +35,9 @@ treemap-beta
 
 **Rendered by Naiad:**
 
-![SingleLevel](../Tests/Treemap/TreemapTests.SingleLevel.verified.png)
+<p align="center">
+  <img src="../Tests/Treemap/TreemapTests.SingleLevel.verified.png" />
+</p>
 
 ## NestedSections
 
@@ -54,7 +58,9 @@ treemap-beta
 
 **Rendered by Naiad:**
 
-![NestedSections](../Tests/Treemap/TreemapTests.NestedSections.verified.png)
+<p align="center">
+  <img src="../Tests/Treemap/TreemapTests.NestedSections.verified.png" />
+</p>
 
 ## MixedHierarchy
 
@@ -72,7 +78,9 @@ treemap-beta
 
 **Rendered by Naiad:**
 
-![MixedHierarchy](../Tests/Treemap/TreemapTests.MixedHierarchy.verified.png)
+<p align="center">
+  <img src="../Tests/Treemap/TreemapTests.MixedHierarchy.verified.png" />
+</p>
 
 ## LargeValues
 
@@ -91,7 +99,9 @@ treemap-beta
 
 **Rendered by Naiad:**
 
-![LargeValues](../Tests/Treemap/TreemapTests.LargeValues.verified.png)
+<p align="center">
+  <img src="../Tests/Treemap/TreemapTests.LargeValues.verified.png" />
+</p>
 
 ## Complex
 
@@ -116,5 +126,7 @@ treemap-beta
 
 **Rendered by Naiad:**
 
-![Complex](../Tests/Treemap/TreemapTests.Complex.verified.png)
+<p align="center">
+  <img src="../Tests/Treemap/TreemapTests.Complex.verified.png" />
+</p>
 

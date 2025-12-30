@@ -13,7 +13,9 @@ curve data1["Series1"]{20, 40, 60, 80, 50}
 
 **Rendered by Naiad:**
 
-![Simple](../Tests/Radar/RadarTests.Simple.verified.png)
+<p align="center">
+  <img src="../Tests/Radar/RadarTests.Simple.verified.png" />
+</p>
 
 ## Title
 
@@ -29,7 +31,9 @@ curve a["Project A"]{80, 60, 40, 70, 90}
 
 **Rendered by Naiad:**
 
-![Title](../Tests/Radar/RadarTests.Title.verified.png)
+<p align="center">
+  <img src="../Tests/Radar/RadarTests.Title.verified.png" />
+</p>
 
 ## MultipleCurves
 
@@ -46,7 +50,9 @@ curve villain["Villain"]{75, 80, 65, 85, 90}
 
 **Rendered by Naiad:**
 
-![MultipleCurves](../Tests/Radar/RadarTests.MultipleCurves.verified.png)
+<p align="center">
+  <img src="../Tests/Radar/RadarTests.MultipleCurves.verified.png" />
+</p>
 
 ## ThreeCurves
 
@@ -64,7 +70,9 @@ curve c["User3"]{60, 60, 80, 70}
 
 **Rendered by Naiad:**
 
-![ThreeCurves](../Tests/Radar/RadarTests.ThreeCurves.verified.png)
+<p align="center">
+  <img src="../Tests/Radar/RadarTests.ThreeCurves.verified.png" />
+</p>
 
 ## Triangle
 
@@ -79,7 +87,9 @@ curve data["Values"]{100, 80, 60}
 
 **Rendered by Naiad:**
 
-![Triangle](../Tests/Radar/RadarTests.Triangle.verified.png)
+<p align="center">
+  <img src="../Tests/Radar/RadarTests.Triangle.verified.png" />
+</p>
 
 ## Hexagon
 
@@ -95,5 +105,7 @@ curve data["Metrics"]{50, 80, 60, 90, 40, 70}
 
 **Rendered by Naiad:**
 
-![Hexagon](../Tests/Radar/RadarTests.Hexagon.verified.png)
+<p align="center">
+  <img src="../Tests/Radar/RadarTests.Hexagon.verified.png" />
+</p>
 
