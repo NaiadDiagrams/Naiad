@@ -38,12 +38,13 @@ public class DocGeneratorTests
                 markdown.AppendLine("```");
                 markdown.AppendLine();
 
-                if (!string.IsNullOrEmpty(test.VerifiedSvgContent))
+                if (!string.IsNullOrEmpty(test.VerifiedPngPath))
                 {
-                    markdown.AppendLine("**Output SVG:**");
-                    markdown.AppendLine("```xml");
-                    markdown.AppendLine(test.VerifiedSvgContent.Trim());
-                    markdown.AppendLine("```");
+                    var relativePngPath = Path.GetRelativePath(ProjectFiles.SolutionDirectory, test.VerifiedPngPath)
+                        .Replace("\\", "/");
+                    markdown.AppendLine("**Output:**");
+                    markdown.AppendLine();
+                    markdown.AppendLine($"![{test.Name}]({relativePngPath})");
                     markdown.AppendLine();
                 }
             }
@@ -83,15 +84,14 @@ public class DocGeneratorTests
                 .OfType<ClassDeclarationSyntax>()
                 .FirstOrDefault()?.Identifier.Text ?? "";
 
-            var verifiedSvgPath = FindVerifiedFile(filePath, className, testName, ".verified.svg");
-            var verifiedSvgContent = verifiedSvgPath != null ? await File.ReadAllTextAsync(verifiedSvgPath) : null;
+            var verifiedPngPath = FindVerifiedFile(filePath, className, testName, ".verified.png");
 
             results.Add(new TestInfo
             {
                 Name = testName,
                 ClassName = className,
                 Input = input,
-                VerifiedSvgContent = verifiedSvgContent
+                VerifiedPngPath = verifiedPngPath
             });
         }
 
@@ -166,6 +166,6 @@ public class DocGeneratorTests
         public string Name { get; set; } = "";
         public string ClassName { get; set; } = "";
         public string Input { get; set; } = "";
-        public string? VerifiedSvgContent { get; set; }
+        public string? VerifiedPngPath { get; set; }
     }
 }
