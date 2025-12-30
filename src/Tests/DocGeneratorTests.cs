@@ -222,27 +222,17 @@ public class DocGeneratorTests
             .FirstOrDefault();
     }
 
-    static string? FindVerifiedFile(string testFile, string className, string testName, string extension)
+    static string FindVerifiedFile(string testFile, string className, string testName, string extension)
     {
         var dir = Path.GetDirectoryName(testFile)!;
 
-        // Try pattern: ClassName.TestName.verified.svg
-        var pattern1 = Path.Combine(dir, $"{className}.{testName}{extension}");
-        if (File.Exists(pattern1))
+        var file = Path.Combine(dir, $"{className}.{testName}{extension}");
+        if (File.Exists(file))
         {
-            return pattern1;
+            return file;
         }
 
-        // Try without class name
-        var pattern2 = Path.Combine(dir, $"{testName}{extension}");
-        if (File.Exists(pattern2))
-        {
-            return pattern2;
-        }
-
-        // Search in subdirectories
-        var searchPattern = $"*{testName}{extension}";
-        return Directory.GetFiles(dir, searchPattern, SearchOption.AllDirectories).FirstOrDefault();
+        throw new($"Could not find: {file}");
     }
 
     static string GetMermaidLiveUrl(string code)
@@ -257,6 +247,6 @@ public class DocGeneratorTests
         public string Name { get; set; } = "";
         public string ClassName { get; set; } = "";
         public string Input { get; set; } = "";
-        public string? VerifiedPngPath { get; set; }
+        public required string VerifiedPngPath { get; init; }
     }
 }

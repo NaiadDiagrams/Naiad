@@ -96,3 +96,7 @@ server:B -- T>:db
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiYXJjaGl0ZWN0dXJlLWJldGFcbnNlcnZpY2UgY2xpZW50KGludGVybmV0KVtDbGllbnRdXG5zZXJ2aWNlIHNlcnZlcihzZXJ2ZXIpW1NlcnZlcl1cbnNlcnZpY2UgZGIoZGF0YWJhc2UpW0RhdGFiYXNlXVxuXHUwMDNDY2xpZW50OlIgLS0gTFx1MDAzRTpzZXJ2ZXJcbnNlcnZlcjpCIC0tIFRcdTAwM0U6ZGIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+**Output:**
+
+![EdgeWithArrows](../Tests/Architecture/ArchitectureTests.EdgeWithArrows.verified.png)
+

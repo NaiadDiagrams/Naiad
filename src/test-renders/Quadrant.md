@@ -154,3 +154,7 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIEVkZ2UgQ2FzZXNcbiAgICB4LWF4aXMgTGVmdCAtLVx1MDAzRSBSaWdodFxuICAgIHktYXhpcyBCb3R0b20gLS1cdTAwM0UgVG9wXG4gICAgVG9wIFJpZ2h0OiBbMS4wLCAxLjBdXG4gICAgVG9wIExlZnQ6IFswLjAsIDEuMF1cbiAgICBCb3R0b20gTGVmdDogWzAuMCwgMC4wXVxuICAgIEJvdHRvbSBSaWdodDogWzEuMCwgMC4wXVxuICAgIENlbnRlcjogWzAuNSwgMC41XSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+**Output:**
+
+![EdgePositions](../Tests/Quadrant/QuadrantTests.EdgePositions.verified.png)
+

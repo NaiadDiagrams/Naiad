@@ -56,6 +56,10 @@ functionalRequirement login_req {
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbmZ1bmN0aW9uYWxSZXF1aXJlbWVudCBsb2dpbl9yZXEge1xuICAgIGlkOiBSRVEtMDAxXG4gICAgdGV4dDogVXNlciBtdXN0IGJlIGFibGUgdG8gbG9nIGluXG4gICAgcmlzazogbWVkaXVtXG4gICAgdmVyaWZ5bWV0aG9kOiBkZW1vbnN0cmF0aW9uXG59IiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+**Output:**
+
+![Functional](../Tests/Requirement/RequirementTests.Functional.verified.png)
+
 ## Element
 
 **Input:**
@@ -144,6 +148,10 @@ performanceRequirement perf1 {
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHJlcTEge1xuICAgIGlkOiBSRVEtMDAxXG4gICAgdGV4dDogRmlyc3QgcmVxdWlyZW1lbnRcbiAgICByaXNrOiBsb3dcbn1cblxucmVxdWlyZW1lbnQgcmVxMiB7XG4gICAgaWQ6IFJFUS0wMDJcbiAgICB0ZXh0OiBTZWNvbmQgcmVxdWlyZW1lbnRcbiAgICByaXNrOiBtZWRpdW1cbn1cblxucGVyZm9ybWFuY2VSZXF1aXJlbWVudCBwZXJmMSB7XG4gICAgaWQ6IFBFUkYtMDAxXG4gICAgdGV4dDogUGVyZm9ybWFuY2UgbXVzdCBiZSBnb29kXG4gICAgcmlzazogaGlnaFxufSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+**Output:**
+
+![Multiple](../Tests/Requirement/RequirementTests.Multiple.verified.png)
+
 ## Complex
 
 **Input:**
@@ -207,6 +215,10 @@ login_page - derives -> user_auth
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHVzZXJfYXV0aCB7XG4gICAgaWQ6IFJFUS0wMDFcbiAgICB0ZXh0OiBVc2VycyBtdXN0IGF1dGhlbnRpY2F0ZVxuICAgIHJpc2s6IGhpZ2hcbiAgICB2ZXJpZnltZXRob2Q6IHRlc3Rcbn1cblxuZnVuY3Rpb25hbFJlcXVpcmVtZW50IGxvZ2luX3BhZ2Uge1xuICAgIGlkOiBSRVEtMDAyXG4gICAgdGV4dDogU3lzdGVtIHByb3ZpZGVzIGxvZ2luIHBhZ2VcbiAgICByaXNrOiBtZWRpdW1cbn1cblxuZWxlbWVudCB3ZWJfYXBwIHtcbiAgICB0eXBlOiBhcHBsaWNhdGlvblxuICAgIGRvY3JlZjogL2RvY3Mvd2ViYXBwXG59XG5cbmVsZW1lbnQgbG9naW5fbW9kdWxlIHtcbiAgICB0eXBlOiBtb2R1bGVcbn1cblxud2ViX2FwcCAtIGNvbnRhaW5zIC1cdTAwM0UgbG9naW5fbW9kdWxlXG5sb2dpbl9tb2R1bGUgLSBzYXRpc2ZpZXMgLVx1MDAzRSBsb2dpbl9wYWdlXG5sb2dpbl9wYWdlIC0gZGVyaXZlcyAtXHUwMDNFIHVzZXJfYXV0aCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
+**Output:**
+
+![Complex](../Tests/Requirement/RequirementTests.Complex.verified.png)
 
 ## AllTypes
 

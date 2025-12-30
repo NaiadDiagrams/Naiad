@@ -76,7 +76,6 @@ public class QuadrantTests : TestBase
     }
 
     [Test]
-    [Explicit("Uses edge coordinates not supported by mermaid.ink/kroki.io")]
     public Task EdgePositions()
     {
         const string input =

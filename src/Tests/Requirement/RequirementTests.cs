@@ -19,7 +19,6 @@ public class RequirementTests : TestBase
     }
 
     [Test]
-    [Explicit("Uses functionalRequirement keyword not supported by mermaid.ink/kroki.io")]
     public Task Functional()
     {
         var input =
@@ -61,7 +60,6 @@ public class RequirementTests : TestBase
     }
 
     [Test]
-    [Explicit("Uses performanceRequirement keyword not supported by mermaid.ink/kroki.io")]
     public Task Multiple()
     {
         var input =
@@ -91,7 +89,6 @@ public class RequirementTests : TestBase
     }
 
     [Test]
-    [Explicit("Uses functionalRequirement keyword not supported by mermaid.ink/kroki.io")]
     public Task Complex()
     {
         var input =
