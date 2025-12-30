@@ -25,7 +25,6 @@ global using MermaidSharp.Diagrams.Timeline;
 global using MermaidSharp.Diagrams.Treemap;
 global using MermaidSharp.Diagrams.UserJourney;
 global using MermaidSharp.Diagrams.XYChart;
-global using MermaidSharp.Layout;
 global using MermaidSharp.Models;
 global using MermaidSharp.Rendering;
 global using Pidgin;

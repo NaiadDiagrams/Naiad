@@ -1,17 +1,15 @@
 namespace MermaidSharp.Diagrams.EntityRelationship;
 
-public class ERRenderer : IDiagramRenderer<ERModel>
+public class ERRenderer(ILayoutEngine? layoutEngine = null) :
+    IDiagramRenderer<ERModel>
 {
-    readonly ILayoutEngine _layoutEngine;
+    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     const double EntityPadding = 10;
     const double LineHeight = 20;
     const double MinEntityWidth = 120;
     const double AttributeIndent = 10;
     const double HeaderHeight = 30;
-
-    public ERRenderer(ILayoutEngine? layoutEngine = null) =>
-        _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     public SvgDocument Render(ERModel model, RenderOptions options)
     {
@@ -25,7 +23,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
             NodeSeparation = 80,
             RankSeparation = 100
         };
-        var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
 
         // Copy positions back to entities
         CopyPositionsToModel(model, graphModel);

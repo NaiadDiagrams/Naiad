@@ -258,12 +258,17 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
 
         // Close any remaining activations
+        // ReSharper disable once UseIndexFromEndExpression
         var lastY = yPositions.Count > 0 ? yPositions[yPositions.Count - 1] + MessageSpacing : 0;
         foreach (var (participantId, startY) in activeLifelines)
         {
-            if (!activations.ContainsKey(participantId))
-                activations[participantId] = [];
-            activations[participantId].Add((startY, lastY));
+            if (!activations.TryGetValue(participantId, out var value))
+            {
+                value = [];
+                activations[participantId] = value;
+            }
+
+            value.Add((startY, lastY));
         }
     }
 

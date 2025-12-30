@@ -1,3 +1,5 @@
+using MermaidSharp.Layout;
+
 namespace MermaidSharp.Diagrams.Class;
 
 public class ClassRenderer(ILayoutEngine? layoutEngine = null) :

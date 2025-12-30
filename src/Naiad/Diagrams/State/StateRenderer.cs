@@ -1,8 +1,9 @@
 namespace MermaidSharp.Diagrams.State;
 
-public class StateRenderer : IDiagramRenderer<StateModel>
+public class StateRenderer(ILayoutEngine? layoutEngine = null) :
+    IDiagramRenderer<StateModel>
 {
-    readonly ILayoutEngine _layoutEngine;
+    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     const double StateWidth = 120;
     const double StateHeight = 40;
@@ -11,9 +12,6 @@ public class StateRenderer : IDiagramRenderer<StateModel>
     const double NoteWidth = 100;
     const double NoteHeight = 40;
     const double NotePadding = 10;
-
-    public StateRenderer(ILayoutEngine? layoutEngine = null) =>
-        _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
@@ -27,7 +25,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
             NodeSeparation = 80,
             RankSeparation = 80
         };
-        var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
 
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
