@@ -40,28 +40,28 @@ var svg = Mermaid.Render(
 
 ## Supported Diagram Types
 
- * Flowchart / Graph
- * Sequence Diagram
- * Class Diagram
- * State Diagram
- * Entity Relationship Diagram
- * Gantt Chart
- * Pie Chart
- * Git Graph
- * Mindmap
- * Timeline
- * User Journey
- * Quadrant Chart
- * Requirement Diagram
- * C4 Diagrams (Context, Container, Component, Deployment)
- * Kanban
- * XY Chart (beta)
- * Sankey (beta)
- * Block Diagram (beta)
- * Packet Diagram (beta)
- * Architecture (beta)
- * Radar (beta)
- * Treemap (beta)
+ * [Flowchart / Graph](https://mermaid.js.org/syntax/flowchart.html)
+ * [Sequence Diagram](https://mermaid.js.org/syntax/sequenceDiagram.html)
+ * [Class Diagram](https://mermaid.js.org/syntax/classDiagram.html)
+ * [State Diagram](https://mermaid.js.org/syntax/stateDiagram.html)
+ * [Entity Relationship Diagram](https://mermaid.js.org/syntax/entityRelationshipDiagram.html)
+ * [Gantt Chart](https://mermaid.js.org/syntax/gantt.html)
+ * [Pie Chart](https://mermaid.js.org/syntax/pie.html)
+ * [Git Graph](https://mermaid.js.org/syntax/gitgraph.html)
+ * [Mindmap](https://mermaid.js.org/syntax/mindmap.html)
+ * [Timeline](https://mermaid.js.org/syntax/timeline.html)
+ * [User Journey](https://mermaid.js.org/syntax/userJourney.html)
+ * [Quadrant Chart](https://mermaid.js.org/syntax/quadrantChart.html)
+ * [Requirement Diagram](https://mermaid.js.org/syntax/requirementDiagram.html)
+ * [C4 Diagrams](https://mermaid.js.org/syntax/c4.html) (Context, Container, Component, Deployment)
+ * [Kanban](https://mermaid.js.org/syntax/kanban.html)
+ * [XY Chart](https://mermaid.js.org/syntax/xyChart.html) (beta)
+ * [Sankey](https://mermaid.js.org/syntax/sankey.html) (beta)
+ * [Block Diagram](https://mermaid.js.org/syntax/block.html) (beta)
+ * [Packet Diagram](https://mermaid.js.org/syntax/packet.html) (beta)
+ * [Architecture](https://mermaid.js.org/syntax/architecture.html) (beta)
+ * [Radar](https://mermaid.js.org/syntax/radar.html) (beta)
+ * [Treemap](https://mermaid.js.org/syntax/treemap.html) (beta)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
