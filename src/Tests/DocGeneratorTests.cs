@@ -94,7 +94,7 @@ public class DocGeneratorTests
 
         // Generate index page
         var index = new StringBuilder();
-        index.AppendLine("# Test Renders");
+        index.AppendLine("## Test Renders");
         index.AppendLine();
         index.AppendLine("Auto-generated documentation from the test suite.");
         index.AppendLine();
@@ -110,7 +110,7 @@ public class DocGeneratorTests
         if (betaCategories.Count > 0)
         {
             index.AppendLine();
-            index.AppendLine("## Beta diagram types");
+            index.AppendLine("### Beta diagram types");
             index.AppendLine();
             foreach (var category in betaCategoriesSorted)
             {

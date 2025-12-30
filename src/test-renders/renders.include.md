@@ -1,4 +1,4 @@
-# Test Renders
+## Test Renders
 
 Auto-generated documentation from the test suite.
 
@@ -18,7 +18,7 @@ Auto-generated documentation from the test suite.
 - [Timeline](Timeline.md)
 - [UserJourney](UserJourney.md)
 
-## Beta diagram types
+### Beta diagram types
 
 - [Architecture](Architecture.md)
 - [Block](Block.md)
