@@ -529,6 +529,25 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                     from.Position.Y + radius * Math.Sin(angle));
         }
 
+        // For fork/join states, connect from near center with offset based on target direction
+        if (from.Type is StateType.Fork or StateType.Join)
+        {
+            // Offset from center based on target's horizontal position
+            var offset = dx > 0 ? 15 : dx < 0 ? -15 : 0;
+            var y = dy > 0
+                ? from.Position.Y + from.Height / 2
+                : from.Position.Y - from.Height / 2;
+            return (from.Position.X + offset, y);
+        }
+
+        // When receiving from fork/join, always use top/bottom center
+        if (to.Type is StateType.Fork or StateType.Join)
+        {
+            return dy > 0
+                ? (from.Position.X, from.Position.Y + from.Height / 2)
+                : (from.Position.X, from.Position.Y - from.Height / 2);
+        }
+
         // For normal states, use edge intersection
         if (Math.Abs(dx) > Math.Abs(dy))
         {
