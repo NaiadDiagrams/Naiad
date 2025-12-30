@@ -63,8 +63,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize + 2}px",
-                fontFamily: options.FontFamily,
-                fontWeight: "bold");
+                fontFamily: options.FontFamily);
             offsetY += 30;
         }
 
