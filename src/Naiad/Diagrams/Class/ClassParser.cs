@@ -98,7 +98,6 @@ public class ClassParser : IDiagramParser<ClassModel>
         select new ClassMethod
         {
             Name = name,
-            Parameters = { },
             ReturnType = returnType.HasValue ? returnType.Value : null,
             Visibility = visibility.HasValue ? visibility.Value : Visibility.Public,
             IsStatic = isStatic.HasValue,
@@ -256,7 +255,7 @@ public class ClassParser : IDiagramParser<ClassModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-    public Parser<char, ClassModel> Parser =>
+    public static Parser<char, ClassModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("classDiagram")
         from __ in CommonParsers.InlineWhitespace

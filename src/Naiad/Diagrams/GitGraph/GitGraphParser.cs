@@ -221,7 +221,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         ).Optional()
         select options.HasValue ? options.Value : (null, null);
 
-    public Parser<char, GitGraphModel> Parser =>
+    public static Parser<char, GitGraphModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in CIString("gitGraph")
         from options in OptionsParser
@@ -255,7 +255,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
             model.MainBranchName = options.mainBranch;
         }
 
-        int order = 0;
+        var order = 0;
         foreach (var op in operations)
         {
             op.Order = order++;

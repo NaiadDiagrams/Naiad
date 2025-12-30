@@ -7,3 +7,4 @@ global using Microsoft.CodeAnalysis;
 global using Microsoft.CodeAnalysis.CSharp;
 global using Microsoft.CodeAnalysis.CSharp.Syntax;
 global using Microsoft.Playwright;
+global using Microsoft.Playwright.NUnit;

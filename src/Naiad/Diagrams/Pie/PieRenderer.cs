@@ -41,7 +41,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             model.ShowData ? $"{s.Label} [{(int)s.Value}]" : s.Label).ToList();
 
         // Match mermaid.ink exact dimensions - width varies based on legend text
-        double width = model.ShowData ? 613.140625 : 551.6875;
+        var width = model.ShowData ? 613.140625 : 551.6875;
         var height = 450.0;
         var cx = 225.0;
         var cy = 225.0;
@@ -63,7 +63,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Draw pie slices
         double startAngle = 0;
-        for (int i = 0; i < model.Sections.Count; i++)
+        for (var i = 0; i < model.Sections.Count; i++)
         {
             var section = model.Sections[i];
             var sweepAngle = (section.Value / total) * 360;
@@ -77,7 +77,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Add percentage labels with mermaid.ink exact positions
         startAngle = 0;
-        for (int i = 0; i < model.Sections.Count; i++)
+        for (var i = 0; i < model.Sections.Count; i++)
         {
             var section = model.Sections[i];
             var sweepAngle = (section.Value / total) * 360;
@@ -103,7 +103,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Legend items
         var legendStartY = -(model.Sections.Count * 22) / 2;
-        for (int i = 0; i < model.Sections.Count; i++)
+        for (var i = 0; i < model.Sections.Count; i++)
         {
             var section = model.Sections[i];
             var colorRgb = GetRgbColor(section.Color, i);
@@ -152,7 +152,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
     static string ConvertToRgb(string color)
     {
-        if (color.StartsWith("#") && color.Length == 7)
+        if (color.StartsWith('#') && color.Length == 7)
         {
             var r = Convert.ToInt32(color.Substring(1, 2), 16);
             var g = Convert.ToInt32(color.Substring(3, 2), 16);

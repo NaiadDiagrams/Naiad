@@ -14,10 +14,8 @@ public class StateRenderer : IDiagramRenderer<StateModel>
     const double NoteHeight = 40;
     const double NotePadding = 10;
 
-    public StateRenderer(ILayoutEngine? layoutEngine = null)
-    {
+    public StateRenderer(ILayoutEngine? layoutEngine = null) =>
         _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
-    }
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
@@ -62,13 +60,11 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return builder.Build();
     }
 
-    double CalculateBackEdgeWidth(List<StateTransition> transitions, Dictionary<string, State> stateMap)
-    {
+    static double CalculateBackEdgeWidth(List<StateTransition> transitions, Dictionary<string, State> stateMap) =>
         // Curves are tight and fit within normal bounds - no extra width needed
-        return 0;
-    }
+        0;
 
-    double CalculateNoteExtraWidth(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
+    static double CalculateNoteExtraWidth(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
     {
         double maxExtraWidth = 0;
 
@@ -90,7 +86,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return maxExtraWidth > 0 ? maxExtraWidth + 10 : 0; // Add small margin
     }
 
-    GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
+    static GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
     {
         var graph = new StateLayoutGraph { Direction = model.Direction };
 
@@ -112,7 +108,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return graph;
     }
 
-    void AddStatesToGraph(StateLayoutGraph graph, List<State> states, RenderOptions options)
+    static void AddStatesToGraph(StateLayoutGraph graph, List<State> states, RenderOptions options)
     {
         foreach (var state in states)
         {
@@ -144,7 +140,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    (double width, double height) CalculateStateSize(State state, RenderOptions options)
+    static (double width, double height) CalculateStateSize(State state, RenderOptions options)
     {
         if (state.Type is StateType.Start or StateType.End)
             return (SpecialStateSize, SpecialStateSize);
@@ -162,12 +158,10 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return (width, StateHeight);
     }
 
-    void CopyPositionsToModel(StateModel model, GraphDiagramBase graph)
-    {
+    static void CopyPositionsToModel(StateModel model, GraphDiagramBase graph) =>
         CopyPositionsToStates(model.States, graph);
-    }
 
-    void CopyPositionsToStates(List<State> states, GraphDiagramBase graph)
+    static void CopyPositionsToStates(List<State> states, GraphDiagramBase graph)
     {
         foreach (var state in states)
         {
@@ -186,7 +180,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    void AdjustForkJoinWidths(StateModel model)
+    static void AdjustForkJoinWidths(StateModel model)
     {
         var stateMap = BuildStateMap(model.States);
 
@@ -289,7 +283,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    void RenderNormalState(SvgBuilder builder, State state, RenderOptions options)
+    static void RenderNormalState(SvgBuilder builder, State state, RenderOptions options)
     {
         var x = state.Position.X - state.Width / 2;
         var y = state.Position.Y - state.Height / 2;
@@ -340,7 +334,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         RenderStates(builder, state.NestedStates, options);
     }
 
-    void RenderTransitions(SvgBuilder builder, StateModel model, RenderOptions options)
+    static void RenderTransitions(SvgBuilder builder, StateModel model, RenderOptions options)
     {
         var stateMap = BuildStateMap(model.States);
 
@@ -400,7 +394,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    HashSet<string> FindBidirectionalPairs(List<StateTransition> transitions)
+    static HashSet<string> FindBidirectionalPairs(List<StateTransition> transitions)
     {
         var pairs = new HashSet<string>();
         var edgeSet = new HashSet<string>();
@@ -421,12 +415,10 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return pairs;
     }
 
-    string GetPairKey(string a, string b)
-    {
-        return string.Compare(a, b, StringComparison.Ordinal) < 0 ? $"{a}|{b}" : $"{b}|{a}";
-    }
+    static string GetPairKey(string a, string b) =>
+        string.Compare(a, b, StringComparison.Ordinal) < 0 ? $"{a}|{b}" : $"{b}|{a}";
 
-    bool IsBackEdge(StateTransition transition, Dictionary<string, State> stateMap)
+    static bool IsBackEdge(StateTransition transition, Dictionary<string, State> stateMap)
     {
         if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
             !stateMap.TryGetValue(transition.ToId, out var toState))
@@ -436,7 +428,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return fromState.Position.Y > toState.Position.Y + 20;
     }
 
-    void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
+    static void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
         Dictionary<string, State> stateMap, bool isBackEdge, RenderOptions options)
     {
         if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
@@ -488,7 +480,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    Dictionary<string, State> BuildStateMap(List<State> states)
+    static Dictionary<string, State> BuildStateMap(List<State> states)
     {
         var map = new Dictionary<string, State>();
         foreach (var state in states)
@@ -505,8 +497,11 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         return map;
     }
 
-    void RenderTransition(SvgBuilder builder, StateTransition transition,
-        Dictionary<string, State> stateMap, RenderOptions options)
+    static void RenderTransition(
+        SvgBuilder builder,
+        StateTransition transition,
+        Dictionary<string, State> stateMap,
+        RenderOptions options)
     {
         if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
             !stateMap.TryGetValue(transition.ToId, out var toState))
@@ -538,7 +533,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    (double x, double y) GetConnectionPoint(State from, State to)
+    static (double x, double y) GetConnectionPoint(State from, State to)
     {
         var dx = to.Position.X - from.Position.X;
         var dy = to.Position.Y - from.Position.Y;
@@ -586,7 +581,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    void DrawArrowhead(SvgBuilder builder, double fromX, double fromY, double toX, double toY)
+    static void DrawArrowhead(SvgBuilder builder, double fromX, double fromY, double toX, double toY)
     {
         var angle = Math.Atan2(toY - fromY, toX - fromX);
         var arrowSize = 8;
@@ -601,7 +596,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         ], fill: "#333");
     }
 
-    void RenderNotes(SvgBuilder builder, StateModel model, RenderOptions options)
+    static void RenderNotes(SvgBuilder builder, StateModel model, RenderOptions options)
     {
         var stateMap = BuildStateMap(model.States);
 
@@ -646,13 +641,11 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
-    static double MeasureText(string text, double fontSize)
-    {
-        return text.Length * fontSize * 0.6;
-    }
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.6;
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }
 
 // Internal graph model for layout
-internal class StateLayoutGraph : GraphDiagramBase { }
+internal class StateLayoutGraph : GraphDiagramBase;

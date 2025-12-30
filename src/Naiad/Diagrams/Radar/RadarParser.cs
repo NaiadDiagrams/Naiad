@@ -87,7 +87,7 @@ public class RadarParser : IDiagramParser<RadarModel>
 
     enum ItemType { Title, Axis, Curve }
 
-    public Parser<char, RadarModel> Parser =>
+    public static Parser<char, RadarModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("radar-beta")
         from ___ in CommonParsers.InlineWhitespace

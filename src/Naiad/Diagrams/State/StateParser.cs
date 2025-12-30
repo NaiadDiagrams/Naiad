@@ -161,7 +161,7 @@ public class StateParser : IDiagramParser<StateModel>
             .Then(CommonParsers.LineEnd)
             .ThenReturn(Unit.Value);
 
-    public Parser<char, StateModel> Parser =>
+    public static Parser<char, StateModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("stateDiagram-v2")).Or(String("stateDiagram"))
         from __ in CommonParsers.InlineWhitespace
@@ -169,10 +169,8 @@ public class StateParser : IDiagramParser<StateModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent()
-    {
-        return ParseContentRecursive(0);
-    }
+    static Parser<char, List<object>> ParseContent() =>
+        ParseContentRecursive(0);
 
     static Parser<char, List<object>> ParseContentRecursive(int depth)
     {

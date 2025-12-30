@@ -61,7 +61,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
             SkipLine.ThenReturn((object?)null)
         );
 
-    public Parser<char, TimelineModel> Parser =>
+    public static Parser<char, TimelineModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("timeline")
         from ___ in CommonParsers.InlineWhitespace

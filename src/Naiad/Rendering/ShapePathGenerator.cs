@@ -12,22 +12,19 @@ public static class ShapePathGenerator
                    $"H{Fmt(x + rx)} Q{Fmt(x)},{Fmt(y + height)} {Fmt(x)},{Fmt(y + height - rx)} " +
                    $"V{Fmt(y + rx)} Q{Fmt(x)},{Fmt(y)} {Fmt(x + rx)},{Fmt(y)} Z";
         }
+
         return $"M{Fmt(x)},{Fmt(y)} H{Fmt(x + width)} V{Fmt(y + height)} H{Fmt(x)} Z";
     }
 
-    public static string Circle(double cx, double cy, double r)
-    {
-        return $"M{Fmt(cx)},{Fmt(cy - r)} " +
-               $"A{Fmt(r)},{Fmt(r)} 0 1 1 {Fmt(cx)},{Fmt(cy + r)} " +
-               $"A{Fmt(r)},{Fmt(r)} 0 1 1 {Fmt(cx)},{Fmt(cy - r)} Z";
-    }
+    public static string Circle(double cx, double cy, double r) =>
+        $"M{Fmt(cx)},{Fmt(cy - r)} " +
+        $"A{Fmt(r)},{Fmt(r)} 0 1 1 {Fmt(cx)},{Fmt(cy + r)} " +
+        $"A{Fmt(r)},{Fmt(r)} 0 1 1 {Fmt(cx)},{Fmt(cy - r)} Z";
 
-    public static string Ellipse(double cx, double cy, double rx, double ry)
-    {
-        return $"M{Fmt(cx)},{Fmt(cy - ry)} " +
-               $"A{Fmt(rx)},{Fmt(ry)} 0 1 1 {Fmt(cx)},{Fmt(cy + ry)} " +
-               $"A{Fmt(rx)},{Fmt(ry)} 0 1 1 {Fmt(cx)},{Fmt(cy - ry)} Z";
-    }
+    public static string Ellipse(double cx, double cy, double rx, double ry) =>
+        $"M{Fmt(cx)},{Fmt(cy - ry)} " +
+        $"A{Fmt(rx)},{Fmt(ry)} 0 1 1 {Fmt(cx)},{Fmt(cy + ry)} " +
+        $"A{Fmt(rx)},{Fmt(ry)} 0 1 1 {Fmt(cx)},{Fmt(cy - ry)} Z";
 
     public static string Diamond(double cx, double cy, double width, double height)
     {

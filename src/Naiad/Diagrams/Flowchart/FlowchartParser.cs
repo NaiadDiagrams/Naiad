@@ -146,7 +146,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-    public Parser<char, FlowchartModel> Parser =>
+    public static Parser<char, FlowchartModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("flowchart")).Or(String("graph"))
         from __ in CommonParsers.InlineWhitespace
@@ -166,7 +166,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         var skipLine = SkipLine.ThenReturn((new List<Node>(), new List<(EdgeType, EdgeStyle, string?)>()));
 
         return Try(statement).Or(skipLine).Many()
-            .Select(s => s.Where(x => x.Item1.Count > 0).ToList());
+            .Select(s => s.Where(x => x.Nodes.Count > 0).ToList());
     }
 
     static FlowchartModel BuildModel(Direction direction,
@@ -177,7 +177,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
 
         foreach (var (nodes, edges) in statements)
         {
-            for (int i = 0; i < nodes.Count; i++)
+            for (var i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
 

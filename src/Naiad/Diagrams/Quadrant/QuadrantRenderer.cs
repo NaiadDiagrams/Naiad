@@ -135,7 +135,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         }
 
         // Draw points
-        for (int i = 0; i < model.Points.Count; i++)
+        for (var i = 0; i < model.Points.Count; i++)
         {
             var point = model.Points[i];
             var pointColor = PointColors[i % PointColors.Length];

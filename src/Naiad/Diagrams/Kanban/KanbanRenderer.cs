@@ -52,7 +52,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
         }
 
         // Draw columns
-        for (int i = 0; i < model.Columns.Count; i++)
+        for (var i = 0; i < model.Columns.Count; i++)
         {
             var column = model.Columns[i];
             var x = options.Padding + i * (ColumnWidth + ColumnPadding);
@@ -77,7 +77,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
                 fontWeight: "bold", fill: "#333");
 
             // Tasks
-            for (int j = 0; j < column.Tasks.Count; j++)
+            for (var j = 0; j < column.Tasks.Count; j++)
             {
                 var task = column.Tasks[j];
                 var taskX = x + TaskPadding;

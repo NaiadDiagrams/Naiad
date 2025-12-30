@@ -10,12 +10,12 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
     const double DayWidth = 20;
     const double MilestoneSize = 12;
 
-    static readonly string TaskColor = "#4CAF50";
-    static readonly string TaskDoneColor = "#808080";
-    static readonly string TaskActiveColor = "#2196F3";
-    static readonly string TaskCritColor = "#F44336";
-    static readonly string SectionColor = "#ECECFF";
-    static readonly string MilestoneColor = "#FF9800";
+    const string TaskColor = "#4CAF50";
+    const string TaskDoneColor = "#808080";
+    const string TaskActiveColor = "#2196F3";
+    const string TaskCritColor = "#F44336";
+    const string SectionColor = "#ECECFF";
+    const string MilestoneColor = "#FF9800";
 
     public SvgDocument Render(GanttModel model, RenderOptions options)
     {
@@ -37,7 +37,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         var totalDays = (maxDate - minDate).Days + 1;
 
         // Calculate dimensions
-        int totalRows = 0;
+        var totalRows = 0;
         foreach (var section in model.Sections)
         {
             if (!string.IsNullOrEmpty(section.Name))
@@ -76,7 +76,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         DrawGridLines(builder, minDate, totalDays, offsetX, offsetY, chartWidth, totalRows * RowHeight);
 
         // Draw sections and tasks
-        int currentRow = 0;
+        var currentRow = 0;
         foreach (var section in model.Sections)
         {
             // Section header
@@ -105,7 +105,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         return builder.Build();
     }
 
-    void DrawAxis(SvgBuilder builder, DateTime startDate, int totalDays, double offsetX, double offsetY,
+    static void DrawAxis(SvgBuilder builder, DateTime startDate, int totalDays, double offsetX, double offsetY,
         double chartWidth, RenderOptions options)
     {
         // Axis line
@@ -113,8 +113,8 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             stroke: "#333", strokeWidth: 1);
 
         // Date labels (show every few days based on scale)
-        int interval = totalDays > 30 ? 7 : totalDays > 14 ? 3 : 1;
-        for (int i = 0; i < totalDays; i += interval)
+        var interval = totalDays > 30 ? 7 : totalDays > 14 ? 3 : 1;
+        for (var i = 0; i < totalDays; i += interval)
         {
             var x = offsetX + i * DayWidth;
             var date = startDate.AddDays(i);
@@ -134,11 +134,11 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
     }
 
-    void DrawGridLines(SvgBuilder builder, DateTime startDate, int totalDays, double offsetX, double offsetY,
+    static void DrawGridLines(SvgBuilder builder, DateTime startDate, int totalDays, double offsetX, double offsetY,
         double chartWidth, double chartHeight)
     {
         // Vertical grid lines (weekly)
-        for (int i = 0; i < totalDays; i++)
+        for (var i = 0; i < totalDays; i++)
         {
             var date = startDate.AddDays(i);
             if (date.DayOfWeek == DayOfWeek.Monday || i == 0)
@@ -150,8 +150,8 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
 
         // Horizontal grid lines
-        int numRows = (int)(chartHeight / RowHeight);
-        for (int i = 0; i <= numRows; i++)
+        var numRows = (int)(chartHeight / RowHeight);
+        for (var i = 0; i <= numRows; i++)
         {
             var y = offsetY + i * RowHeight;
             builder.AddLine(offsetX, y, offsetX + chartWidth, y,
@@ -159,7 +159,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
     }
 
-    void DrawTask(SvgBuilder builder, GanttTask task, DateTime startDate, int row,
+    static void DrawTask(SvgBuilder builder, GanttTask task, DateTime startDate, int row,
         double offsetX, double offsetY, RenderOptions options)
     {
         var y = offsetY + row * RowHeight;
@@ -218,7 +218,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
     }
 
-    List<GanttTask> ComputeTaskDates(GanttModel model)
+    static List<GanttTask> ComputeTaskDates(GanttModel model)
     {
         var allTasks = model.Sections.SelectMany(s => s.Tasks).ToList();
         var taskMap = allTasks.Where(t => t.Id != null).ToDictionary(t => t.Id!, t => t);
@@ -253,8 +253,8 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
 
         // Second pass: resolve dependencies
-        bool changed = true;
-        int maxIterations = 100;
+        var changed = true;
+        var maxIterations = 100;
         while (changed && maxIterations-- > 0)
         {
             changed = false;

@@ -64,7 +64,7 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
             SkipLine.ThenReturn((object?)null)
         );
 
-    public Parser<char, UserJourneyModel> Parser =>
+    public static Parser<char, UserJourneyModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("journey")
         from ___ in CommonParsers.InlineWhitespace

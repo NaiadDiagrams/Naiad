@@ -26,7 +26,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         }
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var legendOffset = model.ShowLegend && model.Curves.Count > 0 ? LegendHeight * model.Curves.Count : 0;
+        var legendOffset = model is {ShowLegend: true, Curves.Count: > 0} ? LegendHeight * model.Curves.Count : 0;
 
         var contentWidth = (ChartRadius + LabelOffsetX) * 2;
         var contentHeight = (ChartRadius + LabelOffsetY) * 2 + titleOffset + legendOffset;
@@ -58,14 +58,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         DrawAxes(builder, centerX, centerY, model.Axes, options);
 
         // Draw curves
-        for (int i = 0; i < model.Curves.Count; i++)
+        for (var i = 0; i < model.Curves.Count; i++)
         {
             DrawCurve(builder, centerX, centerY, model.Curves[i], model.Axes.Count,
                 minValue, maxValue, CurveColors[i % CurveColors.Length], options);
         }
 
         // Draw legend
-        if (model.ShowLegend && model.Curves.Count > 0)
+        if (model is {ShowLegend: true, Curves.Count: > 0})
         {
             DrawLegend(builder, model.Curves, 0, contentHeight - legendOffset + 10, options);
         }
@@ -73,10 +73,10 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         return builder.Build();
     }
 
-    void DrawGraticule(SvgBuilder builder, double cx, double cy, int axisCount, int ticks,
+    static void DrawGraticule(SvgBuilder builder, double cx, double cy, int axisCount, int ticks,
         GraticuleType graticule, RenderOptions options)
     {
-        for (int i = 1; i <= ticks; i++)
+        for (var i = 1; i <= ticks; i++)
         {
             var radius = ChartRadius * i / ticks;
 
@@ -88,7 +88,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             {
                 // Polygon using path
                 var pathData = new List<string>();
-                for (int j = 0; j < axisCount; j++)
+                for (var j = 0; j < axisCount; j++)
                 {
                     var angle = 2 * Math.PI * j / axisCount - Math.PI / 2;
                     var x = cx + radius * Math.Cos(angle);
@@ -101,9 +101,9 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         }
     }
 
-    void DrawAxes(SvgBuilder builder, double cx, double cy, List<RadarAxis> axes, RenderOptions options)
+    static void DrawAxes(SvgBuilder builder, double cx, double cy, List<RadarAxis> axes, RenderOptions options)
     {
-        for (int i = 0; i < axes.Count; i++)
+        for (var i = 0; i < axes.Count; i++)
         {
             var angle = 2 * Math.PI * i / axes.Count - Math.PI / 2;
             var x = cx + ChartRadius * Math.Cos(angle);
@@ -124,13 +124,13 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         }
     }
 
-    void DrawCurve(SvgBuilder builder, double cx, double cy, RadarCurve curve,
+    static void DrawCurve(SvgBuilder builder, double cx, double cy, RadarCurve curve,
         int axisCount, double minValue, double maxValue, string color, RenderOptions options)
     {
         if (curve.Values.Count == 0) return;
 
         var pathData = new List<string>();
-        for (int i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
+        for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
         {
             var value = curve.Values[i];
             var normalizedValue = (value - minValue) / (maxValue - minValue);
@@ -150,7 +150,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             fill: fillColor, stroke: color, strokeWidth: 2);
 
         // Draw points
-        for (int i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
+        for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
         {
             var value = curve.Values[i];
             var normalizedValue = (value - minValue) / (maxValue - minValue);
@@ -164,9 +164,9 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         }
     }
 
-    void DrawLegend(SvgBuilder builder, List<RadarCurve> curves, double x, double y, RenderOptions options)
+    static void DrawLegend(SvgBuilder builder, List<RadarCurve> curves, double x, double y, RenderOptions options)
     {
-        for (int i = 0; i < curves.Count; i++)
+        for (var i = 0; i < curves.Count; i++)
         {
             var legendY = y + i * LegendHeight;
             var color = CurveColors[i % CurveColors.Length];
@@ -182,7 +182,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
 
     static string ColorToRgba(string hexColor, double alpha)
     {
-        if (!hexColor.StartsWith("#") || hexColor.Length != 7)
+        if (!hexColor.StartsWith('#') || hexColor.Length != 7)
             return hexColor;
 
         var r = Convert.ToInt32(hexColor.Substring(1, 2), 16);

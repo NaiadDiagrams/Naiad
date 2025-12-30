@@ -275,15 +275,13 @@ public class SvgText : SvgElement
         return sb.ToString();
     }
 
-    static string EscapeXml(string text)
-    {
-        return text
+    static string EscapeXml(string text) =>
+        text
             .Replace("&", "&amp;")
             .Replace("<", "&lt;")
             .Replace(">", "&gt;")
             .Replace("\"", "&quot;")
             .Replace("'", "&apos;");
-    }
 }
 
 public class SvgForeignObject : SvgElement
@@ -299,7 +297,7 @@ public class SvgForeignObject : SvgElement
         var sb = new StringBuilder();
         sb.Append($"<foreignObject x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\" width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
         sb.Append(CommonAttributes());
-        sb.Append(">");
+        sb.Append('>');
         sb.Append($"<div xmlns=\"http://www.w3.org/1999/xhtml\" style=\"display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: {Fmt(Width)}px; height: {Fmt(Height)}px;\">");
         sb.Append($"<span class=\"nodeLabel\">{HtmlContent}</span>");
         sb.Append("</div>");

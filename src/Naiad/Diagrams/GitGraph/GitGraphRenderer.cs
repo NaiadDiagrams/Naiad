@@ -96,7 +96,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         return builder.Build();
     }
 
-    void DrawConnection(SvgBuilder builder, GitCommit from, GitCommit to,
+    static void DrawConnection(SvgBuilder builder, GitCommit from, GitCommit to,
         ComputedGitGraph graph, double offsetX, double offsetY)
     {
         var fromBranch = graph.Branches.Find(b => b.Name == from.Branch);
@@ -128,7 +128,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         builder.AddPath(path, stroke: toColor, strokeWidth: 2, fill: "none");
     }
 
-    void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
+    static void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
         double offsetX, double offsetY, RenderOptions options)
     {
         var branch = graph.Branches.Find(b => b.Name == commit.Branch);
@@ -184,7 +184,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         }
     }
 
-    ComputedGitGraph ComputeGraph(GitGraphModel model)
+    static ComputedGitGraph ComputeGraph(GitGraphModel model)
     {
         var computed = new ComputedGitGraph();
         var branchMap = new Dictionary<string, GitBranch>();
@@ -340,10 +340,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         return computed;
     }
 
-    static double MeasureText(string text, double fontSize)
-    {
-        return text.Length * fontSize * 0.55;
-    }
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

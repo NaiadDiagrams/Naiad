@@ -175,7 +175,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
             SkipLine.ThenReturn((object?)null)
         );
 
-    public Parser<char, RequirementModel> Parser =>
+    public static Parser<char, RequirementModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("requirementDiagram")
         from ___ in CommonParsers.InlineWhitespace

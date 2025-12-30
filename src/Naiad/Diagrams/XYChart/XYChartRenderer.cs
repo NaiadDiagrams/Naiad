@@ -60,7 +60,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
 
         // Draw grid lines
         var gridLines = 5;
-        for (int i = 0; i <= gridLines; i++)
+        for (var i = 0; i <= gridLines; i++)
         {
             var y = chartBottom - (ChartHeight * i / gridLines);
             var value = dataMin + (dataRange * i / gridLines);
@@ -83,7 +83,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             stroke: "#333", strokeWidth: 2);
 
         // Draw X-axis categories
-        for (int i = 0; i < categoryCount; i++)
+        for (var i = 0; i < categoryCount; i++)
         {
             var x = chartLeft + (i + 0.5) * categoryWidth;
             var label = i < model.XAxisCategories.Count ? model.XAxisCategories[i] : $"{i + 1}";
@@ -116,8 +116,8 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         }
 
         // Draw series
-        int barSeriesIndex = 0;
-        int lineSeriesIndex = 0;
+        var barSeriesIndex = 0;
+        var lineSeriesIndex = 0;
         var barSeries = model.Series.Where(s => s.Type == ChartSeriesType.Bar).ToList();
         var barWidth = categoryWidth * 0.8 / Math.Max(1, barSeries.Count);
 
@@ -128,7 +128,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 var color = BarColors[barSeriesIndex % BarColors.Length];
                 var barOffset = (barSeriesIndex - barSeries.Count / 2.0 + 0.5) * barWidth;
 
-                for (int i = 0; i < series.Data.Count && i < categoryCount; i++)
+                for (var i = 0; i < series.Data.Count && i < categoryCount; i++)
                 {
                     var value = series.Data[i];
                     var barHeight = (value - dataMin) / dataRange * ChartHeight;
@@ -145,7 +145,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 var color = LineColors[lineSeriesIndex % LineColors.Length];
                 var points = new List<(double x, double y)>();
 
-                for (int i = 0; i < series.Data.Count && i < categoryCount; i++)
+                for (var i = 0; i < series.Data.Count && i < categoryCount; i++)
                 {
                     var value = series.Data[i];
                     var x = chartLeft + (i + 0.5) * categoryWidth;
@@ -157,7 +157,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 if (points.Count >= 2)
                 {
                     var pathData = $"M {Fmt(points[0].x)} {Fmt(points[0].y)}";
-                    for (int i = 1; i < points.Count; i++)
+                    for (var i = 1; i < points.Count; i++)
                     {
                         pathData += $" L {Fmt(points[i].x)} {Fmt(points[i].y)}";
                     }

@@ -134,7 +134,7 @@ public class ERParser : IDiagramParser<ERModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-    public Parser<char, ERModel> Parser =>
+    public static Parser<char, ERModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("erDiagram")
         from __ in CommonParsers.InlineWhitespace

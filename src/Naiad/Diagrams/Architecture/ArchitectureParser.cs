@@ -152,7 +152,7 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
 
     enum ItemType { Group, Service, Junction, Edge }
 
-    public Parser<char, ArchitectureModel> Parser =>
+    public static Parser<char, ArchitectureModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("architecture-beta")
         from ___ in CommonParsers.InlineWhitespace

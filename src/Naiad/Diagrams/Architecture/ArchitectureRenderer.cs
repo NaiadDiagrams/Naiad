@@ -17,7 +17,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         ["server"] = "M5,10 L45,10 L45,40 L5,40 Z M5,15 L45,15 M8,12.5 A1,1 0 1,1 8,12.49"
     };
 
-    static readonly Dictionary<string, string> IconColors = new()
+    static readonly Dictionary<string, string> iconColors = new()
     {
         ["cloud"] = "#4FC3F7",
         ["database"] = "#81C784",
@@ -78,7 +78,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         builder.AddArrowMarker("arch-arrow", "#666");
 
         // Position and draw services
-        int idx = 0;
+        var idx = 0;
         foreach (var service in model.Services)
         {
             var col = idx % cols;
@@ -117,10 +117,10 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         return builder.Build();
     }
 
-    void DrawService(SvgBuilder builder, ArchitectureService service, double x, double y, RenderOptions options)
+    static void DrawService(SvgBuilder builder, ArchitectureService service, double x, double y, RenderOptions options)
     {
         var icon = service.Icon ?? "server";
-        var color = IconColors.GetValueOrDefault(icon, "#90A4AE");
+        var color = iconColors.GetValueOrDefault(icon, "#90A4AE");
 
         // Background
         builder.AddRect(x, y, ServiceWidth, ServiceHeight, rx: 8,
@@ -144,12 +144,10 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             fill: "#333");
     }
 
-    void DrawJunction(SvgBuilder builder, ArchitectureJunction junction, double x, double y, RenderOptions options)
-    {
+    static void DrawJunction(SvgBuilder builder, ArchitectureJunction junction, double x, double y, RenderOptions options) =>
         builder.AddCircle(x, y, 8, fill: "#666", stroke: "#333", strokeWidth: 1);
-    }
 
-    void DrawEdge(SvgBuilder builder, (double x, double y) from, (double x, double y) to,
+    static void DrawEdge(SvgBuilder builder, (double x, double y) from, (double x, double y) to,
         ArchitectureEdge edge, RenderOptions options)
     {
         // Calculate edge start/end based on direction
@@ -187,7 +185,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         _ => (0, 0)
     };
 
-    void DrawArrow(SvgBuilder builder, double x, double y, double angle)
+    static void DrawArrow(SvgBuilder builder, double x, double y, double angle)
     {
         var arrowSize = 8;
         var arrowAngle = Math.PI / 6;

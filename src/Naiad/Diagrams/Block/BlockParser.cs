@@ -120,7 +120,7 @@ public class BlockParser : IDiagramParser<BlockModel>
             SkipLine.ThenReturn((object?)null)
         );
 
-    public Parser<char, BlockModel> Parser =>
+    public static Parser<char, BlockModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("block-beta"), CIString("block"))
         from ___ in CommonParsers.InlineWhitespace

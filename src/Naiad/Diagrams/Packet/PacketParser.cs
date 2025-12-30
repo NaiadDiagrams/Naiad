@@ -46,13 +46,13 @@ public class PacketParser : IDiagramParser<PacketModel>
             SkipLine.ThenReturn((PacketField?)null)
         );
 
-    public Parser<char, PacketModel> Parser =>
+    public static Parser<char, PacketModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("packet-beta"), CIString("packet"))
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(f => f != null).Cast<PacketField>().ToList());
+        select BuildModel(result.Item1.Where(f => f != null).ToList());
 
     static PacketModel BuildModel(List<PacketField> fields)
     {

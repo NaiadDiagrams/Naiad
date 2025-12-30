@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/SolutionItems/">
+    <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
   </Folder>
   <Project Path="Naiad/Naiad.csproj" />
   <Project Path="Tests/Tests.csproj" />

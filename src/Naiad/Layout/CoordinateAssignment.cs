@@ -23,7 +23,7 @@ static class CoordinateAssignment
     {
         double currentY = 0;
 
-        for (int r = 0; r < graph.Ranks.Length; r++)
+        for (var r = 0; r < graph.Ranks.Length; r++)
         {
             var nodesInRank = graph.Ranks[r];
             var maxHeight = nodesInRank.Count > 0
@@ -52,7 +52,7 @@ static class CoordinateAssignment
         // This is a simplified version of Brandes-Köpf
 
         // Pass 1: Position nodes left-aligned within ranks
-        for (int r = 0; r < graph.Ranks.Length; r++)
+        for (var r = 0; r < graph.Ranks.Length; r++)
         {
             var nodesInRank = graph.Ranks[r].OrderBy(n => n.Order).ToList();
             double currentX = 0;
@@ -73,16 +73,16 @@ static class CoordinateAssignment
         }
 
         // Pass 2: Center alignment based on connected nodes
-        for (int iteration = 0; iteration < 4; iteration++)
+        for (var iteration = 0; iteration < 4; iteration++)
         {
             // Down pass
-            for (int r = 1; r < graph.Ranks.Length; r++)
+            for (var r = 1; r < graph.Ranks.Length; r++)
             {
                 AlignToNeighbors(graph, r, true, nodeSep, isHorizontal);
             }
 
             // Up pass
-            for (int r = graph.Ranks.Length - 2; r >= 0; r--)
+            for (var r = graph.Ranks.Length - 2; r >= 0; r--)
             {
                 AlignToNeighbors(graph, r, false, nodeSep, isHorizontal);
             }

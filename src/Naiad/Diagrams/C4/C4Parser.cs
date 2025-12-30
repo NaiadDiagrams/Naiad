@@ -183,7 +183,7 @@ public class C4Parser : IDiagramParser<C4Model>
             Try(CIString("C4Deployment")).ThenReturn(C4DiagramType.Deployment)
         );
 
-    public Parser<char, C4Model> Parser =>
+    public static Parser<char, C4Model> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from type in DiagramTypeParser
         from __ in CommonParsers.InlineWhitespace

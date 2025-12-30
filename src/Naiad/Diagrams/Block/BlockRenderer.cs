@@ -46,9 +46,9 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         }
 
         // Position and draw elements
-        int currentColumn = 0;
-        int currentRow = 0;
-        int colorIndex = 0;
+        var currentColumn = 0;
+        var currentRow = 0;
+        var colorIndex = 0;
 
         foreach (var element in model.Elements)
         {
@@ -84,8 +84,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
 
     static int CalculateRows(List<BlockElement> elements, int columns)
     {
-        int currentColumn = 0;
-        int rows = 1;
+        var currentColumn = 0;
+        var rows = 1;
 
         foreach (var element in elements)
         {

@@ -65,9 +65,9 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         }
 
         // Draw sections and periods
-        double currentX = options.Padding;
-        int sectionIndex = 0;
-        int globalPeriodIndex = 0;
+        var currentX = options.Padding;
+        var sectionIndex = 0;
+        var globalPeriodIndex = 0;
 
         foreach (var section in model.Sections)
         {
@@ -148,10 +148,8 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         return builder.Build();
     }
 
-    static double MeasureText(string text, double fontSize)
-    {
-        return text.Length * fontSize * 0.55;
-    }
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

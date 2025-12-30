@@ -77,7 +77,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
 
         // Draw nodes
-        int nodeIndex = 0;
+        var nodeIndex = 0;
         foreach (var (name, node) in nodes)
         {
             var x = options.Padding + node.Column * ColumnSpacing;
@@ -158,13 +158,13 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
     {
         var maxColumn = nodes.Values.Max(n => n.Column);
 
-        for (int col = 0; col <= maxColumn; col++)
+        for (var col = 0; col <= maxColumn; col++)
         {
             var columnNodes = nodes.Values.Where(n => n.Column == col).ToList();
             var totalValue = columnNodes.Sum(n => Math.Max(n.InputValue, n.OutputValue));
             var scale = (chartHeight - (columnNodes.Count - 1) * NodePadding) / Math.Max(1, totalValue);
 
-            double y = topOffset;
+            var y = topOffset;
             foreach (var node in columnNodes)
             {
                 var value = Math.Max(node.InputValue, node.OutputValue);

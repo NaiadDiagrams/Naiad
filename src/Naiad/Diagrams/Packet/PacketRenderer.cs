@@ -49,7 +49,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         var baseY = options.Padding + titleOffset;
 
         // Draw bit numbers
-        for (int i = 0; i < bitsPerRow; i++)
+        for (var i = 0; i < bitsPerRow; i++)
         {
             var x = options.Padding + i * BitWidth + BitWidth / 2;
             builder.AddText(x, baseY + BitNumberHeight / 2, i.ToString(),
@@ -59,7 +59,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         }
 
         // Draw fields
-        int colorIndex = 0;
+        var colorIndex = 0;
         foreach (var field in model.Fields)
         {
             var startRow = field.StartBit / bitsPerRow;
@@ -86,7 +86,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
             else
             {
                 // Field spans multiple rows
-                for (int row = startRow; row <= endRow; row++)
+                for (var row = startRow; row <= endRow; row++)
                 {
                     int colStart, colEnd;
 

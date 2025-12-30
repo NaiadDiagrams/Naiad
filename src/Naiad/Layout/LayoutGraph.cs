@@ -6,10 +6,7 @@ class LayoutGraph
     public List<LayoutEdge> Edges { get; } = [];
     public List<LayoutNode>[] Ranks { get; private set; } = [];
 
-    public void AddNode(LayoutNode node)
-    {
-        Nodes[node.Id] = node;
-    }
+    public void AddNode(LayoutNode node) => Nodes[node.Id] = node;
 
     public void AddEdge(LayoutEdge edge)
     {
@@ -25,7 +22,7 @@ class LayoutGraph
     }
 
     public LayoutNode? GetNode(string id) =>
-        Nodes.TryGetValue(id, out var node) ? node : null;
+        Nodes.GetValueOrDefault(id);
 
     public IEnumerable<LayoutNode> GetSuccessors(string nodeId)
     {
@@ -55,7 +52,7 @@ class LayoutGraph
     {
         var maxRank = Nodes.Values.Max(n => n.Rank);
         Ranks = new List<LayoutNode>[maxRank + 1];
-        for (int i = 0; i <= maxRank; i++)
+        for (var i = 0; i <= maxRank; i++)
         {
             Ranks[i] = [];
         }
@@ -67,10 +64,10 @@ class LayoutGraph
 
     public void UpdateOrderInRanks()
     {
-        for (int r = 0; r < Ranks.Length; r++)
+        for (var r = 0; r < Ranks.Length; r++)
         {
             var nodesInRank = Ranks[r].OrderBy(n => n.Order).ToList();
-            for (int i = 0; i < nodesInRank.Count; i++)
+            for (var i = 0; i < nodesInRank.Count; i++)
             {
                 nodesInRank[i].Order = i;
             }

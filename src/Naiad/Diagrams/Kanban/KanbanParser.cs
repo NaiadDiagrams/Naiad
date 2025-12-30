@@ -46,7 +46,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
             SkipLine.ThenReturn((object?)null)
         );
 
-    public Parser<char, KanbanModel> Parser =>
+    public static Parser<char, KanbanModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("kanban")
         from ___ in CommonParsers.InlineWhitespace
@@ -69,10 +69,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
                     break;
 
                 case ("task", string id, string name):
-                    if (currentColumn != null)
-                    {
-                        currentColumn.Tasks.Add(new KanbanTask { Id = id, Name = name });
-                    }
+                    currentColumn?.Tasks.Add(new KanbanTask { Id = id, Name = name });
                     break;
             }
         }

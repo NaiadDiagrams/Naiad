@@ -9,13 +9,13 @@ public class C4Renderer : IDiagramRenderer<C4Model>
     const double TitleHeight = 50;
     const double RowSpacing = 60;
 
-    static readonly string PersonColor = "#08427B";
-    static readonly string PersonExtColor = "#999999";
-    static readonly string SystemColor = "#1168BD";
-    static readonly string SystemExtColor = "#999999";
-    static readonly string ContainerColor = "#438DD5";
-    static readonly string ContainerDbColor = "#438DD5";
-    static readonly string ComponentColor = "#85BBF0";
+    const string PersonColor = "#08427B";
+    const string PersonExtColor = "#999999";
+    const string SystemColor = "#1168BD";
+    const string SystemExtColor = "#999999";
+    const string ContainerColor = "#438DD5";
+    const string ContainerDbColor = "#438DD5";
+    const string ComponentColor = "#85BBF0";
 
     public SvgDocument Render(C4Model model, RenderOptions options)
     {
@@ -38,13 +38,13 @@ public class C4Renderer : IDiagramRenderer<C4Model>
 
         // Calculate layout
         var maxPerRow = 4;
-        var personRows = (int)Math.Ceiling((double)persons.Count / maxPerRow);
-        var systemRows = (int)Math.Ceiling((double)systems.Count / maxPerRow);
-        var containerRows = (int)Math.Ceiling((double)containers.Count / maxPerRow);
-        var componentRows = (int)Math.Ceiling((double)components.Count / maxPerRow);
+        var personRows = (int) Math.Ceiling((double) persons.Count / maxPerRow);
+        var systemRows = (int) Math.Ceiling((double) systems.Count / maxPerRow);
+        var containerRows = (int) Math.Ceiling((double) containers.Count / maxPerRow);
+        var componentRows = (int) Math.Ceiling((double) components.Count / maxPerRow);
 
         var totalRows = personRows + systemRows + containerRows + componentRows;
-        var maxCols = Math.Max(1, new[] { persons.Count, systems.Count, containers.Count, components.Count }.Max());
+        var maxCols = Math.Max(1, new[] {persons.Count, systems.Count, containers.Count, components.Count}.Max());
         maxCols = Math.Min(maxCols, maxPerRow);
 
         var width = maxCols * (ElementWidth + ElementSpacing) + options.Padding * 2;
@@ -68,7 +68,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
 
         // Position tracking
         var elementPositions = new Dictionary<string, (double x, double y, double w, double h)>();
-        double currentY = options.Padding + titleOffset;
+        var currentY = options.Padding + titleOffset;
 
         // Draw persons
         currentY = DrawElementRow(builder, persons, currentY, width, options, elementPositions, "person");
@@ -95,7 +95,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         return builder.Build();
     }
 
-    double DrawElementRow(SvgBuilder builder, List<C4Element> elements, double startY, double totalWidth,
+    static double DrawElementRow(SvgBuilder builder, List<C4Element> elements, double startY, double totalWidth,
         RenderOptions options, Dictionary<string, (double x, double y, double w, double h)> positions, string type)
     {
         if (elements.Count == 0) return startY;
@@ -103,7 +103,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var rowWidth = elements.Count * (ElementWidth + ElementSpacing) - ElementSpacing;
         var startX = (totalWidth - rowWidth) / 2;
 
-        for (int i = 0; i < elements.Count; i++)
+        for (var i = 0; i < elements.Count; i++)
         {
             var element = elements[i];
             var x = startX + i * (ElementWidth + ElementSpacing);
@@ -118,7 +118,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         return startY + maxHeight + RowSpacing;
     }
 
-    void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
+    static void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
     {
         var color = GetElementColor(element);
         var textColor = "#FFFFFF";
@@ -186,7 +186,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         }
     }
 
-    void DrawElementText(SvgBuilder builder, C4Element element, double x, double y,
+    static void DrawElementText(SvgBuilder builder, C4Element element, double x, double y,
         RenderOptions options, string textColor)
     {
         var centerX = x + ElementWidth / 2;
@@ -219,7 +219,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         }
     }
 
-    void DrawRelationship(SvgBuilder builder,
+    static void DrawRelationship(SvgBuilder builder,
         (double x, double y, double w, double h) from,
         (double x, double y, double w, double h) to,
         string? label, RenderOptions options)
@@ -283,8 +283,12 @@ public class C4Renderer : IDiagramRenderer<C4Model>
 
     static string TruncateText(string text, int maxLength)
     {
-        if (text.Length <= maxLength) return text;
-        return text.Substring(0, maxLength - 3) + "...";
+        if (text.Length <= maxLength)
+        {
+            return text;
+        }
+
+        return string.Concat(text.AsSpan(0, maxLength - 3), "...");
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);

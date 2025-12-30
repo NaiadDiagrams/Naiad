@@ -113,7 +113,7 @@ public class VerifiedFileRegenerator
     static string? ExtractRawStringLiteral(string text)
     {
         // Handle """ ... """ raw string literals
-        var match = Regex.Match(text, @"^""""""\s*\n?(.*?)\s*""""""$", RegexOptions.Singleline);
+        var match = Regex.Match(text, """"^"""\s*\n?(.*?)\s*"""$"""", RegexOptions.Singleline);
         if (match.Success)
         {
             return match.Groups[1].Value;
@@ -121,13 +121,11 @@ public class VerifiedFileRegenerator
         return text.Trim('"');
     }
 
-    static string? ExtractInterpolatedString(InterpolatedStringExpressionSyntax interpolated)
-    {
+    static string? ExtractInterpolatedString(InterpolatedStringExpressionSyntax interpolated) =>
         // For simple interpolated strings without expressions
-        return string.Concat(interpolated.Contents
+        string.Concat(interpolated.Contents
             .OfType<InterpolatedStringTextSyntax>()
             .Select(t => t.TextToken.ValueText));
-    }
 
     static async Task<string> FetchFromMermaidInk(string mermaidCode)
     {

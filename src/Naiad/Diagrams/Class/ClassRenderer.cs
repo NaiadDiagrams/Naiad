@@ -11,10 +11,8 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
     const double MinWidth = 100;
     const double SeparatorHeight = 1;
 
-    public ClassRenderer(ILayoutEngine? layoutEngine = null)
-    {
+    public ClassRenderer(ILayoutEngine? layoutEngine = null) =>
         _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
-    }
 
     public SvgDocument Render(ClassModel model, RenderOptions options)
     {
@@ -64,7 +62,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         return builder.Build();
     }
 
-    GraphDiagramBase ConvertToGraphModel(ClassModel model, RenderOptions options)
+    static GraphDiagramBase ConvertToGraphModel(ClassModel model, RenderOptions options)
     {
         var graph = new FlowchartModel { Direction = model.Direction };
 
@@ -98,7 +96,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         return graph;
     }
 
-    (double width, double height) CalculateClassSize(ClassDefinition classDef, RenderOptions options)
+    static (double width, double height) CalculateClassSize(ClassDefinition classDef, RenderOptions options)
     {
         // Calculate width based on longest text
         var maxTextWidth = MeasureText(classDef.Name, options.FontSize, true);
@@ -147,7 +145,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         return (width, height);
     }
 
-    void RenderClassBox(SvgBuilder builder, ClassDefinition classDef, Node node, RenderOptions options)
+    static void RenderClassBox(SvgBuilder builder, ClassDefinition classDef, Node node, RenderOptions options)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
@@ -229,7 +227,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         }
     }
 
-    void RenderRelationship(SvgBuilder builder, ClassRelationship rel, Node fromNode, Node toNode, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, ClassRelationship rel, Node fromNode, Node toNode, RenderOptions options)
     {
         // Calculate connection points
         var (startX, startY) = GetConnectionPoint(fromNode, toNode);
@@ -279,7 +277,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         }
     }
 
-    (double x, double y) GetConnectionPoint(Node from, Node to)
+    static (double x, double y) GetConnectionPoint(Node from, Node to)
     {
         // Calculate the point on the edge of 'from' node facing 'to' node
         var dx = to.Position.X - from.Position.X;
@@ -293,16 +291,14 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
                 ? (from.Position.X + from.Width / 2, from.Position.Y)
                 : (from.Position.X - from.Width / 2, from.Position.Y);
         }
-        else
-        {
-            // Vertical connection
-            return dy > 0
-                ? (from.Position.X, from.Position.Y + from.Height / 2)
-                : (from.Position.X, from.Position.Y - from.Height / 2);
-        }
+
+        // Vertical connection
+        return dy > 0
+            ? (from.Position.X, from.Position.Y + from.Height / 2)
+            : (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
-    void DrawRelationshipMarker(SvgBuilder builder, RelationshipType type, double x, double y, double fromX, double fromY)
+    static void DrawRelationshipMarker(SvgBuilder builder, RelationshipType type, double x, double y, double fromX, double fromY)
     {
         var angle = Math.Atan2(y - fromY, x - fromX);
         var markerSize = 10.0;
@@ -338,7 +334,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         }
     }
 
-    Position[] GetTrianglePoints(double x, double y, double angle, double size)
+    static Position[] GetTrianglePoints(double x, double y, double angle, double size)
     {
         var backAngle1 = angle + Math.PI - Math.PI / 6;
         var backAngle2 = angle + Math.PI + Math.PI / 6;
@@ -351,7 +347,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         ];
     }
 
-    Position[] GetDiamondPoints(double x, double y, double angle, double size)
+    static Position[] GetDiamondPoints(double x, double y, double angle, double size)
     {
         var halfSize = size / 2;
         return
@@ -365,7 +361,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         ];
     }
 
-    Position[] GetArrowPoints(double x, double y, double angle, double size)
+    static Position[] GetArrowPoints(double x, double y, double angle, double size)
     {
         var halfSize = size * 0.4;
         var backAngle1 = angle + Math.PI - Math.PI / 6;
@@ -435,4 +431,4 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
 }
 
 // Temporary model for layout - reusing flowchart structure
-file class FlowchartModel : GraphDiagramBase { }
+file class FlowchartModel : GraphDiagramBase;

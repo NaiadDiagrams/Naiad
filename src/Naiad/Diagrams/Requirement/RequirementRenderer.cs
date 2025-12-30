@@ -7,8 +7,8 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
     const double BoxSpacing = 60;
     const double TitleHeight = 40;
 
-    static readonly string RequirementColor = "#C8E6C9";
-    static readonly string ElementColor = "#BBDEFB";
+    const string RequirementColor = "#C8E6C9";
+    const string ElementColor = "#BBDEFB";
 
     public SvgDocument Render(RequirementModel model, RenderOptions options)
     {
@@ -48,7 +48,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         // Draw requirements (left column)
         var reqX = options.Padding;
-        for (int i = 0; i < model.Requirements.Count; i++)
+        for (var i = 0; i < model.Requirements.Count; i++)
         {
             var req = model.Requirements[i];
             var y = options.Padding + titleOffset + i * (BoxHeight + BoxSpacing);
@@ -59,7 +59,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         // Draw elements (right column)
         var elemX = options.Padding + BoxWidth + BoxSpacing;
-        for (int i = 0; i < model.Elements.Count; i++)
+        for (var i = 0; i < model.Elements.Count; i++)
         {
             var elem = model.Elements[i];
             var y = options.Padding + titleOffset + i * (BoxHeight + BoxSpacing);
@@ -81,7 +81,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         return builder.Build();
     }
 
-    void DrawRequirement(SvgBuilder builder, Requirement req, double x, double y, RenderOptions options)
+    static void DrawRequirement(SvgBuilder builder, Requirement req, double x, double y, RenderOptions options)
     {
         // Box
         builder.AddRect(x, y, BoxWidth, BoxHeight, rx: 5,
@@ -121,7 +121,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         // Text (truncated)
         if (!string.IsNullOrEmpty(req.Text))
         {
-            var text = req.Text.Length > 25 ? req.Text.Substring(0, 22) + "..." : req.Text;
+            var text = req.Text.Length > 25 ? string.Concat(req.Text.AsSpan(0, 22), "...") : req.Text;
             builder.AddText(x + BoxWidth / 2, y + BoxHeight - 15, text,
                 anchor: "middle", baseline: "middle",
                 fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
@@ -129,7 +129,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         }
     }
 
-    void DrawElement(SvgBuilder builder, RequirementElement elem, double x, double y, RenderOptions options)
+    static void DrawElement(SvgBuilder builder, RequirementElement elem, double x, double y, RenderOptions options)
     {
         // Box
         builder.AddRect(x, y, BoxWidth, BoxHeight, rx: 5,
@@ -157,8 +157,12 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         }
     }
 
-    void DrawRelation(SvgBuilder builder, (double x, double y) from, (double x, double y) to,
-        RelationType type, RenderOptions options)
+    static void DrawRelation(
+        SvgBuilder builder,
+        (double x, double y) from,
+        (double x, double y) to,
+        RelationType type,
+        RenderOptions options)
     {
         // Calculate edge points
         var dx = to.x - from.x;

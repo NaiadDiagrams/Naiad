@@ -106,7 +106,7 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         }
     }
 
-    void DrawLeafNode(SvgBuilder builder, TreemapNode node, double x, double y,
+    static void DrawLeafNode(SvgBuilder builder, TreemapNode node, double x, double y,
         double width, double height, string color, RenderOptions options)
     {
         builder.AddRect(x, y, width, height,
@@ -178,12 +178,12 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         var maxChars = (int)(maxWidth / charWidth);
         if (text.Length <= maxChars) return text;
         if (maxChars <= 3) return "";
-        return text.Substring(0, maxChars - 3) + "...";
+        return text[..(maxChars - 3)] + "...";
     }
 
     static string DarkenColor(string hexColor, double factor)
     {
-        if (!hexColor.StartsWith("#") || hexColor.Length != 7)
+        if (!hexColor.StartsWith('#') || hexColor.Length != 7)
             return hexColor;
 
         var r = (int)(Convert.ToInt32(hexColor.Substring(1, 2), 16) * (1 - factor));

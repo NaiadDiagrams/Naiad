@@ -57,13 +57,13 @@ public class SankeyParser : IDiagramParser<SankeyModel>
             SkipLine.ThenReturn((SankeyLink?)null)
         );
 
-    public Parser<char, SankeyModel> Parser =>
+    public static Parser<char, SankeyModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("sankey-beta"), CIString("sankey"))
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(l => l != null).Cast<SankeyLink>().ToList());
+        select BuildModel(result.Item1.Where(l => l != null).ToList());
 
     static SankeyModel BuildModel(List<SankeyLink> links)
     {

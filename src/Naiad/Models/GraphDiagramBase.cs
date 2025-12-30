@@ -16,8 +16,6 @@ public abstract class GraphDiagramBase : DiagramBase
         }
     }
 
-    public void AddEdge(Edge edge)
-    {
+    public void AddEdge(Edge edge) =>
         Edges.Add(edge);
-    }
 }

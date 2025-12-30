@@ -54,7 +54,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         return builder.Build();
     }
 
-    void CalculateNodeSizes(MindmapNode node, RenderOptions options)
+    static void CalculateNodeSizes(MindmapNode node, RenderOptions options)
     {
         var textWidth = MeasureText(node.Text, options.FontSize);
         node.Width = Math.Max(NodeMinWidth, textWidth + NodePadding * 2);
@@ -66,7 +66,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         }
     }
 
-    double CalculateSubtreeHeights(MindmapNode node)
+    static double CalculateSubtreeHeights(MindmapNode node)
     {
         if (node.Children.Count == 0)
         {
@@ -85,7 +85,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         return node.SubtreeHeight;
     }
 
-    void LayoutTree(MindmapNode node, double x, double y)
+    static void LayoutTree(MindmapNode node, double x, double y)
     {
         // Position this node
         node.Position = new Position(x + node.Width / 2, y + node.SubtreeHeight / 2);
@@ -104,7 +104,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         }
     }
 
-    double GetChildrenTotalHeight(MindmapNode node)
+    static double GetChildrenTotalHeight(MindmapNode node)
     {
         if (node.Children.Count == 0)
             return 0;
@@ -112,7 +112,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         return node.Children.Sum(c => c.SubtreeHeight) + (node.Children.Count - 1) * VerticalSpacing;
     }
 
-    (double width, double height) CalculateBounds(MindmapNode node)
+    static (double width, double height) CalculateBounds(MindmapNode node)
     {
         var rightEdge = node.Position.X + node.Width / 2;
         var bottomEdge = node.Position.Y + node.Height / 2;
@@ -127,7 +127,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         return (rightEdge, bottomEdge);
     }
 
-    void DrawConnections(SvgBuilder builder, MindmapNode node)
+    static void DrawConnections(SvgBuilder builder, MindmapNode node)
     {
         foreach (var child in node.Children)
         {
@@ -151,7 +151,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         }
     }
 
-    void DrawNodes(SvgBuilder builder, MindmapNode node, RenderOptions options)
+    static void DrawNodes(SvgBuilder builder, MindmapNode node, RenderOptions options)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
@@ -208,7 +208,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         }
     }
 
-    void DrawHexagon(SvgBuilder builder, double cx, double cy, double width, double height,
+    static void DrawHexagon(SvgBuilder builder, double cx, double cy, double width, double height,
         string fill, string stroke)
     {
         var hw = width / 2;
@@ -232,15 +232,13 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         builder.AddPath(path, fill: fill, stroke: stroke, strokeWidth: 2);
     }
 
-    static string GetLevelColor(int level)
-    {
-        return LevelColors[Math.Min(level, LevelColors.Length - 1)];
-    }
+    static string GetLevelColor(int level) =>
+        LevelColors[Math.Min(level, LevelColors.Length - 1)];
 
     static string DarkenColor(string hexColor)
     {
         // Simple darkening: reduce each component by 20%
-        if (!hexColor.StartsWith("#") || hexColor.Length != 7)
+        if (!hexColor.StartsWith('#') || hexColor.Length != 7)
             return "#333";
 
         var r = Convert.ToInt32(hexColor.Substring(1, 2), 16);
@@ -254,10 +252,8 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         return $"#{r:X2}{g:X2}{b:X2}";
     }
 
-    static double MeasureText(string text, double fontSize)
-    {
-        return text.Length * fontSize * 0.55;
-    }
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

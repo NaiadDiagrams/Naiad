@@ -19,7 +19,7 @@ public class DocumentationGeneratorTests
 
         foreach (var testFile in testFiles)
         {
-            var tests = await ExtractTestsFromFile(testFile, testsDir);
+            var tests = await ExtractTestsFromFile(testFile);
             if (tests.Count == 0) continue;
 
             var relativePath = Path.GetRelativePath(testsDir, testFile);
@@ -55,7 +55,7 @@ public class DocumentationGeneratorTests
         Console.WriteLine($"Generated documentation at: {outputPath}");
     }
 
-    private async Task<List<TestInfo>> ExtractTestsFromFile(string filePath, string testsDir)
+    static async Task<List<TestInfo>> ExtractTestsFromFile(string filePath)
     {
         var results = new List<TestInfo>();
         var code = await File.ReadAllTextAsync(filePath);
@@ -98,7 +98,7 @@ public class DocumentationGeneratorTests
         return results;
     }
 
-    private string? ExtractInputString(MethodDeclarationSyntax method)
+    private static string? ExtractInputString(MethodDeclarationSyntax method)
     {
         // Find raw string literals (""" ... """)
         var rawStrings = method.DescendantNodes()
@@ -142,7 +142,7 @@ public class DocumentationGeneratorTests
         return null;
     }
 
-    string? FindVerifiedFile(string testFile, string className, string testName, string extension)
+    static string? FindVerifiedFile(string testFile, string className, string testName, string extension)
     {
         var dir = Path.GetDirectoryName(testFile)!;
 

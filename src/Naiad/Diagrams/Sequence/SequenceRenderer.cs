@@ -79,7 +79,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var y = options.Padding + ParticipantHeight + MessageSpacing;
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
 
-        for (int i = 0; i < model.Elements.Count; i++)
+        for (var i = 0; i < model.Elements.Count; i++)
         {
             elementYPositions[i] = y + titleOffset;
             y += GetElementHeight(model.Elements[i]);
@@ -89,16 +89,14 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         return (totalHeight, elementYPositions);
     }
 
-    static double GetElementHeight(SequenceElement element)
-    {
-        return element switch
+    static double GetElementHeight(SequenceElement element) =>
+        element switch
         {
             Message => MessageSpacing,
             Note => NoteHeight + 10,
             Activation => 0, // Activations don't add height
             _ => MessageSpacing
         };
-    }
 
     static double CalculateWidth(SequenceModel model, RenderOptions options)
     {
@@ -106,7 +104,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         return options.Padding * 2 + ParticipantWidth + (participantCount - 1) * ParticipantSpacing;
     }
 
-    void DrawParticipants(SvgBuilder builder, SequenceModel model,
+    static void DrawParticipants(SvgBuilder builder, SequenceModel model,
         Dictionary<string, double> positions, double y, RenderOptions options)
     {
         foreach (var participant in model.Participants)
@@ -124,7 +122,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawParticipantBox(SvgBuilder builder, double cx, double y,
+    static void DrawParticipantBox(SvgBuilder builder, double cx, double y,
         string text, RenderOptions options)
     {
         builder.AddRect(
@@ -144,7 +142,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             fontFamily: options.FontFamily);
     }
 
-    void DrawActor(SvgBuilder builder, double cx, double y,
+    static void DrawActor(SvgBuilder builder, double cx, double y,
         string text, RenderOptions options)
     {
         // Stick figure
@@ -201,7 +199,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawElements(SvgBuilder builder, SequenceModel model,
+    static void DrawElements(SvgBuilder builder, SequenceModel model,
         Dictionary<string, double> positions,
         Dictionary<int, double> yPositions,
         RenderOptions options,
@@ -210,7 +208,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var messageNumber = 0;
         var activeLifelines = new Dictionary<string, double>(); // participantId -> activation start Y
 
-        for (int i = 0; i < model.Elements.Count; i++)
+        for (var i = 0; i < model.Elements.Count; i++)
         {
             var element = model.Elements[i];
             var y = yPositions[i];
@@ -227,6 +225,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                     {
                         activeLifelines[msg.ToId] = y;
                     }
+
                     if (msg.Deactivate && activeLifelines.TryGetValue(msg.ToId, out var startY))
                     {
                         if (!activations.ContainsKey(msg.ToId))
@@ -234,6 +233,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         activations[msg.ToId].Add((startY, y));
                         activeLifelines.Remove(msg.ToId);
                     }
+
                     break;
 
                 case Note note:
@@ -252,6 +252,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         activations[activation.ParticipantId].Add((actStartY, y));
                         activeLifelines.Remove(activation.ParticipantId);
                     }
+
                     break;
             }
         }
@@ -266,7 +267,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawMessage(SvgBuilder builder, Message msg,
+    static void DrawMessage(SvgBuilder builder, Message msg,
         Dictionary<string, double> positions, double y,
         RenderOptions options, int? number)
     {
@@ -328,7 +329,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             {
                 var labelText = number.HasValue && !string.IsNullOrEmpty(msg.Text)
                     ? $"{number}. {msg.Text}"
-                    : number.HasValue ? $"{number}." : msg.Text!;
+                    : number.HasValue
+                        ? $"{number}."
+                        : msg.Text!;
 
                 var midX = (fromX + toX) / 2;
                 builder.AddText(midX, y - 8, labelText,
@@ -340,7 +343,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawArrowhead(SvgBuilder builder, double fromX, double toX, double y, MessageType type)
+    static void DrawArrowhead(SvgBuilder builder, double fromX, double toX, double y, MessageType type)
     {
         var direction = Math.Sign(toX - fromX);
         var arrowSize = 8;
@@ -383,7 +386,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    void DrawNote(SvgBuilder builder, Note note,
+    static void DrawNote(SvgBuilder builder, Note note,
         Dictionary<string, double> positions, double y, RenderOptions options)
     {
         var participantX = positions[note.ParticipantId];
@@ -408,6 +411,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                 {
                     noteX = participantX - NoteWidth / 2;
                 }
+
                 break;
         }
 
@@ -423,11 +427,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         // Fold line
         builder.AddLine(noteX + NoteWidth - foldSize, y,
-                       noteX + NoteWidth - foldSize, y + foldSize,
-                       stroke: "#AAAA33", strokeWidth: 1);
+            noteX + NoteWidth - foldSize, y + foldSize,
+            stroke: "#AAAA33", strokeWidth: 1);
         builder.AddLine(noteX + NoteWidth - foldSize, y + foldSize,
-                       noteX + NoteWidth, y + foldSize,
-                       stroke: "#AAAA33", strokeWidth: 1);
+            noteX + NoteWidth, y + foldSize,
+            stroke: "#AAAA33", strokeWidth: 1);
 
         // Note text
         builder.AddText(noteX + NoteWidth / 2, y + NoteHeight / 2, note.Text,

@@ -87,12 +87,10 @@ static class Ranker
         } while (changed);
     }
 
-    static void NetworkSimplex(LayoutGraph graph)
-    {
+    static void NetworkSimplex(LayoutGraph graph) =>
         // Network simplex is complex - fall back to tight tree for now
         // Full implementation would use linear programming approach
         TightTree(graph);
-    }
 
     static void NormalizeRanks(LayoutGraph graph)
     {
@@ -121,7 +119,7 @@ static class Ranker
             {
                 // Need dummy nodes
                 var prevNodeId = edge.SourceId;
-                for (int r = source.Rank + 1; r < target.Rank; r++)
+                for (var r = source.Rank + 1; r < target.Rank; r++)
                 {
                     var dummyId = $"_dummy_{dummyCount++}";
                     var dummy = new LayoutNode

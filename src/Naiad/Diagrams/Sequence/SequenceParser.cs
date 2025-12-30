@@ -139,7 +139,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-    public Parser<char, SequenceModel> Parser =>
+    public static Parser<char, SequenceModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("sequenceDiagram")
         from __ in CommonParsers.InlineWhitespace

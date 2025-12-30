@@ -51,13 +51,13 @@ public class TreemapParser : IDiagramParser<TreemapModel>
         Try(NodeLineParser.Select(n => (NodeLine?)n))
             .Or(SkipLine.ThenReturn((NodeLine?)null));
 
-    public Parser<char, TreemapModel> Parser =>
+    public static Parser<char, TreemapModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("treemap-beta")
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from lines in ContentItem.ManyThen(End)
-        select BuildModel(lines.Item1.Where(l => l != null).Cast<NodeLine>().ToList());
+        select BuildModel(lines.Item1.Where(l => l != null).ToList());
 
     static TreemapModel BuildModel(List<NodeLine> lines)
     {

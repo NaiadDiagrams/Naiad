@@ -12,10 +12,8 @@ public class ERRenderer : IDiagramRenderer<ERModel>
     const double AttributeIndent = 10;
     const double HeaderHeight = 30;
 
-    public ERRenderer(ILayoutEngine? layoutEngine = null)
-    {
+    public ERRenderer(ILayoutEngine? layoutEngine = null) =>
         _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
-    }
 
     public SvgDocument Render(ERModel model, RenderOptions options)
     {
@@ -54,7 +52,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         return builder.Build();
     }
 
-    GraphDiagramBase ConvertToGraphModel(ERModel model, RenderOptions options)
+    static GraphDiagramBase ConvertToGraphModel(ERModel model, RenderOptions options)
     {
         var graph = new ERLayoutGraph { Direction = model.Direction };
 
@@ -88,7 +86,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         return graph;
     }
 
-    (double width, double height) CalculateEntitySize(Entity entity, RenderOptions options)
+    static (double width, double height) CalculateEntitySize(Entity entity, RenderOptions options)
     {
         // Calculate width based on longest text
         var maxTextWidth = MeasureText(entity.Name, options.FontSize, true);
@@ -111,7 +109,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         return (width, height);
     }
 
-    void CopyPositionsToModel(ERModel model, GraphDiagramBase graph)
+    static void CopyPositionsToModel(ERModel model, GraphDiagramBase graph)
     {
         foreach (var entity in model.Entities)
         {
@@ -123,7 +121,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         }
     }
 
-    void RenderEntity(SvgBuilder builder, Entity entity, RenderOptions options)
+    static void RenderEntity(SvgBuilder builder, Entity entity, RenderOptions options)
     {
         var x = entity.Position.X - entity.Width / 2;
         var y = entity.Position.Y - entity.Height / 2;
@@ -184,7 +182,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         }
     }
 
-    void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
     {
         var fromEntity = model.Entities.Find(e => e.Name == rel.FromEntity);
         var toEntity = model.Entities.Find(e => e.Name == rel.ToEntity);
@@ -227,7 +225,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         }
     }
 
-    (double x, double y) GetConnectionPoint(Entity from, Entity to)
+    static (double x, double y) GetConnectionPoint(Entity from, Entity to)
     {
         var dx = to.Position.X - from.Position.X;
         var dy = to.Position.Y - from.Position.Y;
@@ -238,15 +236,13 @@ public class ERRenderer : IDiagramRenderer<ERModel>
                 ? (from.Position.X + from.Width / 2, from.Position.Y)
                 : (from.Position.X - from.Width / 2, from.Position.Y);
         }
-        else
-        {
-            return dy > 0
-                ? (from.Position.X, from.Position.Y + from.Height / 2)
-                : (from.Position.X, from.Position.Y - from.Height / 2);
-        }
+
+        return dy > 0
+            ? (from.Position.X, from.Position.Y + from.Height / 2)
+            : (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
-    void DrawCardinalityMarker(SvgBuilder builder, double x, double y,
+    static void DrawCardinalityMarker(SvgBuilder builder, double x, double y,
         double toX, double toY, Cardinality cardinality, bool atStart)
     {
         var angle = Math.Atan2(toY - y, toX - x);
@@ -297,15 +293,13 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         }
     }
 
-    void DrawLine(SvgBuilder builder, double x, double y, double perpX, double perpY, double length)
-    {
+    static void DrawLine(SvgBuilder builder, double x, double y, double perpX, double perpY, double length) =>
         builder.AddLine(
             x - perpX * length / 2, y - perpY * length / 2,
             x + perpX * length / 2, y + perpY * length / 2,
             stroke: "#333", strokeWidth: 1);
-    }
 
-    void DrawCrowFoot(SvgBuilder builder, double x, double y, double angle, double spread)
+    static void DrawCrowFoot(SvgBuilder builder, double x, double y, double angle, double spread)
     {
         // Draw three lines from center point spreading outward
         var tipX = x + 8 * Math.Cos(angle);
@@ -354,4 +348,4 @@ public class ERRenderer : IDiagramRenderer<ERModel>
 }
 
 // Internal graph model for layout
-internal class ERLayoutGraph : GraphDiagramBase { }
+internal class ERLayoutGraph : GraphDiagramBase;

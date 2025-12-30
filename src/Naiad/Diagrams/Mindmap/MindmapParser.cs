@@ -8,7 +8,11 @@ public class MindmapParser : IDiagramParser<MindmapModel>
     static readonly Parser<char, int> IndentationParser =
         Token(c => c is ' ' or '\t')
             .Many()
-            .Select(chars => chars.Count(c => c == '\t') * 4 + chars.Count(c => c == ' '));
+            .Select(chars =>
+            {
+                var array = chars as char[] ?? chars.ToArray();
+                return array.Count(c => c == '\t') * 4 + array.Count(c => c == ' ');
+            });
 
     // Icon: ::icon(fa fa-book)
     static readonly Parser<char, string> IconParser =
@@ -101,7 +105,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
                 .ThenReturn(((int, string, MindmapShape, string?, string?)?)null)
         );
 
-    public Parser<char, MindmapModel> Parser =>
+    public static Parser<char, MindmapModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("mindmap")
         from ___ in CommonParsers.InlineWhitespace
@@ -138,9 +142,9 @@ public class MindmapParser : IDiagramParser<MindmapModel>
         var indentStack = new Stack<(int indent, MindmapNode node)>();
         indentStack.Push((baseIndent, model.Root));
 
-        for (int i = 1; i < lines.Count; i++)
+        for (var i = 1; i < lines.Count; i++)
         {
-            var (indent, text, shape, icon, cssClass) = lines[i];
+            var (indent, _, _, _, _) = lines[i];
             var node = nodes[i];
 
             // Pop stack until we find a parent with smaller indentation

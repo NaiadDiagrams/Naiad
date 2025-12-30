@@ -12,7 +12,7 @@ internal static class Ordering
         var bestCrossings = CountCrossings(graph);
         var bestOrders = SaveOrders(graph);
 
-        for (int i = 0; i < MaxIterations && bestCrossings > 0; i++)
+        for (var i = 0; i < MaxIterations && bestCrossings > 0; i++)
         {
             // Alternate between sweeping down and up
             if (i % 2 == 0)
@@ -38,10 +38,10 @@ internal static class Ordering
 
     static void InitializeOrder(LayoutGraph graph)
     {
-        for (int r = 0; r < graph.Ranks.Length; r++)
+        for (var r = 0; r < graph.Ranks.Length; r++)
         {
             var nodesInRank = graph.Ranks[r];
-            for (int i = 0; i < nodesInRank.Count; i++)
+            for (var i = 0; i < nodesInRank.Count; i++)
             {
                 nodesInRank[i].Order = i;
             }
@@ -50,7 +50,7 @@ internal static class Ordering
 
     static void SweepDown(LayoutGraph graph)
     {
-        for (int r = 1; r < graph.Ranks.Length; r++)
+        for (var r = 1; r < graph.Ranks.Length; r++)
         {
             OrderByMedian(graph, r, true);
         }
@@ -58,7 +58,7 @@ internal static class Ordering
 
     static void SweepUp(LayoutGraph graph)
     {
-        for (int r = graph.Ranks.Length - 2; r >= 0; r--)
+        for (var r = graph.Ranks.Length - 2; r >= 0; r--)
         {
             OrderByMedian(graph, r, false);
         }
@@ -92,7 +92,7 @@ internal static class Ordering
             .ThenBy(n => n.Order)
             .ToList();
 
-        for (int i = 0; i < sortedNodes.Count; i++)
+        for (var i = 0; i < sortedNodes.Count; i++)
         {
             sortedNodes[i].Order = i;
         }
@@ -114,8 +114,8 @@ internal static class Ordering
 
     static int CountCrossings(LayoutGraph graph)
     {
-        int total = 0;
-        for (int r = 0; r < graph.Ranks.Length - 1; r++)
+        var total = 0;
+        for (var r = 0; r < graph.Ranks.Length - 1; r++)
         {
             total += CountCrossingsBetweenRanks(graph, r, r + 1);
         }
@@ -141,10 +141,10 @@ internal static class Ordering
 
         // Count inversions (crossings) using O(n^2) for simplicity
         // Could be optimized to O(n log n) using merge sort
-        int crossings = 0;
-        for (int i = 0; i < edges.Count; i++)
+        var crossings = 0;
+        for (var i = 0; i < edges.Count; i++)
         {
-            for (int j = i + 1; j < edges.Count; j++)
+            for (var j = i + 1; j < edges.Count; j++)
             {
                 var e1 = edges[i];
                 var e2 = edges[j];
@@ -159,20 +159,15 @@ internal static class Ordering
         return crossings;
     }
 
-    static Dictionary<string, int> SaveOrders(LayoutGraph graph)
-    {
-        return graph.Nodes.Values.ToDictionary(n => n.Id, n => n.Order);
-    }
+    static Dictionary<string, int> SaveOrders(LayoutGraph graph) =>
+        graph.Nodes.Values.ToDictionary(n => n.Id, n => n.Order);
 
     static void RestoreOrders(LayoutGraph graph, Dictionary<string, int> orders)
     {
         foreach (var (id, order) in orders)
         {
             var node = graph.GetNode(id);
-            if (node is not null)
-            {
-                node.Order = order;
-            }
+            node?.Order = order;
         }
     }
 }

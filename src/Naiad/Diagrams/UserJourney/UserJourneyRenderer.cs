@@ -68,8 +68,8 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         }
 
         // Draw actors legend on the right
-        double legendX = width - options.Padding - 100;
-        double legendY = titleOffset + options.Padding + 10;
+        var legendX = width - options.Padding - 100;
+        var legendY = titleOffset + options.Padding + 10;
 
         builder.AddText(legendX, legendY, "Actors:",
             anchor: "start",
@@ -78,7 +78,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             fontFamily: options.FontFamily,
             fontWeight: "bold");
 
-        for (int i = 0; i < allActors.Count; i++)
+        for (var i = 0; i < allActors.Count; i++)
         {
             var actorY = legendY + (i + 1) * ActorRowHeight;
             var actorColor = GetActorColor(i);
@@ -92,8 +92,8 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         }
 
         // Draw sections
-        double currentY = titleOffset + options.Padding;
-        int sectionIndex = 0;
+        var currentY = titleOffset + options.Padding;
+        var sectionIndex = 0;
 
         foreach (var section in model.Sections)
         {
@@ -116,8 +116,8 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             }
 
             // Draw tasks
-            double taskX = options.Padding + TaskMargin;
-            double taskY = currentY + SectionPadding + 15;
+            var taskX = options.Padding + TaskMargin;
+            var taskY = currentY + SectionPadding + 15;
 
             foreach (var task in section.Tasks)
             {
@@ -156,7 +156,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                     fill: "#666");
 
                 // Actor indicators
-                double actorX = taskX + 5;
+                var actorX = taskX + 5;
                 foreach (var actor in task.Actors)
                 {
                     var actorIndex = allActors.IndexOf(actor);

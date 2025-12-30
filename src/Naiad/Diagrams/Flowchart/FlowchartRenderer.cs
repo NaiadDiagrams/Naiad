@@ -3,9 +3,10 @@ using MermaidSharp.Layout;
 
 namespace MermaidSharp.Diagrams.Flowchart;
 
-public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
+public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
+    IDiagramRenderer<FlowchartModel>
 {
-    readonly ILayoutEngine _layoutEngine;
+    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     // Mermaid.ink default colors
     const string NodeFill = "#ECECFF";
@@ -15,11 +16,6 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
 
     // FontAwesome icon pattern: fa:fa-icon-name or fab:fa-icon-name
     static readonly Regex IconPattern = new("(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled);
-
-    public FlowchartRenderer(ILayoutEngine? layoutEngine = null)
-    {
-        _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
-    }
 
     public SvgDocument Render(FlowchartModel model, RenderOptions options)
     {
@@ -84,7 +80,7 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         return builder.Build();
     }
 
-    void RenderNode(SvgBuilder builder, Node node, RenderOptions options)
+    static void RenderNode(SvgBuilder builder, Node node, RenderOptions options)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
@@ -106,7 +102,7 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
             className: "nodeLabel");
     }
 
-    void RenderEdge(SvgBuilder builder, Edge edge, RenderOptions options)
+    static void RenderEdge(SvgBuilder builder, Edge edge, RenderOptions options)
     {
         if (edge.Points.Count < 2) return;
 
@@ -121,7 +117,7 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         else
         {
             // Use curve for smoother edges
-            for (int i = 1; i < points.Count; i++)
+            for (var i = 1; i < points.Count; i++)
             {
                 pathData += $" L{Fmt(points[i].X)},{Fmt(points[i].Y)}";
             }

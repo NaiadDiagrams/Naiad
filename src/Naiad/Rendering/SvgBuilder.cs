@@ -61,10 +61,8 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder AddArrowMarker(string id = "arrowhead", string fill = "#333")
-    {
-        return AddMarker(id, "M0,0 L10,3.5 L0,7 Z", 10, 7, 9, 3.5, fill);
-    }
+    public SvgBuilder AddArrowMarker(string id = "arrowhead", string fill = "#333") =>
+        AddMarker(id, "M0,0 L10,3.5 L0,7 Z", 10, 7, 9, 3.5, fill);
 
     public SvgBuilder AddCircleMarker(string id = "circle", string fill = "#333")
     {

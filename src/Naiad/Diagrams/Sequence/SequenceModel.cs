@@ -22,7 +22,7 @@ public enum ParticipantType
     Actor
 }
 
-public abstract class SequenceElement { }
+public abstract class SequenceElement;
 
 public class Message : SequenceElement
 {

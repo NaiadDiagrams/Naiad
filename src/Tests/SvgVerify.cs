@@ -1,15 +1,12 @@
-﻿using Microsoft.Playwright.NUnit;
-
-public class TestBase: PageTest
+﻿public class TestBase :
+    PageTest
 {
     // Set device scale factor for higher resolution screenshots
-    public override BrowserNewContextOptions ContextOptions()
-    {
-        return new BrowserNewContextOptions
+    public override BrowserNewContextOptions ContextOptions() =>
+        new()
         {
             DeviceScaleFactor = 2
         };
-    }
 
     public async Task VerifySvg(
         string input,

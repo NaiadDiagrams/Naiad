@@ -30,7 +30,7 @@ public class PieParser : IDiagramParser<PieModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-    public Parser<char, PieModel> Parser =>
+    public static Parser<char, PieModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("pie")
         from __ in CommonParsers.InlineWhitespace
@@ -40,18 +40,16 @@ public class PieParser : IDiagramParser<PieModel>
         from content in ParseContent()
         select BuildModel(showData, content.title, content.sections);
 
-    static Parser<char, (string? title, List<PieSection> sections)> ParseContent()
-    {
-        return from lines in (
-                Try(TitleLine.Select(t => (title: (string?)t, section: (PieSection?)null)))
+    static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
+        from lines in (
+            Try(TitleLine.Select(t => (title: (string?)t, section: (PieSection?)null)))
                 .Or(Try(SectionParser.Select(s => (title: (string?)null, section: (PieSection?)s))))
                 .Or(SkipLine.ThenReturn((title: (string?)null, section: (PieSection?)null)))
-            ).Many()
-            select (
-                title: lines.FirstOrDefault(l => l.title != null).title,
-                sections: lines.Where(l => l.section != null).Select(l => l.section!).ToList()
-            );
-    }
+        ).Many()
+        select (
+            title: lines.FirstOrDefault(l => l.title != null).title,
+            sections: lines.Where(l => l.section != null).Select(l => l.section!).ToList()
+        );
 
     static PieModel BuildModel(bool showData, string? title, List<PieSection> sections)
     {

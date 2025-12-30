@@ -139,7 +139,11 @@ public static class CommonParsers
     public static Parser<char, int> Indentation =>
         Token(c => c is ' ' or '\t')
             .Many()
-            .Select(chars => chars.Count(c => c == '\t') * 4 + chars.Count(c => c == ' '));
+            .Select(chars =>
+            {
+                var array = chars as char[] ?? chars.ToArray();
+                return array.Count(c => c == '\t') * 4 + array.Count(c => c == ' ');
+            });
 
     // Keyword helpers
     public static Parser<char, Unit> Keyword(string keyword) =>
