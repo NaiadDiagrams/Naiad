@@ -1,5 +1,3 @@
-using MermaidSharp.Layout;
-
 namespace MermaidSharp.Diagrams.State;
 
 public class StateRenderer : IDiagramRenderer<StateModel>

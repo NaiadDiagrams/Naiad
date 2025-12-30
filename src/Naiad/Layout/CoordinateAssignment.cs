@@ -89,7 +89,7 @@ static class CoordinateAssignment
         }
 
         // Normalize positions to start at 0
-        NormalizePositions(graph, isHorizontal);
+        NormalizePositions(graph);
     }
 
     static void AlignToNeighbors(LayoutGraph graph, int rank, bool useInEdges,
@@ -186,7 +186,7 @@ static class CoordinateAssignment
         return values[mid];
     }
 
-    static void NormalizePositions(LayoutGraph graph, bool isHorizontal)
+    static void NormalizePositions(LayoutGraph graph)
     {
         if (graph.Nodes.Count == 0)
         {

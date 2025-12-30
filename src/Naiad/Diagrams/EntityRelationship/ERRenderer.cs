@@ -1,5 +1,3 @@
-using MermaidSharp.Layout;
-
 namespace MermaidSharp.Diagrams.EntityRelationship;
 
 public class ERRenderer : IDiagramRenderer<ERModel>

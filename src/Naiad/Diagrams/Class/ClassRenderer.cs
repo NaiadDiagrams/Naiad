@@ -1,18 +1,14 @@
-using MermaidSharp.Layout;
-
 namespace MermaidSharp.Diagrams.Class;
 
-public class ClassRenderer : IDiagramRenderer<ClassModel>
+public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
+    IDiagramRenderer<ClassModel>
 {
-    readonly ILayoutEngine _layoutEngine;
+    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     const double ClassPadding = 10;
     const double LineHeight = 20;
     const double MinWidth = 100;
     const double SeparatorHeight = 1;
-
-    public ClassRenderer(ILayoutEngine? layoutEngine = null) =>
-        _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     public SvgDocument Render(ClassModel model, RenderOptions options)
     {

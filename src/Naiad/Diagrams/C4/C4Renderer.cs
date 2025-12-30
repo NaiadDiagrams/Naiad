@@ -80,7 +80,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         currentY = DrawElementRow(builder, containers, currentY, width, options, elementPositions);
 
         // Draw components
-        currentY = DrawElementRow(builder, components, currentY, width, options, elementPositions);
+        DrawElementRow(builder, components, currentY, width, options, elementPositions);
 
         // Draw relationships
         foreach (var rel in model.Relationships)
