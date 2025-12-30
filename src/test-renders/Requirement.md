@@ -13,6 +13,7 @@ requirement test_req {
     verifymethod: test
 }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 requirementDiagram
 
@@ -26,7 +27,7 @@ requirement test_req {
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHRlc3RfcmVxIHtcbiAgICBpZDogMVxuICAgIHRleHQ6IFRoZSBzeXN0ZW0gc2hhbGwgZG8gc29tZXRoaW5nXG4gICAgcmlzazogaGlnaFxuICAgIHZlcmlmeW1ldGhvZDogdGVzdFxufSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/Requirement/RequirementTests.Simple.verified.png)
 
@@ -43,6 +44,7 @@ functionalRequirement login_req {
     verifymethod: demonstration
 }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 requirementDiagram
 
@@ -56,7 +58,7 @@ functionalRequirement login_req {
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbmZ1bmN0aW9uYWxSZXF1aXJlbWVudCBsb2dpbl9yZXEge1xuICAgIGlkOiBSRVEtMDAxXG4gICAgdGV4dDogVXNlciBtdXN0IGJlIGFibGUgdG8gbG9nIGluXG4gICAgcmlzazogbWVkaXVtXG4gICAgdmVyaWZ5bWV0aG9kOiBkZW1vbnN0cmF0aW9uXG59IiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Functional](../Tests/Requirement/RequirementTests.Functional.verified.png)
 
@@ -78,6 +80,7 @@ element test_entity {
 
 test_entity - satisfies -> test_req
 ```
+**Rendered by Mermaid:**
 ```mermaid
 requirementDiagram
 
@@ -96,7 +99,7 @@ test_entity - satisfies -> test_req
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHRlc3RfcmVxIHtcbiAgICBpZDogMVxuICAgIHRleHQ6IFN5c3RlbSByZXF1aXJlbWVudFxuICAgIHJpc2s6IGxvd1xufVxuXG5lbGVtZW50IHRlc3RfZW50aXR5IHtcbiAgICB0eXBlOiBzaW11bGF0aW9uXG59XG5cbnRlc3RfZW50aXR5IC0gc2F0aXNmaWVzIC1cdTAwM0UgdGVzdF9yZXEiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Element](../Tests/Requirement/RequirementTests.Element.verified.png)
 
@@ -124,6 +127,7 @@ performanceRequirement perf1 {
     risk: high
 }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 requirementDiagram
 
@@ -148,7 +152,7 @@ performanceRequirement perf1 {
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHJlcTEge1xuICAgIGlkOiBSRVEtMDAxXG4gICAgdGV4dDogRmlyc3QgcmVxdWlyZW1lbnRcbiAgICByaXNrOiBsb3dcbn1cblxucmVxdWlyZW1lbnQgcmVxMiB7XG4gICAgaWQ6IFJFUS0wMDJcbiAgICB0ZXh0OiBTZWNvbmQgcmVxdWlyZW1lbnRcbiAgICByaXNrOiBtZWRpdW1cbn1cblxucGVyZm9ybWFuY2VSZXF1aXJlbWVudCBwZXJmMSB7XG4gICAgaWQ6IFBFUkYtMDAxXG4gICAgdGV4dDogUGVyZm9ybWFuY2UgbXVzdCBiZSBnb29kXG4gICAgcmlzazogaGlnaFxufSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Multiple](../Tests/Requirement/RequirementTests.Multiple.verified.png)
 
@@ -184,6 +188,7 @@ web_app - contains -> login_module
 login_module - satisfies -> login_page
 login_page - derives -> user_auth
 ```
+**Rendered by Mermaid:**
 ```mermaid
 requirementDiagram
 
@@ -216,7 +221,7 @@ login_page - derives -> user_auth
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHVzZXJfYXV0aCB7XG4gICAgaWQ6IFJFUS0wMDFcbiAgICB0ZXh0OiBVc2VycyBtdXN0IGF1dGhlbnRpY2F0ZVxuICAgIHJpc2s6IGhpZ2hcbiAgICB2ZXJpZnltZXRob2Q6IHRlc3Rcbn1cblxuZnVuY3Rpb25hbFJlcXVpcmVtZW50IGxvZ2luX3BhZ2Uge1xuICAgIGlkOiBSRVEtMDAyXG4gICAgdGV4dDogU3lzdGVtIHByb3ZpZGVzIGxvZ2luIHBhZ2VcbiAgICByaXNrOiBtZWRpdW1cbn1cblxuZWxlbWVudCB3ZWJfYXBwIHtcbiAgICB0eXBlOiBhcHBsaWNhdGlvblxuICAgIGRvY3JlZjogL2RvY3Mvd2ViYXBwXG59XG5cbmVsZW1lbnQgbG9naW5fbW9kdWxlIHtcbiAgICB0eXBlOiBtb2R1bGVcbn1cblxud2ViX2FwcCAtIGNvbnRhaW5zIC1cdTAwM0UgbG9naW5fbW9kdWxlXG5sb2dpbl9tb2R1bGUgLSBzYXRpc2ZpZXMgLVx1MDAzRSBsb2dpbl9wYWdlXG5sb2dpbl9wYWdlIC0gZGVyaXZlcyAtXHUwMDNFIHVzZXJfYXV0aCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/Requirement/RequirementTests.Complex.verified.png)
 
@@ -244,6 +249,7 @@ req2 - derives -> req1
 elem1 - satisfies -> req1
 elem1 - verifies -> req2
 ```
+**Rendered by Mermaid:**
 ```mermaid
 requirementDiagram
 
@@ -268,7 +274,7 @@ elem1 - verifies -> req2
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHJlcTEge1xuICAgIGlkOiAxXG4gICAgdGV4dDogTWFpbiByZXF1aXJlbWVudFxufVxuXG5yZXF1aXJlbWVudCByZXEyIHtcbiAgICBpZDogMlxuICAgIHRleHQ6IERlcml2ZWQgcmVxdWlyZW1lbnRcbn1cblxuZWxlbWVudCBlbGVtMSB7XG4gICAgdHlwZTogY29tcG9uZW50XG59XG5cbnJlcTIgLSBkZXJpdmVzIC1cdTAwM0UgcmVxMVxuZWxlbTEgLSBzYXRpc2ZpZXMgLVx1MDAzRSByZXExXG5lbGVtMSAtIHZlcmlmaWVzIC1cdTAwM0UgcmVxMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![AllTypes](../Tests/Requirement/RequirementTests.AllTypes.verified.png)
 

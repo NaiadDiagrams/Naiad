@@ -11,6 +11,7 @@ quadrantChart
     Campaign A: [0.3, 0.6]
     Campaign B: [0.7, 0.8]
 ```
+**Rendered by Mermaid:**
 ```mermaid
 quadrantChart
     title Campaign Analysis
@@ -22,7 +23,7 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIENhbXBhaWduIEFuYWx5c2lzXG4gICAgeC1heGlzIExvdyBSZWFjaCAtLVx1MDAzRSBIaWdoIFJlYWNoXG4gICAgeS1heGlzIExvdyBFbmdhZ2VtZW50IC0tXHUwMDNFIEhpZ2ggRW5nYWdlbWVudFxuICAgIENhbXBhaWduIEE6IFswLjMsIDAuNl1cbiAgICBDYW1wYWlnbiBCOiBbMC43LCAwLjhdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/Quadrant/QuadrantTests.Simple.verified.png)
 
@@ -43,6 +44,7 @@ quadrantChart
     Task C: [0.2, 0.2]
     Task D: [0.9, 0.3]
 ```
+**Rendered by Mermaid:**
 ```mermaid
 quadrantChart
     title Priority Matrix
@@ -60,7 +62,7 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIFByaW9yaXR5IE1hdHJpeFxuICAgIHgtYXhpcyBMb3cgVXJnZW5jeSAtLVx1MDAzRSBIaWdoIFVyZ2VuY3lcbiAgICB5LWF4aXMgTG93IEltcGFjdCAtLVx1MDAzRSBIaWdoIEltcGFjdFxuICAgIHF1YWRyYW50LTEgRG8gRmlyc3RcbiAgICBxdWFkcmFudC0yIFNjaGVkdWxlXG4gICAgcXVhZHJhbnQtMyBEZWxlZ2F0ZVxuICAgIHF1YWRyYW50LTQgRWxpbWluYXRlXG4gICAgVGFzayBBOiBbMC44LCAwLjldXG4gICAgVGFzayBCOiBbMC4yLCAwLjhdXG4gICAgVGFzayBDOiBbMC4yLCAwLjJdXG4gICAgVGFzayBEOiBbMC45LCAwLjNdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Labels](../Tests/Quadrant/QuadrantTests.Labels.verified.png)
 
@@ -79,6 +81,7 @@ quadrantChart
     Product E: [0.5, 0.5]
     Product F: [0.3, 0.7]
 ```
+**Rendered by Mermaid:**
 ```mermaid
 quadrantChart
     title Product Portfolio
@@ -94,7 +97,7 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIFByb2R1Y3QgUG9ydGZvbGlvXG4gICAgeC1heGlzIExvdyBHcm93dGggLS1cdTAwM0UgSGlnaCBHcm93dGhcbiAgICB5LWF4aXMgTG93IFNoYXJlIC0tXHUwMDNFIEhpZ2ggU2hhcmVcbiAgICBQcm9kdWN0IEE6IFswLjEsIDAuOV1cbiAgICBQcm9kdWN0IEI6IFswLjksIDAuOV1cbiAgICBQcm9kdWN0IEM6IFswLjEsIDAuMV1cbiAgICBQcm9kdWN0IEQ6IFswLjksIDAuMV1cbiAgICBQcm9kdWN0IEU6IFswLjUsIDAuNV1cbiAgICBQcm9kdWN0IEY6IFswLjMsIDAuN10iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![ManyPoints](../Tests/Quadrant/QuadrantTests.ManyPoints.verified.png)
 
@@ -110,6 +113,7 @@ quadrantChart
     JavaScript: [0.7, 0.7]
     Rust: [0.3, 0.5]
 ```
+**Rendered by Mermaid:**
 ```mermaid
 quadrantChart
     title Skills Assessment
@@ -122,7 +126,7 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIFNraWxscyBBc3Nlc3NtZW50XG4gICAgeC1heGlzIEJlZ2lubmVyIC0tXHUwMDNFIEV4cGVydFxuICAgIHktYXhpcyBMb3cgUHJpb3JpdHkgLS1cdTAwM0UgSGlnaCBQcmlvcml0eVxuICAgIFB5dGhvbjogWzAuOCwgMC45XVxuICAgIEphdmFTY3JpcHQ6IFswLjcsIDAuN11cbiAgICBSdXN0OiBbMC4zLCAwLjVdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![TitleOnly](../Tests/Quadrant/QuadrantTests.TitleOnly.verified.png)
 
@@ -140,6 +144,7 @@ quadrantChart
     Bottom Right: [1.0, 0.0]
     Center: [0.5, 0.5]
 ```
+**Rendered by Mermaid:**
 ```mermaid
 quadrantChart
     title Edge Cases
@@ -154,7 +159,7 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIEVkZ2UgQ2FzZXNcbiAgICB4LWF4aXMgTGVmdCAtLVx1MDAzRSBSaWdodFxuICAgIHktYXhpcyBCb3R0b20gLS1cdTAwM0UgVG9wXG4gICAgVG9wIFJpZ2h0OiBbMS4wLCAxLjBdXG4gICAgVG9wIExlZnQ6IFswLjAsIDEuMF1cbiAgICBCb3R0b20gTGVmdDogWzAuMCwgMC4wXVxuICAgIEJvdHRvbSBSaWdodDogWzEuMCwgMC4wXVxuICAgIENlbnRlcjogWzAuNSwgMC41XSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![EdgePositions](../Tests/Quadrant/QuadrantTests.EdgePositions.verified.png)
 

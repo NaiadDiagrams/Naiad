@@ -7,6 +7,7 @@
 classDiagram
     class Animal
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     class Animal
@@ -14,7 +15,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgY2xhc3MgQW5pbWFsIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/Class/ClassTests.Simple.verified.png)
 
@@ -28,6 +29,7 @@ classDiagram
         +int age
     }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     class Animal {
@@ -38,7 +40,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgY2xhc3MgQW5pbWFsIHtcbiAgICAgICAgXHUwMDJCU3RyaW5nIG5hbWVcbiAgICAgICAgXHUwMDJCaW50IGFnZVxuICAgIH0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Members](../Tests/Class/ClassTests.Members.verified.png)
 
@@ -52,6 +54,7 @@ classDiagram
         +move() : void
     }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     class Animal {
@@ -62,7 +65,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgY2xhc3MgQW5pbWFsIHtcbiAgICAgICAgXHUwMDJCbWFrZVNvdW5kKClcbiAgICAgICAgXHUwMDJCbW92ZSgpIDogdm9pZFxuICAgIH0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Methods](../Tests/Class/ClassTests.Methods.verified.png)
 
@@ -78,6 +81,7 @@ classDiagram
         +move(int distance) : void
     }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     class Animal {
@@ -90,7 +94,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgY2xhc3MgQW5pbWFsIHtcbiAgICAgICAgXHUwMDJCU3RyaW5nIG5hbWVcbiAgICAgICAgXHUwMDJCaW50IGFnZVxuICAgICAgICBcdTAwMkJtYWtlU291bmQoKSA6IHZvaWRcbiAgICAgICAgXHUwMDJCbW92ZShpbnQgZGlzdGFuY2UpIDogdm9pZFxuICAgIH0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![MembersAndMethods](../Tests/Class/ClassTests.MembersAndMethods.verified.png)
 
@@ -102,6 +106,7 @@ classDiagram
     Animal <|-- Dog
     Animal <|-- Cat
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     Animal <|-- Dog
@@ -110,7 +115,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgQW5pbWFsIFx1MDAzQ3wtLSBEb2dcbiAgICBBbmltYWwgXHUwMDNDfC0tIENhdCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Inheritance](../Tests/Class/ClassTests.Inheritance.verified.png)
 
@@ -122,6 +127,7 @@ classDiagram
     Car *-- Engine
     Car *-- Wheel
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     Car *-- Engine
@@ -130,7 +136,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgQ2FyICotLSBFbmdpbmVcbiAgICBDYXIgKi0tIFdoZWVsIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Composition](../Tests/Class/ClassTests.Composition.verified.png)
 
@@ -141,6 +147,7 @@ classDiagram
 classDiagram
     Library o-- Book
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     Library o-- Book
@@ -148,7 +155,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgTGlicmFyeSBvLS0gQm9vayIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Aggregation](../Tests/Class/ClassTests.Aggregation.verified.png)
 
@@ -159,6 +166,7 @@ classDiagram
 classDiagram
     Student --> Course : enrolls
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     Student --> Course : enrolls
@@ -166,7 +174,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgU3R1ZGVudCAtLVx1MDAzRSBDb3Vyc2UgOiBlbnJvbGxzIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Association](../Tests/Class/ClassTests.Association.verified.png)
 
@@ -180,6 +188,7 @@ classDiagram
         +fly() : void
     }
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
     class IFlyable {
@@ -190,7 +199,7 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgY2xhc3MgSUZseWFibGUge1xuICAgICAgICBcdTAwM0NcdTAwM0NpbnRlcmZhY2VcdTAwM0VcdTAwM0VcbiAgICAgICAgXHUwMDJCZmx5KCkgOiB2b2lkXG4gICAgfSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![InterfaceAnnotation](../Tests/Class/ClassTests.InterfaceAnnotation.verified.png)
 
@@ -265,6 +274,7 @@ User "1" --> "1..*" Address : has
 User "1" o-- "*" Order : places
 Order "1" *-- "1..*" Item : contains
 ```
+**Rendered by Mermaid:**
 ```mermaid
 classDiagram
 class IRepository~T~ {
@@ -336,7 +346,7 @@ Order "1" *-- "1..*" Item : contains
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG5jbGFzcyBJUmVwb3NpdG9yeX5UfiB7XG4gICAgXHUwMDNDXHUwMDNDaW50ZXJmYWNlXHUwMDNFXHUwMDNFXG4gICAgXHUwMDJCZ2V0KGlkOiBpbnQpIFRcbiAgICBcdTAwMkJzYXZlKGVudGl0eTogVCkgdm9pZFxuICAgIFx1MDAyQmRlbGV0ZShpZDogaW50KSB2b2lkXG59XG5cbmNsYXNzIEFic3RyYWN0RW50aXR5IHtcbiAgICBcdTAwM0NcdTAwM0NhYnN0cmFjdFx1MDAzRVx1MDAzRVxuICAgICNpbnQgaWRcbiAgICAjRGF0ZVRpbWUgY3JlYXRlZEF0XG4gICAgI0RhdGVUaW1lIHVwZGF0ZWRBdFxuICAgIFx1MDAyQmdldElkKCkgaW50XG59XG5cbmNsYXNzIFVzZXJTZXJ2aWNlIHtcbiAgICBcdTAwM0NcdTAwM0NzZXJ2aWNlXHUwMDNFXHUwMDNFXG4gICAgLUlVc2VyUmVwb3NpdG9yeSByZXBvc2l0b3J5XG4gICAgLUlMb2dnZXIgbG9nZ2VyXG4gICAgXHUwMDJCY3JlYXRlVXNlcihuYW1lOiBTdHJpbmcpIFVzZXJcbiAgICBcdTAwMkJmaW5kVXNlcihpZDogaW50KSBVc2VyXG4gICAgXHUwMDJCZGVsZXRlVXNlcihpZDogaW50KSB2b2lkXG59XG5cbmNsYXNzIFN0YXR1cyB7XG4gICAgXHUwMDNDXHUwMDNDZW51bWVyYXRpb25cdTAwM0VcdTAwM0VcbiAgICBBQ1RJVkVcbiAgICBJTkFDVElWRVxuICAgIFBFTkRJTkdcbiAgICBERUxFVEVEXG59XG5cbmNsYXNzIFVzZXIge1xuICAgIFx1MDAyQlN0cmluZyBuYW1lXG4gICAgXHUwMDJCU3RyaW5nIGVtYWlsXG4gICAgLVN0cmluZyBwYXNzd29yZEhhc2hcbiAgICB+U3RhdHVzIHN0YXR1c1xuICAgIFx1MDAyQnZhbGlkYXRlKCkkIGJvb2xcbiAgICBcdTAwMkJoYXNoUGFzc3dvcmQocGFzc3dvcmQ6IFN0cmluZykkIFN0cmluZ1xufVxuXG5jbGFzcyBBZGRyZXNzIHtcbiAgICBcdTAwMkJTdHJpbmcgc3RyZWV0XG4gICAgXHUwMDJCU3RyaW5nIGNpdHlcbiAgICBcdTAwMkJTdHJpbmcgemlwQ29kZVxufVxuXG5jbGFzcyBPcmRlciB7XG4gICAgXHUwMDJCaW50IG9yZGVySWRcbiAgICBcdTAwMkJMaXN0fkl0ZW1+IGl0ZW1zXG4gICAgXHUwMDJCY2FsY3VsYXRlVG90YWwoKSBEZWNpbWFsXG59XG5cbmNsYXNzIEl0ZW0ge1xuICAgIFx1MDAyQlN0cmluZyBuYW1lXG4gICAgXHUwMDJCRGVjaW1hbCBwcmljZVxuICAgIFx1MDAyQmludCBxdWFudGl0eVxufVxuXG5JUmVwb3NpdG9yeX5UfiBcdTAwM0N8Li4gVXNlclJlcG9zaXRvcnkgOiBpbXBsZW1lbnRzXG5BYnN0cmFjdEVudGl0eSBcdTAwM0N8LS0gVXNlciA6IGV4dGVuZHNcblVzZXJTZXJ2aWNlIC4uXHUwMDNFIElSZXBvc2l0b3J5flR+IDogdXNlc1xuVXNlciBcdTAwMjIxXHUwMDIyIC0tXHUwMDNFIFx1MDAyMjEuLipcdTAwMjIgQWRkcmVzcyA6IGhhc1xuVXNlciBcdTAwMjIxXHUwMDIyIG8tLSBcdTAwMjIqXHUwMDIyIE9yZGVyIDogcGxhY2VzXG5PcmRlciBcdTAwMjIxXHUwMDIyICotLSBcdTAwMjIxLi4qXHUwMDIyIEl0ZW0gOiBjb250YWlucyIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/Class/ClassTests.Complex.verified.png)
 

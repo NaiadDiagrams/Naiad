@@ -9,6 +9,7 @@ gitGraph
     commit
     commit
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit
@@ -18,7 +19,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXRcbiAgICBjb21taXRcbiAgICBjb21taXQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/GitGraph/GitGraphTests.Simple.verified.png)
 
@@ -31,6 +32,7 @@ gitGraph
     commit id: "beta"
     commit id: "gamma"
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit id: "alpha"
@@ -40,7 +42,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXQgaWQ6IFx1MDAyMmFscGhhXHUwMDIyXG4gICAgY29tbWl0IGlkOiBcdTAwMjJiZXRhXHUwMDIyXG4gICAgY29tbWl0IGlkOiBcdTAwMjJnYW1tYVx1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Id](../Tests/GitGraph/GitGraphTests.Id.verified.png)
 
@@ -53,6 +55,7 @@ gitGraph
     commit tag: "v1.0.0"
     commit
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit
@@ -62,7 +65,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXRcbiAgICBjb21taXQgdGFnOiBcdTAwMjJ2MS4wLjBcdTAwMjJcbiAgICBjb21taXQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Tag](../Tests/GitGraph/GitGraphTests.Tag.verified.png)
 
@@ -74,6 +77,7 @@ gitGraph
     commit id: "init" msg: "Initial commit"
     commit id: "feat" msg: "Add feature"
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit id: "init" msg: "Initial commit"
@@ -82,7 +86,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXQgaWQ6IFx1MDAyMmluaXRcdTAwMjIgbXNnOiBcdTAwMjJJbml0aWFsIGNvbW1pdFx1MDAyMlxuICAgIGNvbW1pdCBpZDogXHUwMDIyZmVhdFx1MDAyMiBtc2c6IFx1MDAyMkFkZCBmZWF0dXJlXHUwMDIyIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Message](../Tests/GitGraph/GitGraphTests.Message.verified.png)
 
@@ -95,6 +99,7 @@ gitGraph
     commit type: REVERSE
     commit type: HIGHLIGHT
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit type: NORMAL
@@ -104,7 +109,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXQgdHlwZTogTk9STUFMXG4gICAgY29tbWl0IHR5cGU6IFJFVkVSU0VcbiAgICBjb21taXQgdHlwZTogSElHSExJR0hUIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Types](../Tests/GitGraph/GitGraphTests.Types.verified.png)
 
@@ -119,6 +124,7 @@ gitGraph
     checkout main
     commit
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit
@@ -130,7 +136,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXRcbiAgICBicmFuY2ggZGV2ZWxvcFxuICAgIGNvbW1pdFxuICAgIGNoZWNrb3V0IG1haW5cbiAgICBjb21taXQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![BranchAndCheckout](../Tests/GitGraph/GitGraphTests.BranchAndCheckout.verified.png)
 
@@ -149,6 +155,7 @@ gitGraph
     checkout main
     commit
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit
@@ -164,7 +171,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXRcbiAgICBicmFuY2ggZGV2ZWxvcFxuICAgIGNvbW1pdFxuICAgIGJyYW5jaCBmZWF0dXJlXG4gICAgY29tbWl0XG4gICAgY2hlY2tvdXQgZGV2ZWxvcFxuICAgIGNvbW1pdFxuICAgIGNoZWNrb3V0IG1haW5cbiAgICBjb21taXQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![MultipleBranches](../Tests/GitGraph/GitGraphTests.MultipleBranches.verified.png)
 
@@ -181,6 +188,7 @@ gitGraph
     merge develop
     commit
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit
@@ -194,7 +202,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXRcbiAgICBicmFuY2ggZGV2ZWxvcFxuICAgIGNvbW1pdFxuICAgIGNvbW1pdFxuICAgIGNoZWNrb3V0IG1haW5cbiAgICBtZXJnZSBkZXZlbG9wXG4gICAgY29tbWl0IiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![MergeBranch](../Tests/GitGraph/GitGraphTests.MergeBranch.verified.png)
 
@@ -209,6 +217,7 @@ gitGraph
     checkout main
     merge develop tag: "v2.0.0"
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit
@@ -220,7 +229,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXRcbiAgICBicmFuY2ggZGV2ZWxvcFxuICAgIGNvbW1pdFxuICAgIGNoZWNrb3V0IG1haW5cbiAgICBtZXJnZSBkZXZlbG9wIHRhZzogXHUwMDIydjIuMC4wXHUwMDIyIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![MergeWithTag](../Tests/GitGraph/GitGraphTests.MergeWithTag.verified.png)
 
@@ -235,6 +244,7 @@ gitGraph
     checkout main
     cherry-pick id: "two"
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit id: "one"
@@ -246,7 +256,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXQgaWQ6IFx1MDAyMm9uZVx1MDAyMlxuICAgIGJyYW5jaCBkZXZlbG9wXG4gICAgY29tbWl0IGlkOiBcdTAwMjJ0d29cdTAwMjJcbiAgICBjaGVja291dCBtYWluXG4gICAgY2hlcnJ5LXBpY2sgaWQ6IFx1MDAyMnR3b1x1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![CherryPick](../Tests/GitGraph/GitGraphTests.CherryPick.verified.png)
 
@@ -267,6 +277,7 @@ gitGraph
     merge develop tag: "v2.0"
     commit id: "hotfix" type: HIGHLIGHT
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gitGraph
     commit id: "init" tag: "v1.0"
@@ -284,7 +295,7 @@ gitGraph
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2l0R3JhcGhcbiAgICBjb21taXQgaWQ6IFx1MDAyMmluaXRcdTAwMjIgdGFnOiBcdTAwMjJ2MS4wXHUwMDIyXG4gICAgYnJhbmNoIGRldmVsb3BcbiAgICBjb21taXQgaWQ6IFx1MDAyMmRldjFcdTAwMjJcbiAgICBjb21taXQgaWQ6IFx1MDAyMmRldjJcdTAwMjJcbiAgICBicmFuY2ggZmVhdHVyZVxuICAgIGNvbW1pdCBpZDogXHUwMDIyZmVhdDFcdTAwMjJcbiAgICBjaGVja291dCBkZXZlbG9wXG4gICAgbWVyZ2UgZmVhdHVyZVxuICAgIGNoZWNrb3V0IG1haW5cbiAgICBtZXJnZSBkZXZlbG9wIHRhZzogXHUwMDIydjIuMFx1MDAyMlxuICAgIGNvbW1pdCBpZDogXHUwMDIyaG90Zml4XHUwMDIyIHR5cGU6IEhJR0hMSUdIVCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/GitGraph/GitGraphTests.Complex.verified.png)
 

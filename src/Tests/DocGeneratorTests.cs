@@ -67,6 +67,7 @@ public class DocGeneratorTests
                 // Only render mermaid block for non-beta (GitHub doesn't support beta syntax)
                 if (!isBeta)
                 {
+                    markdown.AppendLine("**Rendered by Mermaid:**");
                     markdown.AppendLine("```mermaid");
                     markdown.AppendLine(test.Input);
                     markdown.AppendLine("```");
@@ -81,7 +82,7 @@ public class DocGeneratorTests
                     var relativePngPath = Path
                         .GetRelativePath(outputDir, test.VerifiedPngPath)
                         .Replace("\\", "/");
-                    markdown.AppendLine("**Output:**");
+                    markdown.AppendLine("**Rendered by Naiad:**");
                     markdown.AppendLine();
                     markdown.AppendLine($"![{test.Name}]({relativePngPath})");
                     markdown.AppendLine();

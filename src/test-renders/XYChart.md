@@ -13,7 +13,7 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyTW9udGhseSBTYWxlc1x1MDAyMlxuICAgIHgtYXhpcyBbSmFuLCBGZWIsIE1hciwgQXByLCBNYXldXG4gICAgeS1heGlzIFx1MDAyMlJldmVudWVcdTAwMjIgMCAtLVx1MDAzRSAxMDBcbiAgICBiYXIgWzUwLCA2MCwgNzUsIDgwLCA5MF0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/XYChart/XYChartTests.Simple.verified.png)
 
@@ -31,7 +31,7 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyU2FsZXMgdnMgVGFyZ2V0XHUwMDIyXG4gICAgeC1heGlzIFtRMSwgUTIsIFEzLCBRNF1cbiAgICB5LWF4aXMgXHUwMDIyQW1vdW50XHUwMDIyIDAgLS1cdTAwM0UgMjAwXG4gICAgYmFyIFsxMjAsIDE1MCwgMTgwLCAxNjBdXG4gICAgbGluZSBbMTAwLCAxNDAsIDE3MCwgMTkwXSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![BarAndLine](../Tests/XYChart/XYChartTests.BarAndLine.verified.png)
 
@@ -49,7 +49,7 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyUHJvZHVjdCBDb21wYXJpc29uXHUwMDIyXG4gICAgeC1heGlzIFsyMDIwLCAyMDIxLCAyMDIyLCAyMDIzXVxuICAgIHktYXhpcyBcdTAwMjJVbml0c1x1MDAyMiAwIC0tXHUwMDNFIDUwMFxuICAgIGJhciBbMTAwLCAxNTAsIDIwMCwgMjUwXVxuICAgIGJhciBbODAsIDEyMCwgMTgwLCAyMjBdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![MultipleBarSeries](../Tests/XYChart/XYChartTests.MultipleBarSeries.verified.png)
 
@@ -64,7 +64,7 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgeC1heGlzIFtBLCBCLCBDLCBEXVxuICAgIGJhciBbMTAsIDIwLCAzMCwgNDBdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![WithoutTitle](../Tests/XYChart/XYChartTests.WithoutTitle.verified.png)
 
@@ -81,7 +81,7 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyUmVnaW9uYWwgU2FsZXNcdTAwMjJcbiAgICB4LWF4aXMgW1x1MDAyMk5vcnRoIEFtZXJpY2FcdTAwMjIsIFx1MDAyMkV1cm9wZVx1MDAyMiwgXHUwMDIyQXNpYSBQYWNpZmljXHUwMDIyXVxuICAgIHktYXhpcyBcdTAwMjJSZXZlbnVlIChNJClcdTAwMjIgMCAtLVx1MDAzRSAxMDBcbiAgICBiYXIgWzg1LCA3MiwgOTBdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![QuotedCategories](../Tests/XYChart/XYChartTests.QuotedCategories.verified.png)
 
@@ -99,7 +99,7 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyQW5udWFsIERhdGFcdTAwMjJcbiAgICB4LWF4aXMgW0phbiwgRmViLCBNYXIsIEFwciwgTWF5LCBKdW4sIEp1bCwgQXVnLCBTZXAsIE9jdCwgTm92LCBEZWNdXG4gICAgeS1heGlzIFx1MDAyMlZhbHVlXHUwMDIyIDAgLS1cdTAwM0UgMTAwXG4gICAgYmFyIFs0NSwgNTIsIDYxLCA1OCwgNzIsIDg1LCA5MSwgODgsIDc2LCA2NSwgNTUsIDQ4XVxuICAgIGxpbmUgWzQwLCA0OCwgNTgsIDU1LCA3MCwgODIsIDg4LCA4NSwgNzMsIDYyLCA1MiwgNDVdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/XYChart/XYChartTests.Complex.verified.png)
 

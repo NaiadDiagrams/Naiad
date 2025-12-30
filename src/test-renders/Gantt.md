@@ -9,6 +9,7 @@ gantt
     Task A :a1, 2024-01-01, 30d
     Task B :b1, 2024-01-15, 20d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Simple Gantt
@@ -18,7 +19,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBTaW1wbGUgR2FudHRcbiAgICBUYXNrIEEgOmExLCAyMDI0LTAxLTAxLCAzMGRcbiAgICBUYXNrIEIgOmIxLCAyMDI0LTAxLTE1LCAyMGQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/Gantt/GanttTests.Simple.verified.png)
 
@@ -31,6 +32,7 @@ gantt
     Task A :a1, 2024-01-01, 10d
     Task B :b1, after a1, 15d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Dependent Tasks
@@ -40,7 +42,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBEZXBlbmRlbnQgVGFza3NcbiAgICBUYXNrIEEgOmExLCAyMDI0LTAxLTAxLCAxMGRcbiAgICBUYXNrIEIgOmIxLCBhZnRlciBhMSwgMTVkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![TaskWithDependency](../Tests/Gantt/GanttTests.TaskWithDependency.verified.png)
 
@@ -57,6 +59,7 @@ gantt
         Coding :b1, after a2, 30d
         Testing :b2, after b1, 14d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Project Timeline
@@ -70,7 +73,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBQcm9qZWN0IFRpbWVsaW5lXG4gICAgc2VjdGlvbiBQbGFubmluZ1xuICAgICAgICBSZXNlYXJjaCA6YTEsIDIwMjQtMDEtMDEsIDdkXG4gICAgICAgIERlc2lnbiA6YTIsIGFmdGVyIGExLCAxNGRcbiAgICBzZWN0aW9uIERldmVsb3BtZW50XG4gICAgICAgIENvZGluZyA6YjEsIGFmdGVyIGEyLCAzMGRcbiAgICAgICAgVGVzdGluZyA6YjIsIGFmdGVyIGIxLCAxNGQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Sections](../Tests/Gantt/GanttTests.Sections.verified.png)
 
@@ -84,6 +87,7 @@ gantt
     Active Task :active, a1, 2024-01-11, 10d
     Normal Task :n1, 2024-01-21, 10d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Task Statuses
@@ -94,7 +98,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBUYXNrIFN0YXR1c2VzXG4gICAgRG9uZSBUYXNrIDpkb25lLCBkMSwgMjAyNC0wMS0wMSwgMTBkXG4gICAgQWN0aXZlIFRhc2sgOmFjdGl2ZSwgYTEsIDIwMjQtMDEtMTEsIDEwZFxuICAgIE5vcm1hbCBUYXNrIDpuMSwgMjAyNC0wMS0yMSwgMTBkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Statuses](../Tests/Gantt/GanttTests.Statuses.verified.png)
 
@@ -108,6 +112,7 @@ gantt
     Critical :crit, c1, 2024-01-11, 10d
     Also Critical :crit, c2, after c1, 10d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Critical Path
@@ -118,7 +123,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBDcml0aWNhbCBQYXRoXG4gICAgTm9ybWFsIDpuMSwgMjAyNC0wMS0wMSwgMTBkXG4gICAgQ3JpdGljYWwgOmNyaXQsIGMxLCAyMDI0LTAxLTExLCAxMGRcbiAgICBBbHNvIENyaXRpY2FsIDpjcml0LCBjMiwgYWZ0ZXIgYzEsIDEwZCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Critical](../Tests/Gantt/GanttTests.Critical.verified.png)
 
@@ -131,6 +136,7 @@ gantt
     Development :d1, 2024-01-01, 30d
     Release :milestone, m1, 2024-01-31, 0d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title With Milestones
@@ -140,7 +146,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBXaXRoIE1pbGVzdG9uZXNcbiAgICBEZXZlbG9wbWVudCA6ZDEsIDIwMjQtMDEtMDEsIDMwZFxuICAgIFJlbGVhc2UgOm1pbGVzdG9uZSwgbTEsIDIwMjQtMDEtMzEsIDBkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Milestones](../Tests/Gantt/GanttTests.Milestones.verified.png)
 
@@ -162,6 +168,7 @@ gantt
         Deployment :t2, after t1, 3d
         Go Live :milestone, m1, after t2, 0d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Complete Project
@@ -180,7 +187,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBDb21wbGV0ZSBQcm9qZWN0XG4gICAgZGF0ZUZvcm1hdCBZWVlZLU1NLUREXG4gICAgc2VjdGlvbiBQaGFzZSAxXG4gICAgICAgIFBsYW5uaW5nIDpkb25lLCBwMSwgMjAyNC0wMS0wMSwgN2RcbiAgICAgICAgRGVzaWduIDpkb25lLCBwMiwgYWZ0ZXIgcDEsIDE0ZFxuICAgIHNlY3Rpb24gUGhhc2UgMlxuICAgICAgICBEZXZlbG9wbWVudCA6YWN0aXZlLCBkMSwgYWZ0ZXIgcDIsIDMwZFxuICAgICAgICBDb2RlIFJldmlldyA6Y3JpdCwgZDIsIGFmdGVyIGQxLCA3ZFxuICAgIHNlY3Rpb24gUGhhc2UgM1xuICAgICAgICBUZXN0aW5nIDp0MSwgYWZ0ZXIgZDIsIDE0ZFxuICAgICAgICBEZXBsb3ltZW50IDp0MiwgYWZ0ZXIgdDEsIDNkXG4gICAgICAgIEdvIExpdmUgOm1pbGVzdG9uZSwgbTEsIGFmdGVyIHQyLCAwZCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/Gantt/GanttTests.Complex.verified.png)
 
@@ -193,6 +200,7 @@ gantt
     Week Task :w1, 2024-01-01, 2w
     Day Task :d1, after w1, 5d
 ```
+**Rendered by Mermaid:**
 ```mermaid
 gantt
     title Weekly Tasks
@@ -202,7 +210,7 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBXZWVrbHkgVGFza3NcbiAgICBXZWVrIFRhc2sgOncxLCAyMDI0LTAxLTAxLCAyd1xuICAgIERheSBUYXNrIDpkMSwgYWZ0ZXIgdzEsIDVkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![WeeklyDuration](../Tests/Gantt/GanttTests.WeeklyDuration.verified.png)
 

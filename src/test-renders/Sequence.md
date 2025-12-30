@@ -8,6 +8,7 @@ sequenceDiagram
     Alice->>Bob: Hello Bob
     Bob-->>Alice: Hi Alice
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     Alice->>Bob: Hello Bob
@@ -16,7 +17,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFQm9iOiBIZWxsbyBCb2JcbiAgICBCb2ItLVx1MDAzRVx1MDAzRUFsaWNlOiBIaSBBbGljZSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/Sequence/SequenceTests.Simple.verified.png)
 
@@ -30,6 +31,7 @@ sequenceDiagram
     A->>B: Hello
     B->>A: Hi
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     participant A as Alice
@@ -40,7 +42,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgcGFydGljaXBhbnQgQSBhcyBBbGljZVxuICAgIHBhcnRpY2lwYW50IEIgYXMgQm9iXG4gICAgQS1cdTAwM0VcdTAwM0VCOiBIZWxsb1xuICAgIEItXHUwMDNFXHUwMDNFQTogSGkiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Participants](../Tests/Sequence/SequenceTests.Participants.verified.png)
 
@@ -54,6 +56,7 @@ sequenceDiagram
     User->>Server: Request
     Server-->>User: Response
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     actor User
@@ -64,7 +67,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgYWN0b3IgVXNlclxuICAgIHBhcnRpY2lwYW50IFNlcnZlclxuICAgIFVzZXItXHUwMDNFXHUwMDNFU2VydmVyOiBSZXF1ZXN0XG4gICAgU2VydmVyLS1cdTAwM0VcdTAwM0VVc2VyOiBSZXNwb25zZSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Actors](../Tests/Sequence/SequenceTests.Actors.verified.png)
 
@@ -76,6 +79,7 @@ sequenceDiagram
     Alice->>+Bob: Hello
     Bob-->>-Alice: Hi
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     Alice->>+Bob: Hello
@@ -84,7 +88,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFXHUwMDJCQm9iOiBIZWxsb1xuICAgIEJvYi0tXHUwMDNFXHUwMDNFLUFsaWNlOiBIaSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Activation](../Tests/Sequence/SequenceTests.Activation.verified.png)
 
@@ -98,6 +102,7 @@ sequenceDiagram
     Bob-->>Alice: Hi
     Note over Alice,Bob: Conversation
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     Alice->>Bob: Hello
@@ -108,7 +113,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFQm9iOiBIZWxsb1xuICAgIE5vdGUgcmlnaHQgb2YgQm9iOiBCb2IgdGhpbmtzXG4gICAgQm9iLS1cdTAwM0VcdTAwM0VBbGljZTogSGlcbiAgICBOb3RlIG92ZXIgQWxpY2UsQm9iOiBDb252ZXJzYXRpb24iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Notes](../Tests/Sequence/SequenceTests.Notes.verified.png)
 
@@ -122,6 +127,7 @@ sequenceDiagram
     Bob->>Alice: Hi
     Alice->>Bob: How are you?
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     autonumber
@@ -132,7 +138,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgYXV0b251bWJlclxuICAgIEFsaWNlLVx1MDAzRVx1MDAzRUJvYjogSGVsbG9cbiAgICBCb2ItXHUwMDNFXHUwMDNFQWxpY2U6IEhpXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFQm9iOiBIb3cgYXJlIHlvdT8iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![AutoNumber](../Tests/Sequence/SequenceTests.AutoNumber.verified.png)
 
@@ -148,6 +154,7 @@ sequenceDiagram
     A-xB: Solid cross
     A--xB: Dotted cross
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     A->>B: Solid arrow
@@ -160,7 +167,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQS1cdTAwM0VcdTAwM0VCOiBTb2xpZCBhcnJvd1xuICAgIEEtLVx1MDAzRVx1MDAzRUI6IERvdHRlZCBhcnJvd1xuICAgIEEtXHUwMDNFQjogU29saWQgb3BlblxuICAgIEEtLVx1MDAzRUI6IERvdHRlZCBvcGVuXG4gICAgQS14QjogU29saWQgY3Jvc3NcbiAgICBBLS14QjogRG90dGVkIGNyb3NzIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![DifferentArrows](../Tests/Sequence/SequenceTests.DifferentArrows.verified.png)
 
@@ -173,6 +180,7 @@ sequenceDiagram
     Client->>Server: Login request
     Server-->>Client: Token
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     title Authentication Flow
@@ -182,7 +190,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgdGl0bGUgQXV0aGVudGljYXRpb24gRmxvd1xuICAgIENsaWVudC1cdTAwM0VcdTAwM0VTZXJ2ZXI6IExvZ2luIHJlcXVlc3RcbiAgICBTZXJ2ZXItLVx1MDAzRVx1MDAzRUNsaWVudDogVG9rZW4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Title](../Tests/Sequence/SequenceTests.Title.verified.png)
 
@@ -213,6 +221,7 @@ sequenceDiagram
     Client-->>-User: Show dashboard
     Note over User,DB: Session established
 ```
+**Rendered by Mermaid:**
 ```mermaid
 sequenceDiagram
     title Complete Authentication Flow
@@ -240,7 +249,7 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgdGl0bGUgQ29tcGxldGUgQXV0aGVudGljYXRpb24gRmxvd1xuICAgIGF1dG9udW1iZXJcblxuICAgIGFjdG9yIFVzZXJcbiAgICBwYXJ0aWNpcGFudCBDbGllbnQgYXMgV2ViIENsaWVudFxuICAgIHBhcnRpY2lwYW50IEF1dGggYXMgQXV0aCBTZXJ2aWNlXG4gICAgcGFydGljaXBhbnQgREIgYXMgRGF0YWJhc2VcbiAgICBwYXJ0aWNpcGFudCBFbWFpbCBhcyBFbWFpbCBTZXJ2aWNlXG5cbiAgICBVc2VyLVx1MDAzRVx1MDAzRVx1MDAyQkNsaWVudDogRW50ZXIgY3JlZGVudGlhbHNcbiAgICBDbGllbnQtXHUwMDNFXHUwMDNFXHUwMDJCQXV0aDogUE9TVCAvbG9naW5cbiAgICBBdXRoLVx1MDAzRVx1MDAzRVx1MDAyQkRCOiBRdWVyeSB1c2VyXG4gICAgREItLVx1MDAzRVx1MDAzRS1BdXRoOiBVc2VyIGRhdGFcbiAgICBOb3RlIHJpZ2h0IG9mIEF1dGg6IFZhbGlkYXRlIGNyZWRlbnRpYWxzXG4gICAgQXV0aC1cdTAwM0VcdTAwM0VBdXRoOiBHZW5lcmF0ZSBKV1RcbiAgICBOb3RlIHJpZ2h0IG9mIEF1dGg6IFRva2VuIGV4cGlyZXMgaW4gMjRoXG4gICAgQXV0aC0tXHUwMDNFXHUwMDNFLUNsaWVudDogMjAwIE9LIFx1MDAyQiBUb2tlblxuICAgIENsaWVudC1cdTAwM0VcdTAwM0VcdTAwMkJFbWFpbDogU2VuZCB3ZWxjb21lIGVtYWlsXG4gICAgRW1haWwtLVx1MDAzRVx1MDAzRS1DbGllbnQ6IEVtYWlsIHNlbnRcbiAgICBDbGllbnQtLVx1MDAzRVx1MDAzRS1Vc2VyOiBTaG93IGRhc2hib2FyZFxuICAgIE5vdGUgb3ZlciBVc2VyLERCOiBTZXNzaW9uIGVzdGFibGlzaGVkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/Sequence/SequenceTests.Complex.verified.png)
 

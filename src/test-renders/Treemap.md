@@ -14,7 +14,7 @@ treemap-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidHJlZW1hcC1iZXRhXG5cdTAwMjJTZWN0aW9uIEFcdTAwMjJcbiAgICBcdTAwMjJJdGVtIDFcdTAwMjI6IDMwXG4gICAgXHUwMDIySXRlbSAyXHUwMDIyOiAyMFxuXHUwMDIyU2VjdGlvbiBCXHUwMDIyXG4gICAgXHUwMDIySXRlbSAzXHUwMDIyOiA1MCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Simple](../Tests/Treemap/TreemapTests.Simple.verified.png)
 
@@ -31,7 +31,7 @@ treemap-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidHJlZW1hcC1iZXRhXG5cdTAwMjJBbHBoYVx1MDAyMjogNDBcblx1MDAyMkJldGFcdTAwMjI6IDMwXG5cdTAwMjJHYW1tYVx1MDAyMjogMjBcblx1MDAyMkRlbHRhXHUwMDIyOiAxMCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![SingleLevel](../Tests/Treemap/TreemapTests.SingleLevel.verified.png)
 
@@ -52,7 +52,7 @@ treemap-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidHJlZW1hcC1iZXRhXG5cdTAwMjJSb290XHUwMDIyXG4gICAgXHUwMDIyQnJhbmNoIDFcdTAwMjJcbiAgICAgICAgXHUwMDIyTGVhZiAxLjFcdTAwMjI6IDE1XG4gICAgICAgIFx1MDAyMkxlYWYgMS4yXHUwMDIyOiAyNVxuICAgIFx1MDAyMkJyYW5jaCAyXHUwMDIyXG4gICAgICAgIFx1MDAyMkxlYWYgMi4xXHUwMDIyOiAzMFxuICAgICAgICBcdTAwMjJMZWFmIDIuMlx1MDAyMjogMTBcbiAgICAgICAgXHUwMDIyTGVhZiAyLjNcdTAwMjI6IDIwIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![NestedSections](../Tests/Treemap/TreemapTests.NestedSections.verified.png)
 
@@ -70,7 +70,7 @@ treemap-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidHJlZW1hcC1iZXRhXG5cdTAwMjJQcm9kdWN0c1x1MDAyMjogMTAwXG5cdTAwMjJTZXJ2aWNlc1x1MDAyMlxuICAgIFx1MDAyMkNvbnN1bHRpbmdcdTAwMjI6IDUwXG4gICAgXHUwMDIyU3VwcG9ydFx1MDAyMjogMzBcblx1MDAyMk90aGVyXHUwMDIyOiAyMCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![MixedHierarchy](../Tests/Treemap/TreemapTests.MixedHierarchy.verified.png)
 
@@ -89,7 +89,7 @@ treemap-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidHJlZW1hcC1iZXRhXG5cdTAwMjJDYXRlZ29yeSBBXHUwMDIyXG4gICAgXHUwMDIyU3ViIEExXHUwMDIyOiAxMDAwXG4gICAgXHUwMDIyU3ViIEEyXHUwMDIyOiA1MDBcblx1MDAyMkNhdGVnb3J5IEJcdTAwMjJcbiAgICBcdTAwMjJTdWIgQjFcdTAwMjI6IDc1MFxuICAgIFx1MDAyMlN1YiBCMlx1MDAyMjogMjUwIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![LargeValues](../Tests/Treemap/TreemapTests.LargeValues.verified.png)
 
@@ -114,7 +114,7 @@ treemap-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidHJlZW1hcC1iZXRhXG5cdTAwMjJHcm91cCAxXHUwMDIyXG4gICAgXHUwMDIyQVx1MDAyMjogMTBcbiAgICBcdTAwMjJCXHUwMDIyOiAxNVxuICAgIFx1MDAyMkNcdTAwMjI6IDIwXG5cdTAwMjJHcm91cCAyXHUwMDIyXG4gICAgXHUwMDIyRFx1MDAyMjogMjVcbiAgICBcdTAwMjJFXHUwMDIyOiAzMFxuXHUwMDIyR3JvdXAgM1x1MDAyMlxuICAgIFx1MDAyMkZcdTAwMjI6IDEyXG4gICAgXHUwMDIyR1x1MDAyMjogMThcbiAgICBcdTAwMjJIXHUwMDIyOiAyMlxuICAgIFx1MDAyMklcdTAwMjI6IDgiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Output:**
+**Rendered by Naiad:**
 
 ![Complex](../Tests/Treemap/TreemapTests.Complex.verified.png)
 
