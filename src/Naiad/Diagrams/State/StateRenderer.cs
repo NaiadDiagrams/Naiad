@@ -39,14 +39,13 @@ public class StateRenderer : IDiagramRenderer<StateModel>
 
         // Calculate extra width needed for back-edge curves and notes
         var stateMap = BuildStateMap(model.States);
-        var extraWidth = CalculateBackEdgeWidth(model.Transitions, stateMap);
         var noteExtraWidth = CalculateNoteExtraWidth(model, stateMap, options);
 
         // Build SVG
         var builder = new SvgBuilder()
-            .Size(layoutResult.Width + extraWidth + noteExtraWidth, layoutResult.Height)
+            .Size(layoutResult.Width + noteExtraWidth, layoutResult.Height)
             .Padding(options.Padding)
-            .AddArrowMarker("arrowhead", "#333");
+            .AddArrowMarker();
 
         // Render transitions first (behind states)
         RenderTransitions(builder, model, options);
@@ -59,10 +58,6 @@ public class StateRenderer : IDiagramRenderer<StateModel>
 
         return builder.Build();
     }
-
-    static double CalculateBackEdgeWidth(List<StateTransition> transitions, Dictionary<string, State> stateMap) =>
-        // Curves are tight and fit within normal bounds - no extra width needed
-        0;
 
     static double CalculateNoteExtraWidth(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
     {
@@ -573,12 +568,10 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                 ? (from.Position.X + from.Width / 2, from.Position.Y)
                 : (from.Position.X - from.Width / 2, from.Position.Y);
         }
-        else
-        {
-            return dy > 0
-                ? (from.Position.X, from.Position.Y + from.Height / 2)
-                : (from.Position.X, from.Position.Y - from.Height / 2);
-        }
+
+        return dy > 0
+            ? (from.Position.X, from.Position.Y + from.Height / 2)
+            : (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
     static void DrawArrowhead(SvgBuilder builder, double fromX, double fromY, double toX, double toY)

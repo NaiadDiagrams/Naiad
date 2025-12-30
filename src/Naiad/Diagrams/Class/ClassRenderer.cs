@@ -32,7 +32,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         var builder = new SvgBuilder()
             .Size(layoutResult.Width, layoutResult.Height)
             .Padding(options.Padding)
-            .AddArrowMarker("arrowhead", "#333")
+            .AddArrowMarker()
             .AddArrowMarker("arrowhead-open", "#333");
 
         // Add relationship markers

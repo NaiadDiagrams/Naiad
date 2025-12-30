@@ -38,10 +38,6 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 fontWeight: "bold");
         }
 
-        // Calculate total value for layout
-        var totalValue = model.RootNodes.Sum(n => n.TotalValue);
-        if (totalValue <= 0) totalValue = 1;
-
         // Draw treemap using squarified layout
         var x = options.Padding;
         var y = options.Padding + titleOffset;
