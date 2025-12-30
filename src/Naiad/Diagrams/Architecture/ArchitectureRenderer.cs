@@ -26,6 +26,14 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         ["server"] = "#90A4AE"
     };
 
+    static readonly string[] GroupColors =
+    [
+        "#E3F2FD", "#E8F5E9", "#FFF3E0", "#F3E5F5",
+        "#FCE4EC", "#E0F7FA", "#FFF8E1", "#F1F8E9"
+    ];
+
+    const double GroupLabelHeight = 24;
+
     public SvgDocument Render(ArchitectureModel model, RenderOptions options)
     {
         if (model.Services.Count == 0 && model.Groups.Count == 0)
@@ -36,29 +44,12 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             return emptyBuilder.Build();
         }
 
-        // Build hierarchy
-        var groupChildren = new Dictionary<string, List<string>>();
+        // Build service-to-group mapping
         var serviceParents = new Dictionary<string, string>();
-
-        foreach (var group in model.Groups)
-        {
-            if (!string.IsNullOrEmpty(group.Parent))
-            {
-                if (!groupChildren.ContainsKey(group.Parent))
-                    groupChildren[group.Parent] = [];
-                groupChildren[group.Parent].Add(group.Id);
-            }
-        }
-
         foreach (var service in model.Services)
         {
             if (!string.IsNullOrEmpty(service.Parent))
-            {
                 serviceParents[service.Id] = service.Parent;
-                if (!groupChildren.ContainsKey(service.Parent))
-                    groupChildren[service.Parent] = [];
-                groupChildren[service.Parent].Add(service.Id);
-            }
         }
 
         // Simple grid layout for services
@@ -77,7 +68,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         // Add arrow marker
         builder.AddArrowMarker("arch-arrow", "#666");
 
-        // Position and draw services
+        // Position services (calculate positions first, draw later)
+        var servicePositions = new Dictionary<string, (double x, double y, double width, double height)>();
         var idx = 0;
         foreach (var service in model.Services)
         {
@@ -87,11 +79,12 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             var y = row * (ServiceHeight + ServiceSpacing);
 
             positions[service.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
-            DrawService(builder, service, x, y, options);
+            servicePositions[service.Id] = (x, y, ServiceWidth, ServiceHeight);
             idx++;
         }
 
         // Position junctions
+        var junctionPositions = new Dictionary<string, (double x, double y)>();
         foreach (var junction in model.Junctions)
         {
             var col = idx % cols;
@@ -100,8 +93,35 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             var y = row * (ServiceHeight + ServiceSpacing);
 
             positions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
-            DrawJunction(builder, junction, x + ServiceWidth / 2, y + ServiceHeight / 2, options);
+            junctionPositions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
             idx++;
+        }
+
+        // Draw groups first (as background)
+        var colorIndex = 0;
+        foreach (var group in model.Groups)
+        {
+            var bounds = CalculateGroupBounds(group.Id, model.Services, servicePositions);
+            if (bounds.HasValue)
+            {
+                var color = GroupColors[colorIndex % GroupColors.Length];
+                DrawGroup(builder, group, bounds.Value, color, options);
+                colorIndex++;
+            }
+        }
+
+        // Draw services
+        foreach (var service in model.Services)
+        {
+            var pos = servicePositions[service.Id];
+            DrawService(builder, service, pos.x, pos.y, options);
+        }
+
+        // Draw junctions
+        foreach (var junction in model.Junctions)
+        {
+            var pos = junctionPositions[junction.Id];
+            DrawJunction(builder, junction, pos.x, pos.y, options);
         }
 
         // Draw edges
@@ -115,6 +135,53 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         }
 
         return builder.Build();
+    }
+
+    static (double x, double y, double width, double height)? CalculateGroupBounds(
+        string groupId,
+        List<ArchitectureService> services,
+        Dictionary<string, (double x, double y, double width, double height)> servicePositions)
+    {
+        double? minX = null, minY = null, maxX = null, maxY = null;
+
+        foreach (var service in services)
+        {
+            if (service.Parent == groupId && servicePositions.TryGetValue(service.Id, out var pos))
+            {
+                minX = minX.HasValue ? Math.Min(minX.Value, pos.x) : pos.x;
+                minY = minY.HasValue ? Math.Min(minY.Value, pos.y) : pos.y;
+                maxX = maxX.HasValue ? Math.Max(maxX.Value, pos.x + pos.width) : pos.x + pos.width;
+                maxY = maxY.HasValue ? Math.Max(maxY.Value, pos.y + pos.height) : pos.y + pos.height;
+            }
+        }
+
+        if (!minX.HasValue)
+            return null;
+
+        return (
+            minX.Value - GroupPadding,
+            minY.Value - GroupPadding - GroupLabelHeight,
+            maxX!.Value - minX.Value + GroupPadding * 2,
+            maxY!.Value - minY.Value + GroupPadding * 2 + GroupLabelHeight
+        );
+    }
+
+    static void DrawGroup(SvgBuilder builder, ArchitectureGroup group,
+        (double x, double y, double width, double height) bounds, string color, RenderOptions options)
+    {
+        var icon = group.Icon ?? "cloud";
+        var borderColor = iconColors.GetValueOrDefault(icon, "#90A4AE");
+
+        // Group background
+        builder.AddRect(bounds.x, bounds.y, bounds.width, bounds.height, rx: 8,
+            fill: color, stroke: borderColor, strokeWidth: 2, strokeDasharray: "5,3");
+
+        // Group label
+        var label = group.Label ?? group.Id;
+        builder.AddText(bounds.x + GroupPadding, bounds.y + GroupLabelHeight / 2 + GroupPadding / 2, label,
+            anchor: "start", baseline: "middle",
+            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+            fontWeight: "bold", fill: "#333");
     }
 
     static void DrawService(SvgBuilder builder, ArchitectureService service, double x, double y, RenderOptions options)
