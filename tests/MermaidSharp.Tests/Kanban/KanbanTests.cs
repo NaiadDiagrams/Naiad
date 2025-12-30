@@ -1,7 +1,7 @@
-public class KanbanRendererTests : TestBase
+public class KanbanTests : TestBase
 {
     [Test]
-    public Task SimpleKanban()
+    public Task Simple()
     {
         const string input =
             """

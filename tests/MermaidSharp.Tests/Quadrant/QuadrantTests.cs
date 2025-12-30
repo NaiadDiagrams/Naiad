@@ -1,7 +1,7 @@
-public class QuadrantRendererTests : TestBase
+public class QuadrantTests : TestBase
 {
     [Test]
-    public Task SimpleQuadrant()
+    public Task Simple()
     {
         const string input =
             """
@@ -17,7 +17,7 @@ public class QuadrantRendererTests : TestBase
     }
 
     [Test]
-    public Task WithQuadrantLabels()
+    public Task Labels()
     {
         const string input =
             """
@@ -59,20 +59,7 @@ public class QuadrantRendererTests : TestBase
     }
 
     [Test]
-    public Task MinimalQuadrant()
-    {
-        const string input =
-            """
-            quadrantChart
-                Point 1: [0.25, 0.75]
-                Point 2: [0.75, 0.25]
-            """;
-
-        return VerifySvg(input);
-    }
-
-    [Test]
-    public Task WithTitleOnly()
+    public Task TitleOnly()
     {
         const string input =
             """

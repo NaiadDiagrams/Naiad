@@ -1,7 +1,7 @@
-public class SankeyRendererTests : TestBase
+public class SankeyTests : TestBase
 {
     [Test]
-    public Task SimpleSankey()
+    public Task Simple()
     {
         const string input =
             """

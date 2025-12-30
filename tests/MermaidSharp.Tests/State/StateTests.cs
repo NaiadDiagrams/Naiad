@@ -1,7 +1,7 @@
-public class StateRendererTests : TestBase
+public class StateTests : TestBase
 {
     [Test]
-    public Task SimpleState()
+    public Task Simple()
     {
         const string input =
             """
@@ -30,7 +30,7 @@ public class StateRendererTests : TestBase
     }
 
     [Test]
-    public Task StateWithTransitionLabels()
+    public Task TransitionLabels()
     {
         const string input =
             """
@@ -45,7 +45,7 @@ public class StateRendererTests : TestBase
     }
 
     [Test]
-    public Task StateWithDescription()
+    public Task Description()
     {
         const string input =
             """
@@ -117,7 +117,7 @@ public class StateRendererTests : TestBase
     }
 
     [Test]
-    public Task CompleteStateDiagram()
+    public Task Complex()
     {
         const string input =
             """

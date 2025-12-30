@@ -1,7 +1,7 @@
-public class C4RendererTests : TestBase
+public class C4Tests : TestBase
 {
     [Test]
-    public Task SimpleContext()
+    public Task Simple()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class C4RendererTests : TestBase
     }
 
     [Test]
-    public Task ContextWithExternal()
+    public Task External()
     {
         const string input =
             """
@@ -33,7 +33,7 @@ public class C4RendererTests : TestBase
     }
 
     [Test]
-    public Task ContainerDiagram()
+    public Task Container()
     {
         const string input =
             """
@@ -52,7 +52,7 @@ public class C4RendererTests : TestBase
     }
 
     [Test]
-    public Task ComponentDiagram()
+    public Task Component()
     {
         const string input =
             """
@@ -105,7 +105,7 @@ public class C4RendererTests : TestBase
     }
 
     [Test]
-    public Task CompleteC4()
+    public Task Complex()
     {
         const string input =
             """

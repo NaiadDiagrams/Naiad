@@ -1,7 +1,7 @@
-public class TimelineRendererTests : TestBase
+public class TimelineTests : TestBase
 {
     [Test]
-    public Task SimpleTimeline()
+    public Task Simple()
     {
         const string input =
             """
@@ -15,7 +15,7 @@ public class TimelineRendererTests : TestBase
     }
 
     [Test]
-    public Task TimelineWithTitle()
+    public Task Title()
     {
         const string input =
             """
@@ -46,7 +46,7 @@ public class TimelineRendererTests : TestBase
     }
 
     [Test]
-    public Task WithSections()
+    public Task Sections()
     {
         const string input =
             """
@@ -100,7 +100,7 @@ public class TimelineRendererTests : TestBase
     }
 
     [Test]
-    public Task CompleteTimeline()
+    public Task Complex()
     {
         const string input =
             """

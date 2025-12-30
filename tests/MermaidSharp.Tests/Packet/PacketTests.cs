@@ -1,7 +1,7 @@
-public class PacketRendererTests : TestBase
+public class PacketTests : TestBase
 {
     [Test]
-    public Task SimplePacket()
+    public Task Simple()
     {
         const string input =
             """
@@ -80,7 +80,7 @@ public class PacketRendererTests : TestBase
     }
 
     [Test]
-    public Task WideFields()
+    public Task Fields()
     {
         const string input =
             """

@@ -1,7 +1,7 @@
-public class MindmapRendererTests : TestBase
+public class MindmapTests : TestBase
 {
     [Test]
-    public Task SimpleHierarchy()
+    public Task Simple()
     {
         const string input =
             """
@@ -16,7 +16,7 @@ public class MindmapRendererTests : TestBase
     }
 
     [Test]
-    public Task NestedHierarchy()
+    public Task Nested()
     {
         const string input =
             """
@@ -140,7 +140,7 @@ public class MindmapRendererTests : TestBase
     }
 
     [Test]
-    public Task CompleteMindmap()
+    public Task Complex()
     {
         const string input =
             """

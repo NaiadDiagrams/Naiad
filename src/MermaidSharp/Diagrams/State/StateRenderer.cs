@@ -39,13 +39,14 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         // Adjust fork/join bar widths to span connected nodes
         AdjustForkJoinWidths(model);
 
-        // Calculate extra width needed for back-edge curves
+        // Calculate extra width needed for back-edge curves and notes
         var stateMap = BuildStateMap(model.States);
         var extraWidth = CalculateBackEdgeWidth(model.Transitions, stateMap);
+        var noteExtraWidth = CalculateNoteExtraWidth(model, stateMap, options);
 
         // Build SVG
         var builder = new SvgBuilder()
-            .Size(layoutResult.Width + extraWidth, layoutResult.Height)
+            .Size(layoutResult.Width + extraWidth + noteExtraWidth, layoutResult.Height)
             .Padding(options.Padding)
             .AddArrowMarker("arrowhead", "#333");
 
@@ -65,6 +66,28 @@ public class StateRenderer : IDiagramRenderer<StateModel>
     {
         // Curves are tight and fit within normal bounds - no extra width needed
         return 0;
+    }
+
+    double CalculateNoteExtraWidth(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
+    {
+        double maxExtraWidth = 0;
+
+        foreach (var note in model.Notes)
+        {
+            if (!stateMap.TryGetValue(note.StateId, out var state))
+                continue;
+
+            if (note.Position == NotePosition.RightOf)
+            {
+                var noteWidth = Math.Max(NoteWidth, MeasureText(note.Text, options.FontSize - 2) + 20);
+                var noteRightEdge = state.Position.X + state.Width / 2 + NotePadding + noteWidth;
+                var stateRightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
+                var extraNeeded = noteRightEdge - stateRightEdge;
+                maxExtraWidth = Math.Max(maxExtraWidth, extraNeeded);
+            }
+        }
+
+        return maxExtraWidth > 0 ? maxExtraWidth + 10 : 0; // Add small margin
     }
 
     GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)

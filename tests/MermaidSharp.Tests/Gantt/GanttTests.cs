@@ -1,7 +1,7 @@
-public class GanttRendererTests : TestBase
+public class GanttTests : TestBase
 {
     [Test]
-    public Task SimpleTasks()
+    public Task Simple()
     {
         const string input =
             """
@@ -29,7 +29,7 @@ public class GanttRendererTests : TestBase
     }
 
     [Test]
-    public Task WithSections()
+    public Task Sections()
     {
         const string input =
             """
@@ -47,7 +47,7 @@ public class GanttRendererTests : TestBase
     }
 
     [Test]
-    public Task TaskStatuses()
+    public Task Statuses()
     {
         const string input =
             """
@@ -62,7 +62,7 @@ public class GanttRendererTests : TestBase
     }
 
     [Test]
-    public Task CriticalTasks()
+    public Task Critical()
     {
         const string input =
             """
@@ -91,7 +91,7 @@ public class GanttRendererTests : TestBase
     }
 
     [Test]
-    public Task CompleteGantt()
+    public Task Complex()
     {
         const string input =
             """

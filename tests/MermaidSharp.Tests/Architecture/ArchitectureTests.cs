@@ -44,18 +44,19 @@ public class ArchitectureTests : TestBase
     [Test]
     public Task ServicesWithEdge()
     {
-        var input = """
-                    architecture-beta
-                    service db(database)[Database]
-                    service server(server)[Server]
-                    db:R -- L:server
-                    """;
+        var input =
+            """
+            architecture-beta
+            service db(database)[Database]
+            service server(server)[Server]
+            db:R -- L:server
+            """;
 
         return VerifySvg(input);
     }
 
     [Test]
-    public Task ComplexDiagram()
+    public Task Complex()
     {
         var input =
             """

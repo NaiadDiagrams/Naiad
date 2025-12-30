@@ -1,7 +1,7 @@
-public class GitGraphRendererTests : TestBase
+public class GitGraphTests : TestBase
 {
     [Test]
-    public Task SimpleCommits()
+    public Task Simple()
     {
         const string input =
             """
@@ -15,7 +15,7 @@ public class GitGraphRendererTests : TestBase
     }
 
     [Test]
-    public Task CommitWithId()
+    public Task Id()
     {
         const string input =
             """
@@ -29,7 +29,7 @@ public class GitGraphRendererTests : TestBase
     }
 
     [Test]
-    public Task CommitWithTag()
+    public Task Tag()
     {
         const string input =
             """
@@ -43,7 +43,7 @@ public class GitGraphRendererTests : TestBase
     }
 
     [Test]
-    public Task CommitWithMessage()
+    public Task Message()
     {
         const string input =
             """
@@ -56,7 +56,7 @@ public class GitGraphRendererTests : TestBase
     }
 
     [Test]
-    public Task CommitTypes()
+    public Task Types()
     {
         const string input =
             """
@@ -156,7 +156,7 @@ public class GitGraphRendererTests : TestBase
     }
 
     [Test]
-    public Task CompleteGitGraph()
+    public Task Complex()
     {
         const string input =
             """

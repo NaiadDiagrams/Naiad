@@ -1,7 +1,7 @@
-public class FlowchartRendererTests : TestBase
+public class FlowchartTests : TestBase
 {
     [Test]
-    public Task SimpleFlowchart()
+    public Task Simple()
     {
         const string input =
             """

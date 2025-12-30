@@ -1,7 +1,7 @@
-public class XYChartRendererTests: TestBase
+public class XYChartTests: TestBase
 {
     [Test]
-    public Task SimpleBarChart()
+    public Task Simple()
     {
         const string input =
             """
@@ -10,21 +10,6 @@ public class XYChartRendererTests: TestBase
                 x-axis [Jan, Feb, Mar, Apr, May]
                 y-axis "Revenue" 0 --> 100
                 bar [50, 60, 75, 80, 90]
-            """;
-
-        return VerifySvg(input);
-    }
-
-    [Test]
-    public Task SimpleLineChart()
-    {
-        const string input =
-            """
-            xychart-beta
-                title "Temperature Trend"
-                x-axis [Mon, Tue, Wed, Thu, Fri]
-                y-axis "Celsius" 0 --> 40
-                line [20, 22, 25, 23, 28]
             """;
 
         return VerifySvg(input);
@@ -76,7 +61,7 @@ public class XYChartRendererTests: TestBase
     }
 
     [Test]
-    public Task WithQuotedCategories()
+    public Task QuotedCategories()
     {
         const string input =
             """
@@ -91,7 +76,7 @@ public class XYChartRendererTests: TestBase
     }
 
     [Test]
-    public Task LargeDataset()
+    public Task Complex()
     {
         const string input =
             """

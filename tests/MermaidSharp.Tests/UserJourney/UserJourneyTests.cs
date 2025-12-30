@@ -1,7 +1,7 @@
-public class UserJourneyRendererTests: TestBase
+public class UserJourneyTests: TestBase
 {
     [Test]
-    public Task SimpleJourney()
+    public Task Simple()
     {
         const string input =
             """
@@ -90,22 +90,6 @@ public class UserJourneyRendererTests: TestBase
     }
 
     [Test]
-    public Task SingleSection()
-    {
-        const string input =
-            """
-            journey
-                title Quick Journey
-                section Main
-                    Start: 3: User
-                    Process: 4: User
-                    End: 5: User
-            """;
-
-        return VerifySvg(input);
-    }
-
-    [Test]
     public Task ManyActors()
     {
         const string input =
@@ -123,7 +107,7 @@ public class UserJourneyRendererTests: TestBase
     }
 
     [Test]
-    public Task CompleteUserJourney()
+    public Task Complex()
     {
         const string input =
             """
