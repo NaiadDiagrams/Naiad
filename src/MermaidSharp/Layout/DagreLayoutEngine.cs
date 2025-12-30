@@ -33,9 +33,9 @@ public class DagreLayoutEngine : ILayoutEngine
         // Apply positions back to diagram
         ApplyLayout(graph, diagram, options);
 
-        // Calculate bounds
-        var width = diagram.Nodes.Max(n => n.Position.X + n.Width / 2) + options.MarginX;
-        var height = diagram.Nodes.Max(n => n.Position.Y + n.Height / 2) + options.MarginY;
+        // Calculate bounds (don't add margin again - positions already include it)
+        var width = diagram.Nodes.Max(n => n.Position.X + n.Width / 2);
+        var height = diagram.Nodes.Max(n => n.Position.Y + n.Height / 2);
 
         return new LayoutResult
         {
@@ -72,14 +72,13 @@ public class DagreLayoutEngine : ILayoutEngine
 
     static void ApplyLayout(LayoutGraph graph, GraphDiagramBase diagram, LayoutOptions options)
     {
+        // Don't add margin here - let the renderer handle padding
         foreach (var node in diagram.Nodes)
         {
             var layoutNode = graph.GetNode(node.Id);
             if (layoutNode is not null)
             {
-                node.Position = new Position(
-                    layoutNode.X + options.MarginX,
-                    layoutNode.Y + options.MarginY);
+                node.Position = new Position(layoutNode.X, layoutNode.Y);
                 node.Rank = layoutNode.Rank;
                 node.Order = layoutNode.Order;
             }
@@ -96,9 +95,7 @@ public class DagreLayoutEngine : ILayoutEngine
                 edge.Points.Clear();
                 foreach (var point in layoutEdge.Points)
                 {
-                    edge.Points.Add(new Position(
-                        point.X + options.MarginX,
-                        point.Y + options.MarginY));
+                    edge.Points.Add(new Position(point.X, point.Y));
                 }
             }
             else
@@ -118,9 +115,7 @@ public class DagreLayoutEngine : ILayoutEngine
 
         if (source is null || target is null) return;
 
-        edge.Points.Add(new Position(
-            source.X + options.MarginX,
-            source.Y + source.Height / 2 + options.MarginY));
+        edge.Points.Add(new Position(source.X, source.Y + source.Height / 2));
 
         // Find dummy nodes
         var dummies = graph.Nodes.Values
@@ -132,13 +127,9 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var dummy in dummies)
         {
-            edge.Points.Add(new Position(
-                dummy.X + options.MarginX,
-                dummy.Y + options.MarginY));
+            edge.Points.Add(new Position(dummy.X, dummy.Y));
         }
 
-        edge.Points.Add(new Position(
-            target.X + options.MarginX,
-            target.Y - target.Height / 2 + options.MarginY));
+        edge.Points.Add(new Position(target.X, target.Y - target.Height / 2));
     }
 }

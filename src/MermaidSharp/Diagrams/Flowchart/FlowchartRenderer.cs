@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using MermaidSharp.Layout;
 
 namespace MermaidSharp.Diagrams.Flowchart;
@@ -5,6 +6,15 @@ namespace MermaidSharp.Diagrams.Flowchart;
 public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
 {
     readonly ILayoutEngine _layoutEngine;
+
+    // Mermaid.ink default colors
+    const string NodeFill = "#ECECFF";
+    const string NodeStroke = "#9370DB";
+    const string EdgeStroke = "#333333";
+    const string LabelBackground = "rgba(232,232,232,0.8)";
+
+    // FontAwesome icon pattern: fa:fa-icon-name or fab:fa-icon-name
+    static readonly Regex IconPattern = new("(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled);
 
     public FlowchartRenderer(ILayoutEngine? layoutEngine = null)
     {
@@ -17,9 +27,13 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         foreach (var node in model.Nodes)
         {
             var label = node.Label ?? node.Id;
-            var textSize = MeasureText(label, options.FontSize);
-            node.Width = textSize.Width + 20;
-            node.Height = textSize.Height + 16;
+            // Strip icon syntax for measurement
+            var textForMeasure = IconPattern.Replace(label, "").Trim();
+            var textSize = MeasureText(textForMeasure, options.FontSize);
+            // Add extra width for icon if present
+            var hasIcon = IconPattern.IsMatch(label);
+            node.Width = textSize.Width + 30 + (hasIcon ? 20 : 0);
+            node.Height = textSize.Height + 27;
 
             // Adjust size for different shapes
             if (node.Shape is NodeShape.Circle or NodeShape.DoubleCircle)
@@ -30,8 +44,8 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
             }
             else if (node.Shape == NodeShape.Diamond)
             {
-                node.Width *= 1.3;
-                node.Height *= 1.3;
+                node.Width *= 1.4;
+                node.Height *= 1.4;
             }
         }
 
@@ -40,22 +54,20 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
         {
             Direction = model.Direction,
             NodeSeparation = 50,
-            RankSeparation = 50
+            RankSeparation = 70
         };
         var layoutResult = _layoutEngine.Layout(model, layoutOptions);
 
         // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
-
         var builder = new SvgBuilder()
-            .Size(width, height)
-            .AddArrowMarker()
-            .AddCircleMarker()
-            .AddCrossMarker();
+            .Size(layoutResult.Width, layoutResult.Height)
+            .Padding(options.Padding)
+            .AddMermaidArrowMarker()
+            .AddMermaidCircleMarker()
+            .AddMermaidCrossMarker();
 
-        // Add CSS styles
-        builder.AddStyles(GetStyles(options));
+        // Add mermaid.ink CSS styles
+        builder.AddStyles(MermaidStyles.FlowchartStyles);
 
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
@@ -76,23 +88,22 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
-        var cx = node.Position.X;
-        var cy = node.Position.Y;
 
         var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
 
         builder.AddPath(shapePath,
-            fill: "#f9f9f9",
-            stroke: "#333",
-            strokeWidth: 1.5);
+            fill: NodeFill,
+            stroke: NodeStroke,
+            strokeWidth: 1);
 
-        // Render label
+        // Render label with icon support
         var label = node.Label ?? node.Id;
-        builder.AddText(cx, cy, label,
-            anchor: "middle",
-            baseline: "central",
-            fontSize: $"{options.FontSize}px",
-            fontFamily: options.FontFamily);
+        var htmlLabel = ConvertIconsToHtml(label);
+
+        builder.AddForeignObject(
+            x, y, node.Width, node.Height,
+            htmlLabel,
+            className: "nodeLabel");
     }
 
     void RenderEdge(SvgBuilder builder, Edge edge, RenderOptions options)
@@ -118,57 +129,100 @@ public class FlowchartRenderer : IDiagramRenderer<FlowchartModel>
 
         var strokeDasharray = edge.LineStyle switch
         {
-            EdgeStyle.Dotted => "5,5",
+            EdgeStyle.Dotted => "2",
             _ => null
         };
 
         var strokeWidth = edge.LineStyle switch
         {
-            EdgeStyle.Thick => 3.0,
-            _ => 1.5
+            EdgeStyle.Thick => 3.5,
+            _ => 2.0
         };
 
-        var markerEnd = edge.HasArrowHead ? "url(#arrowhead)" :
-                        edge.HasCircleEnd ? "url(#circle)" :
-                        edge.HasCrossEnd ? "url(#cross)" : null;
+        var markerEnd = edge.HasArrowHead ? "url(#mermaid-svg_flowchart-v2-pointEnd)" :
+                        edge.HasCircleEnd ? "url(#mermaid-svg_flowchart-v2-circleEnd)" :
+                        edge.HasCrossEnd ? "url(#mermaid-svg_flowchart-v2-crossEnd)" : null;
 
-        var markerStart = edge.HasArrowTail ? "url(#arrowhead)" : null;
+        var markerStart = edge.HasArrowTail ? "url(#mermaid-svg_flowchart-v2-pointStart)" : null;
 
         builder.AddPath(pathData,
             fill: "none",
-            stroke: "#333",
+            stroke: EdgeStroke,
             strokeWidth: strokeWidth,
             strokeDasharray: strokeDasharray,
             markerEnd: markerEnd,
-            markerStart: markerStart);
+            markerStart: markerStart,
+            cssClass: "flowchart-link");
 
         // Render edge label if present
         if (!string.IsNullOrEmpty(edge.Label))
         {
-            var labelPos = edge.LabelPosition;
+            var labelX = edge.LabelPosition.X;
+            var labelY = edge.LabelPosition.Y;
+            var labelWidth = edge.Label.Length * 8 + 16;
+            var labelHeight = 24;
+
             builder.AddRect(
-                labelPos.X - 20, labelPos.Y - 10, 40, 20,
-                fill: "#fff", stroke: "none");
-            builder.AddText(labelPos.X, labelPos.Y, edge.Label,
-                anchor: "middle",
-                baseline: "central",
-                fontSize: $"{options.FontSize - 2}px",
-                fontFamily: options.FontFamily);
+                labelX - labelWidth / 2, labelY - labelHeight / 2,
+                labelWidth, labelHeight,
+                fill: LabelBackground, stroke: "none",
+                cssClass: "edgeLabel");
+
+            builder.AddForeignObject(
+                labelX - labelWidth / 2, labelY - labelHeight / 2,
+                labelWidth, labelHeight,
+                $"<p>{System.Net.WebUtility.HtmlEncode(edge.Label)}</p>",
+                className: "edgeLabel");
         }
+    }
+
+    /// <summary>
+    /// Converts FontAwesome icon syntax (fa:fa-icon) to HTML elements.
+    /// </summary>
+    static string ConvertIconsToHtml(string text)
+    {
+        // If no icons, just encode and wrap in paragraph
+        if (!IconPattern.IsMatch(text))
+        {
+            return $"<p>{System.Net.WebUtility.HtmlEncode(text)}</p>";
+        }
+
+        // Build HTML by processing text segments and icons
+        var html = new StringBuilder();
+        var lastIndex = 0;
+
+        foreach (Match match in IconPattern.Matches(text))
+        {
+            // Add text before this icon (encoded)
+            if (match.Index > lastIndex)
+            {
+                var textBefore = text[lastIndex..match.Index];
+                html.Append(System.Net.WebUtility.HtmlEncode(textBefore));
+            }
+
+            // Add the icon element
+            var prefix = match.Groups[1].Value;
+            var iconName = match.Groups[2].Value;
+            html.Append($"<i class=\"{prefix} fa-{iconName}\"></i>");
+
+            lastIndex = match.Index + match.Length;
+        }
+
+        // Add remaining text after last icon
+        if (lastIndex < text.Length)
+        {
+            html.Append(System.Net.WebUtility.HtmlEncode(text[lastIndex..]));
+        }
+
+        return $"<p>{html.ToString().Trim()}</p>";
     }
 
     static Size MeasureText(string text, double fontSize)
     {
-        var width = text.Length * fontSize * 0.6;
-        var height = fontSize * 1.4;
+        var width = text.Length * fontSize * 0.55;
+        var height = fontSize * 1.5;
         return new Size(width, height);
     }
-
-    static string GetStyles(RenderOptions options) =>
-        ".node rect, .node circle, .node ellipse, .node polygon, .node path { " +
-        "fill: #f9f9f9; stroke: #333; stroke-width: 1.5px; } " +
-        $".node text {{ font-family: {options.FontFamily}; font-size: {options.FontSize}px; }} " +
-        ".edge path { fill: none; stroke: #333; stroke-width: 1.5px; }";
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

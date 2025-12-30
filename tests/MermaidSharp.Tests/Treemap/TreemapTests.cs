@@ -1,9 +1,10 @@
-public class TreemapTests
+public class TreemapTests : TestBase
 {
     [Test]
-    public async Task BasicTreemap()
+    public Task Simple()
     {
-        var input = """
+        var input =
+            """
             treemap-beta
             "Section A"
                 "Item 1": 30
@@ -12,14 +13,14 @@ public class TreemapTests
                 "Item 3": 50
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task SingleLevel()
+    public Task SingleLevel()
     {
-        var input = """
+        var input =
+            """
             treemap-beta
             "Alpha": 40
             "Beta": 30
@@ -27,14 +28,14 @@ public class TreemapTests
             "Delta": 10
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task NestedSections()
+    public Task NestedSections()
     {
-        var input = """
+        var input =
+            """
             treemap-beta
             "Root"
                 "Branch 1"
@@ -46,14 +47,14 @@ public class TreemapTests
                     "Leaf 2.3": 20
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task MixedHierarchy()
+    public Task MixedHierarchy()
     {
-        var input = """
+        var input =
+            """
             treemap-beta
             "Products": 100
             "Services"
@@ -62,14 +63,14 @@ public class TreemapTests
             "Other": 20
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task LargeValues()
+    public Task LargeValues()
     {
-        var input = """
+        var input =
+            """
             treemap-beta
             "Category A"
                 "Sub A1": 1000
@@ -79,14 +80,14 @@ public class TreemapTests
                 "Sub B2": 250
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task ManyItems()
+    public Task Complex()
     {
-        var input = """
+        var input =
+            """
             treemap-beta
             "Group 1"
                 "A": 10
@@ -102,7 +103,6 @@ public class TreemapTests
                 "I": 8
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 }

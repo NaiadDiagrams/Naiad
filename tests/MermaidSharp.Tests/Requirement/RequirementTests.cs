@@ -1,9 +1,10 @@
-public class RequirementTests
+public class RequirementTests : TestBase
 {
     [Test]
-    public async Task BasicRequirement()
+    public Task Simple()
     {
-        var input = """
+        var input =
+            """
             requirementDiagram
 
             requirement test_req {
@@ -14,14 +15,15 @@ public class RequirementTests
             }
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task FunctionalRequirement()
+    [Explicit("Uses functionalRequirement keyword not supported by mermaid.ink/kroki.io")]
+    public Task Functional()
     {
-        var input = """
+        var input =
+            """
             requirementDiagram
 
             functionalRequirement login_req {
@@ -32,14 +34,14 @@ public class RequirementTests
             }
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task RequirementWithElement()
+    public Task Element()
     {
-        var input = """
+        var input =
+            """
             requirementDiagram
 
             requirement test_req {
@@ -55,14 +57,15 @@ public class RequirementTests
             test_entity - satisfies -> test_req
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task MultipleRequirements()
+    [Explicit("Uses performanceRequirement keyword not supported by mermaid.ink/kroki.io")]
+    public Task Multiple()
     {
-        var input = """
+        var input =
+            """
             requirementDiagram
 
             requirement req1 {
@@ -84,14 +87,15 @@ public class RequirementTests
             }
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task ComplexDiagram()
+    [Explicit("Uses functionalRequirement keyword not supported by mermaid.ink/kroki.io")]
+    public Task Complex()
     {
-        var input = """
+        var input =
+            """
             requirementDiagram
 
             requirement user_auth {
@@ -121,14 +125,14 @@ public class RequirementTests
             login_page - derives -> user_auth
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task AllRelationTypes()
+    public Task AllTypes()
     {
-        var input = """
+        var input =
+            """
             requirementDiagram
 
             requirement req1 {
@@ -150,7 +154,6 @@ public class RequirementTests
             elem1 - verifies -> req2
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 }

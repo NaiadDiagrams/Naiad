@@ -1,36 +1,37 @@
-public class RadarTests
+public class RadarTests : TestBase
 {
     [Test]
-    public async Task BasicRadar()
+    public Task Simple()
     {
-        var input = """
+        var input =
+            """
             radar-beta
             axis A, B, C, D, E
             curve data1["Series1"]{20, 40, 60, 80, 50}
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task RadarWithTitle()
+    public Task Title()
     {
-        var input = """
+        var input =
+            """
             radar-beta
             title Performance Metrics
             axis Speed, Quality, Cost, Time, Scope
             curve a["Project A"]{80, 60, 40, 70, 90}
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task MultipleCurves()
+    public Task MultipleCurves()
     {
-        var input = """
+        var input =
+            """
             radar-beta
             title Comparison
             axis Strength, Speed, Agility, Stamina, Intelligence
@@ -38,14 +39,14 @@ public class RadarTests
             curve villain["Villain"]{75, 80, 65, 85, 90}
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task ThreeCurves()
+    public Task ThreeCurves()
     {
-        var input = """
+        var input =
+            """
             radar-beta
             title Language Skills
             axis English, French, German, Spanish
@@ -54,34 +55,33 @@ public class RadarTests
             curve c["User3"]{60, 60, 80, 70}
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task TriangleRadar()
+    public Task Triangle()
     {
-        var input = """
+        var input =
+            """
             radar-beta
             axis A, B, C
             curve data["Values"]{100, 80, 60}
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 
     [Test]
-    public async Task HexagonRadar()
+    public Task Hexagon()
     {
-        var input = """
+        var input =
+            """
             radar-beta
             title Six Dimensions
             axis Dim1, Dim2, Dim3, Dim4, Dim5, Dim6
             curve data["Metrics"]{50, 80, 60, 90, 40, 70}
             """;
 
-        var svg = Mermaid.Render(input);
-        await Verify(svg, extension: "svg");
+        return VerifySvg(input);
     }
 }

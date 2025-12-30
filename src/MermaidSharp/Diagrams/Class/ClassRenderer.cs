@@ -31,11 +31,9 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
 
         // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
-
         var builder = new SvgBuilder()
-            .Size(width, height)
+            .Size(layoutResult.Width, layoutResult.Height)
+            .Padding(options.Padding)
             .AddArrowMarker("arrowhead", "#333")
             .AddArrowMarker("arrowhead-open", "#333");
 

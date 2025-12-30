@@ -35,10 +35,9 @@ public class ERRenderer : IDiagramRenderer<ERModel>
         CopyPositionsToModel(model, graphModel);
 
         // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
-
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder()
+            .Size(layoutResult.Width, layoutResult.Height)
+            .Padding(options.Padding);
 
         // Render relationships first (behind entities)
         foreach (var relationship in model.Relationships)
@@ -128,6 +127,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
     {
         var x = entity.Position.X - entity.Width / 2;
         var y = entity.Position.Y - entity.Height / 2;
+        var centerX = entity.Position.X;
 
         // Entity box
         builder.AddRect(x, y, entity.Width, entity.Height,
@@ -142,7 +142,7 @@ public class ERRenderer : IDiagramRenderer<ERModel>
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        builder.AddText(entity.Position.X, y + HeaderHeight / 2, entity.Name,
+        builder.AddText(centerX, y + HeaderHeight / 2, entity.Name,
             anchor: "middle",
             baseline: "middle",
             fontSize: $"{options.FontSize}px",

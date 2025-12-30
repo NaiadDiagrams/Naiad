@@ -28,20 +28,26 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         var layoutOptions = new LayoutOptions
         {
             Direction = model.Direction,
-            NodeSeparation = 50,
-            RankSeparation = 60
+            NodeSeparation = 80,
+            RankSeparation = 80
         };
         var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
 
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
 
-        // Build SVG
-        var width = layoutResult.Width + options.Padding * 2;
-        var height = layoutResult.Height + options.Padding * 2;
+        // Adjust fork/join bar widths to span connected nodes
+        AdjustForkJoinWidths(model);
 
+        // Calculate extra width needed for back-edge curves and notes
+        var stateMap = BuildStateMap(model.States);
+        var extraWidth = CalculateBackEdgeWidth(model.Transitions, stateMap);
+        var noteExtraWidth = CalculateNoteExtraWidth(model, stateMap, options);
+
+        // Build SVG
         var builder = new SvgBuilder()
-            .Size(width, height)
+            .Size(layoutResult.Width + extraWidth + noteExtraWidth, layoutResult.Height)
+            .Padding(options.Padding)
             .AddArrowMarker("arrowhead", "#333");
 
         // Render transitions first (behind states)
@@ -54,6 +60,34 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         RenderNotes(builder, model, options);
 
         return builder.Build();
+    }
+
+    double CalculateBackEdgeWidth(List<StateTransition> transitions, Dictionary<string, State> stateMap)
+    {
+        // Curves are tight and fit within normal bounds - no extra width needed
+        return 0;
+    }
+
+    double CalculateNoteExtraWidth(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
+    {
+        double maxExtraWidth = 0;
+
+        foreach (var note in model.Notes)
+        {
+            if (!stateMap.TryGetValue(note.StateId, out var state))
+                continue;
+
+            if (note.Position == NotePosition.RightOf)
+            {
+                var noteWidth = Math.Max(NoteWidth, MeasureText(note.Text, options.FontSize - 2) + 20);
+                var noteRightEdge = state.Position.X + state.Width / 2 + NotePadding + noteWidth;
+                var stateRightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
+                var extraNeeded = noteRightEdge - stateRightEdge;
+                maxExtraWidth = Math.Max(maxExtraWidth, extraNeeded);
+            }
+        }
+
+        return maxExtraWidth > 0 ? maxExtraWidth + 10 : 0; // Add small margin
     }
 
     GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
@@ -152,6 +186,45 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         }
     }
 
+    void AdjustForkJoinWidths(StateModel model)
+    {
+        var stateMap = BuildStateMap(model.States);
+
+        foreach (var state in model.States)
+        {
+            if (state.Type is StateType.Fork or StateType.Join)
+            {
+                // Find all connected states
+                var connectedStates = new List<State>();
+
+                foreach (var transition in model.Transitions)
+                {
+                    // Fork: outgoing transitions (fork --> target)
+                    if (state.Type == StateType.Fork && transition.FromId == state.Id)
+                    {
+                        if (stateMap.TryGetValue(transition.ToId, out var target))
+                            connectedStates.Add(target);
+                    }
+                    // Join: incoming transitions (source --> join)
+                    if (state.Type == StateType.Join && transition.ToId == state.Id)
+                    {
+                        if (stateMap.TryGetValue(transition.FromId, out var source))
+                            connectedStates.Add(source);
+                    }
+                }
+
+                if (connectedStates.Count >= 2)
+                {
+                    // Calculate width to span from leftmost to rightmost connected state
+                    var minX = connectedStates.Min(s => s.Position.X - s.Width / 2);
+                    var maxX = connectedStates.Max(s => s.Position.X + s.Width / 2);
+                    state.Width = maxX - minX;
+                    state.Position = new Position((minX + maxX) / 2, state.Position.Y);
+                }
+            }
+        }
+    }
+
     void RenderStates(SvgBuilder builder, List<State> states, RenderOptions options)
     {
         foreach (var state in states)
@@ -228,7 +301,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
             strokeWidth: 1);
 
         var label = state.Description ?? state.Id;
-        if (state.Id != "[*]")
+        if (state.Type == StateType.Normal)
         {
             builder.AddText(state.Position.X, state.Position.Y, label,
                 anchor: "middle",
@@ -271,9 +344,28 @@ public class StateRenderer : IDiagramRenderer<StateModel>
     {
         var stateMap = BuildStateMap(model.States);
 
+        // Build set of bidirectional pairs (where A->B and B->A both exist)
+        var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
+
         foreach (var transition in model.Transitions)
         {
-            RenderTransition(builder, transition, stateMap, options);
+            var pairKey = GetPairKey(transition.FromId, transition.ToId);
+            if (bidirectionalPairs.Contains(pairKey))
+            {
+                // This is part of a bidirectional pair - curve it
+                var isBackEdge = IsBackEdge(transition, stateMap);
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge, options);
+            }
+            else if (IsBackEdge(transition, stateMap))
+            {
+                // Single back-edge (no forward counterpart) - curve to the right
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, options);
+            }
+            else
+            {
+                // Regular forward transition with no back-edge - straight line
+                RenderTransition(builder, transition, stateMap, options);
+            }
         }
 
         // Render nested transitions
@@ -285,11 +377,114 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                 foreach (var map in stateMap)
                     nestedMap.TryAdd(map.Key, map.Value);
 
+                var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
+
                 foreach (var transition in state.NestedTransitions)
                 {
-                    RenderTransition(builder, transition, nestedMap, options);
+                    var pairKey = GetPairKey(transition.FromId, transition.ToId);
+                    if (nestedBidirectional.Contains(pairKey))
+                    {
+                        var isBackEdge = IsBackEdge(transition, nestedMap);
+                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, options);
+                    }
+                    else if (IsBackEdge(transition, nestedMap))
+                    {
+                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, options);
+                    }
+                    else
+                    {
+                        RenderTransition(builder, transition, nestedMap, options);
+                    }
                 }
             }
+        }
+    }
+
+    HashSet<string> FindBidirectionalPairs(List<StateTransition> transitions)
+    {
+        var pairs = new HashSet<string>();
+        var edgeSet = new HashSet<string>();
+
+        foreach (var t in transitions)
+        {
+            var forward = $"{t.FromId}->{t.ToId}";
+            var reverse = $"{t.ToId}->{t.FromId}";
+
+            if (edgeSet.Contains(reverse))
+            {
+                // Found bidirectional pair
+                pairs.Add(GetPairKey(t.FromId, t.ToId));
+            }
+            edgeSet.Add(forward);
+        }
+
+        return pairs;
+    }
+
+    string GetPairKey(string a, string b)
+    {
+        return string.Compare(a, b, StringComparison.Ordinal) < 0 ? $"{a}|{b}" : $"{b}|{a}";
+    }
+
+    bool IsBackEdge(StateTransition transition, Dictionary<string, State> stateMap)
+    {
+        if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
+            !stateMap.TryGetValue(transition.ToId, out var toState))
+            return false;
+
+        // Back-edge: source is below target (going upward in the diagram)
+        return fromState.Position.Y > toState.Position.Y + 20;
+    }
+
+    void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
+        Dictionary<string, State> stateMap, bool isBackEdge, RenderOptions options)
+    {
+        if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
+            !stateMap.TryGetValue(transition.ToId, out var toState))
+            return;
+
+        // Back-edge curves to the RIGHT, forward edge curves to the LEFT
+        var curveDirection = isBackEdge ? 1 : -1;
+        var curveOffset = 15 * curveDirection; // Tighter curve
+
+        // Offset connection points to create gap between arrows
+        var connectionOffset = 8 * curveDirection;
+
+        // Start and end with horizontal offset for gap
+        var startX = fromState.Position.X + connectionOffset;
+        var startY = fromState.Position.Y + (isBackEdge ? -fromState.Height / 2 : fromState.Height / 2);
+
+        var endX = toState.Position.X + connectionOffset;
+        var endY = toState.Position.Y + (isBackEdge ? toState.Height / 2 : -toState.Height / 2);
+
+        // Control points - use midpoint Y for smoother curve
+        var midY = (startY + endY) / 2;
+
+        var path = $"M {Fmt(startX)} {Fmt(startY)} " +
+                   $"C {Fmt(startX + curveOffset)} {Fmt(midY)}, " +
+                   $"{Fmt(endX + curveOffset)} {Fmt(midY)}, " +
+                   $"{Fmt(endX)} {Fmt(endY)}";
+
+        builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
+
+        // Draw arrowhead - calculate direction from control point to end
+        var arrowFromX = endX + curveOffset;
+        var arrowFromY = midY;
+        DrawArrowhead(builder, arrowFromX, arrowFromY, endX, endY);
+
+        // Draw label if present
+        if (!string.IsNullOrEmpty(transition.Label))
+        {
+            var labelX = startX + curveOffset * 2;
+            var labelY = midY;
+
+            builder.AddRect(labelX - 30, labelY - 8, 60, 16,
+                fill: "#fff", stroke: "none");
+            builder.AddText(labelX, labelY, transition.Label,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 2}px",
+                fontFamily: options.FontFamily);
         }
     }
 
@@ -357,6 +552,25 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                     from.Position.Y + radius * Math.Sin(angle));
         }
 
+        // For fork/join states, connect from near center with offset based on target direction
+        if (from.Type is StateType.Fork or StateType.Join)
+        {
+            // Offset from center based on target's horizontal position
+            var offset = dx > 0 ? 15 : dx < 0 ? -15 : 0;
+            var y = dy > 0
+                ? from.Position.Y + from.Height / 2
+                : from.Position.Y - from.Height / 2;
+            return (from.Position.X + offset, y);
+        }
+
+        // When receiving from fork/join, always use top/bottom center
+        if (to.Type is StateType.Fork or StateType.Join)
+        {
+            return dy > 0
+                ? (from.Position.X, from.Position.Y + from.Height / 2)
+                : (from.Position.X, from.Position.Y - from.Height / 2);
+        }
+
         // For normal states, use edge intersection
         if (Math.Abs(dx) > Math.Abs(dy))
         {
@@ -396,32 +610,35 @@ public class StateRenderer : IDiagramRenderer<StateModel>
             if (!stateMap.TryGetValue(note.StateId, out var state))
                 continue;
 
+            // Calculate note width based on text
+            var noteWidth = Math.Max(NoteWidth, MeasureText(note.Text, options.FontSize - 2) + 20);
+
             var noteX = note.Position == NotePosition.RightOf
                 ? state.Position.X + state.Width / 2 + NotePadding
-                : state.Position.X - state.Width / 2 - NoteWidth - NotePadding;
+                : state.Position.X - state.Width / 2 - noteWidth - NotePadding;
 
             var noteY = state.Position.Y - NoteHeight / 2;
 
             // Note box with folded corner
             var foldSize = 8;
             var path = $"M{Fmt(noteX)},{Fmt(noteY)} " +
-                       $"L{Fmt(noteX + NoteWidth - foldSize)},{Fmt(noteY)} " +
-                       $"L{Fmt(noteX + NoteWidth)},{Fmt(noteY + foldSize)} " +
-                       $"L{Fmt(noteX + NoteWidth)},{Fmt(noteY + NoteHeight)} " +
+                       $"L{Fmt(noteX + noteWidth - foldSize)},{Fmt(noteY)} " +
+                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + foldSize)} " +
+                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + NoteHeight)} " +
                        $"L{Fmt(noteX)},{Fmt(noteY + NoteHeight)} Z";
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
             // Fold corner
-            builder.AddLine(noteX + NoteWidth - foldSize, noteY,
-                           noteX + NoteWidth - foldSize, noteY + foldSize,
+            builder.AddLine(noteX + noteWidth - foldSize, noteY,
+                           noteX + noteWidth - foldSize, noteY + foldSize,
                            stroke: "#AAAA33", strokeWidth: 1);
-            builder.AddLine(noteX + NoteWidth - foldSize, noteY + foldSize,
-                           noteX + NoteWidth, noteY + foldSize,
+            builder.AddLine(noteX + noteWidth - foldSize, noteY + foldSize,
+                           noteX + noteWidth, noteY + foldSize,
                            stroke: "#AAAA33", strokeWidth: 1);
 
             // Note text
-            builder.AddText(noteX + NoteWidth / 2, noteY + NoteHeight / 2, note.Text,
+            builder.AddText(noteX + noteWidth / 2, noteY + NoteHeight / 2, note.Text,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",

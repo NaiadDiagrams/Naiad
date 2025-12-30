@@ -208,6 +208,9 @@ static class CoordinateAssignment
         }
     }
 
+    // Arrow marker size - the arrowhead extends this far past the line endpoint
+    const double ArrowMarkerOffset = 5;
+
     public static void RouteEdges(LayoutGraph graph)
     {
         foreach (var edge in graph.Edges)
@@ -243,7 +246,25 @@ static class CoordinateAssignment
                     edge.Points.Add(new Position(dummy.X, dummy.Y));
                 }
 
-                edge.Points.Add(new Position(target.X, target.Y - target.Height / 2));
+                // Calculate the target endpoint, offset to account for arrow marker
+                var targetEdgeY = target.Y - target.Height / 2;
+                var targetEdgeX = target.X;
+
+                // Get the last point before target to determine edge direction
+                var lastPoint = edge.Points[^1];
+                var dx = targetEdgeX - lastPoint.X;
+                var dy = targetEdgeY - lastPoint.Y;
+                var length = Math.Sqrt(dx * dx + dy * dy);
+
+                if (length > ArrowMarkerOffset)
+                {
+                    // Shorten the endpoint by the arrow marker size
+                    var ratio = (length - ArrowMarkerOffset) / length;
+                    targetEdgeX = lastPoint.X + dx * ratio;
+                    targetEdgeY = lastPoint.Y + dy * ratio;
+                }
+
+                edge.Points.Add(new Position(targetEdgeX, targetEdgeY));
             }
         }
     }

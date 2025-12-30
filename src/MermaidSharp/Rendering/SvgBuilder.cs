@@ -3,12 +3,39 @@ namespace MermaidSharp.Rendering;
 public class SvgBuilder
 {
     readonly SvgDocument _document = new();
-    SvgGroup? _currentGroup;
+    readonly Stack<SvgGroup> _groupStack = new();
+    double _padding;
+    double _contentWidth;
+    double _contentHeight;
 
     public SvgBuilder Size(double width, double height)
     {
+        _contentWidth = width;
+        _contentHeight = height;
         _document.Width = width;
         _document.Height = height;
+        return this;
+    }
+
+    public SvgBuilder Padding(double padding)
+    {
+        _padding = padding;
+        // Adjust document size to include padding on all sides
+        _document.Width = _contentWidth + padding * 2;
+        _document.Height = _contentHeight + padding * 2;
+        return this;
+    }
+
+    public SvgBuilder ViewBox(string viewBox)
+    {
+        _document.ViewBoxOverride = viewBox;
+        return this;
+    }
+
+    public SvgBuilder DiagramType(string diagramClass, string ariaRoledescription)
+    {
+        _document.DiagramClass = diagramClass;
+        _document.AriaRoledescription = ariaRoledescription;
         return this;
     }
 
@@ -69,6 +96,119 @@ public class SvgBuilder
         return this;
     }
 
+    public SvgBuilder AddMermaidArrowMarker()
+    {
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-pointEnd",
+            Path = "M 0 0 L 10 5 L 0 10 z",
+            MarkerWidth = 8,
+            MarkerHeight = 8,
+            RefX = 5,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-pointStart",
+            Path = "M 0 5 L 10 10 L 10 0 z",
+            MarkerWidth = 8,
+            MarkerHeight = 8,
+            RefX = 4.5,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        return this;
+    }
+
+    public SvgBuilder AddMermaidCircleMarker()
+    {
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-circleEnd",
+            Path = "",
+            UseCircle = true,
+            CircleCx = 5,
+            CircleCy = 5,
+            CircleR = 5,
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = 11,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-circleStart",
+            Path = "",
+            UseCircle = true,
+            CircleCx = 5,
+            CircleCy = 5,
+            CircleR = 5,
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = -1,
+            RefY = 5,
+            ViewBox = "0 0 10 10",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker flowchart-v2"
+        });
+        return this;
+    }
+
+    public SvgBuilder AddMermaidCrossMarker()
+    {
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-crossEnd",
+            Path = "M 1,1 l 9,9 M 10,1 l -9,9",
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = 12,
+            RefY = 5.2,
+            ViewBox = "0 0 11 11",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker cross flowchart-v2",
+            StrokeWidth = 2
+        });
+        _document.Defs.Markers.Add(new SvgMarker
+        {
+            Id = "mermaid-svg_flowchart-v2-crossStart",
+            Path = "M 1,1 l 9,9 M 10,1 l -9,9",
+            MarkerWidth = 11,
+            MarkerHeight = 11,
+            RefX = -1,
+            RefY = 5.2,
+            ViewBox = "0 0 11 11",
+            MarkerUnits = "userSpaceOnUse",
+            ClassName = "marker cross flowchart-v2",
+            StrokeWidth = 2
+        });
+        return this;
+    }
+
+    public SvgBuilder AddForeignObject(double x, double y, double width, double height,
+        string htmlContent, string? className = null)
+    {
+        var foreignObject = new SvgForeignObject
+        {
+            X = x,
+            Y = y,
+            Width = width,
+            Height = height,
+            HtmlContent = htmlContent,
+            Class = className
+        };
+        AddElement(foreignObject);
+        return this;
+    }
+
     public SvgBuilder BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
     {
         var group = new SvgGroup
@@ -78,28 +218,31 @@ public class SvgBuilder
             Transform = transform
         };
 
-        if (_currentGroup is not null)
+        if (_groupStack.Count > 0)
         {
-            _currentGroup.Children.Add(group);
+            _groupStack.Peek().Children.Add(group);
         }
         else
         {
             _document.Elements.Add(group);
         }
 
-        _currentGroup = group;
+        _groupStack.Push(group);
         return this;
     }
 
     public SvgBuilder EndGroup()
     {
-        _currentGroup = null;
+        if (_groupStack.Count > 0)
+        {
+            _groupStack.Pop();
+        }
         return this;
     }
 
     public SvgBuilder AddRect(double x, double y, double width, double height,
         double rx = 0, string? fill = null, string? stroke = null, double? strokeWidth = null,
-        string? id = null, string? cssClass = null)
+        string? id = null, string? cssClass = null, string? style = null)
     {
         var rect = new SvgRect
         {
@@ -113,14 +256,27 @@ public class SvgBuilder
             Stroke = stroke,
             StrokeWidth = strokeWidth,
             Id = id,
-            Class = cssClass
+            Class = cssClass,
+            Style = style
+        };
+        AddElement(rect);
+        return this;
+    }
+
+    public SvgBuilder AddRectNoXY(double width, double height, string? style = null)
+    {
+        var rect = new SvgRectNoXY
+        {
+            Width = width,
+            Height = height,
+            Style = style
         };
         AddElement(rect);
         return this;
     }
 
     public SvgBuilder AddCircle(double cx, double cy, double r,
-        string? fill = null, string? stroke = null, double? strokeWidth = null)
+        string? fill = null, string? stroke = null, double? strokeWidth = null, string? cssClass = null)
     {
         var circle = new SvgCircle
         {
@@ -129,7 +285,8 @@ public class SvgBuilder
             R = r,
             Fill = fill,
             Stroke = stroke,
-            StrokeWidth = strokeWidth
+            StrokeWidth = strokeWidth,
+            Class = cssClass
         };
         AddElement(circle);
         return this;
@@ -170,7 +327,8 @@ public class SvgBuilder
 
     public SvgBuilder AddPath(string d, string? fill = null, string? stroke = null,
         double? strokeWidth = null, string? strokeDasharray = null,
-        string? markerStart = null, string? markerEnd = null)
+        string? markerStart = null, string? markerEnd = null, double? opacity = null,
+        string? cssClass = null)
     {
         var path = new SvgPath
         {
@@ -180,7 +338,9 @@ public class SvgBuilder
             StrokeWidth = strokeWidth,
             StrokeDasharray = strokeDasharray,
             MarkerStart = markerStart,
-            MarkerEnd = markerEnd
+            MarkerEnd = markerEnd,
+            Opacity = opacity,
+            Class = cssClass
         };
         AddElement(path);
         return this;
@@ -215,12 +375,14 @@ public class SvgBuilder
     public SvgBuilder AddText(double x, double y, string content,
         string? anchor = null, string? baseline = null,
         string? fontSize = null, string? fontFamily = null, string? fontWeight = null,
-        string? fill = null, string? id = null, string? cssClass = null)
+        string? fill = null, string? id = null, string? cssClass = null,
+        string? transform = null, string? style = null, bool omitXY = false)
     {
         var text = new SvgText
         {
             X = x,
             Y = y,
+            OmitXY = omitXY,
             Content = content,
             TextAnchor = anchor,
             DominantBaseline = baseline,
@@ -229,7 +391,9 @@ public class SvgBuilder
             FontWeight = fontWeight,
             Fill = fill,
             Id = id,
-            Class = cssClass
+            Class = cssClass,
+            Transform = transform,
+            Style = style
         };
         AddElement(text);
         return this;
@@ -237,9 +401,9 @@ public class SvgBuilder
 
     void AddElement(SvgElement element)
     {
-        if (_currentGroup is not null)
+        if (_groupStack.Count > 0)
         {
-            _currentGroup.Children.Add(element);
+            _groupStack.Peek().Children.Add(element);
         }
         else
         {
@@ -247,5 +411,21 @@ public class SvgBuilder
         }
     }
 
-    public SvgDocument Build() => _document;
+    public SvgDocument Build()
+    {
+        // If padding is set, wrap all elements in a transform group
+        if (_padding > 0 && _document.Elements.Count > 0)
+        {
+            var paddingGroup = new SvgGroup
+            {
+                Transform = $"translate({Fmt(_padding)},{Fmt(_padding)})"
+            };
+            paddingGroup.Children.AddRange(_document.Elements);
+            _document.Elements.Clear();
+            _document.Elements.Add(paddingGroup);
+        }
+        return _document;
+    }
+
+    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

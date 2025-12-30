@@ -3,9 +3,10 @@ using MermaidSharp.Diagrams.Pie;
 public class PieParserTests
 {
     [Test]
-    public async Task Parse_SimplePie_ReturnsSections()
+    public void SimplePie_ReturnsSections()
     {
-        const string input = """
+        const string input =
+            """
             pie
                 "Dogs" : 40
                 "Cats" : 30
@@ -15,16 +16,17 @@ public class PieParserTests
         var parser = new PieParser();
         var result = parser.Parse(input);
 
-        await Assert.That(result.Success).IsTrue();
-        await Assert.That(result.Value.Sections.Count).IsEqualTo(3);
-        await Assert.That(result.Value.Sections[0].Label).IsEqualTo("Dogs");
-        await Assert.That(result.Value.Sections[0].Value).IsEqualTo(40);
+        Assert.That(result.Success, Is.True);
+        Assert.That(result.Value.Sections.Count, Is.EqualTo(3));
+        Assert.That(result.Value.Sections[0].Label, Is.EqualTo("Dogs"));
+        Assert.That(result.Value.Sections[0].Value, Is.EqualTo(40));
     }
 
     [Test]
-    public async Task Parse_PieWithTitle_ParsesTitle()
+    public void PieWithTitle_ParsesTitle()
     {
-        const string input = """
+        const string input =
+            """
             pie
                 title Pet Distribution
                 "Dogs" : 40
@@ -34,15 +36,16 @@ public class PieParserTests
         var parser = new PieParser();
         var result = parser.Parse(input);
 
-        await Assert.That(result.Success).IsTrue();
-        await Assert.That(result.Value.Title).IsEqualTo("Pet Distribution");
-        await Assert.That(result.Value.Sections.Count).IsEqualTo(2);
+        Assert.That(result.Success, Is.True);
+        Assert.That(result.Value.Title, Is.EqualTo("Pet Distribution"));
+        Assert.That(result.Value.Sections.Count, Is.EqualTo(2));
     }
 
     [Test]
-    public async Task Parse_PieWithShowData_SetsShowDataFlag()
+    public void PieWithShowData_SetsShowDataFlag()
     {
-        const string input = """
+        const string input =
+            """
             pie showData
                 "A" : 50
                 "B" : 50
@@ -51,14 +54,15 @@ public class PieParserTests
         var parser = new PieParser();
         var result = parser.Parse(input);
 
-        await Assert.That(result.Success).IsTrue();
-        await Assert.That(result.Value.ShowData).IsTrue();
+        Assert.That(result.Success, Is.True);
+        Assert.That(result.Value.ShowData, Is.True);
     }
 
     [Test]
-    public async Task Parse_PieWithDecimalValues_ParsesCorrectly()
+    public void PieWithDecimalValues_ParsesCorrectly()
     {
-        const string input = """
+        const string input =
+            """
             pie
                 "Section A" : 33.33
                 "Section B" : 66.67
@@ -67,8 +71,8 @@ public class PieParserTests
         var parser = new PieParser();
         var result = parser.Parse(input);
 
-        await Assert.That(result.Success).IsTrue();
-        await Assert.That(result.Value.Sections[0].Value).IsEqualTo(33.33);
-        await Assert.That(result.Value.Sections[1].Value).IsEqualTo(66.67);
+        Assert.That(result.Success, Is.True);
+        Assert.That(result.Value.Sections[0].Value, Is.EqualTo(33.33));
+        Assert.That(result.Value.Sections[1].Value, Is.EqualTo(66.67));
     }
 }
