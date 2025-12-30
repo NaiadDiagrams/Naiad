@@ -8,10 +8,6 @@ public class GanttParser : IDiagramParser<GanttModel>
     static readonly Parser<char, string> RestOfLine =
         Token(c => c != '\r' && c != '\n').ManyString();
 
-    static readonly Parser<char, string> Identifier =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-')
-            .AtLeastOnceString();
-
     // Title: title My Chart Title
     static readonly Parser<char, string> TitleParser =
         from _ in CommonParsers.InlineWhitespace
@@ -57,16 +53,6 @@ public class GanttParser : IDiagramParser<GanttModel>
         from ____ in CommonParsers.LineEnd
         select name.Trim();
 
-    // Task modifiers
-    static readonly Parser<char, (bool active, bool done, bool crit, bool milestone)> TaskModifiers =
-        from modifiers in Try(
-            from parts in Identifier.SeparatedAndOptionallyTerminated(
-                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            )
-            select parts.ToList()
-        ).Optional()
-        select ParseModifiers(modifiers.HasValue ? modifiers.Value : []);
-
     static (bool active, bool done, bool crit, bool milestone) ParseModifiers(List<string> parts)
     {
         bool active = false, done = false, crit = false, milestone = false;
@@ -82,12 +68,6 @@ public class GanttParser : IDiagramParser<GanttModel>
         return (active, done, crit, milestone);
     }
 
-    // Duration: 30d, 2w, or until date
-    static readonly Parser<char, TimeSpan?> DurationParser =
-        from num in CommonParsers.Integer
-        from unit in Token(char.IsLetter).Optional()
-        select (TimeSpan?) (unit.HasValue ? ParseDuration(num, unit.Value) : TimeSpan.FromDays(num));
-
     static TimeSpan ParseDuration(int num, char unit) =>
         unit switch
         {
@@ -96,22 +76,6 @@ public class GanttParser : IDiagramParser<GanttModel>
             'h' => TimeSpan.FromHours(num),
             _ => TimeSpan.FromDays(num)
         };
-
-    // Date: YYYY-MM-DD format
-    static readonly Parser<char, DateTime> DateParser =
-        from year in Digit.RepeatString(4)
-        from _ in Char('-')
-        from month in Digit.RepeatString(2)
-        from __ in Char('-')
-        from day in Digit.RepeatString(2)
-        select new DateTime(int.Parse(year), int.Parse(month), int.Parse(day));
-
-    // After reference: after taskId
-    static readonly Parser<char, string> AfterParser =
-        from _ in CIString("after")
-        from __ in CommonParsers.RequiredWhitespace
-        from taskId in Identifier
-        select taskId;
 
     // Task line parser - handles multiple formats
     // Format: Task name :modifiers, id, start, duration

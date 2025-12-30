@@ -23,23 +23,6 @@ public class RequirementParser : IDiagramParser<RequirementModel>
             CIString("requirement").ThenReturn(RequirementType.Requirement)
         );
 
-    // Risk level
-    static readonly Parser<char, RiskLevel> RiskParser =
-        OneOf(
-            Try(CIString("low")).ThenReturn(RiskLevel.Low),
-            Try(CIString("medium")).ThenReturn(RiskLevel.Medium),
-            CIString("high").ThenReturn(RiskLevel.High)
-        );
-
-    // Verify method
-    static readonly Parser<char, VerifyMethod> VerifyMethodParser =
-        OneOf(
-            Try(CIString("analysis")).ThenReturn(VerifyMethod.Analysis),
-            Try(CIString("demonstration")).ThenReturn(VerifyMethod.Demonstration),
-            Try(CIString("inspection")).ThenReturn(VerifyMethod.Inspection),
-            CIString("test").ThenReturn(VerifyMethod.Test)
-        );
-
     // Property: key: value
     static readonly Parser<char, (string key, string value)> PropertyParser =
         from _ in CommonParsers.InlineWhitespace
