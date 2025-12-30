@@ -211,8 +211,10 @@ static class CoordinateAssignment
     // Arrow marker size - the arrowhead extends this far past the line endpoint
     const double ArrowMarkerOffset = 5;
 
-    public static void RouteEdges(LayoutGraph graph)
+    public static void RouteEdges(LayoutGraph graph, Direction direction)
     {
+        var isHorizontal = direction is Direction.LeftToRight or Direction.RightToLeft;
+
         foreach (var edge in graph.Edges)
         {
             var source = graph.GetNode(edge.SourceId);
@@ -231,7 +233,11 @@ static class CoordinateAssignment
             else
             {
                 // Regular edge - create path through dummy nodes if any
-                edge.Points.Add(new Position(source.X, source.Y + source.Height / 2));
+                // For horizontal layout: connect right edge of source
+                // For vertical layout: connect bottom edge of source
+                var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
+                var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
+                edge.Points.Add(new Position(sourceEdgeX, sourceEdgeY));
 
                 // Find dummy nodes for this edge
                 var dummies = graph.Nodes.Values
@@ -247,8 +253,10 @@ static class CoordinateAssignment
                 }
 
                 // Calculate the target endpoint, offset to account for arrow marker
-                var targetEdgeY = target.Y - target.Height / 2;
-                var targetEdgeX = target.X;
+                // For horizontal layout: connect left edge of target
+                // For vertical layout: connect top edge of target
+                var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;
+                var targetEdgeY = isHorizontal ? target.Y : target.Y - target.Height / 2;
 
                 // Get the last point before target to determine edge direction
                 var lastPoint = edge.Points[^1];

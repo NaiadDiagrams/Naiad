@@ -25,7 +25,7 @@ public class DagreLayoutEngine : ILayoutEngine
         CoordinateAssignment.Run(graph, options.NodeSeparation, options.RankSeparation, options.Direction);
 
         // Phase 5: Route edges
-        CoordinateAssignment.RouteEdges(graph);
+        CoordinateAssignment.RouteEdges(graph, options.Direction);
 
         // Undo edge reversals
         Acyclic.Undo(graph);
@@ -115,7 +115,13 @@ public class DagreLayoutEngine : ILayoutEngine
 
         if (source is null || target is null) return;
 
-        edge.Points.Add(new Position(source.X, source.Y + source.Height / 2));
+        var isHorizontal = options.Direction is Direction.LeftToRight or Direction.RightToLeft;
+
+        // For horizontal layout: connect right edge of source to left edge of target
+        // For vertical layout: connect bottom edge of source to top edge of target
+        var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
+        var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
+        edge.Points.Add(new Position(sourceEdgeX, sourceEdgeY));
 
         // Find dummy nodes
         var dummies = graph.Nodes.Values
@@ -130,6 +136,8 @@ public class DagreLayoutEngine : ILayoutEngine
             edge.Points.Add(new Position(dummy.X, dummy.Y));
         }
 
-        edge.Points.Add(new Position(target.X, target.Y - target.Height / 2));
+        var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;
+        var targetEdgeY = isHorizontal ? target.Y : target.Y - target.Height / 2;
+        edge.Points.Add(new Position(targetEdgeX, targetEdgeY));
     }
 }
