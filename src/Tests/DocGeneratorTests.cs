@@ -125,10 +125,10 @@ public class DocGeneratorTests
         await WriteWithLfAsync(indexPath, index.ToString());
     }
 
-    static async Task WriteWithLfAsync(string path, string content)
+    static Task WriteWithLfAsync(string path, string content)
     {
         var lfContent = content.ReplaceLineEndings("\n");
-        await File.WriteAllTextAsync(path, lfContent);
+        return File.WriteAllTextAsync(path, lfContent);
     }
 
     static bool IsBeta(string input)

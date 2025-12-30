@@ -6,7 +6,7 @@ public class DagreLayoutEngine : ILayoutEngine
     {
         if (diagram.Nodes.Count == 0)
         {
-            return new LayoutResult { Width = 0, Height = 0 };
+            return new() { Width = 0, Height = 0 };
         }
 
         // Build internal graph
@@ -37,7 +37,7 @@ public class DagreLayoutEngine : ILayoutEngine
         var width = diagram.Nodes.Max(n => n.Position.X + n.Width / 2);
         var height = diagram.Nodes.Max(n => n.Position.Y + n.Height / 2);
 
-        return new LayoutResult
+        return new()
         {
             Width = width,
             Height = height
@@ -50,7 +50,7 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var node in diagram.Nodes)
         {
-            graph.AddNode(new LayoutNode
+            graph.AddNode(new()
             {
                 Id = node.Id,
                 Width = node.Width,
@@ -60,7 +60,7 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var edge in diagram.Edges)
         {
-            graph.AddEdge(new LayoutEdge
+            graph.AddEdge(new()
             {
                 SourceId = edge.SourceId,
                 TargetId = edge.TargetId
@@ -78,7 +78,7 @@ public class DagreLayoutEngine : ILayoutEngine
             var layoutNode = graph.GetNode(node.Id);
             if (layoutNode is not null)
             {
-                node.Position = new Position(layoutNode.X, layoutNode.Y);
+                node.Position = new(layoutNode.X, layoutNode.Y);
                 node.Rank = layoutNode.Rank;
                 node.Order = layoutNode.Order;
             }
@@ -95,7 +95,7 @@ public class DagreLayoutEngine : ILayoutEngine
                 edge.Points.Clear();
                 foreach (var point in layoutEdge.Points)
                 {
-                    edge.Points.Add(new Position(point.X, point.Y));
+                    edge.Points.Add(new(point.X, point.Y));
                 }
             }
             else
@@ -113,7 +113,10 @@ public class DagreLayoutEngine : ILayoutEngine
         var source = graph.GetNode(edge.SourceId);
         var target = graph.GetNode(edge.TargetId);
 
-        if (source is null || target is null) return;
+        if (source is null || target is null)
+        {
+            return;
+        }
 
         var isHorizontal = options.Direction is Direction.LeftToRight or Direction.RightToLeft;
 
@@ -121,7 +124,7 @@ public class DagreLayoutEngine : ILayoutEngine
         // For vertical layout: connect bottom edge of source to top edge of target
         var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
         var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
-        edge.Points.Add(new Position(sourceEdgeX, sourceEdgeY));
+        edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
 
         // Find dummy nodes
         var dummies = graph.Nodes.Values
@@ -133,11 +136,11 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var dummy in dummies)
         {
-            edge.Points.Add(new Position(dummy.X, dummy.Y));
+            edge.Points.Add(new(dummy.X, dummy.Y));
         }
 
         var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;
         var targetEdgeY = isHorizontal ? target.Y : target.Y - target.Height / 2;
-        edge.Points.Add(new Position(targetEdgeX, targetEdgeY));
+        edge.Points.Add(new(targetEdgeX, targetEdgeY));
     }
 }

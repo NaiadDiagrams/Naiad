@@ -64,7 +64,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
 
     static GraphDiagramBase ConvertToGraphModel(ClassModel model, RenderOptions options)
     {
-        var graph = new FlowchartModel { Direction = model.Direction };
+        var graph = new FlowchartModel {Direction = model.Direction};
 
         // Create nodes for each class
         foreach (var classDef in model.Classes)
@@ -236,8 +236,6 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         var isDotted = rel.Type is RelationshipType.DependencyLeft or RelationshipType.DependencyRight or RelationshipType.Realization;
         var dashArray = isDotted ? "5,5" : null;
 
-        var markerId = GetMarkerId(rel.Type);
-
         builder.AddLine(startX, startY, endX, endY,
             stroke: "#333",
             strokeWidth: 1,
@@ -267,6 +265,7 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
                 fontSize: $"{options.FontSize - 2}px",
                 fontFamily: options.FontFamily);
         }
+
         if (!string.IsNullOrEmpty(rel.ToCardinality))
         {
             builder.AddText(endX - 10, endY - 10, rel.ToCardinality,
@@ -341,9 +340,9 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
 
         return
         [
-            new Position(x, y),
-            new Position(x + size * Math.Cos(backAngle1), y + size * Math.Sin(backAngle1)),
-            new Position(x + size * Math.Cos(backAngle2), y + size * Math.Sin(backAngle2))
+            new(x, y),
+            new(x + size * Math.Cos(backAngle1), y + size * Math.Sin(backAngle1)),
+            new(x + size * Math.Cos(backAngle2), y + size * Math.Sin(backAngle2))
         ];
     }
 
@@ -352,26 +351,25 @@ public class ClassRenderer : IDiagramRenderer<ClassModel>
         var halfSize = size / 2;
         return
         [
-            new Position(x, y),
-            new Position(x - halfSize * Math.Cos(angle) + halfSize * Math.Sin(angle),
-                        y - halfSize * Math.Sin(angle) - halfSize * Math.Cos(angle)),
-            new Position(x - size * Math.Cos(angle), y - size * Math.Sin(angle)),
-            new Position(x - halfSize * Math.Cos(angle) - halfSize * Math.Sin(angle),
-                        y - halfSize * Math.Sin(angle) + halfSize * Math.Cos(angle))
+            new(x, y),
+            new(x - halfSize * Math.Cos(angle) + halfSize * Math.Sin(angle),
+                y - halfSize * Math.Sin(angle) - halfSize * Math.Cos(angle)),
+            new(x - size * Math.Cos(angle), y - size * Math.Sin(angle)),
+            new(x - halfSize * Math.Cos(angle) - halfSize * Math.Sin(angle),
+                y - halfSize * Math.Sin(angle) + halfSize * Math.Cos(angle))
         ];
     }
 
     static Position[] GetArrowPoints(double x, double y, double angle, double size)
     {
-        var halfSize = size * 0.4;
         var backAngle1 = angle + Math.PI - Math.PI / 6;
         var backAngle2 = angle + Math.PI + Math.PI / 6;
 
         return
         [
-            new Position(x, y),
-            new Position(x + size * Math.Cos(backAngle1), y + size * Math.Sin(backAngle1)),
-            new Position(x + size * Math.Cos(backAngle2), y + size * Math.Sin(backAngle2))
+            new(x, y),
+            new(x + size * Math.Cos(backAngle1), y + size * Math.Sin(backAngle1)),
+            new(x + size * Math.Cos(backAngle2), y + size * Math.Sin(backAngle2))
         ];
     }
 

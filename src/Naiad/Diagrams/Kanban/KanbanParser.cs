@@ -64,12 +64,12 @@ public class KanbanParser : IDiagramParser<KanbanModel>
             switch (item)
             {
                 case ("column", string id, string name):
-                    currentColumn = new KanbanColumn { Id = id, Name = name };
+                    currentColumn = new() { Id = id, Name = name };
                     model.Columns.Add(currentColumn);
                     break;
 
                 case ("task", string id, string name):
-                    currentColumn?.Tasks.Add(new KanbanTask { Id = id, Name = name });
+                    currentColumn?.Tasks.Add(new() { Id = id, Name = name });
                     break;
             }
         }

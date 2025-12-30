@@ -71,16 +71,16 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var currentY = options.Padding + titleOffset;
 
         // Draw persons
-        currentY = DrawElementRow(builder, persons, currentY, width, options, elementPositions, "person");
+        currentY = DrawElementRow(builder, persons, currentY, width, options, elementPositions);
 
         // Draw systems
-        currentY = DrawElementRow(builder, systems, currentY, width, options, elementPositions, "system");
+        currentY = DrawElementRow(builder, systems, currentY, width, options, elementPositions);
 
         // Draw containers
-        currentY = DrawElementRow(builder, containers, currentY, width, options, elementPositions, "container");
+        currentY = DrawElementRow(builder, containers, currentY, width, options, elementPositions);
 
         // Draw components
-        currentY = DrawElementRow(builder, components, currentY, width, options, elementPositions, "component");
+        currentY = DrawElementRow(builder, components, currentY, width, options, elementPositions);
 
         // Draw relationships
         foreach (var rel in model.Relationships)
@@ -95,10 +95,18 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         return builder.Build();
     }
 
-    static double DrawElementRow(SvgBuilder builder, List<C4Element> elements, double startY, double totalWidth,
-        RenderOptions options, Dictionary<string, (double x, double y, double w, double h)> positions, string type)
+    static double DrawElementRow(
+        SvgBuilder builder,
+        List<C4Element> elements,
+        double startY,
+        double totalWidth,
+        RenderOptions options,
+        Dictionary<string, (double x, double y, double w, double h)> positions)
     {
-        if (elements.Count == 0) return startY;
+        if (elements.Count == 0)
+        {
+            return startY;
+        }
 
         var rowWidth = elements.Count * (ElementWidth + ElementSpacing) - ElementSpacing;
         var startX = (totalWidth - rowWidth) / 2;

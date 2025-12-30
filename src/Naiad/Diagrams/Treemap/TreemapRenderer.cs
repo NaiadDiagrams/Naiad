@@ -55,10 +55,16 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
     void DrawNodes(SvgBuilder builder, List<TreemapNode> nodes, double x, double y,
         double width, double height, int depth, ref int colorIndex, RenderOptions options)
     {
-        if (nodes.Count == 0 || width <= 0 || height <= 0) return;
+        if (nodes.Count == 0 || width <= 0 || height <= 0)
+        {
+            return;
+        }
 
         var totalValue = nodes.Sum(n => n.TotalValue);
-        if (totalValue <= 0) return;
+        if (totalValue <= 0)
+        {
+            return;
+        }
 
         // Use slice-and-dice algorithm based on depth
         var horizontal = depth % 2 == 0;
@@ -88,7 +94,10 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 currentPos += nodeSize;
             }
 
-            if (nodeWidth < 2 || nodeHeight < 2) continue;
+            if (nodeWidth < 2 || nodeHeight < 2)
+            {
+                continue;
+            }
 
             var color = Colors[colorIndex % Colors.Length];
             colorIndex++;
@@ -175,9 +184,17 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
     static string TruncateLabel(string text, double maxWidth, double fontSize)
     {
         var charWidth = fontSize * 0.6;
-        var maxChars = (int)(maxWidth / charWidth);
-        if (text.Length <= maxChars) return text;
-        if (maxChars <= 3) return "";
+        var maxChars = (int) (maxWidth / charWidth);
+        if (text.Length <= maxChars)
+        {
+            return text;
+        }
+
+        if (maxChars <= 3)
+        {
+            return "";
+        }
+
         return text[..(maxChars - 3)] + "...";
     }
 

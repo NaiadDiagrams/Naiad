@@ -213,7 +213,7 @@ public class StateRenderer : IDiagramRenderer<StateModel>
                     var minX = connectedStates.Min(s => s.Position.X - s.Width / 2);
                     var maxX = connectedStates.Max(s => s.Position.X + s.Width / 2);
                     state.Width = maxX - minX;
-                    state.Position = new Position((minX + maxX) / 2, state.Position.Y);
+                    state.Position = new((minX + maxX) / 2, state.Position.Y);
                 }
             }
         }
@@ -590,9 +590,9 @@ public class StateRenderer : IDiagramRenderer<StateModel>
         var backAngle2 = angle + Math.PI + Math.PI / 6;
 
         builder.AddPolygon([
-            new Position(toX, toY),
-            new Position(toX + arrowSize * Math.Cos(backAngle1), toY + arrowSize * Math.Sin(backAngle1)),
-            new Position(toX + arrowSize * Math.Cos(backAngle2), toY + arrowSize * Math.Sin(backAngle2))
+            new(toX, toY),
+            new(toX + arrowSize * Math.Cos(backAngle1), toY + arrowSize * Math.Sin(backAngle1)),
+            new(toX + arrowSize * Math.Cos(backAngle2), toY + arrowSize * Math.Sin(backAngle2))
         ], fill: "#333");
     }
 

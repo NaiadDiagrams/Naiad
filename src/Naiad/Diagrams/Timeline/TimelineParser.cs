@@ -84,7 +84,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
                     break;
 
                 case ("section", string sectionName):
-                    currentSection = new TimelineSection { Name = sectionName };
+                    currentSection = new() { Name = sectionName };
                     model.Sections.Add(currentSection);
                     currentPeriod = null;
                     break;
@@ -92,10 +92,13 @@ public class TimelineParser : IDiagramParser<TimelineModel>
                 case ("period", string period, string eventText):
                     if (currentSection == null)
                     {
-                        currentSection = new TimelineSection();
+                        currentSection = new();
                         model.Sections.Add(currentSection);
                     }
-                    currentPeriod = new TimePeriod { Label = period };
+                    currentPeriod = new()
+                    {
+                        Label = period
+                    };
                     if (!string.IsNullOrEmpty(eventText))
                     {
                         currentPeriod.Events.Add(eventText);

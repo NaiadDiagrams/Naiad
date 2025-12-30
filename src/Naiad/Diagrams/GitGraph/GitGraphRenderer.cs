@@ -59,7 +59,10 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Draw branch lines
         foreach (var branch in computed.Branches)
         {
-            if (branch.Commits.Count == 0) continue;
+            if (branch.Commits.Count == 0)
+            {
+                continue;
+            }
 
             var y = offsetY + branch.Column * CommitSpacingY;
             var color = branch.Color ?? BranchColors[branch.Column % BranchColors.Length];
@@ -102,7 +105,10 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var fromBranch = graph.Branches.Find(b => b.Name == from.Branch);
         var toBranch = graph.Branches.Find(b => b.Name == to.Branch);
 
-        if (fromBranch == null || toBranch == null) return;
+        if (fromBranch == null || toBranch == null)
+        {
+            return;
+        }
 
         var fromX = offsetX + from.Row * CommitSpacingX;
         var fromY = offsetY + fromBranch.Column * CommitSpacingY;
@@ -132,7 +138,10 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         double offsetX, double offsetY, RenderOptions options)
     {
         var branch = graph.Branches.Find(b => b.Name == commit.Branch);
-        if (branch == null) return;
+        if (branch == null)
+        {
+            return;
+        }
 
         var x = offsetX + commit.Row * CommitSpacingX;
         var y = offsetY + branch.Column * CommitSpacingY;

@@ -202,8 +202,8 @@ public class ERRenderer : IDiagramRenderer<ERModel>
             strokeDasharray: dashArray);
 
         // Draw cardinality markers
-        DrawCardinalityMarker(builder, startX, startY, endX, endY, rel.FromCardinality, true);
-        DrawCardinalityMarker(builder, endX, endY, startX, startY, rel.ToCardinality, false);
+        DrawCardinalityMarker(builder, startX, startY, endX, endY, rel.FromCardinality);
+        DrawCardinalityMarker(builder, endX, endY, startX, startY, rel.ToCardinality);
 
         // Draw label if present
         if (!string.IsNullOrEmpty(rel.Label))
@@ -242,8 +242,13 @@ public class ERRenderer : IDiagramRenderer<ERModel>
             : (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
-    static void DrawCardinalityMarker(SvgBuilder builder, double x, double y,
-        double toX, double toY, Cardinality cardinality, bool atStart)
+    static void DrawCardinalityMarker(
+        SvgBuilder builder,
+        double x,
+        double y,
+        double toX,
+        double toY,
+        Cardinality cardinality)
     {
         var angle = Math.Atan2(toY - y, toX - x);
         var markerDistance = 15.0;

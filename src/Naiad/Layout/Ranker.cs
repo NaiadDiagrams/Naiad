@@ -36,8 +36,10 @@ static class Ranker
 
     static int DfsLongestPath(LayoutGraph graph, LayoutNode node, HashSet<string> visited)
     {
-        if (visited.Contains(node.Id)) return node.Rank;
-        visited.Add(node.Id);
+        if (!visited.Add(node.Id))
+        {
+            return node.Rank;
+        }
 
         var maxPredRank = -1;
         foreach (var pred in graph.GetPredecessors(node.Id))
@@ -94,7 +96,10 @@ static class Ranker
 
     static void NormalizeRanks(LayoutGraph graph)
     {
-        if (graph.Nodes.Count == 0) return;
+        if (graph.Nodes.Count == 0)
+        {
+            return;
+        }
 
         var minRank = graph.Nodes.Values.Min(n => n.Rank);
         foreach (var node in graph.Nodes.Values)
@@ -112,7 +117,10 @@ static class Ranker
         {
             var source = graph.GetNode(edge.SourceId);
             var target = graph.GetNode(edge.TargetId);
-            if (source is null || target is null) continue;
+            if (source is null || target is null)
+            {
+                continue;
+            }
 
             var rankDiff = target.Rank - source.Rank;
             if (rankDiff > 1)

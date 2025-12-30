@@ -68,19 +68,19 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
         {
-            RenderEdge(builder, edge, options);
+            RenderEdge(builder, edge);
         }
 
         // Render nodes
         foreach (var node in model.Nodes)
         {
-            RenderNode(builder, node, options);
+            RenderNode(builder, node);
         }
 
         return builder.Build();
     }
 
-    static void RenderNode(SvgBuilder builder, Node node, RenderOptions options)
+    static void RenderNode(SvgBuilder builder, Node node)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
@@ -102,9 +102,12 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             className: "nodeLabel");
     }
 
-    static void RenderEdge(SvgBuilder builder, Edge edge, RenderOptions options)
+    static void RenderEdge(SvgBuilder builder, Edge edge)
     {
-        if (edge.Points.Count < 2) return;
+        if (edge.Points.Count < 2)
+        {
+            return;
+        }
 
         // Build path from points
         var points = edge.Points;
@@ -217,7 +220,7 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     {
         var width = text.Length * fontSize * 0.55;
         var height = fontSize * 1.5;
-        return new Size(width, height);
+        return new(width, height);
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);

@@ -180,12 +180,12 @@ public class SequenceParser : IDiagramParser<SequenceModel>
                     // Auto-add participants from messages
                     if (!participantIds.Contains(m.FromId))
                     {
-                        model.Participants.Add(new Participant { Id = m.FromId });
+                        model.Participants.Add(new() { Id = m.FromId });
                         participantIds.Add(m.FromId);
                     }
                     if (!participantIds.Contains(m.ToId))
                     {
-                        model.Participants.Add(new Participant { Id = m.ToId });
+                        model.Participants.Add(new() { Id = m.ToId });
                         participantIds.Add(m.ToId);
                     }
                     model.Elements.Add(m);

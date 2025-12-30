@@ -110,9 +110,9 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         foreach (var link in model.Links)
         {
             if (!nodes.ContainsKey(link.Source))
-                nodes[link.Source] = new SankeyNode { Name = link.Source };
+                nodes[link.Source] = new() { Name = link.Source };
             if (!nodes.ContainsKey(link.Target))
-                nodes[link.Target] = new SankeyNode { Name = link.Target };
+                nodes[link.Target] = new() { Name = link.Target };
 
             nodes[link.Source].OutputValue += link.Value;
             nodes[link.Target].InputValue += link.Value;

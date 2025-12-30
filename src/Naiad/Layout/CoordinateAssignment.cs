@@ -103,7 +103,10 @@ static class CoordinateAssignment
                 ? graph.GetPredecessors(node.Id).ToList()
                 : graph.GetSuccessors(node.Id).ToList();
 
-            if (neighbors.Count == 0) continue;
+            if (neighbors.Count == 0)
+            {
+                continue;
+            }
 
             // Calculate median position of neighbors
             var positions = neighbors
@@ -144,7 +147,10 @@ static class CoordinateAssignment
 
         foreach (var other in nodesInRank)
         {
-            if (other.Id == node.Id) continue;
+            if (other.Id == node.Id)
+            {
+                continue;
+            }
 
             var otherPos = isHorizontal ? other.Y : other.X;
             var otherSize = isHorizontal ? other.Height : other.Width;
@@ -161,18 +167,31 @@ static class CoordinateAssignment
 
     static double Median(List<double> values)
     {
-        if (values.Count == 0) return 0;
-        if (values.Count == 1) return values[0];
+        if (values.Count == 0)
+        {
+            return 0;
+        }
+
+        if (values.Count == 1)
+        {
+            return values[0];
+        }
 
         var mid = values.Count / 2;
-        return values.Count % 2 == 0
-            ? (values[mid - 1] + values[mid]) / 2
-            : values[mid];
+        if (values.Count % 2 == 0)
+        {
+            return (values[mid - 1] + values[mid]) / 2;
+        }
+
+        return values[mid];
     }
 
     static void NormalizePositions(LayoutGraph graph, bool isHorizontal)
     {
-        if (graph.Nodes.Count == 0) return;
+        if (graph.Nodes.Count == 0)
+        {
+            return;
+        }
 
         var minX = graph.Nodes.Values.Min(n => n.X - n.Width / 2);
         var minY = graph.Nodes.Values.Min(n => n.Y - n.Height / 2);
@@ -186,7 +205,10 @@ static class CoordinateAssignment
 
     static void AdjustForDirection(LayoutGraph graph, Direction direction)
     {
-        if (graph.Nodes.Count == 0) return;
+        if (graph.Nodes.Count == 0)
+        {
+            return;
+        }
 
         switch (direction)
         {
@@ -220,15 +242,18 @@ static class CoordinateAssignment
             var source = graph.GetNode(edge.SourceId);
             var target = graph.GetNode(edge.TargetId);
 
-            if (source is null || target is null) continue;
+            if (source is null || target is null)
+            {
+                continue;
+            }
 
             edge.Points.Clear();
 
             if (source.IsDummy || target.IsDummy)
             {
                 // Part of a long edge - just add the node positions
-                edge.Points.Add(new Position(source.X, source.Y));
-                edge.Points.Add(new Position(target.X, target.Y));
+                edge.Points.Add(new(source.X, source.Y));
+                edge.Points.Add(new(target.X, target.Y));
             }
             else
             {
@@ -237,7 +262,7 @@ static class CoordinateAssignment
                 // For vertical layout: connect bottom edge of source
                 var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
                 var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
-                edge.Points.Add(new Position(sourceEdgeX, sourceEdgeY));
+                edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
 
                 // Find dummy nodes for this edge
                 var dummies = graph.Nodes.Values
@@ -249,7 +274,7 @@ static class CoordinateAssignment
 
                 foreach (var dummy in dummies)
                 {
-                    edge.Points.Add(new Position(dummy.X, dummy.Y));
+                    edge.Points.Add(new(dummy.X, dummy.Y));
                 }
 
                 // Calculate the target endpoint, offset to account for arrow marker
@@ -272,7 +297,7 @@ static class CoordinateAssignment
                     targetEdgeY = lastPoint.Y + dy * ratio;
                 }
 
-                edge.Points.Add(new Position(targetEdgeX, targetEdgeY));
+                edge.Points.Add(new(targetEdgeX, targetEdgeY));
             }
         }
     }

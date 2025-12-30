@@ -51,11 +51,17 @@ public class VerifiedFileRegenerator
                     .SelectMany(al => al.Attributes)
                     .Any(a => a.Name.ToString() == "Test");
 
-                if (!hasTestAttribute) continue;
+                if (!hasTestAttribute)
+                {
+                    continue;
+                }
 
                 // Only include tests that return Task (which use Verify)
                 var returnType = method.ReturnType.ToString();
-                if (returnType != "Task") continue;
+                if (returnType != "Task")
+                {
+                    continue;
+                }
 
                 // Look for const string input declaration
                 var localDeclarations = method.Body?.DescendantNodes()
@@ -66,10 +72,16 @@ public class VerifiedFileRegenerator
                 foreach (var localDecl in localDeclarations)
                 {
                     var variable = localDecl.Declaration.Variables.FirstOrDefault();
-                    if (variable?.Identifier.Text != "input") continue;
+                    if (variable?.Identifier.Text != "input")
+                    {
+                        continue;
+                    }
 
                     var initializer = variable.Initializer?.Value;
-                    if (initializer == null) continue;
+                    if (initializer == null)
+                    {
+                        continue;
+                    }
 
                     string? inputValue = null;
 
@@ -95,7 +107,7 @@ public class VerifiedFileRegenerator
 
                     if (inputValue != null)
                     {
-                        result.Add(new TestInput
+                        result.Add(new()
                         {
                             ClassName = className,
                             MethodName = method.Identifier.Text,

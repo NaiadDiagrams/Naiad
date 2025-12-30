@@ -61,7 +61,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         for (var i = 0; i < model.Curves.Count; i++)
         {
             DrawCurve(builder, centerX, centerY, model.Curves[i], model.Axes.Count,
-                minValue, maxValue, CurveColors[i % CurveColors.Length], options);
+                minValue, maxValue, CurveColors[i % CurveColors.Length]);
         }
 
         // Draw legend
@@ -124,10 +124,20 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         }
     }
 
-    static void DrawCurve(SvgBuilder builder, double cx, double cy, RadarCurve curve,
-        int axisCount, double minValue, double maxValue, string color, RenderOptions options)
+    static void DrawCurve(
+        SvgBuilder builder,
+        double cx,
+        double cy,
+        RadarCurve curve,
+        int axisCount,
+        double minValue,
+        double maxValue,
+        string color)
     {
-        if (curve.Values.Count == 0) return;
+        if (curve.Values.Count == 0)
+        {
+            return;
+        }
 
         var pathData = new List<string>();
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)

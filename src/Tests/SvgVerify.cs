@@ -49,6 +49,6 @@
             OmitBackground = false
         });
 
-        return new MemoryStream(screenshot);
+        return new(screenshot);
     }
 }

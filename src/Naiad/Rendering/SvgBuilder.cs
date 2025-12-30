@@ -48,16 +48,17 @@ public class SvgBuilder
     public SvgBuilder AddMarker(string id, string path, double width, double height,
         double refX, double refY, string? fill = null)
     {
-        _document.Defs.Markers.Add(new SvgMarker
-        {
-            Id = id,
-            Path = path,
-            MarkerWidth = width,
-            MarkerHeight = height,
-            RefX = refX,
-            RefY = refY,
-            Fill = fill
-        });
+        _document.Defs.Markers.Add(
+            new()
+            {
+                Id = id,
+                Path = path,
+                MarkerWidth = width,
+                MarkerHeight = height,
+                RefX = refX,
+                RefY = refY,
+                Fill = fill
+            });
         return this;
     }
 
@@ -66,7 +67,7 @@ public class SvgBuilder
 
     public SvgBuilder AddCircleMarker(string id = "circle", string fill = "#333")
     {
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(new()
         {
             Id = id,
             Path = "M4,4 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0",
@@ -81,7 +82,7 @@ public class SvgBuilder
 
     public SvgBuilder AddCrossMarker(string id = "cross", string stroke = "#333")
     {
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(new()
         {
             Id = id,
             Path = "M1,1 L7,7 M7,1 L1,7",
@@ -96,19 +97,20 @@ public class SvgBuilder
 
     public SvgBuilder AddMermaidArrowMarker()
     {
-        _document.Defs.Markers.Add(new SvgMarker
-        {
-            Id = "mermaid-svg_flowchart-v2-pointEnd",
-            Path = "M 0 0 L 10 5 L 0 10 z",
-            MarkerWidth = 8,
-            MarkerHeight = 8,
-            RefX = 5,
-            RefY = 5,
-            ViewBox = "0 0 10 10",
-            MarkerUnits = "userSpaceOnUse",
-            ClassName = "marker flowchart-v2"
-        });
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(
+            new()
+            {
+                Id = "mermaid-svg_flowchart-v2-pointEnd",
+                Path = "M 0 0 L 10 5 L 0 10 z",
+                MarkerWidth = 8,
+                MarkerHeight = 8,
+                RefX = 5,
+                RefY = 5,
+                ViewBox = "0 0 10 10",
+                MarkerUnits = "userSpaceOnUse",
+                ClassName = "marker flowchart-v2"
+            });
+        _document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-pointStart",
             Path = "M 0 5 L 10 10 L 10 0 z",
@@ -125,7 +127,7 @@ public class SvgBuilder
 
     public SvgBuilder AddMermaidCircleMarker()
     {
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-circleEnd",
             Path = "",
@@ -141,7 +143,7 @@ public class SvgBuilder
             MarkerUnits = "userSpaceOnUse",
             ClassName = "marker flowchart-v2"
         });
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-circleStart",
             Path = "",
@@ -162,7 +164,7 @@ public class SvgBuilder
 
     public SvgBuilder AddMermaidCrossMarker()
     {
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-crossEnd",
             Path = "M 1,1 l 9,9 M 10,1 l -9,9",
@@ -175,7 +177,7 @@ public class SvgBuilder
             ClassName = "marker cross flowchart-v2",
             StrokeWidth = 2
         });
-        _document.Defs.Markers.Add(new SvgMarker
+        _document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-crossStart",
             Path = "M 1,1 l 9,9 M 10,1 l -9,9",
@@ -235,6 +237,7 @@ public class SvgBuilder
         {
             _groupStack.Pop();
         }
+
         return this;
     }
 
@@ -347,7 +350,7 @@ public class SvgBuilder
     public SvgBuilder AddPolygon(IEnumerable<Position> points,
         string? fill = null, string? stroke = null)
     {
-        var polygon = new SvgPolygon { Fill = fill, Stroke = stroke };
+        var polygon = new SvgPolygon {Fill = fill, Stroke = stroke};
         polygon.Points.AddRange(points);
         AddElement(polygon);
         return this;
@@ -422,6 +425,7 @@ public class SvgBuilder
             _document.Elements.Clear();
             _document.Elements.Add(paddingGroup);
         }
+
         return _document;
     }
 

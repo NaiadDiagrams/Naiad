@@ -86,14 +86,14 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
                     break;
 
                 case ("section", string sectionName):
-                    currentSection = new JourneySection { Name = sectionName };
+                    currentSection = new() { Name = sectionName };
                     model.Sections.Add(currentSection);
                     break;
 
                 case ("task", JourneyTask task):
                     if (currentSection == null)
                     {
-                        currentSection = new JourneySection();
+                        currentSection = new();
                         model.Sections.Add(currentSection);
                     }
                     currentSection.Tasks.Add(task);

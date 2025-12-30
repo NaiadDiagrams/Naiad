@@ -17,8 +17,15 @@ public class Edge
     {
         get
         {
-            if (Points.Count == 0) return Position.Zero;
-            if (Points.Count == 1) return Points[0];
+            if (Points.Count == 0)
+            {
+                return Position.Zero;
+            }
+
+            if (Points.Count == 1)
+            {
+                return Points[0];
+            }
 
             // Return midpoint of the edge path
             var midIndex = Points.Count / 2;
@@ -26,17 +33,26 @@ public class Edge
             {
                 var p1 = Points[midIndex - 1];
                 var p2 = Points[midIndex];
-                return new Position((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
+                return new((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
             }
+
             return Points[midIndex];
         }
     }
 
-    public bool HasArrowHead => Type is EdgeType.Arrow or EdgeType.DottedArrow or EdgeType.ThickArrow
-        or EdgeType.BiDirectional or EdgeType.BiDirectionalCircle or EdgeType.BiDirectionalCross;
+    public bool HasArrowHead =>
+        Type is
+            EdgeType.Arrow or
+            EdgeType.DottedArrow or
+            EdgeType.ThickArrow or
+            EdgeType.BiDirectional or
+            EdgeType.BiDirectionalCircle or
+            EdgeType.BiDirectionalCross;
 
-    public bool HasArrowTail => Type is EdgeType.BiDirectional or EdgeType.BiDirectionalCircle
-        or EdgeType.BiDirectionalCross;
+    public bool HasArrowTail => Type is
+        EdgeType.BiDirectional or
+        EdgeType.BiDirectionalCircle or
+        EdgeType.BiDirectionalCross;
 
     public bool HasCircleEnd => Type is EdgeType.CircleEnd or EdgeType.BiDirectionalCircle;
     public bool HasCrossEnd => Type is EdgeType.CrossEnd or EdgeType.BiDirectionalCross;

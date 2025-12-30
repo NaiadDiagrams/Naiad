@@ -275,14 +275,14 @@ public class GanttParser : IDiagramParser<GanttModel>
                     break;
 
                 case ("section", string sectionName):
-                    currentSection = new GanttSection {Name = sectionName};
+                    currentSection = new() {Name = sectionName};
                     model.Sections.Add(currentSection);
                     break;
 
                 case GanttTask task:
                     if (currentSection == null)
                     {
-                        currentSection = new GanttSection {Name = ""};
+                        currentSection = new() {Name = ""};
                         model.Sections.Add(currentSection);
                     }
 

@@ -186,7 +186,6 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
                 {
                     nodeDict[node.Id] = node;
                     model.Nodes.Add(node);
-                    existingNode = node;
                 }
                 else if (node.Label != null && existingNode.Label == null)
                 {
@@ -198,7 +197,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
                 if (i < edges.Count)
                 {
                     var edge = edges[i];
-                    model.Edges.Add(new Edge
+                    model.Edges.Add(new()
                     {
                         SourceId = nodes[i].Id,
                         TargetId = nodes[i + 1].Id,

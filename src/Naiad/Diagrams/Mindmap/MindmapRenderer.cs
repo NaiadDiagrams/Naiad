@@ -88,7 +88,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     static void LayoutTree(MindmapNode node, double x, double y)
     {
         // Position this node
-        node.Position = new Position(x + node.Width / 2, y + node.SubtreeHeight / 2);
+        node.Position = new(x + node.Width / 2, y + node.SubtreeHeight / 2);
 
         if (node.Children.Count == 0)
             return;

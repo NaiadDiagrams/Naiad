@@ -120,7 +120,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         foreach (var junction in model.Junctions)
         {
             var pos = junctionPositions[junction.Id];
-            DrawJunction(builder, junction, pos.x, pos.y, options);
+            DrawJunction(builder, pos.x, pos.y);
         }
 
         // Draw edges
@@ -129,7 +129,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             if (positions.TryGetValue(edge.SourceId, out var from) &&
                 positions.TryGetValue(edge.TargetId, out var to))
             {
-                DrawEdge(builder, from, to, edge, options);
+                DrawEdge(builder, from, to, edge);
             }
         }
 
@@ -212,17 +212,15 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 
     static void DrawJunction(
         SvgBuilder builder,
-        ArchitectureJunction junction,
-        double x, double y,
-        RenderOptions options) =>
+        double x,
+        double y) =>
         builder.AddCircle(x, y, 8, fill: "#666", stroke: "#333", strokeWidth: 1);
 
     static void DrawEdge(
         SvgBuilder builder,
         (double x, double y) from,
         (double x, double y) to,
-        ArchitectureEdge edge,
-        RenderOptions options)
+        ArchitectureEdge edge)
     {
         // Calculate edge start/end based on direction
         var fromOffset = GetDirectionOffset(edge.SourceSide);

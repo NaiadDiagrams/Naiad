@@ -48,7 +48,7 @@ public class ClassParser : IDiagramParser<ClassModel>
             var parts = param.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 1)
             {
-                parameters.Add(new MethodParameter
+                parameters.Add(new()
                 {
                     Name = parts.Length >= 2 ? parts[1] : parts[0],
                     Type = parts.Length >= 2 ? parts[0] : null
@@ -300,12 +300,12 @@ public class ClassParser : IDiagramParser<ClassModel>
                     // Auto-add classes from relationships
                     if (!classIds.Contains(r.FromId))
                     {
-                        model.Classes.Add(new ClassDefinition { Id = r.FromId });
+                        model.Classes.Add(new() { Id = r.FromId });
                         classIds.Add(r.FromId);
                     }
                     if (!classIds.Contains(r.ToId))
                     {
-                        model.Classes.Add(new ClassDefinition { Id = r.ToId });
+                        model.Classes.Add(new() { Id = r.ToId });
                         classIds.Add(r.ToId);
                     }
                     model.Relationships.Add(r);

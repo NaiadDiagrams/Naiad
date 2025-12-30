@@ -40,7 +40,10 @@ static class Acyclic
         stack.Add(nodeId);
 
         var node = graph.GetNode(nodeId);
-        if (node is null) return;
+        if (node is null)
+        {
+            return;
+        }
 
         foreach (var edge in node.OutEdges.ToList())
         {
