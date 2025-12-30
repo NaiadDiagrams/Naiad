@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>MermaidSharp.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -20,7 +19,7 @@
     <PackageReference Include="Verify.NUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.Playwright" />
-    <ProjectReference Include="..\..\src\MermaidSharp\MermaidSharp.csproj" />
+    <ProjectReference Include="..\Naiad\Naiad.csproj" />
   </ItemGroup>
 
 </Project>

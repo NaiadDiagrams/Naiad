@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/SolutionItems/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="Naiad/Naiad.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>
