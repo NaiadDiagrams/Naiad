@@ -1,7 +1,3 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 /// <summary>
 /// Uses Roslyn to find all tests with const string input and regenerates
 /// their verified files from mermaid.ink.
