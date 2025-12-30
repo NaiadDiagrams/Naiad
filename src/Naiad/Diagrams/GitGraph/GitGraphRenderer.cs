@@ -99,8 +99,13 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         return builder.Build();
     }
 
-    static void DrawConnection(SvgBuilder builder, GitCommit from, GitCommit to,
-        ComputedGitGraph graph, double offsetX, double offsetY)
+    static void DrawConnection(
+        SvgBuilder builder,
+        GitCommit from,
+        GitCommit to,
+        ComputedGitGraph graph,
+        double offsetX,
+        double offsetY)
     {
         var fromBranch = graph.Branches.Find(b => b.Name == from.Branch);
         var toBranch = graph.Branches.Find(b => b.Name == to.Branch);
