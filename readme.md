@@ -3,11 +3,65 @@
 [![Build status](https://img.shields.io/appveyor/build/SimonCropp/Naiad)](https://ci.appveyor.com/project/SimonCropp/Naiad)
 [![NuGet Status](https://img.shields.io/nuget/v/Naiad.svg)](https://www.nuget.org/packages/Naiad/)
 
+A .NET library for rendering [Mermaid](https://mermaid.js.org/) diagrams to SVG. No browser or JavaScript runtime required.
 
 
 ## NuGet package
 
 https://nuget.org/packages/Naiad/
+
+
+## Usage
+
+```cs
+var svg = Mermaid.Render(
+    """
+    flowchart LR
+        A[Start] --> B[Process] --> C[End]
+    """);
+```
+
+The diagram type is automatically detected from the input.
+
+
+### Render Options
+
+```cs
+var svg = Mermaid.Render(
+    input,
+    new RenderOptions
+    {
+        Padding = 20,
+        FontSize = 14,
+        FontFamily = "Arial, sans-serif"
+    });
+```
+
+
+## Supported Diagram Types
+
+ * Flowchart / Graph
+ * Sequence Diagram
+ * Class Diagram
+ * State Diagram
+ * Entity Relationship Diagram
+ * Gantt Chart
+ * Pie Chart
+ * Git Graph
+ * Mindmap
+ * Timeline
+ * User Journey
+ * Quadrant Chart
+ * Requirement Diagram
+ * C4 Diagrams (Context, Container, Component, Deployment)
+ * Kanban
+ * XY Chart (beta)
+ * Sankey (beta)
+ * Block Diagram (beta)
+ * Packet Diagram (beta)
+ * Architecture (beta)
+ * Radar (beta)
+ * Treemap (beta)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
