@@ -104,7 +104,7 @@ public class DocGeneratorTests
 
         foreach (var category in stableCategories)
         {
-            index.AppendLine($"- [{category}]({category}.md)");
+            index.AppendLine($"- [{category}](/src/test-renders/{category}.md)");
         }
 
         if (betaCategories.Count > 0)
