@@ -32,10 +32,19 @@ public class DocGeneratorTests
             {
                 markdown.AppendLine($"### {test.Name}");
                 markdown.AppendLine();
+
                 markdown.AppendLine("**Input:**");
-                markdown.AppendLine("```mermaid");
-                markdown.AppendLine(test.Input.Trim());
                 markdown.AppendLine("```");
+                markdown.AppendLine(test.Input);
+                markdown.AppendLine("```");
+
+
+                markdown.AppendLine("```mermaid");
+                markdown.AppendLine(test.Input);
+                markdown.AppendLine("```");
+
+                markdown.AppendLine();
+                markdown.AppendLine($"[Open in Mermaid Live]({GetMermaidLiveUrl(test.Input)})");
                 markdown.AppendLine();
 
                 if (!string.IsNullOrEmpty(test.VerifiedPngPath))
@@ -159,6 +168,13 @@ public class DocGeneratorTests
         var found = Directory.GetFiles(dir, searchPattern, SearchOption.AllDirectories).FirstOrDefault();
 
         return found;
+    }
+
+    static string GetMermaidLiveUrl(string code)
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(new { code, mermaid = new { theme = "default" } });
+        var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+        return $"https://mermaid.live/edit#base64:{base64}";
     }
 
     private class TestInfo
