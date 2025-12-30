@@ -170,9 +170,9 @@ public class StateParser : IDiagramParser<StateModel>
         select BuildModel(content);
 
     static Parser<char, List<object>> ParseContent() =>
-        ParseContentRecursive(0);
+        ParseContentRecursive();
 
-    static Parser<char, List<object>> ParseContentRecursive(int depth)
+    static Parser<char, List<object>> ParseContentRecursive()
     {
         var element = OneOf(
             Try(DirectionParser.Select(d => (object)d)),
@@ -187,7 +187,10 @@ public class StateParser : IDiagramParser<StateModel>
             SkipLine.ThenReturn((object)Unit.Value)
         );
 
-        return element.Many().Select(e => e.Where(x => x is not Unit).ToList());
+        return element
+            .Many()
+            .Select(e => e.Where(x => x is not Unit)
+                .ToList());
     }
 
     static StateModel BuildModel(List<object> content)

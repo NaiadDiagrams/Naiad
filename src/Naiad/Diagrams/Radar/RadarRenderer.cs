@@ -52,7 +52,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         var minValue = model.Min ?? 0;
 
         // Draw graticule
-        DrawGraticule(builder, centerX, centerY, model.Axes.Count, model.Ticks, model.Graticule, options);
+        DrawGraticule(builder, centerX, centerY, model.Axes.Count, model.Ticks, model.Graticule);
 
         // Draw axis lines and labels
         DrawAxes(builder, centerX, centerY, model.Axes, options);
@@ -73,8 +73,13 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         return builder.Build();
     }
 
-    static void DrawGraticule(SvgBuilder builder, double cx, double cy, int axisCount, int ticks,
-        GraticuleType graticule, RenderOptions options)
+    static void DrawGraticule(
+        SvgBuilder builder,
+        double cx,
+        double cy,
+        int axisCount,
+        int ticks,
+        GraticuleType graticule)
     {
         for (var i = 1; i <= ticks; i++)
         {

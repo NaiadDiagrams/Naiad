@@ -62,8 +62,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var targetNode = nodes[link.Target];
 
             var linkHeight = link.Value / Math.Max(1, sourceNode.OutputValue) * sourceNode.Height;
-            var sourceY = GetLinkSourceY(sourceNode, link, model.Links, nodes);
-            var targetY = GetLinkTargetY(targetNode, link, model.Links, nodes);
+            var sourceY = GetLinkSourceY(sourceNode, link, model.Links);
+            var targetY = GetLinkTargetY(targetNode, link, model.Links);
 
             var sourceX = options.Padding + sourceNode.Column * ColumnSpacing + NodeWidth;
             var targetX = options.Padding + targetNode.Column * ColumnSpacing;
@@ -175,8 +175,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
     }
 
-    static double GetLinkSourceY(SankeyNode sourceNode, SankeyLink link, List<SankeyLink> allLinks,
-        Dictionary<string, SankeyNode> nodes)
+    static double GetLinkSourceY(SankeyNode sourceNode, SankeyLink link, List<SankeyLink> allLinks)
     {
         var outgoingLinks = allLinks.Where(l => l.Source == link.Source).ToList();
         double offset = 0;
@@ -189,8 +188,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         return sourceNode.Y + offset + linkHeight / 2;
     }
 
-    static double GetLinkTargetY(SankeyNode targetNode, SankeyLink link, List<SankeyLink> allLinks,
-        Dictionary<string, SankeyNode> nodes)
+    static double GetLinkTargetY(SankeyNode targetNode, SankeyLink link, List<SankeyLink> allLinks)
     {
         var incomingLinks = allLinks.Where(l => l.Target == link.Target).ToList();
         double offset = 0;
