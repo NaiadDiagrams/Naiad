@@ -18,7 +18,7 @@ Auto-generated documentation from the test suite.
 - [Timeline](Timeline.md)
 - [UserJourney](UserJourney.md)
 
-## Beta
+## Beta diagram types
 
 - [Architecture](Architecture.md)
 - [Block](Block.md)

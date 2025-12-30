@@ -10,8 +10,8 @@ public class DocGeneratorTests
         Directory.CreateDirectory(outputDir);
 
         var testFiles = Directory.GetFiles(testsDir, "*Tests.cs", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("DocumentationGenerator"))
-            .OrderBy(f => f);
+            .Where(_ => !_.Contains("DocumentationGenerator"))
+            .OrderBy(_ => _);
 
         // Group tests by category
         var testsByCategory = new Dictionary<string, List<TestInfo>>();
@@ -89,8 +89,7 @@ public class DocGeneratorTests
             }
 
             var outputPath = Path.Combine(outputDir, $"{category}.md");
-            await File.WriteAllTextAsync(outputPath, markdown.ToString());
-            Console.WriteLine($"Generated: {outputPath}");
+            await WriteWithLfAsync(outputPath, markdown.ToString());
         }
 
         // Generate index page
@@ -100,8 +99,8 @@ public class DocGeneratorTests
         index.AppendLine("Auto-generated documentation from the test suite.");
         index.AppendLine();
 
-        var stableCategories = testsByCategory.Keys.Where(c => !betaCategories.Contains(c)).OrderBy(c => c);
-        var betaCategoriesSorted = betaCategories.OrderBy(c => c);
+        var stableCategories = testsByCategory.Keys.Where(_ => !betaCategories.Contains(_)).OrderBy(_ => _);
+        var betaCategoriesSorted = betaCategories.OrderBy(_ => _);
 
         foreach (var category in stableCategories)
         {
@@ -111,7 +110,7 @@ public class DocGeneratorTests
         if (betaCategories.Count > 0)
         {
             index.AppendLine();
-            index.AppendLine("## Beta");
+            index.AppendLine("## Beta diagram types");
             index.AppendLine();
             foreach (var category in betaCategoriesSorted)
             {
@@ -119,9 +118,14 @@ public class DocGeneratorTests
             }
         }
 
-        var indexPath = Path.Combine(outputDir, "index.md");
-        await File.WriteAllTextAsync(indexPath, index.ToString());
-        Console.WriteLine($"Generated: {indexPath}");
+        var indexPath = Path.Combine(outputDir, "renders.include.md");
+        await WriteWithLfAsync(indexPath, index.ToString());
+    }
+
+    static async Task WriteWithLfAsync(string path, string content)
+    {
+        var lfContent = content.ReplaceLineEndings("\n");
+        await File.WriteAllTextAsync(path, lfContent);
     }
 
     static bool IsBeta(string input)
@@ -140,9 +144,9 @@ public class DocGeneratorTests
 
         var methods = root.DescendantNodes()
             .OfType<MethodDeclarationSyntax>()
-            .Where(m => m.AttributeLists
-                .SelectMany(a => a.Attributes)
-                .Any(a => a.Name.ToString() == "Test"));
+            .Where(_ => _.AttributeLists
+                .SelectMany(_ => _.Attributes)
+                .Any(_ => _.Name.ToString() == "Test"));
 
         foreach (var method in methods)
         {
@@ -183,9 +187,9 @@ public class DocGeneratorTests
         // Find raw string literals (""" ... """)
         var rawStrings = method.DescendantNodes()
             .OfType<LiteralExpressionSyntax>()
-            .Where(l => l.IsKind(SyntaxKind.Utf8StringLiteralExpression) ||
-                        l.Token.IsKind(SyntaxKind.SingleLineRawStringLiteralToken) ||
-                        l.Token.IsKind(SyntaxKind.MultiLineRawStringLiteralToken))
+            .Where(_ => _.IsKind(SyntaxKind.Utf8StringLiteralExpression) ||
+                        _.Token.IsKind(SyntaxKind.SingleLineRawStringLiteralToken) ||
+                        _.Token.IsKind(SyntaxKind.MultiLineRawStringLiteralToken))
             .ToList();
 
         if (rawStrings.Count > 0)
@@ -198,7 +202,7 @@ public class DocGeneratorTests
         // Fall back to regular string literals
         var stringLiterals = method.DescendantNodes()
             .OfType<LiteralExpressionSyntax>()
-            .Where(l => l.IsKind(SyntaxKind.StringLiteralExpression))
+            .Where(_ => _.IsKind(SyntaxKind.StringLiteralExpression))
             .ToList();
 
         if (stringLiterals.Count > 0)
@@ -214,7 +218,7 @@ public class DocGeneratorTests
         return interpolated?
             .Contents
             .OfType<InterpolatedStringTextSyntax>()
-            .Select(c => c.TextToken.ValueText)
+            .Select(_ => _.TextToken.ValueText)
             .FirstOrDefault();
     }
 
