@@ -1,8 +1,8 @@
-public class DocumentationGeneratorTests
+public class DocGeneratorTests
 {
     [Test]
     [Explicit]
-    public async Task GenerateTestDocumentation()
+    public async Task Generate()
     {
         var testsDir = ProjectFiles.ProjectDirectory;
         var outputPath = Path.Combine(ProjectFiles.SolutionDirectory, "test-cases.include.md");
