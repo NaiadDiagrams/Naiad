@@ -44,22 +44,21 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             return emptyBuilder.Build();
         }
 
-        // Build service-to-group mapping
-        var serviceParents = new Dictionary<string, string>();
-        foreach (var service in model.Services)
-        {
-            if (!string.IsNullOrEmpty(service.Parent))
-                serviceParents[service.Id] = service.Parent;
-        }
+        // Check if any services belong to groups
+        var hasGroups = model.Groups.Count > 0 && model.Services.Any(s => !string.IsNullOrEmpty(s.Parent));
+
+        // Offset for group padding (to make room for group bounds)
+        var offsetX = hasGroups ? GroupPadding : 0;
+        var offsetY = hasGroups ? GroupPadding + GroupLabelHeight : 0;
 
         // Simple grid layout for services
         var positions = new Dictionary<string, (double x, double y)>();
         var cols = (int)Math.Ceiling(Math.Sqrt(model.Services.Count + model.Junctions.Count));
         var rows = (int)Math.Ceiling((double)(model.Services.Count + model.Junctions.Count) / cols);
 
-        // Content dimensions (without padding)
-        var contentWidth = cols * ServiceWidth + Math.Max(0, cols - 1) * ServiceSpacing;
-        var contentHeight = rows * ServiceHeight + Math.Max(0, rows - 1) * ServiceSpacing;
+        // Content dimensions (with extra space for groups if needed)
+        var contentWidth = cols * ServiceWidth + Math.Max(0, cols - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 : 0);
+        var contentHeight = rows * ServiceHeight + Math.Max(0, rows - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 + GroupLabelHeight : 0);
 
         var builder = new SvgBuilder()
             .Size(contentWidth, contentHeight)
@@ -75,8 +74,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         {
             var col = idx % cols;
             var row = idx / cols;
-            var x = col * (ServiceWidth + ServiceSpacing);
-            var y = row * (ServiceHeight + ServiceSpacing);
+            var x = offsetX + col * (ServiceWidth + ServiceSpacing);
+            var y = offsetY + row * (ServiceHeight + ServiceSpacing);
 
             positions[service.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
             servicePositions[service.Id] = (x, y, ServiceWidth, ServiceHeight);
@@ -89,8 +88,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         {
             var col = idx % cols;
             var row = idx / cols;
-            var x = col * (ServiceWidth + ServiceSpacing);
-            var y = row * (ServiceHeight + ServiceSpacing);
+            var x = offsetX + col * (ServiceWidth + ServiceSpacing);
+            var y = offsetY + row * (ServiceHeight + ServiceSpacing);
 
             positions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
             junctionPositions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
@@ -155,14 +154,14 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             }
         }
 
-        if (!minX.HasValue)
+        if (!minX.HasValue || !minY.HasValue || !maxX.HasValue || !maxY.HasValue)
             return null;
 
         return (
             minX.Value - GroupPadding,
             minY.Value - GroupPadding - GroupLabelHeight,
-            maxX!.Value - minX.Value + GroupPadding * 2,
-            maxY!.Value - minY.Value + GroupPadding * 2 + GroupLabelHeight
+            maxX.Value - minX.Value + GroupPadding * 2,
+            maxY.Value - minY.Value + GroupPadding * 2 + GroupLabelHeight
         );
     }
 
@@ -172,9 +171,9 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var icon = group.Icon ?? "cloud";
         var borderColor = iconColors.GetValueOrDefault(icon, "#90A4AE");
 
-        // Group background
+        // Group background with dashed border
         builder.AddRect(bounds.x, bounds.y, bounds.width, bounds.height, rx: 8,
-            fill: color, stroke: borderColor, strokeWidth: 2, strokeDasharray: "5,3");
+            fill: color, stroke: borderColor, strokeWidth: 2, style: "stroke-dasharray: 5,3");
 
         // Group label
         var label = group.Label ?? group.Id;

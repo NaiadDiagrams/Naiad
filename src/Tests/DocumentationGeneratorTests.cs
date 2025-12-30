@@ -5,7 +5,7 @@ public class DocumentationGeneratorTests
     public async Task GenerateTestDocumentation()
     {
         var testsDir = ProjectFiles.ProjectDirectory;
-        var outputPath = Path.Combine(ProjectFiles.SolutionDirectory, "test-examples.md");
+        var outputPath = Path.Combine(ProjectFiles.SolutionDirectory, "test-cases.include.md");
 
         var markdown = new StringBuilder();
         markdown.AppendLine("# MermaidSharp Test Examples");
