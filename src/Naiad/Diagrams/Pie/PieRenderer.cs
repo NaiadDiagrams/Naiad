@@ -66,7 +66,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         for (var i = 0; i < model.Sections.Count; i++)
         {
             var section = model.Sections[i];
-            var sweepAngle = (section.Value / total) * 360;
+            var sweepAngle = section.Value / total * 360;
             var color = section.Color ?? DefaultColors[i % DefaultColors.Length];
 
             var path = CreateMermaidArcPath(startAngle, sweepAngle);
@@ -80,7 +80,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         for (var i = 0; i < model.Sections.Count; i++)
         {
             var section = model.Sections[i];
-            var sweepAngle = (section.Value / total) * 360;
+            var sweepAngle = section.Value / total * 360;
             var percentage = (int)Math.Round(section.Value / total * 100);
 
             // Mermaid uses a label radius factor of 0.75 (138.75 / 185)

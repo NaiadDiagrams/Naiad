@@ -134,7 +134,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
             from label2 in EdgeLabelParser.Optional()
             from _4 in CommonParsers.InlineWhitespace
             from node in NodeParser
-            select (node, arrow.Type, arrow.Style, label1.HasValue ? label1.Value : (label2.HasValue ? label2.Value : null))
+            select (node, arrow.Type, arrow.Style, label1.HasValue ? label1.Value : label2.HasValue ? label2.Value : null)
         ).Many()
         select (
             new List<Node>([first, .. rest.Select(r => r.node)]),

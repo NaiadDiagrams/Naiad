@@ -12,7 +12,7 @@ public class RadarParser : IDiagramParser<RadarModel>
     static readonly Parser<char, double> Number =
         from neg in Char('-').Optional()
         from digits in Digit.AtLeastOnceString()
-        from dec in (Char('.').Then(Digit.AtLeastOnceString())).Optional()
+        from dec in Char('.').Then(Digit.AtLeastOnceString()).Optional()
         select double.Parse((neg.HasValue ? "-" : "") + digits + (dec.HasValue ? "." + dec.Value : ""));
 
     // Quoted label: ["label"]

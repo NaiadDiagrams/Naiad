@@ -132,7 +132,7 @@ public static class CommonParsers
 
     // Helper to skip empty lines and comments
     public static Parser<char, Unit> SkipBlankLines =>
-        (InlineWhitespace.Then(Comment).Or(InlineWhitespace.Then(Newline)))
+        InlineWhitespace.Then(Comment).Or(InlineWhitespace.Then(Newline))
             .SkipMany();
 
     // Indentation for hierarchical diagrams (mindmap, timeline)

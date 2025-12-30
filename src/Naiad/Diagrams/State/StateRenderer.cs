@@ -5,13 +5,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 {
     readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
-    const double StateWidth = 120;
+    const double StateMinWidth = 40;
     const double StateHeight = 40;
+    const double StatePadding = 30;
     const double StateRadius = 5;
     const double SpecialStateSize = 20;
-    const double NoteWidth = 100;
+    const double NoteMinWidth = 60;
     const double NoteHeight = 40;
-    const double NotePadding = 10;
+    const double NotePadding = 20;
+    const double NoteHorizontalOffset = 60;
+    const double NoteVerticalOffset = 50;
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
@@ -33,13 +36,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Adjust fork/join bar widths to span connected nodes
         AdjustForkJoinWidths(model);
 
-        // Calculate extra width needed for back-edge curves and notes
+        // Calculate extra space needed for notes
         var stateMap = BuildStateMap(model.States);
-        var noteExtraWidth = CalculateNoteExtraWidth(model, stateMap, options);
+        var (noteExtraWidth, noteExtraHeight) = CalculateNoteExtraSpace(model, stateMap, options);
 
         // Build SVG
         var builder = new SvgBuilder()
-            .Size(layoutResult.Width + noteExtraWidth, layoutResult.Height)
+            .Size(layoutResult.Width + noteExtraWidth, layoutResult.Height + noteExtraHeight)
             .Padding(options.Padding)
             .AddArrowMarker();
 
@@ -55,26 +58,51 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
-    static double CalculateNoteExtraWidth(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
+    static (double extraWidth, double extraHeight) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
     {
         double maxExtraWidth = 0;
+        double maxExtraHeight = 0;
 
         foreach (var note in model.Notes)
         {
             if (!stateMap.TryGetValue(note.StateId, out var state))
                 continue;
 
-            if (note.Position == NotePosition.RightOf)
+            var noteWidth = Math.Max(NoteMinWidth, MeasureText(note.Text, options.FontSize - 2) + NotePadding);
+
+            // Check horizontal space needed - notes go to outside of diagram
+            var diagramCenterX = model.States.Average(s => s.Position.X);
+            var placeToRight = state.Position.X >= diagramCenterX;
+            double noteX;
+            if (placeToRight)
             {
-                var noteWidth = Math.Max(NoteWidth, MeasureText(note.Text, options.FontSize - 2) + 20);
-                var noteRightEdge = state.Position.X + state.Width / 2 + NotePadding + noteWidth;
-                var stateRightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
-                var extraNeeded = noteRightEdge - stateRightEdge;
-                maxExtraWidth = Math.Max(maxExtraWidth, extraNeeded);
+                noteX = state.Position.X + state.Width / 2 + NoteHorizontalOffset - noteWidth / 2;
+            }
+            else
+            {
+                noteX = state.Position.X - state.Width / 2 - NoteHorizontalOffset - noteWidth / 2;
+            }
+
+            var noteRightEdge = noteX + noteWidth;
+            var stateRightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
+            var extraWidthNeeded = noteRightEdge - stateRightEdge;
+            maxExtraWidth = Math.Max(maxExtraWidth, extraWidthNeeded);
+
+            // Check if note extends below
+            var spaceAbove = state.Position.Y;
+            var maxY = model.States.Max(s => s.Position.Y + s.Height / 2);
+            var spaceBelow = maxY - state.Position.Y;
+            var placeBelow = spaceBelow >= spaceAbove;
+
+            if (placeBelow)
+            {
+                var noteBottomEdge = state.Position.Y + state.Height / 2 + NoteVerticalOffset + NoteHeight;
+                var extraHeightNeeded = noteBottomEdge - maxY;
+                maxExtraHeight = Math.Max(maxExtraHeight, extraHeightNeeded);
             }
         }
 
-        return maxExtraWidth > 0 ? maxExtraWidth + 10 : 0; // Add small margin
+        return (maxExtraWidth > 0 ? maxExtraWidth + 20 : 0, maxExtraHeight > 0 ? maxExtraHeight + 20 : 0);
     }
 
     static GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
@@ -137,14 +165,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             return (SpecialStateSize, SpecialStateSize);
 
         if (state.Type is StateType.Fork or StateType.Join)
-            return (StateWidth, 8);
+            return (StateMinWidth, 8);
 
         if (state.Type == StateType.Choice)
             return (SpecialStateSize * 2, SpecialStateSize * 2);
 
+        // Size based on content
         var label = state.Description ?? state.Id;
         var textWidth = MeasureText(label, options.FontSize);
-        var width = Math.Max(StateWidth, textWidth + 20);
+        var width = Math.Max(StateMinWidth, textWidth + StatePadding);
 
         return (width, StateHeight);
     }
@@ -594,14 +623,35 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             if (!stateMap.TryGetValue(note.StateId, out var state))
                 continue;
 
-            // Calculate note width based on text
-            var noteWidth = Math.Max(NoteWidth, MeasureText(note.Text, options.FontSize - 2) + 20);
+            // Calculate note dimensions based on text content
+            var noteWidth = Math.Max(NoteMinWidth, MeasureText(note.Text, options.FontSize - 2) + NotePadding);
 
-            var noteX = note.Position == NotePosition.RightOf
-                ? state.Position.X + state.Width / 2 + NotePadding
-                : state.Position.X - state.Width / 2 - noteWidth - NotePadding;
+            // Determine vertical placement based on available space
+            var spaceAbove = state.Position.Y;
+            var maxY = model.States.Max(s => s.Position.Y + s.Height / 2);
+            var spaceBelow = maxY - state.Position.Y;
+            var placeBelow = spaceBelow >= spaceAbove;
 
-            var noteY = state.Position.Y - NoteHeight / 2;
+            // Position note to the outside of the diagram (away from center)
+            // Use vertical space where available
+            double noteX, noteY;
+            var diagramCenterX = model.States.Average(s => s.Position.X);
+            var placeToRight = state.Position.X >= diagramCenterX;
+
+            if (placeToRight)
+            {
+                // Place to the right of the state (outside edge)
+                noteX = state.Position.X + state.Width / 2 + NoteHorizontalOffset - noteWidth / 2;
+            }
+            else
+            {
+                // Place to the left of the state (outside edge)
+                noteX = state.Position.X - state.Width / 2 - NoteHorizontalOffset - noteWidth / 2;
+            }
+
+            noteY = placeBelow
+                ? state.Position.Y + state.Height / 2 + NoteVerticalOffset
+                : state.Position.Y - state.Height / 2 - NoteVerticalOffset - NoteHeight;
 
             // Note box with folded corner
             var foldSize = 8;
@@ -627,6 +677,34 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
                 fontFamily: options.FontFamily);
+
+            // Curved dashed line connecting note to state
+            // Connection points
+            double stateConnectX, stateConnectY, noteConnectX, noteConnectY;
+
+            if (placeToRight)
+            {
+                stateConnectX = state.Position.X + state.Width / 2;
+                noteConnectX = noteX;
+            }
+            else
+            {
+                stateConnectX = state.Position.X - state.Width / 2;
+                noteConnectX = noteX + noteWidth;
+            }
+
+            stateConnectY = placeBelow
+                ? state.Position.Y + state.Height / 2
+                : state.Position.Y - state.Height / 2;
+            noteConnectY = placeBelow ? noteY : noteY + NoteHeight;
+
+            // Draw curved dashed line
+            var midX = (stateConnectX + noteConnectX) / 2;
+            var midY = (stateConnectY + noteConnectY) / 2;
+            var curvePath = $"M {Fmt(stateConnectX)} {Fmt(stateConnectY)} " +
+                           $"Q {Fmt(stateConnectX)} {Fmt(midY)}, {Fmt(noteConnectX)} {Fmt(noteConnectY)}";
+
+            builder.AddPath(curvePath, fill: "none", stroke: "#333", strokeWidth: 1, strokeDasharray: "5,5");
         }
     }
 

@@ -28,7 +28,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
 
         // Calculate total rows needed
         var maxBit = model.Fields.Max(f => f.EndBit);
-        var totalRows = (maxBit / bitsPerRow) + 1;
+        var totalRows = maxBit / bitsPerRow + 1;
 
         var width = bitsPerRow * BitWidth + options.Padding * 2;
         var height = totalRows * RowHeight + BitNumberHeight + options.Padding * 2 + titleOffset;

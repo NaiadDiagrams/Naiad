@@ -41,11 +41,9 @@ public class PieParser : IDiagramParser<PieModel>
         select BuildModel(showData, content.title, content.sections);
 
     static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
-        from lines in (
-            Try(TitleLine.Select(t => (title: (string?)t, section: (PieSection?)null)))
-                .Or(Try(SectionParser.Select(s => (title: (string?)null, section: (PieSection?)s))))
-                .Or(SkipLine.ThenReturn((title: (string?)null, section: (PieSection?)null)))
-        ).Many()
+        from lines in Try(TitleLine.Select(t => (title: (string?)t, section: (PieSection?)null)))
+            .Or(Try(SectionParser.Select(s => (title: (string?)null, section: (PieSection?)s))))
+            .Or(SkipLine.ThenReturn((title: (string?)null, section: (PieSection?)null))).Many()
         select (
             title: lines.FirstOrDefault(l => l.title != null).title,
             sections: lines.Where(l => l.section != null).Select(l => l.section!).ToList()
