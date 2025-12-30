@@ -210,11 +210,19 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             fill: "#333");
     }
 
-    static void DrawJunction(SvgBuilder builder, ArchitectureJunction junction, double x, double y, RenderOptions options) =>
+    static void DrawJunction(
+        SvgBuilder builder,
+        ArchitectureJunction junction,
+        double x, double y,
+        RenderOptions options) =>
         builder.AddCircle(x, y, 8, fill: "#666", stroke: "#333", strokeWidth: 1);
 
-    static void DrawEdge(SvgBuilder builder, (double x, double y) from, (double x, double y) to,
-        ArchitectureEdge edge, RenderOptions options)
+    static void DrawEdge(
+        SvgBuilder builder,
+        (double x, double y) from,
+        (double x, double y) to,
+        ArchitectureEdge edge,
+        RenderOptions options)
     {
         // Calculate edge start/end based on direction
         var fromOffset = GetDirectionOffset(edge.SourceSide);

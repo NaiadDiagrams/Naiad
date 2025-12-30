@@ -3,7 +3,7 @@ namespace MermaidSharp.Diagrams.Quadrant;
 public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 {
     const double ChartSize = 400;
-    const double AxisMargin = 60;
+    const double MinAxisMargin = 60;
     const double TitleHeight = 40;
     const double PointRadius = 8;
     const double LabelPadding = 10;
@@ -29,13 +29,20 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
     public SvgDocument Render(QuadrantModel model, RenderOptions options)
     {
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var width = ChartSize + AxisMargin * 2 + options.Padding * 2;
-        var height = ChartSize + AxisMargin * 2 + titleOffset + options.Padding * 2;
+
+        // Calculate left margin based on y-axis label lengths
+        var yLabelMaxLength = Math.Max(
+            model.YAxisTop?.Length ?? 0,
+            model.YAxisBottom?.Length ?? 0);
+        var leftAxisMargin = Math.Max(MinAxisMargin, yLabelMaxLength * options.FontSize * 0.6 + LabelPadding);
+
+        var width = ChartSize + leftAxisMargin + MinAxisMargin + options.Padding * 2;
+        var height = ChartSize + MinAxisMargin * 2 + titleOffset + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);
 
-        var chartLeft = options.Padding + AxisMargin;
-        var chartTop = options.Padding + titleOffset + AxisMargin;
+        var chartLeft = options.Padding + leftAxisMargin;
+        var chartTop = options.Padding + titleOffset + MinAxisMargin;
         var chartRight = chartLeft + ChartSize;
         var chartBottom = chartTop + ChartSize;
         var centerX = chartLeft + ChartSize / 2;
