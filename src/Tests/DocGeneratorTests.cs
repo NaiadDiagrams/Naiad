@@ -5,32 +5,58 @@ public class DocGeneratorTests
     public async Task Generate()
     {
         var testsDir = ProjectFiles.ProjectDirectory;
-        var outputPath = Path.Combine(ProjectFiles.SolutionDirectory, "test-cases.include.md");
-
-        var markdown = new StringBuilder();
-        markdown.AppendLine("# MermaidSharp Test Examples");
-        markdown.AppendLine();
-        markdown.AppendLine("This document is auto-generated from the test suite.");
-        markdown.AppendLine();
+        var outputDir = Path.Combine(ProjectFiles.SolutionDirectory, "test-renders");
+        Directory.Delete(outputDir,true);
+        Directory.CreateDirectory(outputDir);
 
         var testFiles = Directory.GetFiles(testsDir, "*Tests.cs", SearchOption.AllDirectories)
             .Where(f => !f.Contains("DocumentationGenerator"))
             .OrderBy(f => f);
 
+        // Group tests by category
+        var testsByCategory = new Dictionary<string, List<TestInfo>>();
+
         foreach (var testFile in testFiles)
         {
             var tests = await ExtractTestsFromFile(testFile);
-            if (tests.Count == 0) continue;
+            if (tests.Count == 0)
+            {
+                continue;
+            }
 
             var relativePath = Path.GetRelativePath(testsDir, testFile);
-            var category = Path.GetDirectoryName(relativePath)?.Replace("\\", "/") ?? "";
+            var category = Path.GetDirectoryName(relativePath)?.Replace("\\", "/") ?? "Other";
 
-            markdown.AppendLine($"## {category}");
+            if (!testsByCategory.TryGetValue(category, out var value))
+            {
+                value = [];
+                testsByCategory[category] = value;
+            }
+
+            value.AddRange(tests);
+        }
+
+        // Determine which categories are beta (first test's first line ends with -beta)
+        var betaCategories = new HashSet<string>();
+        foreach (var (category, tests) in testsByCategory)
+        {
+            if (tests.Count > 0 && IsBeta(tests[0].Input))
+            {
+                betaCategories.Add(category);
+            }
+        }
+
+        // Write one file per category
+        foreach (var (category, tests) in testsByCategory)
+        {
+            var isBeta = betaCategories.Contains(category);
+            var markdown = new StringBuilder();
+            markdown.AppendLine($"# {category}");
             markdown.AppendLine();
 
             foreach (var test in tests)
             {
-                markdown.AppendLine($"### {test.Name}");
+                markdown.AppendLine($"## {test.Name}");
                 markdown.AppendLine();
 
                 markdown.AppendLine("**Input:**");
@@ -38,10 +64,13 @@ public class DocGeneratorTests
                 markdown.AppendLine(test.Input);
                 markdown.AppendLine("```");
 
-
-                markdown.AppendLine("```mermaid");
-                markdown.AppendLine(test.Input);
-                markdown.AppendLine("```");
+                // Only render mermaid block for non-beta (GitHub doesn't support beta syntax)
+                if (!isBeta)
+                {
+                    markdown.AppendLine("```mermaid");
+                    markdown.AppendLine(test.Input);
+                    markdown.AppendLine("```");
+                }
 
                 markdown.AppendLine();
                 markdown.AppendLine($"[Open in Mermaid Live]({GetMermaidLiveUrl(test.Input)})");
@@ -49,7 +78,8 @@ public class DocGeneratorTests
 
                 if (!string.IsNullOrEmpty(test.VerifiedPngPath))
                 {
-                    var relativePngPath = Path.GetRelativePath(ProjectFiles.SolutionDirectory, test.VerifiedPngPath)
+                    var relativePngPath = Path
+                        .GetRelativePath(outputDir, test.VerifiedPngPath)
                         .Replace("\\", "/");
                     markdown.AppendLine("**Output:**");
                     markdown.AppendLine();
@@ -57,12 +87,47 @@ public class DocGeneratorTests
                     markdown.AppendLine();
                 }
             }
+
+            var outputPath = Path.Combine(outputDir, $"{category}.md");
+            await File.WriteAllTextAsync(outputPath, markdown.ToString());
+            Console.WriteLine($"Generated: {outputPath}");
         }
 
-        Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
-        await File.WriteAllTextAsync(outputPath, markdown.ToString());
+        // Generate index page
+        var index = new StringBuilder();
+        index.AppendLine("# Test Renders");
+        index.AppendLine();
+        index.AppendLine("Auto-generated documentation from the test suite.");
+        index.AppendLine();
 
-        Console.WriteLine($"Generated documentation at: {outputPath}");
+        var stableCategories = testsByCategory.Keys.Where(c => !betaCategories.Contains(c)).OrderBy(c => c);
+        var betaCategoriesSorted = betaCategories.OrderBy(c => c);
+
+        foreach (var category in stableCategories)
+        {
+            index.AppendLine($"- [{category}]({category}.md)");
+        }
+
+        if (betaCategories.Count > 0)
+        {
+            index.AppendLine();
+            index.AppendLine("## Beta");
+            index.AppendLine();
+            foreach (var category in betaCategoriesSorted)
+            {
+                index.AppendLine($"- [{category}]({category}.md)");
+            }
+        }
+
+        var indexPath = Path.Combine(outputDir, "index.md");
+        await File.WriteAllTextAsync(indexPath, index.ToString());
+        Console.WriteLine($"Generated: {indexPath}");
+    }
+
+    static bool IsBeta(string input)
+    {
+        var firstLine = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? "";
+        return firstLine.TrimEnd().EndsWith("-beta");
     }
 
     static async Task<List<TestInfo>> ExtractTestsFromFile(string filePath)
@@ -83,10 +148,16 @@ public class DocGeneratorTests
         {
             var body = method.Body?.ToString() ?? method.ExpressionBody?.ToString() ?? "";
 
-            if (!body.Contains("VerifySvg")) continue;
+            if (!body.Contains("VerifySvg"))
+            {
+                continue;
+            }
 
             var input = ExtractInputString(method);
-            if (string.IsNullOrEmpty(input)) continue;
+            if (string.IsNullOrEmpty(input))
+            {
+                continue;
+            }
 
             var testName = method.Identifier.Text;
             var className = method.Ancestors()
@@ -95,7 +166,7 @@ public class DocGeneratorTests
 
             var verifiedPngPath = FindVerifiedFile(filePath, className, testName, ".verified.png");
 
-            results.Add(new TestInfo
+            results.Add(new()
             {
                 Name = testName,
                 ClassName = className,
@@ -140,15 +211,11 @@ public class DocGeneratorTests
             .OfType<InterpolatedStringExpressionSyntax>()
             .FirstOrDefault();
 
-        if (interpolated != null)
-        {
-            return interpolated.Contents
-                .OfType<InterpolatedStringTextSyntax>()
-                .Select(c => c.TextToken.ValueText)
-                .FirstOrDefault();
-        }
-
-        return null;
+        return interpolated?
+            .Contents
+            .OfType<InterpolatedStringTextSyntax>()
+            .Select(c => c.TextToken.ValueText)
+            .FirstOrDefault();
     }
 
     static string? FindVerifiedFile(string testFile, string className, string testName, string extension)
@@ -157,17 +224,21 @@ public class DocGeneratorTests
 
         // Try pattern: ClassName.TestName.verified.svg
         var pattern1 = Path.Combine(dir, $"{className}.{testName}{extension}");
-        if (File.Exists(pattern1)) return pattern1;
+        if (File.Exists(pattern1))
+        {
+            return pattern1;
+        }
 
         // Try without class name
         var pattern2 = Path.Combine(dir, $"{testName}{extension}");
-        if (File.Exists(pattern2)) return pattern2;
+        if (File.Exists(pattern2))
+        {
+            return pattern2;
+        }
 
         // Search in subdirectories
         var searchPattern = $"*{testName}{extension}";
-        var found = Directory.GetFiles(dir, searchPattern, SearchOption.AllDirectories).FirstOrDefault();
-
-        return found;
+        return Directory.GetFiles(dir, searchPattern, SearchOption.AllDirectories).FirstOrDefault();
     }
 
     static string GetMermaidLiveUrl(string code)
