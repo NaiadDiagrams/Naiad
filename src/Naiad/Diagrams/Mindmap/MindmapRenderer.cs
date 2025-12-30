@@ -119,9 +119,9 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
 
         foreach (var child in node.Children)
         {
-            var (childWidth, childHeight) = CalculateBounds(child);
-            rightEdge = Math.Max(rightEdge, child.Position.X + child.Width / 2);
-            bottomEdge = Math.Max(bottomEdge, child.Position.Y + child.Height / 2);
+            var (childRight, childBottom) = CalculateBounds(child);
+            rightEdge = Math.Max(rightEdge, childRight);
+            bottomEdge = Math.Max(bottomEdge, childBottom);
         }
 
         return (rightEdge, bottomEdge);

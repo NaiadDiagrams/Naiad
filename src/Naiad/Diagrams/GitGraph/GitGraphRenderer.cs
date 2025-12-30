@@ -120,7 +120,6 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var toX = offsetX + to.Row * CommitSpacingX;
         var toY = offsetY + toBranch.Column * CommitSpacingY;
 
-        var fromColor = fromBranch.Color ?? BranchColors[fromBranch.Column % BranchColors.Length];
         var toColor = toBranch.Color ?? BranchColors[toBranch.Column % BranchColors.Length];
 
         if (from.Branch == to.Branch)
