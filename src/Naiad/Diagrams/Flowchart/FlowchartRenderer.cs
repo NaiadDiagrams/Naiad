@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using MermaidSharp.Layout;
 
 namespace MermaidSharp.Diagrams.Flowchart;
 
