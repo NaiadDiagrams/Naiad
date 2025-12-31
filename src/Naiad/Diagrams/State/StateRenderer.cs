@@ -33,16 +33,23 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
 
-        // Adjust fork/join bar widths to span connected nodes
-        AdjustForkJoinWidths(model);
+        // Align start/end nodes and their single children
+        AlignSingleChildNodes(model);
 
         // Calculate extra space needed for notes
         var stateMap = BuildStateMap(model.States);
-        var (noteExtraWidth, noteExtraHeight) = CalculateNoteExtraSpace(model, stateMap, options);
+        var (noteExtraWidth, noteExtraHeight, noteExtraLeft) = CalculateNoteExtraSpace(model, stateMap, options);
+
+        // Shift all positions right if notes extend past left edge
+        if (noteExtraLeft > 0)
+        {
+            foreach (var state in model.States)
+                state.Position = new(state.Position.X + noteExtraLeft, state.Position.Y);
+        }
 
         // Build SVG
         var builder = new SvgBuilder()
-            .Size(layoutResult.Width + noteExtraWidth, layoutResult.Height + noteExtraHeight)
+            .Size(layoutResult.Width + noteExtraWidth + noteExtraLeft, layoutResult.Height + noteExtraHeight)
             .Padding(options.Padding)
             .AddArrowMarker();
 
@@ -58,10 +65,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
-    static (double extraWidth, double extraHeight) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
+    static (double extraWidth, double extraHeight, double extraLeft) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
     {
         double maxExtraWidth = 0;
         double maxExtraHeight = 0;
+        double maxExtraLeft = 0;
 
         foreach (var note in model.Notes)
         {
@@ -83,10 +91,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 noteX = state.Position.X - state.Width / 2 - NoteHorizontalOffset - noteWidth / 2;
             }
 
+            // Check if note extends past right edge
             var noteRightEdge = noteX + noteWidth;
             var stateRightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
             var extraWidthNeeded = noteRightEdge - stateRightEdge;
+
+            // Check if note extends past left edge
+            var stateLeftEdge = model.States.Min(s => s.Position.X - s.Width / 2);
+            var extraLeftNeeded = stateLeftEdge - noteX;
             maxExtraWidth = Math.Max(maxExtraWidth, extraWidthNeeded);
+            maxExtraLeft = Math.Max(maxExtraLeft, extraLeftNeeded);
 
             // Check if note extends below
             var spaceAbove = state.Position.Y;
@@ -102,7 +116,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             }
         }
 
-        return (maxExtraWidth > 0 ? maxExtraWidth + 20 : 0, maxExtraHeight > 0 ? maxExtraHeight + 20 : 0);
+        return (
+            maxExtraWidth > 0 ? maxExtraWidth + 20 : 0,
+            maxExtraHeight > 0 ? maxExtraHeight + 20 : 0,
+            maxExtraLeft > 0 ? maxExtraLeft + 20 : 0
+        );
     }
 
     static GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
@@ -165,7 +183,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             return (SpecialStateSize, SpecialStateSize);
 
         if (state.Type is StateType.Fork or StateType.Join)
-            return (StateMinWidth, 8);
+            return (100, 8); // Fixed compact width for fork/join bars
 
         if (state.Type == StateType.Choice)
             return (SpecialStateSize * 2, SpecialStateSize * 2);
@@ -200,6 +218,50 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
+    static void AlignSingleChildNodes(StateModel model)
+    {
+        // Find the horizontal center of the diagram
+        var contentStates = model.States
+            .Where(s => s.Type != StateType.Start && s.Type != StateType.End)
+            .ToList();
+        if (contentStates.Count == 0) return;
+
+        var diagramCenterX = (contentStates.Min(s => s.Position.X) + contentStates.Max(s => s.Position.X)) / 2;
+
+        // Center start node
+        var startNode = model.States.FirstOrDefault(s => s.Type == StateType.Start);
+        if (startNode != null)
+        {
+            startNode.Position = new(diagramCenterX, startNode.Position.Y);
+
+            // If start has only one child, align that child with start
+            var startChildren = model.Transitions.Where(t => t.FromId == startNode.Id).ToList();
+            if (startChildren.Count == 1)
+            {
+                var childState = model.States.FirstOrDefault(s => s.Id == startChildren[0].ToId);
+                if (childState != null && childState.Type != StateType.Fork)
+                {
+                    childState.Position = new(diagramCenterX, childState.Position.Y);
+                }
+            }
+        }
+
+        // Center end node with its parent if it has only one
+        var endNode = model.States.FirstOrDefault(s => s.Type == StateType.End);
+        if (endNode != null)
+        {
+            var endParents = model.Transitions.Where(t => t.ToId == endNode.Id).ToList();
+            if (endParents.Count == 1)
+            {
+                var parentState = model.States.FirstOrDefault(s => s.Id == endParents[0].FromId);
+                if (parentState != null)
+                {
+                    endNode.Position = new(parentState.Position.X, endNode.Position.Y);
+                }
+            }
+        }
+    }
+
     static void AdjustForkJoinWidths(StateModel model)
     {
         var stateMap = BuildStateMap(model.States);
@@ -229,11 +291,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
                 if (connectedStates.Count >= 2)
                 {
-                    // Calculate width to span from leftmost to rightmost connected state
-                    var minX = connectedStates.Min(s => s.Position.X - s.Width / 2);
-                    var maxX = connectedStates.Max(s => s.Position.X + s.Width / 2);
-                    state.Width = maxX - minX;
-                    state.Position = new((minX + maxX) / 2, state.Position.Y);
+                    // Calculate width based on number of connected states
+                    // Keep bars compact - roughly 40px per connected state
+                    var barWidth = Math.Max(80, connectedStates.Count * 50);
+                    state.Width = barWidth;
+                    // Center between leftmost and rightmost connected states
+                    var leftState = connectedStates.OrderBy(s => s.Position.X).First();
+                    var rightState = connectedStates.OrderBy(s => s.Position.X).Last();
+                    state.Position = new((leftState.Position.X + rightState.Position.X) / 2, state.Position.Y);
                 }
             }
         }
@@ -652,6 +717,38 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             noteY = placeBelow
                 ? state.Position.Y + state.Height / 2 + NoteVerticalOffset
                 : state.Position.Y - state.Height / 2 - NoteVerticalOffset - NoteHeight;
+
+            // Check for overlaps with other states and adjust position
+            const double minGap = 15;
+            foreach (var otherState in model.States)
+            {
+                if (otherState.Id == state.Id) continue;
+
+                var otherTop = otherState.Position.Y - otherState.Height / 2;
+                var otherBottom = otherState.Position.Y + otherState.Height / 2;
+                var otherLeft = otherState.Position.X - otherState.Width / 2;
+                var otherRight = otherState.Position.X + otherState.Width / 2;
+
+                var noteBottom = noteY + NoteHeight;
+                var noteRight = noteX + noteWidth;
+
+                // Check horizontal overlap
+                var horizontalOverlap = noteX < otherRight + minGap && noteRight > otherLeft - minGap;
+
+                if (horizontalOverlap)
+                {
+                    // If note bottom overlaps with other state top, move note up
+                    if (noteBottom > otherTop - minGap && noteY < otherTop)
+                    {
+                        noteY = otherTop - NoteHeight - minGap;
+                    }
+                    // If note top overlaps with other state bottom, move note down
+                    else if (noteY < otherBottom + minGap && noteBottom > otherBottom)
+                    {
+                        noteY = otherBottom + minGap;
+                    }
+                }
+            }
 
             // Note box with folded corner
             var foldSize = 8;
