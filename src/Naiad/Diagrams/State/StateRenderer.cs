@@ -1,9 +1,23 @@
+using System.Diagnostics;
+
 namespace MermaidSharp.Diagrams.State;
 
 public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<StateModel>
 {
     readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+
+#if DEBUG
+    readonly List<TextBounds> _textBounds = [];
+    readonly List<LineBounds> _lineBounds = [];
+    readonly List<NodeBounds> _nodeBounds = [];
+    double _svgWidth;
+    double _svgHeight;
+
+    record TextBounds(double X, double Y, double Width, double Height, string Label);
+    record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
+    record NodeBounds(double X, double Y, double Width, double Height, string Label);
+#endif
 
     const double StateMinWidth = 40;
     const double StateHeight = 40;
@@ -18,6 +32,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
+#if DEBUG
+        _textBounds.Clear();
+        _lineBounds.Clear();
+        _nodeBounds.Clear();
+#endif
+
         // Convert to graph model for layout
         var graphModel = ConvertToGraphModel(model, options);
 
@@ -25,7 +45,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var layoutOptions = new LayoutOptions
         {
             Direction = model.Direction,
-            NodeSeparation = 80,
+            NodeSeparation = 120,  // More horizontal space
             RankSeparation = 80
         };
         var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
@@ -40,16 +60,38 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var stateMap = BuildStateMap(model.States);
         var (noteExtraWidth, noteExtraHeight, noteExtraLeft) = CalculateNoteExtraSpace(model, stateMap, options);
 
-        // Shift all positions right if notes extend past left edge
-        if (noteExtraLeft > 0)
+        // Calculate extra space needed for bidirectional forward edges (curve left)
+        var curveExtraLeft = CalculateCurveExtraLeft(model, stateMap);
+        var totalExtraLeft = Math.Max(noteExtraLeft, curveExtraLeft);
+
+        // Calculate extra space needed for back-edges (curve right)
+        var curveExtraRight = CalculateCurveExtraRight(model, stateMap);
+
+        // Calculate extra height for end node if it was repositioned
+        var endExtraHeight = CalculateEndNodeExtraHeight(model, layoutResult.Height);
+
+        // Calculate extra height for routed transitions that go around obstacles
+        var routedExtraHeight = CalculateRoutedTransitionExtraHeight(model, stateMap, layoutResult.Height);
+
+        // Shift all positions right if notes or curves extend past left edge
+        if (totalExtraLeft > 0)
         {
             foreach (var state in model.States)
-                state.Position = new(state.Position.X + noteExtraLeft, state.Position.Y);
+                state.Position = new(state.Position.X + totalExtraLeft, state.Position.Y);
         }
 
+        // Ensure end nodes don't overlap with other states (run after position shift)
+        AdjustEndNodePosition(model);
+
         // Build SVG
+        var svgWidth = layoutResult.Width + noteExtraWidth + totalExtraLeft + curveExtraRight;
+        var svgHeight = layoutResult.Height + noteExtraHeight + endExtraHeight + routedExtraHeight;
+#if DEBUG
+        _svgWidth = svgWidth;
+        _svgHeight = svgHeight;
+#endif
         var builder = new SvgBuilder()
-            .Size(layoutResult.Width + noteExtraWidth + noteExtraLeft, layoutResult.Height + noteExtraHeight)
+            .Size(svgWidth, svgHeight)
             .Padding(options.Padding)
             .AddArrowMarker();
 
@@ -62,7 +104,314 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Render notes
         RenderNotes(builder, model, options);
 
+#if DEBUG
+        CheckForTextOverlaps();
+        CheckForLinesUnderNodes();
+        CheckForNodeOverlaps();
+        CheckForElementsOutsideBounds();
+#endif
+
         return builder.Build();
+    }
+
+#if DEBUG
+    void TrackText(double x, double y, string text, string anchor, double fontSize)
+    {
+        var width = MeasureText(text, fontSize);
+        var height = fontSize * 1.2; // Approximate line height
+
+        // Adjust x based on anchor
+        var left = anchor switch
+        {
+            "middle" => x - width / 2,
+            "end" => x - width,
+            _ => x // "start" or default
+        };
+
+        // Adjust y (text is typically centered vertically with dominant-baseline="middle")
+        var top = y - height / 2;
+
+        _textBounds.Add(new TextBounds(left, top, width, height, text));
+    }
+
+    void CheckForTextOverlaps()
+    {
+        for (var i = 0; i < _textBounds.Count; i++)
+        {
+            for (var j = i + 1; j < _textBounds.Count; j++)
+            {
+                var a = _textBounds[i];
+                var b = _textBounds[j];
+
+                // Check for rectangle overlap
+                var overlapsX = a.X < b.X + b.Width && a.X + a.Width > b.X;
+                var overlapsY = a.Y < b.Y + b.Height && a.Y + a.Height > b.Y;
+
+                if (overlapsX && overlapsY)
+                {
+                    throw new InvalidOperationException(
+                        $"Text overlap detected: \"{a.Label}\" at ({a.X:F1},{a.Y:F1},{a.Width:F1}x{a.Height:F1}) " +
+                        $"overlaps with \"{b.Label}\" at ({b.X:F1},{b.Y:F1},{b.Width:F1}x{b.Height:F1})");
+                }
+            }
+        }
+    }
+
+    void TrackLine(double x1, double y1, double x2, double y2, string label) =>
+        _lineBounds.Add(new LineBounds(x1, y1, x2, y2, label));
+
+    void TrackNode(double x, double y, double width, double height, string label) =>
+        _nodeBounds.Add(new NodeBounds(x - width / 2, y - height / 2, width, height, label));
+
+    void CheckForLinesUnderNodes()
+    {
+        foreach (var line in _lineBounds)
+        {
+            foreach (var node in _nodeBounds)
+            {
+                // Skip if line is connected to this node (endpoint is near/inside the node)
+                var nodeRight = node.X + node.Width;
+                var nodeBottom = node.Y + node.Height;
+                var margin = 10.0; // Allow endpoints near edges
+
+                var startInNode = line.X1 >= node.X - margin && line.X1 <= nodeRight + margin &&
+                                  line.Y1 >= node.Y - margin && line.Y1 <= nodeBottom + margin;
+                var endInNode = line.X2 >= node.X - margin && line.X2 <= nodeRight + margin &&
+                                line.Y2 >= node.Y - margin && line.Y2 <= nodeBottom + margin;
+
+                if (startInNode || endInNode)
+                    continue; // This line is connected to this node, not passing under it
+
+                // Check if line segment passes through node's bounding box
+                if (LineIntersectsRect(line.X1, line.Y1, line.X2, line.Y2,
+                    node.X, node.Y, node.Width, node.Height))
+                {
+                    throw new InvalidOperationException(
+                        $"Line passes under node: \"{line.Label}\" from ({line.X1:F1},{line.Y1:F1}) to ({line.X2:F1},{line.Y2:F1}) " +
+                        $"passes under \"{node.Label}\" at ({node.X:F1},{node.Y:F1},{node.Width:F1}x{node.Height:F1})");
+                }
+            }
+        }
+    }
+
+    void CheckForNodeOverlaps()
+    {
+        for (var i = 0; i < _nodeBounds.Count; i++)
+        {
+            for (var j = i + 1; j < _nodeBounds.Count; j++)
+            {
+                var a = _nodeBounds[i];
+                var b = _nodeBounds[j];
+
+                // Check for rectangle overlap with margin
+                var margin = 2.0;
+                var overlapsX = a.X < b.X + b.Width - margin && a.X + a.Width > b.X + margin;
+                var overlapsY = a.Y < b.Y + b.Height - margin && a.Y + a.Height > b.Y + margin;
+
+                if (overlapsX && overlapsY)
+                {
+                    throw new InvalidOperationException(
+                        $"Node overlap detected: \"{a.Label}\" at ({a.X:F1},{a.Y:F1},{a.Width:F1}x{a.Height:F1}) " +
+                        $"overlaps with \"{b.Label}\" at ({b.X:F1},{b.Y:F1},{b.Width:F1}x{b.Height:F1})");
+                }
+            }
+        }
+    }
+
+    void CheckForElementsOutsideBounds()
+    {
+        // Check nodes
+        foreach (var node in _nodeBounds)
+        {
+            if (node.X < 0 || node.Y < 0 ||
+                node.X + node.Width > _svgWidth ||
+                node.Y + node.Height > _svgHeight)
+            {
+                throw new InvalidOperationException(
+                    $"Node outside bounds: \"{node.Label}\" at ({node.X:F1},{node.Y:F1},{node.Width:F1}x{node.Height:F1}) " +
+                    $"is outside SVG bounds (0,0,{_svgWidth:F1}x{_svgHeight:F1})");
+            }
+        }
+
+        // Check text
+        foreach (var text in _textBounds)
+        {
+            if (text.X < 0 || text.Y < 0 ||
+                text.X + text.Width > _svgWidth ||
+                text.Y + text.Height > _svgHeight)
+            {
+                throw new InvalidOperationException(
+                    $"Text outside bounds: \"{text.Label}\" at ({text.X:F1},{text.Y:F1},{text.Width:F1}x{text.Height:F1}) " +
+                    $"is outside SVG bounds (0,0,{_svgWidth:F1}x{_svgHeight:F1})");
+            }
+        }
+
+        // Check lines
+        foreach (var line in _lineBounds)
+        {
+            if (line.X1 < 0 || line.Y1 < 0 || line.X2 < 0 || line.Y2 < 0 ||
+                line.X1 > _svgWidth || line.Y1 > _svgHeight ||
+                line.X2 > _svgWidth || line.Y2 > _svgHeight)
+            {
+                throw new InvalidOperationException(
+                    $"Line outside bounds: \"{line.Label}\" from ({line.X1:F1},{line.Y1:F1}) to ({line.X2:F1},{line.Y2:F1}) " +
+                    $"is outside SVG bounds (0,0,{_svgWidth:F1}x{_svgHeight:F1})");
+            }
+        }
+    }
+
+    static bool LineIntersectsRect(double x1, double y1, double x2, double y2,
+        double rx, double ry, double rw, double rh)
+    {
+        // Check if line segment intersects rectangle interior (not just edges)
+        // Use parametric line equation and check for intersection with rectangle
+
+        var left = rx;
+        var right = rx + rw;
+        var top = ry;
+        var bottom = ry + rh;
+
+        // Shrink the rect slightly to avoid edge cases at connection points
+        var margin = 2.0;
+        left += margin;
+        right -= margin;
+        top += margin;
+        bottom -= margin;
+
+        if (right <= left || bottom <= top)
+            return false;
+
+        // Check if either endpoint is inside the rectangle (shouldn't happen for valid lines)
+        // Skip endpoints since they might be at connection points
+
+        // Use Cohen-Sutherland style clipping to find if line passes through interior
+        // Sample points along the line and check if any are inside
+        var steps = 20;
+        for (var i = 1; i < steps; i++) // Skip endpoints (i=0 and i=steps)
+        {
+            var t = i / (double)steps;
+            var px = x1 + t * (x2 - x1);
+            var py = y1 + t * (y2 - y1);
+
+            if (px > left && px < right && py > top && py < bottom)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+#endif
+
+    static double CalculateCurveExtraLeft(StateModel model, Dictionary<string, State> stateMap)
+    {
+        // Check if any bidirectional forward edges will curve left
+        var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
+        if (bidirectionalPairs.Count == 0)
+            return 0;
+
+        var leftEdge = model.States.Min(s => s.Position.X - s.Width / 2);
+        double maxExtraNeeded = 0;
+
+        foreach (var transition in model.Transitions)
+        {
+            var pairKey = GetPairKey(transition.FromId, transition.ToId);
+            if (!bidirectionalPairs.Contains(pairKey))
+                continue;
+
+            // Check if this is a forward edge (not back edge)
+            if (IsBackEdge(transition, stateMap))
+                continue;
+
+            // Forward edge of bidirectional pair - calculate how far left it extends
+            // The curve goes to baseLeftEdge - 50
+            var baseLeftEdge = leftEdge - 50;
+            var curveExtraNeeded = -baseLeftEdge; // How much past x=0 it goes
+
+            // Also account for label width if present (label is centered on vertical line)
+            var labelExtraNeeded = 0.0;
+            if (!string.IsNullOrEmpty(transition.Label))
+            {
+                var labelWidth = MeasureText(transition.Label, 12); // FontSize - 2
+                var labelLeft = baseLeftEdge - labelWidth / 2;
+                labelExtraNeeded = -labelLeft;
+            }
+
+            maxExtraNeeded = Math.Max(maxExtraNeeded, Math.Max(curveExtraNeeded, labelExtraNeeded));
+        }
+
+        return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0; // Add margin
+    }
+
+    static double CalculateCurveExtraRight(StateModel model, Dictionary<string, State> stateMap)
+    {
+        // Check if any back-edges or bidirectional back-edges will curve right
+        var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
+        var rightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
+
+        // Count back-edges to determine spacing
+        var backEdgeCount = model.Transitions
+            .Count(t => IsBackEdge(t, stateMap) && !bidirectionalPairs.Contains(GetPairKey(t.FromId, t.ToId)));
+
+        // Also count bidirectional back-edges
+        var bidirectionalBackEdgeCount = model.Transitions
+            .Count(t => IsBackEdge(t, stateMap) && bidirectionalPairs.Contains(GetPairKey(t.FromId, t.ToId)));
+
+        var totalBackEdges = backEdgeCount + bidirectionalBackEdgeCount;
+        if (totalBackEdges == 0)
+            return 0;
+
+        // Back-edges go to baseRightEdge + 50, with spacing of 50 between each
+        // The rightmost curve extends to rightEdge + 50 + (backEdgeCount - 1) * 50
+        var baseRightEdge = rightEdge + 50;
+        var maxRightExtent = baseRightEdge + (totalBackEdges - 1) * 50;
+
+        // Extra width needed beyond the layout width (which includes states up to rightEdge)
+        var extraNeeded = maxRightExtent - rightEdge;
+        return extraNeeded > 0 ? extraNeeded + 10 : 0; // Add margin
+    }
+
+    static double CalculateEndNodeExtraHeight(StateModel model, double layoutHeight)
+    {
+        var endNode = model.States.FirstOrDefault(s => s.Type == StateType.End);
+        if (endNode == null)
+            return 0;
+
+        var endBottom = endNode.Position.Y + SpecialStateSize / 2;
+        var extraNeeded = endBottom - layoutHeight;
+        return extraNeeded > 0 ? extraNeeded + 10 : 0; // Add margin
+    }
+
+    static double CalculateRoutedTransitionExtraHeight(StateModel model, Dictionary<string, State> stateMap, double layoutHeight)
+    {
+        double maxExtraNeeded = 0;
+
+        foreach (var transition in model.Transitions)
+        {
+            if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
+                !stateMap.TryGetValue(transition.ToId, out var toState))
+                continue;
+
+            var (startX, startY) = GetConnectionPoint(fromState, toState);
+            var (endX, endY) = GetConnectionPoint(toState, fromState);
+
+            var obstacle = FindObstacleState(startX, startY, endX, endY, transition, stateMap);
+            if (obstacle == null)
+                continue;
+
+            // Calculate how far down the routed path goes
+            var obstacleBottom = obstacle.Position.Y + obstacle.Height / 2;
+            var targetBottom = toState.Type == StateType.End
+                ? toState.Position.Y + SpecialStateSize / 2
+                : toState.Position.Y + toState.Height / 2;
+            var margin = 30.0;
+            var horizontalY = Math.Max(obstacleBottom, targetBottom) + margin;
+
+            var extraNeeded = horizontalY - layoutHeight;
+            maxExtraNeeded = Math.Max(maxExtraNeeded, extraNeeded);
+        }
+
+        return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0;
     }
 
     static (double extraWidth, double extraHeight, double extraLeft) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
@@ -262,6 +611,37 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
+    static void AdjustEndNodePosition(StateModel model)
+    {
+        var endNode = model.States.FirstOrDefault(s => s.Type == StateType.End);
+        if (endNode == null) return;
+
+        const double margin = 30;
+        var endHalfSize = SpecialStateSize / 2;
+
+        // Find siblings at similar Y level (within 100 pixels) and move end node to the right
+        foreach (var state in model.States)
+        {
+            if (state.Type is StateType.End or StateType.Start or StateType.Fork or StateType.Join or StateType.Choice)
+                continue;
+
+            // Check if this state is at a similar vertical level as the end node
+            var yDistance = Math.Abs(state.Position.Y - endNode.Position.Y);
+            if (yDistance > 100)
+                continue;
+
+            // Check if they're horizontally close (would overlap in a straight line from parent)
+            var xDistance = Math.Abs(state.Position.X - endNode.Position.X);
+            if (xDistance > state.Width)
+                continue;
+
+            // Move end node to the right of this state, at the same Y level
+            var stateRight = state.Position.X + state.Width / 2;
+            var newX = stateRight + margin + endHalfSize;
+            endNode.Position = new(newX, state.Position.Y);
+        }
+    }
+
     static void AdjustForkJoinWidths(StateModel model)
     {
         var stateMap = BuildStateMap(model.States);
@@ -323,6 +703,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Filled circle
                 builder.AddCircle(x, y, SpecialStateSize / 2,
                     fill: "#333", stroke: "#333", strokeWidth: 1);
+#if DEBUG
+                TrackNode(x, y, SpecialStateSize, SpecialStateSize, state.Id);
+#endif
                 break;
 
             case StateType.End:
@@ -331,6 +714,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "none", stroke: "#333", strokeWidth: 2);
                 builder.AddCircle(x, y, SpecialStateSize / 4,
                     fill: "#333", stroke: "#333", strokeWidth: 1);
+#if DEBUG
+                TrackNode(x, y, SpecialStateSize, SpecialStateSize, state.Id);
+#endif
                 break;
 
             case StateType.Fork:
@@ -340,6 +726,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     x - state.Width / 2, y - state.Height / 2,
                     state.Width, state.Height,
                     fill: "#333", stroke: "#333");
+#if DEBUG
+                TrackNode(x, y, state.Width, state.Height, state.Id);
+#endif
                 break;
 
             case StateType.Choice:
@@ -351,6 +740,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                                   $"L{Fmt(x)},{Fmt(y + halfH)} " +
                                   $"L{Fmt(x - halfW)},{Fmt(y)} Z";
                 builder.AddPath(diamondPath, fill: "#fff", stroke: "#333", strokeWidth: 1);
+#if DEBUG
+                TrackNode(x, y, state.Width, state.Height, state.Id);
+#endif
                 break;
 
             default:
@@ -368,7 +760,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void RenderNormalState(SvgBuilder builder, State state, RenderOptions options)
+    void RenderNormalState(SvgBuilder builder, State state, RenderOptions options)
     {
         var x = state.Position.X - state.Width / 2;
         var y = state.Position.Y - state.Height / 2;
@@ -379,6 +771,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "#9370DB",
             strokeWidth: 1);
 
+#if DEBUG
+        TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id);
+#endif
+
         var label = state.Description ?? state.Id;
         if (state.Type == StateType.Normal)
         {
@@ -387,6 +783,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 baseline: "middle",
                 fontSize: $"{options.FontSize}px",
                 fontFamily: options.FontFamily);
+#if DEBUG
+            TrackText(state.Position.X, state.Position.Y, label, "middle", options.FontSize);
+#endif
         }
     }
 
@@ -410,6 +809,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             fontSize: $"{options.FontSize}px",
             fontFamily: options.FontFamily,
             fontWeight: "bold");
+#if DEBUG
+        TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize);
+#endif
 
         // Separator line
         builder.AddLine(x, y + 30, x + state.Width, y + 30,
@@ -419,26 +821,33 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         RenderStates(builder, state.NestedStates, options);
     }
 
-    static void RenderTransitions(SvgBuilder builder, StateModel model, RenderOptions options)
+    void RenderTransitions(SvgBuilder builder, StateModel model, RenderOptions options)
     {
         var stateMap = BuildStateMap(model.States);
 
         // Build set of bidirectional pairs (where A->B and B->A both exist)
         var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
 
+        // Collect all back-edges to assign unique offsets
+        var backEdges = model.Transitions
+            .Where(t => IsBackEdge(t, stateMap) && !bidirectionalPairs.Contains(GetPairKey(t.FromId, t.ToId)))
+            .OrderBy(t => stateMap.TryGetValue(t.FromId, out var s) ? s.Position.X : 0)
+            .ToList();
+
         foreach (var transition in model.Transitions)
         {
             var pairKey = GetPairKey(transition.FromId, transition.ToId);
             if (bidirectionalPairs.Contains(pairKey))
             {
-                // This is part of a bidirectional pair - curve it
+                // Bidirectional pair - use curves (forward curves left, back curves right)
                 var isBackEdge = IsBackEdge(transition, stateMap);
-                RenderCurvedTransition(builder, transition, stateMap, isBackEdge, options);
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge, model, 0, options);
             }
             else if (IsBackEdge(transition, stateMap))
             {
-                // Single back-edge (no forward counterpart) - curve to the right
-                RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, options);
+                // Single back-edge (no forward counterpart) - curve to the right with offset
+                var backEdgeIndex = backEdges.IndexOf(transition);
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, model, backEdgeIndex, options);
             }
             else
             {
@@ -458,17 +867,23 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
                 var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
 
+                var nestedBackEdges = state.NestedTransitions
+                    .Where(t => IsBackEdge(t, nestedMap) && !nestedBidirectional.Contains(GetPairKey(t.FromId, t.ToId)))
+                    .OrderBy(t => nestedMap.TryGetValue(t.FromId, out var s) ? s.Position.X : 0)
+                    .ToList();
+
                 foreach (var transition in state.NestedTransitions)
                 {
                     var pairKey = GetPairKey(transition.FromId, transition.ToId);
                     if (nestedBidirectional.Contains(pairKey))
                     {
                         var isBackEdge = IsBackEdge(transition, nestedMap);
-                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, options);
+                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, model, 0, options);
                     }
                     else if (IsBackEdge(transition, nestedMap))
                     {
-                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, options);
+                        var backEdgeIndex = nestedBackEdges.IndexOf(transition);
+                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, model, backEdgeIndex, options);
                     }
                     else
                     {
@@ -513,55 +928,155 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return fromState.Position.Y > toState.Position.Y + 20;
     }
 
-    static void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
-        Dictionary<string, State> stateMap, bool isBackEdge, RenderOptions options)
+    void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
+        Dictionary<string, State> stateMap, bool isBackEdge, StateModel model, int backEdgeIndex, RenderOptions options)
     {
         if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
             !stateMap.TryGetValue(transition.ToId, out var toState))
             return;
 
-        // Back-edge curves to the RIGHT, forward edge curves to the LEFT
-        var curveDirection = isBackEdge ? 1 : -1;
-        var curveOffset = 15 * curveDirection; // Tighter curve
-
-        // Offset connection points to create gap between arrows
-        var connectionOffset = 8 * curveDirection;
-
-        // Start and end with horizontal offset for gap
-        var startX = fromState.Position.X + connectionOffset;
-        var startY = fromState.Position.Y + (isBackEdge ? -fromState.Height / 2 : fromState.Height / 2);
-
-        var endX = toState.Position.X + connectionOffset;
-        var endY = toState.Position.Y + (isBackEdge ? toState.Height / 2 : -toState.Height / 2);
-
-        // Control points - use midpoint Y for smoother curve
-        var midY = (startY + endY) / 2;
-
-        var path = $"M {Fmt(startX)} {Fmt(startY)} " +
-                   $"C {Fmt(startX + curveOffset)} {Fmt(midY)}, " +
-                   $"{Fmt(endX + curveOffset)} {Fmt(midY)}, " +
-                   $"{Fmt(endX)} {Fmt(endY)}";
-
-        builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
-
-        // Draw arrowhead - calculate direction from control point to end
-        var arrowFromX = endX + curveOffset;
-        var arrowFromY = midY;
-        DrawArrowhead(builder, arrowFromX, arrowFromY, endX, endY);
-
-        // Draw label if present
-        if (!string.IsNullOrEmpty(transition.Label))
+        if (isBackEdge)
         {
-            var labelX = startX + curveOffset * 2;
-            var labelY = midY;
+            // Route back-edges around the right side of the diagram
+            // Space lines apart enough for labels to be centered on each line without overlap
+            // Exclude special states (Start/End) from edge calculation since they may be repositioned
+            var normalStates = model.States.Where(s => s.Type == StateType.Normal).ToList();
+            var baseRightEdge = (normalStates.Count > 0 ? normalStates.Max(s => s.Position.X + s.Width / 2) : 100) + 50;
 
-            builder.AddRect(labelX - 30, labelY - 8, 60, 16,
-                fill: "#fff", stroke: "none");
-            builder.AddText(labelX, labelY, transition.Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
-                fontFamily: options.FontFamily);
+            // Use spacing of 50px between lines - enough for typical labels
+            var lineSpacing = 50;
+            var rightEdge = baseRightEdge + backEdgeIndex * lineSpacing;
+
+            // Back-edges use smooth curves: angle out, go vertical, angle back in
+            // Exit from right side of source state (center Y)
+            var startX = fromState.Position.X + fromState.Width / 2;
+            var startY = fromState.Position.Y;
+            // Enter right side of target state - offset each line so they don't overlap
+            // Outer lines (higher index, further right) enter higher to avoid crossing
+            var endX = toState.Position.X + toState.Width / 2;
+            var entrySpacing = 15.0;
+            var endY = toState.Position.Y - backEdgeIndex * entrySpacing;
+
+            // Radius for the quarter-circle curves at corners
+            var curveRadius = Math.Min(80, (rightEdge - startX) / 2);
+
+            // Path: smooth curve out, vertical line, smooth curve in
+            // Curves gradually transition - tangent horizontal at state, tangent vertical at line
+            var path = $"M {Fmt(startX)} {Fmt(startY)} " +
+                       // Exit curve: gradual from horizontal to vertical
+                       // P1 horizontal from start, P2 vertical from end
+                       $"C {Fmt(startX + curveRadius)} {Fmt(startY)}, " +
+                       $"{Fmt(rightEdge)} {Fmt(startY - curveRadius)}, " +
+                       $"{Fmt(rightEdge)} {Fmt(startY - curveRadius * 2)} " +
+                       // Vertical line up
+                       $"L {Fmt(rightEdge)} {Fmt(endY + curveRadius * 2)} " +
+                       // Entry curve: gradual from vertical to horizontal (mirrored)
+                       // P1 vertical from start, P2 horizontal from end
+                       $"C {Fmt(rightEdge)} {Fmt(endY + curveRadius)}, " +
+                       $"{Fmt(endX + curveRadius)} {Fmt(endY)}, " +
+                       $"{Fmt(endX)} {Fmt(endY)}";
+
+            builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
+
+#if DEBUG
+            var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
+            // Track segments for collision detection (symmetric at both ends)
+            // Exit: only track initial horizontal portion before curve rises
+            TrackLine(startX, startY, startX + curveRadius, startY, lineLabel);
+            // Vertical segment
+            TrackLine(rightEdge, startY - curveRadius * 2, rightEdge, endY + curveRadius * 2, lineLabel);
+            // Entry: only track final horizontal portion after curve flattens
+            TrackLine(endX + curveRadius, endY, endX, endY, lineLabel);
+#endif
+
+            // Arrowhead comes in horizontally from the right
+            DrawArrowhead(builder, endX + curveRadius, endY, endX, endY);
+
+            // Draw label centered on this back-edge's vertical line
+            if (!string.IsNullOrEmpty(transition.Label))
+            {
+                // Position label centered on the vertical line segment
+                var labelX = rightEdge;
+                // Position at midpoint of the vertical segment
+                var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
+
+                builder.AddText(labelX, labelY, transition.Label,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: $"{options.FontSize - 2}px",
+                    fontFamily: options.FontFamily,
+                    fill: "#666");
+#if DEBUG
+                TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+#endif
+            }
+        }
+        else
+        {
+            // Forward edge (mirror of back-edge) - curves to the LEFT
+            // Route around the left side of the diagram
+            // Exclude special states (Start/End) from edge calculation
+            var normalStates = model.States.Where(s => s.Type == StateType.Normal).ToList();
+            var baseLeftEdge = (normalStates.Count > 0 ? normalStates.Min(s => s.Position.X - s.Width / 2) : 0) - 50;
+
+            // Use same spacing as back-edges
+            var lineSpacing = 50;
+            var leftEdge = baseLeftEdge - backEdgeIndex * lineSpacing;
+
+            // Exit from left side of source state (center Y)
+            var startX = fromState.Position.X - fromState.Width / 2;
+            var startY = fromState.Position.Y;
+            // Enter left side of target state
+            var endX = toState.Position.X - toState.Width / 2;
+            var entrySpacing = 15.0;
+            var endY = toState.Position.Y + backEdgeIndex * entrySpacing;
+
+            // Radius for the quarter-circle curves at corners (mirror of back-edge)
+            var curveRadius = Math.Min(80, (startX - leftEdge) / 2);
+
+            // Path: smooth curve out to left, vertical line down, smooth curve in
+            // Mirror of back-edge algorithm
+            var path = $"M {Fmt(startX)} {Fmt(startY)} " +
+                       // Exit curve: gradual from horizontal to vertical (going left then down)
+                       $"C {Fmt(startX - curveRadius)} {Fmt(startY)}, " +
+                       $"{Fmt(leftEdge)} {Fmt(startY + curveRadius)}, " +
+                       $"{Fmt(leftEdge)} {Fmt(startY + curveRadius * 2)} " +
+                       // Vertical line down
+                       $"L {Fmt(leftEdge)} {Fmt(endY - curveRadius * 2)} " +
+                       // Entry curve: gradual from vertical to horizontal (mirrored)
+                       $"C {Fmt(leftEdge)} {Fmt(endY - curveRadius)}, " +
+                       $"{Fmt(endX - curveRadius)} {Fmt(endY)}, " +
+                       $"{Fmt(endX)} {Fmt(endY)}";
+
+            builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
+
+#if DEBUG
+            var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
+            // Track segments for collision detection (mirror of back-edge)
+            TrackLine(startX, startY, startX - curveRadius, startY, lineLabel);
+            TrackLine(leftEdge, startY + curveRadius * 2, leftEdge, endY - curveRadius * 2, lineLabel);
+            TrackLine(endX - curveRadius, endY, endX, endY, lineLabel);
+#endif
+
+            // Arrowhead comes in horizontally from the left
+            DrawArrowhead(builder, endX - curveRadius, endY, endX, endY);
+
+            if (!string.IsNullOrEmpty(transition.Label))
+            {
+                // Position label centered on this edge's vertical line
+                var labelX = leftEdge;
+                var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
+
+                builder.AddRect(labelX - 30, labelY - 8, 60, 16, fill: "#fff", stroke: "none");
+                builder.AddText(labelX, labelY, transition.Label,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: $"{options.FontSize - 2}px",
+                    fontFamily: options.FontFamily);
+#if DEBUG
+                TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+#endif
+            }
         }
     }
 
@@ -582,7 +1097,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return map;
     }
 
-    static void RenderTransition(
+    void RenderTransition(
         SvgBuilder builder,
         StateTransition transition,
         Dictionary<string, State> stateMap,
@@ -595,74 +1110,216 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var (startX, startY) = GetConnectionPoint(fromState, toState);
         var (endX, endY) = GetConnectionPoint(toState, fromState);
 
-        // Draw arrow line
-        builder.AddLine(startX, startY, endX, endY,
-            stroke: "#333", strokeWidth: 1);
+        // Check if line would pass through any other state
+        var obstacleState = FindObstacleState(startX, startY, endX, endY, transition, stateMap);
 
-        // Draw arrowhead
-        DrawArrowhead(builder, startX, startY, endX, endY);
+        if (obstacleState != null)
+        {
+            // Route around the obstacle
+            RenderRoutedTransition(builder, transition, fromState, toState, obstacleState, options);
+        }
+        else
+        {
+            // Draw straight arrow line
+            builder.AddLine(startX, startY, endX, endY, stroke: "#333", strokeWidth: 1);
+
+#if DEBUG
+            var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
+            TrackLine(startX, startY, endX, endY, lineLabel);
+#endif
+
+            // Draw arrowhead
+            DrawArrowhead(builder, startX, startY, endX, endY);
+
+            // Draw label if present
+            if (!string.IsNullOrEmpty(transition.Label))
+            {
+                // Position label along the line - at 85% for transitions to End nodes to avoid overlap with curves
+                var t = toState.Type == StateType.End ? 0.85 : 0.5;
+                var labelX = startX + t * (endX - startX);
+                var labelY = startY + t * (endY - startY) - 10;
+
+                builder.AddRect(labelX - 30, labelY - 8, 60, 16, fill: "#fff", stroke: "none");
+                builder.AddText(labelX, labelY, transition.Label,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: $"{options.FontSize - 2}px",
+                    fontFamily: options.FontFamily);
+#if DEBUG
+                TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+#endif
+            }
+        }
+    }
+
+    static State? FindObstacleState(double x1, double y1, double x2, double y2,
+        StateTransition transition, Dictionary<string, State> stateMap)
+    {
+        // Don't route transitions to end nodes - their position is adjusted to avoid overlap
+        if (stateMap.TryGetValue(transition.ToId, out var toState) && toState.Type == StateType.End)
+            return null;
+
+        foreach (var kvp in stateMap)
+        {
+            var state = kvp.Value;
+            // Skip source and target states
+            if (state.Id == transition.FromId || state.Id == transition.ToId)
+                continue;
+            // Skip special states (start/end circles are small)
+            if (state.Type is StateType.Start or StateType.End)
+                continue;
+
+            // Check if line passes through this state
+            var left = state.Position.X - state.Width / 2 - 5;
+            var right = state.Position.X + state.Width / 2 + 5;
+            var top = state.Position.Y - state.Height / 2 - 5;
+            var bottom = state.Position.Y + state.Height / 2 + 5;
+
+            // Sample points along the line
+            for (var i = 1; i < 20; i++)
+            {
+                var t = i / 20.0;
+                var px = x1 + t * (x2 - x1);
+                var py = y1 + t * (y2 - y1);
+
+                if (px > left && px < right && py > top && py < bottom)
+                    return state;
+            }
+        }
+        return null;
+    }
+
+    void RenderRoutedTransition(SvgBuilder builder, StateTransition transition,
+        State fromState, State toState, State obstacle, RenderOptions options)
+    {
+        // Route around the obstacle - go to the side with more space
+        var obstacleLeft = obstacle.Position.X - obstacle.Width / 2;
+        var obstacleRight = obstacle.Position.X + obstacle.Width / 2;
+
+        // Determine which side to route around
+        var fromX = fromState.Position.X;
+        var spaceOnLeft = obstacleLeft - 0; // Space from left edge
+        var spaceOnRight = fromX - obstacleRight; // Space from obstacle to line
+        var routeLeft = Math.Abs(fromX - obstacleLeft) < Math.Abs(fromX - obstacleRight);
+
+        // Connection points
+        var startX = fromState.Position.X;
+        var startY = fromState.Position.Y + fromState.Height / 2;
+        var endX = toState.Position.X;
+        // Since we're routing around and approaching from below, connect to BOTTOM of target
+        var endY = toState.Type == StateType.End
+            ? toState.Position.Y + SpecialStateSize / 2
+            : toState.Position.Y + toState.Height / 2;
+
+        // Route around obstacle
+        var margin = 30.0;
+        var routeX = routeLeft
+            ? obstacleLeft - margin
+            : obstacleRight + margin;
+
+        // Create path: down from start, horizontal to route position, down past obstacle and target, then to end
+        var obstacleTop = obstacle.Position.Y - obstacle.Height / 2;
+        var obstacleBottom = obstacle.Position.Y + obstacle.Height / 2;
+
+        // The horizontal return segment should be below both the obstacle AND the target
+        var targetBottom = toState.Type == StateType.End
+            ? toState.Position.Y + SpecialStateSize / 2
+            : toState.Position.Y + toState.Height / 2;
+        var horizontalY = Math.Max(obstacleBottom, targetBottom) + margin;
+
+        var path = $"M {Fmt(startX)} {Fmt(startY)} " +
+                   $"L {Fmt(startX)} {Fmt(obstacleTop - margin)} " +
+                   $"L {Fmt(routeX)} {Fmt(obstacleTop - margin)} " +
+                   $"L {Fmt(routeX)} {Fmt(horizontalY)} " +
+                   $"L {Fmt(endX)} {Fmt(horizontalY)} " +
+                   $"L {Fmt(endX)} {Fmt(endY)}";
+
+        builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
+
+#if DEBUG
+        var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
+        // Track the segments
+        TrackLine(startX, startY, startX, obstacleTop - margin, lineLabel);
+        TrackLine(startX, obstacleTop - margin, routeX, obstacleTop - margin, lineLabel);
+        TrackLine(routeX, obstacleTop - margin, routeX, horizontalY, lineLabel);
+        TrackLine(routeX, horizontalY, endX, horizontalY, lineLabel);
+        TrackLine(endX, horizontalY, endX, endY, lineLabel);
+#endif
+
+        // Draw arrowhead (pointing up since we approach from below)
+        DrawArrowhead(builder, endX, horizontalY, endX, endY);
 
         // Draw label if present
         if (!string.IsNullOrEmpty(transition.Label))
         {
-            var labelX = (startX + endX) / 2;
-            var labelY = (startY + endY) / 2 - 10;
+            var labelX = routeX;
+            var labelY = obstacle.Position.Y;
 
-            builder.AddRect(labelX - 30, labelY - 8, 60, 16,
-                fill: "#fff", stroke: "none");
+            builder.AddRect(labelX - 30, labelY - 8, 60, 16, fill: "#fff", stroke: "none");
             builder.AddText(labelX, labelY, transition.Label,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
                 fontFamily: options.FontFamily);
+#if DEBUG
+            TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+#endif
         }
     }
 
-    static (double x, double y) GetConnectionPoint(State from, State to)
+    // Calculate where a line from center to target intersects the node's edge
+    static (double x, double y) GetEdgeIntersection(State state, double targetX, double targetY)
     {
-        var dx = to.Position.X - from.Position.X;
-        var dy = to.Position.Y - from.Position.Y;
+        var cx = state.Position.X;
+        var cy = state.Position.Y;
+        var dx = targetX - cx;
+        var dy = targetY - cy;
 
-        // For special states, use center with offset
-        if (from.Type is StateType.Start or StateType.End)
+        if (Math.Abs(dx) < 0.001 && Math.Abs(dy) < 0.001)
+            return (cx, cy);
+
+        // For circular nodes (start/end)
+        if (state.Type is StateType.Start or StateType.End)
         {
             var angle = Math.Atan2(dy, dx);
             var radius = SpecialStateSize / 2;
-            return (from.Position.X + radius * Math.Cos(angle),
-                    from.Position.Y + radius * Math.Sin(angle));
+            return (cx + radius * Math.Cos(angle), cy + radius * Math.Sin(angle));
         }
 
-        // For fork/join states, connect from near center with offset based on target direction
-        if (from.Type is StateType.Fork or StateType.Join)
+        // For diamond (choice) - edge equation: |x| + |y| = size
+        if (state.Type == StateType.Choice)
         {
-            // Offset from center based on target's horizontal position
-            var offset = dx > 0 ? 15 : dx < 0 ? -15 : 0;
-            var y = dy > 0
-                ? from.Position.Y + from.Height / 2
-                : from.Position.Y - from.Height / 2;
-            return (from.Position.X + offset, y);
+            var size = SpecialStateSize;
+            // For a diamond, intersection at parameter t where |t*dx| + |t*dy| = size
+            var t = size / (Math.Abs(dx) + Math.Abs(dy));
+            return (cx + dx * t, cy + dy * t);
         }
 
-        // When receiving from fork/join, always use top/bottom center
-        if (to.Type is StateType.Fork or StateType.Join)
+        // For fork/join (horizontal bar)
+        if (state.Type is StateType.Fork or StateType.Join)
         {
-            return dy > 0
-                ? (from.Position.X, from.Position.Y + from.Height / 2)
-                : (from.Position.X, from.Position.Y - from.Height / 2);
+            // Always connect from top or bottom of the bar
+            var y = dy > 0 ? cy + state.Height / 2 : cy - state.Height / 2;
+            // X position along the bar based on target direction
+            var x = Math.Clamp(cx + dx * 0.1, cx - state.Width / 2 + 5, cx + state.Width / 2 - 5);
+            return (x, y);
         }
 
-        // For normal states, use edge intersection
-        if (Math.Abs(dx) > Math.Abs(dy))
-        {
-            return dx > 0
-                ? (from.Position.X + from.Width / 2, from.Position.Y)
-                : (from.Position.X - from.Width / 2, from.Position.Y);
-        }
+        // For rectangular nodes - find edge intersection
+        var halfW = state.Width / 2;
+        var halfH = state.Height / 2;
 
-        return dy > 0
-            ? (from.Position.X, from.Position.Y + from.Height / 2)
-            : (from.Position.X, from.Position.Y - from.Height / 2);
+        // Calculate intersection with rectangle edges
+        var tX = Math.Abs(dx) > 0.001 ? halfW / Math.Abs(dx) : double.MaxValue;
+        var tY = Math.Abs(dy) > 0.001 ? halfH / Math.Abs(dy) : double.MaxValue;
+        var t2 = Math.Min(tX, tY);
+
+        return (cx + dx * t2, cy + dy * t2);
     }
+
+    // Line targets center of destination, clips at edge of source
+    static (double x, double y) GetConnectionPoint(State from, State to) =>
+        GetEdgeIntersection(from, to.Position.X, to.Position.Y);
 
     static void DrawArrowhead(SvgBuilder builder, double fromX, double fromY, double toX, double toY)
     {
@@ -679,7 +1336,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         ], fill: "#333");
     }
 
-    static void RenderNotes(SvgBuilder builder, StateModel model, RenderOptions options)
+    void RenderNotes(SvgBuilder builder, StateModel model, RenderOptions options)
     {
         var stateMap = BuildStateMap(model.States);
 
@@ -692,16 +1349,25 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var noteWidth = Math.Max(NoteMinWidth, MeasureText(note.Text, options.FontSize - 2) + NotePadding);
 
             // Determine vertical placement based on available space
+            // But if this state has back-edges AND note would be placed to the right,
+            // prefer placing BELOW to avoid blocking the back-edge path
             var spaceAbove = state.Position.Y;
             var maxY = model.States.Max(s => s.Position.Y + s.Height / 2);
             var spaceBelow = maxY - state.Position.Y;
-            var placeBelow = spaceBelow >= spaceAbove;
+
+            var hasBackEdgeFromThisState = model.Transitions.Any(t =>
+                t.FromId == state.Id &&
+                stateMap.TryGetValue(t.ToId, out var to) &&
+                state.Position.Y > to.Position.Y + 20);
+            var diagramCenterX = model.States.Average(s => s.Position.X);
+            var wouldPlaceToRight = state.Position.X >= diagramCenterX;
+
+            // If this state has back-edges and note would be on the right, force placement below
+            var placeBelow = (hasBackEdgeFromThisState && wouldPlaceToRight) || spaceBelow >= spaceAbove;
 
             // Position note to the outside of the diagram (away from center)
-            // Use vertical space where available
             double noteX, noteY;
-            var diagramCenterX = model.States.Average(s => s.Position.X);
-            var placeToRight = state.Position.X >= diagramCenterX;
+            var placeToRight = wouldPlaceToRight;
 
             if (placeToRight)
             {
@@ -760,6 +1426,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
+#if DEBUG
+            // Track note as a node for line-under-node detection
+            TrackNode(noteX + noteWidth / 2, noteY + NoteHeight / 2, noteWidth, NoteHeight, $"Note: {note.Text}");
+#endif
+
             // Fold corner
             builder.AddLine(noteX + noteWidth - foldSize, noteY,
                            noteX + noteWidth - foldSize, noteY + foldSize,
@@ -774,29 +1445,29 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
                 fontFamily: options.FontFamily);
+#if DEBUG
+            TrackText(noteX + noteWidth / 2, noteY + NoteHeight / 2, note.Text, "middle", options.FontSize - 2);
+#endif
 
-            // Curved dashed line connecting note to state
-            // Connection points
-            double stateConnectX, stateConnectY, noteConnectX, noteConnectY;
+            // Curved dashed line connecting note to state using center-targeting algorithm
+            var noteCenterX = noteX + noteWidth / 2;
+            var noteCenterY = noteY + NoteHeight / 2;
 
-            if (placeToRight)
-            {
-                stateConnectX = state.Position.X + state.Width / 2;
-                noteConnectX = noteX;
-            }
-            else
-            {
-                stateConnectX = state.Position.X - state.Width / 2;
-                noteConnectX = noteX + noteWidth;
-            }
+            // State connection point - target note center, clip at state edge
+            var (stateConnectX, stateConnectY) = GetEdgeIntersection(state, noteCenterX, noteCenterY);
 
-            stateConnectY = placeBelow
-                ? state.Position.Y + state.Height / 2
-                : state.Position.Y - state.Height / 2;
-            noteConnectY = placeBelow ? noteY : noteY + NoteHeight;
+            // Note connection point - target state center, clip at note edge (rectangle)
+            var dx = state.Position.X - noteCenterX;
+            var dy = state.Position.Y - noteCenterY;
+            var noteHalfW = noteWidth / 2;
+            var noteHalfH = NoteHeight / 2;
+            var tX = Math.Abs(dx) > 0.001 ? noteHalfW / Math.Abs(dx) : double.MaxValue;
+            var tY = Math.Abs(dy) > 0.001 ? noteHalfH / Math.Abs(dy) : double.MaxValue;
+            var t = Math.Min(tX, tY);
+            var noteConnectX = noteCenterX + dx * t;
+            var noteConnectY = noteCenterY + dy * t;
 
             // Draw curved dashed line
-            var midX = (stateConnectX + noteConnectX) / 2;
             var midY = (stateConnectY + noteConnectY) / 2;
             var curvePath = $"M {Fmt(stateConnectX)} {Fmt(stateConnectY)} " +
                            $"Q {Fmt(stateConnectX)} {Fmt(midY)}, {Fmt(noteConnectX)} {Fmt(noteConnectY)}";
