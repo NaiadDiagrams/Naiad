@@ -698,15 +698,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Path: curve out to rightEdge, go vertical, curve back into target
             var path = $"M {Fmt(startX)} {Fmt(startY)} " +
-                       // Curve out: from top of source, curving right to the vertical line
-                       $"C {Fmt(startX)} {Fmt(startY - curveExtent)}, " +
-                       $"{Fmt(rightEdge)} {Fmt(startY - curveExtent)}, " +
-                       $"{Fmt(rightEdge)} {Fmt(startY - curveExtent * 2)} " +
+                       // Curve out: from top of source, curving right then up to the vertical line
+                       $"C {Fmt(startX + curveExtent)} {Fmt(startY)}, " +
+                       $"{Fmt(rightEdge)} {Fmt(startY)}, " +
+                       $"{Fmt(rightEdge)} {Fmt(startY - curveExtent)} " +
                        // Vertical line up
-                       $"L {Fmt(rightEdge)} {Fmt(endY + curveExtent * 2)} " +
-                       // Curve in: from vertical line, curving left into target
-                       $"C {Fmt(rightEdge)} {Fmt(endY + curveExtent)}, " +
-                       $"{Fmt(endX)} {Fmt(endY + curveExtent)}, " +
+                       $"L {Fmt(rightEdge)} {Fmt(endY + curveExtent)} " +
+                       // Curve in: from vertical line, curving down then left into target
+                       $"C {Fmt(rightEdge)} {Fmt(endY)}, " +
+                       $"{Fmt(endX + curveExtent)} {Fmt(endY)}, " +
                        $"{Fmt(endX)} {Fmt(endY)}";
 
             builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
@@ -714,10 +714,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 #if DEBUG
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track the vertical segment for collision detection
-            TrackLine(rightEdge, startY - curveExtent * 2, rightEdge, endY + curveExtent * 2, lineLabel);
+            TrackLine(rightEdge, startY - curveExtent, rightEdge, endY + curveExtent, lineLabel);
 #endif
 
-            DrawArrowhead(builder, endX, endY + curveExtent, endX, endY);
+            // Arrowhead comes in horizontally from the right
+            DrawArrowhead(builder, endX + curveExtent, endY, endX, endY);
 
             // Draw label centered on this back-edge's vertical line
             if (!string.IsNullOrEmpty(transition.Label))
