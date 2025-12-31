@@ -131,7 +131,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Adjust y (text is typically centered vertically with dominant-baseline="middle")
         var top = y - height / 2;
 
-        _textBounds.Add(new TextBounds(left, top, width, height, text));
+        _textBounds.Add(new(left, top, width, height, text));
     }
 
     void CheckForTextOverlaps()
@@ -158,10 +158,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     }
 
     void TrackLine(double x1, double y1, double x2, double y2, string label) =>
-        _lineBounds.Add(new LineBounds(x1, y1, x2, y2, label));
+        _lineBounds.Add(new(x1, y1, x2, y2, label));
 
     void TrackNode(double x, double y, double width, double height, string label) =>
-        _nodeBounds.Add(new NodeBounds(x - width / 2, y - height / 2, width, height, label));
+        _nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
 
     void CheckForLinesUnderNodes()
     {
@@ -1192,14 +1192,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     void RenderRoutedTransition(SvgBuilder builder, StateTransition transition,
         State fromState, State toState, State obstacle, RenderOptions options)
     {
-        // Route around the obstacle - go to the side with more space
+        // Route around the obstacle
         var obstacleLeft = obstacle.Position.X - obstacle.Width / 2;
         var obstacleRight = obstacle.Position.X + obstacle.Width / 2;
 
-        // Determine which side to route around
+        // Determine which side to route around (pick the closer side)
         var fromX = fromState.Position.X;
-        var spaceOnLeft = obstacleLeft - 0; // Space from left edge
-        var spaceOnRight = fromX - obstacleRight; // Space from obstacle to line
         var routeLeft = Math.Abs(fromX - obstacleLeft) < Math.Abs(fromX - obstacleRight);
 
         // Connection points

@@ -238,16 +238,16 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         {
             model.Direction = options.direction switch
             {
-                "TB" or "TD" => Models.Direction.TopToBottom,
-                "BT" => Models.Direction.BottomToTop,
-                "LR" => Models.Direction.LeftToRight,
-                "RL" => Models.Direction.RightToLeft,
-                _ => Models.Direction.LeftToRight
+                "TB" or "TD" => Direction.TopToBottom,
+                "BT" => Direction.BottomToTop,
+                "LR" => Direction.LeftToRight,
+                "RL" => Direction.RightToLeft,
+                _ => Direction.LeftToRight
             };
         }
         else
         {
-            model.Direction = Models.Direction.LeftToRight; // Git graphs default to LR
+            model.Direction = Direction.LeftToRight; // Git graphs default to LR
         }
 
         if (options.mainBranch != null)

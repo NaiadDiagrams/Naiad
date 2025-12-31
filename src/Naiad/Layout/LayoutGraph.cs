@@ -99,5 +99,5 @@ internal class LayoutEdge
     public required string TargetId { get; init; }
     public int Weight { get; set; } = 1;
     public bool IsReversed { get; set; }
-    public List<MermaidSharp.Models.Position> Points { get; } = [];
+    public List<Position> Points { get; } = [];
 }

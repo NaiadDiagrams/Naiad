@@ -55,15 +55,15 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         // Calculate category count
         var categoryCount = model.XAxisCategories.Count > 0
             ? model.XAxisCategories.Count
-            : (model.Series.Count > 0 ? model.Series.Max(s => s.Data.Count) : 1);
+            : model.Series.Count > 0 ? model.Series.Max(s => s.Data.Count) : 1;
         var categoryWidth = ChartWidth / categoryCount;
 
         // Draw grid lines
         var gridLines = 5;
         for (var i = 0; i <= gridLines; i++)
         {
-            var y = chartBottom - (ChartHeight * i / gridLines);
-            var value = dataMin + (dataRange * i / gridLines);
+            var y = chartBottom - ChartHeight * i / gridLines;
+            var value = dataMin + dataRange * i / gridLines;
 
             // Grid line
             builder.AddLine(chartLeft, y, chartRight, y,

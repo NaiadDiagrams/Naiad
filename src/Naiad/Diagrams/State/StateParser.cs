@@ -292,7 +292,7 @@ public class StateParser : IDiagramParser<StateModel>
             return;
 
         var stateType = id == "[*]"
-            ? (compositeStack.Count == 0 ? StateType.Start : StateType.Normal)
+            ? compositeStack.Count == 0 ? StateType.Start : StateType.Normal
             : StateType.Normal;
 
         var state = new State { Id = id, Type = stateType };
