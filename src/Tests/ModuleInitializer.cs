@@ -1,26 +1,29 @@
+using EmptyFiles;
+
 public static partial class ModuleInitializer
 {
     [ModuleInitializer]
     public static void Init()
     {
-        // Configure Verify to use UTF-8 without BOM
-        VerifierSettings.UseUtf8NoBom();
-
         // Normalize floating point values to 4 decimal places for visual equivalence
         VerifierSettings.AddScrubber(NormalizeFloatingPoint);
+
+        VerifyImageSharpCompare.RegisterComparers(threshold: 5);
+
+        VerifierSettings.InitializePlugins();
     }
 
-    static void NormalizeFloatingPoint(StringBuilder sb)
+    static void NormalizeFloatingPoint(StringBuilder builder)
     {
-        var content = sb.ToString();
+        var content = builder.ToString();
         var normalized = FloatRegex().Replace(content, match =>
         {
             var value = double.Parse(match.Value, System.Globalization.CultureInfo.InvariantCulture);
             var rounded = Math.Round(value, 4);
             return rounded.ToString("0.####", System.Globalization.CultureInfo.InvariantCulture);
         });
-        sb.Clear();
-        sb.Append(normalized);
+        builder.Clear();
+        builder.Append(normalized);
     }
 
     [GeneratedRegex(@"-?\d+\.\d{5,}")]

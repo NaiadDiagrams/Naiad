@@ -387,10 +387,7 @@ public static class Mermaid
     }
 }
 
-public class MermaidException : Exception
-{
-    public MermaidException(string message) : base(message) { }
-}
+public class MermaidException(string message) : Exception(message);
 
 public class MermaidParseException : MermaidException
 {
