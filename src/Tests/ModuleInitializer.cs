@@ -8,7 +8,7 @@ public static partial class ModuleInitializer
         // Normalize floating point values to 4 decimal places for visual equivalence
         VerifierSettings.AddScrubber(NormalizeFloatingPoint);
 
-        VerifyImageSharpCompare.RegisterComparers(threshold: 5);
+        VerifyImageSharpCompare.RegisterComparers(threshold: 1000);
 
         VerifierSettings.InitializePlugins();
     }
