@@ -64,19 +64,6 @@ public class DocGeneratorTests
                 markdown.AppendLine(test.Input);
                 markdown.AppendLine("```");
 
-                // Only render mermaid block for non-beta (GitHub doesn't support beta syntax)
-                if (!isBeta)
-                {
-                    markdown.AppendLine("**Rendered by Mermaid:**");
-                    markdown.AppendLine("```mermaid");
-                    markdown.AppendLine(test.Input);
-                    markdown.AppendLine("```");
-                }
-
-                markdown.AppendLine();
-                markdown.AppendLine($"[Open in Mermaid Live]({GetMermaidLiveUrl(test.Input)})");
-                markdown.AppendLine();
-
                 var relativePngPath = Path
                     .GetRelativePath(outputDir, test.VerifiedPngPath)
                     .Replace("\\", "/");
@@ -89,6 +76,19 @@ public class DocGeneratorTests
                      </p>
 
                      """);
+
+                // Only render mermaid block for non-beta (GitHub doesn't support beta syntax)
+                if (!isBeta)
+                {
+                    markdown.AppendLine("**Rendered by Mermaid:**");
+                    markdown.AppendLine("```mermaid");
+                    markdown.AppendLine(test.Input);
+                    markdown.AppendLine("```");
+                }
+
+                markdown.AppendLine();
+                markdown.AppendLine($"[Open in Mermaid Live]({GetMermaidLiveUrl(test.Input)})");
+                markdown.AppendLine();
             }
 
             var outputPath = Path.Combine(outputDir, $"{category}.md");

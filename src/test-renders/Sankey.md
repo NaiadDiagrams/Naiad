@@ -8,14 +8,14 @@ sankey-beta
 A,B,10
 A,C,20
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbkEsQiwxMFxuQSxDLDIwIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Sankey/SankeyTests.Simple.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbkEsQiwxMFxuQSxDLDIwIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
 ## ThreeColumns
 
@@ -25,14 +25,14 @@ sankey-beta
 Source,Middle,30
 Middle,Target,30
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcblNvdXJjZSxNaWRkbGUsMzBcbk1pZGRsZSxUYXJnZXQsMzAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Sankey/SankeyTests.ThreeColumns.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcblNvdXJjZSxNaWRkbGUsMzBcbk1pZGRsZSxUYXJnZXQsMzAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
 ## EnergyFlow
 
@@ -46,14 +46,14 @@ Electricity,Industry,80
 Electricity,Residential,60
 Electricity,Commercial,40
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbkNvYWwsRWxlY3RyaWNpdHksMTAwXG5HYXMsRWxlY3RyaWNpdHksNTBcbk51Y2xlYXIsRWxlY3RyaWNpdHksMzBcbkVsZWN0cmljaXR5LEluZHVzdHJ5LDgwXG5FbGVjdHJpY2l0eSxSZXNpZGVudGlhbCw2MFxuRWxlY3RyaWNpdHksQ29tbWVyY2lhbCw0MCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Sankey/SankeyTests.EnergyFlow.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbkNvYWwsRWxlY3RyaWNpdHksMTAwXG5HYXMsRWxlY3RyaWNpdHksNTBcbk51Y2xlYXIsRWxlY3RyaWNpdHksMzBcbkVsZWN0cmljaXR5LEluZHVzdHJ5LDgwXG5FbGVjdHJpY2l0eSxSZXNpZGVudGlhbCw2MFxuRWxlY3RyaWNpdHksQ29tbWVyY2lhbCw0MCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
 ## BudgetFlow
 
@@ -67,14 +67,14 @@ Expenses,Food,800
 Expenses,Transport,400
 Expenses,Other,300
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcblNhbGFyeSxTYXZpbmdzLDEwMDBcblNhbGFyeSxFeHBlbnNlcywzMDAwXG5FeHBlbnNlcyxIb3VzaW5nLDE1MDBcbkV4cGVuc2VzLEZvb2QsODAwXG5FeHBlbnNlcyxUcmFuc3BvcnQsNDAwXG5FeHBlbnNlcyxPdGhlciwzMDAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Sankey/SankeyTests.BudgetFlow.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcblNhbGFyeSxTYXZpbmdzLDEwMDBcblNhbGFyeSxFeHBlbnNlcywzMDAwXG5FeHBlbnNlcyxIb3VzaW5nLDE1MDBcbkV4cGVuc2VzLEZvb2QsODAwXG5FeHBlbnNlcyxUcmFuc3BvcnQsNDAwXG5FeHBlbnNlcyxPdGhlciwzMDAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
 ## MultipleSourcesAndTargets
 
@@ -87,14 +87,14 @@ B,X,20
 B,Y,25
 B,Z,5
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbkEsWCwxMFxuQSxZLDE1XG5CLFgsMjBcbkIsWSwyNVxuQixaLDUiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Sankey/SankeyTests.MultipleSourcesAndTargets.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbkEsWCwxMFxuQSxZLDE1XG5CLFgsMjBcbkIsWSwyNVxuQixaLDUiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
 ## SingleLink
 
@@ -103,12 +103,12 @@ B,Z,5
 sankey-beta
 Input,Output,100
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbklucHV0LE91dHB1dCwxMDAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Sankey/SankeyTests.SingleLink.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2Fua2V5LWJldGFcbklucHV0LE91dHB1dCwxMDAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 

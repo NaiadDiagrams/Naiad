@@ -11,6 +11,12 @@ todo[Todo]
 done[Done]
     task3[Completed Task]
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.Simple.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 kanban
@@ -22,12 +28,6 @@ done[Done]
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoia2FuYmFuXG50b2RvW1RvZG9dXG4gICAgdGFzazFbRmlyc3QgVGFza11cbiAgICB0YXNrMltTZWNvbmQgVGFza11cbmRvbmVbRG9uZV1cbiAgICB0YXNrM1tDb21wbGV0ZWQgVGFza10iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Kanban/KanbanTests.Simple.verified.png" />
-</p>
 
 ## ThreeColumns
 
@@ -43,6 +43,12 @@ done[Done]
     t4[Testing]
     t5[Review]
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.ThreeColumns.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 kanban
@@ -58,12 +64,6 @@ done[Done]
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoia2FuYmFuXG50b2RvW1RvIERvXVxuICAgIHQxW1Jlc2VhcmNoXVxuICAgIHQyW0Rlc2lnbl1cbndpcFtJbiBQcm9ncmVzc11cbiAgICB0M1tEZXZlbG9wbWVudF1cbmRvbmVbRG9uZV1cbiAgICB0NFtUZXN0aW5nXVxuICAgIHQ1W1Jldmlld10iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Kanban/KanbanTests.ThreeColumns.verified.png" />
-</p>
-
 ## EmptyColumns
 
 **Input:**
@@ -74,6 +74,12 @@ todo[To Do]
 done[Done]
     t1[Task 1]
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.EmptyColumns.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 kanban
@@ -84,12 +90,6 @@ done[Done]
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoia2FuYmFuXG5iYWNrbG9nW0JhY2tsb2ddXG50b2RvW1RvIERvXVxuZG9uZVtEb25lXVxuICAgIHQxW1Rhc2sgMV0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Kanban/KanbanTests.EmptyColumns.verified.png" />
-</p>
 
 ## ManyTasks
 
@@ -111,6 +111,12 @@ col4[Done]
     t9[Setup]
     t10[Configuration]
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.ManyTasks.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 kanban
@@ -132,12 +138,6 @@ col4[Done]
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoia2FuYmFuXG5jb2wxW1NwcmludCBCYWNrbG9nXVxuICAgIHQxW1VzZXIgU3RvcnkgMV1cbiAgICB0MltVc2VyIFN0b3J5IDJdXG4gICAgdDNbVXNlciBTdG9yeSAzXVxuICAgIHQ0W1VzZXIgU3RvcnkgNF1cbiAgICB0NVtVc2VyIFN0b3J5IDVdXG5jb2wyW0luIFByb2dyZXNzXVxuICAgIHQ2W0ZlYXR1cmUgQV1cbiAgICB0N1tGZWF0dXJlIEJdXG5jb2wzW1Jldmlld11cbiAgICB0OFtCdWcgRml4IDFdXG5jb2w0W0RvbmVdXG4gICAgdDlbU2V0dXBdXG4gICAgdDEwW0NvbmZpZ3VyYXRpb25dIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Kanban/KanbanTests.ManyTasks.verified.png" />
-</p>
-
 ## SingleColumn
 
 **Input:**
@@ -148,6 +148,12 @@ tasks[All Tasks]
     t2[Task Two]
     t3[Task Three]
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Kanban/KanbanTests.SingleColumn.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 kanban
@@ -158,10 +164,4 @@ tasks[All Tasks]
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoia2FuYmFuXG50YXNrc1tBbGwgVGFza3NdXG4gICAgdDFbVGFzayBPbmVdXG4gICAgdDJbVGFzayBUd29dXG4gICAgdDNbVGFzayBUaHJlZV0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Kanban/KanbanTests.SingleColumn.verified.png" />
-</p>
 

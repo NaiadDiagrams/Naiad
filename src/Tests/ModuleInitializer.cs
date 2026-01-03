@@ -1,5 +1,3 @@
-using EmptyFiles;
-
 public static partial class ModuleInitializer
 {
     [ModuleInitializer]

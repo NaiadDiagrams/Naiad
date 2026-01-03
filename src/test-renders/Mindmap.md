@@ -10,6 +10,12 @@ mindmap
     Branch B
     Branch C
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Simple.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -20,12 +26,6 @@ mindmap
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBSb290XG4gICAgQnJhbmNoIEFcbiAgICBCcmFuY2ggQlxuICAgIEJyYW5jaCBDIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.Simple.verified.png" />
-</p>
 
 ## Nested
 
@@ -39,6 +39,12 @@ mindmap
     Branch 2
       Sub 2.1
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Nested.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -52,12 +58,6 @@ mindmap
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBSb290XG4gICAgQnJhbmNoIDFcbiAgICAgIFN1YiAxLjFcbiAgICAgIFN1YiAxLjJcbiAgICBCcmFuY2ggMlxuICAgICAgU3ViIDIuMSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.Nested.verified.png" />
-</p>
-
 ## CircleShape
 
 **Input:**
@@ -67,6 +67,12 @@ mindmap
     Child 1
     Child 2
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.CircleShape.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -77,12 +83,6 @@ mindmap
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICAoKENlbnRyYWwpKVxuICAgIENoaWxkIDFcbiAgICBDaGlsZCAyIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.CircleShape.verified.png" />
-</p>
-
 ## SquareShape
 
 **Input:**
@@ -92,6 +92,12 @@ mindmap
     [Square Child]
     Normal Child
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.SquareShape.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -102,12 +108,6 @@ mindmap
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBbU3F1YXJlIFJvb3RdXG4gICAgW1NxdWFyZSBDaGlsZF1cbiAgICBOb3JtYWwgQ2hpbGQiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.SquareShape.verified.png" />
-</p>
-
 ## RoundedShape
 
 **Input:**
@@ -117,6 +117,12 @@ mindmap
     (Rounded Child)
     Normal Child
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.RoundedShape.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -127,12 +133,6 @@ mindmap
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICAoUm91bmRlZCBSb290KVxuICAgIChSb3VuZGVkIENoaWxkKVxuICAgIE5vcm1hbCBDaGlsZCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.RoundedShape.verified.png" />
-</p>
-
 ## HexagonShape
 
 **Input:**
@@ -142,6 +142,12 @@ mindmap
     Child A
     Child B
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.HexagonShape.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -151,12 +157,6 @@ mindmap
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICB7e0hleGFnb259fVxuICAgIENoaWxkIEFcbiAgICBDaGlsZCBCIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.HexagonShape.verified.png" />
-</p>
 
 ## MixedShapes
 
@@ -169,6 +169,12 @@ mindmap
     (Rounded)
       {{Hex}}
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.MixedShapes.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -180,12 +186,6 @@ mindmap
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICAoKENlbnRlcikpXG4gICAgW1NxdWFyZV1cbiAgICAgIE5vcm1hbFxuICAgIChSb3VuZGVkKVxuICAgICAge3tIZXh9fSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.MixedShapes.verified.png" />
-</p>
 
 ## DeepHierarchy
 
@@ -199,6 +199,12 @@ mindmap
           Level 4
             Level 5
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.DeepHierarchy.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -211,12 +217,6 @@ mindmap
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBSb290XG4gICAgTGV2ZWwgMVxuICAgICAgTGV2ZWwgMlxuICAgICAgICBMZXZlbCAzXG4gICAgICAgICAgTGV2ZWwgNFxuICAgICAgICAgICAgTGV2ZWwgNSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.DeepHierarchy.verified.png" />
-</p>
 
 ## WideTree
 
@@ -231,6 +231,12 @@ mindmap
     E
     F
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.WideTree.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -244,12 +250,6 @@ mindmap
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBDZW50ZXJcbiAgICBBXG4gICAgQlxuICAgIENcbiAgICBEXG4gICAgRVxuICAgIEYiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.WideTree.verified.png" />
-</p>
 
 ## Complex
 
@@ -271,6 +271,12 @@ mindmap
       Staging
       Production
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Complex.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
 mindmap
@@ -291,10 +297,4 @@ mindmap
 ```
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICAoKFByb2plY3QpKVxuICAgIFtQbGFubmluZ11cbiAgICAgIFJlcXVpcmVtZW50c1xuICAgICAgRGVzaWduXG4gICAgW0RldmVsb3BtZW50XVxuICAgICAgRnJvbnRlbmRcbiAgICAgIEJhY2tlbmRcbiAgICAgIERhdGFiYXNlXG4gICAgW1Rlc3RpbmddXG4gICAgICBVbml0IFRlc3RzXG4gICAgICBJbnRlZ3JhdGlvblxuICAgIFtEZXBsb3ltZW50XVxuICAgICAgU3RhZ2luZ1xuICAgICAgUHJvZHVjdGlvbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
-
-**Rendered by Naiad:**
-
-<p align="center">
-  <img src="../Tests/Mindmap/MindmapTests.Complex.verified.png" />
-</p>
 

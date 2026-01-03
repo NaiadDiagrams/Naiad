@@ -8,14 +8,14 @@ packet-beta
 0-15: "Source Port"
 16-31: "Destination Port"
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMTU6IFx1MDAyMlNvdXJjZSBQb3J0XHUwMDIyXG4xNi0zMTogXHUwMDIyRGVzdGluYXRpb24gUG9ydFx1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Packet/PacketTests.Simple.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMTU6IFx1MDAyMlNvdXJjZSBQb3J0XHUwMDIyXG4xNi0zMTogXHUwMDIyRGVzdGluYXRpb24gUG9ydFx1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
 ## TCPHeader
 
@@ -39,14 +39,14 @@ packet-beta
 111-111: "FIN"
 112-127: "Window Size"
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMTU6IFx1MDAyMlNvdXJjZSBQb3J0XHUwMDIyXG4xNi0zMTogXHUwMDIyRGVzdGluYXRpb24gUG9ydFx1MDAyMlxuMzItNjM6IFx1MDAyMlNlcXVlbmNlIE51bWJlclx1MDAyMlxuNjQtOTU6IFx1MDAyMkFja25vd2xlZGdtZW50IE51bWJlclx1MDAyMlxuOTYtOTk6IFx1MDAyMkRhdGEgT2Zmc2V0XHUwMDIyXG4xMDAtMTAyOiBcdTAwMjJSZXNlcnZlZFx1MDAyMlxuMTAzLTEwMzogXHUwMDIyTlNcdTAwMjJcbjEwNC0xMDQ6IFx1MDAyMkNXUlx1MDAyMlxuMTA1LTEwNTogXHUwMDIyRUNFXHUwMDIyXG4xMDYtMTA2OiBcdTAwMjJVUkdcdTAwMjJcbjEwNy0xMDc6IFx1MDAyMkFDS1x1MDAyMlxuMTA4LTEwODogXHUwMDIyUFNIXHUwMDIyXG4xMDktMTA5OiBcdTAwMjJSU1RcdTAwMjJcbjExMC0xMTA6IFx1MDAyMlNZTlx1MDAyMlxuMTExLTExMTogXHUwMDIyRklOXHUwMDIyXG4xMTItMTI3OiBcdTAwMjJXaW5kb3cgU2l6ZVx1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Packet/PacketTests.TCPHeader.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMTU6IFx1MDAyMlNvdXJjZSBQb3J0XHUwMDIyXG4xNi0zMTogXHUwMDIyRGVzdGluYXRpb24gUG9ydFx1MDAyMlxuMzItNjM6IFx1MDAyMlNlcXVlbmNlIE51bWJlclx1MDAyMlxuNjQtOTU6IFx1MDAyMkFja25vd2xlZGdtZW50IE51bWJlclx1MDAyMlxuOTYtOTk6IFx1MDAyMkRhdGEgT2Zmc2V0XHUwMDIyXG4xMDAtMTAyOiBcdTAwMjJSZXNlcnZlZFx1MDAyMlxuMTAzLTEwMzogXHUwMDIyTlNcdTAwMjJcbjEwNC0xMDQ6IFx1MDAyMkNXUlx1MDAyMlxuMTA1LTEwNTogXHUwMDIyRUNFXHUwMDIyXG4xMDYtMTA2OiBcdTAwMjJVUkdcdTAwMjJcbjEwNy0xMDc6IFx1MDAyMkFDS1x1MDAyMlxuMTA4LTEwODogXHUwMDIyUFNIXHUwMDIyXG4xMDktMTA5OiBcdTAwMjJSU1RcdTAwMjJcbjExMC0xMTA6IFx1MDAyMlNZTlx1MDAyMlxuMTExLTExMTogXHUwMDIyRklOXHUwMDIyXG4xMTItMTI3OiBcdTAwMjJXaW5kb3cgU2l6ZVx1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
 ## IPv4Header
 
@@ -67,14 +67,14 @@ packet-beta
 96-127: "Source IP Address"
 128-159: "Destination IP Address"
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMzogXHUwMDIyVmVyc2lvblx1MDAyMlxuNC03OiBcdTAwMjJJSExcdTAwMjJcbjgtMTM6IFx1MDAyMkRTQ1BcdTAwMjJcbjE0LTE1OiBcdTAwMjJFQ05cdTAwMjJcbjE2LTMxOiBcdTAwMjJUb3RhbCBMZW5ndGhcdTAwMjJcbjMyLTQ3OiBcdTAwMjJJZGVudGlmaWNhdGlvblx1MDAyMlxuNDgtNTA6IFx1MDAyMkZsYWdzXHUwMDIyXG41MS02MzogXHUwMDIyRnJhZ21lbnQgT2Zmc2V0XHUwMDIyXG42NC03MTogXHUwMDIyVFRMXHUwMDIyXG43Mi03OTogXHUwMDIyUHJvdG9jb2xcdTAwMjJcbjgwLTk1OiBcdTAwMjJIZWFkZXIgQ2hlY2tzdW1cdTAwMjJcbjk2LTEyNzogXHUwMDIyU291cmNlIElQIEFkZHJlc3NcdTAwMjJcbjEyOC0xNTk6IFx1MDAyMkRlc3RpbmF0aW9uIElQIEFkZHJlc3NcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Packet/PacketTests.IPv4Header.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMzogXHUwMDIyVmVyc2lvblx1MDAyMlxuNC03OiBcdTAwMjJJSExcdTAwMjJcbjgtMTM6IFx1MDAyMkRTQ1BcdTAwMjJcbjE0LTE1OiBcdTAwMjJFQ05cdTAwMjJcbjE2LTMxOiBcdTAwMjJUb3RhbCBMZW5ndGhcdTAwMjJcbjMyLTQ3OiBcdTAwMjJJZGVudGlmaWNhdGlvblx1MDAyMlxuNDgtNTA6IFx1MDAyMkZsYWdzXHUwMDIyXG41MS02MzogXHUwMDIyRnJhZ21lbnQgT2Zmc2V0XHUwMDIyXG42NC03MTogXHUwMDIyVFRMXHUwMDIyXG43Mi03OTogXHUwMDIyUHJvdG9jb2xcdTAwMjJcbjgwLTk1OiBcdTAwMjJIZWFkZXIgQ2hlY2tzdW1cdTAwMjJcbjk2LTEyNzogXHUwMDIyU291cmNlIElQIEFkZHJlc3NcdTAwMjJcbjEyOC0xNTk6IFx1MDAyMkRlc3RpbmF0aW9uIElQIEFkZHJlc3NcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
 ## SingleRow
 
@@ -86,14 +86,14 @@ packet-beta
 16-23: "Byte 3"
 24-31: "Byte 4"
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtNzogXHUwMDIyQnl0ZSAxXHUwMDIyXG44LTE1OiBcdTAwMjJCeXRlIDJcdTAwMjJcbjE2LTIzOiBcdTAwMjJCeXRlIDNcdTAwMjJcbjI0LTMxOiBcdTAwMjJCeXRlIDRcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Packet/PacketTests.SingleRow.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtNzogXHUwMDIyQnl0ZSAxXHUwMDIyXG44LTE1OiBcdTAwMjJCeXRlIDJcdTAwMjJcbjE2LTIzOiBcdTAwMjJCeXRlIDNcdTAwMjJcbjI0LTMxOiBcdTAwMjJCeXRlIDRcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
 ## Fields
 
@@ -104,12 +104,12 @@ packet-beta
 32-63: "Second Word"
 64-95: "Third Word"
 ```
-
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMzE6IFx1MDAyMkZpcnN0IFdvcmRcdTAwMjJcbjMyLTYzOiBcdTAwMjJTZWNvbmQgV29yZFx1MDAyMlxuNjQtOTU6IFx1MDAyMlRoaXJkIFdvcmRcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
-
 **Rendered by Naiad:**
 
 <p align="center">
   <img src="../Tests/Packet/PacketTests.Fields.verified.png" />
 </p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMzE6IFx1MDAyMkZpcnN0IFdvcmRcdTAwMjJcbjMyLTYzOiBcdTAwMjJTZWNvbmQgV29yZFx1MDAyMlxuNjQtOTU6IFx1MDAyMlRoaXJkIFdvcmRcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
