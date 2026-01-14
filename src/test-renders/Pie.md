@@ -77,3 +77,22 @@ pie showData
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGllIHNob3dEYXRhXG4gICAgXHUwMDIyUmV2ZW51ZVx1MDAyMiA6IDY1XG4gICAgXHUwMDIyQ29zdHNcdTAwMjIgOiAzNSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+## InlineTitle
+
+**Input:**
+```
+pie title Browser Market Share
+    "Chrome" : 65
+    "Safari" : 19
+    "Firefox" : 10
+    "Other" : 6
+```
+**Rendered by Mermaid:**
+```mermaid
+pie title Browser Market Share
+    "Chrome" : 65
+    "Safari" : 19
+    "Firefox" : 10
+    "Other" : 6
+```
+

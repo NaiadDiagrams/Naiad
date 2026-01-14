@@ -271,3 +271,42 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgdGl0bGUgQ29tcGxldGUgQXV0aGVudGljYXRpb24gRmxvd1xuICAgIGF1dG9udW1iZXJcblxuICAgIGFjdG9yIFVzZXJcbiAgICBwYXJ0aWNpcGFudCBDbGllbnQgYXMgV2ViIENsaWVudFxuICAgIHBhcnRpY2lwYW50IEF1dGggYXMgQXV0aCBTZXJ2aWNlXG4gICAgcGFydGljaXBhbnQgREIgYXMgRGF0YWJhc2VcbiAgICBwYXJ0aWNpcGFudCBFbWFpbCBhcyBFbWFpbCBTZXJ2aWNlXG5cbiAgICBVc2VyLVx1MDAzRVx1MDAzRVx1MDAyQkNsaWVudDogRW50ZXIgY3JlZGVudGlhbHNcbiAgICBDbGllbnQtXHUwMDNFXHUwMDNFXHUwMDJCQXV0aDogUE9TVCAvbG9naW5cbiAgICBBdXRoLVx1MDAzRVx1MDAzRVx1MDAyQkRCOiBRdWVyeSB1c2VyXG4gICAgREItLVx1MDAzRVx1MDAzRS1BdXRoOiBVc2VyIGRhdGFcbiAgICBOb3RlIHJpZ2h0IG9mIEF1dGg6IFZhbGlkYXRlIGNyZWRlbnRpYWxzXG4gICAgQXV0aC1cdTAwM0VcdTAwM0VBdXRoOiBHZW5lcmF0ZSBKV1RcbiAgICBOb3RlIHJpZ2h0IG9mIEF1dGg6IFRva2VuIGV4cGlyZXMgaW4gMjRoXG4gICAgQXV0aC0tXHUwMDNFXHUwMDNFLUNsaWVudDogMjAwIE9LIFx1MDAyQiBUb2tlblxuICAgIENsaWVudC1cdTAwM0VcdTAwM0VcdTAwMkJFbWFpbDogU2VuZCB3ZWxjb21lIGVtYWlsXG4gICAgRW1haWwtLVx1MDAzRVx1MDAzRS1DbGllbnQ6IEVtYWlsIHNlbnRcbiAgICBDbGllbnQtLVx1MDAzRVx1MDAzRS1Vc2VyOiBTaG93IGRhc2hib2FyZFxuICAgIE5vdGUgb3ZlciBVc2VyLERCOiBTZXNzaW9uIGVzdGFibGlzaGVkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+## AltElseBlocks
+
+**Input:**
+```
+sequenceDiagram
+    actor User
+    participant API
+    participant DB
+
+    User->>API: Request data
+    API->>DB: Query
+
+    alt Data found
+        DB-->>API: Return data
+        API-->>User: 200 OK
+    else Not found
+        DB-->>API: Empty result
+        API-->>User: 404 Not Found
+    end
+```
+**Rendered by Mermaid:**
+```mermaid
+sequenceDiagram
+    actor User
+    participant API
+    participant DB
+
+    User->>API: Request data
+    API->>DB: Query
+
+    alt Data found
+        DB-->>API: Return data
+        API-->>User: 200 OK
+    else Not found
+        DB-->>API: Empty result
+        API-->>User: 404 Not Found
+    end
+```
+

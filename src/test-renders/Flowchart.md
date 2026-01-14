@@ -121,3 +121,61 @@ graph TD
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ3JhcGggVERcbiAgICBBIC0tXHUwMDNFIEIgLS1cdTAwM0UgQyIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+## StyleDirective
+
+**Input:**
+```
+flowchart TD
+    Start([Start]) --> Process[Process Data]
+    Process --> Decision{Valid?}
+    Decision -->|Yes| Success[Success]
+    Decision -->|No| Error[Error]
+    Success --> End([End])
+    Error --> End
+
+    style Start fill:#e1f5e1
+    style End fill:#e1f5e1
+    style Error fill:#f8d7da
+    style Success fill:#d1ecf1
+```
+**Rendered by Mermaid:**
+```mermaid
+flowchart TD
+    Start([Start]) --> Process[Process Data]
+    Process --> Decision{Valid?}
+    Decision -->|Yes| Success[Success]
+    Decision -->|No| Error[Error]
+    Success --> End([End])
+    Error --> End
+
+    style Start fill:#e1f5e1
+    style End fill:#e1f5e1
+    style Error fill:#f8d7da
+    style Success fill:#d1ecf1
+```
+
+## Subgraph
+
+**Input:**
+```
+flowchart LR
+    subgraph Frontend
+        A[React App] --> B[Components]
+    end
+    subgraph Backend
+        C[API Server] --> D[Database]
+    end
+    B --> C
+```
+**Rendered by Mermaid:**
+```mermaid
+flowchart LR
+    subgraph Frontend
+        A[React App] --> B[Components]
+    end
+    subgraph Backend
+        C[API Server] --> D[Database]
+    end
+    B --> C
+```
+

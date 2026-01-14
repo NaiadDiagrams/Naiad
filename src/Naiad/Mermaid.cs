@@ -5,6 +5,7 @@ public static class Mermaid
     public static string Render(string input, RenderOptions? options = null)
     {
         options ??= RenderOptions.Default;
+        input = StripInitBlock(input);
         var diagramType = DetectDiagramType(input);
 
         return diagramType switch
@@ -41,6 +42,24 @@ public static class Mermaid
     public static DiagramType DetectDiagramType(string input)
     {
         var firstLine = input.TrimStart();
+
+        // Skip %%{init:...}%% configuration blocks
+        while (firstLine.StartsWith("%%{", StringComparison.Ordinal))
+        {
+            // Find end of init block and move to next line
+            var endIndex = firstLine.IndexOf("}%%", StringComparison.Ordinal);
+            if (endIndex < 0)
+                break;
+
+            firstLine = firstLine[(endIndex + 3)..].TrimStart();
+
+            // Skip past any newline
+            var newlineIndex = firstLine.IndexOfAny(['\r', '\n']);
+            if (newlineIndex >= 0)
+            {
+                firstLine = firstLine[(newlineIndex + 1)..].TrimStart();
+            }
+        }
 
         if (firstLine.StartsWith("pie", StringComparison.OrdinalIgnoreCase))
             return DiagramType.Pie;
@@ -98,6 +117,25 @@ public static class Mermaid
             return DiagramType.Treemap;
 
         throw new MermaidException($"Unknown diagram type in: {firstLine.Split('\n')[0]}");
+    }
+
+    /// <summary>
+    /// Strips %%{init:...}%% configuration blocks from the beginning of input.
+    /// </summary>
+    static string StripInitBlock(string input)
+    {
+        var result = input.TrimStart();
+
+        while (result.StartsWith("%%{", StringComparison.Ordinal))
+        {
+            var endIndex = result.IndexOf("}%%", StringComparison.Ordinal);
+            if (endIndex < 0)
+                break;
+
+            result = result[(endIndex + 3)..].TrimStart();
+        }
+
+        return result;
     }
 
     static string RenderPie(string input, RenderOptions options)
