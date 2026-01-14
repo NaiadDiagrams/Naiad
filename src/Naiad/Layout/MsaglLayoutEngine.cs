@@ -32,7 +32,7 @@ public class MsaglLayoutEngine : ILayoutEngine
         // Apply results back to diagram
         ApplyLayout(graph, nodeMap, diagram, options);
 
-        // Calculate bounds
+        // Calculate bounds (margins already applied via offset, renderers add extra space as needed)
         var width = diagram.Nodes.Max(n => n.Position.X + n.Width / 2);
         var height = diagram.Nodes.Max(n => n.Position.Y + n.Height / 2);
 

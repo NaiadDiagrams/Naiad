@@ -3,7 +3,7 @@ namespace MermaidSharp.Diagrams.EntityRelationship;
 public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ERModel>
 {
-    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    readonly ILayoutEngine layoutEngine = layoutEngine ?? new MsaglLayoutEngine();
 
     const double EntityPadding = 10;
     const double LineHeight = 20;

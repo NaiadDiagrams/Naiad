@@ -5,7 +5,7 @@ namespace MermaidSharp.Diagrams.Flowchart;
 public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<FlowchartModel>
 {
-    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new MsaglLayoutEngine();
 
     // Mermaid.ink default colors
     const string NodeFill = "#ECECFF";
