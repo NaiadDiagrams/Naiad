@@ -1,16 +1,16 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="27.0.2" />
+    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0" />
     <PackageVersion Include="Microsoft.Msagl" Version="1.1.6" />
     <PackageVersion Include="Microsoft.Playwright.NUnit" Version="1.58.0" />
     <PackageVersion Include="Pidgin" Version="3.5.1" />
     <PackageVersion Include="NUnit" Version="4.4.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.1.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.171" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.172" />
     <PackageVersion Include="ProjectFiles" Version="0.5.0" />
     <PackageVersion Include="Verify.ImageSharp.Compare" Version="3.0.3" />
-    <PackageVersion Include="Verify.NUnit" Version="31.11.0" />
+    <PackageVersion Include="Verify.NUnit" Version="31.12.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.58.0" />
   </ItemGroup>
