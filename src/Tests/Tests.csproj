@@ -13,6 +13,11 @@
     <PackageReference Include="ProjectFiles" />
     <PackageReference Include="Verify.ImageSharp.Compare" />
     <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="DiffEngine" />
+    <PackageReference Include="EmptyFiles" />
+    <PackageReference Include="SimpleInfoName" />
+    <PackageReference Include="Verify" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.Playwright" />
     <ProjectReference Include="..\Naiad\Naiad.csproj" />
