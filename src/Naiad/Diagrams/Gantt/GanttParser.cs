@@ -189,12 +189,12 @@ public class GanttParser : IDiagramParser<GanttModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(t => (object?) ("title", t))),
-            Try(dateFormatParser.Select(f => (object?) ("dateFormat", f))),
-            Try(axisFormatParser.Select(f => (object?) ("axisFormat", f))),
-            Try(excludesParser.Select(e => (object?) ("excludes", e))),
-            Try(sectionParser.Select(s => (object?) ("section", s))),
-            Try(taskParser.Select(t => (object?) t)),
+            Try(titleParser.Select(_ => (object?) ("title", _))),
+            Try(dateFormatParser.Select(_ => (object?) ("dateFormat", _))),
+            Try(axisFormatParser.Select(_ => (object?) ("axisFormat", _))),
+            Try(excludesParser.Select(_ => (object?) ("excludes", _))),
+            Try(sectionParser.Select(_ => (object?) ("section", _))),
+            Try(taskParser.Select(_ => (object?) _)),
             skipLine.ThenReturn((object?) null)
         );
 

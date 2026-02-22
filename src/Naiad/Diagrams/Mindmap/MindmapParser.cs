@@ -98,7 +98,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
     // Content line - node line, skip line (comment/empty), or end
     static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)?> ContentLine =>
         OneOf(
-            Try(NodeLineParser.Select(n => ((int, string, MindmapShape, string?, string?)?)n)),
+            Try(NodeLineParser.Select(_ => ((int, string, MindmapShape, string?, string?)?)_)),
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .ThenReturn(((int, string, MindmapShape, string?, string?)?)null),
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline))

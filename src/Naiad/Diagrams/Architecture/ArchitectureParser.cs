@@ -139,10 +139,10 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(groupParser.Select(g => (object?)(ItemType.Group, g))),
-            Try(serviceParser.Select(s => (object?)(ItemType.Service, s))),
-            Try(junctionParser.Select(j => (object?)(ItemType.Junction, j))),
-            Try(edgeParser.Select(e => (object?)(ItemType.Edge, e))),
+            Try(groupParser.Select(_ => (object?)(ItemType.Group, _))),
+            Try(serviceParser.Select(_ => (object?)(ItemType.Service, _))),
+            Try(junctionParser.Select(_ => (object?)(ItemType.Junction, _))),
+            Try(edgeParser.Select(_ => (object?)(ItemType.Edge, _))),
             skipLine.ThenReturn((object?)null)
         );
 

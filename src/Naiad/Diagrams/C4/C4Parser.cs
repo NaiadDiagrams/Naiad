@@ -217,12 +217,12 @@ public class C4Parser : IDiagramParser<C4Model>
     // Element inside boundary (sets BoundaryId later)
     static Parser<char, object?> BoundaryContentItem =>
         OneOf(
-            Try(personParser.Select(e => (object?)("element", e))),
-            Try(SystemDbParser.Select(e => (object?)("element", e))),
-            Try(SystemParser.Select(e => (object?)("element", e))),
-            Try(ContainerParser.Select(e => (object?)("element", e))),
-            Try(ComponentParser.Select(e => (object?)("element", e))),
-            Try(relParser.Select(r => (object?)("rel", r))),
+            Try(personParser.Select(_ => (object?)("element", _))),
+            Try(SystemDbParser.Select(_ => (object?)("element", _))),
+            Try(SystemParser.Select(_ => (object?)("element", _))),
+            Try(ContainerParser.Select(_ => (object?)("element", _))),
+            Try(ComponentParser.Select(_ => (object?)("element", _))),
+            Try(relParser.Select(_ => (object?)("rel", _))),
             skipLine.ThenReturn((object?)null)
         );
 
@@ -239,21 +239,21 @@ public class C4Parser : IDiagramParser<C4Model>
     // Content inside boundary: either nested boundary or regular element
     static Parser<char, object?> BoundaryContentOrNestedBoundary =>
         OneOf(
-            Try(BoundaryParser.Select(b => (object?)("boundary", b))),
+            Try(BoundaryParser.Select(_ => (object?)("boundary", _))),
             BoundaryContentItem
         );
 
     // Content item (top level)
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(ritleParser.Select(t => (object?)("title", t))),
-            Try(BoundaryParser.Select(b => (object?)("boundary", b))),
-            Try(personParser.Select(e => (object?)("element", e))),
-            Try(SystemDbParser.Select(e => (object?)("element", e))),
-            Try(SystemParser.Select(e => (object?)("element", e))),
-            Try(ContainerParser.Select(e => (object?)("element", e))),
-            Try(ComponentParser.Select(e => (object?)("element", e))),
-            Try(relParser.Select(r => (object?)("rel", r))),
+            Try(ritleParser.Select(_ => (object?)("title", _))),
+            Try(BoundaryParser.Select(_ => (object?)("boundary", _))),
+            Try(personParser.Select(_ => (object?)("element", _))),
+            Try(SystemDbParser.Select(_ => (object?)("element", _))),
+            Try(SystemParser.Select(_ => (object?)("element", _))),
+            Try(ContainerParser.Select(_ => (object?)("element", _))),
+            Try(ComponentParser.Select(_ => (object?)("element", _))),
+            Try(relParser.Select(_ => (object?)("rel", _))),
             skipLine.ThenReturn((object?)null)
         );
 

@@ -79,9 +79,9 @@ public class RadarParser : IDiagramParser<RadarModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TitleParser.Select(t => (object?)(ItemType.Title, t))),
-            Try(AxisParser.Select(a => (object?)(ItemType.Axis, a))),
-            Try(CurveLineParser.Select(c => (object?)(ItemType.Curve, c))),
+            Try(TitleParser.Select(_ => (object?)(ItemType.Title, _))),
+            Try(AxisParser.Select(_ => (object?)(ItemType.Axis, _))),
+            Try(CurveLineParser.Select(_ => (object?)(ItemType.Curve, _))),
             SkipLine.ThenReturn((object?)null)
         );
 

@@ -121,9 +121,9 @@ public class ClassParser : IDiagramParser<ClassModel>
     // Class body content: { ... }
     static Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> ParseClassBody()
     {
-        var annotationLine = Try(annotationParser.Select(a => (object)a));
-        var methodLine = Try(methodParser.Select(m => (object)m));
-        var memberLine = Try(memberParser.Select(m => (object)m));
+        var annotationLine = Try(annotationParser.Select(_ => (object)_));
+        var methodLine = Try(methodParser.Select(_ => (object)_));
+        var memberLine = Try(memberParser.Select(_ => (object)_));
         var emptyLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd).ThenReturn((object)Unit.Value);
 
         var contentLine = OneOf(annotationLine, methodLine, memberLine, emptyLine);
@@ -266,7 +266,7 @@ public class ClassParser : IDiagramParser<ClassModel>
     static Parser<char, List<object>> ParseContent()
     {
         var element = OneOf(
-            Try(directionDirectiveParser.Select(d => (object)d)),
+            Try(directionDirectiveParser.Select(_ => (object)_)),
             Try(classDefinitionParser.Select(_ => (object)_)),
             Try(relationshipParser.Select(_ => (object)_)),
             skipLine.ThenReturn((object)Unit.Value)

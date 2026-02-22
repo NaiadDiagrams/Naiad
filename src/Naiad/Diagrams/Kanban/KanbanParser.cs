@@ -41,8 +41,8 @@ public class KanbanParser : IDiagramParser<KanbanModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TaskParser.Select(t => (object?)("task", t.id, t.name))),
-            Try(ColumnParser.Select(c => (object?)("column", c.id, c.name))),
+            Try(TaskParser.Select(_ => (object?)("task", _.id, _.name))),
+            Try(ColumnParser.Select(_ => (object?)("column", _.id, _.name))),
             SkipLine.ThenReturn((object?)null)
         );
 

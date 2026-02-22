@@ -99,7 +99,7 @@ public class ERParser : IDiagramParser<ERModel>
     static Parser<char, List<EntityAttribute>> EntityBodyParser()
     {
         var attributeOrEmpty = OneOf(
-            Try(attributeParser.Select(a => (EntityAttribute?)a)),
+            Try(attributeParser.Select(_ => (EntityAttribute?)_)),
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)).ThenReturn((EntityAttribute?)null)
         );
 
@@ -145,8 +145,8 @@ public class ERParser : IDiagramParser<ERModel>
     static Parser<char, List<object>> ParseContent()
     {
         var element = OneOf(
-            Try(EntityDefinitionParser.Select(e => (object)e)),
-            Try(RelationshipParser.Select(r => (object)r)),
+            Try(EntityDefinitionParser.Select(_ => (object)_)),
+            Try(RelationshipParser.Select(_ => (object)_)),
             SkipLine.ThenReturn((object)Unit.Value)
         );
 

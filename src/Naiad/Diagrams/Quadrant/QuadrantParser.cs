@@ -96,11 +96,11 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TitleParser.Select(t => (object?)("title", t))),
-            Try(XAxisParser.Select(x => (object?)("x-axis", x.left, x.right))),
-            Try(YAxisParser.Select(y => (object?)("y-axis", y.bottom, y.top))),
-            Try(QuadrantLabelParser.Select(q => (object?)("quadrant", q.quadrant, q.label))),
-            Try(PointParser.Select(p => (object?)("point", p))),
+            Try(TitleParser.Select(_ => (object?)("title", _))),
+            Try(XAxisParser.Select(_ => (object?)("x-axis", _.left, _.right))),
+            Try(YAxisParser.Select(_ => (object?)("y-axis", _.bottom, _.top))),
+            Try(QuadrantLabelParser.Select(_ => (object?)("quadrant", _.quadrant, _.label))),
+            Try(PointParser.Select(_ => (object?)("point", _))),
             SkipLine.ThenReturn((object?)null)
         );
 

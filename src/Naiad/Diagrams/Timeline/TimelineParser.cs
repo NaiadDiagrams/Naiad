@@ -54,10 +54,10 @@ public class TimelineParser : IDiagramParser<TimelineModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TitleParser.Select(t => (object?)("title", t))),
-            Try(SectionParser.Select(s => (object?)("section", s))),
-            Try(PeriodEventParser.Select(pe => (object?)("period", pe.period, pe.eventText))),
-            Try(ContinuationEventParser.Select(e => (object?)("continuation", e))),
+            Try(TitleParser.Select(_ => (object?)("title", _))),
+            Try(SectionParser.Select(_ => (object?)("section", _))),
+            Try(PeriodEventParser.Select(_ => (object?)("period", _.period, _.eventText))),
+            Try(ContinuationEventParser.Select(_ => (object?)("continuation", _))),
             SkipLine.ThenReturn((object?)null)
         );
 

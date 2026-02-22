@@ -48,7 +48,7 @@ public class TreemapParser : IDiagramParser<TreemapModel>
 
     // Content item
     static Parser<char, NodeLine?> ContentItem =>
-        Try(nodeLineParser.Select(n => (NodeLine?)n))
+        Try(nodeLineParser.Select(_ => (NodeLine?)_))
             .Or(skipLine.ThenReturn((NodeLine?)null));
 
     public static Parser<char, TreemapModel> Parser =>

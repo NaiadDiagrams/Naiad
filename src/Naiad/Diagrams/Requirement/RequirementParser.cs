@@ -152,9 +152,9 @@ public class RequirementParser : IDiagramParser<RequirementModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(RequirementBlockParser.Select(r => (object?)("requirement", r))),
-            Try(ElementBlockParser.Select(e => (object?)("element", e))),
-            Try(RelationParser.Select(r => (object?)("relation", r))),
+            Try(RequirementBlockParser.Select(_ => (object?)("requirement", _))),
+            Try(ElementBlockParser.Select(_ => (object?)("element", _))),
+            Try(RelationParser.Select(_ => (object?)("relation", _))),
             SkipLine.ThenReturn((object?)null)
         );
 

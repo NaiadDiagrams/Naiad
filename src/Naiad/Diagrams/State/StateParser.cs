@@ -175,15 +175,15 @@ public class StateParser : IDiagramParser<StateModel>
     static Parser<char, List<object>> ParseContentRecursive()
     {
         var element = OneOf(
-            Try(DirectionParser.Select(d => (object)d)),
-            Try(NoteParser.Select(n => (object)n)),
-            Try(StateDeclarationWithAlias.Select(s => (object)s)),
-            Try(StateDeclarationWithType.Select(s => (object)s)),
-            Try(CompositeStateStart.Select(id => (object)("composite:" + id))),
+            Try(DirectionParser.Select(_ => (object)_)),
+            Try(NoteParser.Select(_ => (object)_)),
+            Try(StateDeclarationWithAlias.Select(_ => (object)_)),
+            Try(StateDeclarationWithType.Select(_ => (object)_)),
+            Try(CompositeStateStart.Select(_ => (object)("composite:" + _))),
             Try(CompositeStateEnd.ThenReturn((object)"end_composite")),
-            Try(TransitionParser.Select(t => (object)t)),
-            Try(StateWithDescription.Select(s => (object)s)),
-            Try(SimpleStateDeclaration.Select(s => (object)s)),
+            Try(TransitionParser.Select(_ => (object)_)),
+            Try(StateWithDescription.Select(_ => (object)_)),
+            Try(SimpleStateDeclaration.Select(_ => (object)_)),
             SkipLine.ThenReturn((object)Unit.Value)
         );
 

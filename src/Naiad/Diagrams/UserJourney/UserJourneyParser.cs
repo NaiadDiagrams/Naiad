@@ -58,9 +58,9 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(t => (object?)("title", t))),
-            Try(sectionParser.Select(s => (object?)("section", s))),
-            Try(taskParser.Select(task => (object?)("task", task))),
+            Try(titleParser.Select(_ => (object?)("title", _))),
+            Try(sectionParser.Select(_ => (object?)("section", _))),
+            Try(taskParser.Select(_ => (object?)("task", _))),
             skipLine.ThenReturn((object?)null)
         );
 

@@ -115,11 +115,11 @@ public class XYChartParser : IDiagramParser<XYChartModel>
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TitleParser.Select(t => (object?)("title", t))),
-            Try(XAxisParser.Select(x => (object?)("x-axis", x.label, x.categories))),
-            Try(YAxisParser.Select(y => (object?)("y-axis", y.label, y.min, y.max))),
-            Try(BarParser.Select(s => (object?)("series", s))),
-            Try(LineParser.Select(s => (object?)("series", s))),
+            Try(TitleParser.Select(_ => (object?)("title", _))),
+            Try(XAxisParser.Select(_ => (object?)("x-axis", _.label, _.categories))),
+            Try(YAxisParser.Select(_ => (object?)("y-axis", _.label, _.min, _.max))),
+            Try(BarParser.Select(_ => (object?)("series", _))),
+            Try(LineParser.Select(_ => (object?)("series", _))),
             SkipLine.ThenReturn((object?)null)
         );
 
