@@ -1,6 +1,6 @@
 # <img src="/src/icon.png" height="30px"> Naiad
 
-[![Build status](https://img.shields.io/appveyor/build/SimonCropp/Naiad)](https://ci.appveyor.com/project/SimonCropp/Naiad)
+[![Build status](https://img.shields.io/github/actions/workflow/status/NaiadDiagrams/Naiad/ci.yml?branch=main)](https://github.com/NaiadDiagrams/Naiad/actions/workflows/ci.yml)
 [![NuGet Status](https://img.shields.io/nuget/v/Naiad.svg)](https://www.nuget.org/packages/Naiad/)
 
 A .NET library for rendering [Mermaid](https://mermaid.js.org/) diagrams to SVG. No browser or JavaScript runtime required.
