@@ -226,7 +226,8 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
             .Select(_ => _.Where(__ => __.Nodes.Count > 0).ToList());
     }
 
-    static FlowchartModel BuildModel(Direction direction,
+    static FlowchartModel BuildModel(
+        Direction direction,
         List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> statements)
     {
         var model = new FlowchartModel { Direction = direction };

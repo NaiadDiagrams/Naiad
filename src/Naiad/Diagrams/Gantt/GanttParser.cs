@@ -6,7 +6,9 @@ public class GanttParser : IDiagramParser<GanttModel>
 
     // Basic parsers
     static Parser<char, string> restOfLine =
-        Token(_ => _ != '\r' && _ != '\n').ManyString();
+        Token(_ => _ != '\r' &&
+                   _ != '\n')
+            .ManyString();
 
     // Title: title My Chart Title
     static Parser<char, string> titleParser =

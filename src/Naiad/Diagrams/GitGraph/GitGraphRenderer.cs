@@ -137,7 +137,10 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Use a simple path with control points
         var midX = (fromX + toX) / 2;
 
-        var path = $"M {Fmt(fromX)} {Fmt(fromY)} C {Fmt(midX)} {Fmt(fromY)}, {Fmt(midX)} {Fmt(toY)}, {Fmt(toX)} {Fmt(toY)}";
+        var path = $"""
+                    M {Fmt(fromX)} {Fmt(fromY)}
+                    C {Fmt(midX)} {Fmt(fromY)}, {Fmt(midX)} {Fmt(toY)}, {Fmt(toX)} {Fmt(toY)}
+                    """;
 
         builder.AddPath(path, stroke: toColor, strokeWidth: 2, fill: "none");
     }
@@ -219,7 +222,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         computed.Branches.Add(mainBranch);
 
         string? lastCommitId = null;
-        var branchHeads = new Dictionary<string, string>(); // branch -> latest commit id
+        // branch -> latest commit id
+        var branchHeads = new Dictionary<string, string>();
 
         foreach (var op in model.Operations)
         {
@@ -301,6 +305,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                     {
                         mergeCommit.Parents.Add(currentHead);
                     }
+
                     if (branchHeads.TryGetValue(merge.BranchName, out var mergedHead))
                     {
                         mergeCommit.Parents.Add(mergedHead);
