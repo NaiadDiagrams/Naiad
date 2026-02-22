@@ -9,3 +9,4 @@ obj/
 nugets/
 /.claude
 nul
+/BenchmarkDotNet.Artifacts

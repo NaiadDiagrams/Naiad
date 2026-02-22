@@ -46,11 +46,39 @@ public class SvgText : SvgElement
         }
     }
 
-    static string EscapeXml(string text) =>
-        text
-            .Replace("&", "&amp;")
-            .Replace("<", "&lt;")
-            .Replace(">", "&gt;")
-            .Replace("\"", "&quot;")
-            .Replace("'", "&apos;");
+    static string EscapeXml(string text)
+    {
+        // Fast path: check if escaping is needed at all
+        var needsEscape = false;
+        foreach (var c in text)
+        {
+            if (c is '&' or '<' or '>' or '"' or '\'')
+            {
+                needsEscape = true;
+                break;
+            }
+        }
+
+        if (!needsEscape)
+        {
+            return text;
+        }
+
+        // Single-pass escape
+        var sb = new StringBuilder(text.Length + 8);
+        foreach (var c in text)
+        {
+            switch (c)
+            {
+                case '&': sb.Append("&amp;"); break;
+                case '<': sb.Append("&lt;"); break;
+                case '>': sb.Append("&gt;"); break;
+                case '"': sb.Append("&quot;"); break;
+                case '\'': sb.Append("&apos;"); break;
+                default: sb.Append(c); break;
+            }
+        }
+
+        return sb.ToString();
+    }
 }

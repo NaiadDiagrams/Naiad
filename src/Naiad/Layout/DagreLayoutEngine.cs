@@ -84,11 +84,17 @@ public class DagreLayoutEngine : ILayoutEngine
             }
         }
 
+        // Build edge lookup for O(1) access instead of O(n) FirstOrDefault per edge
+        var edgeLookup = new Dictionary<(string, string), LayoutEdge>(graph.Edges.Count);
+        foreach (var le in graph.Edges)
+        {
+            edgeLookup.TryAdd((le.SourceId, le.TargetId), le);
+        }
+
         foreach (var edge in diagram.Edges)
         {
             // Find the original edge or reconstruct from dummies
-            var layoutEdge = graph.Edges.FirstOrDefault(_ =>
-                _.SourceId == edge.SourceId && _.TargetId == edge.TargetId);
+            edgeLookup.TryGetValue((edge.SourceId, edge.TargetId), out var layoutEdge);
 
             if (layoutEdge is not null)
             {

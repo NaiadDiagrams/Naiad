@@ -54,7 +54,8 @@ static class CoordinateAssignment
         // Pass 1: Position nodes left-aligned within ranks
         for (var r = 0; r < graph.Ranks.Length; r++)
         {
-            var nodesInRank = graph.Ranks[r].OrderBy(_ => _.Order).ToList();
+            var nodesInRank = graph.Ranks[r];
+            nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
             double currentX = 0;
 
             foreach (var node in nodesInRank)
@@ -95,24 +96,27 @@ static class CoordinateAssignment
     static void AlignToNeighbors(LayoutGraph graph, int rank, bool useInEdges,
         double nodeSep, bool isHorizontal)
     {
-        var nodesInRank = graph.Ranks[rank].OrderBy(_ => _.Order).ToList();
+        var nodesInRank = graph.Ranks[rank];
+        nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
+
+        var positions = new List<double>();
 
         foreach (var node in nodesInRank)
         {
-            var neighbors = useInEdges
-                ? graph.GetPredecessors(node.Id).ToList()
-                : graph.GetSuccessors(node.Id).ToList();
+            positions.Clear();
+            foreach (var neighbor in useInEdges
+                         ? graph.GetPredecessors(node.Id)
+                         : graph.GetSuccessors(node.Id))
+            {
+                positions.Add(isHorizontal ? neighbor.Y : neighbor.X);
+            }
 
-            if (neighbors.Count == 0)
+            if (positions.Count == 0)
             {
                 continue;
             }
 
-            // Calculate median position of neighbors
-            var positions = neighbors
-                .Select(_ => isHorizontal ? _.Y : _.X)
-                .OrderBy(_ => _)
-                .ToList();
+            positions.Sort();
 
             var targetPos = Median(positions);
             var currentPos = isHorizontal ? node.Y : node.X;
@@ -237,6 +241,28 @@ static class CoordinateAssignment
     {
         var isHorizontal = direction is Direction.LeftToRight or Direction.RightToLeft;
 
+        // Build lookup for dummy nodes by (OriginalEdgeSource, OriginalEdgeTarget)
+        var dummyLookup = new Dictionary<(string, string), List<LayoutNode>>();
+        foreach (var node in graph.Nodes.Values)
+        {
+            if (node.IsDummy && node.OriginalEdgeSource is not null && node.OriginalEdgeTarget is not null)
+            {
+                var key = (node.OriginalEdgeSource, node.OriginalEdgeTarget);
+                if (!dummyLookup.TryGetValue(key, out var list))
+                {
+                    list = [];
+                    dummyLookup[key] = list;
+                }
+                list.Add(node);
+            }
+        }
+
+        // Sort each dummy list by rank once
+        foreach (var list in dummyLookup.Values)
+        {
+            list.Sort((a, b) => a.Rank.CompareTo(b.Rank));
+        }
+
         foreach (var edge in graph.Edges)
         {
             var source = graph.GetNode(edge.SourceId);
@@ -258,23 +284,17 @@ static class CoordinateAssignment
             else
             {
                 // Regular edge - create path through dummy nodes if any
-                // For horizontal layout: connect right edge of source
-                // For vertical layout: connect bottom edge of source
                 var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
                 var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
                 edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
 
-                // Find dummy nodes for this edge
-                var dummies = graph.Nodes.Values
-                    .Where(_ => _.IsDummy &&
-                                _.OriginalEdgeSource == edge.SourceId &&
-                                _.OriginalEdgeTarget == edge.TargetId)
-                    .OrderBy(_ => _.Rank)
-                    .ToList();
-
-                foreach (var dummy in dummies)
+                // Find dummy nodes for this edge using pre-built lookup
+                if (dummyLookup.TryGetValue((edge.SourceId, edge.TargetId), out var dummies))
                 {
-                    edge.Points.Add(new(dummy.X, dummy.Y));
+                    foreach (var dummy in dummies)
+                    {
+                        edge.Points.Add(new(dummy.X, dummy.Y));
+                    }
                 }
 
                 // Calculate the target endpoint, offset to account for arrow marker

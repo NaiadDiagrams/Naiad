@@ -6,4 +6,5 @@
   </Folder>
   <Project Path="Naiad/Naiad.csproj" />
   <Project Path="Tests/Tests.csproj" />
+  <Project Path="Benchmarks/Benchmarks.csproj" />
 </Solution>

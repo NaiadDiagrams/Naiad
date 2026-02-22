@@ -141,8 +141,13 @@ public static class CommonParsers
             .Many()
             .Select(chars =>
             {
-                var array = chars as char[] ?? chars.ToArray();
-                return array.Count(_ => _ == '\t') * 4 + array.Count(_ => _ == ' ');
+                var level = 0;
+                foreach (var c in chars)
+                {
+                    level += c == '\t' ? 4 : 1;
+                }
+
+                return level;
             });
 
     // Keyword helpers
