@@ -4,6 +4,7 @@ public static class Mermaid
 {
     public static string Render(string input, RenderOptions? options = null)
     {
+        input = input.Trim();
         options ??= RenderOptions.Default;
         var diagramType = DetectDiagramType(input);
 
