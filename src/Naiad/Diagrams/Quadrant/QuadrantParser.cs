@@ -22,7 +22,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
-        from left in Token(c => c is not '-' or ' ').AtLeastOnceString()
+        from left in Token(c => c is not '-').AtLeastOnceString()
             .Where(s => !s.TrimEnd().EndsWith('-'))
             .Or(Token(c => c != '\r' && c != '\n' && c != '-').ManyString())
         from arrow in String("-->")
@@ -36,7 +36,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
-        from bottom in Token(c => c is not '-' or ' ').AtLeastOnceString()
+        from bottom in Token(c => c is not '-').AtLeastOnceString()
             .Where(s => !s.TrimEnd().EndsWith('-'))
             .Or(Token(c => c != '\r' && c != '\n' && c != '-').ManyString())
         from arrow in String("-->")
