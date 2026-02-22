@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace MermaidSharp.Diagrams.Flowchart;
 
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :

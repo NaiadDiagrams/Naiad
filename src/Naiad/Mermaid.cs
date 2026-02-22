@@ -152,7 +152,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse pie chart: {result.Error}");
+        }
 
         var renderer = new PieRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -165,7 +167,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse flowchart: {result.Error}");
+        }
 
         var renderer = new FlowchartRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -178,7 +182,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse sequence diagram: {result.Error}");
+        }
 
         var renderer = new SequenceRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -191,7 +197,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse class diagram: {result.Error}");
+        }
 
         var renderer = new ClassRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -204,7 +212,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse state diagram: {result.Error}");
+        }
 
         var renderer = new StateRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -217,7 +227,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse ER diagram: {result.Error}");
+        }
 
         var renderer = new ERRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -230,7 +242,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse git graph: {result.Error}");
+        }
 
         var renderer = new GitGraphRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -243,7 +257,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse gantt chart: {result.Error}");
+        }
 
         var renderer = new GanttRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -256,7 +272,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse mindmap: {result.Error}");
+        }
 
         var renderer = new MindmapRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -269,7 +287,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse timeline: {result.Error}");
+        }
 
         var renderer = new TimelineRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -282,7 +302,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse user journey: {result.Error}");
+        }
 
         var renderer = new UserJourneyRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -295,7 +317,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse quadrant chart: {result.Error}");
+        }
 
         var renderer = new QuadrantRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -308,7 +332,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse XY chart: {result.Error}");
+        }
 
         var renderer = new XYChartRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -321,7 +347,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse Sankey diagram: {result.Error}");
+        }
 
         var renderer = new SankeyRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -334,7 +362,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse block diagram: {result.Error}");
+        }
 
         var renderer = new BlockRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -347,7 +377,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse kanban board: {result.Error}");
+        }
 
         var renderer = new KanbanRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -360,7 +392,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse packet diagram: {result.Error}");
+        }
 
         var renderer = new PacketRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -373,7 +407,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse C4 diagram: {result.Error}");
+        }
 
         var renderer = new C4Renderer();
         var svg = renderer.Render(result.Value, options);
@@ -386,7 +422,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse requirement diagram: {result.Error}");
+        }
 
         var renderer = new RequirementRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -399,7 +437,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse architecture diagram: {result.Error}");
+        }
 
         var renderer = new ArchitectureRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -412,7 +452,9 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse radar diagram: {result.Error}");
+        }
 
         var renderer = new RadarRenderer();
         var svg = renderer.Render(result.Value, options);
@@ -425,17 +467,12 @@ public static class Mermaid
         var result = parser.Parse(input);
 
         if (!result.Success)
+        {
             throw new MermaidParseException($"Failed to parse treemap diagram: {result.Error}");
+        }
 
         var renderer = new TreemapRenderer();
         var svg = renderer.Render(result.Value, options);
         return ToXml(svg);
     }
-}
-
-public class MermaidException(string message) : Exception(message);
-
-public class MermaidParseException : MermaidException
-{
-    public MermaidParseException(string message) : base(message) { }
 }

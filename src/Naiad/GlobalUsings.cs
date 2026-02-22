@@ -4,6 +4,7 @@ global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Text;
+global using System.Text.RegularExpressions;
 global using MermaidSharp;
 global using MermaidSharp.Diagrams.Architecture;
 global using MermaidSharp.Diagrams.Block;
