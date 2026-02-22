@@ -234,9 +234,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         _boundaryPositions[boundary.Id] = (x + width / 2, y + height / 2, width, height);
 
         // Content area starts after title
-        var contentX = x + BoundaryPadding;
         var contentY = y + BoundaryTitleHeight + BoundaryPadding;
-        var contentWidth = width - BoundaryPadding * 2;
 
         // Get child boundaries and direct elements
         var childBoundaries = model.Boundaries.Where(b => b.ParentBoundaryId == boundary.Id).ToList();

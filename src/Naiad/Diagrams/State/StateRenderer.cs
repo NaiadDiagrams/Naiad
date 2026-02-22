@@ -5,42 +5,42 @@ namespace MermaidSharp.Diagrams.State;
 public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<StateModel>
 {
-    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     // Track placed label bounds to avoid label-to-label overlaps
     record LabelBounds(double Left, double Top, double Width, double Height);
-    readonly List<LabelBounds> _placedLabels = [];
+    List<LabelBounds> placedLabels = [];
 
 #if DEBUG
-    readonly List<TextBounds> _textBounds = [];
-    readonly List<LineBounds> _lineBounds = [];
-    readonly List<NodeBounds> _nodeBounds = [];
-    double _svgWidth;
-    double _svgHeight;
+    List<TextBounds> textBounds = [];
+    List<LineBounds> lineBounds = [];
+    List<NodeBounds> nodeBounds = [];
+    double svgWidth;
+    double svgHeight;
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
     record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
     record NodeBounds(double X, double Y, double Width, double Height, string Label);
 #endif
 
-    const double StateMinWidth = 40;
-    const double StateHeight = 40;
-    const double StatePadding = 30;
-    const double StateRadius = 5;
-    const double SpecialStateSize = 20;
-    const double NoteMinWidth = 60;
-    const double NoteHeight = 40;
-    const double NotePadding = 20;
-    const double NoteHorizontalOffset = 60;
-    const double NoteVerticalOffset = 50;
+    const double stateMinWidth = 40;
+    const double stateHeight = 40;
+    const double statePadding = 30;
+    const double stateRadius = 5;
+    const double specialStateSize = 20;
+    const double noteMinWidth = 60;
+    const double noteHeight = 40;
+    const double notePadding = 20;
+    const double noteHorizontalOffset = 60;
+    const double noteVerticalOffset = 50;
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
-        _placedLabels.Clear();
+        placedLabels.Clear();
 #if DEBUG
-        _textBounds.Clear();
-        _lineBounds.Clear();
-        _nodeBounds.Clear();
+        textBounds.Clear();
+        lineBounds.Clear();
+        nodeBounds.Clear();
 #endif
 
         // Convert to graph model for layout
@@ -50,7 +50,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var layoutOptions = new LayoutOptions
         {
             Direction = model.Direction,
-            NodeSeparation = 120,  // More horizontal space
+            // More horizontal space
+            NodeSeparation = 120,
             RankSeparation = 80
         };
         var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
@@ -92,8 +93,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var svgWidth = layoutResult.Width + noteExtraWidth + totalExtraLeft + curveExtraRight;
         var svgHeight = layoutResult.Height + noteExtraHeight + endExtraHeight + routedExtraHeight;
 #if DEBUG
-        _svgWidth = svgWidth;
-        _svgHeight = svgHeight;
+        this.svgWidth = svgWidth;
+        this.svgHeight = svgHeight;
 #endif
         var builder = new SvgBuilder()
             .Size(svgWidth, svgHeight)
@@ -136,17 +137,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Adjust y (text is typically centered vertically with dominant-baseline="middle")
         var top = y - height / 2;
 
-        _textBounds.Add(new(left, top, width, height, text));
+        textBounds.Add(new(left, top, width, height, text));
     }
 
     void CheckForTextOverlaps()
     {
-        for (var i = 0; i < _textBounds.Count; i++)
+        for (var i = 0; i < textBounds.Count; i++)
         {
-            for (var j = i + 1; j < _textBounds.Count; j++)
+            for (var j = i + 1; j < textBounds.Count; j++)
             {
-                var a = _textBounds[i];
-                var b = _textBounds[j];
+                var a = textBounds[i];
+                var b = textBounds[j];
 
                 // Check for rectangle overlap
                 var overlapsX = a.X < b.X + b.Width && a.X + a.Width > b.X;
@@ -163,16 +164,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     }
 
     void TrackLine(double x1, double y1, double x2, double y2, string label) =>
-        _lineBounds.Add(new(x1, y1, x2, y2, label));
+        lineBounds.Add(new(x1, y1, x2, y2, label));
 
     void TrackNode(double x, double y, double width, double height, string label) =>
-        _nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
+        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
 
     void CheckForLinesUnderNodes()
     {
-        foreach (var line in _lineBounds)
+        foreach (var line in lineBounds)
         {
-            foreach (var node in _nodeBounds)
+            foreach (var node in nodeBounds)
             {
                 // Skip if line is connected to this node (endpoint is near/inside the node)
                 var nodeRight = node.X + node.Width;
@@ -201,12 +202,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     void CheckForNodeOverlaps()
     {
-        for (var i = 0; i < _nodeBounds.Count; i++)
+        for (var i = 0; i < nodeBounds.Count; i++)
         {
-            for (var j = i + 1; j < _nodeBounds.Count; j++)
+            for (var j = i + 1; j < nodeBounds.Count; j++)
             {
-                var a = _nodeBounds[i];
-                var b = _nodeBounds[j];
+                var a = nodeBounds[i];
+                var b = nodeBounds[j];
 
                 // Check for rectangle overlap with margin
                 var margin = 2.0;
@@ -226,41 +227,41 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     void CheckForElementsOutsideBounds()
     {
         // Check nodes
-        foreach (var node in _nodeBounds)
+        foreach (var node in nodeBounds)
         {
             if (node.X < 0 || node.Y < 0 ||
-                node.X + node.Width > _svgWidth ||
-                node.Y + node.Height > _svgHeight)
+                node.X + node.Width > svgWidth ||
+                node.Y + node.Height > svgHeight)
             {
                 throw new InvalidOperationException(
                     $"Node outside bounds: \"{node.Label}\" at ({node.X:F1},{node.Y:F1},{node.Width:F1}x{node.Height:F1}) " +
-                    $"is outside SVG bounds (0,0,{_svgWidth:F1}x{_svgHeight:F1})");
+                    $"is outside SVG bounds (0,0,{svgWidth:F1}x{svgHeight:F1})");
             }
         }
 
         // Check text
-        foreach (var text in _textBounds)
+        foreach (var text in textBounds)
         {
             if (text.X < 0 || text.Y < 0 ||
-                text.X + text.Width > _svgWidth ||
-                text.Y + text.Height > _svgHeight)
+                text.X + text.Width > svgWidth ||
+                text.Y + text.Height > svgHeight)
             {
                 throw new InvalidOperationException(
                     $"Text outside bounds: \"{text.Label}\" at ({text.X:F1},{text.Y:F1},{text.Width:F1}x{text.Height:F1}) " +
-                    $"is outside SVG bounds (0,0,{_svgWidth:F1}x{_svgHeight:F1})");
+                    $"is outside SVG bounds (0,0,{svgWidth:F1}x{svgHeight:F1})");
             }
         }
 
         // Check lines
-        foreach (var line in _lineBounds)
+        foreach (var line in lineBounds)
         {
             if (line.X1 < 0 || line.Y1 < 0 || line.X2 < 0 || line.Y2 < 0 ||
-                line.X1 > _svgWidth || line.Y1 > _svgHeight ||
-                line.X2 > _svgWidth || line.Y2 > _svgHeight)
+                line.X1 > svgWidth || line.Y1 > svgHeight ||
+                line.X2 > svgWidth || line.Y2 > svgHeight)
             {
                 throw new InvalidOperationException(
                     $"Line outside bounds: \"{line.Label}\" from ({line.X1:F1},{line.Y1:F1}) to ({line.X2:F1},{line.Y2:F1}) " +
-                    $"is outside SVG bounds (0,0,{_svgWidth:F1}x{_svgHeight:F1})");
+                    $"is outside SVG bounds (0,0,{svgWidth:F1}x{svgHeight:F1})");
             }
         }
     }
@@ -350,8 +351,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     static double CalculateCurveExtraRight(StateModel model, Dictionary<string, State> stateMap)
     {
-        // Check if any back-edges or bidirectional back-edges will curve right
-        var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
         var rightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
 
         // Get all back-edges with their indices for position calculation
@@ -396,7 +395,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (endNode == null)
             return 0;
 
-        var endBottom = endNode.Position.Y + SpecialStateSize / 2;
+        var endBottom = endNode.Position.Y + specialStateSize / 2;
         var extraNeeded = endBottom - layoutHeight;
         return extraNeeded > 0 ? extraNeeded + 10 : 0; // Add margin
     }
@@ -421,7 +420,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Calculate how far down the routed path goes
             var obstacleBottom = obstacle.Position.Y + obstacle.Height / 2;
             var targetBottom = toState.Type == StateType.End
-                ? toState.Position.Y + SpecialStateSize / 2
+                ? toState.Position.Y + specialStateSize / 2
                 : toState.Position.Y + toState.Height / 2;
             var margin = 30.0;
             var horizontalY = Math.Max(obstacleBottom, targetBottom) + margin;
@@ -444,7 +443,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             if (!stateMap.TryGetValue(note.StateId, out var state))
                 continue;
 
-            var noteWidth = Math.Max(NoteMinWidth, MeasureText(note.Text, options.FontSize - 2) + NotePadding);
+            var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
             // Check horizontal space needed - notes go to outside of diagram
             var diagramCenterX = model.States.Average(s => s.Position.X);
@@ -452,11 +451,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             double noteX;
             if (placeToRight)
             {
-                noteX = state.Position.X + state.Width / 2 + NoteHorizontalOffset - noteWidth / 2;
+                noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
             }
             else
             {
-                noteX = state.Position.X - state.Width / 2 - NoteHorizontalOffset - noteWidth / 2;
+                noteX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
             }
 
             // Check if note extends past right edge
@@ -478,7 +477,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             if (placeBelow)
             {
-                var noteBottomEdge = state.Position.Y + state.Height / 2 + NoteVerticalOffset + NoteHeight;
+                var noteBottomEdge = state.Position.Y + state.Height / 2 + noteVerticalOffset + noteHeight;
                 var extraHeightNeeded = noteBottomEdge - maxY;
                 maxExtraHeight = Math.Max(maxExtraHeight, extraHeightNeeded);
             }
@@ -548,20 +547,20 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     static (double width, double height) CalculateStateSize(State state, RenderOptions options)
     {
         if (state.Type is StateType.Start or StateType.End)
-            return (SpecialStateSize, SpecialStateSize);
+            return (specialStateSize, specialStateSize);
 
         if (state.Type is StateType.Fork or StateType.Join)
             return (100, 8); // Fixed compact width for fork/join bars
 
         if (state.Type == StateType.Choice)
-            return (SpecialStateSize * 2, SpecialStateSize * 2);
+            return (specialStateSize * 2, specialStateSize * 2);
 
         // Size based on content
         var label = state.Description ?? state.Id;
         var textWidth = MeasureText(label, options.FontSize);
-        var width = Math.Max(StateMinWidth, textWidth + StatePadding);
+        var width = Math.Max(stateMinWidth, textWidth + statePadding);
 
-        return (width, StateHeight);
+        return (width, stateHeight);
     }
 
     static void CopyPositionsToModel(StateModel model, GraphDiagramBase graph) =>
@@ -636,7 +635,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (endNode == null) return;
 
         const double margin = 30;
-        var endHalfSize = SpecialStateSize / 2;
+        var endHalfSize = specialStateSize / 2;
 
         // Find siblings at similar Y level (within 100 pixels) and move end node to the right
         foreach (var state in model.States)
@@ -720,21 +719,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             case StateType.Start:
                 // Filled circle
-                builder.AddCircle(x, y, SpecialStateSize / 2,
+                builder.AddCircle(x, y, specialStateSize / 2,
                     fill: "#333", stroke: "#333", strokeWidth: 1);
 #if DEBUG
-                TrackNode(x, y, SpecialStateSize, SpecialStateSize, state.Id);
+                TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
 #endif
                 break;
 
             case StateType.End:
                 // Double circle
-                builder.AddCircle(x, y, SpecialStateSize / 2,
+                builder.AddCircle(x, y, specialStateSize / 2,
                     fill: "none", stroke: "#333", strokeWidth: 2);
-                builder.AddCircle(x, y, SpecialStateSize / 4,
+                builder.AddCircle(x, y, specialStateSize / 4,
                     fill: "#333", stroke: "#333", strokeWidth: 1);
 #if DEBUG
-                TrackNode(x, y, SpecialStateSize, SpecialStateSize, state.Id);
+                TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
 #endif
                 break;
 
@@ -785,7 +784,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var y = state.Position.Y - state.Height / 2;
 
         builder.AddRect(x, y, state.Width, state.Height,
-            rx: StateRadius,
+            rx: stateRadius,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
@@ -816,7 +815,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var y = state.Position.Y - state.Height / 2;
 
         builder.AddRect(x, y, state.Width, state.Height,
-            rx: StateRadius,
+            rx: stateRadius,
             fill: "#F4F4F4",
             stroke: "#666",
             strokeWidth: 2);
@@ -1023,7 +1022,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
 
                 // Register this label's position to prevent future overlaps
-                _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+                placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddText(labelX, labelY, transition.Label,
                     anchor: "middle",
@@ -1096,7 +1095,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
 
                 // Register this label's position to prevent future overlaps
-                _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+                placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
                 builder.AddText(labelX, labelY, transition.Label,
@@ -1173,7 +1172,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 const double labelHeight = 16;
 
                 // Register this label's position to prevent future overlaps
-                _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+                placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
                 builder.AddText(labelX, labelY, transition.Label,
@@ -1242,7 +1241,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Check overlap with previously placed labels
                 if (!overlaps)
                 {
-                    foreach (var placed in _placedLabels)
+                    foreach (var placed in placedLabels)
                     {
                         var placedRight = placed.Left + placed.Width;
                         var placedBottom = placed.Top + placed.Height;
@@ -1323,7 +1322,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var endX = toState.Position.X;
         // Since we're routing around and approaching from below, connect to BOTTOM of target
         var endY = toState.Type == StateType.End
-            ? toState.Position.Y + SpecialStateSize / 2
+            ? toState.Position.Y + specialStateSize / 2
             : toState.Position.Y + toState.Height / 2;
 
         var margin = 30.0;
@@ -1373,7 +1372,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         // The horizontal return segment should be below both the obstacle AND the target
         var targetBottom = toState.Type == StateType.End
-            ? toState.Position.Y + SpecialStateSize / 2
+            ? toState.Position.Y + specialStateSize / 2
             : toState.Position.Y + toState.Height / 2;
         var horizontalY = Math.Max(obstacleBottom, targetBottom) + margin;
 
@@ -1412,7 +1411,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             const double labelHeight = 16;
 
             // Register this label's position to prevent future overlaps
-            _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+            placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
             builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
             builder.AddText(labelX, labelY, transition.Label,
@@ -1470,7 +1469,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Check overlap with previously placed labels
                 if (!overlaps)
                 {
-                    foreach (var placed in _placedLabels)
+                    foreach (var placed in placedLabels)
                     {
                         var placedRight = placed.Left + placed.Width;
                         var placedBottom = placed.Top + placed.Height;
@@ -1510,14 +1509,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (state.Type is StateType.Start or StateType.End)
         {
             var angle = Math.Atan2(dy, dx);
-            var radius = SpecialStateSize / 2;
+            var radius = specialStateSize / 2;
             return (cx + radius * Math.Cos(angle), cy + radius * Math.Sin(angle));
         }
 
         // For diamond (choice) - edge equation: |x| + |y| = size
         if (state.Type == StateType.Choice)
         {
-            var size = SpecialStateSize;
+            var size = specialStateSize;
             // For a diamond, intersection at parameter t where |t*dx| + |t*dy| = size
             var t = size / (Math.Abs(dx) + Math.Abs(dy));
             return (cx + dx * t, cy + dy * t);
@@ -1574,7 +1573,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 continue;
 
             // Calculate note dimensions based on text content
-            var noteWidth = Math.Max(NoteMinWidth, MeasureText(note.Text, options.FontSize - 2) + NotePadding);
+            var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
             // Determine vertical placement based on available space
             // But if this state has back-edges AND note would be placed to the right,
@@ -1600,17 +1599,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             if (placeToRight)
             {
                 // Place to the right of the state (outside edge)
-                noteX = state.Position.X + state.Width / 2 + NoteHorizontalOffset - noteWidth / 2;
+                noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
             }
             else
             {
                 // Place to the left of the state (outside edge)
-                noteX = state.Position.X - state.Width / 2 - NoteHorizontalOffset - noteWidth / 2;
+                noteX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
             }
 
             noteY = placeBelow
-                ? state.Position.Y + state.Height / 2 + NoteVerticalOffset
-                : state.Position.Y - state.Height / 2 - NoteVerticalOffset - NoteHeight;
+                ? state.Position.Y + state.Height / 2 + noteVerticalOffset
+                : state.Position.Y - state.Height / 2 - noteVerticalOffset - noteHeight;
 
             // Check for overlaps with other states and adjust position
             const double minGap = 15;
@@ -1623,7 +1622,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var otherLeft = otherState.Position.X - otherState.Width / 2;
                 var otherRight = otherState.Position.X + otherState.Width / 2;
 
-                var noteBottom = noteY + NoteHeight;
+                var noteBottom = noteY + noteHeight;
                 var noteRight = noteX + noteWidth;
 
                 // Check horizontal overlap
@@ -1634,7 +1633,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     // If note bottom overlaps with other state top, move note up
                     if (noteBottom > otherTop - minGap && noteY < otherTop)
                     {
-                        noteY = otherTop - NoteHeight - minGap;
+                        noteY = otherTop - noteHeight - minGap;
                     }
                     // If note top overlaps with other state bottom, move note down
                     else if (noteY < otherBottom + minGap && noteBottom > otherBottom)
@@ -1649,14 +1648,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var path = $"M{Fmt(noteX)},{Fmt(noteY)} " +
                        $"L{Fmt(noteX + noteWidth - foldSize)},{Fmt(noteY)} " +
                        $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + foldSize)} " +
-                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + NoteHeight)} " +
-                       $"L{Fmt(noteX)},{Fmt(noteY + NoteHeight)} Z";
+                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + noteHeight)} " +
+                       $"L{Fmt(noteX)},{Fmt(noteY + noteHeight)} Z";
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
 #if DEBUG
             // Track note as a node for line-under-node detection
-            TrackNode(noteX + noteWidth / 2, noteY + NoteHeight / 2, noteWidth, NoteHeight, $"Note: {note.Text}");
+            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}");
 #endif
 
             // Fold corner
@@ -1668,18 +1667,18 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                            stroke: "#AAAA33", strokeWidth: 1);
 
             // Note text
-            builder.AddText(noteX + noteWidth / 2, noteY + NoteHeight / 2, note.Text,
+            builder.AddText(noteX + noteWidth / 2, noteY + noteHeight / 2, note.Text,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
                 fontFamily: options.FontFamily);
 #if DEBUG
-            TrackText(noteX + noteWidth / 2, noteY + NoteHeight / 2, note.Text, "middle", options.FontSize - 2);
+            TrackText(noteX + noteWidth / 2, noteY + noteHeight / 2, note.Text, "middle", options.FontSize - 2);
 #endif
 
             // Curved dashed line connecting note to state using center-targeting algorithm
             var noteCenterX = noteX + noteWidth / 2;
-            var noteCenterY = noteY + NoteHeight / 2;
+            var noteCenterY = noteY + noteHeight / 2;
 
             // State connection point - target note center, clip at state edge
             var (stateConnectX, stateConnectY) = GetEdgeIntersection(state, noteCenterX, noteCenterY);
@@ -1688,7 +1687,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var dx = state.Position.X - noteCenterX;
             var dy = state.Position.Y - noteCenterY;
             var noteHalfW = noteWidth / 2;
-            var noteHalfH = NoteHeight / 2;
+            var noteHalfH = noteHeight / 2;
             var tX = Math.Abs(dx) > 0.001 ? noteHalfW / Math.Abs(dx) : double.MaxValue;
             var tY = Math.Abs(dy) > 0.001 ? noteHalfH / Math.Abs(dy) : double.MaxValue;
             var t = Math.Min(tX, tY);
