@@ -2,11 +2,11 @@ namespace MermaidSharp.Diagrams.Treemap;
 
 public class TreemapRenderer : IDiagramRenderer<TreemapModel>
 {
-    const double TitleHeight = 30;
-    const double DefaultWidth = 600;
-    const double DefaultHeight = 400;
+    const double titleHeight = 30;
+    const double defaultWidth = 600;
+    const double defaultHeight = 400;
 
-    static readonly string[] Colors =
+    static string[] colors =
     [
         "#8dd3c7", "#ffffb3", "#bebada", "#fb8072",
         "#80b1d3", "#fdb462", "#b3de69", "#fccde5",
@@ -23,16 +23,16 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
             return emptyBuilder.Build();
         }
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var chartWidth = DefaultWidth - options.Padding * 2;
-        var chartHeight = DefaultHeight - options.Padding * 2 - titleOffset;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
+        var chartWidth = defaultWidth - options.Padding * 2;
+        var chartHeight = defaultHeight - options.Padding * 2 - titleOffset;
 
-        var builder = new SvgBuilder().Size(DefaultWidth, DefaultHeight);
+        var builder = new SvgBuilder().Size(defaultWidth, defaultHeight);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(DefaultWidth / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(defaultWidth / 2, options.Padding + titleHeight / 2, model.Title,
                 anchor: "middle", baseline: "middle",
                 fontSize: $"{options.FontSize + 4}px", fontFamily: options.FontFamily,
                 fontWeight: "bold");
@@ -95,7 +95,7 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 continue;
             }
 
-            var color = Colors[colorIndex % Colors.Length];
+            var color = colors[colorIndex % colors.Length];
             colorIndex++;
 
             if (node.IsLeaf)
@@ -197,7 +197,9 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
     static string DarkenColor(string hexColor, double factor)
     {
         if (!hexColor.StartsWith('#') || hexColor.Length != 7)
+        {
             return hexColor;
+        }
 
         var r = (int)(Convert.ToInt32(hexColor.Substring(1, 2), 16) * (1 - factor));
         var g = (int)(Convert.ToInt32(hexColor.Substring(3, 2), 16) * (1 - factor));

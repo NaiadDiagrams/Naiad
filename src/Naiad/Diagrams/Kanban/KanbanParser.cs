@@ -5,18 +5,18 @@ public class KanbanParser : IDiagramParser<KanbanModel>
     public DiagramType DiagramType => DiagramType.Kanban;
 
     // Identifier
-    static readonly Parser<char, string> Identifier =
+    static Parser<char, string> Identifier =
         Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString();
 
     // Label in brackets: [Label Text]
-    static readonly Parser<char, string> LabelParser =
+    static Parser<char, string> LabelParser =
         from _ in Char('[')
         from label in Token(c => c != ']').ManyString()
         from __ in Char(']')
         select label.Trim();
 
     // Column: id[Name] (no leading whitespace or minimal)
-    static readonly Parser<char, (string id, string name)> ColumnParser =
+    static Parser<char, (string id, string name)> ColumnParser =
         from indent in CommonParsers.Indentation.Where(i => i < 4)
         from id in Identifier
         from name in LabelParser
@@ -25,7 +25,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         select (id, name);
 
     // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
-    static readonly Parser<char, (string id, string name)> TaskParser =
+    static Parser<char, (string id, string name)> TaskParser =
         from indent in CommonParsers.Indentation.Where(i => i >= 4)
         from id in Identifier
         from name in LabelParser
@@ -34,7 +34,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         select (id, name);
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

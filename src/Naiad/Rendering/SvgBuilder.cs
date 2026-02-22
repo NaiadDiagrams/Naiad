@@ -2,53 +2,53 @@ namespace MermaidSharp.Rendering;
 
 public class SvgBuilder
 {
-    readonly SvgDocument _document = new();
-    readonly Stack<SvgGroup> _groupStack = new();
-    double _padding;
-    double _contentWidth;
-    double _contentHeight;
+    SvgDocument document = new();
+    Stack<SvgGroup> groupStack = new();
+    double padding;
+    double contentWidth;
+    double contentHeight;
 
     public SvgBuilder Size(double width, double height)
     {
-        _contentWidth = width;
-        _contentHeight = height;
-        _document.Width = width;
-        _document.Height = height;
+        contentWidth = width;
+        contentHeight = height;
+        document.Width = width;
+        document.Height = height;
         return this;
     }
 
     public SvgBuilder Padding(double padding)
     {
-        _padding = padding;
+        this.padding = padding;
         // Adjust document size to include padding on all sides
-        _document.Width = _contentWidth + padding * 2;
-        _document.Height = _contentHeight + padding * 2;
+        document.Width = contentWidth + padding * 2;
+        document.Height = contentHeight + padding * 2;
         return this;
     }
 
     public SvgBuilder ViewBox(string viewBox)
     {
-        _document.ViewBoxOverride = viewBox;
+        document.ViewBoxOverride = viewBox;
         return this;
     }
 
     public SvgBuilder DiagramType(string diagramClass, string ariaRoledescription)
     {
-        _document.DiagramClass = diagramClass;
-        _document.AriaRoledescription = ariaRoledescription;
+        document.DiagramClass = diagramClass;
+        document.AriaRoledescription = ariaRoledescription;
         return this;
     }
 
     public SvgBuilder AddStyles(string css)
     {
-        _document.CssStyles = css;
+        document.CssStyles = css;
         return this;
     }
 
     public SvgBuilder AddMarker(string id, string path, double width, double height,
         double refX, double refY, string? fill = null)
     {
-        _document.Defs.Markers.Add(
+        document.Defs.Markers.Add(
             new()
             {
                 Id = id,
@@ -67,7 +67,7 @@ public class SvgBuilder
 
     public SvgBuilder AddCircleMarker(string id = "circle", string fill = "#333")
     {
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = id,
             Path = "M4,4 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0",
@@ -82,7 +82,7 @@ public class SvgBuilder
 
     public SvgBuilder AddCrossMarker(string id = "cross", string stroke = "#333")
     {
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = id,
             Path = "M1,1 L7,7 M7,1 L1,7",
@@ -97,7 +97,7 @@ public class SvgBuilder
 
     public SvgBuilder AddMermaidArrowMarker()
     {
-        _document.Defs.Markers.Add(
+        document.Defs.Markers.Add(
             new()
             {
                 Id = "mermaid-svg_flowchart-v2-pointEnd",
@@ -110,7 +110,7 @@ public class SvgBuilder
                 MarkerUnits = "userSpaceOnUse",
                 ClassName = "marker flowchart-v2"
             });
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-pointStart",
             Path = "M 0 5 L 10 10 L 10 0 z",
@@ -127,7 +127,7 @@ public class SvgBuilder
 
     public SvgBuilder AddMermaidCircleMarker()
     {
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-circleEnd",
             Path = "",
@@ -143,7 +143,7 @@ public class SvgBuilder
             MarkerUnits = "userSpaceOnUse",
             ClassName = "marker flowchart-v2"
         });
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-circleStart",
             Path = "",
@@ -164,7 +164,7 @@ public class SvgBuilder
 
     public SvgBuilder AddMermaidCrossMarker()
     {
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-crossEnd",
             Path = "M 1,1 l 9,9 M 10,1 l -9,9",
@@ -177,7 +177,7 @@ public class SvgBuilder
             ClassName = "marker cross flowchart-v2",
             StrokeWidth = 2
         });
-        _document.Defs.Markers.Add(new()
+        document.Defs.Markers.Add(new()
         {
             Id = "mermaid-svg_flowchart-v2-crossStart",
             Path = "M 1,1 l 9,9 M 10,1 l -9,9",
@@ -218,24 +218,24 @@ public class SvgBuilder
             Transform = transform
         };
 
-        if (_groupStack.Count > 0)
+        if (groupStack.Count > 0)
         {
-            _groupStack.Peek().Children.Add(group);
+            groupStack.Peek().Children.Add(group);
         }
         else
         {
-            _document.Elements.Add(group);
+            document.Elements.Add(group);
         }
 
-        _groupStack.Push(group);
+        groupStack.Push(group);
         return this;
     }
 
     public SvgBuilder EndGroup()
     {
-        if (_groupStack.Count > 0)
+        if (groupStack.Count > 0)
         {
-            _groupStack.Pop();
+            groupStack.Pop();
         }
 
         return this;
@@ -402,31 +402,31 @@ public class SvgBuilder
 
     void AddElement(SvgElement element)
     {
-        if (_groupStack.Count > 0)
+        if (groupStack.Count > 0)
         {
-            _groupStack.Peek().Children.Add(element);
+            groupStack.Peek().Children.Add(element);
         }
         else
         {
-            _document.Elements.Add(element);
+            document.Elements.Add(element);
         }
     }
 
     public SvgDocument Build()
     {
         // If padding is set, wrap all elements in a transform group
-        if (_padding > 0 && _document.Elements.Count > 0)
+        if (padding > 0 && document.Elements.Count > 0)
         {
             var paddingGroup = new SvgGroup
             {
-                Transform = $"translate({Fmt(_padding)},{Fmt(_padding)})"
+                Transform = $"translate({Fmt(padding)},{Fmt(padding)})"
             };
-            paddingGroup.Children.AddRange(_document.Elements);
-            _document.Elements.Clear();
-            _document.Elements.Add(paddingGroup);
+            paddingGroup.Children.AddRange(document.Elements);
+            document.Elements.Clear();
+            document.Elements.Add(paddingGroup);
         }
 
-        return _document;
+        return document;
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);

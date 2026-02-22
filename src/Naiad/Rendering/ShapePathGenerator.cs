@@ -133,13 +133,8 @@ public static class ShapePathGenerator
     {
         var waveHeight = height * 0.15;
         var bodyHeight = height - waveHeight;
-        return $"M{Fmt(x)},{Fmt(y)} " +
-               $"H{Fmt(x + width)} " +
-               $"V{Fmt(y + bodyHeight)} " +
-               $"Q{Fmt(x + width * 0.75)},{Fmt(y + height + waveHeight * 0.5)} " +
-               $"{Fmt(x + width * 0.5)},{Fmt(y + bodyHeight)} " +
-               $"Q{Fmt(x + width * 0.25)},{Fmt(y + bodyHeight - waveHeight * 0.5)} " +
-               $"{Fmt(x)},{Fmt(y + bodyHeight)} Z";
+        var xWidth = x + width;
+        return $"M{Fmt(x)},{Fmt(y)} H{Fmt(xWidth)} V{Fmt(y + bodyHeight)} Q{Fmt(x + width * 0.75)},{Fmt(y + height + waveHeight * 0.5)} {Fmt(x + width * 0.5)},{Fmt(y + bodyHeight)} Q{Fmt(x + width * 0.25)},{Fmt(y + bodyHeight - waveHeight * 0.5)} {Fmt(x)},{Fmt(y + bodyHeight)} Z";
     }
 
     public static string GetPath(NodeShape shape, double x, double y, double width, double height)

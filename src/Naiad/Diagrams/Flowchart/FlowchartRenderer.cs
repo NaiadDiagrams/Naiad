@@ -2,19 +2,21 @@ using System.Text.RegularExpressions;
 
 namespace MermaidSharp.Diagrams.Flowchart;
 
-public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
+public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<FlowchartModel>
 {
-    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
     // Mermaid.ink default colors
-    const string NodeFill = "#ECECFF";
-    const string NodeStroke = "#9370DB";
-    const string EdgeStroke = "#333333";
-    const string LabelBackground = "rgba(232,232,232,0.8)";
+    const string nodeFill = "#ECECFF";
+    const string nodeStroke = "#9370DB";
+    const string edgeStroke = "#333333";
+    const string labelBackground = "rgba(232,232,232,0.8)";
 
     // FontAwesome icon pattern: fa:fa-icon-name or fab:fa-icon-name
-    static readonly Regex IconPattern = new("(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled);
+    static Regex iconPattern = IconPatternMyRegex();
+    [GeneratedRegex("(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled)]
+    private static partial Regex IconPatternMyRegex();
 
     public SvgDocument Render(FlowchartModel model, RenderOptions options)
     {
@@ -23,10 +25,10 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         {
             var label = node.Label ?? node.Id;
             // Strip icon syntax for measurement
-            var textForMeasure = IconPattern.Replace(label, "").Trim();
+            var textForMeasure = iconPattern.Replace(label, "").Trim();
             var textSize = MeasureText(textForMeasure, options.FontSize);
             // Add extra width for icon if present
-            var hasIcon = IconPattern.IsMatch(label);
+            var hasIcon = iconPattern.IsMatch(label);
             node.Width = textSize.Width + 30 + (hasIcon ? 20 : 0);
             node.Height = textSize.Height + 27;
 
@@ -51,7 +53,7 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 50,
             RankSeparation = 70
         };
-        var layoutResult = _layoutEngine.Layout(model, layoutOptions);
+        var layoutResult = layoutEngine.Layout(model, layoutOptions);
 
         // Build SVG
         var builder = new SvgBuilder()
@@ -87,8 +89,8 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
 
         builder.AddPath(shapePath,
-            fill: NodeFill,
-            stroke: NodeStroke,
+            fill: nodeFill,
+            stroke: nodeStroke,
             strokeWidth: 1);
 
         // Render label with icon support
@@ -145,7 +147,7 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         builder.AddPath(pathData,
             fill: "none",
-            stroke: EdgeStroke,
+            stroke: edgeStroke,
             strokeWidth: strokeWidth,
             strokeDasharray: strokeDasharray,
             markerEnd: markerEnd,
@@ -163,7 +165,7 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddRect(
                 labelX - labelWidth / 2, labelY - labelHeight / 2,
                 labelWidth, labelHeight,
-                fill: LabelBackground, stroke: "none",
+                fill: labelBackground, stroke: "none",
                 cssClass: "edgeLabel");
 
             builder.AddForeignObject(
@@ -180,7 +182,7 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     static string ConvertIconsToHtml(string text)
     {
         // If no icons, just encode and wrap in paragraph
-        if (!IconPattern.IsMatch(text))
+        if (!iconPattern.IsMatch(text))
         {
             return $"<p>{System.Net.WebUtility.HtmlEncode(text)}</p>";
         }
@@ -189,7 +191,7 @@ public class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var html = new StringBuilder();
         var lastIndex = 0;
 
-        foreach (Match match in IconPattern.Matches(text))
+        foreach (Match match in iconPattern.Matches(text))
         {
             // Add text before this icon (encoded)
             if (match.Index > lastIndex)

@@ -5,13 +5,13 @@ public class ERParser : IDiagramParser<ERModel>
     public DiagramType DiagramType => DiagramType.EntityRelationship;
 
     // Entity name (alphanumeric, underscore, hyphen)
-    static readonly Parser<char, string> EntityName =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-')
+    static Parser<char, string> entityName =
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
             .AtLeastOnceString()
             .Labelled("entity name");
 
     // Left cardinality markers
-    static readonly Parser<char, Cardinality> LeftCardinality =
+    static Parser<char, Cardinality> leftCardinality =
         OneOf(
             Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
             Try(String("|o")).ThenReturn(Cardinality.ZeroOrOne),
@@ -20,7 +20,7 @@ public class ERParser : IDiagramParser<ERModel>
         );
 
     // Right cardinality markers
-    static readonly Parser<char, Cardinality> RightCardinality =
+    static Parser<char, Cardinality> rightCardinality =
         OneOf(
             Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
             Try(String("o|")).ThenReturn(Cardinality.ZeroOrOne),
@@ -29,27 +29,27 @@ public class ERParser : IDiagramParser<ERModel>
         );
 
     // Line style (-- for identifying, .. for non-identifying)
-    static readonly Parser<char, bool> LineStyle =
+    static Parser<char, bool> LineStyle =
         OneOf(
             String("--").ThenReturn(true),
             String("..").ThenReturn(false)
         );
 
     // Relationship: ENTITY1 ||--o{ ENTITY2 : label
-    static readonly Parser<char, Relationship> RelationshipParser =
+    static Parser<char, Relationship> RelationshipParser =
         from _ in CommonParsers.InlineWhitespace
-        from fromEntity in EntityName
+        from fromEntity in entityName
         from __ in CommonParsers.InlineWhitespace
-        from leftCard in LeftCardinality
+        from leftCard in leftCardinality
         from identifying in LineStyle
-        from rightCard in RightCardinality
+        from rightCard in rightCardinality
         from ___ in CommonParsers.InlineWhitespace
-        from toEntity in EntityName
+        from toEntity in entityName
         from label in Try(
             CommonParsers.InlineWhitespace
                 .Then(Char(':'))
                 .Then(CommonParsers.InlineWhitespace)
-                .Then(Token(c => c != '\r' && c != '\n').AtLeastOnceString())
+                .Then(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString())
         ).Optional()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
@@ -64,7 +64,7 @@ public class ERParser : IDiagramParser<ERModel>
         };
 
     // Attribute key type
-    static readonly Parser<char, AttributeKeyType> KeyTypeParser =
+    static Parser<char, AttributeKeyType> KeyTypeParser =
         OneOf(
             Try(String("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
             Try(String("FK")).ThenReturn(AttributeKeyType.ForeignKey),
@@ -72,21 +72,21 @@ public class ERParser : IDiagramParser<ERModel>
         );
 
     // Attribute comment (in quotes)
-    static readonly Parser<char, string> AttributeComment =
+    static Parser<char, string> AttributeComment =
         CommonParsers.DoubleQuotedString;
 
     // Entity attribute: type name PK "comment"
-    static readonly Parser<char, EntityAttribute> AttributeParser =
+    static Parser<char, EntityAttribute> attributeParser =
         from _ in CommonParsers.InlineWhitespace
-        from type in Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '[' || c == ']').AtLeastOnceString()
+        from type in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '[' || _ == ']').AtLeastOnceString()
         from __ in CommonParsers.RequiredWhitespace
-        from name in Token(c => char.IsLetterOrDigit(c) || c == '_').AtLeastOnceString()
+        from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
         from ___ in CommonParsers.InlineWhitespace
         from keyType in Try(KeyTypeParser).Optional()
         from ____ in CommonParsers.InlineWhitespace
         from comment in Try(AttributeComment).Optional()
         from _____ in CommonParsers.InlineWhitespace
-        from ______ in CommonParsers.LineEnd
+        from lineEnd in CommonParsers.LineEnd
         select new EntityAttribute
         {
             Name = name,
@@ -99,7 +99,7 @@ public class ERParser : IDiagramParser<ERModel>
     static Parser<char, List<EntityAttribute>> EntityBodyParser()
     {
         var attributeOrEmpty = OneOf(
-            Try(AttributeParser.Select(a => (EntityAttribute?)a)),
+            Try(attributeParser.Select(a => (EntityAttribute?)a)),
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)).ThenReturn((EntityAttribute?)null)
         );
 
@@ -111,7 +111,7 @@ public class ERParser : IDiagramParser<ERModel>
     static Parser<char, Entity> EntityDefinitionParser =>
         Try(
             from _ in CommonParsers.InlineWhitespace
-            from name in EntityName
+            from name in entityName
             from __ in CommonParsers.InlineWhitespace
             from open in Char('{')
             from ___ in CommonParsers.LineEnd
@@ -130,7 +130,7 @@ public class ERParser : IDiagramParser<ERModel>
     }
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 

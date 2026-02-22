@@ -5,15 +5,15 @@ public class XYChartParser : IDiagramParser<XYChartModel>
     public DiagramType DiagramType => DiagramType.XYChart;
 
     // Rest of line (for text content)
-    static readonly Parser<char, string> RestOfLine =
+    static Parser<char, string> RestOfLine =
         Token(c => c != '\r' && c != '\n').ManyString();
 
     // Quoted string
-    static readonly Parser<char, string> QuotedString =
+    static Parser<char, string> QuotedString =
         Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
 
     // Title: title "My Chart" or title My Chart
-    static readonly Parser<char, string> TitleParser =
+    static Parser<char, string> TitleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -22,7 +22,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select title.Trim();
 
     // Number parser
-    static readonly Parser<char, double> NumberParser =
+    static Parser<char, double> NumberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()
         from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
@@ -31,13 +31,13 @@ public class XYChartParser : IDiagramParser<XYChartModel>
             CultureInfo.InvariantCulture);
 
     // Category item (unquoted or quoted)
-    static readonly Parser<char, string> CategoryItem =
+    static Parser<char, string> CategoryItem =
         QuotedString.Or(
             Token(c => c != ',' && c != ']' && c != '\r' && c != '\n').AtLeastOnceString()
                 .Select(s => s.Trim()));
 
     // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]
-    static readonly Parser<char, List<string>> CategoryListParser =
+    static Parser<char, List<string>> CategoryListParser =
         from _ in Char('[')
         from __ in CommonParsers.InlineWhitespace
         from items in CategoryItem.SeparatedAtLeastOnce(
@@ -47,7 +47,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select items.ToList();
 
     // X-axis: x-axis [cat1, cat2] or x-axis "Label" [cat1, cat2]
-    static readonly Parser<char, (string label, List<string> categories)> XAxisParser =
+    static Parser<char, (string label, List<string> categories)> XAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -58,7 +58,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select (label.GetValueOrDefault() ?? "", categories);
 
     // Y-axis: y-axis "Label" min --> max or y-axis min --> max
-    static readonly Parser<char, (string label, double min, double max)> YAxisParser =
+    static Parser<char, (string label, double min, double max)> YAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -78,7 +78,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
                 range.HasValue ? range.Value.max : 100);
 
     // Data list: [100, 200, 300]
-    static readonly Parser<char, List<double>> DataListParser =
+    static Parser<char, List<double>> DataListParser =
         from _ in Char('[')
         from __ in CommonParsers.InlineWhitespace
         from items in NumberParser.SeparatedAtLeastOnce(
@@ -88,7 +88,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select items.ToList();
 
     // Bar series: bar [100, 200, 300]
-    static readonly Parser<char, ChartSeries> BarParser =
+    static Parser<char, ChartSeries> BarParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("bar")
         from ___ in CommonParsers.RequiredWhitespace
@@ -98,7 +98,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select new ChartSeries { Type = ChartSeriesType.Bar, Data = data };
 
     // Line series: line [100, 200, 300]
-    static readonly Parser<char, ChartSeries> LineParser =
+    static Parser<char, ChartSeries> LineParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("line")
         from ___ in CommonParsers.RequiredWhitespace
@@ -108,7 +108,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select new ChartSeries { Type = ChartSeriesType.Line, Data = data };
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

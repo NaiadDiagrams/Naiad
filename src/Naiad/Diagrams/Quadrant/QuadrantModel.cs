@@ -12,10 +12,3 @@ public class QuadrantModel : DiagramBase
     public string? Quadrant4Label { get; set; } // Bottom-right
     public List<QuadrantPoint> Points { get; } = [];
 }
-
-public class QuadrantPoint
-{
-    public required string Name { get; init; }
-    public double X { get; init; } // 0.0 to 1.0
-    public double Y { get; init; } // 0.0 to 1.0
-}

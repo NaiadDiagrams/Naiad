@@ -4,29 +4,25 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
 {
     public DiagramType DiagramType => DiagramType.Architecture;
 
-    // Identifier
-    static readonly Parser<char, string> Identifier =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString();
+    static Parser<char, string> identifier =
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    // Icon: (iconName)
-    static readonly Parser<char, string> IconParser =
-        Char('(').Then(Token(c => c != ')').ManyString()).Before(Char(')'));
+    static Parser<char, string> iconParser =
+        Char('(').Then(Token(_ => _ != ')').ManyString()).Before(Char(')'));
 
-    // Label: [text]
-    static readonly Parser<char, string> LabelParser =
-        Char('[').Then(Token(c => c != ']').ManyString()).Before(Char(']'));
+    static Parser<char, string> labelParser =
+        Char('[').Then(Token(_ => _ != ']').ManyString()).Before(Char(']'));
 
-    // Parent: in parentId
-    static readonly Parser<char, string> ParentParser =
+    static Parser<char, string> parentParser =
         Try(
             CommonParsers.RequiredWhitespace
                 .Then(CIString("in"))
                 .Then(CommonParsers.RequiredWhitespace)
-                .Then(Identifier)
+                .Then(identifier)
         );
 
     // Direction: L, R, T, B
-    static readonly Parser<char, EdgeDirection> DirectionParser =
+    static Parser<char, EdgeDirection> directionParser =
         OneOf(
             Char('L').ThenReturn(EdgeDirection.Left),
             Char('R').ThenReturn(EdgeDirection.Right),
@@ -35,14 +31,14 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         );
 
     // Group: group id(icon)[label] in parent
-    static readonly Parser<char, ArchitectureGroup> GroupParser =
+    static Parser<char, ArchitectureGroup> groupParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("group")
         from ___ in CommonParsers.RequiredWhitespace
-        from id in Identifier
-        from icon in IconParser.Optional()
-        from label in LabelParser.Optional()
-        from parent in ParentParser.Optional()
+        from id in identifier
+        from icon in iconParser.Optional()
+        from label in labelParser.Optional()
+        from parent in parentParser.Optional()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         select new ArchitectureGroup
@@ -54,14 +50,14 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         };
 
     // Service: service id(icon)[label] in parent
-    static readonly Parser<char, ArchitectureService> ServiceParser =
+    static Parser<char, ArchitectureService> serviceParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("service")
         from ___ in CommonParsers.RequiredWhitespace
-        from id in Identifier
-        from icon in IconParser.Optional()
-        from label in LabelParser.Optional()
-        from parent in ParentParser.Optional()
+        from id in identifier
+        from icon in iconParser.Optional()
+        from label in labelParser.Optional()
+        from parent in parentParser.Optional()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         select new ArchitectureService
@@ -73,12 +69,12 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         };
 
     // Junction: junction id in parent
-    static readonly Parser<char, ArchitectureJunction> JunctionParser =
+    static Parser<char, ArchitectureJunction> junctionParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("junction")
         from ___ in CommonParsers.RequiredWhitespace
-        from id in Identifier
-        from parent in ParentParser.Optional()
+        from id in identifier
+        from parent in parentParser.Optional()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         select new ArchitectureJunction
@@ -88,35 +84,35 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         };
 
     // Group reference: {groupId}
-    static readonly Parser<char, string> GroupRef =
-        Char('{').Then(Identifier).Before(Char('}'));
+    static Parser<char, string> groupRef =
+        Char('{').Then(identifier).Before(Char('}'));
 
     // Source side: id{group}?:direction with optional arrow
-    static readonly Parser<char, (string id, string? grp, EdgeDirection dir, bool arrow)> SourceSideParser =
+    static Parser<char, (string id, string? grp, EdgeDirection dir, bool arrow)> sourceSideParser =
         from arw in Char('<').Optional()
-        from nodeId in Identifier
-        from grp in GroupRef.Optional()
-        from _ in Char(':')
-        from dir in DirectionParser
+        from nodeId in identifier
+        from grp in groupRef.Optional()
+        from colon in Char(':')
+        from dir in directionParser
         select (nodeId, grp.GetValueOrDefault(), dir, arw.HasValue);
 
     // Target side: direction:id{group}? with optional arrow
-    static readonly Parser<char, (string id, string? grp, EdgeDirection dir, bool arrow)> TargetSideParser =
-        from dir in DirectionParser
+    static Parser<char, (string id, string? grp, EdgeDirection dir, bool arrow)> targetSideParser =
+        from dir in directionParser
         from arw in Char('>').Optional()
-        from _ in Char(':')
-        from nodeId in Identifier
-        from grp in GroupRef.Optional()
+        from colon in Char(':')
+        from nodeId in identifier
+        from grp in groupRef.Optional()
         select (nodeId, grp.GetValueOrDefault(), dir, arw.HasValue);
 
     // Edge: source:side <arrow>--<arrow> side:target
-    static readonly Parser<char, ArchitectureEdge> EdgeParser =
+    static Parser<char, ArchitectureEdge> edgeParser =
         from _ in CommonParsers.InlineWhitespace
-        from source in SourceSideParser
+        from source in sourceSideParser
         from __ in CommonParsers.InlineWhitespace
         from ___ in String("--")
         from ____ in CommonParsers.InlineWhitespace
-        from target in TargetSideParser
+        from target in targetSideParser
         from _____ in CommonParsers.InlineWhitespace
         from ______ in CommonParsers.LineEnd
         select BuildEdge(source, target);
@@ -136,29 +132,29 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
     };
 
     // Skip line
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(GroupParser.Select(g => (object?)(ItemType.Group, g))),
-            Try(ServiceParser.Select(s => (object?)(ItemType.Service, s))),
-            Try(JunctionParser.Select(j => (object?)(ItemType.Junction, j))),
-            Try(EdgeParser.Select(e => (object?)(ItemType.Edge, e))),
-            SkipLine.ThenReturn((object?)null)
+            Try(groupParser.Select(g => (object?)(ItemType.Group, g))),
+            Try(serviceParser.Select(s => (object?)(ItemType.Service, s))),
+            Try(junctionParser.Select(j => (object?)(ItemType.Junction, j))),
+            Try(edgeParser.Select(e => (object?)(ItemType.Edge, e))),
+            skipLine.ThenReturn((object?)null)
         );
 
     enum ItemType { Group, Service, Junction, Edge }
 
     public static Parser<char, ArchitectureModel> Parser =>
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("architecture-beta")
-        from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
+        from inlineWhitespace in CommonParsers.InlineWhitespace
+        from architecture in CIString("architecture-beta")
+        from innerInlineWhitespace in CommonParsers.InlineWhitespace
+        from lineEnd in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static ArchitectureModel BuildModel(List<object?> content)
     {

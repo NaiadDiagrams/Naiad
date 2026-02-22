@@ -5,84 +5,84 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
     public DiagramType DiagramType => DiagramType.Flowchart;
 
     // Node shape parsers - returns (label, shape)
-    static readonly Parser<char, (string Label, NodeShape Shape)> DoubleCircleShape =
+    static Parser<char, (string Label, NodeShape Shape)> doubleCircleShape =
         String("(((")
-            .Then(Token(c => c != ')').ManyString())
+            .Then(Token(_ => _ != ')').ManyString())
             .Before(String(")))"))
             .Select(text => (text, NodeShape.DoubleCircle));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> CircleShape =
+    static Parser<char, (string Label, NodeShape Shape)> circleShape =
         String("((")
-            .Then(Token(c => c != ')').ManyString())
+            .Then(Token(_ => _ != ')').ManyString())
             .Before(String("))"))
             .Select(text => (text, NodeShape.Circle));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> StadiumShape =
+    static Parser<char, (string Label, NodeShape Shape)> stadiumShape =
         String("([")
-            .Then(Token(c => c != ']').ManyString())
+            .Then(Token(_ => _ != ']').ManyString())
             .Before(String("])"))
             .Select(text => (text, NodeShape.Stadium));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> SubroutineShape =
+    static Parser<char, (string Label, NodeShape Shape)> subroutineShape =
         String("[[")
-            .Then(Token(c => c != ']').ManyString())
+            .Then(Token(_ => _ != ']').ManyString())
             .Before(String("]]"))
             .Select(text => (text, NodeShape.Subroutine));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> CylinderShape =
+    static Parser<char, (string Label, NodeShape Shape)> cylinderShape =
         String("[(")
-            .Then(Token(c => c != ')').ManyString())
+            .Then(Token(_ => _ != ')').ManyString())
             .Before(String(")]"))
             .Select(text => (text, NodeShape.Cylinder));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> HexagonShape =
+    static Parser<char, (string Label, NodeShape Shape)> hexagonShape =
         String("{{")
-            .Then(Token(c => c != '}').ManyString())
+            .Then(Token(_ => _ != '}').ManyString())
             .Before(String("}}"))
             .Select(text => (text, NodeShape.Hexagon));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> DiamondShape =
+    static Parser<char, (string Label, NodeShape Shape)> diamondShape =
         Char('{')
-            .Then(Token(c => c != '}').ManyString())
+            .Then(Token(_ => _ != '}').ManyString())
             .Before(Char('}'))
             .Select(text => (text, NodeShape.Diamond));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> RoundedShape =
+    static Parser<char, (string Label, NodeShape Shape)> roundedShape =
         Char('(')
-            .Then(Token(c => c != ')').ManyString())
+            .Then(Token(_ => _ != ')').ManyString())
             .Before(Char(')'))
             .Select(text => (text, NodeShape.RoundedRectangle));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> RectangleShape =
+    static Parser<char, (string Label, NodeShape Shape)> rectangleShape =
         Char('[')
-            .Then(Token(c => c != ']').ManyString())
+            .Then(Token(_ => _ != ']').ManyString())
             .Before(Char(']'))
             .Select(text => (text, NodeShape.Rectangle));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> AsymmetricShape =
+    static Parser<char, (string Label, NodeShape Shape)> asymmetricShape =
         Char('>')
-            .Then(Token(c => c != ']').ManyString())
+            .Then(Token(_ => _ != ']').ManyString())
             .Before(Char(']'))
             .Select(text => (text, NodeShape.Asymmetric));
 
-    static readonly Parser<char, (string Label, NodeShape Shape)> NodeShapeParser =
+    static Parser<char, (string Label, NodeShape Shape)> nodeShapeParser =
         OneOf(
-            Try(DoubleCircleShape),
-            Try(CircleShape),
-            Try(StadiumShape),
-            Try(SubroutineShape),
-            Try(CylinderShape),
-            Try(HexagonShape),
-            Try(DiamondShape),
-            Try(RoundedShape),
-            Try(AsymmetricShape),
-            RectangleShape
+            Try(doubleCircleShape),
+            Try(circleShape),
+            Try(stadiumShape),
+            Try(subroutineShape),
+            Try(cylinderShape),
+            Try(hexagonShape),
+            Try(diamondShape),
+            Try(roundedShape),
+            Try(asymmetricShape),
+            rectangleShape
         );
 
     // Node parser: identifier optionally followed by shape
-    static readonly Parser<char, Node> NodeParser =
+    static Parser<char, Node> nodeParser =
         from id in CommonParsers.Identifier
-        from shape in NodeShapeParser.Optional()
+        from shape in nodeShapeParser.Optional()
         select new Node
         {
             Id = id,
@@ -90,8 +90,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
             Shape = shape.HasValue ? shape.Value.Shape : NodeShape.Rectangle
         };
 
-    // Arrow parsers
-    static readonly Parser<char, (EdgeType Type, EdgeStyle Style)> ArrowTypeParser =
+    static Parser<char, (EdgeType Type, EdgeStyle Style)> arrowTypeParser =
         OneOf(
             Try(String("<-->")).ThenReturn((EdgeType.BiDirectional, EdgeStyle.Solid)),
             Try(String("o--o")).ThenReturn((EdgeType.BiDirectionalCircle, EdgeStyle.Solid)),
@@ -107,13 +106,12 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         );
 
     // Edge label: |text|
-    static readonly Parser<char, string> EdgeLabelParser =
+    static Parser<char, string> edgeLabelParser =
         Char('|')
-            .Then(Token(c => c != '|').ManyString())
+            .Then(Token(_ => _ != '|').ManyString())
             .Before(Char('|'));
 
-    // Direction parser
-    static readonly Parser<char, Direction> FlowchartDirection =
+    static Parser<char, Direction> flowchartDirection =
         OneOf(
             Try(String("TB")).ThenReturn(Direction.TopToBottom),
             Try(String("TD")).ThenReturn(Direction.TopToBottom),
@@ -124,16 +122,16 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
 
     // Statement: A --> B --> C (chain of nodes with edges)
     static Parser<char, (List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> StatementParser =>
-        from first in NodeParser
+        from first in nodeParser
         from rest in (
             from _1 in CommonParsers.InlineWhitespace
-            from label1 in EdgeLabelParser.Optional()
+            from label1 in edgeLabelParser.Optional()
             from _2 in CommonParsers.InlineWhitespace
-            from arrow in ArrowTypeParser
+            from arrow in arrowTypeParser
             from _3 in CommonParsers.InlineWhitespace
-            from label2 in EdgeLabelParser.Optional()
+            from label2 in edgeLabelParser.Optional()
             from _4 in CommonParsers.InlineWhitespace
-            from node in NodeParser
+            from node in nodeParser
             select (node, arrow.Type, arrow.Style, label1.HasValue ? label1.Value : label2.HasValue ? label2.Value : null)
         ).Many()
         select (
@@ -142,66 +140,66 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         );
 
     // Style directive: style NodeName fill:#color,stroke:#color
-    static readonly Parser<char, Unit> StyleDirective =
+    static Parser<char, Unit> styleDirective =
         from _ in CommonParsers.InlineWhitespace
         from __ in String("style")
         from ___ in CommonParsers.RequiredWhitespace
-        from ____ in Token(c => c != '\r' && c != '\n').ManyString() // consume rest of line
-        from _____ in CommonParsers.LineEnd
+        from ____ in Token(_ => _ != '\r' && _ != '\n').ManyString() // consume rest of line
+        from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
     // Class definition: classDef className fill:#color
-    static readonly Parser<char, Unit> ClassDefDirective =
+    static Parser<char, Unit> classDefDirective =
         from _ in CommonParsers.InlineWhitespace
         from __ in String("classDef")
         from ___ in CommonParsers.RequiredWhitespace
-        from ____ in Token(c => c != '\r' && c != '\n').ManyString()
-        from _____ in CommonParsers.LineEnd
+        from ____ in Token(_ => _ != '\r' && _ != '\n').ManyString()
+        from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
     // Class application: class nodeId className
-    static readonly Parser<char, Unit> ClassDirective =
+    static Parser<char, Unit> classDirective =
         from _ in CommonParsers.InlineWhitespace
         from __ in String("class")
         from ___ in CommonParsers.RequiredWhitespace
-        from ____ in Token(c => c != '\r' && c != '\n').ManyString()
-        from _____ in CommonParsers.LineEnd
+        from ____ in Token(_ => _ != '\r' && _ != '\n').ManyString()
+        from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
     // Click directive: click nodeId callback
-    static readonly Parser<char, Unit> ClickDirective =
+    static Parser<char, Unit> clickDirective =
         from _ in CommonParsers.InlineWhitespace
         from __ in String("click")
         from ___ in CommonParsers.RequiredWhitespace
-        from ____ in Token(c => c != '\r' && c != '\n').ManyString()
-        from _____ in CommonParsers.LineEnd
+        from ____ in Token(_ => _ != '\r' && _ != '\n').ManyString()
+        from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
     // Subgraph start: subgraph name[Label] or subgraph name
-    static readonly Parser<char, Unit> SubgraphStart =
+    static Parser<char, Unit> subgraphStart =
         from _ in CommonParsers.InlineWhitespace
-        from __ in String("subgraph")
-        from ___ in Token(c => c != '\r' && c != '\n').ManyString()
-        from ____ in CommonParsers.LineEnd
+        from subGraph in String("subgraph")
+        from ___ in Token(_ => _ != '\r' && _ != '\n').ManyString()
+        from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
     // Subgraph end: end
-    static readonly Parser<char, Unit> SubgraphEnd =
+    static Parser<char, Unit> subgraphEnd =
         from _ in CommonParsers.InlineWhitespace
-        from __ in String("end")
+        from end in String("end")
         from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
+        from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
     // Skip empty lines, comments, and directives
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         OneOf(
-            Try(StyleDirective),
-            Try(ClassDefDirective),
-            Try(ClassDirective),
-            Try(ClickDirective),
-            Try(SubgraphStart),
-            Try(SubgraphEnd),
+            Try(styleDirective),
+            Try(classDefDirective),
+            Try(classDirective),
+            Try(clickDirective),
+            Try(subgraphStart),
+            Try(subgraphEnd),
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
         );
 
@@ -209,9 +207,9 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("flowchart")).Or(String("graph"))
         from __ in CommonParsers.InlineWhitespace
-        from direction in FlowchartDirection.Optional()
+        from direction in flowchartDirection.Optional()
         from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
+        from lineEnd in CommonParsers.LineEnd
         from statements in ParseStatements()
         select BuildModel(direction.GetValueOrDefault(Direction.TopToBottom), statements);
 
@@ -222,7 +220,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
                 .Then(StatementParser)
                 .Before(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd));
 
-        var skipLine = SkipLine.ThenReturn((new List<Node>(), new List<(EdgeType, EdgeStyle, string?)>()));
+        var skipLine = FlowchartParser.skipLine.ThenReturn((new List<Node>(), new List<(EdgeType, EdgeStyle, string?)>()));
 
         return Try(statement).Or(skipLine).Many()
             .Select(s => s.Where(x => x.Nodes.Count > 0).ToList());

@@ -19,55 +19,53 @@ public class SvgDocument
 
     public string ToXml()
     {
-        var sb = new StringBuilder();
-
         // Build mermaid-compatible SVG root element (attribute order matches mermaid.ink exactly)
-        sb.Append($"<svg id=\"{Id}\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"");
+        var builder = new StringBuilder($"<svg id=\"{Id}\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"");
 
         if (!string.IsNullOrEmpty(DiagramClass))
         {
-            sb.Append($" class=\"{DiagramClass}\"");
+            builder.Append($" class=\"{DiagramClass}\"");
         }
 
-        sb.Append($" viewBox=\"{ViewBox}\"");
-        sb.Append($" style=\"max-width: {FmtWidth(Width)}px;\"");
+        builder.Append($" viewBox=\"{ViewBox}\"");
+        builder.Append($" style=\"max-width: {FmtWidth(Width)}px;\"");
 
         if (!string.IsNullOrEmpty(Role))
         {
-            sb.Append($" role=\"{Role}\"");
+            builder.Append($" role=\"{Role}\"");
         }
 
         if (!string.IsNullOrEmpty(AriaRoledescription))
         {
-            sb.Append($" aria-roledescription=\"{AriaRoledescription}\"");
+            builder.Append($" aria-roledescription=\"{AriaRoledescription}\"");
         }
 
-        sb.Append(" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
+        builder.Append(" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
 
         // Font Awesome import
         if (!string.IsNullOrEmpty(FontAwesomeImport))
         {
-            sb.Append($"<style xmlns=\"http://www.w3.org/1999/xhtml\">{FontAwesomeImport}</style>");
+            builder.Append($"<style xmlns=\"http://www.w3.org/1999/xhtml\">{FontAwesomeImport}</style>");
         }
 
         // Main CSS styles
         if (CssStyles is not null)
         {
-            sb.Append($"<style>{CssStyles}</style>");
+            builder.Append($"<style>{CssStyles}</style>");
         }
 
         if (Defs.HasContent)
         {
-            sb.Append(Defs.ToXml());
+            builder.Append(Defs.ToXml());
         }
 
         foreach (var element in Elements)
         {
-            sb.Append(element.ToXml());
+            builder.Append(element.ToXml());
         }
 
-        sb.Append("</svg>");
-        return sb.ToString();
+        builder.Append("</svg>");
+        return builder.ToString();
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
@@ -84,25 +82,24 @@ public class SvgDefs
 
     public string ToXml()
     {
-        var sb = new StringBuilder();
-        sb.Append("<defs>");
+        var builder = new StringBuilder("<defs>");
 
         foreach (var marker in Markers)
         {
-            sb.Append(marker.ToXml());
+            builder.Append(marker.ToXml());
         }
 
         foreach (var gradient in Gradients)
         {
-            sb.Append(gradient.ToXml());
+            builder.Append(gradient.ToXml());
         }
 
         foreach (var filter in Filters)
         {
-            sb.Append(filter.ToXml());
+            builder.Append(filter.ToXml());
         }
 
-        sb.Append("</defs>");
-        return sb.ToString();
+        builder.Append("</defs>");
+        return builder.ToString();
     }
 }

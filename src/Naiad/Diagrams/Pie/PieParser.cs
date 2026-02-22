@@ -4,7 +4,7 @@ public class PieParser : IDiagramParser<PieModel>
 {
     public DiagramType DiagramType => DiagramType.Pie;
 
-    static readonly Parser<char, PieSection> SectionParser =
+    static Parser<char, PieSection> SectionParser =
         from _ in CommonParsers.InlineWhitespace
         from label in CommonParsers.QuotedString
         from __ in CommonParsers.InlineWhitespace
@@ -15,7 +15,7 @@ public class PieParser : IDiagramParser<PieModel>
         from _____ in CommonParsers.LineEnd
         select new PieSection { Label = label, Value = value };
 
-    static readonly Parser<char, string> TitleLine =
+    static Parser<char, string> TitleLine =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("title")
         from __ in CommonParsers.RequiredWhitespace
@@ -23,15 +23,15 @@ public class PieParser : IDiagramParser<PieModel>
         from ___ in CommonParsers.LineEnd
         select title;
 
-    static readonly Parser<char, bool> ShowDataParser =
+    static Parser<char, bool> ShowDataParser =
         Try(String("showData")).ThenReturn(true).Or(Return(false));
 
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Inline title: pie title My Title (on same line)
-    static readonly Parser<char, string> InlineTitleParser =
+    static Parser<char, string> InlineTitleParser =
         from keyword in String("title")
         from _ in CommonParsers.RequiredWhitespace
         from title in Token(c => c != '\r' && c != '\n').ManyString()

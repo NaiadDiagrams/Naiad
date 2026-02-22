@@ -5,11 +5,11 @@ public class TimelineParser : IDiagramParser<TimelineModel>
     public DiagramType DiagramType => DiagramType.Timeline;
 
     // Rest of line (for text content)
-    static readonly Parser<char, string> RestOfLine =
+    static Parser<char, string> RestOfLine =
         Token(c => c != '\r' && c != '\n').ManyString();
 
     // Title: title My Timeline
-    static readonly Parser<char, string> TitleParser =
+    static Parser<char, string> TitleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -18,7 +18,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select title.Trim();
 
     // Section: section Section Name
-    static readonly Parser<char, string> SectionParser =
+    static Parser<char, string> SectionParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("section")
         from ___ in CommonParsers.RequiredWhitespace
@@ -27,7 +27,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select name.Trim();
 
     // Period with event: 2020 : Event description
-    static readonly Parser<char, (string period, string eventText)> PeriodEventParser =
+    static Parser<char, (string period, string eventText)> PeriodEventParser =
         from _ in CommonParsers.InlineWhitespace
         from period in Token(c => c != ':' && c != '\r' && c != '\n').AtLeastOnceString()
         from __ in CommonParsers.InlineWhitespace
@@ -38,7 +38,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select (period.Trim(), eventText.Trim());
 
     // Continuation event: : Another event (no period, just event)
-    static readonly Parser<char, string> ContinuationEventParser =
+    static Parser<char, string> ContinuationEventParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in Char(':')
         from ___ in CommonParsers.InlineWhitespace
@@ -47,7 +47,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select eventText.Trim();
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

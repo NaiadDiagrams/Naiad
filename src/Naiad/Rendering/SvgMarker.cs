@@ -21,26 +21,38 @@ public class SvgMarker
 
     public string ToXml()
     {
-        var sb = new StringBuilder();
-        sb.Append($"<marker id=\"{Id}\"");
-        if (ClassName is not null) sb.Append($" class=\"{ClassName}\"");
-        if (ViewBox is not null) sb.Append($" viewBox=\"{ViewBox}\"");
-        sb.Append($" refX=\"{Fmt(RefX)}\" refY=\"{Fmt(RefY)}\"");
-        if (MarkerUnits is not null) sb.Append($" markerUnits=\"{MarkerUnits}\"");
-        sb.Append($" markerWidth=\"{Fmt(MarkerWidth)}\" markerHeight=\"{Fmt(MarkerHeight)}\"");
-        sb.Append($" orient=\"{Orient}\">");
+        var builder = new StringBuilder($"<marker id=\"{Id}\"");
+
+        if (ClassName is not null)
+        {
+            builder.Append($" class=\"{ClassName}\"");
+        }
+
+        if (ViewBox is not null)
+        {
+            builder.Append($" viewBox=\"{ViewBox}\"");
+        }
+
+        builder.Append($" refX=\"{Fmt(RefX)}\" refY=\"{Fmt(RefY)}\"");
+        if (MarkerUnits is not null)
+        {
+            builder.Append($" markerUnits=\"{MarkerUnits}\"");
+        }
+
+        builder.Append($" markerWidth=\"{Fmt(MarkerWidth)}\" markerHeight=\"{Fmt(MarkerHeight)}\"");
+        builder.Append($" orient=\"{Orient}\">");
 
         if (UseCircle)
         {
-            sb.Append($"<circle cx=\"{Fmt(CircleCx)}\" cy=\"{Fmt(CircleCy)}\" r=\"{Fmt(CircleR)}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+            builder.Append($"<circle cx=\"{Fmt(CircleCx)}\" cy=\"{Fmt(CircleCy)}\" r=\"{Fmt(CircleR)}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
         }
         else
         {
-            sb.Append($"<path d=\"{Path}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+            builder.Append($"<path d=\"{Path}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
         }
 
-        sb.Append("</marker>");
-        return sb.ToString();
+        builder.Append("</marker>");
+        return builder.ToString();
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);

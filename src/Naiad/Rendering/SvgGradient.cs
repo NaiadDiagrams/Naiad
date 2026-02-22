@@ -9,13 +9,14 @@ public class SvgGradient
     public string ToXml()
     {
         var tag = IsRadial ? "radialGradient" : "linearGradient";
-        var sb = new StringBuilder();
-        sb.Append($"<{tag} id=\"{Id}\">");
+        var builder = new StringBuilder($"<{tag} id=\"{Id}\">");
+
         foreach (var stop in Stops)
         {
-            sb.Append($"<stop offset=\"{stop.Offset}%\" style=\"stop-color:{stop.Color}\" />");
+            builder.Append($"<stop offset=\"{stop.Offset}%\" style=\"stop-color:{stop.Color}\" />");
         }
-        sb.Append($"</{tag}>");
-        return sb.ToString();
+
+        builder.Append($"</{tag}>");
+        return builder.ToString();
     }
 }

@@ -5,11 +5,11 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
     public DiagramType DiagramType => DiagramType.Quadrant;
 
     // Rest of line (for text content)
-    static readonly Parser<char, string> RestOfLine =
+    static Parser<char, string> RestOfLine =
         Token(c => c != '\r' && c != '\n').ManyString();
 
     // Title: title My Chart
-    static readonly Parser<char, string> TitleParser =
+    static Parser<char, string> TitleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -18,7 +18,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select title.Trim();
 
     // X-axis: x-axis Low --> High
-    static readonly Parser<char, (string left, string right)> XAxisParser =
+    static Parser<char, (string left, string right)> XAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -32,7 +32,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select (left.Trim().TrimEnd('-').Trim(), right.Trim());
 
     // Y-axis: y-axis Low --> High
-    static readonly Parser<char, (string bottom, string top)> YAxisParser =
+    static Parser<char, (string bottom, string top)> YAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -46,7 +46,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select (bottom.Trim().TrimEnd('-').Trim(), top.Trim());
 
     // Quadrant labels: quadrant-1 Label
-    static readonly Parser<char, (int quadrant, string label)> QuadrantLabelParser =
+    static Parser<char, (int quadrant, string label)> QuadrantLabelParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("quadrant-")
         from num in Digit.Select(c => c - '0')
@@ -56,7 +56,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select (num, label.Trim());
 
     // Number parser for coordinates
-    static readonly Parser<char, double> NumberParser =
+    static Parser<char, double> NumberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()
         from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
@@ -65,7 +65,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
             CultureInfo.InvariantCulture);
 
     // Point: Name: [0.5, 0.7]
-    static readonly Parser<char, QuadrantPoint> PointParser =
+    static Parser<char, QuadrantPoint> PointParser =
         from _ in CommonParsers.InlineWhitespace
         from name in Token(c => c != ':' && c != '\r' && c != '\n').AtLeastOnceString()
         from __ in Char(':')
@@ -89,7 +89,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         };
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

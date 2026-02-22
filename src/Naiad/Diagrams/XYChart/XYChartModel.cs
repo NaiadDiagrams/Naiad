@@ -9,15 +9,3 @@ public class XYChartModel : DiagramBase
     public double? YAxisMax { get; set; }
     public List<ChartSeries> Series { get; } = [];
 }
-
-public class ChartSeries
-{
-    public ChartSeriesType Type { get; init; }
-    public List<double> Data { get; init; } = [];
-}
-
-public enum ChartSeriesType
-{
-    Bar,
-    Line
-}

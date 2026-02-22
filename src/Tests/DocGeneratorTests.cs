@@ -6,7 +6,7 @@ public class DocGeneratorTests
     {
         var testsDir = ProjectFiles.ProjectDirectory;
         var outputDir = Path.Combine(ProjectFiles.SolutionDirectory, "test-renders");
-        Directory.Delete(outputDir,true);
+        Directory.Delete(outputDir, true);
         Directory.CreateDirectory(outputDir);
 
         var testFiles = Directory.GetFiles(testsDir, "*Tests.cs", SearchOption.AllDirectories)
@@ -96,11 +96,13 @@ public class DocGeneratorTests
         }
 
         // Generate index page
-        var index = new StringBuilder();
-        index.AppendLine("## Test Renders");
-        index.AppendLine();
-        index.AppendLine("Auto-generated documentation from the test suite.");
-        index.AppendLine();
+        var index = new StringBuilder(
+            """
+            ## Test Renders
+
+            Auto-generated documentation from the test suite.
+
+            """);
 
         var stableCategories = testsByCategory.Keys.Where(_ => !betaCategories.Contains(_)).OrderBy(_ => _);
         var betaCategoriesSorted = betaCategories.OrderBy(_ => _);
@@ -112,9 +114,12 @@ public class DocGeneratorTests
 
         if (betaCategories.Count > 0)
         {
-            index.AppendLine();
-            index.AppendLine("### Beta diagram types");
-            index.AppendLine();
+            index.AppendLine(
+                """
+
+                ### Beta diagram types
+
+                """);
             foreach (var category in betaCategoriesSorted)
             {
                 index.AppendLine($"- [{category}]({category}.md)");

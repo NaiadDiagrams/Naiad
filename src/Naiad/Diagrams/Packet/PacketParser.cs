@@ -5,20 +5,20 @@ public class PacketParser : IDiagramParser<PacketModel>
     public DiagramType DiagramType => DiagramType.Packet;
 
     // Quoted label
-    static readonly Parser<char, string> QuotedLabel =
+    static Parser<char, string> QuotedLabel =
         Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
 
     // Unquoted label (rest of line)
-    static readonly Parser<char, string> UnquotedLabel =
+    static Parser<char, string> UnquotedLabel =
         Token(c => c != '\r' && c != '\n').AtLeastOnceString()
             .Select(s => s.Trim());
 
     // Label (quoted or unquoted)
-    static readonly Parser<char, string> Label =
+    static Parser<char, string> Label =
         QuotedLabel.Or(UnquotedLabel);
 
     // Field: start-end: "label" or start-end: label
-    static readonly Parser<char, PacketField> FieldParser =
+    static Parser<char, PacketField> FieldParser =
         from _ in CommonParsers.InlineWhitespace
         from start in Digit.AtLeastOnceString().Select(int.Parse)
         from __ in Char('-')
@@ -35,7 +35,7 @@ public class PacketParser : IDiagramParser<PacketModel>
         };
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

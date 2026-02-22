@@ -10,23 +10,3 @@ public class RadarModel : DiagramBase
     public GraticuleType Graticule { get; set; } = GraticuleType.Circle;
     public int Ticks { get; set; } = 5;
 }
-
-public class RadarAxis
-{
-    public required string Id { get; init; }
-    public string? Label { get; set; }
-}
-
-public class RadarCurve
-{
-    public required string Id { get; init; }
-    public string? Label { get; set; }
-    public List<double> Values { get; } = [];
-    public Dictionary<string, double> NamedValues { get; } = [];
-}
-
-public enum GraticuleType
-{
-    Circle,
-    Polygon
-}

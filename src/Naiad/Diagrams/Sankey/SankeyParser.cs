@@ -5,7 +5,7 @@ public class SankeyParser : IDiagramParser<SankeyModel>
     public DiagramType DiagramType => DiagramType.Sankey;
 
     // Number parser
-    static readonly Parser<char, double> NumberParser =
+    static Parser<char, double> NumberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()
         from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
@@ -14,20 +14,20 @@ public class SankeyParser : IDiagramParser<SankeyModel>
             CultureInfo.InvariantCulture);
 
     // Quoted string
-    static readonly Parser<char, string> QuotedString =
+    static Parser<char, string> QuotedString =
         Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
 
     // Unquoted name (no commas or newlines)
-    static readonly Parser<char, string> UnquotedName =
+    static Parser<char, string> UnquotedName =
         Token(c => c != ',' && c != '\r' && c != '\n').AtLeastOnceString()
             .Select(s => s.Trim());
 
     // Name (quoted or unquoted)
-    static readonly Parser<char, string> Name =
+    static Parser<char, string> Name =
         QuotedString.Or(UnquotedName);
 
     // Link: source,target,value
-    static readonly Parser<char, SankeyLink> LinkParser =
+    static Parser<char, SankeyLink> LinkParser =
         from _ in CommonParsers.InlineWhitespace
         from source in Name
         from __ in Char(',')
@@ -46,7 +46,7 @@ public class SankeyParser : IDiagramParser<SankeyModel>
         };
 
     // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> SkipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

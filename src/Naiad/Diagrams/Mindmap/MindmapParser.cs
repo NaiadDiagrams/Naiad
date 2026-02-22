@@ -5,7 +5,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
     public DiagramType DiagramType => DiagramType.Mindmap;
 
     // Parse indentation (spaces or tabs)
-    static readonly Parser<char, int> IndentationParser =
+    static Parser<char, int> IndentationParser =
         Token(c => c is ' ' or '\t')
             .Many()
             .Select(chars =>
@@ -15,14 +15,14 @@ public class MindmapParser : IDiagramParser<MindmapModel>
             });
 
     // Icon: ::icon(fa fa-book)
-    static readonly Parser<char, string> IconParser =
+    static Parser<char, string> IconParser =
         from _ in String("::icon(")
         from icon in Token(c => c != ')').AtLeastOnceString()
         from __ in Char(')')
         select icon;
 
     // CSS class: :::className
-    static readonly Parser<char, string> CssClassParser =
+    static Parser<char, string> CssClassParser =
         from _ in String(":::")
         from cls in Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString()
         select cls;
@@ -75,7 +75,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
         );
 
     // Node line: indentation + optional shape + text + optional icon/class
-    static readonly Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)> NodeLineParser =
+    static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)> NodeLineParser =
         from indent in IndentationParser
         from shaped in Try(ShapedNodeParser).Optional()
         from plainText in shaped.HasValue
