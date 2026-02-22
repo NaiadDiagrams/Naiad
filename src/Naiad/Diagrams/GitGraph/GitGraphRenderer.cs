@@ -2,14 +2,14 @@ namespace MermaidSharp.Diagrams.GitGraph;
 
 public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 {
-    const double CommitRadius = 12;
-    const double CommitSpacingX = 60;
-    const double CommitSpacingY = 50;
-    const double BranchLabelWidth = 80;
-    const double TagHeight = 20;
-    const double TagPadding = 5;
+    const double commitRadius = 12;
+    const double commitSpacingX = 60;
+    const double commitSpacingY = 50;
+    const double branchLabelWidth = 80;
+    const double tagHeight = 20;
+    const double tagPadding = 5;
 
-    static string[] BranchColors =
+    static string[] branchColors =
     [
         "#4CAF50", // green - main
         "#2196F3", // blue
@@ -30,24 +30,25 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(_ => _.Row) : 0;
         var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
 
-        var graphWidth = (maxRow + 1) * CommitSpacingX + BranchLabelWidth;
-        var graphHeight = (maxColumn + 1) * CommitSpacingY;
+        var graphWidth = (maxRow + 1) * commitSpacingX + branchLabelWidth;
+        var graphHeight = (maxColumn + 1) * commitSpacingY;
 
         var width = graphWidth + options.Padding * 2;
         var height = graphHeight + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);
 
-        var offsetX = options.Padding + BranchLabelWidth;
-        var offsetY = options.Padding + CommitSpacingY / 2;
+        var offsetX = options.Padding + branchLabelWidth;
+        var offsetY = options.Padding + commitSpacingY / 2;
 
         // Draw branch labels
         foreach (var branch in computed.Branches)
         {
-            var y = offsetY + branch.Column * CommitSpacingY;
-            var color = branch.Color ?? BranchColors[branch.Column % BranchColors.Length];
+            var y = offsetY + branch.Column * commitSpacingY;
+            var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
 
-            builder.AddText(options.Padding + 5, y, branch.Name,
+            builder.AddText(
+                options.Padding + 5, y, branch.Name,
                 anchor: "start",
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
@@ -64,16 +65,20 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 continue;
             }
 
-            var y = offsetY + branch.Column * CommitSpacingY;
-            var color = branch.Color ?? BranchColors[branch.Column % BranchColors.Length];
+            var y = offsetY + branch.Column * commitSpacingY;
+            var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
 
             var firstCommit = branch.Commits.OrderBy(_ => _.Row).First();
             var lastCommit = branch.Commits.OrderBy(_ => _.Row).Last();
 
-            var startX = offsetX + firstCommit.Row * CommitSpacingX;
-            var endX = offsetX + lastCommit.Row * CommitSpacingX;
+            var startX = offsetX + firstCommit.Row * commitSpacingX;
+            var endX = offsetX + lastCommit.Row * commitSpacingX;
 
-            builder.AddLine(startX, y, endX, y,
+            builder.AddLine(
+                startX,
+                y,
+                endX,
+                y,
                 stroke: color,
                 strokeWidth: 2);
         }
@@ -115,12 +120,12 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             return;
         }
 
-        var fromX = offsetX + from.Row * CommitSpacingX;
-        var fromY = offsetY + fromBranch.Column * CommitSpacingY;
-        var toX = offsetX + to.Row * CommitSpacingX;
-        var toY = offsetY + toBranch.Column * CommitSpacingY;
+        var fromX = offsetX + from.Row * commitSpacingX;
+        var fromY = offsetY + fromBranch.Column * commitSpacingY;
+        var toX = offsetX + to.Row * commitSpacingX;
+        var toY = offsetY + toBranch.Column * commitSpacingY;
 
-        var toColor = toBranch.Color ?? BranchColors[toBranch.Column % BranchColors.Length];
+        var toColor = toBranch.Color ?? branchColors[toBranch.Column % branchColors.Length];
 
         if (from.Branch == to.Branch)
         {
@@ -132,8 +137,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Use a simple path with control points
         var midX = (fromX + toX) / 2;
 
-        var path = $"M {Fmt(fromX)} {Fmt(fromY)} " +
-                   $"C {Fmt(midX)} {Fmt(fromY)}, {Fmt(midX)} {Fmt(toY)}, {Fmt(toX)} {Fmt(toY)}";
+        var path = $"M {Fmt(fromX)} {Fmt(fromY)} C {Fmt(midX)} {Fmt(fromY)}, {Fmt(midX)} {Fmt(toY)}, {Fmt(toX)} {Fmt(toY)}";
 
         builder.AddPath(path, stroke: toColor, strokeWidth: 2, fill: "none");
     }
@@ -147,9 +151,9 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             return;
         }
 
-        var x = offsetX + commit.Row * CommitSpacingX;
-        var y = offsetY + branch.Column * CommitSpacingY;
-        var color = branch.Color ?? BranchColors[branch.Column % BranchColors.Length];
+        var x = offsetX + commit.Row * commitSpacingX;
+        var y = offsetY + branch.Column * commitSpacingY;
+        var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
 
         // Commit circle
         var fill = commit.Type switch
@@ -161,7 +165,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
         var strokeWidth = commit.Type == CommitType.Reverse ? 3 : 2;
 
-        builder.AddCircle(x, y, CommitRadius,
+        builder.AddCircle(x, y, commitRadius,
             fill: fill,
             stroke: color,
             strokeWidth: strokeWidth);
@@ -178,17 +182,17 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Tag
         if (!string.IsNullOrEmpty(commit.Tag))
         {
-            var tagWidth = MeasureText(commit.Tag, options.FontSize - 2) + TagPadding * 2;
+            var tagWidth = MeasureText(commit.Tag, options.FontSize - 2) + tagPadding * 2;
             var tagX = x - tagWidth / 2;
-            var tagY = y - CommitRadius - TagHeight - 5;
+            var tagY = y - commitRadius - tagHeight - 5;
 
-            builder.AddRect(tagX, tagY, tagWidth, TagHeight,
+            builder.AddRect(tagX, tagY, tagWidth, tagHeight,
                 rx: 3,
                 fill: "#FFF9C4",
                 stroke: "#FBC02D",
                 strokeWidth: 1);
 
-            builder.AddText(x, tagY + TagHeight / 2, commit.Tag,
+            builder.AddText(x, tagY + tagHeight / 2, commit.Tag,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px",
