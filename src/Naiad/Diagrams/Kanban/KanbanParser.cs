@@ -6,18 +6,18 @@ public class KanbanParser : IDiagramParser<KanbanModel>
 
     // Identifier
     static Parser<char, string> Identifier =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString();
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label in brackets: [Label Text]
     static Parser<char, string> LabelParser =
         from _ in Char('[')
-        from label in Token(c => c != ']').ManyString()
+        from label in Token(_ => _ != ']').ManyString()
         from __ in Char(']')
         select label.Trim();
 
     // Column: id[Name] (no leading whitespace or minimal)
     static Parser<char, (string id, string name)> ColumnParser =
-        from indent in CommonParsers.Indentation.Where(i => i < 4)
+        from indent in CommonParsers.Indentation.Where(_ => _ < 4)
         from id in Identifier
         from name in LabelParser
         from __ in CommonParsers.InlineWhitespace
@@ -26,7 +26,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
 
     // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
     static Parser<char, (string id, string name)> TaskParser =
-        from indent in CommonParsers.Indentation.Where(i => i >= 4)
+        from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
         from id in Identifier
         from name in LabelParser
         from __ in CommonParsers.InlineWhitespace
@@ -52,7 +52,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static KanbanModel BuildModel(List<object?> content)
     {

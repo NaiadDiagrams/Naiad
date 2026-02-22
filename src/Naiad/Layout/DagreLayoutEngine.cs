@@ -34,8 +34,8 @@ public class DagreLayoutEngine : ILayoutEngine
         ApplyLayout(graph, diagram, options);
 
         // Calculate bounds (don't add margin again - positions already include it)
-        var width = diagram.Nodes.Max(n => n.Position.X + n.Width / 2);
-        var height = diagram.Nodes.Max(n => n.Position.Y + n.Height / 2);
+        var width = diagram.Nodes.Max(_ => _.Position.X + _.Width / 2);
+        var height = diagram.Nodes.Max(_ => _.Position.Y + _.Height / 2);
 
         return new()
         {
@@ -87,8 +87,8 @@ public class DagreLayoutEngine : ILayoutEngine
         foreach (var edge in diagram.Edges)
         {
             // Find the original edge or reconstruct from dummies
-            var layoutEdge = graph.Edges.FirstOrDefault(e =>
-                e.SourceId == edge.SourceId && e.TargetId == edge.TargetId);
+            var layoutEdge = graph.Edges.FirstOrDefault(_ =>
+                _.SourceId == edge.SourceId && _.TargetId == edge.TargetId);
 
             if (layoutEdge is not null)
             {
@@ -128,10 +128,10 @@ public class DagreLayoutEngine : ILayoutEngine
 
         // Find dummy nodes
         var dummies = graph.Nodes.Values
-            .Where(n => n.IsDummy &&
-                        n.OriginalEdgeSource == edge.SourceId &&
-                        n.OriginalEdgeTarget == edge.TargetId)
-            .OrderBy(n => n.Rank)
+            .Where(_ => _.IsDummy &&
+                        _.OriginalEdgeSource == edge.SourceId &&
+                        _.OriginalEdgeTarget == edge.TargetId)
+            .OrderBy(_ => _.Rank)
             .ToList();
 
         foreach (var dummy in dummies)

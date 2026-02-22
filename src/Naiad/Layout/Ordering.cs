@@ -81,15 +81,15 @@ internal static class Ordering
             }
             else
             {
-                var neighborOrders = neighbors.Select(n => (double)n.Order).OrderBy(x => x).ToList();
+                var neighborOrders = neighbors.Select(_ => (double)_.Order).OrderBy(_ => _).ToList();
                 positions[node.Id] = Median(neighborOrders);
             }
         }
 
         // Sort by median position, maintaining stability for equal positions
         var sortedNodes = nodesInRank
-            .OrderBy(n => positions[n.Id])
-            .ThenBy(n => n.Order)
+            .OrderBy(_ => positions[_.Id])
+            .ThenBy(_ => _.Order)
             .ToList();
 
         for (var i = 0; i < sortedNodes.Count; i++)
@@ -174,7 +174,7 @@ internal static class Ordering
     }
 
     static Dictionary<string, int> SaveOrders(LayoutGraph graph) =>
-        graph.Nodes.Values.ToDictionary(n => n.Id, n => n.Order);
+        graph.Nodes.Values.ToDictionary(_ => _.Id, _ => _.Order);
 
     static void RestoreOrders(LayoutGraph graph, Dictionary<string, int> orders)
     {

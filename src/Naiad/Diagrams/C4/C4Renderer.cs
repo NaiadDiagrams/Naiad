@@ -43,19 +43,19 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         }
 
         // Step 1: Calculate all boundary dimensions (bottom-up)
-        var topLevelBoundaries = model.Boundaries.Where(b => b.ParentBoundaryId == null).ToList();
+        var topLevelBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == null).ToList();
         foreach (var boundary in topLevelBoundaries)
         {
             CalculateBoundaryDimensions(model, boundary);
         }
 
         // Step 2: Get elements outside any boundary
-        var outsideElements = model.Elements.Where(e => e.BoundaryId == null).ToList();
-        var outsidePersons = outsideElements.Where(e => e.Type == C4ElementType.Person).ToList();
-        var outsideSystems = outsideElements.Where(e => e.Type is C4ElementType.System or C4ElementType.SystemDb).ToList();
-        var outsideContainers = outsideElements.Where(e =>
-            e.Type is C4ElementType.Container or C4ElementType.ContainerDb or C4ElementType.ContainerQueue).ToList();
-        var outsideComponents = outsideElements.Where(e => e.Type == C4ElementType.Component).ToList();
+        var outsideElements = model.Elements.Where(_ => _.BoundaryId == null).ToList();
+        var outsidePersons = outsideElements.Where(_ => _.Type == C4ElementType.Person).ToList();
+        var outsideSystems = outsideElements.Where(_ => _.Type is C4ElementType.System or C4ElementType.SystemDb).ToList();
+        var outsideContainers = outsideElements.Where(_ =>
+            _.Type is C4ElementType.Container or C4ElementType.ContainerDb or C4ElementType.ContainerQueue).ToList();
+        var outsideComponents = outsideElements.Where(_ => _.Type == C4ElementType.Component).ToList();
 
         // Step 3: Calculate total diagram dimensions
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
@@ -67,9 +67,9 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var outsideComponentsHeight = outsideComponents.Count > 0 ? ElementHeight + RowSpacing : 0;
 
         // Calculate top-level boundary row dimensions
-        var boundaryRowWidth = topLevelBoundaries.Sum(b => _boundaryDimensions[b.Id].w + BoundarySpacing) - BoundarySpacing;
+        var boundaryRowWidth = topLevelBoundaries.Sum(_ => _boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
         var boundaryRowHeight = topLevelBoundaries.Count > 0
-            ? topLevelBoundaries.Max(b => _boundaryDimensions[b.Id].h) + RowSpacing
+            ? topLevelBoundaries.Max(_ => _boundaryDimensions[_.Id].h) + RowSpacing
             : 0;
 
         // Calculate width based on elements and boundaries
@@ -118,7 +118,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 DrawBoundaryRecursive(builder, model, boundary, boundaryStartX, currentY, bw, bh, options);
                 boundaryStartX += bw + BoundarySpacing;
             }
-            currentY += topLevelBoundaries.Max(b => _boundaryDimensions[b.Id].h) + RowSpacing;
+            currentY += topLevelBoundaries.Max(_ => _boundaryDimensions[_.Id].h) + RowSpacing;
         }
 
         // Draw outside containers
@@ -146,10 +146,10 @@ public class C4Renderer : IDiagramRenderer<C4Model>
     (double w, double h) CalculateBoundaryDimensions(C4Model model, C4Boundary boundary)
     {
         // Get direct elements in this boundary
-        var directElements = model.Elements.Where(e => e.BoundaryId == boundary.Id).ToList();
+        var directElements = model.Elements.Where(_ => _.BoundaryId == boundary.Id).ToList();
 
         // Get child boundaries
-        var childBoundaries = model.Boundaries.Where(b => b.ParentBoundaryId == boundary.Id).ToList();
+        var childBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == boundary.Id).ToList();
 
         // Recursively calculate child boundary dimensions first
         foreach (var child in childBoundaries)
@@ -164,8 +164,8 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         // Layout: child boundaries in a row, then direct elements below
         if (childBoundaries.Count > 0)
         {
-            var childrenWidth = childBoundaries.Sum(b => _boundaryDimensions[b.Id].w + BoundarySpacing) - BoundarySpacing;
-            var childrenHeight = childBoundaries.Max(b => _boundaryDimensions[b.Id].h);
+            var childrenWidth = childBoundaries.Sum(_ => _boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
+            var childrenHeight = childBoundaries.Max(_ => _boundaryDimensions[_.Id].h);
             contentWidth = Math.Max(contentWidth, childrenWidth);
             contentHeight += childrenHeight + (directElements.Count > 0 ? RowSpacing : 0);
         }
@@ -174,7 +174,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         if (directElements.Count > 0)
         {
             var elementsWidth = directElements.Count * (ElementWidth + ElementSpacing) - ElementSpacing;
-            var elementsHeight = directElements.Max(e => e.Type == C4ElementType.Person ? PersonHeight : ElementHeight);
+            var elementsHeight = directElements.Max(_ => _.Type == C4ElementType.Person ? PersonHeight : ElementHeight);
             contentWidth = Math.Max(contentWidth, elementsWidth);
             contentHeight += elementsHeight;
         }
@@ -237,13 +237,13 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var contentY = y + BoundaryTitleHeight + BoundaryPadding;
 
         // Get child boundaries and direct elements
-        var childBoundaries = model.Boundaries.Where(b => b.ParentBoundaryId == boundary.Id).ToList();
-        var directElements = model.Elements.Where(e => e.BoundaryId == boundary.Id).ToList();
+        var childBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == boundary.Id).ToList();
+        var directElements = model.Elements.Where(_ => _.BoundaryId == boundary.Id).ToList();
 
         // Draw child boundaries first (in a row)
         if (childBoundaries.Count > 0)
         {
-            var childrenTotalWidth = childBoundaries.Sum(b => _boundaryDimensions[b.Id].w + BoundarySpacing) - BoundarySpacing;
+            var childrenTotalWidth = childBoundaries.Sum(_ => _boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
             var childStartX = x + (width - childrenTotalWidth) / 2;
 
             foreach (var child in childBoundaries)
@@ -254,7 +254,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             }
 
             // Move content Y down past child boundaries
-            contentY += childBoundaries.Max(b => _boundaryDimensions[b.Id].h) + RowSpacing;
+            contentY += childBoundaries.Max(_ => _boundaryDimensions[_.Id].h) + RowSpacing;
         }
 
         // Draw direct elements in this boundary
@@ -298,7 +298,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             DrawElement(builder, element, x, startY, options);
         }
 
-        var maxHeight = elements.Max(e => e.Type == C4ElementType.Person ? PersonHeight : ElementHeight);
+        var maxHeight = elements.Max(_ => _.Type == C4ElementType.Person ? PersonHeight : ElementHeight);
         return startY + maxHeight + RowSpacing;
     }
 

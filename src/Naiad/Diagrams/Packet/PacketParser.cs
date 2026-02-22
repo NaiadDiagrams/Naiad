@@ -6,12 +6,12 @@ public class PacketParser : IDiagramParser<PacketModel>
 
     // Quoted label
     static Parser<char, string> QuotedLabel =
-        Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
+        Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Unquoted label (rest of line)
     static Parser<char, string> UnquotedLabel =
-        Token(c => c != '\r' && c != '\n').AtLeastOnceString()
-            .Select(s => s.Trim());
+        Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()
+            .Select(_ => _.Trim());
 
     // Label (quoted or unquoted)
     static Parser<char, string> Label =
@@ -42,7 +42,7 @@ public class PacketParser : IDiagramParser<PacketModel>
     // Content item
     static Parser<char, PacketField?> ContentItem =>
         OneOf(
-            Try(FieldParser.Select(f => (PacketField?)f)),
+            Try(FieldParser.Select(_ => (PacketField?)_)),
             SkipLine.ThenReturn((PacketField?)null)
         );
 
@@ -52,7 +52,7 @@ public class PacketParser : IDiagramParser<PacketModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(f => f != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static PacketModel BuildModel(List<PacketField> fields)
     {

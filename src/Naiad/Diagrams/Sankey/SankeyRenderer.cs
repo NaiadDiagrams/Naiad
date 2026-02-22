@@ -29,8 +29,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         AssignColumns(nodes, model);
 
         // Calculate scale
-        var maxColumn = nodes.Values.Max(n => n.Column);
-        var totalValue = nodes.Values.Where(n => n.Column == 0).Sum(n => n.OutputValue);
+        var maxColumn = nodes.Values.Max(_ => _.Column);
+        var totalValue = nodes.Values.Where(_ => _.Column == 0).Sum(_ => _.OutputValue);
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var chartHeight = Math.Max(300, totalValue * 2);
@@ -124,8 +124,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
     static void AssignColumns(Dictionary<string, SankeyNode> nodes, SankeyModel model)
     {
         // Find source nodes (no incoming links)
-        var targets = model.Links.Select(l => l.Target).ToHashSet();
-        var sources = model.Links.Select(l => l.Source).ToHashSet();
+        var targets = model.Links.Select(_ => _.Target).ToHashSet();
+        var sources = model.Links.Select(_ => _.Source).ToHashSet();
 
         var sourceOnly = sources.Except(targets).ToList();
 
@@ -142,7 +142,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var current = queue.Dequeue();
             var currentColumn = nodes[current].Column;
 
-            foreach (var link in model.Links.Where(l => l.Source == current))
+            foreach (var link in model.Links.Where(_ => _.Source == current))
             {
                 var targetNode = nodes[link.Target];
                 if (targetNode.Column <= currentColumn)
@@ -156,12 +156,12 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
     static void PositionNodes(Dictionary<string, SankeyNode> nodes, double chartHeight, double topOffset)
     {
-        var maxColumn = nodes.Values.Max(n => n.Column);
+        var maxColumn = nodes.Values.Max(_ => _.Column);
 
         for (var col = 0; col <= maxColumn; col++)
         {
-            var columnNodes = nodes.Values.Where(n => n.Column == col).ToList();
-            var totalValue = columnNodes.Sum(n => Math.Max(n.InputValue, n.OutputValue));
+            var columnNodes = nodes.Values.Where(_ => _.Column == col).ToList();
+            var totalValue = columnNodes.Sum(_ => Math.Max(_.InputValue, _.OutputValue));
             var scale = (chartHeight - (columnNodes.Count - 1) * NodePadding) / Math.Max(1, totalValue);
 
             var y = topOffset;
@@ -177,7 +177,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
     static double GetLinkSourceY(SankeyNode sourceNode, SankeyLink link, List<SankeyLink> allLinks)
     {
-        var outgoingLinks = allLinks.Where(l => l.Source == link.Source).ToList();
+        var outgoingLinks = allLinks.Where(_ => _.Source == link.Source).ToList();
         double offset = 0;
         foreach (var l in outgoingLinks)
         {
@@ -190,7 +190,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
     static double GetLinkTargetY(SankeyNode targetNode, SankeyLink link, List<SankeyLink> allLinks)
     {
-        var incomingLinks = allLinks.Where(l => l.Target == link.Target).ToList();
+        var incomingLinks = allLinks.Where(_ => _.Target == link.Target).ToList();
         double offset = 0;
         foreach (var l in incomingLinks)
         {

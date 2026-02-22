@@ -6,11 +6,11 @@ public class XYChartParser : IDiagramParser<XYChartModel>
 
     // Rest of line (for text content)
     static Parser<char, string> RestOfLine =
-        Token(c => c != '\r' && c != '\n').ManyString();
+        Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Quoted string
     static Parser<char, string> QuotedString =
-        Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
+        Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Title: title "My Chart" or title My Chart
     static Parser<char, string> TitleParser =
@@ -33,8 +33,8 @@ public class XYChartParser : IDiagramParser<XYChartModel>
     // Category item (unquoted or quoted)
     static Parser<char, string> CategoryItem =
         QuotedString.Or(
-            Token(c => c != ',' && c != ']' && c != '\r' && c != '\n').AtLeastOnceString()
-                .Select(s => s.Trim()));
+            Token(_ => _ != ',' && _ != ']' && _ != '\r' && _ != '\n').AtLeastOnceString()
+                .Select(_ => _.Trim()));
 
     // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]
     static Parser<char, List<string>> CategoryListParser =
@@ -129,7 +129,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static XYChartModel BuildModel(List<object?> content)
     {

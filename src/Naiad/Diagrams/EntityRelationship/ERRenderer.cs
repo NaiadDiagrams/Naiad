@@ -180,8 +180,8 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
     static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
     {
-        var fromEntity = model.Entities.Find(e => e.Name == rel.FromEntity);
-        var toEntity = model.Entities.Find(e => e.Name == rel.ToEntity);
+        var fromEntity = model.Entities.Find(_ => _.Name == rel.FromEntity);
+        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
 
         if (fromEntity == null || toEntity == null)
             return;

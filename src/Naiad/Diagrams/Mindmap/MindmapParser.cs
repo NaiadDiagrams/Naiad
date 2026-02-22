@@ -6,25 +6,25 @@ public class MindmapParser : IDiagramParser<MindmapModel>
 
     // Parse indentation (spaces or tabs)
     static Parser<char, int> IndentationParser =
-        Token(c => c is ' ' or '\t')
+        Token(_ => _ is ' ' or '\t')
             .Many()
             .Select(chars =>
             {
                 var array = chars as char[] ?? chars.ToArray();
-                return array.Count(c => c == '\t') * 4 + array.Count(c => c == ' ');
+                return array.Count(_ => _ == '\t') * 4 + array.Count(_ => _ == ' ');
             });
 
     // Icon: ::icon(fa fa-book)
     static Parser<char, string> IconParser =
         from _ in String("::icon(")
-        from icon in Token(c => c != ')').AtLeastOnceString()
+        from icon in Token(_ => _ != ')').AtLeastOnceString()
         from __ in Char(')')
         select icon;
 
     // CSS class: :::className
     static Parser<char, string> CssClassParser =
         from _ in String(":::")
-        from cls in Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString()
+        from cls in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString()
         select cls;
 
     // Node with shape: ((circle)), (rounded), [square], {{hexagon}}, ))bang((, )cloud(
@@ -33,42 +33,42 @@ public class MindmapParser : IDiagramParser<MindmapModel>
             // Circle: ((text))
             Try(
                 from _ in String("((")
-                from text in Token(c => c != ')').AtLeastOnceString()
+                from text in Token(_ => _ != ')').AtLeastOnceString()
                 from __ in String("))")
                 select (text, MindmapShape.Circle)
             ),
             // Bang/explosion: ))text((
             Try(
                 from _ in String("))")
-                from text in Token(c => c != '(').AtLeastOnceString()
+                from text in Token(_ => _ != '(').AtLeastOnceString()
                 from __ in String("((")
                 select (text, MindmapShape.Bang)
             ),
             // Cloud: )text(
             Try(
                 from _ in Char(')')
-                from text in Token(c => c != '(').AtLeastOnceString()
+                from text in Token(_ => _ != '(').AtLeastOnceString()
                 from __ in Char('(')
                 select (text, MindmapShape.Cloud)
             ),
             // Hexagon: {{text}}
             Try(
                 from _ in String("{{")
-                from text in Token(c => c != '}').AtLeastOnceString()
+                from text in Token(_ => _ != '}').AtLeastOnceString()
                 from __ in String("}}")
                 select (text, MindmapShape.Hexagon)
             ),
             // Rounded: (text)
             Try(
                 from _ in Char('(')
-                from text in Token(c => c != ')').AtLeastOnceString()
+                from text in Token(_ => _ != ')').AtLeastOnceString()
                 from __ in Char(')')
                 select (text, MindmapShape.Rounded)
             ),
             // Square: [text]
             Try(
                 from _ in Char('[')
-                from text in Token(c => c != ']').AtLeastOnceString()
+                from text in Token(_ => _ != ']').AtLeastOnceString()
                 from __ in Char(']')
                 select (text, MindmapShape.Square)
             )
@@ -80,7 +80,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
         from shaped in Try(ShapedNodeParser).Optional()
         from plainText in shaped.HasValue
             ? Return("")
-            : Token(c => c != ':' && c != '\r' && c != '\n').ManyString()
+            : Token(_ => _ != ':' && _ != '\r' && _ != '\n').ManyString()
         from _ in CommonParsers.InlineWhitespace
         from icon in Try(IconParser).Optional()
         from __ in CommonParsers.InlineWhitespace
@@ -111,7 +111,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentLine.ManyThen(End)
-        select BuildModel(result.Item1.Where(l => l.HasValue).Select(l => l!.Value).ToList());
+        select BuildModel(result.Item1.Where(_ => _.HasValue).Select(_ => _!.Value).ToList());
 
     static MindmapModel BuildModel(List<(int indent, string text, MindmapShape shape, string? icon, string? cssClass)> lines)
     {

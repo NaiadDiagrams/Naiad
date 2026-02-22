@@ -6,7 +6,7 @@ public class TreemapParser : IDiagramParser<TreemapModel>
 
     // Quoted string: "text"
     static Parser<char, string> quotedString =
-        Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
+        Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Number
     static Parser<char, double> number =
@@ -17,7 +17,7 @@ public class TreemapParser : IDiagramParser<TreemapModel>
 
     // CSS class: :::className
     static Parser<char, string> cssClass =
-        String(":::").Then(Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString());
+        String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
 
     // Node line
     record NodeLine(int Indent, string Name, double? Value, string? CssClass);
@@ -57,7 +57,7 @@ public class TreemapParser : IDiagramParser<TreemapModel>
         from innerWhitespace in CommonParsers.InlineWhitespace
         from lineEnd in CommonParsers.LineEnd
         from lines in ContentItem.ManyThen(End)
-        select BuildModel(lines.Item1.Where(l => l != null).ToList());
+        select BuildModel(lines.Item1.Where(_ => _ != null).ToList());
 
     static TreemapModel BuildModel(List<NodeLine> lines)
     {

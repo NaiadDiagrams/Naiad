@@ -6,7 +6,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
 
     // Sequence diagram identifier (no dash to avoid conflicts with arrows)
     static Parser<char, string> SeqIdentifier =
-        Token(c => char.IsLetterOrDigit(c) || c == '_')
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_')
             .AtLeastOnceString()
             .Labelled("identifier");
 
@@ -23,7 +23,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             CommonParsers.RequiredWhitespace
                 .Then(String("as"))
                 .Then(CommonParsers.RequiredWhitespace)
-                .Then(Token(c => c != '\r' && c != '\n').AtLeastOnceString())
+                .Then(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString())
         ).Optional()
         from ___ in CommonParsers.LineEnd
         select new Participant
@@ -60,7 +60,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from text in Try(
             Char(':')
                 .Then(CommonParsers.InlineWhitespace)
-                .Then(Token(c => c != '\r' && c != '\n').ManyString())
+                .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
         ).Optional()
         from _____ in CommonParsers.LineEnd
         select new Message
@@ -93,7 +93,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from ____ in CommonParsers.InlineWhitespace
         from colon in Char(':')
         from _____ in CommonParsers.InlineWhitespace
-        from text in Token(c => c != '\r' && c != '\n').ManyString()
+        from text in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from ______ in CommonParsers.LineEnd
         select new Note
         {
@@ -131,7 +131,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         CommonParsers.InlineWhitespace
             .Then(String("title"))
             .Then(CommonParsers.InlineWhitespace)
-            .Then(Token(c => c != '\r' && c != '\n').ManyString())
+            .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
             .Before(CommonParsers.LineEnd);
 
     // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
@@ -150,7 +150,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             Try(String("rect")),
             String("end")
         )
-        from __ in Token(c => c != '\r' && c != '\n').ManyString()
+        from __ in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from ___ in CommonParsers.LineEnd
         select Unit.Value;
 
@@ -181,7 +181,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             SkipLine.ThenReturn((object)Unit.Value)
         );
 
-        return element.Many().Select(e => e.Where(x => x is not Unit).ToList());
+        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
     }
 
     static SequenceModel BuildModel(List<object> content)

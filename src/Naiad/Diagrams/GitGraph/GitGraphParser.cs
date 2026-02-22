@@ -11,7 +11,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
             .Labelled("branch name");
 
     static Parser<char, string> CommitId =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-')
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
             .AtLeastOnceString()
             .Labelled("commit id");
 
@@ -81,7 +81,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
             Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select ("tag", (object)a)),
             Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select ("type", (object)a))
         );
-        return attr.Many().Select(a => a.ToList());
+        return attr.Many().Select(_ => _.ToList());
     }
 
     static CommitOperation CreateCommit(List<(string key, object value)> attrs)
@@ -147,7 +147,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
             Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select ("tag", (object)a)),
             Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select ("type", (object)a))
         );
-        return attr.Many().Select(a => a.ToList());
+        return attr.Many().Select(_ => _.ToList());
     }
 
     static MergeOperation CreateMerge(string name, List<(string key, object value)> attrs)
@@ -202,7 +202,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         );
 
         return operation.Many()
-            .Select(ops => ops.Where(o => o != null).Cast<GitOperation>().ToList());
+            .Select(_ => _.Where(_ => _ != null).Cast<GitOperation>().ToList());
     }
 
     // Options parser (gitGraph TB: or gitGraph LR:)

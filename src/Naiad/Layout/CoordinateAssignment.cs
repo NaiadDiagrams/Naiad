@@ -27,7 +27,7 @@ static class CoordinateAssignment
         {
             var nodesInRank = graph.Ranks[r];
             var maxHeight = nodesInRank.Count > 0
-                ? nodesInRank.Max(n => isHorizontal ? n.Width : n.Height)
+                ? nodesInRank.Max(_ => isHorizontal ? _.Width : _.Height)
                 : 0;
 
             foreach (var node in nodesInRank)
@@ -54,7 +54,7 @@ static class CoordinateAssignment
         // Pass 1: Position nodes left-aligned within ranks
         for (var r = 0; r < graph.Ranks.Length; r++)
         {
-            var nodesInRank = graph.Ranks[r].OrderBy(n => n.Order).ToList();
+            var nodesInRank = graph.Ranks[r].OrderBy(_ => _.Order).ToList();
             double currentX = 0;
 
             foreach (var node in nodesInRank)
@@ -95,7 +95,7 @@ static class CoordinateAssignment
     static void AlignToNeighbors(LayoutGraph graph, int rank, bool useInEdges,
         double nodeSep, bool isHorizontal)
     {
-        var nodesInRank = graph.Ranks[rank].OrderBy(n => n.Order).ToList();
+        var nodesInRank = graph.Ranks[rank].OrderBy(_ => _.Order).ToList();
 
         foreach (var node in nodesInRank)
         {
@@ -110,8 +110,8 @@ static class CoordinateAssignment
 
             // Calculate median position of neighbors
             var positions = neighbors
-                .Select(n => isHorizontal ? n.Y : n.X)
-                .OrderBy(x => x)
+                .Select(_ => isHorizontal ? _.Y : _.X)
+                .OrderBy(_ => _)
                 .ToList();
 
             var targetPos = Median(positions);
@@ -193,8 +193,8 @@ static class CoordinateAssignment
             return;
         }
 
-        var minX = graph.Nodes.Values.Min(n => n.X - n.Width / 2);
-        var minY = graph.Nodes.Values.Min(n => n.Y - n.Height / 2);
+        var minX = graph.Nodes.Values.Min(_ => _.X - _.Width / 2);
+        var minY = graph.Nodes.Values.Min(_ => _.Y - _.Height / 2);
 
         foreach (var node in graph.Nodes.Values)
         {
@@ -213,7 +213,7 @@ static class CoordinateAssignment
         switch (direction)
         {
             case Direction.BottomToTop:
-                var maxY = graph.Nodes.Values.Max(n => n.Y);
+                var maxY = graph.Nodes.Values.Max(_ => _.Y);
                 foreach (var node in graph.Nodes.Values)
                 {
                     node.Y = maxY - node.Y;
@@ -221,7 +221,7 @@ static class CoordinateAssignment
                 break;
 
             case Direction.RightToLeft:
-                var maxX = graph.Nodes.Values.Max(n => n.X);
+                var maxX = graph.Nodes.Values.Max(_ => _.X);
                 foreach (var node in graph.Nodes.Values)
                 {
                     node.X = maxX - node.X;
@@ -266,10 +266,10 @@ static class CoordinateAssignment
 
                 // Find dummy nodes for this edge
                 var dummies = graph.Nodes.Values
-                    .Where(n => n.IsDummy &&
-                                n.OriginalEdgeSource == edge.SourceId &&
-                                n.OriginalEdgeTarget == edge.TargetId)
-                    .OrderBy(n => n.Rank)
+                    .Where(_ => _.IsDummy &&
+                                _.OriginalEdgeSource == edge.SourceId &&
+                                _.OriginalEdgeTarget == edge.TargetId)
+                    .OrderBy(_ => _.Rank)
                     .ToList();
 
                 foreach (var dummy in dummies)

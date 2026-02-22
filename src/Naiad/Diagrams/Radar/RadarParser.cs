@@ -6,7 +6,7 @@ public class RadarParser : IDiagramParser<RadarModel>
 
     // Identifier
     static Parser<char, string> Identifier =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString();
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Number
     static Parser<char, double> Number =
@@ -17,7 +17,7 @@ public class RadarParser : IDiagramParser<RadarModel>
 
     // Quoted label: ["label"]
     static Parser<char, string> QuotedLabel =
-        Char('[').Then(Char('"')).Then(Token(c => c != '"').ManyString()).Before(Char('"')).Before(Char(']'));
+        Char('[').Then(Char('"')).Then(Token(_ => _ != '"').ManyString()).Before(Char('"')).Before(Char(']'));
 
     // Axis list: axis id1, id2, id3
     static Parser<char, List<RadarAxis>> AxisParser =
@@ -28,7 +28,7 @@ public class RadarParser : IDiagramParser<RadarModel>
             CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
-        select axes.Select(a => new RadarAxis { Id = a, Label = a }).ToList();
+        select axes.Select(_ => new RadarAxis { Id = _, Label = _ }).ToList();
 
     // Value list: {1, 2, 3}
     static Parser<char, List<double>> ValueList =
@@ -38,7 +38,7 @@ public class RadarParser : IDiagramParser<RadarModel>
                 CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)))
             .Before(CommonParsers.InlineWhitespace)
             .Before(Char('}'))
-            .Select(v => v.ToList());
+            .Select(_ => _.ToList());
 
     // Curve definition: curve id["label"]{1, 2, 3}
     static Parser<char, RadarCurve> CurveItemParser =
@@ -67,7 +67,7 @@ public class RadarParser : IDiagramParser<RadarModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
-        from title in Token(c => c != '\r' && c != '\n').ManyString()
+        from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from ____ in CommonParsers.LineEnd
         select title.Trim();
 
@@ -93,7 +93,7 @@ public class RadarParser : IDiagramParser<RadarModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static RadarModel BuildModel(List<object?> content)
     {

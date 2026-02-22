@@ -33,12 +33,12 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
     public SvgDocument Render(PieModel model, RenderOptions options)
     {
-        var total = model.Sections.Sum(s => s.Value);
+        var total = model.Sections.Sum(_ => _.Value);
         if (total == 0) total = 1;
 
         // Calculate legend labels (with values if showData is enabled)
-        var legendLabels = model.Sections.Select(s =>
-            model.ShowData ? $"{s.Label} [{(int)s.Value}]" : s.Label).ToList();
+        var legendLabels = model.Sections.Select(_ =>
+            model.ShowData ? $"{_.Label} [{(int)_.Value}]" : _.Label).ToList();
 
         // Match mermaid.ink exact dimensions - width varies based on legend text
         var width = model.ShowData ? 613.140625 : 551.6875;

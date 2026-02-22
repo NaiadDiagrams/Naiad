@@ -50,7 +50,7 @@ class LayoutGraph
 
     public void BuildRanks()
     {
-        var maxRank = Nodes.Values.Max(n => n.Rank);
+        var maxRank = Nodes.Values.Max(_ => _.Rank);
         Ranks = new List<LayoutNode>[maxRank + 1];
         for (var i = 0; i <= maxRank; i++)
         {
@@ -66,7 +66,7 @@ class LayoutGraph
     {
         for (var r = 0; r < Ranks.Length; r++)
         {
-            var nodesInRank = Ranks[r].OrderBy(n => n.Order).ToList();
+            var nodesInRank = Ranks[r].OrderBy(_ => _.Order).ToList();
             for (var i = 0; i < nodesInRank.Count; i++)
             {
                 nodesInRank[i].Order = i;

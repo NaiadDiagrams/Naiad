@@ -32,7 +32,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
         }
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var maxTasks = model.Columns.Max(c => c.Tasks.Count);
+        var maxTasks = model.Columns.Max(_ => _.Tasks.Count);
         var contentHeight = HeaderHeight + maxTasks * (TaskHeight + TaskPadding) + ColumnPadding * 2;
 
         var width = model.Columns.Count * (ColumnWidth + ColumnPadding) + options.Padding * 2;

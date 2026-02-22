@@ -32,7 +32,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 
     public SvgDocument Render(TimelineModel model, RenderOptions options)
     {
-        if (model.Sections.Count == 0 || model.Sections.All(s => s.Periods.Count == 0))
+        if (model.Sections.Count == 0 || model.Sections.All(_ => _.Periods.Count == 0))
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
             emptyBuilder.AddText(100, 50, "Empty timeline", anchor: "middle", baseline: "middle",
@@ -41,8 +41,8 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         }
 
         // Calculate layout
-        var totalPeriods = model.Sections.Sum(s => s.Periods.Count);
-        var maxEvents = model.Sections.SelectMany(s => s.Periods).Max(p => p.Events.Count);
+        var totalPeriods = model.Sections.Sum(_ => _.Periods.Count);
+        var maxEvents = model.Sections.SelectMany(_ => _.Periods).Max(_ => _.Events.Count);
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var eventsHeight = maxEvents * EventHeight + EventPadding * 2;

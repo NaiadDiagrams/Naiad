@@ -11,7 +11,7 @@ public class SvgPolyline : SvgElement
 
     public override string ToXml()
     {
-        var pointsStr = string.Join(" ", Points.Select(p => $"{Fmt(p.X)},{Fmt(p.Y)}"));
+        var pointsStr = string.Join(" ", Points.Select(_ => $"{Fmt(_.X)},{Fmt(_.Y)}"));
         var builder = new StringBuilder($"<polyline points=\"{pointsStr}\"");
 
         if (Fill is not null)

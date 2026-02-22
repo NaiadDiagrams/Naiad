@@ -19,7 +19,7 @@ public class PieParser : IDiagramParser<PieModel>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("title")
         from __ in CommonParsers.RequiredWhitespace
-        from title in Token(c => c != '\r' && c != '\n').ManyString()
+        from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from ___ in CommonParsers.LineEnd
         select title;
 
@@ -34,7 +34,7 @@ public class PieParser : IDiagramParser<PieModel>
     static Parser<char, string> InlineTitleParser =
         from keyword in String("title")
         from _ in CommonParsers.RequiredWhitespace
-        from title in Token(c => c != '\r' && c != '\n').ManyString()
+        from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
         select title;
 
     public static Parser<char, PieModel> Parser =>
@@ -54,8 +54,8 @@ public class PieParser : IDiagramParser<PieModel>
             .Or(Try(SectionParser.Select(_ => (title: (string?)null, section: (PieSection?)_))))
             .Or(SkipLine.ThenReturn((title: (string?)null, section: (PieSection?)null))).Many()
         select (
-            title: lines.FirstOrDefault(l => l.title != null).title,
-            sections: lines.Where(l => l.section != null).Select(l => l.section!).ToList()
+            title: lines.FirstOrDefault(_ => _.title != null).title,
+            sections: lines.Where(_ => _.section != null).Select(_ => _.section!).ToList()
         );
 
     static PieModel BuildModel(bool showData, string? title, List<PieSection> sections)

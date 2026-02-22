@@ -42,7 +42,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         from requiredWhitespace in CommonParsers.RequiredWhitespace
         from innerExcludes in restOfLine
         from lineEnd in CommonParsers.LineEnd
-        select innerExcludes.Trim().Split(',').Select(e => e.Trim()).ToList();
+        select innerExcludes.Trim().Split(',').Select(_ => _.Trim()).ToList();
 
     // Section: section Section Name
     static Parser<char, string> sectionParser =
@@ -89,14 +89,14 @@ public class GanttParser : IDiagramParser<GanttModel>
         from __ in CommonParsers.InlineWhitespace
         from colon in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from parts in Token(c => c != '\r' && c != '\n').ManyString()
+        from parts in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from lineEnd in CommonParsers.LineEnd
         select ParseTaskLine(name.Trim(), parts.Trim());
 
     static GanttTask ParseTaskLine(string name, string partsStr)
     {
         var task = new GanttTask {Name = name};
-        var parts = partsStr.Split(',').Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p)).ToList();
+        var parts = partsStr.Split(',').Select(_ => _.Trim()).Where(_ => !string.IsNullOrEmpty(_)).ToList();
 
         foreach (var part in parts)
         {

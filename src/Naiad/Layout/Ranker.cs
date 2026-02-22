@@ -63,19 +63,19 @@ static class Ranker
         do
         {
             changed = false;
-            foreach (var node in graph.Nodes.Values.OrderByDescending(n => n.Rank))
+            foreach (var node in graph.Nodes.Values.OrderByDescending(_ => _.Rank))
             {
                 var successors = graph.GetSuccessors(node.Id).ToList();
                 if (successors.Count > 0)
                 {
-                    var minSuccRank = successors.Min(s => s.Rank);
+                    var minSuccRank = successors.Min(_ => _.Rank);
                     var targetRank = minSuccRank - 1;
                     if (targetRank > node.Rank)
                     {
                         // Can we move this node down?
                         var predecessors = graph.GetPredecessors(node.Id).ToList();
                         var minAllowedRank = predecessors.Count > 0
-                            ? predecessors.Max(p => p.Rank) + 1
+                            ? predecessors.Max(_ => _.Rank) + 1
                             : 0;
 
                         if (targetRank >= minAllowedRank)
@@ -101,7 +101,7 @@ static class Ranker
             return;
         }
 
-        var minRank = graph.Nodes.Values.Min(n => n.Rank);
+        var minRank = graph.Nodes.Values.Min(_ => _.Rank);
         foreach (var node in graph.Nodes.Values)
         {
             node.Rank -= minRank;

@@ -6,7 +6,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
 
     // Rest of line (for text content)
     static Parser<char, string> RestOfLine =
-        Token(c => c != '\r' && c != '\n').ManyString();
+        Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Timeline
     static Parser<char, string> TitleParser =
@@ -29,7 +29,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
     // Period with event: 2020 : Event description
     static Parser<char, (string period, string eventText)> PeriodEventParser =
         from _ in CommonParsers.InlineWhitespace
-        from period in Token(c => c != ':' && c != '\r' && c != '\n').AtLeastOnceString()
+        from period in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
@@ -67,7 +67,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static TimelineModel BuildModel(List<object?> content)
     {

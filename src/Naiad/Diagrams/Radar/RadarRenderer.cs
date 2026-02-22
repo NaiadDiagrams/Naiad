@@ -48,7 +48,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         }
 
         // Calculate max value
-        var maxValue = model.Max ?? model.Curves.SelectMany(c => c.Values).DefaultIfEmpty(100).Max();
+        var maxValue = model.Max ?? model.Curves.SelectMany(_ => _.Values).DefaultIfEmpty(100).Max();
         var minValue = model.Min ?? 0;
 
         // Draw graticule

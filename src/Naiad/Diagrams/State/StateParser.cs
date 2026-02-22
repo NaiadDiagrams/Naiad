@@ -7,7 +7,7 @@ public class StateParser : IDiagramParser<StateModel>
     // State identifier (alphanumeric, underscore, or [*] for start/end)
     static Parser<char, string> StateIdentifier =
         Try(String("[*]")).Or(
-            Token(c => char.IsLetterOrDigit(c) || c == '_')
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_')
                 .AtLeastOnceString()
         ).Labelled("state identifier");
 
@@ -76,7 +76,7 @@ public class StateParser : IDiagramParser<StateModel>
         from __ in CommonParsers.InlineWhitespace
         from colon in Char(':')
         from ___ in CommonParsers.InlineWhitespace
-        from description in Token(c => c != '\r' && c != '\n').ManyString()
+        from description in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from ____ in CommonParsers.LineEnd
         select new State
         {
@@ -96,7 +96,7 @@ public class StateParser : IDiagramParser<StateModel>
             CommonParsers.InlineWhitespace
                 .Then(Char(':'))
                 .Then(CommonParsers.InlineWhitespace)
-                .Then(Token(c => c != '\r' && c != '\n').ManyString())
+                .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
         ).Optional()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
@@ -121,7 +121,7 @@ public class StateParser : IDiagramParser<StateModel>
         from ____ in CommonParsers.InlineWhitespace
         from colon in Char(':')
         from _____ in CommonParsers.InlineWhitespace
-        from text in Token(c => c != '\r' && c != '\n').ManyString()
+        from text in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from ______ in CommonParsers.LineEnd
         select new StateNote
         {
@@ -189,7 +189,7 @@ public class StateParser : IDiagramParser<StateModel>
 
         return element
             .Many()
-            .Select(e => e.Where(x => x is not Unit)
+            .Select(_ => _.Where(_ => _ is not Unit)
                 .ToList());
     }
 

@@ -11,5 +11,5 @@ public class TreemapNode
 
     public double TotalValue => IsLeaf
         ? Value ?? 0
-        : Children.Sum(c => c.TotalValue);
+        : Children.Sum(_ => _.TotalValue);
 }

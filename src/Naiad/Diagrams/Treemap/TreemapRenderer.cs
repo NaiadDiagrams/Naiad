@@ -56,7 +56,7 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
             return;
         }
 
-        var totalValue = nodes.Sum(n => n.TotalValue);
+        var totalValue = nodes.Sum(_ => _.TotalValue);
         if (totalValue <= 0)
         {
             return;

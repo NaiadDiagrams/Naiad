@@ -316,7 +316,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (bidirectionalPairs.Count == 0)
             return 0;
 
-        var leftEdge = model.States.Min(s => s.Position.X - s.Width / 2);
+        var leftEdge = model.States.Min(_ => _.Position.X - _.Width / 2);
         double maxExtraNeeded = 0;
 
         foreach (var transition in model.Transitions)
@@ -351,12 +351,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     static double CalculateCurveExtraRight(StateModel model, Dictionary<string, State> stateMap)
     {
-        var rightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
+        var rightEdge = model.States.Max(_ => _.Position.X + _.Width / 2);
 
         // Get all back-edges with their indices for position calculation
         var backEdges = model.Transitions
-            .Where(t => IsBackEdge(t, stateMap))
-            .OrderBy(t => stateMap.TryGetValue(t.FromId, out var s) ? s.Position.X : 0)
+            .Where(_ => IsBackEdge(_, stateMap))
+            .OrderBy(_ => stateMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
             .ToList();
 
         if (backEdges.Count == 0)
@@ -391,7 +391,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     static double CalculateEndNodeExtraHeight(StateModel model, double layoutHeight)
     {
-        var endNode = model.States.FirstOrDefault(s => s.Type == StateType.End);
+        var endNode = model.States.FirstOrDefault(_ => _.Type == StateType.End);
         if (endNode == null)
             return 0;
 
@@ -446,7 +446,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
             // Check horizontal space needed - notes go to outside of diagram
-            var diagramCenterX = model.States.Average(s => s.Position.X);
+            var diagramCenterX = model.States.Average(_ => _.Position.X);
             var placeToRight = state.Position.X >= diagramCenterX;
             double noteX;
             if (placeToRight)
@@ -460,18 +460,18 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Check if note extends past right edge
             var noteRightEdge = noteX + noteWidth;
-            var stateRightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
+            var stateRightEdge = model.States.Max(_ => _.Position.X + _.Width / 2);
             var extraWidthNeeded = noteRightEdge - stateRightEdge;
 
             // Check if note extends past left edge
-            var stateLeftEdge = model.States.Min(s => s.Position.X - s.Width / 2);
+            var stateLeftEdge = model.States.Min(_ => _.Position.X - _.Width / 2);
             var extraLeftNeeded = stateLeftEdge - noteX;
             maxExtraWidth = Math.Max(maxExtraWidth, extraWidthNeeded);
             maxExtraLeft = Math.Max(maxExtraLeft, extraLeftNeeded);
 
             // Check if note extends below
             var spaceAbove = state.Position.Y;
-            var maxY = model.States.Max(s => s.Position.Y + s.Height / 2);
+            var maxY = model.States.Max(_ => _.Position.Y + _.Height / 2);
             var spaceBelow = maxY - state.Position.Y;
             var placeBelow = spaceBelow >= spaceAbove;
 
@@ -589,23 +589,23 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     {
         // Find the horizontal center of the diagram
         var contentStates = model.States
-            .Where(s => s.Type != StateType.Start && s.Type != StateType.End)
+            .Where(_ => _.Type != StateType.Start && _.Type != StateType.End)
             .ToList();
         if (contentStates.Count == 0) return;
 
-        var diagramCenterX = (contentStates.Min(s => s.Position.X) + contentStates.Max(s => s.Position.X)) / 2;
+        var diagramCenterX = (contentStates.Min(_ => _.Position.X) + contentStates.Max(_ => _.Position.X)) / 2;
 
         // Center start node
-        var startNode = model.States.FirstOrDefault(s => s.Type == StateType.Start);
+        var startNode = model.States.FirstOrDefault(_ => _.Type == StateType.Start);
         if (startNode != null)
         {
             startNode.Position = new(diagramCenterX, startNode.Position.Y);
 
             // If start has only one child, align that child with start
-            var startChildren = model.Transitions.Where(t => t.FromId == startNode.Id).ToList();
+            var startChildren = model.Transitions.Where(_ => _.FromId == startNode.Id).ToList();
             if (startChildren.Count == 1)
             {
-                var childState = model.States.FirstOrDefault(s => s.Id == startChildren[0].ToId);
+                var childState = model.States.FirstOrDefault(_ => _.Id == startChildren[0].ToId);
                 if (childState != null && childState.Type != StateType.Fork)
                 {
                     childState.Position = new(diagramCenterX, childState.Position.Y);
@@ -614,13 +614,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         // Center end node with its parent if it has only one
-        var endNode = model.States.FirstOrDefault(s => s.Type == StateType.End);
+        var endNode = model.States.FirstOrDefault(_ => _.Type == StateType.End);
         if (endNode != null)
         {
-            var endParents = model.Transitions.Where(t => t.ToId == endNode.Id).ToList();
+            var endParents = model.Transitions.Where(_ => _.ToId == endNode.Id).ToList();
             if (endParents.Count == 1)
             {
-                var parentState = model.States.FirstOrDefault(s => s.Id == endParents[0].FromId);
+                var parentState = model.States.FirstOrDefault(_ => _.Id == endParents[0].FromId);
                 if (parentState != null)
                 {
                     endNode.Position = new(parentState.Position.X, endNode.Position.Y);
@@ -631,7 +631,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     static void AdjustEndNodePosition(StateModel model)
     {
-        var endNode = model.States.FirstOrDefault(s => s.Type == StateType.End);
+        var endNode = model.States.FirstOrDefault(_ => _.Type == StateType.End);
         if (endNode == null) return;
 
         const double margin = 30;
@@ -694,8 +694,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     var barWidth = Math.Max(80, connectedStates.Count * 50);
                     state.Width = barWidth;
                     // Center between leftmost and rightmost connected states
-                    var leftState = connectedStates.OrderBy(s => s.Position.X).First();
-                    var rightState = connectedStates.OrderBy(s => s.Position.X).Last();
+                    var leftState = connectedStates.OrderBy(_ => _.Position.X).First();
+                    var rightState = connectedStates.OrderBy(_ => _.Position.X).Last();
                     state.Position = new((leftState.Position.X + rightState.Position.X) / 2, state.Position.Y);
                 }
             }
@@ -848,8 +848,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Collect all back-edges to assign unique offsets
         var backEdges = model.Transitions
-            .Where(t => IsBackEdge(t, stateMap) && !bidirectionalPairs.Contains(GetPairKey(t.FromId, t.ToId)))
-            .OrderBy(t => stateMap.TryGetValue(t.FromId, out var s) ? s.Position.X : 0)
+            .Where(_ => IsBackEdge(_, stateMap) && !bidirectionalPairs.Contains(GetPairKey(_.FromId, _.ToId)))
+            .OrderBy(_ => stateMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
             .ToList();
 
         foreach (var transition in model.Transitions)
@@ -886,8 +886,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
 
                 var nestedBackEdges = state.NestedTransitions
-                    .Where(t => IsBackEdge(t, nestedMap) && !nestedBidirectional.Contains(GetPairKey(t.FromId, t.ToId)))
-                    .OrderBy(t => nestedMap.TryGetValue(t.FromId, out var s) ? s.Position.X : 0)
+                    .Where(_ => IsBackEdge(_, nestedMap) && !nestedBidirectional.Contains(GetPairKey(_.FromId, _.ToId)))
+                    .OrderBy(_ => nestedMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
                     .ToList();
 
                 foreach (var transition in state.NestedTransitions)
@@ -958,8 +958,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Route back-edges around the right side of the diagram
             // Space lines apart enough for labels to be centered on each line without overlap
             // Exclude special states (Start/End) from edge calculation since they may be repositioned
-            var normalStates = model.States.Where(s => s.Type == StateType.Normal).ToList();
-            var baseRightEdge = (normalStates.Count > 0 ? normalStates.Max(s => s.Position.X + s.Width / 2) : 100) + 50;
+            var normalStates = model.States.Where(_ => _.Type == StateType.Normal).ToList();
+            var baseRightEdge = (normalStates.Count > 0 ? normalStates.Max(_ => _.Position.X + _.Width / 2) : 100) + 50;
 
             // Use spacing of 50px between lines - enough for typical labels
             var lineSpacing = 50;
@@ -1040,8 +1040,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Forward edge (mirror of back-edge) - curves to the LEFT
             // Route around the left side of the diagram
             // Exclude special states (Start/End) from edge calculation
-            var normalStates = model.States.Where(s => s.Type == StateType.Normal).ToList();
-            var baseLeftEdge = (normalStates.Count > 0 ? normalStates.Min(s => s.Position.X - s.Width / 2) : 0) - 50;
+            var normalStates = model.States.Where(_ => _.Type == StateType.Normal).ToList();
+            var baseLeftEdge = (normalStates.Count > 0 ? normalStates.Min(_ => _.Position.X - _.Width / 2) : 0) - 50;
 
             // Use same spacing as back-edges
             var lineSpacing = 50;
@@ -1195,8 +1195,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         const double labelHeight = 16;
 
         // Estimate maximum bounds from states
-        var maxStateX = stateMap.Values.Max(s => s.Position.X + s.Width / 2);
-        var maxStateY = stateMap.Values.Max(s => s.Position.Y + s.Height / 2);
+        var maxStateX = stateMap.Values.Max(_ => _.Position.X + _.Width / 2);
+        var maxStateY = stateMap.Values.Max(_ => _.Position.Y + _.Height / 2);
 
         // Try different positions along the line and with different offsets
         double[] tValues = isToEnd ? [0.85, 0.7, 0.6, 0.5, 0.4, 0.3] : [0.5, 0.4, 0.6, 0.3, 0.7, 0.25, 0.75];
@@ -1579,14 +1579,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // But if this state has back-edges AND note would be placed to the right,
             // prefer placing BELOW to avoid blocking the back-edge path
             var spaceAbove = state.Position.Y;
-            var maxY = model.States.Max(s => s.Position.Y + s.Height / 2);
+            var maxY = model.States.Max(_ => _.Position.Y + _.Height / 2);
             var spaceBelow = maxY - state.Position.Y;
 
-            var hasBackEdgeFromThisState = model.Transitions.Any(t =>
-                t.FromId == state.Id &&
-                stateMap.TryGetValue(t.ToId, out var to) &&
+            var hasBackEdgeFromThisState = model.Transitions.Any(_ =>
+                _.FromId == state.Id &&
+                stateMap.TryGetValue(_.ToId, out var to) &&
                 state.Position.Y > to.Position.Y + 20);
-            var diagramCenterX = model.States.Average(s => s.Position.X);
+            var diagramCenterX = model.States.Average(_ => _.Position.X);
             var wouldPlaceToRight = state.Position.X >= diagramCenterX;
 
             // If this state has back-edges and note would be on the right, force placement below

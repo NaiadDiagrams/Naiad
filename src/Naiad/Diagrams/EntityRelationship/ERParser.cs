@@ -104,7 +104,7 @@ public class ERParser : IDiagramParser<ERModel>
         );
 
         return attributeOrEmpty.Many()
-            .Select(attrs => attrs.Where(a => a != null).Cast<EntityAttribute>().ToList());
+            .Select(_ => _.Where(_ => _ != null).Cast<EntityAttribute>().ToList());
     }
 
     // Entity definition: EntityName { attributes }
@@ -150,7 +150,7 @@ public class ERParser : IDiagramParser<ERModel>
             SkipLine.ThenReturn((object)Unit.Value)
         );
 
-        return element.Many().Select(e => e.Where(x => x is not Unit).ToList());
+        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
     }
 
     static ERModel BuildModel(List<object> content)

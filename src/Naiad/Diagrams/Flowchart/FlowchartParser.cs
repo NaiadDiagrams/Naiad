@@ -135,8 +135,8 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
             select (node, arrow.Type, arrow.Style, label1.HasValue ? label1.Value : label2.HasValue ? label2.Value : null)
         ).Many()
         select (
-            new List<Node>([first, .. rest.Select(r => r.node)]),
-            rest.Select(r => (r.Type, r.Style, (string?)r.Item4)).ToList()
+            new List<Node>([first, .. rest.Select(_ => _.node)]),
+            rest.Select(_ => (_.Type, _.Style, (string?)_.Item4)).ToList()
         );
 
     // Style directive: style NodeName fill:#color,stroke:#color
@@ -223,7 +223,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         var skipLine = FlowchartParser.skipLine.ThenReturn((new List<Node>(), new List<(EdgeType, EdgeStyle, string?)>()));
 
         return Try(statement).Or(skipLine).Many()
-            .Select(s => s.Where(x => x.Nodes.Count > 0).ToList());
+            .Select(_ => _.Where(__ => __.Nodes.Count > 0).ToList());
     }
 
     static FlowchartModel BuildModel(Direction direction,

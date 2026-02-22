@@ -272,7 +272,7 @@ public class ClassParser : IDiagramParser<ClassModel>
             skipLine.ThenReturn((object)Unit.Value)
         );
 
-        return element.Many().Select(e => e.Where(x => x is not Unit).ToList());
+        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
     }
 
     static ClassModel BuildModel(List<object> content)

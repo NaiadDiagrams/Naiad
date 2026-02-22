@@ -6,7 +6,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
 
     // Rest of line (for text content)
     static Parser<char, string> RestOfLine =
-        Token(c => c != '\r' && c != '\n').ManyString();
+        Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Chart
     static Parser<char, string> TitleParser =
@@ -22,9 +22,9 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
-        from left in Token(c => c is not '-').AtLeastOnceString()
+        from left in Token(_ => _ is not '-').AtLeastOnceString()
             .Where(s => !s.TrimEnd().EndsWith('-'))
-            .Or(Token(c => c != '\r' && c != '\n' && c != '-').ManyString())
+            .Or(Token(_ => _ != '\r' && _ != '\n' && _ != '-').ManyString())
         from arrow in String("-->")
         from ____ in CommonParsers.InlineWhitespace
         from right in RestOfLine
@@ -36,9 +36,9 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
-        from bottom in Token(c => c is not '-').AtLeastOnceString()
+        from bottom in Token(_ => _ is not '-').AtLeastOnceString()
             .Where(s => !s.TrimEnd().EndsWith('-'))
-            .Or(Token(c => c != '\r' && c != '\n' && c != '-').ManyString())
+            .Or(Token(_ => _ != '\r' && _ != '\n' && _ != '-').ManyString())
         from arrow in String("-->")
         from ____ in CommonParsers.InlineWhitespace
         from top in RestOfLine
@@ -49,7 +49,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
     static Parser<char, (int quadrant, string label)> QuadrantLabelParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("quadrant-")
-        from num in Digit.Select(c => c - '0')
+        from num in Digit.Select(_ => _ - '0')
         from ___ in CommonParsers.RequiredWhitespace
         from label in RestOfLine
         from ____ in CommonParsers.LineEnd
@@ -67,7 +67,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
     // Point: Name: [0.5, 0.7]
     static Parser<char, QuadrantPoint> PointParser =
         from _ in CommonParsers.InlineWhitespace
-        from name in Token(c => c != ':' && c != '\r' && c != '\n').AtLeastOnceString()
+        from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in Char(':')
         from ___ in CommonParsers.InlineWhitespace
         from ____ in Char('[')
@@ -110,7 +110,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static QuadrantModel BuildModel(List<object?> content)
     {

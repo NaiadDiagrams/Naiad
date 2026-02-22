@@ -15,12 +15,12 @@ public class SankeyParser : IDiagramParser<SankeyModel>
 
     // Quoted string
     static Parser<char, string> QuotedString =
-        Char('"').Then(Token(c => c != '"').ManyString()).Before(Char('"'));
+        Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Unquoted name (no commas or newlines)
     static Parser<char, string> UnquotedName =
-        Token(c => c != ',' && c != '\r' && c != '\n').AtLeastOnceString()
-            .Select(s => s.Trim());
+        Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
+            .Select(_ => _.Trim());
 
     // Name (quoted or unquoted)
     static Parser<char, string> Name =
@@ -63,7 +63,7 @@ public class SankeyParser : IDiagramParser<SankeyModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(l => l != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static SankeyModel BuildModel(List<SankeyLink> links)
     {

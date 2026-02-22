@@ -109,7 +109,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         if (node.Children.Count == 0)
             return 0;
 
-        return node.Children.Sum(c => c.SubtreeHeight) + (node.Children.Count - 1) * VerticalSpacing;
+        return node.Children.Sum(_ => _.SubtreeHeight) + (node.Children.Count - 1) * VerticalSpacing;
     }
 
     static (double width, double height) CalculateBounds(MindmapNode node)
@@ -226,7 +226,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         };
 
         var path = $"M {Fmt(points[0].Item1)} {Fmt(points[0].Item2)} " +
-                   string.Join(" ", points.Skip(1).Select(p => $"L {Fmt(p.Item1)} {Fmt(p.Item2)}")) +
+                   string.Join(" ", points.Skip(1).Select(_ => $"L {Fmt(_.Item1)} {Fmt(_.Item2)}")) +
                    " Z";
 
         builder.AddPath(path, fill: fill, stroke: stroke, strokeWidth: 2);

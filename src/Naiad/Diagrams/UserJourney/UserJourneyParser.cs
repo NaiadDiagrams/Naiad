@@ -6,7 +6,7 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
 
     // Rest of line (for text content)
     static Parser<char, string> restOfLine =
-        Token(c => c != '\r' && c != '\n').ManyString();
+        Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Journey
     static Parser<char, string> titleParser =
@@ -28,14 +28,14 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
 
     // Actor list: Me, Cat, Dog
     static Parser<char, List<string>> actorListParser =
-        Token(c => c != ',' && c != '\r' && c != '\n').AtLeastOnceString()
+        Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
             .SeparatedAtLeastOnce(Char(',').Then(CommonParsers.InlineWhitespace))
-            .Select(actors => actors.Select(a => a.Trim()).ToList());
+            .Select(actors => actors.Select(_ => _.Trim()).ToList());
 
     // Task: Task Name: 5: Me, Cat
     static Parser<char, JourneyTask> taskParser =
         from _ in CommonParsers.InlineWhitespace
-        from name in Token(c => c != ':' && c != '\r' && c != '\n').AtLeastOnceString()
+        from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from colon in Char(':')
         from whitespace in CommonParsers.InlineWhitespace
         from score in Digit.AtLeastOnceString().Select(int.Parse)
@@ -70,7 +70,7 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
         from inerWhitespace in CommonParsers.InlineWhitespace
         from lineEnd in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static UserJourneyModel BuildModel(List<object?> content)
     {

@@ -6,11 +6,11 @@ public class RequirementParser : IDiagramParser<RequirementModel>
 
     // Identifier
     static Parser<char, string> Identifier =
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-').AtLeastOnceString();
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Rest of line
     static Parser<char, string> RestOfLine =
-        Token(c => c != '\r' && c != '\n').ManyString();
+        Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Requirement type
     static Parser<char, RequirementType> RequirementTypeParser =
@@ -164,7 +164,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(c => c != null).ToList());
+        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
 
     static RequirementModel BuildModel(List<object?> content)
     {

@@ -63,7 +63,7 @@ static class Acyclic
 
     public static void Undo(LayoutGraph graph)
     {
-        foreach (var edge in graph.Edges.Where(e => e.IsReversed))
+        foreach (var edge in graph.Edges.Where(_ => _.IsReversed))
         {
             edge.IsReversed = false;
             // Swap back

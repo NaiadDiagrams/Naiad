@@ -46,7 +46,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         }
 
         // Calculate data range
-        var allData = model.Series.SelectMany(s => s.Data).ToList();
+        var allData = model.Series.SelectMany(_ => _.Data).ToList();
         var dataMin = model.YAxisMin ?? (allData.Count > 0 ? allData.Min() : 0);
         var dataMax = model.YAxisMax ?? (allData.Count > 0 ? allData.Max() : 100);
         var dataRange = dataMax - dataMin;
@@ -55,7 +55,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         // Calculate category count
         var categoryCount = model.XAxisCategories.Count > 0
             ? model.XAxisCategories.Count
-            : model.Series.Count > 0 ? model.Series.Max(s => s.Data.Count) : 1;
+            : model.Series.Count > 0 ? model.Series.Max(_ => _.Data.Count) : 1;
         var categoryWidth = ChartWidth / categoryCount;
 
         // Draw grid lines
@@ -118,7 +118,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         // Draw series
         var barSeriesIndex = 0;
         var lineSeriesIndex = 0;
-        var barSeries = model.Series.Where(s => s.Type == ChartSeriesType.Bar).ToList();
+        var barSeries = model.Series.Where(_ => _.Type == ChartSeriesType.Bar).ToList();
         var barWidth = categoryWidth * 0.8 / Math.Max(1, barSeries.Count);
 
         foreach (var series in model.Series)

@@ -309,7 +309,7 @@ public class C4Parser : IDiagramParser<C4Model>
                     // Add this boundary as child of parent
                     if (parentBoundaryId is not null)
                     {
-                        var parent = model.Boundaries.FirstOrDefault(b => b.Id == parentBoundaryId);
+                        var parent = model.Boundaries.FirstOrDefault(_ => _.Id == parentBoundaryId);
                         parent?.ChildBoundaryIds.Add(boundary.Id);
                     }
 
@@ -317,7 +317,7 @@ public class C4Parser : IDiagramParser<C4Model>
                     ProcessContent(model, boundaryContent, boundary.Id);
 
                     // Collect direct element IDs that belong to this boundary (not nested)
-                    foreach (var el in model.Elements.Where(e => e.BoundaryId == boundary.Id))
+                    foreach (var el in model.Elements.Where(_ => _.BoundaryId == boundary.Id))
                     {
                         boundary.ElementIds.Add(el.Id);
                     }

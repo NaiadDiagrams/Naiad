@@ -8,7 +8,7 @@ public class SvgPolygon : SvgElement
 
     public override string ToXml()
     {
-        var pointsStr = string.Join(' ', Points.Select(p => $"{Fmt(p.X)},{Fmt(p.Y)}"));
+        var pointsStr = string.Join(' ', Points.Select(_ => $"{Fmt(_.X)},{Fmt(_.Y)}"));
         var builder = new StringBuilder($"<polygon points=\"{pointsStr}\"");
 
         if (Fill is not null)

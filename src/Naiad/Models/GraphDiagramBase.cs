@@ -6,11 +6,11 @@ public abstract class GraphDiagramBase : DiagramBase
     public List<Edge> Edges { get; } = [];
     public List<Subgraph> Subgraphs { get; } = [];
 
-    public Node? GetNode(string id) => Nodes.Find(n => n.Id == id);
+    public Node? GetNode(string id) => Nodes.Find(_ => _.Id == id);
 
     public void AddNode(Node node)
     {
-        if (Nodes.All(n => n.Id != node.Id))
+        if (Nodes.All(_ => _.Id != node.Id))
         {
             Nodes.Add(node);
         }

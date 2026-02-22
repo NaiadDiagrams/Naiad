@@ -10,7 +10,7 @@ public static class CommonParsers
         Token(char.IsWhiteSpace).SkipAtLeastOnce();
 
     public static Parser<char, Unit> InlineWhitespace =>
-        Token(c => c is ' ' or '\t').SkipMany();
+        Token(_ => _ is ' ' or '\t').SkipMany();
 
     // Line handling
     public static Parser<char, Unit> Newline =>
@@ -20,12 +20,12 @@ public static class CommonParsers
         Newline.Or(End);
 
     public static Parser<char, Unit> SkipRestOfLine =>
-        Token(c => c != '\r' && c != '\n').SkipMany().Then(LineEnd.Optional()).ThenReturn(Unit.Value);
+        Token(_ => _ != '\r' && _ != '\n').SkipMany().Then(LineEnd.Optional()).ThenReturn(Unit.Value);
 
     // Comments (Mermaid uses %% for comments)
     public static Parser<char, Unit> Comment =>
         String("%%")
-            .Then(Token(c => c != '\r' && c != '\n').SkipMany())
+            .Then(Token(_ => _ != '\r' && _ != '\n').SkipMany())
             .Then(LineEnd.Optional())
             .ThenReturn(Unit.Value);
 
@@ -34,7 +34,7 @@ public static class CommonParsers
 
     // Identifiers
     public static Parser<char, string> Identifier =>
-        Token(c => char.IsLetterOrDigit(c) || c == '_' || c == '-')
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
             .AtLeastOnceString()
             .Labelled("identifier");
 
@@ -46,13 +46,13 @@ public static class CommonParsers
     // Quoted strings
     public static Parser<char, string> DoubleQuotedString =>
         Char('"')
-            .Then(Token(c => c != '"').ManyString())
+            .Then(Token(_ => _ != '"').ManyString())
             .Before(Char('"'))
             .Labelled("double-quoted string");
 
     public static Parser<char, string> SingleQuotedString =>
         Char('\'')
-            .Then(Token(c => c != '\'').ManyString())
+            .Then(Token(_ => _ != '\'').ManyString())
             .Before(Char('\''))
             .Labelled("single-quoted string");
 
@@ -101,10 +101,10 @@ public static class CommonParsers
     // Edge label (text between |text|)
     public static Parser<char, string?> EdgeLabel =>
         Char('|')
-            .Then(Token(c => c != '|').ManyString())
+            .Then(Token(_ => _ != '|').ManyString())
             .Before(Char('|'))
             .Optional()
-            .Select(o => o.HasValue ? o.Value : null);
+            .Select(_ => _.HasValue ? _.Value : null);
 
     // Accessibility title and description
     public static Parser<char, string> AccTitle =>
@@ -112,7 +112,7 @@ public static class CommonParsers
             .Then(InlineWhitespace)
             .Then(Char(':'))
             .Then(InlineWhitespace)
-            .Then(Token(c => c != '\r' && c != '\n').ManyString())
+            .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
             .Before(LineEnd);
 
     public static Parser<char, string> AccDescr =>
@@ -120,14 +120,14 @@ public static class CommonParsers
             .Then(InlineWhitespace)
             .Then(Char(':'))
             .Then(InlineWhitespace)
-            .Then(Token(c => c != '\r' && c != '\n').ManyString())
+            .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
             .Before(LineEnd);
 
     // Title
     public static Parser<char, string> Title =>
         String("title")
             .Then(RequiredWhitespace)
-            .Then(Token(c => c != '\r' && c != '\n').ManyString())
+            .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
             .Before(LineEnd);
 
     // Helper to skip empty lines and comments
@@ -137,12 +137,12 @@ public static class CommonParsers
 
     // Indentation for hierarchical diagrams (mindmap, timeline)
     public static Parser<char, int> Indentation =>
-        Token(c => c is ' ' or '\t')
+        Token(_ => _ is ' ' or '\t')
             .Many()
             .Select(chars =>
             {
                 var array = chars as char[] ?? chars.ToArray();
-                return array.Count(c => c == '\t') * 4 + array.Count(c => c == ' ');
+                return array.Count(_ => _ == '\t') * 4 + array.Count(_ => _ == ' ');
             });
 
     // Keyword helpers
@@ -158,8 +158,8 @@ public static class CommonParsers
     // Color parsing (#rgb, #rrggbb, named colors)
     public static Parser<char, string> HexColor =>
         Char('#')
-            .Then(Token(c => char.IsLetterOrDigit(c)).AtLeastOnceString())
-            .Select(s => "#" + s);
+            .Then(Token(_ => char.IsLetterOrDigit(_)).AtLeastOnceString())
+            .Select(_ => "#" + _);
 
     public static Parser<char, string> NamedColor =>
         Token(char.IsLetter).AtLeastOnceString();

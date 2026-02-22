@@ -30,7 +30,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 
     public SvgDocument Render(UserJourneyModel model, RenderOptions options)
     {
-        if (model.Sections.Count == 0 || model.Sections.All(s => s.Tasks.Count == 0))
+        if (model.Sections.Count == 0 || model.Sections.All(_ => _.Tasks.Count == 0))
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
             emptyBuilder.AddText(100, 50, "Empty journey", anchor: "middle", baseline: "middle",
@@ -40,13 +40,13 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 
         // Collect all unique actors
         var allActors = model.Sections
-            .SelectMany(s => s.Tasks)
-            .SelectMany(t => t.Actors)
+            .SelectMany(_ => _.Tasks)
+            .SelectMany(_ => _.Actors)
             .Distinct()
             .ToList();
 
         // Calculate layout
-        var maxTasks = model.Sections.Max(s => s.Tasks.Count);
+        var maxTasks = model.Sections.Max(_ => _.Tasks.Count);
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var actorsHeight = allActors.Count * ActorRowHeight + SectionPadding;
 

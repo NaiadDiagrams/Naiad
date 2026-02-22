@@ -9,7 +9,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     const double TagHeight = 20;
     const double TagPadding = 5;
 
-    static readonly string[] BranchColors =
+    static string[] BranchColors =
     [
         "#4CAF50", // green - main
         "#2196F3", // blue
@@ -27,8 +27,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var computed = ComputeGraph(model);
 
         // Calculate dimensions
-        var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(c => c.Row) : 0;
-        var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(b => b.Column) : 0;
+        var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(_ => _.Row) : 0;
+        var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
 
         var graphWidth = (maxRow + 1) * CommitSpacingX + BranchLabelWidth;
         var graphHeight = (maxColumn + 1) * CommitSpacingY;
@@ -67,8 +67,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             var y = offsetY + branch.Column * CommitSpacingY;
             var color = branch.Color ?? BranchColors[branch.Column % BranchColors.Length];
 
-            var firstCommit = branch.Commits.OrderBy(c => c.Row).First();
-            var lastCommit = branch.Commits.OrderBy(c => c.Row).Last();
+            var firstCommit = branch.Commits.OrderBy(_ => _.Row).First();
+            var lastCommit = branch.Commits.OrderBy(_ => _.Row).Last();
 
             var startX = offsetX + firstCommit.Row * CommitSpacingX;
             var endX = offsetX + lastCommit.Row * CommitSpacingX;
@@ -107,8 +107,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         double offsetX,
         double offsetY)
     {
-        var fromBranch = graph.Branches.Find(b => b.Name == from.Branch);
-        var toBranch = graph.Branches.Find(b => b.Name == to.Branch);
+        var fromBranch = graph.Branches.Find(_ => _.Name == from.Branch);
+        var toBranch = graph.Branches.Find(_ => _.Name == to.Branch);
 
         if (fromBranch == null || toBranch == null)
         {
@@ -141,7 +141,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     static void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
         double offsetX, double offsetY, RenderOptions options)
     {
-        var branch = graph.Branches.Find(b => b.Name == commit.Branch);
+        var branch = graph.Branches.Find(_ => _.Name == commit.Branch);
         if (branch == null)
         {
             return;
