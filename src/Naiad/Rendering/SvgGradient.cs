@@ -6,10 +6,10 @@ public class SvgGradient
     public List<SvgGradientStop> Stops { get; } = [];
     public bool IsRadial { get; set; }
 
-    public string ToXml()
+    public void ToXml(StringBuilder builder)
     {
         var tag = IsRadial ? "radialGradient" : "linearGradient";
-        var builder = new StringBuilder($"<{tag} id=\"{Id}\">");
+        builder.Append($"<{tag} id=\"{Id}\">");
 
         foreach (var stop in Stops)
         {
@@ -17,6 +17,5 @@ public class SvgGradient
         }
 
         builder.Append($"</{tag}>");
-        return builder.ToString();
     }
 }

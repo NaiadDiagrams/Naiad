@@ -17,10 +17,10 @@ public class SvgDocument
     public string? Role { get; set; } = "graphics-document document";
     public string? FontAwesomeImport { get; set; } = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css\");";
 
-    public string ToXml()
+    public void ToXml(StringBuilder builder)
     {
         // Build mermaid-compatible SVG root element (attribute order matches mermaid.ink exactly)
-        var builder = new StringBuilder($"<svg id=\"{Id}\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"");
+        builder.Append($"<svg id=\"{Id}\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"");
 
         if (!string.IsNullOrEmpty(DiagramClass))
         {
@@ -56,16 +56,15 @@ public class SvgDocument
 
         if (Defs.HasContent)
         {
-            builder.Append(Defs.ToXml());
+            Defs.ToXml(builder);
         }
 
         foreach (var element in Elements)
         {
-            builder.Append(element.ToXml());
+            element.ToXml(builder);
         }
 
         builder.Append("</svg>");
-        return builder.ToString();
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
@@ -80,26 +79,25 @@ public class SvgDefs
 
     public bool HasContent => Markers.Count > 0 || Gradients.Count > 0 || Filters.Count > 0;
 
-    public string ToXml()
+    public void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder("<defs>");
+        builder.Append("<defs>");
 
         foreach (var marker in Markers)
         {
-            builder.Append(marker.ToXml());
+            marker.ToXml(builder);
         }
 
         foreach (var gradient in Gradients)
         {
-            builder.Append(gradient.ToXml());
+            gradient.ToXml(builder);
         }
 
         foreach (var filter in Filters)
         {
-            builder.Append(filter.ToXml());
+            filter.ToXml(builder);
         }
 
         builder.Append("</defs>");
-        return builder.ToString();
     }
 }

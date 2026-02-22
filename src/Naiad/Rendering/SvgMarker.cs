@@ -19,9 +19,9 @@ public class SvgMarker
     public double CircleR { get; set; } = 5;
     public int StrokeWidth { get; set; } = 1;
 
-    public string ToXml()
+    public void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<marker id=\"{Id}\"");
+        builder.Append($"<marker id=\"{Id}\"");
 
         if (ClassName is not null)
         {
@@ -52,7 +52,6 @@ public class SvgMarker
         }
 
         builder.Append("</marker>");
-        return builder.ToString();
     }
 
     static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);

@@ -6,10 +6,10 @@ public class SvgPolygon : SvgElement
     public string? Fill { get; set; }
     public string? Stroke { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
         var pointsStr = string.Join(' ', Points.Select(_ => $"{Fmt(_.X)},{Fmt(_.Y)}"));
-        var builder = new StringBuilder($"<polygon points=\"{pointsStr}\"");
+        builder.Append($"<polygon points=\"{pointsStr}\"");
 
         if (Fill is not null)
         {
@@ -21,8 +21,7 @@ public class SvgPolygon : SvgElement
             builder.Append($" stroke=\"{Stroke}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

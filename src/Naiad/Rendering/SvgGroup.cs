@@ -4,9 +4,10 @@ public class SvgGroup : SvgElement
 {
     public List<SvgElement> Children { get; } = [];
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<g{CommonAttributes()}");
+        builder.Append("<g");
+        CommonAttributes(builder);
 
         if (Children.Count == 0)
         {
@@ -17,12 +18,10 @@ public class SvgGroup : SvgElement
             builder.Append('>');
             foreach (var child in Children)
             {
-                builder.Append(child.ToXml());
+                child.ToXml(builder);
             }
 
             builder.Append("</g>");
         }
-
-        return builder.ToString();
     }
 }

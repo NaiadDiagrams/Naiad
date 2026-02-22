@@ -11,9 +11,9 @@ public class SvgPath : SvgElement
     public string? MarkerEnd { get; set; }
     public double? Opacity { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<path d=\"{D}\"");
+        builder.Append($"<path d=\"{D}\"");
 
         if (Fill is not null)
         {
@@ -50,8 +50,7 @@ public class SvgPath : SvgElement
             builder.Append($" opacity=\"{Fmt(Opacity.Value)}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

@@ -12,9 +12,9 @@ public class SvgRect : SvgElement
     public string? Stroke { get; set; }
     public double? StrokeWidth { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<rect x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\" width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
+        builder.Append($"<rect x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\" width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
 
         if (Rx > 0)
         {
@@ -41,8 +41,7 @@ public class SvgRect : SvgElement
             builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

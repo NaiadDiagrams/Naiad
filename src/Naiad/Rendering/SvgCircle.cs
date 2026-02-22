@@ -9,9 +9,8 @@ public class SvgCircle : SvgElement
     public string? Stroke { get; set; }
     public double? StrokeWidth { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder();
         builder.Append($"<circle cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" r=\"{Fmt(R)}\"");
 
         if (Fill is not null)
@@ -29,8 +28,7 @@ public class SvgCircle : SvgElement
             builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

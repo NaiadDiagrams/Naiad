@@ -5,11 +5,10 @@ public class SvgRectNoXY : SvgElement
     public double Width { get; set; }
     public double Height { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<rect width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
-        builder.Append(CommonAttributes());
+        builder.Append($"<rect width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

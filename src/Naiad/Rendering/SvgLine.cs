@@ -10,9 +10,9 @@ public class SvgLine : SvgElement
     public double? StrokeWidth { get; set; }
     public string? StrokeDasharray { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<line x1=\"{Fmt(X1)}\" y1=\"{Fmt(Y1)}\" x2=\"{Fmt(X2)}\" y2=\"{Fmt(Y2)}\"");
+        builder.Append($"<line x1=\"{Fmt(X1)}\" y1=\"{Fmt(Y1)}\" x2=\"{Fmt(X2)}\" y2=\"{Fmt(Y2)}\"");
 
         if (Stroke is not null)
         {
@@ -29,8 +29,7 @@ public class SvgLine : SvgElement
             builder.Append($" stroke-dasharray=\"{StrokeDasharray}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

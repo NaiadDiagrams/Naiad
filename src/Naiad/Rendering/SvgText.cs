@@ -13,9 +13,8 @@ public class SvgText : SvgElement
     public string? FontWeight { get; set; }
     public string? Fill { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder();
         builder.Append("<text");
 
         // For transformed text (OmitXY=true), mermaid.ink uses: transform, class, style order
@@ -34,7 +33,7 @@ public class SvgText : SvgElement
             if (FontFamily is not null) builder.Append($" font-family=\"{FontFamily}\"");
             if (FontWeight is not null) builder.Append($" font-weight=\"{FontWeight}\"");
             if (Fill is not null) builder.Append($" fill=\"{Fill}\"");
-            builder.Append(CommonAttributes());
+            CommonAttributes(builder);
         }
 
         if (string.IsNullOrEmpty(Content))
@@ -45,7 +44,6 @@ public class SvgText : SvgElement
         {
             builder.Append($">{EscapeXml(Content)}</text>");
         }
-        return builder.ToString();
     }
 
     static string EscapeXml(string text) =>

@@ -7,12 +7,10 @@ public abstract class SvgElement
     public string? Style { get; set; }
     public string? Transform { get; set; }
 
-    public abstract string ToXml();
+    public abstract void ToXml(StringBuilder builder);
 
-    protected string CommonAttributes()
+    protected void CommonAttributes(StringBuilder builder)
     {
-        var builder = new StringBuilder();
-
         if (Id is not null)
         {
             builder.Append($" id=\"{Id}\"");
@@ -32,8 +30,6 @@ public abstract class SvgElement
         {
             builder.Append($" transform=\"{Transform}\"");
         }
-
-        return builder.ToString();
     }
 
     protected static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);

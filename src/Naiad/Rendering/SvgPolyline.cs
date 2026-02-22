@@ -9,10 +9,10 @@ public class SvgPolyline : SvgElement
     public string? StrokeDasharray { get; set; }
     public string? MarkerEnd { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
         var pointsStr = string.Join(" ", Points.Select(_ => $"{Fmt(_.X)},{Fmt(_.Y)}"));
-        var builder = new StringBuilder($"<polyline points=\"{pointsStr}\"");
+        builder.Append($"<polyline points=\"{pointsStr}\"");
 
         if (Fill is not null)
         {
@@ -39,8 +39,7 @@ public class SvgPolyline : SvgElement
             builder.Append($" marker-end=\"{MarkerEnd}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }

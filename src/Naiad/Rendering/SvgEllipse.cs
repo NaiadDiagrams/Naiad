@@ -9,9 +9,9 @@ public class SvgEllipse : SvgElement
     public string? Fill { get; set; }
     public string? Stroke { get; set; }
 
-    public override string ToXml()
+    public override void ToXml(StringBuilder builder)
     {
-        var builder = new StringBuilder($"<ellipse cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" rx=\"{Fmt(Rx)}\" ry=\"{Fmt(Ry)}\"");
+        builder.Append($"<ellipse cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" rx=\"{Fmt(Rx)}\" ry=\"{Fmt(Ry)}\"");
 
         if (Fill is not null)
         {
@@ -23,8 +23,7 @@ public class SvgEllipse : SvgElement
             builder.Append($" stroke=\"{Stroke}\"");
         }
 
-        builder.Append(CommonAttributes());
+        CommonAttributes(builder);
         builder.Append("/>");
-        return builder.ToString();
     }
 }
