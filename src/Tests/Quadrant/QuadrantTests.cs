@@ -76,6 +76,21 @@ public class QuadrantTests : TestBase
     }
 
     [Test]
+    public Task AxisLabelsWithSpaces()
+    {
+        const string input =
+            """
+            quadrantChart
+                title Skills Matrix
+                x-axis Very Low Skill --> Very High Skill
+                y-axis Very Low Value --> Very High Value
+                Item A: [0.3, 0.6]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task EdgePositions()
     {
         const string input =
