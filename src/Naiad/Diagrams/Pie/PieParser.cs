@@ -30,15 +30,24 @@ public class PieParser : IDiagramParser<PieModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
+    // Inline title: pie title My Title (on same line)
+    static readonly Parser<char, string> InlineTitleParser =
+        from keyword in String("title")
+        from _ in CommonParsers.RequiredWhitespace
+        from title in Token(c => c != '\r' && c != '\n').ManyString()
+        select title;
+
     public static Parser<char, PieModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("pie")
         from __ in CommonParsers.InlineWhitespace
         from showData in ShowDataParser
         from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
+        from inlineTitle in Try(InlineTitleParser).Optional()
+        from ____ in CommonParsers.InlineWhitespace
+        from _____ in CommonParsers.LineEnd
         from content in ParseContent()
-        select BuildModel(showData, content.title, content.sections);
+        select BuildModel(showData, inlineTitle.HasValue ? inlineTitle.Value : content.title, content.sections);
 
     static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
         from lines in Try(TitleLine.Select(t => (title: (string?)t, section: (PieSection?)null)))

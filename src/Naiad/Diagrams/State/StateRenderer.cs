@@ -7,6 +7,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 {
     readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
+    // Track placed label bounds to avoid label-to-label overlaps
+    record LabelBounds(double Left, double Top, double Width, double Height);
+    readonly List<LabelBounds> _placedLabels = [];
+
 #if DEBUG
     readonly List<TextBounds> _textBounds = [];
     readonly List<LineBounds> _lineBounds = [];
@@ -32,6 +36,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
+        _placedLabels.Clear();
 #if DEBUG
         _textBounds.Clear();
         _lineBounds.Clear();
@@ -349,26 +354,40 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
         var rightEdge = model.States.Max(s => s.Position.X + s.Width / 2);
 
-        // Count back-edges to determine spacing
-        var backEdgeCount = model.Transitions
-            .Count(t => IsBackEdge(t, stateMap) && !bidirectionalPairs.Contains(GetPairKey(t.FromId, t.ToId)));
+        // Get all back-edges with their indices for position calculation
+        var backEdges = model.Transitions
+            .Where(t => IsBackEdge(t, stateMap))
+            .OrderBy(t => stateMap.TryGetValue(t.FromId, out var s) ? s.Position.X : 0)
+            .ToList();
 
-        // Also count bidirectional back-edges
-        var bidirectionalBackEdgeCount = model.Transitions
-            .Count(t => IsBackEdge(t, stateMap) && bidirectionalPairs.Contains(GetPairKey(t.FromId, t.ToId)));
-
-        var totalBackEdges = backEdgeCount + bidirectionalBackEdgeCount;
-        if (totalBackEdges == 0)
+        if (backEdges.Count == 0)
             return 0;
 
-        // Back-edges go to baseRightEdge + 50, with spacing of 50 between each
-        // The rightmost curve extends to rightEdge + 50 + (backEdgeCount - 1) * 50
+        double maxExtraNeeded = 0;
         var baseRightEdge = rightEdge + 50;
-        var maxRightExtent = baseRightEdge + (totalBackEdges - 1) * 50;
+        var lineSpacing = 50;
 
-        // Extra width needed beyond the layout width (which includes states up to rightEdge)
-        var extraNeeded = maxRightExtent - rightEdge;
-        return extraNeeded > 0 ? extraNeeded + 10 : 0; // Add margin
+        for (var i = 0; i < backEdges.Count; i++)
+        {
+            var transition = backEdges[i];
+            var edgeX = baseRightEdge + i * lineSpacing;
+
+            // Calculate space needed for the curve itself
+            var curveExtraNeeded = edgeX - rightEdge;
+
+            // Also account for label width if present (label is centered on vertical line)
+            var labelExtraNeeded = 0.0;
+            if (!string.IsNullOrEmpty(transition.Label))
+            {
+                var labelWidth = MeasureText(transition.Label, 12); // FontSize - 2
+                var labelRight = edgeX + labelWidth / 2;
+                labelExtraNeeded = labelRight - rightEdge;
+            }
+
+            maxExtraNeeded = Math.Max(maxExtraNeeded, Math.Max(curveExtraNeeded, labelExtraNeeded));
+        }
+
+        return maxExtraNeeded > 0 ? maxExtraNeeded + 20 : 0; // Add margin
     }
 
     static double CalculateEndNodeExtraHeight(StateModel model, double layoutHeight)
@@ -995,10 +1014,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Draw label centered on this back-edge's vertical line
             if (!string.IsNullOrEmpty(transition.Label))
             {
+                var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
+                const double labelHeight = 16;
+
                 // Position label centered on the vertical line segment
                 var labelX = rightEdge;
                 // Position at midpoint of the vertical segment
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
+
+                // Register this label's position to prevent future overlaps
+                _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddText(labelX, labelY, transition.Label,
                     anchor: "middle",
@@ -1063,11 +1088,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             if (!string.IsNullOrEmpty(transition.Label))
             {
+                var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
+                const double labelHeight = 16;
+
                 // Position label centered on this edge's vertical line
                 var labelX = leftEdge;
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
 
-                builder.AddRect(labelX - 30, labelY - 8, 60, 16, fill: "#fff", stroke: "none");
+                // Register this label's position to prevent future overlaps
+                _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+
+                builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
                 builder.AddText(labelX, labelY, transition.Label,
                     anchor: "middle",
                     baseline: "middle",
@@ -1116,7 +1147,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (obstacleState != null)
         {
             // Route around the obstacle
-            RenderRoutedTransition(builder, transition, fromState, toState, obstacleState, options);
+            RenderRoutedTransition(builder, transition, fromState, toState, obstacleState, stateMap, options);
         }
         else
         {
@@ -1134,12 +1165,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Draw label if present
             if (!string.IsNullOrEmpty(transition.Label))
             {
-                // Position label along the line - at 85% for transitions to End nodes to avoid overlap with curves
-                var t = toState.Type == StateType.End ? 0.85 : 0.5;
-                var labelX = startX + t * (endX - startX);
-                var labelY = startY + t * (endY - startY) - 10;
+                // Find position that doesn't overlap with states or other labels
+                var (labelX, labelY) = FindNonOverlappingLabelPosition(
+                    startX, startY, endX, endY, transition.Label, stateMap, options, toState.Type == StateType.End);
 
-                builder.AddRect(labelX - 30, labelY - 8, 60, 16, fill: "#fff", stroke: "none");
+                var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
+                const double labelHeight = 16;
+
+                // Register this label's position to prevent future overlaps
+                _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+
+                builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
                 builder.AddText(labelX, labelY, transition.Label,
                     anchor: "middle",
                     baseline: "middle",
@@ -1150,6 +1186,95 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 #endif
             }
         }
+    }
+
+    (double x, double y) FindNonOverlappingLabelPosition(
+        double startX, double startY, double endX, double endY,
+        string label, Dictionary<string, State> stateMap, RenderOptions options, bool isToEnd)
+    {
+        var labelWidth = MeasureText(label, options.FontSize - 2) + 8;
+        const double labelHeight = 16;
+
+        // Estimate maximum bounds from states
+        var maxStateX = stateMap.Values.Max(s => s.Position.X + s.Width / 2);
+        var maxStateY = stateMap.Values.Max(s => s.Position.Y + s.Height / 2);
+
+        // Try different positions along the line and with different offsets
+        double[] tValues = isToEnd ? [0.85, 0.7, 0.6, 0.5, 0.4, 0.3] : [0.5, 0.4, 0.6, 0.3, 0.7, 0.25, 0.75];
+        double[] yOffsets = [-10, -25, 10, -40, 25, 40, -55, 55];
+
+        foreach (var t in tValues)
+        {
+            var baseX = startX + t * (endX - startX);
+            var baseY = startY + t * (endY - startY);
+
+            foreach (var yOffset in yOffsets)
+            {
+                var labelX = baseX;
+                var labelY = baseY + yOffset;
+
+                // Calculate label bounds with generous margin
+                var labelLeft = labelX - labelWidth / 2;
+                var labelRight = labelX + labelWidth / 2;
+                var labelTop = labelY - labelHeight / 2;
+                var labelBottom = labelY + labelHeight / 2;
+
+                // Check overlap with all states - use large margin to account for state labels
+                var overlaps = false;
+                foreach (var kvp in stateMap)
+                {
+                    var state = kvp.Value;
+                    // Use larger margin (20px) to account for state label text which may extend beyond box
+                    var margin = 20.0;
+                    var stateLeft = state.Position.X - state.Width / 2 - margin;
+                    var stateRight = state.Position.X + state.Width / 2 + margin;
+                    var stateTop = state.Position.Y - state.Height / 2 - margin;
+                    var stateBottom = state.Position.Y + state.Height / 2 + margin;
+
+                    if (labelLeft < stateRight && labelRight > stateLeft &&
+                        labelTop < stateBottom && labelBottom > stateTop)
+                    {
+                        overlaps = true;
+                        break;
+                    }
+                }
+
+                // Check overlap with previously placed labels
+                if (!overlaps)
+                {
+                    foreach (var placed in _placedLabels)
+                    {
+                        var placedRight = placed.Left + placed.Width;
+                        var placedBottom = placed.Top + placed.Height;
+
+                        if (labelLeft < placedRight && labelRight > placed.Left &&
+                            labelTop < placedBottom && labelBottom > placed.Top)
+                        {
+                            overlaps = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Check if label would be outside SVG bounds (estimate bounds from states)
+                if (labelLeft < 0 || labelTop < 0 || labelRight > maxStateX + 150 || labelBottom > maxStateY + 100)
+                    overlaps = true;
+
+                if (!overlaps)
+                    return (labelX, labelY);
+            }
+        }
+
+        // Fallback: use original position but ensure it's within bounds
+        var fallbackT = isToEnd ? 0.85 : 0.5;
+        var fallbackX = startX + fallbackT * (endX - startX);
+        var fallbackY = startY + fallbackT * (endY - startY) - 10;
+
+        // Ensure fallback doesn't go outside bounds
+        fallbackX = Math.Max(labelWidth / 2, Math.Min(maxStateX + 100, fallbackX));
+        fallbackY = Math.Max(labelHeight / 2, Math.Min(maxStateY + 50, fallbackY));
+
+        return (fallbackX, fallbackY);
     }
 
     static State? FindObstacleState(double x1, double y1, double x2, double y2,
@@ -1190,16 +1315,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     }
 
     void RenderRoutedTransition(SvgBuilder builder, StateTransition transition,
-        State fromState, State toState, State obstacle, RenderOptions options)
+        State fromState, State toState, State obstacle, Dictionary<string, State> stateMap, RenderOptions options)
     {
-        // Route around the obstacle
-        var obstacleLeft = obstacle.Position.X - obstacle.Width / 2;
-        var obstacleRight = obstacle.Position.X + obstacle.Width / 2;
-
-        // Determine which side to route around (pick the closer side)
-        var fromX = fromState.Position.X;
-        var routeLeft = Math.Abs(fromX - obstacleLeft) < Math.Abs(fromX - obstacleRight);
-
         // Connection points
         var startX = fromState.Position.X;
         var startY = fromState.Position.Y + fromState.Height / 2;
@@ -1209,11 +1326,46 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             ? toState.Position.Y + SpecialStateSize / 2
             : toState.Position.Y + toState.Height / 2;
 
-        // Route around obstacle
         var margin = 30.0;
-        var routeX = routeLeft
-            ? obstacleLeft - margin
-            : obstacleRight + margin;
+
+        // Find all states that are in the vertical path region (between startX/endX and obstacle)
+        // and calculate routeX that avoids them all
+        var obstacleLeft = obstacle.Position.X - obstacle.Width / 2;
+        var obstacleRight = obstacle.Position.X + obstacle.Width / 2;
+
+        // Determine initial side preference based on closest side of primary obstacle
+        var fromX = fromState.Position.X;
+        var preferLeft = Math.Abs(fromX - obstacleLeft) < Math.Abs(fromX - obstacleRight);
+
+        // Find leftmost and rightmost extent of all states that might be in the routing path
+        var minLeft = obstacleLeft;
+        var maxRight = obstacleRight;
+
+        foreach (var kvp in stateMap)
+        {
+            var state = kvp.Value;
+            // Skip source state, but INCLUDE target state in bounds (we need to route around it)
+            if (state.Id == transition.FromId)
+                continue;
+            if (state.Type is StateType.Start or StateType.End)
+                continue;
+
+            // Check if this state is in the Y range where we might route
+            var stateTop = state.Position.Y - state.Height / 2;
+            var routeYRange = Math.Max(startY, endY) + margin * 2;
+
+            if (stateTop < routeYRange)
+            {
+                // This state might be in our routing path - expand the bounds
+                minLeft = Math.Min(minLeft, state.Position.X - state.Width / 2);
+                maxRight = Math.Max(maxRight, state.Position.X + state.Width / 2);
+            }
+        }
+
+        // Route around all states
+        var routeX = preferLeft
+            ? minLeft - margin
+            : maxRight + margin;
 
         // Create path: down from start, horizontal to route position, down past obstacle and target, then to end
         var obstacleTop = obstacle.Position.Y - obstacle.Height / 2;
@@ -1250,10 +1402,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Draw label if present
         if (!string.IsNullOrEmpty(transition.Label))
         {
-            var labelX = routeX;
-            var labelY = obstacle.Position.Y;
+            // Find position that doesn't overlap with states or other labels
+            var defaultX = routeX;
+            var defaultY = obstacle.Position.Y;
+            var (labelX, labelY) = FindNonOverlappingLabelPositionForRouted(
+                defaultX, defaultY, routeX, obstacleTop - margin, horizontalY, transition.Label, stateMap, options);
 
-            builder.AddRect(labelX - 30, labelY - 8, 60, 16, fill: "#fff", stroke: "none");
+            var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
+            const double labelHeight = 16;
+
+            // Register this label's position to prevent future overlaps
+            _placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+
+            builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
             builder.AddText(labelX, labelY, transition.Label,
                 anchor: "middle",
                 baseline: "middle",
@@ -1263,6 +1424,75 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
 #endif
         }
+    }
+
+    (double x, double y) FindNonOverlappingLabelPositionForRouted(
+        double defaultX, double defaultY, double routeX, double topY, double bottomY,
+        string label, Dictionary<string, State> stateMap, RenderOptions options)
+    {
+        var labelWidth = MeasureText(label, options.FontSize - 2) + 8;
+        const double labelHeight = 16;
+
+        // Try positions along the vertical route segment
+        double[] yPositions = [defaultY, (topY + bottomY) / 2, topY + 30, bottomY - 30, topY + 60, bottomY - 60];
+        double[] xOffsets = [0, -50, 50, -100, 100, -150, 150];
+
+        foreach (var yPos in yPositions)
+        {
+            foreach (var xOffset in xOffsets)
+            {
+                var labelX = routeX + xOffset;
+                var labelY = yPos;
+
+                var labelLeft = labelX - labelWidth / 2;
+                var labelRight = labelX + labelWidth / 2;
+                var labelTop = labelY - labelHeight / 2;
+                var labelBottom = labelY + labelHeight / 2;
+
+                var overlaps = false;
+                foreach (var kvp in stateMap)
+                {
+                    var state = kvp.Value;
+                    var margin = 20.0;
+                    var stateLeft = state.Position.X - state.Width / 2 - margin;
+                    var stateRight = state.Position.X + state.Width / 2 + margin;
+                    var stateTop = state.Position.Y - state.Height / 2 - margin;
+                    var stateBottom = state.Position.Y + state.Height / 2 + margin;
+
+                    if (labelLeft < stateRight && labelRight > stateLeft &&
+                        labelTop < stateBottom && labelBottom > stateTop)
+                    {
+                        overlaps = true;
+                        break;
+                    }
+                }
+
+                // Check overlap with previously placed labels
+                if (!overlaps)
+                {
+                    foreach (var placed in _placedLabels)
+                    {
+                        var placedRight = placed.Left + placed.Width;
+                        var placedBottom = placed.Top + placed.Height;
+
+                        if (labelLeft < placedRight && labelRight > placed.Left &&
+                            labelTop < placedBottom && labelBottom > placed.Top)
+                        {
+                            overlaps = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (labelLeft < 0 || labelTop < 0)
+                    overlaps = true;
+
+                if (!overlaps)
+                    return (labelX, labelY);
+            }
+        }
+
+        return (Math.Max(labelWidth / 2, defaultX), Math.Max(labelHeight / 2, defaultY));
     }
 
     // Calculate where a line from center to target intersects the node's edge

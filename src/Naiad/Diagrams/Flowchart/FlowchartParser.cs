@@ -141,10 +141,69 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
             rest.Select(r => (r.Type, r.Style, (string?)r.Item4)).ToList()
         );
 
-    // Skip empty lines and comments
+    // Style directive: style NodeName fill:#color,stroke:#color
+    static readonly Parser<char, Unit> StyleDirective =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in String("style")
+        from ___ in CommonParsers.RequiredWhitespace
+        from ____ in Token(c => c != '\r' && c != '\n').ManyString() // consume rest of line
+        from _____ in CommonParsers.LineEnd
+        select Unit.Value;
+
+    // Class definition: classDef className fill:#color
+    static readonly Parser<char, Unit> ClassDefDirective =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in String("classDef")
+        from ___ in CommonParsers.RequiredWhitespace
+        from ____ in Token(c => c != '\r' && c != '\n').ManyString()
+        from _____ in CommonParsers.LineEnd
+        select Unit.Value;
+
+    // Class application: class nodeId className
+    static readonly Parser<char, Unit> ClassDirective =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in String("class")
+        from ___ in CommonParsers.RequiredWhitespace
+        from ____ in Token(c => c != '\r' && c != '\n').ManyString()
+        from _____ in CommonParsers.LineEnd
+        select Unit.Value;
+
+    // Click directive: click nodeId callback
+    static readonly Parser<char, Unit> ClickDirective =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in String("click")
+        from ___ in CommonParsers.RequiredWhitespace
+        from ____ in Token(c => c != '\r' && c != '\n').ManyString()
+        from _____ in CommonParsers.LineEnd
+        select Unit.Value;
+
+    // Subgraph start: subgraph name[Label] or subgraph name
+    static readonly Parser<char, Unit> SubgraphStart =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in String("subgraph")
+        from ___ in Token(c => c != '\r' && c != '\n').ManyString()
+        from ____ in CommonParsers.LineEnd
+        select Unit.Value;
+
+    // Subgraph end: end
+    static readonly Parser<char, Unit> SubgraphEnd =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in String("end")
+        from ___ in CommonParsers.InlineWhitespace
+        from ____ in CommonParsers.LineEnd
+        select Unit.Value;
+
+    // Skip empty lines, comments, and directives
     static readonly Parser<char, Unit> SkipLine =
-        CommonParsers.InlineWhitespace
-            .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+        OneOf(
+            Try(StyleDirective),
+            Try(ClassDefDirective),
+            Try(ClassDirective),
+            Try(ClickDirective),
+            Try(SubgraphStart),
+            Try(SubgraphEnd),
+            CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
+        );
 
     public static Parser<char, FlowchartModel> Parser =>
         from _ in CommonParsers.InlineWhitespace

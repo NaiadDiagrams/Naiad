@@ -134,10 +134,32 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             .Then(Token(c => c != '\r' && c != '\n').ManyString())
             .Before(CommonParsers.LineEnd);
 
+    // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
+    // These are skipped for now - content renders without visual grouping
+    static readonly Parser<char, Unit> BlockStartParser =
+        from _ in CommonParsers.InlineWhitespace
+        from keyword in OneOf(
+            Try(String("alt")),
+            Try(String("else")),
+            Try(String("loop")),
+            Try(String("par")),
+            Try(String("and")),
+            Try(String("opt")),
+            Try(String("critical")),
+            Try(String("break")),
+            Try(String("rect")),
+            String("end")
+        )
+        from __ in Token(c => c != '\r' && c != '\n').ManyString()
+        from ___ in CommonParsers.LineEnd
+        select Unit.Value;
+
     // Skip line
     static readonly Parser<char, Unit> SkipLine =
-        CommonParsers.InlineWhitespace
-            .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+        OneOf(
+            Try(BlockStartParser),
+            CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
+        );
 
     public static Parser<char, SequenceModel> Parser =>
         from _ in CommonParsers.InlineWhitespace

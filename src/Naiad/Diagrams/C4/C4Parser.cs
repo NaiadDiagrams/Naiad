@@ -78,6 +78,27 @@ public class C4Parser : IDiagramParser<C4Model>
         CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
             .Then(QuotedString);
 
+    // SystemDb(id, "label", "description") or SystemDb_Ext
+    static readonly Parser<char, C4Element> SystemDbParser =
+        from _ in CommonParsers.InlineWhitespace
+        from type in OneOf(Try(CIString("SystemDb_Ext")), CIString("SystemDb"))
+        from __ in Char('(')
+        from id in Identifier
+        from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
+        from label in QuotedString
+        from desc in Try(OptionalQuotedArg).Optional()
+        from ____ in Char(')')
+        from _____ in CommonParsers.InlineWhitespace
+        from ______ in CommonParsers.LineEnd
+        select new C4Element
+        {
+            Id = id,
+            Label = label,
+            Description = desc.GetValueOrDefault(),
+            Type = C4ElementType.SystemDb,
+            IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
+        };
+
     // Container(id, "label", "tech", "description") or Container_Ext
     static readonly Parser<char, C4Element> ContainerParser =
         from _ in CommonParsers.InlineWhitespace
@@ -162,11 +183,73 @@ public class C4Parser : IDiagramParser<C4Model>
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    // Content item
+    // Boundary opening: Type_Boundary(id, "label") {
+    static Parser<char, (string id, string label, C4BoundaryType type)> BoundaryOpen =>
+        from _ in CommonParsers.InlineWhitespace
+        from boundaryType in OneOf(
+            Try(CIString("Container_Boundary")).ThenReturn(C4BoundaryType.Container),
+            Try(CIString("System_Boundary")).ThenReturn(C4BoundaryType.System),
+            Try(CIString("Enterprise_Boundary")).ThenReturn(C4BoundaryType.Enterprise),
+            Try(CIString("Deployment_Node")).ThenReturn(C4BoundaryType.Deployment),
+            Try(CIString("Node_L")).ThenReturn(C4BoundaryType.Node),
+            Try(CIString("Node_R")).ThenReturn(C4BoundaryType.Node),
+            CIString("Node").ThenReturn(C4BoundaryType.Node))
+        from __ in Char('(')
+        from id in Identifier
+        from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
+        from label in QuotedString
+        from desc in Try(OptionalQuotedArg).Optional() // Optional description for nodes
+        from ____ in Char(')')
+        from _____ in CommonParsers.InlineWhitespace
+        from ______ in Char('{')
+        from _______ in CommonParsers.InlineWhitespace
+        from ________ in CommonParsers.LineEnd.Optional()
+        select (id, label, boundaryType);
+
+    // Boundary closing: }
+    static readonly Parser<char, Unit> BoundaryClose =
+        from _ in CommonParsers.InlineWhitespace
+        from __ in Char('}')
+        from ___ in CommonParsers.InlineWhitespace
+        from ____ in CommonParsers.LineEnd.Optional()
+        select Unit.Value;
+
+    // Element inside boundary (sets BoundaryId later)
+    static Parser<char, object?> BoundaryContentItem =>
+        OneOf(
+            Try(PersonParser.Select(e => (object?)("element", e))),
+            Try(SystemDbParser.Select(e => (object?)("element", e))),
+            Try(SystemParser.Select(e => (object?)("element", e))),
+            Try(ContainerParser.Select(e => (object?)("element", e))),
+            Try(ComponentParser.Select(e => (object?)("element", e))),
+            Try(RelParser.Select(r => (object?)("rel", r))),
+            SkipLine.ThenReturn((object?)null)
+        );
+
+    // Recursive boundary parser - parses boundary with nested content
+    static Parser<char, (C4Boundary boundary, List<object?> content)> BoundaryParser =>
+        from open in BoundaryOpen
+        from content in BoundaryContentOrNestedBoundary.Until(Lookahead(Try(BoundaryClose)))
+        from close in BoundaryClose
+        select (
+            new C4Boundary { Id = open.id, Label = open.label, Type = open.type },
+            content.ToList()
+        );
+
+    // Content inside boundary: either nested boundary or regular element
+    static Parser<char, object?> BoundaryContentOrNestedBoundary =>
+        OneOf(
+            Try(BoundaryParser.Select(b => (object?)("boundary", b))),
+            BoundaryContentItem
+        );
+
+    // Content item (top level)
     static Parser<char, object?> ContentItem =>
         OneOf(
             Try(TitleParser.Select(t => (object?)("title", t))),
+            Try(BoundaryParser.Select(b => (object?)("boundary", b))),
             Try(PersonParser.Select(e => (object?)("element", e))),
+            Try(SystemDbParser.Select(e => (object?)("element", e))),
             Try(SystemParser.Select(e => (object?)("element", e))),
             Try(ContainerParser.Select(e => (object?)("element", e))),
             Try(ComponentParser.Select(e => (object?)("element", e))),
@@ -194,7 +277,12 @@ public class C4Parser : IDiagramParser<C4Model>
     static C4Model BuildModel(C4DiagramType type, List<object?> content)
     {
         var model = new C4Model { Type = type };
+        ProcessContent(model, content, null);
+        return model;
+    }
 
+    static void ProcessContent(C4Model model, List<object?> content, string? parentBoundaryId)
+    {
         foreach (var item in content)
         {
             switch (item)
@@ -204,16 +292,38 @@ public class C4Parser : IDiagramParser<C4Model>
                     break;
 
                 case ("element", C4Element element):
+                    element.BoundaryId = parentBoundaryId;
                     model.Elements.Add(element);
                     break;
 
                 case ("rel", C4Relationship rel):
                     model.Relationships.Add(rel);
                     break;
+
+                case ("boundary", (C4Boundary boundary, List<object?> boundaryContent)):
+                    boundary.ElementIds.Clear();
+                    boundary.ChildBoundaryIds.Clear();
+                    boundary.ParentBoundaryId = parentBoundaryId;
+                    model.Boundaries.Add(boundary);
+
+                    // Add this boundary as child of parent
+                    if (parentBoundaryId is not null)
+                    {
+                        var parent = model.Boundaries.FirstOrDefault(b => b.Id == parentBoundaryId);
+                        parent?.ChildBoundaryIds.Add(boundary.Id);
+                    }
+
+                    // Process nested content with this boundary as parent
+                    ProcessContent(model, boundaryContent, boundary.Id);
+
+                    // Collect direct element IDs that belong to this boundary (not nested)
+                    foreach (var el in model.Elements.Where(e => e.BoundaryId == boundary.Id))
+                    {
+                        boundary.ElementIds.Add(el.Id);
+                    }
+                    break;
             }
         }
-
-        return model;
     }
 
     public Result<char, C4Model> Parse(string input) => Parser.Parse(input);
