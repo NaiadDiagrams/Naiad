@@ -1,0 +1,53 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: src/global.json
+
+    - run: dotnet build src --configuration Release
+
+    - run: dotnet exec --depsfile ./src/Tests/bin/Release/net10.0/Tests.deps.json --runtimeconfig ./src/Tests/bin/Release/net10.0/Tests.runtimeconfig.json ./src/Tests/bin/Release/net10.0/Microsoft.Playwright.dll install chromium
+
+    - run: dotnet test src --configuration Release --no-build --no-restore
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: nugets
+        path: nugets/*.nupkg
+
+    - uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: verify-failures
+        path: '**/*.received.*'
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: src/global.json
+
+    - run: dotnet build src --configuration Release
+
+    - run: dotnet nuget push nugets/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}

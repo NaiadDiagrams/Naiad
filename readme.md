@@ -97,4 +97,4 @@ Auto-generated documentation from the test suite.
 
 ## Icon
 
-[Mermaid Tail](https://thenounproject.com/icon/mermaid-tail-1908145//) designed by [Olena Panasovska](https://thenounproject.com/creator/zzyzz/) from [The Noun Project](https://thenounproject.com).
+[Naiad](https://thenounproject.com/icon/naiad-1389186/) designed by [Icons Producer](https://thenounproject.com/creator/iconsproducer/) from [The Noun Project](https://thenounproject.com).
