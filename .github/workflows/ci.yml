@@ -42,12 +42,11 @@ jobs:
     permissions:
       contents: read
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: nugets
+        path: nugets
 
     - uses: actions/setup-dotnet@v4
-      with:
-        global-json-file: src/global.json
-
-    - run: dotnet build src --configuration Release
 
     - run: dotnet nuget push nugets/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
