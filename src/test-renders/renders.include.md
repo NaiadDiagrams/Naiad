@@ -20,10 +20,10 @@ Auto-generated documentation from the test suite.
 
 ### Beta diagram types
 
-- [Architecture](Architecture.md)
-- [Block](Block.md)
-- [Packet](Packet.md)
-- [Radar](Radar.md)
-- [Sankey](Sankey.md)
-- [Treemap](Treemap.md)
-- [XYChart](XYChart.md)
+- [Architecture](/src/test-renders/Architecture.md)
+- [Block](/src/test-renders/Block.md)
+- [Packet](/src/test-renders/Packet.md)
+- [Radar](/src/test-renders/Radar.md)
+- [Sankey](/src/test-renders/Sankey.md)
+- [Treemap](/src/test-renders/Treemap.md)
+- [XYChart](/src/test-renders/XYChart.md)
