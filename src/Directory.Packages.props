@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0" />
+    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.1" />
     <PackageVersion Include="Microsoft.Playwright.NUnit" Version="1.58.0" />
     <PackageVersion Include="Pidgin" Version="3.5.1" />
     <PackageVersion Include="NUnit" Version="4.5.0" />
@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.Playwright" Version="1.58.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="Argon" Version="0.33.5" />
-    <PackageVersion Include="DiffEngine" Version="18.4.2" />
+    <PackageVersion Include="DiffEngine" Version="19.0.0" />
     <PackageVersion Include="EmptyFiles" Version="8.17.2" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
     <PackageVersion Include="Verify" Version="31.13.2" />
