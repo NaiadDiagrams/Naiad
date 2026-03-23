@@ -122,7 +122,7 @@ public class DocGeneratorTests
                 """);
             foreach (var category in betaCategoriesSorted)
             {
-                index.AppendLine($"- [{category}]({category}.md)");
+                index.AppendLine($"- [{category}](/src/test-renders/{category}.md)");
             }
         }
 
