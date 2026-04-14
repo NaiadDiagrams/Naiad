@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.2" />
+    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.1.0" />
     <PackageVersion Include="Microsoft.Playwright.NUnit" Version="1.59.0" />
     <PackageVersion Include="Pidgin" Version="3.5.1" />
     <PackageVersion Include="NUnit" Version="4.5.1" />
