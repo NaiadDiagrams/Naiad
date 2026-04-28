@@ -3,13 +3,13 @@ class GanttParser : IDiagramParser<GanttModel>
     public DiagramType DiagramType => DiagramType.Gantt;
 
     // Basic parsers
-    public static Parser<char, string> restOfLine =
+    static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' &&
                    _ != '\n')
             .ManyString();
 
     // Title: title My Chart Title
-    public static Parser<char, string> titleParser =
+    static Parser<char, string> titleParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from title in CIString("title")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -18,7 +18,7 @@ class GanttParser : IDiagramParser<GanttModel>
         select innerTitle.Trim();
 
     // Date format: dateFormat YYYY-MM-DD
-    public static Parser<char, string> dateFormatParser =
+    static Parser<char, string> dateFormatParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from dateFormat in CIString("dateFormat")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -45,7 +45,7 @@ class GanttParser : IDiagramParser<GanttModel>
         select innerExcludes.Trim().Split(',').Select(_ => _.Trim()).ToList();
 
     // Section: section Section Name
-    public static Parser<char, string> sectionParser =
+    static Parser<char, string> sectionParser =
         from inlienWhitespace in CommonParsers.InlineWhitespace
         from section in CIString("section")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -83,7 +83,7 @@ class GanttParser : IDiagramParser<GanttModel>
     //   Task A :a1, 2024-01-01, 30d
     //   Task B :done, after a1, 20d
     //   Task C :crit, milestone, 2024-02-01, 0d
-    public static Parser<char, GanttTask> taskParser =
+    static Parser<char, GanttTask> taskParser =
         from _ in CommonParsers.InlineWhitespace
         from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in CommonParsers.InlineWhitespace
@@ -182,7 +182,7 @@ class GanttParser : IDiagramParser<GanttModel>
     }
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 

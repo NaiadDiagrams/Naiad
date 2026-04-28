@@ -2,17 +2,17 @@ class BlockParser : IDiagramParser<BlockModel>
 {
     public DiagramType DiagramType => DiagramType.Block;
 
-    public static Parser<char, string> identifier =
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label content (text inside shape brackets)
-    public static Parser<char, string> labelContent =
+    static Parser<char, string> labelContent =
         Token(_ => _ != '"' && _ != ']' && _ != ')' && _ != '}').ManyString();
 
-    public static Parser<char, string> quotedLabel =
+    static Parser<char, string> quotedLabel =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
-    public static Parser<char, int> columnsParser =
+    static Parser<char, int> columnsParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from columns in CIString("columns")
         from rRequiredWhitespace in CommonParsers.RequiredWhitespace
@@ -22,35 +22,35 @@ class BlockParser : IDiagramParser<BlockModel>
         select num;
 
     // Rectangle shape: ["label"] or [label]
-    public static Parser<char, (string label, BlockShape shape)> rectangleShape =
+    static Parser<char, (string label, BlockShape shape)> rectangleShape =
         from left in Char('[')
         from label in quotedLabel.Or(labelContent)
         from right in Char(']')
         select (label.Trim(), BlockShape.Rectangle);
 
     // Rounded shape: ("label") or (label)
-    public static Parser<char, (string label, BlockShape shape)> roundedShape =
+    static Parser<char, (string label, BlockShape shape)> roundedShape =
         from left in Char('(')
         from label in quotedLabel.Or(Token(_ => _ != ')').ManyString())
         from right in Char(')')
         select (label.Trim(), BlockShape.Rounded);
 
     // Stadium shape: (["label"]) or ([label])
-    public static Parser<char, (string label, BlockShape shape)> stadiumShape =
+    static Parser<char, (string label, BlockShape shape)> stadiumShape =
         from left in String("([")
         from label in quotedLabel.Or(Token(_ => _ != ']').ManyString())
         from right in String("])")
         select (label.Trim(), BlockShape.Stadium);
 
     // Circle shape: (("label")) or ((label))
-    public static Parser<char, (string label, BlockShape shape)> circleShape =
+    static Parser<char, (string label, BlockShape shape)> circleShape =
         from left in String("((")
         from label in quotedLabel.Or(Token(_ => _ != ')').ManyString())
         from right in String("))")
         select (label.Trim(), BlockShape.Circle);
 
     // Diamond shape: {"label"} or {label}
-    public static Parser<char, (string label, BlockShape shape)> diamondShape =
+    static Parser<char, (string label, BlockShape shape)> diamondShape =
         from left in Char('{')
         from notDouble in Lookahead(AnyCharExcept('{'))
         from label in quotedLabel.Or(Token(_ => _ != '}').ManyString())
@@ -58,14 +58,14 @@ class BlockParser : IDiagramParser<BlockModel>
         select (label.Trim(), BlockShape.Diamond);
 
     // Hexagon shape: {{"label"}} or {{label}}
-    public static Parser<char, (string label, BlockShape shape)> hexagonShape =
+    static Parser<char, (string label, BlockShape shape)> hexagonShape =
         from left in String("{{")
         from label in quotedLabel.Or(Token(_ => _ != '}').ManyString())
         from right in String("}}")
         select (label.Trim(), BlockShape.Hexagon);
 
     // Shape parser (order matters - more specific first)
-    public static Parser<char, (string label, BlockShape shape)> shapeParser =
+    static Parser<char, (string label, BlockShape shape)> shapeParser =
         OneOf(
             Try(stadiumShape),
             Try(circleShape),
@@ -76,13 +76,13 @@ class BlockParser : IDiagramParser<BlockModel>
         );
 
     // Span: :N
-    public static Parser<char, int> spanParser =
+    static Parser<char, int> spanParser =
         from _ in Char(':')
         from num in Digit.AtLeastOnceString().Select(int.Parse)
         select num;
 
     // Block element: id["label"]:2
-    public static Parser<char, BlockElement> elementParser =
+    static Parser<char, BlockElement> elementParser =
         from id in identifier
         from shape in shapeParser.Optional()
         from span in spanParser.Optional()
@@ -95,7 +95,7 @@ class BlockParser : IDiagramParser<BlockModel>
         };
 
     // Elements on a line (space separated)
-    public static Parser<char, List<BlockElement>> elementsLineParser =
+    static Parser<char, List<BlockElement>> elementsLineParser =
         from _ in CommonParsers.InlineWhitespace
         from elements in elementParser.SeparatedAtLeastOnce(CommonParsers.RequiredWhitespace)
         from __ in CommonParsers.InlineWhitespace
@@ -103,7 +103,7 @@ class BlockParser : IDiagramParser<BlockModel>
         select elements.ToList();
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

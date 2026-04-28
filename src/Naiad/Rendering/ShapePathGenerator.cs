@@ -75,7 +75,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Cylinder(double x, double y, double width, double height)
+    static string Cylinder(double x, double y, double width, double height)
     {
         var ry = height * 0.1;
         var bodyHeight = height - ry * 2;
@@ -100,7 +100,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string ParallelogramAlt(double x, double y, double width, double height, double skew = 0.2)
+    static string ParallelogramAlt(double x, double y, double width, double height, double skew = 0.2)
     {
         var offset = width * skew;
         return $"""
@@ -111,7 +111,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Trapezoid(double x, double y, double width, double height, double skew = 0.2)
+    static string Trapezoid(double x, double y, double width, double height, double skew = 0.2)
     {
         var offset = width * skew;
         return $"""
@@ -122,7 +122,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string TrapezoidAlt(double x, double y, double width, double height, double skew = 0.2)
+    static string TrapezoidAlt(double x, double y, double width, double height, double skew = 0.2)
     {
         var offset = width * skew;
         return $"""

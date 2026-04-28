@@ -3,18 +3,17 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
     public DiagramType DiagramType => DiagramType.GitGraph;
 
     // Identifiers
-    public static Parser<char, string> branchName =
+    static Parser<char, string> branchName =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-' || _ == '/')
             .AtLeastOnceString()
             .Labelled("branch name");
 
-    public static Parser<char, string> commitId =
+    static Parser<char, string> commitId =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
             .AtLeastOnceString()
             .Labelled("commit id");
 
-    // Commit type
-    public static Parser<char, CommitType> commitTypeParser =
+    static Parser<char, CommitType> commitTypeParser =
         OneOf(
             Try(CIString("REVERSE")).ThenReturn(CommitType.Reverse),
             Try(CIString("HIGHLIGHT")).ThenReturn(CommitType.Highlight),
@@ -99,7 +98,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Branch: branch develop order: 1
-    public static Parser<char, BranchOperation> branchParser =
+    static Parser<char, BranchOperation> branchParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("branch")
         from ___ in CommonParsers.RequiredWhitespace
@@ -118,7 +117,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
         };
 
     // Checkout: checkout develop
-    public static Parser<char, CheckoutOperation> checkoutParser =
+    static Parser<char, CheckoutOperation> checkoutParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("checkout")
         from ___ in CommonParsers.RequiredWhitespace
@@ -128,7 +127,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
         select new CheckoutOperation { BranchName = name };
 
     // Merge: merge develop id: "merge1" tag: "v1.0" type: NORMAL
-    public static Parser<char, MergeOperation> mergeParser =
+    static Parser<char, MergeOperation> mergeParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("merge")
         from ___ in CommonParsers.RequiredWhitespace
@@ -164,7 +163,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Cherry-pick: cherry-pick id: "abc" tag: "v1.0"
-    public static Parser<char, CherryPickOperation> cherryPickParser =
+    static Parser<char, CherryPickOperation> cherryPickParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("cherry-pick")
         from ___ in CommonParsers.InlineWhitespace
@@ -183,7 +182,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
         };
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
@@ -204,7 +203,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Options parser (gitGraph TB: or gitGraph LR:)
-    public static Parser<char, (string? direction, string? mainBranch)> optionsParser =
+    static Parser<char, (string? direction, string? mainBranch)> optionsParser =
         from _ in CommonParsers.InlineWhitespace
         from options in Try(
             from dir in OneOf(

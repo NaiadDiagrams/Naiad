@@ -166,7 +166,7 @@ public static class CommonParsers
             .Then(Token(_ => char.IsLetterOrDigit(_)).AtLeastOnceString())
             .Select(_ => "#" + _);
 
-    public static Parser<char, string> NamedColor =>
+    static Parser<char, string> NamedColor =>
         Token(char.IsLetter).AtLeastOnceString();
 
     public static Parser<char, string> Color =>

@@ -31,7 +31,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
             .Select(actors => actors.Select(_ => _.Trim()).ToList());
 
     // Task: Task Name: 5: Me, Cat
-    public static Parser<char, JourneyTask> taskParser =
+    static Parser<char, JourneyTask> taskParser =
         from _ in CommonParsers.InlineWhitespace
         from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from colon in Char(':')
@@ -49,12 +49,12 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
         };
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    public static Parser<char, IUserJourneyContent?> ContentItem =>
+    static Parser<char, IUserJourneyContent?> ContentItem =>
         OneOf(
             Try(titleParser.Select<IUserJourneyContent?>(_ => new TitleItem(_))),
             Try(sectionParser.Select<IUserJourneyContent?>(_ => new SectionItem(_))),
@@ -62,7 +62,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
             skipLine.ThenReturn<IUserJourneyContent?>(null)
         );
 
-    public static Parser<char, UserJourneyModel> Parser =>
+    static Parser<char, UserJourneyModel> Parser =>
         from whitespace in CommonParsers.InlineWhitespace
         from journey in CIString("journey")
         from inerWhitespace in CommonParsers.InlineWhitespace

@@ -3,13 +3,13 @@ class ClassParser : IDiagramParser<ClassModel>
     public DiagramType DiagramType => DiagramType.Class;
 
     // Identifier for class names (alphanumeric and underscore)
-    public static Parser<char, string> classIdentifier =
+    static Parser<char, string> classIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')
             .AtLeastOnceString()
             .Labelled("class identifier");
 
     // Visibility modifier
-    public static Parser<char, Visibility> visibilityParser =
+    static Parser<char, Visibility> visibilityParser =
         OneOf(
             Char('+').ThenReturn(Visibility.Public),
             Char('-').ThenReturn(Visibility.Private),
@@ -18,7 +18,7 @@ class ClassParser : IDiagramParser<ClassModel>
         );
 
     // Type annotation like : String or : int
-    public static Parser<char, string> typeAnnotation =
+    static Parser<char, string> typeAnnotation =
         CommonParsers.InlineWhitespace
             .Then(Char(':'))
             .Then(CommonParsers.InlineWhitespace)
@@ -26,7 +26,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 .AtLeastOnceString());
 
     // Method parameters like (String name, int age)
-    public static Parser<char, List<MethodParameter>> parametersParser =
+    static Parser<char, List<MethodParameter>> parametersParser =
         Char('(')
             .Then(
                 Token(_ => _ != ')' && _ != '\r' && _ != '\n')

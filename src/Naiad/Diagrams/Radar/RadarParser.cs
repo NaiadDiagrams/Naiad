@@ -2,23 +2,21 @@ class RadarParser : IDiagramParser<RadarModel>
 {
     public DiagramType DiagramType => DiagramType.Radar;
 
-    // identifier
-    public static Parser<char, string> identifier =
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    // Number
-    public static Parser<char, double> number =
+    static Parser<char, double> number =
         from neg in Char('-').Optional()
         from digits in Digit.AtLeastOnceString()
         from dec in Char('.').Then(Digit.AtLeastOnceString()).Optional()
         select double.Parse((neg.HasValue ? "-" : "") + digits + (dec.HasValue ? "." + dec.Value : ""));
 
     // Quoted label: ["label"]
-    public static Parser<char, string> quotedLabel =
+    static Parser<char, string> quotedLabel =
         Char('[').Then(Char('"')).Then(Token(_ => _ != '"').ManyString()).Before(Char('"')).Before(Char(']'));
 
     // Axis list: axis id1, id2, id3
-    public static Parser<char, List<RadarAxis>> axisParser =
+    static Parser<char, List<RadarAxis>> axisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -29,7 +27,7 @@ class RadarParser : IDiagramParser<RadarModel>
         select axes.Select(_ => new RadarAxis { Id = _, Label = _ }).ToList();
 
     // Value list: {1, 2, 3}
-    public static Parser<char, List<double>> valueList =
+    static Parser<char, List<double>> valueList =
         Char('{')
             .Then(CommonParsers.InlineWhitespace)
             .Then(number.SeparatedAtLeastOnce(
@@ -39,7 +37,7 @@ class RadarParser : IDiagramParser<RadarModel>
             .Select(_ => _.ToList());
 
     // Curve definition: curve id["label"]{1, 2, 3}
-    public static Parser<char, RadarCurve> curveItemParser =
+    static Parser<char, RadarCurve> curveItemParser =
         from id in identifier
         from label in quotedLabel.Optional()
         from values in valueList
@@ -50,7 +48,7 @@ class RadarParser : IDiagramParser<RadarModel>
         }.WithValues(values);
 
     // Curve line: curve id1["label"]{1, 2, 3}, id2{4, 5, 6}
-    public static Parser<char, List<RadarCurve>> curveLineParser =
+    static Parser<char, List<RadarCurve>> curveLineParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("curve")
         from ___ in CommonParsers.RequiredWhitespace
@@ -60,8 +58,7 @@ class RadarParser : IDiagramParser<RadarModel>
         from _____ in CommonParsers.LineEnd
         select curves.ToList();
 
-    // Title line
-    public static Parser<char, string> titleParser =
+    static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -69,8 +66,7 @@ class RadarParser : IDiagramParser<RadarModel>
         from ____ in CommonParsers.LineEnd
         select title.Trim();
 
-    // Skip line
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
@@ -120,7 +116,7 @@ class RadarParser : IDiagramParser<RadarModel>
 
     public Result<char, RadarModel> Parse(string input) => Parser.Parse(input);
 
-    internal interface IRadarContent;
+    interface IRadarContent;
     readonly record struct TitleItem(string Value) : IRadarContent;
     readonly record struct AxisItem(List<RadarAxis> Axes) : IRadarContent;
     readonly record struct CurveItem(List<RadarCurve> Curves) : IRadarContent;

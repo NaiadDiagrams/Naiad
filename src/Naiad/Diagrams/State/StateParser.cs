@@ -5,14 +5,14 @@ class StateParser : IDiagramParser<StateModel>
     public DiagramType DiagramType => DiagramType.State;
 
     // State identifier (alphanumeric, underscore, or [*] for start/end)
-    public static Parser<char, string> stateIdentifier =
+    static Parser<char, string> stateIdentifier =
         Try(String("[*]")).Or(
             Token(_ => char.IsLetterOrDigit(_) || _ == '_')
                 .AtLeastOnceString()
         ).Labelled("state identifier");
 
     // State type annotations
-    public static Parser<char, StateType> stateTypeAnnotation =
+    static Parser<char, StateType> stateTypeAnnotation =
         String("<<")
             .Then(OneOf(
                 Try(String("fork")).ThenReturn(StateType.Fork),
@@ -22,11 +22,11 @@ class StateParser : IDiagramParser<StateModel>
             .Before(String(">>"));
 
     // Transition arrow
-    public static Parser<char, Unit> transitionArrow =
+    static Parser<char, Unit> transitionArrow =
         String("-->").ThenReturn(Unit.Value);
 
     // State declaration: state "Description" as StateName
-    public static Parser<char, State> stateDeclarationWithAlias =
+    static Parser<char, State> stateDeclarationWithAlias =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("state")
         from __ in CommonParsers.RequiredWhitespace
@@ -44,7 +44,7 @@ class StateParser : IDiagramParser<StateModel>
         };
 
     // State declaration with type: state StateName <<fork>>
-    public static Parser<char, State> stateDeclarationWithType =
+    static Parser<char, State> stateDeclarationWithType =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("state")
         from __ in CommonParsers.RequiredWhitespace
@@ -60,7 +60,7 @@ class StateParser : IDiagramParser<StateModel>
         };
 
     // Simple state declaration: state StateName
-    public static Parser<char, State> simpleStateDeclaration =
+    static Parser<char, State> simpleStateDeclaration =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("state")
         from __ in CommonParsers.RequiredWhitespace
@@ -70,7 +70,7 @@ class StateParser : IDiagramParser<StateModel>
         select new State { Id = id };
 
     // State with description on same line: StateName : Description
-    public static Parser<char, State> stateWithDescription =
+    static Parser<char, State> stateWithDescription =
         from _ in CommonParsers.InlineWhitespace
         from id in stateIdentifier
         from __ in CommonParsers.InlineWhitespace
@@ -85,7 +85,7 @@ class StateParser : IDiagramParser<StateModel>
         };
 
     // Transition: StateA --> StateB : label
-    public static Parser<char, StateTransition> transitionParser =
+    static Parser<char, StateTransition> transitionParser =
         from _ in CommonParsers.InlineWhitespace
         from fromId in stateIdentifier
         from __ in CommonParsers.InlineWhitespace
@@ -108,7 +108,7 @@ class StateParser : IDiagramParser<StateModel>
         };
 
     // Note: note right of State : Text
-    public static Parser<char, StateNote> noteParser =
+    static Parser<char, StateNote> noteParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("note")
         from __ in CommonParsers.RequiredWhitespace
@@ -130,8 +130,7 @@ class StateParser : IDiagramParser<StateModel>
             Position = position
         };
 
-    // Direction directive
-    public static Parser<char, Direction> directionParser =
+    static Parser<char, Direction> directionParser =
         CommonParsers.InlineWhitespace
             .Then(String("direction"))
             .Then(CommonParsers.RequiredWhitespace)
@@ -139,12 +138,12 @@ class StateParser : IDiagramParser<StateModel>
             .Before(CommonParsers.LineEnd);
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Composite state start: state StateName {
-    public static Parser<char, string> compositeStateStart =
+    static Parser<char, string> compositeStateStart =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("state")
         from __ in CommonParsers.RequiredWhitespace
@@ -155,7 +154,7 @@ class StateParser : IDiagramParser<StateModel>
         select id;
 
     // Composite state end: }
-    public static Parser<char, Unit> compositeStateEnd =
+    static Parser<char, Unit> compositeStateEnd =
         CommonParsers.InlineWhitespace
             .Then(Char('}'))
             .Then(CommonParsers.LineEnd)

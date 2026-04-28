@@ -5,13 +5,13 @@ class SequenceParser : IDiagramParser<SequenceModel>
     public DiagramType DiagramType => DiagramType.Sequence;
 
     // Sequence diagram identifier (no dash to avoid conflicts with arrows)
-    public static Parser<char, string> seqIdentifier =
+    static Parser<char, string> seqIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')
             .AtLeastOnceString()
             .Labelled("identifier");
 
     // Participant declaration: participant/actor Name as Alias
-    public static Parser<char, Participant> participantParser =
+    static Parser<char, Participant> participantParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(String("actor")).ThenReturn(ParticipantType.Actor),
@@ -34,7 +34,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Message arrows
-    public static Parser<char, MessageType> messageArrowParser =
+    static Parser<char, MessageType> messageArrowParser =
         OneOf(
             Try(String("-->>")).ThenReturn(MessageType.DottedArrow),
             Try(String("->>")).ThenReturn(MessageType.SolidArrow),
@@ -47,7 +47,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
         );
 
     // Message: From->>To: Text
-    public static Parser<char, Message> messageParser =
+    static Parser<char, Message> messageParser =
         from _ in CommonParsers.InlineWhitespace
         from fromId in seqIdentifier
         from __ in CommonParsers.InlineWhitespace
@@ -74,7 +74,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Note: Note right of/left of/over Participant: Text
-    public static Parser<char, Note> noteParser =
+    static Parser<char, Note> noteParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("Note")).Or(String("note"))
         from __ in CommonParsers.RequiredWhitespace
@@ -103,8 +103,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
             OverParticipantId2 = participant2.HasValue ? participant2.Value : null
         };
 
-    // Activate/Deactivate
-    public static Parser<char, Activation> activationParser =
+    static Parser<char, Activation> activationParser =
         from _ in CommonParsers.InlineWhitespace
         from isActivate in OneOf(
             String("activate").ThenReturn(true),
@@ -119,15 +118,13 @@ class SequenceParser : IDiagramParser<SequenceModel>
             IsActivate = isActivate
         };
 
-    // AutoNumber
-    public static Parser<char, bool> autoNumberParser =
+    static Parser<char, bool> autoNumberParser =
         CommonParsers.InlineWhitespace
             .Then(String("autonumber"))
             .Then(CommonParsers.LineEnd)
             .ThenReturn(true);
 
-    // Title
-    public static Parser<char, string> titleParser =
+    static Parser<char, string> titleParser =
         CommonParsers.InlineWhitespace
             .Then(String("title"))
             .Then(CommonParsers.InlineWhitespace)
@@ -136,7 +133,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
 
     // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
     // These are skipped for now - content renders without visual grouping
-    public static Parser<char, Unit> blockStartParser =
+    static Parser<char, Unit> blockStartParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in OneOf(
             Try(String("alt")),
@@ -154,8 +151,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
         from ___ in CommonParsers.LineEnd
         select Unit.Value;
 
-    // Skip line
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         OneOf(
             Try(blockStartParser),
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))

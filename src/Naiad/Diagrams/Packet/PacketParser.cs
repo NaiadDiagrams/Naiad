@@ -2,21 +2,20 @@ class PacketParser : IDiagramParser<PacketModel>
 {
     public DiagramType DiagramType => DiagramType.Packet;
 
-    // Quoted label
-    public static Parser<char, string> quotedLabel =
+    static Parser<char, string> quotedLabel =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Unquoted label (rest of line)
-    public static Parser<char, string> unquotedLabel =
+    static Parser<char, string> unquotedLabel =
         Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()
             .Select(_ => _.Trim());
 
     // Label (quoted or unquoted)
-    public static Parser<char, string> labelParser =
+    static Parser<char, string> labelParser =
         quotedLabel.Or(unquotedLabel);
 
     // Field: start-end: "label" or start-end: label
-    public static Parser<char, PacketField> fieldParser =
+    static Parser<char, PacketField> fieldParser =
         from _ in CommonParsers.InlineWhitespace
         from start in Digit.AtLeastOnceString().Select(int.Parse)
         from __ in Char('-')
@@ -33,12 +32,11 @@ class PacketParser : IDiagramParser<PacketModel>
         };
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    // Content item
-    public static Parser<char, PacketField?> ContentItem =>
+    static Parser<char, PacketField?> ContentItem =>
         OneOf(
             Try(fieldParser.Select<PacketField?>(_ => _)),
             skipLine.ThenReturn<PacketField?>(null)

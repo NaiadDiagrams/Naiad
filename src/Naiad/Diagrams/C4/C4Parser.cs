@@ -2,20 +2,17 @@ class C4Parser : IDiagramParser<C4Model>
 {
     public DiagramType DiagramType => DiagramType.C4Context;
 
-    // identifier
-    public static Parser<char, string> identifier =
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    // Quoted string
-    public static Parser<char, string> quotedString =
+    static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
-    // Rest of line
-    public static Parser<char, string> restOfLine =
+    static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Diagram
-    public static Parser<char, string> titleParser =
+    static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -24,7 +21,7 @@ class C4Parser : IDiagramParser<C4Model>
         select title.Trim();
 
     // Person(id, "label", "description")
-    public static Parser<char, C4Element> personParser =
+    static Parser<char, C4Element> personParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("Person_Ext")), CIString("Person"))
         from __ in Char('(')
@@ -48,7 +45,7 @@ class C4Parser : IDiagramParser<C4Model>
         };
 
     // System(id, "label", "description") or System_Ext
-    public static Parser<char, C4Element> systemParser =
+    static Parser<char, C4Element> systemParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("System_Ext")), CIString("System"))
         from __ in Char('(')
@@ -72,12 +69,12 @@ class C4Parser : IDiagramParser<C4Model>
         };
 
     // Optional quoted string with comma prefix
-    public static Parser<char, string> optionalQuotedArg =
+    static Parser<char, string> optionalQuotedArg =
         CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
             .Then(quotedString);
 
     // SystemDb(id, "label", "description") or SystemDb_Ext
-    public static Parser<char, C4Element> systemDbParser =
+    static Parser<char, C4Element> systemDbParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("SystemDb_Ext")), CIString("SystemDb"))
         from __ in Char('(')
@@ -98,7 +95,7 @@ class C4Parser : IDiagramParser<C4Model>
         };
 
     // Container(id, "label", "tech", "description") or Container_Ext
-    public static Parser<char, C4Element> containerParser =
+    static Parser<char, C4Element> containerParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(CIString("Container_Ext")),
@@ -129,7 +126,7 @@ class C4Parser : IDiagramParser<C4Model>
         };
 
     // Component(id, "label", "tech", "description")
-    public static Parser<char, C4Element> componentParser =
+    static Parser<char, C4Element> componentParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("Component_Ext")), CIString("Component"))
         from __ in Char('(')
@@ -152,7 +149,7 @@ class C4Parser : IDiagramParser<C4Model>
         };
 
     // Rel(from, to, "label", "tech")
-    public static Parser<char, C4Relationship> relParser =
+    static Parser<char, C4Relationship> relParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(
             Try(CIString("Rel_D")), Try(CIString("Rel_U")),
@@ -177,7 +174,7 @@ class C4Parser : IDiagramParser<C4Model>
         };
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 

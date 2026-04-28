@@ -3,18 +3,18 @@ class TreemapParser : IDiagramParser<TreemapModel>
     public DiagramType DiagramType => DiagramType.Treemap;
 
     // Quoted string: "text"
-    public static Parser<char, string> quotedString =
+    static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Number
-    public static Parser<char, double> number =
+    static Parser<char, double> number =
         from neg in Char('-').Optional()
         from digits in Digit.AtLeastOnceString()
         from dec in Char('.').Then(Digit.AtLeastOnceString()).Optional()
         select double.Parse((neg.HasValue ? "-" : "") + digits + (dec.HasValue ? "." + dec.Value : ""));
 
     // CSS class: :::className
-    public static Parser<char, string> cssClass =
+    static Parser<char, string> cssClass =
         String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
 
     // Node line

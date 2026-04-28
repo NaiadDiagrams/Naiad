@@ -2,19 +2,18 @@ class KanbanParser : IDiagramParser<KanbanModel>
 {
     public DiagramType DiagramType => DiagramType.Kanban;
 
-    // identifier
-    public static Parser<char, string> identifier =
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label in brackets: [Label Text]
-    public static Parser<char, string> labelParser =
+    static Parser<char, string> labelParser =
         from _ in Char('[')
         from label in Token(_ => _ != ']').ManyString()
         from __ in Char(']')
         select label.Trim();
 
     // Column: id[Name] (no leading whitespace or minimal)
-    public static Parser<char, (string id, string name)> columnParser =
+    static Parser<char, (string id, string name)> columnParser =
         from indent in CommonParsers.Indentation.Where(_ => _ < 4)
         from id in identifier
         from name in labelParser
@@ -23,7 +22,7 @@ class KanbanParser : IDiagramParser<KanbanModel>
         select (id, name);
 
     // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
-    public static Parser<char, (string id, string name)> taskParser =
+    static Parser<char, (string id, string name)> taskParser =
         from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
         from id in identifier
         from name in labelParser
@@ -32,12 +31,11 @@ class KanbanParser : IDiagramParser<KanbanModel>
         select (id, name);
 
     // Skip line (comments, empty lines)
-    public static Parser<char, Unit> skipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    // Content item
-    public static Parser<char, IKanbanContent?> ContentItem =>
+    static Parser<char, IKanbanContent?> ContentItem =>
         OneOf(
             Try(taskParser.Select<IKanbanContent?>(_ => new TaskItem(_.id, _.name))),
             Try(columnParser.Select<IKanbanContent?>(_ => new ColumnItem(_.id, _.name))),
