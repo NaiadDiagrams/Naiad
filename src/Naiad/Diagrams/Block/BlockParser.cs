@@ -4,7 +4,7 @@ public class BlockParser : IDiagramParser<BlockModel>
 {
     public DiagramType DiagramType => DiagramType.Block;
 
-    static Parser<char, string> Identifier =
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label content (text inside shape brackets)
@@ -85,7 +85,7 @@ public class BlockParser : IDiagramParser<BlockModel>
 
     // Block element: id["label"]:2
     static Parser<char, BlockElement> elementParser =
-        from id in Identifier
+        from id in identifier
         from shape in shapeParser.Optional()
         from span in spanParser.Optional()
         select new BlockElement

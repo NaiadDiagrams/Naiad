@@ -29,19 +29,19 @@ public class ERParser : IDiagramParser<ERModel>
         );
 
     // Line style (-- for identifying, .. for non-identifying)
-    static Parser<char, bool> LineStyle =
+    static Parser<char, bool> lineStyle =
         OneOf(
             String("--").ThenReturn(true),
             String("..").ThenReturn(false)
         );
 
     // Relationship: ENTITY1 ||--o{ ENTITY2 : label
-    static Parser<char, Relationship> RelationshipParser =
+    static Parser<char, Relationship> relationshipParser =
         from _ in CommonParsers.InlineWhitespace
         from fromEntity in entityName
         from __ in CommonParsers.InlineWhitespace
         from leftCard in leftCardinality
-        from identifying in LineStyle
+        from identifying in lineStyle
         from rightCard in rightCardinality
         from ___ in CommonParsers.InlineWhitespace
         from toEntity in entityName
@@ -64,7 +64,7 @@ public class ERParser : IDiagramParser<ERModel>
         };
 
     // Attribute key type
-    static Parser<char, AttributeKeyType> KeyTypeParser =
+    static Parser<char, AttributeKeyType> keyTypeParser =
         OneOf(
             Try(String("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
             Try(String("FK")).ThenReturn(AttributeKeyType.ForeignKey),
@@ -72,7 +72,7 @@ public class ERParser : IDiagramParser<ERModel>
         );
 
     // Attribute comment (in quotes)
-    static Parser<char, string> AttributeComment =
+    static Parser<char, string> attributeComment =
         CommonParsers.DoubleQuotedString;
 
     // Entity attribute: type name PK "comment"
@@ -82,9 +82,9 @@ public class ERParser : IDiagramParser<ERModel>
         from __ in CommonParsers.RequiredWhitespace
         from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
         from ___ in CommonParsers.InlineWhitespace
-        from keyType in Try(KeyTypeParser).Optional()
+        from keyType in Try(keyTypeParser).Optional()
         from ____ in CommonParsers.InlineWhitespace
-        from comment in Try(AttributeComment).Optional()
+        from comment in Try(attributeComment).Optional()
         from _____ in CommonParsers.InlineWhitespace
         from lineEnd in CommonParsers.LineEnd
         select new EntityAttribute
@@ -130,7 +130,7 @@ public class ERParser : IDiagramParser<ERModel>
     }
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
@@ -146,8 +146,8 @@ public class ERParser : IDiagramParser<ERModel>
     {
         var element = OneOf(
             Try(EntityDefinitionParser.Select(_ => (object)_)),
-            Try(RelationshipParser.Select(_ => (object)_)),
-            SkipLine.ThenReturn((object)Unit.Value)
+            Try(relationshipParser.Select(_ => (object)_)),
+            skipLine.ThenReturn((object)Unit.Value)
         );
 
         return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());

@@ -5,60 +5,60 @@ public class TimelineParser : IDiagramParser<TimelineModel>
     public DiagramType DiagramType => DiagramType.Timeline;
 
     // Rest of line (for text content)
-    static Parser<char, string> RestOfLine =
+    static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Timeline
-    static Parser<char, string> TitleParser =
+    static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
-        from title in RestOfLine
+        from title in restOfLine
         from ____ in CommonParsers.LineEnd
         select title.Trim();
 
     // Section: section Section Name
-    static Parser<char, string> SectionParser =
+    static Parser<char, string> sectionParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("section")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in RestOfLine
+        from name in restOfLine
         from ____ in CommonParsers.LineEnd
         select name.Trim();
 
     // Period with event: 2020 : Event description
-    static Parser<char, (string period, string eventText)> PeriodEventParser =
+    static Parser<char, (string period, string eventText)> periodEventParser =
         from _ in CommonParsers.InlineWhitespace
         from period in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from eventText in RestOfLine
+        from eventText in restOfLine
         from _____ in CommonParsers.LineEnd
         select (period.Trim(), eventText.Trim());
 
     // Continuation event: : Another event (no period, just event)
-    static Parser<char, string> ContinuationEventParser =
+    static Parser<char, string> continuationEventParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in Char(':')
         from ___ in CommonParsers.InlineWhitespace
-        from eventText in RestOfLine
+        from eventText in restOfLine
         from ____ in CommonParsers.LineEnd
         select eventText.Trim();
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TitleParser.Select(_ => (object?)("title", _))),
-            Try(SectionParser.Select(_ => (object?)("section", _))),
-            Try(PeriodEventParser.Select(_ => (object?)("period", _.period, _.eventText))),
-            Try(ContinuationEventParser.Select(_ => (object?)("continuation", _))),
-            SkipLine.ThenReturn((object?)null)
+            Try(titleParser.Select(_ => (object?)("title", _))),
+            Try(sectionParser.Select(_ => (object?)("section", _))),
+            Try(periodEventParser.Select(_ => (object?)("period", _.period, _.eventText))),
+            Try(continuationEventParser.Select(_ => (object?)("continuation", _))),
+            skipLine.ThenReturn((object?)null)
         );
 
     public static Parser<char, TimelineModel> Parser =>

@@ -4,46 +4,46 @@ public class KanbanParser : IDiagramParser<KanbanModel>
 {
     public DiagramType DiagramType => DiagramType.Kanban;
 
-    // Identifier
-    static Parser<char, string> Identifier =
+    // identifier
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label in brackets: [Label Text]
-    static Parser<char, string> LabelParser =
+    static Parser<char, string> labelParser =
         from _ in Char('[')
         from label in Token(_ => _ != ']').ManyString()
         from __ in Char(']')
         select label.Trim();
 
     // Column: id[Name] (no leading whitespace or minimal)
-    static Parser<char, (string id, string name)> ColumnParser =
+    static Parser<char, (string id, string name)> columnParser =
         from indent in CommonParsers.Indentation.Where(_ => _ < 4)
-        from id in Identifier
-        from name in LabelParser
+        from id in identifier
+        from name in labelParser
         from __ in CommonParsers.InlineWhitespace
         from ___ in CommonParsers.LineEnd
         select (id, name);
 
     // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
-    static Parser<char, (string id, string name)> TaskParser =
+    static Parser<char, (string id, string name)> taskParser =
         from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
-        from id in Identifier
-        from name in LabelParser
+        from id in identifier
+        from name in labelParser
         from __ in CommonParsers.InlineWhitespace
         from ___ in CommonParsers.LineEnd
         select (id, name);
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(TaskParser.Select(_ => (object?)("task", _.id, _.name))),
-            Try(ColumnParser.Select(_ => (object?)("column", _.id, _.name))),
-            SkipLine.ThenReturn((object?)null)
+            Try(taskParser.Select(_ => (object?)("task", _.id, _.name))),
+            Try(columnParser.Select(_ => (object?)("column", _.id, _.name))),
+            skipLine.ThenReturn((object?)null)
         );
 
     public static Parser<char, KanbanModel> Parser =>

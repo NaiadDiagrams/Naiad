@@ -5,7 +5,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
     public DiagramType DiagramType => DiagramType.Mindmap;
 
     // Parse indentation (spaces or tabs)
-    static Parser<char, int> IndentationParser =
+    static Parser<char, int> indentationParser =
         Token(_ => _ is ' ' or '\t')
             .Many()
             .Select(chars =>
@@ -15,14 +15,14 @@ public class MindmapParser : IDiagramParser<MindmapModel>
             });
 
     // Icon: ::icon(fa fa-book)
-    static Parser<char, string> IconParser =
+    static Parser<char, string> iconParser =
         from _ in String("::icon(")
         from icon in Token(_ => _ != ')').AtLeastOnceString()
         from __ in Char(')')
         select icon;
 
     // CSS class: :::className
-    static Parser<char, string> CssClassParser =
+    static Parser<char, string> cssClassParser =
         from _ in String(":::")
         from cls in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString()
         select cls;
@@ -75,16 +75,16 @@ public class MindmapParser : IDiagramParser<MindmapModel>
         );
 
     // Node line: indentation + optional shape + text + optional icon/class
-    static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)> NodeLineParser =
-        from indent in IndentationParser
+    static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)> nodeLineParser =
+        from indent in indentationParser
         from shaped in Try(ShapedNodeParser).Optional()
         from plainText in shaped.HasValue
             ? Return("")
             : Token(_ => _ != ':' && _ != '\r' && _ != '\n').ManyString()
         from _ in CommonParsers.InlineWhitespace
-        from icon in Try(IconParser).Optional()
+        from icon in Try(iconParser).Optional()
         from __ in CommonParsers.InlineWhitespace
-        from cssClass in Try(CssClassParser).Optional()
+        from cssClass in Try(cssClassParser).Optional()
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         select (
@@ -98,7 +98,7 @@ public class MindmapParser : IDiagramParser<MindmapModel>
     // Content line - node line, skip line (comment/empty), or end
     static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)?> ContentLine =>
         OneOf(
-            Try(NodeLineParser.Select(_ => ((int, string, MindmapShape, string?, string?)?)_)),
+            Try(nodeLineParser.Select(_ => ((int, string, MindmapShape, string?, string?)?)_)),
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .ThenReturn(((int, string, MindmapShape, string?, string?)?)null),
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline))

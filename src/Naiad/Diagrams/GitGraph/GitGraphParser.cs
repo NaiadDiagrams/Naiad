@@ -5,18 +5,18 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     public DiagramType DiagramType => DiagramType.GitGraph;
 
     // Identifiers
-    static Parser<char, string> BranchName =
+    static Parser<char, string> branchName =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-' || _ == '/')
             .AtLeastOnceString()
             .Labelled("branch name");
 
-    static Parser<char, string> CommitId =
+    static Parser<char, string> commitId =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
             .AtLeastOnceString()
             .Labelled("commit id");
 
     // Commit type
-    static Parser<char, CommitType> CommitTypeParser =
+    static Parser<char, CommitType> commitTypeParser =
         OneOf(
             Try(CIString("REVERSE")).ThenReturn(CommitType.Reverse),
             Try(CIString("HIGHLIGHT")).ThenReturn(CommitType.Highlight),
@@ -29,7 +29,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from id in CommonParsers.QuotedString.Or(CommitId)
+        from id in CommonParsers.QuotedString.Or(commitId)
         select id;
 
     static Parser<char, string> MessageAttribute =>
@@ -53,7 +53,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from type in CommitTypeParser
+        from type in commitTypeParser
         select type;
 
     static Parser<char, int> OrderAttribute =>
@@ -65,7 +65,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         select order;
 
     // Commit: commit id: "abc" msg: "message" tag: "v1.0" type: NORMAL
-    static Parser<char, CommitOperation> CommitParser =
+    static Parser<char, CommitOperation> commitParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("commit")
         from attrs in ParseCommitAttributes()
@@ -101,11 +101,11 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Branch: branch develop order: 1
-    static Parser<char, BranchOperation> BranchParser =
+    static Parser<char, BranchOperation> branchParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("branch")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in BranchName
+        from name in branchName
         from order in Try(
             from ____ in CommonParsers.InlineWhitespace
             from o in OrderAttribute
@@ -120,21 +120,21 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         };
 
     // Checkout: checkout develop
-    static Parser<char, CheckoutOperation> CheckoutParser =
+    static Parser<char, CheckoutOperation> checkoutParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("checkout")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in BranchName
+        from name in branchName
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         select new CheckoutOperation { BranchName = name };
 
     // Merge: merge develop id: "merge1" tag: "v1.0" type: NORMAL
-    static Parser<char, MergeOperation> MergeParser =
+    static Parser<char, MergeOperation> mergeParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("merge")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in BranchName
+        from name in branchName
         from attrs in ParseMergeAttributes()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
@@ -166,7 +166,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Cherry-pick: cherry-pick id: "abc" tag: "v1.0"
-    static Parser<char, CherryPickOperation> CherryPickParser =
+    static Parser<char, CherryPickOperation> cherryPickParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("cherry-pick")
         from ___ in CommonParsers.InlineWhitespace
@@ -185,7 +185,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
@@ -193,12 +193,12 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     static Parser<char, List<GitOperation>> ParseContent()
     {
         var operation = OneOf(
-            Try(CommitParser.Select(_ => (GitOperation?)_)),
-            Try(BranchParser.Select(_ => (GitOperation?)_)),
-            Try(CheckoutParser.Select(_ => (GitOperation?)_)),
-            Try(MergeParser.Select(_ => (GitOperation?)_)),
-            Try(CherryPickParser.Select(_ => (GitOperation?)_)),
-            SkipLine.ThenReturn((GitOperation?)null)
+            Try(commitParser.Select(_ => (GitOperation?)_)),
+            Try(branchParser.Select(_ => (GitOperation?)_)),
+            Try(checkoutParser.Select(_ => (GitOperation?)_)),
+            Try(mergeParser.Select(_ => (GitOperation?)_)),
+            Try(cherryPickParser.Select(_ => (GitOperation?)_)),
+            skipLine.ThenReturn((GitOperation?)null)
         );
 
         return operation.Many()
@@ -206,7 +206,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Options parser (gitGraph TB: or gitGraph LR:)
-    static Parser<char, (string? direction, string? mainBranch)> OptionsParser =
+    static Parser<char, (string? direction, string? mainBranch)> optionsParser =
         from _ in CommonParsers.InlineWhitespace
         from options in Try(
             from dir in OneOf(
@@ -224,7 +224,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     public static Parser<char, GitGraphModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in CIString("gitGraph")
-        from options in OptionsParser
+        from options in optionsParser
         from __ in CommonParsers.InlineWhitespace
         from ___ in CommonParsers.LineEnd
         from operations in ParseContent()

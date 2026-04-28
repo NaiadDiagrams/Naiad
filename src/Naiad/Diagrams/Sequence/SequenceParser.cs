@@ -5,20 +5,20 @@ public class SequenceParser : IDiagramParser<SequenceModel>
     public DiagramType DiagramType => DiagramType.Sequence;
 
     // Sequence diagram identifier (no dash to avoid conflicts with arrows)
-    static Parser<char, string> SeqIdentifier =
+    static Parser<char, string> seqIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')
             .AtLeastOnceString()
             .Labelled("identifier");
 
     // Participant declaration: participant/actor Name as Alias
-    static Parser<char, Participant> ParticipantParser =
+    static Parser<char, Participant> participantParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(String("actor")).ThenReturn(ParticipantType.Actor),
             String("participant").ThenReturn(ParticipantType.Participant)
         )
         from __ in CommonParsers.RequiredWhitespace
-        from id in SeqIdentifier
+        from id in seqIdentifier
         from alias in Try(
             CommonParsers.RequiredWhitespace
                 .Then(String("as"))
@@ -34,7 +34,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Message arrows
-    static Parser<char, MessageType> MessageArrowParser =
+    static Parser<char, MessageType> messageArrowParser =
         OneOf(
             Try(String("-->>")).ThenReturn(MessageType.DottedArrow),
             Try(String("->>")).ThenReturn(MessageType.SolidArrow),
@@ -47,15 +47,15 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         );
 
     // Message: From->>To: Text
-    static Parser<char, Message> MessageParser =
+    static Parser<char, Message> messageParser =
         from _ in CommonParsers.InlineWhitespace
-        from fromId in SeqIdentifier
+        from fromId in seqIdentifier
         from __ in CommonParsers.InlineWhitespace
-        from arrow in MessageArrowParser
+        from arrow in messageArrowParser
         from activate in Char('+').Optional()
         from deactivate in Char('-').Optional()
         from ___ in CommonParsers.InlineWhitespace
-        from toId in SeqIdentifier
+        from toId in seqIdentifier
         from ____ in CommonParsers.InlineWhitespace
         from text in Try(
             Char(':')
@@ -74,7 +74,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Note: Note right of/left of/over Participant: Text
-    static Parser<char, Note> NoteParser =
+    static Parser<char, Note> noteParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("Note")).Or(String("note"))
         from __ in CommonParsers.RequiredWhitespace
@@ -84,11 +84,11 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             String("over").ThenReturn(NotePosition.Over)
         )
         from ___ in CommonParsers.RequiredWhitespace
-        from participantId in SeqIdentifier
+        from participantId in seqIdentifier
         from participant2 in Try(
             Char(',')
                 .Then(CommonParsers.InlineWhitespace)
-                .Then(SeqIdentifier)
+                .Then(seqIdentifier)
         ).Optional()
         from ____ in CommonParsers.InlineWhitespace
         from colon in Char(':')
@@ -104,14 +104,14 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Activate/Deactivate
-    static Parser<char, Activation> ActivationParser =
+    static Parser<char, Activation> activationParser =
         from _ in CommonParsers.InlineWhitespace
         from isActivate in OneOf(
             String("activate").ThenReturn(true),
             String("deactivate").ThenReturn(false)
         )
         from __ in CommonParsers.RequiredWhitespace
-        from participantId in SeqIdentifier
+        from participantId in seqIdentifier
         from ___ in CommonParsers.LineEnd
         select new Activation
         {
@@ -120,14 +120,14 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // AutoNumber
-    static Parser<char, bool> AutoNumberParser =
+    static Parser<char, bool> autoNumberParser =
         CommonParsers.InlineWhitespace
             .Then(String("autonumber"))
             .Then(CommonParsers.LineEnd)
             .ThenReturn(true);
 
     // Title
-    static Parser<char, string> TitleParser =
+    static Parser<char, string> titleParser =
         CommonParsers.InlineWhitespace
             .Then(String("title"))
             .Then(CommonParsers.InlineWhitespace)
@@ -136,7 +136,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
 
     // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
     // These are skipped for now - content renders without visual grouping
-    static Parser<char, Unit> BlockStartParser =
+    static Parser<char, Unit> blockStartParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in OneOf(
             Try(String("alt")),
@@ -155,9 +155,9 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         select Unit.Value;
 
     // Skip line
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         OneOf(
-            Try(BlockStartParser),
+            Try(blockStartParser),
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
         );
 
@@ -172,13 +172,13 @@ public class SequenceParser : IDiagramParser<SequenceModel>
     static Parser<char, List<object>> ParseContent()
     {
         var element = OneOf(
-            Try(ParticipantParser.Select(_ => (object)_)),
-            Try(MessageParser.Select(_ => (object)_)),
-            Try(NoteParser.Select(_ => (object)_)),
-            Try(ActivationParser.Select(_ => (object)_)),
-            Try(AutoNumberParser.Select(_ => (object)_)),
-            Try(TitleParser.Select(_ => (object)("title:" + _))),
-            SkipLine.ThenReturn((object)Unit.Value)
+            Try(participantParser.Select(_ => (object)_)),
+            Try(messageParser.Select(_ => (object)_)),
+            Try(noteParser.Select(_ => (object)_)),
+            Try(activationParser.Select(_ => (object)_)),
+            Try(autoNumberParser.Select(_ => (object)_)),
+            Try(titleParser.Select(_ => (object)("title:" + _))),
+            skipLine.ThenReturn((object)Unit.Value)
         );
 
         return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());

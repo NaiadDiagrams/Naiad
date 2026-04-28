@@ -4,8 +4,8 @@ public class C4Parser : IDiagramParser<C4Model>
 {
     public DiagramType DiagramType => DiagramType.C4Context;
 
-    // Identifier
-    static Parser<char, string> Identifier =
+    // identifier
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Quoted string
@@ -17,7 +17,7 @@ public class C4Parser : IDiagramParser<C4Model>
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Diagram
-    static Parser<char, string> ritleParser =
+    static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -30,7 +30,7 @@ public class C4Parser : IDiagramParser<C4Model>
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("Person_Ext")), CIString("Person"))
         from __ in Char('(')
-        from id in Identifier
+        from id in identifier
         from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
         from label in quotedString
         from desc in Try(
@@ -50,11 +50,11 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // System(id, "label", "description") or System_Ext
-    static Parser<char, C4Element> SystemParser =
+    static Parser<char, C4Element> systemParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("System_Ext")), CIString("System"))
         from __ in Char('(')
-        from id in Identifier
+        from id in identifier
         from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
         from label in quotedString
         from desc in Try(
@@ -74,19 +74,19 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Optional quoted string with comma prefix
-    static Parser<char, string> OptionalQuotedArg =
+    static Parser<char, string> optionalQuotedArg =
         CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
             .Then(quotedString);
 
     // SystemDb(id, "label", "description") or SystemDb_Ext
-    static Parser<char, C4Element> SystemDbParser =
+    static Parser<char, C4Element> systemDbParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("SystemDb_Ext")), CIString("SystemDb"))
         from __ in Char('(')
-        from id in Identifier
+        from id in identifier
         from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
         from label in quotedString
-        from desc in Try(OptionalQuotedArg).Optional()
+        from desc in Try(optionalQuotedArg).Optional()
         from ____ in Char(')')
         from _____ in CommonParsers.InlineWhitespace
         from ______ in CommonParsers.LineEnd
@@ -100,7 +100,7 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Container(id, "label", "tech", "description") or Container_Ext
-    static Parser<char, C4Element> ContainerParser =
+    static Parser<char, C4Element> containerParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(CIString("Container_Ext")),
@@ -110,11 +110,11 @@ public class C4Parser : IDiagramParser<C4Model>
             Try(CIString("ContainerQueue")),
             CIString("Container"))
         from __ in Char('(')
-        from id in Identifier
+        from id in identifier
         from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
         from label in quotedString
-        from tech in Try(OptionalQuotedArg).Optional()
-        from desc in Try(OptionalQuotedArg).Optional()
+        from tech in Try(optionalQuotedArg).Optional()
+        from desc in Try(optionalQuotedArg).Optional()
         from ____ in Char(')')
         from _____ in CommonParsers.InlineWhitespace
         from ______ in CommonParsers.LineEnd
@@ -131,15 +131,15 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Component(id, "label", "tech", "description")
-    static Parser<char, C4Element> ComponentParser =
+    static Parser<char, C4Element> componentParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("Component_Ext")), CIString("Component"))
         from __ in Char('(')
-        from id in Identifier
+        from id in identifier
         from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
         from label in quotedString
-        from tech in Try(OptionalQuotedArg).Optional()
-        from desc in Try(OptionalQuotedArg).Optional()
+        from tech in Try(optionalQuotedArg).Optional()
+        from desc in Try(optionalQuotedArg).Optional()
         from ____ in Char(')')
         from _____ in CommonParsers.InlineWhitespace
         from ______ in CommonParsers.LineEnd
@@ -162,11 +162,11 @@ public class C4Parser : IDiagramParser<C4Model>
             Try(CIString("Rel_Back")), Try(CIString("Rel_Neighbor")),
             CIString("Rel"))
         from ___ in Char('(')
-        from fromId in Identifier
+        from fromId in identifier
         from ____ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-        from toId in Identifier
-        from label in Try(OptionalQuotedArg).Optional()
-        from tech in Try(OptionalQuotedArg).Optional()
+        from toId in identifier
+        from label in Try(optionalQuotedArg).Optional()
+        from tech in Try(optionalQuotedArg).Optional()
         from _____ in Char(')')
         from ______ in CommonParsers.InlineWhitespace
         from _______ in CommonParsers.LineEnd
@@ -195,10 +195,10 @@ public class C4Parser : IDiagramParser<C4Model>
             Try(CIString("Node_R")).ThenReturn(C4BoundaryType.Node),
             CIString("Node").ThenReturn(C4BoundaryType.Node))
         from __ in Char('(')
-        from id in Identifier
+        from id in identifier
         from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
         from label in quotedString
-        from desc in Try(OptionalQuotedArg).Optional() // Optional description for nodes
+        from desc in Try(optionalQuotedArg).Optional() // Optional description for nodes
         from ____ in Char(')')
         from _____ in CommonParsers.InlineWhitespace
         from ______ in Char('{')
@@ -207,7 +207,7 @@ public class C4Parser : IDiagramParser<C4Model>
         select (id, label, boundaryType);
 
     // Boundary closing: }
-    static Parser<char, Unit> BoundaryClose =
+    static Parser<char, Unit> boundaryClose =
         from _ in CommonParsers.InlineWhitespace
         from __ in Char('}')
         from ___ in CommonParsers.InlineWhitespace
@@ -218,10 +218,10 @@ public class C4Parser : IDiagramParser<C4Model>
     static Parser<char, object?> BoundaryContentItem =>
         OneOf(
             Try(personParser.Select(_ => (object?)("element", _))),
-            Try(SystemDbParser.Select(_ => (object?)("element", _))),
-            Try(SystemParser.Select(_ => (object?)("element", _))),
-            Try(ContainerParser.Select(_ => (object?)("element", _))),
-            Try(ComponentParser.Select(_ => (object?)("element", _))),
+            Try(systemDbParser.Select(_ => (object?)("element", _))),
+            Try(systemParser.Select(_ => (object?)("element", _))),
+            Try(containerParser.Select(_ => (object?)("element", _))),
+            Try(componentParser.Select(_ => (object?)("element", _))),
             Try(relParser.Select(_ => (object?)("rel", _))),
             skipLine.ThenReturn((object?)null)
         );
@@ -229,8 +229,8 @@ public class C4Parser : IDiagramParser<C4Model>
     // Recursive boundary parser - parses boundary with nested content
     static Parser<char, (C4Boundary boundary, List<object?> content)> BoundaryParser =>
         from open in BoundaryOpen
-        from content in BoundaryContentOrNestedBoundary.Until(Lookahead(Try(BoundaryClose)))
-        from close in BoundaryClose
+        from content in BoundaryContentOrNestedBoundary.Until(Lookahead(Try(boundaryClose)))
+        from close in boundaryClose
         select (
             new C4Boundary { Id = open.id, Label = open.label, Type = open.type },
             content.ToList()
@@ -246,19 +246,19 @@ public class C4Parser : IDiagramParser<C4Model>
     // Content item (top level)
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(ritleParser.Select(_ => (object?)("title", _))),
+            Try(titleParser.Select(_ => (object?)("title", _))),
             Try(BoundaryParser.Select(_ => (object?)("boundary", _))),
             Try(personParser.Select(_ => (object?)("element", _))),
-            Try(SystemDbParser.Select(_ => (object?)("element", _))),
-            Try(SystemParser.Select(_ => (object?)("element", _))),
-            Try(ContainerParser.Select(_ => (object?)("element", _))),
-            Try(ComponentParser.Select(_ => (object?)("element", _))),
+            Try(systemDbParser.Select(_ => (object?)("element", _))),
+            Try(systemParser.Select(_ => (object?)("element", _))),
+            Try(containerParser.Select(_ => (object?)("element", _))),
+            Try(componentParser.Select(_ => (object?)("element", _))),
             Try(relParser.Select(_ => (object?)("rel", _))),
             skipLine.ThenReturn((object?)null)
         );
 
     // Diagram type header
-    static Parser<char, C4DiagramType> DiagramTypeParser =
+    static Parser<char, C4DiagramType> diagramTypeParser =
         OneOf(
             Try(CIString("C4Context")).ThenReturn(C4DiagramType.Context),
             Try(CIString("C4Container")).ThenReturn(C4DiagramType.Container),
@@ -268,7 +268,7 @@ public class C4Parser : IDiagramParser<C4Model>
 
     public static Parser<char, C4Model> Parser =>
         from _ in CommonParsers.InlineWhitespace
-        from type in DiagramTypeParser
+        from type in diagramTypeParser
         from __ in CommonParsers.InlineWhitespace
         from ___ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)

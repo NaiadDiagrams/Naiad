@@ -4,16 +4,16 @@ public class RequirementParser : IDiagramParser<RequirementModel>
 {
     public DiagramType DiagramType => DiagramType.Requirement;
 
-    // Identifier
-    static Parser<char, string> Identifier =
+    // identifier
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Rest of line
-    static Parser<char, string> RestOfLine =
+    static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Requirement type
-    static Parser<char, RequirementType> RequirementTypeParser =
+    static Parser<char, RequirementType> requirementTypeParser =
         OneOf(
             Try(CIString("functionalRequirement")).ThenReturn(RequirementType.FunctionalRequirement),
             Try(CIString("interfaceRequirement")).ThenReturn(RequirementType.InterfaceRequirement),
@@ -24,26 +24,26 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         );
 
     // Property: key: value
-    static Parser<char, (string key, string value)> PropertyParser =
+    static Parser<char, (string key, string value)> propertyParser =
         from _ in CommonParsers.InlineWhitespace
-        from key in Identifier
+        from key in identifier
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from value in RestOfLine
+        from value in restOfLine
         from _____ in CommonParsers.LineEnd
         select (key.ToLowerInvariant(), value.Trim());
 
     // Requirement block
-    static Parser<char, Requirement> RequirementBlockParser =
+    static Parser<char, Requirement> requirementBlockParser =
         from _ in CommonParsers.InlineWhitespace
-        from type in RequirementTypeParser
+        from type in requirementTypeParser
         from __ in CommonParsers.RequiredWhitespace
-        from name in Identifier
+        from name in identifier
         from ___ in CommonParsers.InlineWhitespace
         from ____ in Char('{')
         from _____ in CommonParsers.LineEnd
-        from props in PropertyParser.Many()
+        from props in propertyParser.Many()
         from ______ in CommonParsers.InlineWhitespace
         from _______ in Char('}')
         from ________ in CommonParsers.InlineWhitespace
@@ -82,15 +82,15 @@ public class RequirementParser : IDiagramParser<RequirementModel>
     }
 
     // Element block
-    static Parser<char, RequirementElement> ElementBlockParser =
+    static Parser<char, RequirementElement> elementBlockParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("element")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in Identifier
+        from name in identifier
         from ____ in CommonParsers.InlineWhitespace
         from _____ in Char('{')
         from ______ in CommonParsers.LineEnd
-        from props in PropertyParser.Many()
+        from props in propertyParser.Many()
         from _______ in CommonParsers.InlineWhitespace
         from ________ in Char('}')
         from _________ in CommonParsers.InlineWhitespace
@@ -112,7 +112,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
     }
 
     // Relation type
-    static Parser<char, RelationType> RelationTypeParser =
+    static Parser<char, RelationType> relationTypeParser =
         OneOf(
             Try(CIString("contains")).ThenReturn(RelationType.Contains),
             Try(CIString("copies")).ThenReturn(RelationType.Copies),
@@ -124,17 +124,17 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         );
 
     // Relation: source - type -> target
-    static Parser<char, RequirementRelation> RelationParser =
+    static Parser<char, RequirementRelation> relationParser =
         from _ in CommonParsers.InlineWhitespace
-        from source in Identifier
+        from source in identifier
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char('-')
         from ____ in CommonParsers.InlineWhitespace
-        from relType in RelationTypeParser
+        from relType in relationTypeParser
         from _____ in CommonParsers.InlineWhitespace
         from ______ in String("->")
         from _______ in CommonParsers.InlineWhitespace
-        from target in Identifier
+        from target in identifier
         from ________ in CommonParsers.InlineWhitespace
         from _________ in CommonParsers.LineEnd
         select new RequirementRelation
@@ -145,17 +145,17 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         };
 
     // Skip line
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
     static Parser<char, object?> ContentItem =>
         OneOf(
-            Try(RequirementBlockParser.Select(_ => (object?)("requirement", _))),
-            Try(ElementBlockParser.Select(_ => (object?)("element", _))),
-            Try(RelationParser.Select(_ => (object?)("relation", _))),
-            SkipLine.ThenReturn((object?)null)
+            Try(requirementBlockParser.Select(_ => (object?)("requirement", _))),
+            Try(elementBlockParser.Select(_ => (object?)("element", _))),
+            Try(relationParser.Select(_ => (object?)("relation", _))),
+            skipLine.ThenReturn((object?)null)
         );
 
     public static Parser<char, RequirementModel> Parser =>
