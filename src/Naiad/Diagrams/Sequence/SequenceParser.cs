@@ -169,22 +169,22 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent()
+    static Parser<char, IEnumerable<ISequenceContent?>> ParseContent()
     {
         var element = OneOf(
-            Try(participantParser.Select<object>(_ => _)),
-            Try(messageParser.Select<object>(_ => _)),
-            Try(noteParser.Select<object>(_ => _)),
-            Try(activationParser.Select<object>(_ => _)),
-            Try(autoNumberParser.Select(_ => (object)_)),
-            Try(titleParser.Select<object>(_ => "title:" + _)),
-            skipLine.ThenReturn<object>(Unit.Value)
+            Try(participantParser.Select<ISequenceContent?>(_ => new ParticipantItem(_))),
+            Try(messageParser.Select<ISequenceContent?>(_ => new MessageItem(_))),
+            Try(noteParser.Select<ISequenceContent?>(_ => new NoteItem(_))),
+            Try(activationParser.Select<ISequenceContent?>(_ => new ActivationItem(_))),
+            Try(autoNumberParser.Select<ISequenceContent?>(_ => new AutoNumberItem(_))),
+            Try(titleParser.Select<ISequenceContent?>(_ => new TitleItem(_))),
+            skipLine.ThenReturn<ISequenceContent?>(null)
         );
 
-        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
+        return element.Many();
     }
 
-    static SequenceModel BuildModel(List<object> content)
+    static SequenceModel BuildModel(IEnumerable<ISequenceContent?> content)
     {
         var model = new SequenceModel();
         var participantIds = new HashSet<string>();
@@ -193,12 +193,14 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         {
             switch (item)
             {
-                case Participant p:
+                case ParticipantItem participant:
+                    var p = participant.Value;
                     model.Participants.Add(p);
                     participantIds.Add(p.Id);
                     break;
 
-                case Message m:
+                case MessageItem message:
+                    var m = message.Value;
                     // Auto-add participants from messages
                     if (!participantIds.Contains(m.FromId))
                     {
@@ -213,20 +215,20 @@ public class SequenceParser : IDiagramParser<SequenceModel>
                     model.Elements.Add(m);
                     break;
 
-                case Note n:
-                    model.Elements.Add(n);
+                case NoteItem note:
+                    model.Elements.Add(note.Value);
                     break;
 
-                case Activation a:
-                    model.Elements.Add(a);
+                case ActivationItem activation:
+                    model.Elements.Add(activation.Value);
                     break;
 
-                case bool autoNumber:
-                    model.AutoNumber = autoNumber;
+                case AutoNumberItem autoNumber:
+                    model.AutoNumber = autoNumber.Value;
                     break;
 
-                case string s when s.StartsWith("title:"):
-                    model.Title = s[6..];
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
             }
         }
@@ -235,4 +237,12 @@ public class SequenceParser : IDiagramParser<SequenceModel>
     }
 
     public Result<char, SequenceModel> Parse(string input) => Parser.Parse(input);
+
+    interface ISequenceContent;
+    readonly record struct ParticipantItem(Participant Value) : ISequenceContent;
+    readonly record struct MessageItem(Message Value) : ISequenceContent;
+    readonly record struct NoteItem(Note Value) : ISequenceContent;
+    readonly record struct ActivationItem(Activation Value) : ISequenceContent;
+    readonly record struct AutoNumberItem(bool Value) : ISequenceContent;
+    readonly record struct TitleItem(string Value) : ISequenceContent;
 }

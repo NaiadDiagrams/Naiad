@@ -52,13 +52,13 @@ public class TimelineParser : IDiagramParser<TimelineModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, ITimelineContent?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(_ => (object?)("title", _))),
-            Try(sectionParser.Select(_ => (object?)("section", _))),
-            Try(periodEventParser.Select(_ => (object?)("period", _.period, _.eventText))),
-            Try(continuationEventParser.Select(_ => (object?)("continuation", _))),
-            skipLine.ThenReturn<object?>(null)
+            Try(titleParser.Select<ITimelineContent?>(_ => new TitleItem(_))),
+            Try(sectionParser.Select<ITimelineContent?>(_ => new SectionItem(_))),
+            Try(periodEventParser.Select<ITimelineContent?>(_ => new PeriodItem(_.period, _.eventText))),
+            Try(continuationEventParser.Select<ITimelineContent?>(_ => new ContinuationItem(_))),
+            skipLine.ThenReturn<ITimelineContent?>(null)
         );
 
     public static Parser<char, TimelineModel> Parser =>
@@ -67,9 +67,9 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static TimelineModel BuildModel(List<object?> content)
+    static TimelineModel BuildModel(IEnumerable<ITimelineContent?> content)
     {
         var model = new TimelineModel();
         TimelineSection? currentSection = null;
@@ -79,17 +79,17 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         {
             switch (item)
             {
-                case ("title", string value):
-                    model.Title = value;
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
 
-                case ("section", string sectionName):
-                    currentSection = new() { Name = sectionName };
+                case SectionItem section:
+                    currentSection = new() { Name = section.Name };
                     model.Sections.Add(currentSection);
                     currentPeriod = null;
                     break;
 
-                case ("period", string period, string eventText):
+                case PeriodItem period:
                     if (currentSection == null)
                     {
                         currentSection = new();
@@ -97,19 +97,19 @@ public class TimelineParser : IDiagramParser<TimelineModel>
                     }
                     currentPeriod = new()
                     {
-                        Label = period
+                        Label = period.Period
                     };
-                    if (!string.IsNullOrEmpty(eventText))
+                    if (!string.IsNullOrEmpty(period.EventText))
                     {
-                        currentPeriod.Events.Add(eventText);
+                        currentPeriod.Events.Add(period.EventText);
                     }
                     currentSection.Periods.Add(currentPeriod);
                     break;
 
-                case ("continuation", string eventText):
-                    if (currentPeriod != null && !string.IsNullOrEmpty(eventText))
+                case ContinuationItem cont:
+                    if (currentPeriod != null && !string.IsNullOrEmpty(cont.EventText))
                     {
-                        currentPeriod.Events.Add(eventText);
+                        currentPeriod.Events.Add(cont.EventText);
                     }
                     break;
             }
@@ -119,4 +119,10 @@ public class TimelineParser : IDiagramParser<TimelineModel>
     }
 
     public Result<char, TimelineModel> Parse(string input) => Parser.Parse(input);
+
+    interface ITimelineContent;
+    readonly record struct TitleItem(string Value) : ITimelineContent;
+    readonly record struct SectionItem(string Name) : ITimelineContent;
+    readonly record struct PeriodItem(string Period, string EventText) : ITimelineContent;
+    readonly record struct ContinuationItem(string EventText) : ITimelineContent;
 }

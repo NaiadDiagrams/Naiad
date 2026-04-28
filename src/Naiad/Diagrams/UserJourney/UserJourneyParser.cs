@@ -56,12 +56,12 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IUserJourneyContent?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(_ => (object?)("title", _))),
-            Try(sectionParser.Select(_ => (object?)("section", _))),
-            Try(taskParser.Select(_ => (object?)("task", _))),
-            skipLine.ThenReturn<object?>(null)
+            Try(titleParser.Select<IUserJourneyContent?>(_ => new TitleItem(_))),
+            Try(sectionParser.Select<IUserJourneyContent?>(_ => new SectionItem(_))),
+            Try(taskParser.Select<IUserJourneyContent?>(_ => new TaskItem(_))),
+            skipLine.ThenReturn<IUserJourneyContent?>(null)
         );
 
     public static Parser<char, UserJourneyModel> Parser =>
@@ -70,9 +70,9 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
         from inerWhitespace in CommonParsers.InlineWhitespace
         from lineEnd in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static UserJourneyModel BuildModel(List<object?> content)
+    static UserJourneyModel BuildModel(IEnumerable<IUserJourneyContent?> content)
     {
         var model = new UserJourneyModel();
         JourneySection? currentSection = null;
@@ -81,22 +81,22 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
         {
             switch (item)
             {
-                case ("title", string value):
-                    model.Title = value;
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
 
-                case ("section", string sectionName):
-                    currentSection = new() { Name = sectionName };
+                case SectionItem section:
+                    currentSection = new() { Name = section.Name };
                     model.Sections.Add(currentSection);
                     break;
 
-                case ("task", JourneyTask task):
+                case TaskItem taskItem:
                     if (currentSection == null)
                     {
                         currentSection = new();
                         model.Sections.Add(currentSection);
                     }
-                    currentSection.Tasks.Add(task);
+                    currentSection.Tasks.Add(taskItem.Task);
                     break;
             }
         }
@@ -105,4 +105,9 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
     }
 
     public Result<char, UserJourneyModel> Parse(string input) => Parser.Parse(input);
+
+    interface IUserJourneyContent;
+    readonly record struct TitleItem(string Value) : IUserJourneyContent;
+    readonly record struct SectionItem(string Name) : IUserJourneyContent;
+    readonly record struct TaskItem(JourneyTask Task) : IUserJourneyContent;
 }

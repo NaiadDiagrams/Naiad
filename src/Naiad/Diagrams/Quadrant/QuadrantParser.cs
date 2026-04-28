@@ -94,14 +94,14 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IQuadrantContent?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(_ => (object?)("title", _))),
-            Try(xAxisParser.Select(_ => (object?)("x-axis", _.left, _.right))),
-            Try(yAxisParser.Select(_ => (object?)("y-axis", _.bottom, _.top))),
-            Try(quadrantLabelParser.Select(_ => (object?)("quadrant", _.quadrant, _.label))),
-            Try(pointParser.Select(_ => (object?)("point", _))),
-            skipLine.ThenReturn<object?>(null)
+            Try(titleParser.Select<IQuadrantContent?>(_ => new TitleItem(_))),
+            Try(xAxisParser.Select<IQuadrantContent?>(_ => new XAxisItem(_.left, _.right))),
+            Try(yAxisParser.Select<IQuadrantContent?>(_ => new YAxisItem(_.bottom, _.top))),
+            Try(quadrantLabelParser.Select<IQuadrantContent?>(_ => new QuadrantLabelItem(_.quadrant, _.label))),
+            Try(pointParser.Select<IQuadrantContent?>(_ => new PointItem(_))),
+            skipLine.ThenReturn<IQuadrantContent?>(null)
         );
 
     public static Parser<char, QuadrantModel> Parser =>
@@ -110,9 +110,9 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static QuadrantModel BuildModel(List<object?> content)
+    static QuadrantModel BuildModel(IEnumerable<IQuadrantContent?> content)
     {
         var model = new QuadrantModel();
 
@@ -120,32 +120,32 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         {
             switch (item)
             {
-                case ("title", string value):
-                    model.Title = value;
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
 
-                case ("x-axis", string left, string right):
-                    model.XAxisLeft = left;
-                    model.XAxisRight = right;
+                case XAxisItem xAxis:
+                    model.XAxisLeft = xAxis.Left;
+                    model.XAxisRight = xAxis.Right;
                     break;
 
-                case ("y-axis", string bottom, string top):
-                    model.YAxisBottom = bottom;
-                    model.YAxisTop = top;
+                case YAxisItem yAxis:
+                    model.YAxisBottom = yAxis.Bottom;
+                    model.YAxisTop = yAxis.Top;
                     break;
 
-                case ("quadrant", int quadrant, string label):
-                    switch (quadrant)
+                case QuadrantLabelItem label:
+                    switch (label.Quadrant)
                     {
-                        case 1: model.Quadrant1Label = label; break;
-                        case 2: model.Quadrant2Label = label; break;
-                        case 3: model.Quadrant3Label = label; break;
-                        case 4: model.Quadrant4Label = label; break;
+                        case 1: model.Quadrant1Label = label.Label; break;
+                        case 2: model.Quadrant2Label = label.Label; break;
+                        case 3: model.Quadrant3Label = label.Label; break;
+                        case 4: model.Quadrant4Label = label.Label; break;
                     }
                     break;
 
-                case ("point", QuadrantPoint point):
-                    model.Points.Add(point);
+                case PointItem point:
+                    model.Points.Add(point.Point);
                     break;
             }
         }
@@ -154,4 +154,11 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
     }
 
     public Result<char, QuadrantModel> Parse(string input) => Parser.Parse(input);
+
+    interface IQuadrantContent;
+    readonly record struct TitleItem(string Value) : IQuadrantContent;
+    readonly record struct XAxisItem(string Left, string Right) : IQuadrantContent;
+    readonly record struct YAxisItem(string Bottom, string Top) : IQuadrantContent;
+    readonly record struct QuadrantLabelItem(int Quadrant, string Label) : IQuadrantContent;
+    readonly record struct PointItem(QuadrantPoint Point) : IQuadrantContent;
 }

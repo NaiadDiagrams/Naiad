@@ -143,18 +143,18 @@ public class ERParser : IDiagramParser<ERModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent()
+    static Parser<char, IEnumerable<IERContent?>> ParseContent()
     {
         var element = OneOf(
-            Try(EntityDefinitionParser.Select<object>(_ => _)),
-            Try(relationshipParser.Select<object>(_ => _)),
-            skipLine.ThenReturn<object>(Unit.Value)
+            Try(EntityDefinitionParser.Select<IERContent?>(_ => new EntityItem(_))),
+            Try(relationshipParser.Select<IERContent?>(_ => new RelationshipItem(_))),
+            skipLine.ThenReturn<IERContent?>(null)
         );
 
-        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
+        return element.Many();
     }
 
-    static ERModel BuildModel(List<object> content)
+    static ERModel BuildModel(IEnumerable<IERContent?> content)
     {
         var model = new ERModel();
         var entityMap = new Dictionary<string, Entity>();
@@ -163,7 +163,8 @@ public class ERParser : IDiagramParser<ERModel>
         {
             switch (item)
             {
-                case Entity e:
+                case EntityItem entity:
+                    var e = entity.Value;
                     if (entityMap.TryGetValue(e.Name, out var existing))
                     {
                         // Merge attributes into existing entity
@@ -177,7 +178,8 @@ public class ERParser : IDiagramParser<ERModel>
 
                     break;
 
-                case Relationship r:
+                case RelationshipItem rel:
+                    var r = rel.Value;
                     // Auto-create entities from relationships
                     EnsureEntity(r.FromEntity, entityMap, model);
                     EnsureEntity(r.ToEntity, entityMap, model);
@@ -200,4 +202,8 @@ public class ERParser : IDiagramParser<ERModel>
     }
 
     public Result<char, ERModel> Parse(string input) => Parser.Parse(input);
+
+    interface IERContent;
+    readonly record struct EntityItem(Entity Value) : IERContent;
+    readonly record struct RelationshipItem(Relationship Value) : IERContent;
 }

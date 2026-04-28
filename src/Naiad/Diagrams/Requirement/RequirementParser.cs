@@ -150,12 +150,12 @@ public class RequirementParser : IDiagramParser<RequirementModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IRequirementContent?> ContentItem =>
         OneOf(
-            Try(requirementBlockParser.Select(_ => (object?)("requirement", _))),
-            Try(elementBlockParser.Select(_ => (object?)("element", _))),
-            Try(relationParser.Select(_ => (object?)("relation", _))),
-            skipLine.ThenReturn<object?>(null)
+            Try(requirementBlockParser.Select<IRequirementContent?>(_ => new RequirementBlockItem(_))),
+            Try(elementBlockParser.Select<IRequirementContent?>(_ => new ElementBlockItem(_))),
+            Try(relationParser.Select<IRequirementContent?>(_ => new RelationItem(_))),
+            skipLine.ThenReturn<IRequirementContent?>(null)
         );
 
     public static Parser<char, RequirementModel> Parser =>
@@ -164,9 +164,9 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static RequirementModel BuildModel(List<object?> content)
+    static RequirementModel BuildModel(IEnumerable<IRequirementContent?> content)
     {
         var model = new RequirementModel();
 
@@ -174,16 +174,16 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         {
             switch (item)
             {
-                case ("requirement", Requirement req):
-                    model.Requirements.Add(req);
+                case RequirementBlockItem req:
+                    model.Requirements.Add(req.Value);
                     break;
 
-                case ("element", RequirementElement elem):
-                    model.Elements.Add(elem);
+                case ElementBlockItem elem:
+                    model.Elements.Add(elem.Value);
                     break;
 
-                case ("relation", RequirementRelation rel):
-                    model.Relations.Add(rel);
+                case RelationItem rel:
+                    model.Relations.Add(rel.Value);
                     break;
             }
         }
@@ -192,4 +192,9 @@ public class RequirementParser : IDiagramParser<RequirementModel>
     }
 
     public Result<char, RequirementModel> Parse(string input) => Parser.Parse(input);
+
+    interface IRequirementContent;
+    readonly record struct RequirementBlockItem(Requirement Value) : IRequirementContent;
+    readonly record struct ElementBlockItem(RequirementElement Value) : IRequirementContent;
+    readonly record struct RelationItem(RequirementRelation Value) : IRequirementContent;
 }

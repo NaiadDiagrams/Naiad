@@ -39,11 +39,11 @@ public class KanbanParser : IDiagramParser<KanbanModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IKanbanContent?> ContentItem =>
         OneOf(
-            Try(taskParser.Select(_ => (object?)("task", _.id, _.name))),
-            Try(columnParser.Select(_ => (object?)("column", _.id, _.name))),
-            skipLine.ThenReturn<object?>(null)
+            Try(taskParser.Select<IKanbanContent?>(_ => new TaskItem(_.id, _.name))),
+            Try(columnParser.Select<IKanbanContent?>(_ => new ColumnItem(_.id, _.name))),
+            skipLine.ThenReturn<IKanbanContent?>(null)
         );
 
     public static Parser<char, KanbanModel> Parser =>
@@ -52,9 +52,9 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static KanbanModel BuildModel(List<object?> content)
+    static KanbanModel BuildModel(IEnumerable<IKanbanContent?> content)
     {
         var model = new KanbanModel();
         KanbanColumn? currentColumn = null;
@@ -63,13 +63,13 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         {
             switch (item)
             {
-                case ("column", string id, string name):
-                    currentColumn = new() { Id = id, Name = name };
+                case ColumnItem column:
+                    currentColumn = new() { Id = column.Id, Name = column.Name };
                     model.Columns.Add(currentColumn);
                     break;
 
-                case ("task", string id, string name):
-                    currentColumn?.Tasks.Add(new() { Id = id, Name = name });
+                case TaskItem task:
+                    currentColumn?.Tasks.Add(new() { Id = task.Id, Name = task.Name });
                     break;
             }
         }
@@ -78,4 +78,8 @@ public class KanbanParser : IDiagramParser<KanbanModel>
     }
 
     public Result<char, KanbanModel> Parse(string input) => Parser.Parse(input);
+
+    interface IKanbanContent;
+    readonly record struct ColumnItem(string Id, string Name) : IKanbanContent;
+    readonly record struct TaskItem(string Id, string Name) : IKanbanContent;
 }

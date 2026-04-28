@@ -73,28 +73,28 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from ____ in CommonParsers.LineEnd
         select CreateCommit(attrs);
 
-    static Parser<char, List<(string key, object value)>> ParseCommitAttributes()
+    static Parser<char, IEnumerable<ICommitAttr>> ParseCommitAttributes()
     {
         var attr = OneOf(
-            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select ("id", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in MessageAttribute select ("msg", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select ("tag", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select ("type", (object)a))
+            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select (ICommitAttr)new IdAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in MessageAttribute select (ICommitAttr)new MsgAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select (ICommitAttr)new TagAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select (ICommitAttr)new TypeAttr(a))
         );
-        return attr.Many().Select(_ => _.ToList());
+        return attr.Many();
     }
 
-    static CommitOperation CreateCommit(List<(string key, object value)> attrs)
+    static CommitOperation CreateCommit(IEnumerable<ICommitAttr> attrs)
     {
         var commit = new CommitOperation();
-        foreach (var (key, value) in attrs)
+        foreach (var attr in attrs)
         {
-            switch (key)
+            switch (attr)
             {
-                case "id": commit.Id = (string)value; break;
-                case "msg": commit.Message = (string)value; break;
-                case "tag": commit.Tag = (string)value; break;
-                case "type": commit.Type = (CommitType)value; break;
+                case IdAttr id: commit.Id = id.Value; break;
+                case MsgAttr msg: commit.Message = msg.Value; break;
+                case TagAttr tag: commit.Tag = tag.Value; break;
+                case TypeAttr type: commit.Type = type.Value; break;
             }
         }
         return commit;
@@ -140,26 +140,26 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from _____ in CommonParsers.LineEnd
         select CreateMerge(name, attrs);
 
-    static Parser<char, List<(string key, object value)>> ParseMergeAttributes()
+    static Parser<char, IEnumerable<ICommitAttr>> ParseMergeAttributes()
     {
         var attr = OneOf(
-            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select ("id", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select ("tag", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select ("type", (object)a))
+            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select (ICommitAttr)new IdAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select (ICommitAttr)new TagAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select (ICommitAttr)new TypeAttr(a))
         );
-        return attr.Many().Select(_ => _.ToList());
+        return attr.Many();
     }
 
-    static MergeOperation CreateMerge(string name, List<(string key, object value)> attrs)
+    static MergeOperation CreateMerge(string name, IEnumerable<ICommitAttr> attrs)
     {
         var merge = new MergeOperation { BranchName = name };
-        foreach (var (key, value) in attrs)
+        foreach (var attr in attrs)
         {
-            switch (key)
+            switch (attr)
             {
-                case "id": merge.Id = (string)value; break;
-                case "tag": merge.Tag = (string)value; break;
-                case "type": merge.Type = (CommitType)value; break;
+                case IdAttr id: merge.Id = id.Value; break;
+                case TagAttr tag: merge.Tag = tag.Value; break;
+                case TypeAttr type: merge.Type = type.Value; break;
             }
         }
         return merge;
@@ -266,4 +266,10 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     public Result<char, GitGraphModel> Parse(string input) => Parser.Parse(input);
+
+    interface ICommitAttr;
+    readonly record struct IdAttr(string Value) : ICommitAttr;
+    readonly record struct MsgAttr(string Value) : ICommitAttr;
+    readonly record struct TagAttr(string Value) : ICommitAttr;
+    readonly record struct TypeAttr(CommitType Value) : ICommitAttr;
 }

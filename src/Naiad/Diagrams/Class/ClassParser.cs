@@ -121,11 +121,11 @@ public class ClassParser : IDiagramParser<ClassModel>
     // Class body content: { ... }
     static Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> ParseClassBody()
     {
-        var annotationLine = Try(annotationParser.Select(_ => (object)_));
-        var methodLine = Try(methodParser.Select<object>(_ => _));
-        var memberLine = Try(memberParser.Select<object>(_ => _));
+        var annotationLine = Try(annotationParser.Select<IClassBodyContent?>(_ => new AnnotationItem(_)));
+        var methodLine = Try(methodParser.Select<IClassBodyContent?>(_ => new MethodItem(_)));
+        var memberLine = Try(memberParser.Select<IClassBodyContent?>(_ => new MemberItem(_)));
         var emptyLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)
-            .ThenReturn<object>(Unit.Value);
+            .ThenReturn<IClassBodyContent?>(null);
 
         var contentLine = OneOf(annotationLine, methodLine, memberLine, emptyLine);
 
@@ -139,14 +139,14 @@ public class ClassParser : IDiagramParser<ClassModel>
             {
                 switch (item)
                 {
-                    case ClassAnnotation a:
-                        annotation = a;
+                    case AnnotationItem a:
+                        annotation = a.Value;
                         break;
-                    case ClassMember m:
-                        members.Add(m);
+                    case MemberItem m:
+                        members.Add(m.Value);
                         break;
-                    case ClassMethod m:
-                        methods.Add(m);
+                    case MethodItem m:
+                        methods.Add(m.Value);
                         break;
                 }
             }
@@ -264,19 +264,19 @@ public class ClassParser : IDiagramParser<ClassModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent()
+    static Parser<char, IEnumerable<IClassContent?>> ParseContent()
     {
         var element = OneOf(
-            Try(directionDirectiveParser.Select(_ => (object)_)),
-            Try(classDefinitionParser.Select<object>(_ => _)),
-            Try(relationshipParser.Select<object>(_ => _)),
-            skipLine.ThenReturn<object>(Unit.Value)
+            Try(directionDirectiveParser.Select<IClassContent?>(_ => new DirectionItem(_))),
+            Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
+            Try(relationshipParser.Select<IClassContent?>(_ => new RelationshipItem(_))),
+            skipLine.ThenReturn<IClassContent?>(null)
         );
 
-        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
+        return element.Many();
     }
 
-    static ClassModel BuildModel(List<object> content)
+    static ClassModel BuildModel(IEnumerable<IClassContent?> content)
     {
         var model = new ClassModel();
         var classIds = new HashSet<string>();
@@ -285,11 +285,12 @@ public class ClassParser : IDiagramParser<ClassModel>
         {
             switch (item)
             {
-                case Direction d:
-                    model.Direction = d;
+                case DirectionItem d:
+                    model.Direction = d.Value;
                     break;
 
-                case ClassDefinition c:
+                case ClassDefinitionItem cdef:
+                    var c = cdef.Value;
                     if (!classIds.Contains(c.Id))
                     {
                         model.Classes.Add(c);
@@ -297,7 +298,8 @@ public class ClassParser : IDiagramParser<ClassModel>
                     }
                     break;
 
-                case ClassRelationship r:
+                case RelationshipItem rel:
+                    var r = rel.Value;
                     // Auto-add classes from relationships
                     if (!classIds.Contains(r.FromId))
                     {
@@ -318,4 +320,14 @@ public class ClassParser : IDiagramParser<ClassModel>
     }
 
     public Result<char, ClassModel> Parse(string input) => Parser.Parse(input);
+
+    interface IClassBodyContent;
+    readonly record struct AnnotationItem(ClassAnnotation Value) : IClassBodyContent;
+    readonly record struct MemberItem(ClassMember Value) : IClassBodyContent;
+    readonly record struct MethodItem(ClassMethod Value) : IClassBodyContent;
+
+    interface IClassContent;
+    readonly record struct DirectionItem(Direction Value) : IClassContent;
+    readonly record struct ClassDefinitionItem(ClassDefinition Value) : IClassContent;
+    readonly record struct RelationshipItem(ClassRelationship Value) : IClassContent;
 }

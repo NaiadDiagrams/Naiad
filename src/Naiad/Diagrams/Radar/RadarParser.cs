@@ -77,15 +77,13 @@ public class RadarParser : IDiagramParser<RadarModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IRadarContent?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(_ => (object?)(ItemType.Title, _))),
-            Try(axisParser.Select(_ => (object?)(ItemType.Axis, _))),
-            Try(curveLineParser.Select(_ => (object?)(ItemType.Curve, _))),
-            skipLine.ThenReturn<object?>(null)
+            Try(titleParser.Select<IRadarContent?>(_ => new TitleItem(_))),
+            Try(axisParser.Select<IRadarContent?>(_ => new AxisItem(_))),
+            Try(curveLineParser.Select<IRadarContent?>(_ => new CurveItem(_))),
+            skipLine.ThenReturn<IRadarContent?>(null)
         );
-
-    enum ItemType { Title, Axis, Curve }
 
     public static Parser<char, RadarModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
@@ -93,9 +91,9 @@ public class RadarParser : IDiagramParser<RadarModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static RadarModel BuildModel(List<object?> content)
+    static RadarModel BuildModel(IEnumerable<IRadarContent?> content)
     {
         var model = new RadarModel();
 
@@ -103,18 +101,18 @@ public class RadarParser : IDiagramParser<RadarModel>
         {
             switch (item)
             {
-                case (ItemType.Title, string title):
-                    model.Title = title;
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
 
-                case (ItemType.Axis, List<RadarAxis> axes):
-                    foreach (var axis in axes)
-                        model.Axes.Add(axis);
+                case AxisItem axis:
+                    foreach (var a in axis.Axes)
+                        model.Axes.Add(a);
                     break;
 
-                case (ItemType.Curve, List<RadarCurve> curves):
-                    foreach (var curve in curves)
-                        model.Curves.Add(curve);
+                case CurveItem curve:
+                    foreach (var c in curve.Curves)
+                        model.Curves.Add(c);
                     break;
             }
         }
@@ -123,6 +121,11 @@ public class RadarParser : IDiagramParser<RadarModel>
     }
 
     public Result<char, RadarModel> Parse(string input) => Parser.Parse(input);
+
+    interface IRadarContent;
+    readonly record struct TitleItem(string Value) : IRadarContent;
+    readonly record struct AxisItem(List<RadarAxis> Axes) : IRadarContent;
+    readonly record struct CurveItem(List<RadarCurve> Curves) : IRadarContent;
 }
 
 static class RadarCurveExtensions

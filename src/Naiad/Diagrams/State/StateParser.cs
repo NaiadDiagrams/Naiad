@@ -169,31 +169,28 @@ public class StateParser : IDiagramParser<StateModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent() =>
+    static Parser<char, IEnumerable<IStateContent?>> ParseContent() =>
         ParseContentRecursive();
 
-    static Parser<char, List<object>> ParseContentRecursive()
+    static Parser<char, IEnumerable<IStateContent?>> ParseContentRecursive()
     {
         var element = OneOf(
-            Try(directionParser.Select(_ => (object)_)),
-            Try(noteParser.Select<object>(_ => _)),
-            Try(stateDeclarationWithAlias.Select<object>(_ => _)),
-            Try(stateDeclarationWithType.Select<object>(_ => _)),
-            Try(compositeStateStart.Select<object>(_ => "composite:" + _)),
-            Try(compositeStateEnd.ThenReturn<object>("end_composite")),
-            Try(transitionParser.Select<object>(_ => _)),
-            Try(stateWithDescription.Select<object>(_ => _)),
-            Try(simpleStateDeclaration.Select<object>(_ => _)),
-            skipLine.ThenReturn<object>(Unit.Value)
+            Try(directionParser.Select<IStateContent?>(_ => new DirectionItem(_))),
+            Try(noteParser.Select<IStateContent?>(_ => new NoteItem(_))),
+            Try(stateDeclarationWithAlias.Select<IStateContent?>(_ => new StateItem(_))),
+            Try(stateDeclarationWithType.Select<IStateContent?>(_ => new StateItem(_))),
+            Try(compositeStateStart.Select<IStateContent?>(_ => new CompositeStartItem(_))),
+            Try(compositeStateEnd.ThenReturn<IStateContent?>(new CompositeEndItem())),
+            Try(transitionParser.Select<IStateContent?>(_ => new TransitionItem(_))),
+            Try(stateWithDescription.Select<IStateContent?>(_ => new StateItem(_))),
+            Try(simpleStateDeclaration.Select<IStateContent?>(_ => new StateItem(_))),
+            skipLine.ThenReturn<IStateContent?>(null)
         );
 
-        return element
-            .Many()
-            .Select(_ => _.Where(_ => _ is not Unit)
-                .ToList());
+        return element.Many();
     }
 
-    static StateModel BuildModel(List<object> content)
+    static StateModel BuildModel(IEnumerable<IStateContent?> content)
     {
         var model = new StateModel();
         var stateMap = new Dictionary<string, State>();
@@ -203,11 +200,12 @@ public class StateParser : IDiagramParser<StateModel>
         {
             switch (item)
             {
-                case Direction d:
-                    model.Direction = d;
+                case DirectionItem dir:
+                    model.Direction = dir.Value;
                     break;
 
-                case State s:
+                case StateItem stateItem:
+                    var s = stateItem.Value;
                     if (stateMap.TryGetValue(s.Id, out var existing))
                     {
                         // Update existing state with description/type
@@ -227,7 +225,8 @@ public class StateParser : IDiagramParser<StateModel>
 
                     break;
 
-                case StateTransition t:
+                case TransitionItem transitionItem:
+                    var t = transitionItem.Value;
                     // Handle [*] - create separate start and end states
                     var fromId = t.FromId;
                     var toId = t.ToId;
@@ -259,14 +258,13 @@ public class StateParser : IDiagramParser<StateModel>
                         model.Transitions.Add(transition);
                     break;
 
-                case StateNote n:
-                    model.Notes.Add(n);
+                case NoteItem note:
+                    model.Notes.Add(note.Value);
                     break;
 
-                case string s when s.StartsWith("composite:"):
-                    var compositeId = s[10..];
-                    var compositeState = new State { Id = compositeId };
-                    stateMap[compositeId] = compositeState;
+                case CompositeStartItem cs:
+                    var compositeState = new State { Id = cs.Id };
+                    stateMap[cs.Id] = compositeState;
 
                     if (compositeStack.Count > 0)
                         compositeStack.Peek().NestedStates.Add(compositeState);
@@ -276,7 +274,7 @@ public class StateParser : IDiagramParser<StateModel>
                     compositeStack.Push(compositeState);
                     break;
 
-                case "end_composite":
+                case CompositeEndItem:
                     if (compositeStack.Count > 0)
                         compositeStack.Pop();
                     break;
@@ -319,4 +317,12 @@ public class StateParser : IDiagramParser<StateModel>
     }
 
     public Result<char, StateModel> Parse(string input) => Parser.Parse(input);
+
+    interface IStateContent;
+    readonly record struct DirectionItem(Direction Value) : IStateContent;
+    readonly record struct StateItem(State Value) : IStateContent;
+    readonly record struct TransitionItem(StateTransition Value) : IStateContent;
+    readonly record struct NoteItem(StateNote Value) : IStateContent;
+    readonly record struct CompositeStartItem(string Id) : IStateContent;
+    readonly record struct CompositeEndItem : IStateContent;
 }

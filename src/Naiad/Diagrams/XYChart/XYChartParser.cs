@@ -113,14 +113,14 @@ public class XYChartParser : IDiagramParser<XYChartModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IXYContent?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(_ => (object?)("title", _))),
-            Try(xAxisParser.Select(_ => (object?)("x-axis", _.label, _.categories))),
-            Try(yAxisParser.Select(_ => (object?)("y-axis", _.label, _.min, _.max))),
-            Try(barParser.Select(_ => (object?)("series", _))),
-            Try(lineParser.Select(_ => (object?)("series", _))),
-            skipLine.ThenReturn<object?>(null)
+            Try(titleParser.Select<IXYContent?>(_ => new TitleItem(_))),
+            Try(xAxisParser.Select<IXYContent?>(_ => new XAxisItem(_.label, _.categories))),
+            Try(yAxisParser.Select<IXYContent?>(_ => new YAxisItem(_.label, _.min, _.max))),
+            Try(barParser.Select<IXYContent?>(_ => new SeriesItem(_))),
+            Try(lineParser.Select<IXYContent?>(_ => new SeriesItem(_))),
+            skipLine.ThenReturn<IXYContent?>(null)
         );
 
     public static Parser<char, XYChartModel> Parser =>
@@ -129,9 +129,9 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static XYChartModel BuildModel(List<object?> content)
+    static XYChartModel BuildModel(IEnumerable<IXYContent?> content)
     {
         var model = new XYChartModel();
 
@@ -139,23 +139,23 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         {
             switch (item)
             {
-                case ("title", string value):
-                    model.Title = value;
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
 
-                case ("x-axis", string label, List<string> categories):
-                    model.XAxisLabel = string.IsNullOrEmpty(label) ? null : label;
-                    model.XAxisCategories.AddRange(categories);
+                case XAxisItem xAxis:
+                    model.XAxisLabel = string.IsNullOrEmpty(xAxis.Label) ? null : xAxis.Label;
+                    model.XAxisCategories.AddRange(xAxis.Categories);
                     break;
 
-                case ("y-axis", string label, double min, double max):
-                    model.YAxisLabel = string.IsNullOrEmpty(label) ? null : label;
-                    model.YAxisMin = min;
-                    model.YAxisMax = max;
+                case YAxisItem yAxis:
+                    model.YAxisLabel = string.IsNullOrEmpty(yAxis.Label) ? null : yAxis.Label;
+                    model.YAxisMin = yAxis.Min;
+                    model.YAxisMax = yAxis.Max;
                     break;
 
-                case ("series", ChartSeries series):
-                    model.Series.Add(series);
+                case SeriesItem series:
+                    model.Series.Add(series.Series);
                     break;
             }
         }
@@ -164,4 +164,10 @@ public class XYChartParser : IDiagramParser<XYChartModel>
     }
 
     public Result<char, XYChartModel> Parse(string input) => Parser.Parse(input);
+
+    interface IXYContent;
+    readonly record struct TitleItem(string Value) : IXYContent;
+    readonly record struct XAxisItem(string Label, List<string> Categories) : IXYContent;
+    readonly record struct YAxisItem(string Label, double Min, double Max) : IXYContent;
+    readonly record struct SeriesItem(ChartSeries Series) : IXYContent;
 }
