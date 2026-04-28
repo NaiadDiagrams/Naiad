@@ -99,8 +99,9 @@ public class ERParser : IDiagramParser<ERModel>
     static Parser<char, List<EntityAttribute>> EntityBodyParser()
     {
         var attributeOrEmpty = OneOf(
-            Try(attributeParser.Select(_ => (EntityAttribute?)_)),
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)).ThenReturn((EntityAttribute?)null)
+            Try(attributeParser.Select<EntityAttribute?>(_ => _)),
+            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd))
+                .ThenReturn<EntityAttribute?>(null)
         );
 
         return attributeOrEmpty.Many()
@@ -145,9 +146,9 @@ public class ERParser : IDiagramParser<ERModel>
     static Parser<char, List<object>> ParseContent()
     {
         var element = OneOf(
-            Try(EntityDefinitionParser.Select(_ => (object)_)),
-            Try(relationshipParser.Select(_ => (object)_)),
-            skipLine.ThenReturn((object)Unit.Value)
+            Try(EntityDefinitionParser.Select<object>(_ => _)),
+            Try(relationshipParser.Select<object>(_ => _)),
+            skipLine.ThenReturn<object>(Unit.Value)
         );
 
         return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());

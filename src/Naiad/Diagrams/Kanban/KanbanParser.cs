@@ -43,7 +43,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         OneOf(
             Try(taskParser.Select(_ => (object?)("task", _.id, _.name))),
             Try(columnParser.Select(_ => (object?)("column", _.id, _.name))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, KanbanModel> Parser =>

@@ -172,13 +172,13 @@ public class SequenceParser : IDiagramParser<SequenceModel>
     static Parser<char, List<object>> ParseContent()
     {
         var element = OneOf(
-            Try(participantParser.Select(_ => (object)_)),
-            Try(messageParser.Select(_ => (object)_)),
-            Try(noteParser.Select(_ => (object)_)),
-            Try(activationParser.Select(_ => (object)_)),
+            Try(participantParser.Select<object>(_ => _)),
+            Try(messageParser.Select<object>(_ => _)),
+            Try(noteParser.Select<object>(_ => _)),
+            Try(activationParser.Select<object>(_ => _)),
             Try(autoNumberParser.Select(_ => (object)_)),
-            Try(titleParser.Select(_ => (object)("title:" + _))),
-            skipLine.ThenReturn((object)Unit.Value)
+            Try(titleParser.Select<object>(_ => "title:" + _)),
+            skipLine.ThenReturn<object>(Unit.Value)
         );
 
         return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());

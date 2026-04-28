@@ -1,12 +1,14 @@
-namespace MermaidSharp.Layout;
-
-public class DagreLayoutEngine : ILayoutEngine
+class DagreLayoutEngine : ILayoutEngine
 {
     public LayoutResult Layout(GraphDiagramBase diagram, LayoutOptions options)
     {
         if (diagram.Nodes.Count == 0)
         {
-            return new() { Width = 0, Height = 0 };
+            return new()
+            {
+                Width = 0,
+                Height = 0
+            };
         }
 
         // Build internal graph
@@ -50,7 +52,8 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var node in diagram.Nodes)
         {
-            graph.AddNode(new()
+            graph.AddNode(
+                new()
             {
                 Id = node.Id,
                 Width = node.Width,
@@ -60,7 +63,8 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var edge in diagram.Edges)
         {
-            graph.AddEdge(new()
+            graph.AddEdge(
+                new()
             {
                 SourceId = edge.SourceId,
                 TargetId = edge.TargetId
@@ -96,18 +100,18 @@ public class DagreLayoutEngine : ILayoutEngine
             // Find the original edge or reconstruct from dummies
             edgeLookup.TryGetValue((edge.SourceId, edge.TargetId), out var layoutEdge);
 
-            if (layoutEdge is not null)
+            if (layoutEdge is null)
+            {
+                // Edge was split by dummy nodes - collect points
+                CollectEdgePoints(graph, edge, options);
+            }
+            else
             {
                 edge.Points.Clear();
                 foreach (var point in layoutEdge.Points)
                 {
                     edge.Points.Add(new(point.X, point.Y));
                 }
-            }
-            else
-            {
-                // Edge was split by dummy nodes - collect points
-                CollectEdgePoints(graph, edge, options);
             }
         }
     }
@@ -133,16 +137,24 @@ public class DagreLayoutEngine : ILayoutEngine
         edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
 
         // Find dummy nodes
-        var dummies = graph.Nodes.Values
-            .Where(_ => _.IsDummy &&
-                        _.OriginalEdgeSource == edge.SourceId &&
-                        _.OriginalEdgeTarget == edge.TargetId)
-            .OrderBy(_ => _.Rank)
-            .ToList();
-
-        foreach (var dummy in dummies)
+        List<LayoutNode>? dummies = null;
+        foreach (var node in graph.Nodes.Values)
         {
-            edge.Points.Add(new(dummy.X, dummy.Y));
+            if (node.IsDummy &&
+                node.OriginalEdgeSource == edge.SourceId &&
+                node.OriginalEdgeTarget == edge.TargetId)
+            {
+                (dummies ??= []).Add(node);
+            }
+        }
+
+        if (dummies is not null)
+        {
+            dummies.Sort((a, b) => a.Rank.CompareTo(b.Rank));
+            foreach (var dummy in dummies)
+            {
+                edge.Points.Add(new(dummy.X, dummy.Y));
+            }
         }
 
         var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;

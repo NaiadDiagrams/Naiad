@@ -53,8 +53,8 @@ public class SankeyParser : IDiagramParser<SankeyModel>
     // Content item
     static Parser<char, SankeyLink?> ContentItem =>
         OneOf(
-            Try(linkParser.Select(_ => (SankeyLink?)_)),
-            skipLine.ThenReturn((SankeyLink?)null)
+            Try(linkParser.Select<SankeyLink?>(_ => _)),
+            skipLine.ThenReturn<SankeyLink?>(null)
         );
 
     public static Parser<char, SankeyModel> Parser =>

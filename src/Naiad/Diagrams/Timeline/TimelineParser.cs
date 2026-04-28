@@ -58,7 +58,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
             Try(sectionParser.Select(_ => (object?)("section", _))),
             Try(periodEventParser.Select(_ => (object?)("period", _.period, _.eventText))),
             Try(continuationEventParser.Select(_ => (object?)("continuation", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, TimelineModel> Parser =>

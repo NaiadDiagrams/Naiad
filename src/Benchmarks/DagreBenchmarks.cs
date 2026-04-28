@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using MermaidSharp;
 using MermaidSharp.Diagrams.Flowchart;
-using MermaidSharp.Layout;
 using MermaidSharp.Models;
 
 namespace Benchmarks;

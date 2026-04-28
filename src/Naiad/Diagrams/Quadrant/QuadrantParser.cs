@@ -101,7 +101,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
             Try(yAxisParser.Select(_ => (object?)("y-axis", _.bottom, _.top))),
             Try(quadrantLabelParser.Select(_ => (object?)("quadrant", _.quadrant, _.label))),
             Try(pointParser.Select(_ => (object?)("point", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, QuadrantModel> Parser =>

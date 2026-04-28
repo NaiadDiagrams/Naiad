@@ -82,7 +82,7 @@ public class RadarParser : IDiagramParser<RadarModel>
             Try(titleParser.Select(_ => (object?)(ItemType.Title, _))),
             Try(axisParser.Select(_ => (object?)(ItemType.Axis, _))),
             Try(curveLineParser.Select(_ => (object?)(ItemType.Curve, _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     enum ItemType { Title, Axis, Curve }

@@ -155,7 +155,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
             Try(requirementBlockParser.Select(_ => (object?)("requirement", _))),
             Try(elementBlockParser.Select(_ => (object?)("element", _))),
             Try(relationParser.Select(_ => (object?)("relation", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, RequirementModel> Parser =>

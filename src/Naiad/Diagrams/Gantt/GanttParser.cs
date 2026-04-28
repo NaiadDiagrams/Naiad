@@ -196,8 +196,8 @@ public class GanttParser : IDiagramParser<GanttModel>
             Try(axisFormatParser.Select(_ => (object?) ("axisFormat", _))),
             Try(excludesParser.Select(_ => (object?) ("excludes", _))),
             Try(sectionParser.Select(_ => (object?) ("section", _))),
-            Try(taskParser.Select(_ => (object?) _)),
-            skipLine.ThenReturn((object?) null)
+            Try(taskParser.Select<object?>(_ => _)),
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, GanttModel> Parser =>

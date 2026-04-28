@@ -120,7 +120,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
             Try(yAxisParser.Select(_ => (object?)("y-axis", _.label, _.min, _.max))),
             Try(barParser.Select(_ => (object?)("series", _))),
             Try(lineParser.Select(_ => (object?)("series", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, XYChartModel> Parser =>

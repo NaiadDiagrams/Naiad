@@ -143,7 +143,7 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
             Try(serviceParser.Select(_ => (object?)(ItemType.Service, _))),
             Try(junctionParser.Select(_ => (object?)(ItemType.Junction, _))),
             Try(edgeParser.Select(_ => (object?)(ItemType.Edge, _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     enum ItemType { Group, Service, Junction, Edge }

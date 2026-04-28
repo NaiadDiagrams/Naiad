@@ -114,7 +114,7 @@ public class BlockParser : IDiagramParser<BlockModel>
         OneOf(
             Try(columnsParser.Select(_ => (object?)("columns", _))),
             Try(elementsLineParser.Select(_ => (object?)("elements", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, BlockModel> Parser =>

@@ -61,7 +61,7 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
             Try(titleParser.Select(_ => (object?)("title", _))),
             Try(sectionParser.Select(_ => (object?)("section", _))),
             Try(taskParser.Select(_ => (object?)("task", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     public static Parser<char, UserJourneyModel> Parser =>

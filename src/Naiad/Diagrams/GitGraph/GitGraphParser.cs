@@ -193,12 +193,12 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     static Parser<char, List<GitOperation>> ParseContent()
     {
         var operation = OneOf(
-            Try(commitParser.Select(_ => (GitOperation?)_)),
-            Try(branchParser.Select(_ => (GitOperation?)_)),
-            Try(checkoutParser.Select(_ => (GitOperation?)_)),
-            Try(mergeParser.Select(_ => (GitOperation?)_)),
-            Try(cherryPickParser.Select(_ => (GitOperation?)_)),
-            skipLine.ThenReturn((GitOperation?)null)
+            Try(commitParser.Select<GitOperation?>(_ => _)),
+            Try(branchParser.Select<GitOperation?>(_ => _)),
+            Try(checkoutParser.Select<GitOperation?>(_ => _)),
+            Try(mergeParser.Select<GitOperation?>(_ => _)),
+            Try(cherryPickParser.Select<GitOperation?>(_ => _)),
+            skipLine.ThenReturn<GitOperation?>(null)
         );
 
         return operation.Many()

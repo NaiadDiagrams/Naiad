@@ -49,7 +49,7 @@ public class TreemapParser : IDiagramParser<TreemapModel>
     // Content item
     static Parser<char, NodeLine?> ContentItem =>
         Try(nodeLineParser.Select(_ => (NodeLine?)_))
-            .Or(skipLine.ThenReturn((NodeLine?)null));
+            .Or(skipLine.ThenReturn<NodeLine?>(null));
 
     public static Parser<char, TreemapModel> Parser =>
         from whitespance in CommonParsers.InlineWhitespace

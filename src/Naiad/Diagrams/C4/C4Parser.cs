@@ -223,7 +223,7 @@ public class C4Parser : IDiagramParser<C4Model>
             Try(containerParser.Select(_ => (object?)("element", _))),
             Try(componentParser.Select(_ => (object?)("element", _))),
             Try(relParser.Select(_ => (object?)("rel", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     // Recursive boundary parser - parses boundary with nested content
@@ -254,7 +254,7 @@ public class C4Parser : IDiagramParser<C4Model>
             Try(containerParser.Select(_ => (object?)("element", _))),
             Try(componentParser.Select(_ => (object?)("element", _))),
             Try(relParser.Select(_ => (object?)("rel", _))),
-            skipLine.ThenReturn((object?)null)
+            skipLine.ThenReturn<object?>(null)
         );
 
     // Diagram type header

@@ -176,15 +176,15 @@ public class StateParser : IDiagramParser<StateModel>
     {
         var element = OneOf(
             Try(directionParser.Select(_ => (object)_)),
-            Try(noteParser.Select(_ => (object)_)),
-            Try(stateDeclarationWithAlias.Select(_ => (object)_)),
-            Try(stateDeclarationWithType.Select(_ => (object)_)),
-            Try(compositeStateStart.Select(_ => (object)("composite:" + _))),
-            Try(compositeStateEnd.ThenReturn((object)"end_composite")),
-            Try(transitionParser.Select(_ => (object)_)),
-            Try(stateWithDescription.Select(_ => (object)_)),
-            Try(simpleStateDeclaration.Select(_ => (object)_)),
-            skipLine.ThenReturn((object)Unit.Value)
+            Try(noteParser.Select<object>(_ => _)),
+            Try(stateDeclarationWithAlias.Select<object>(_ => _)),
+            Try(stateDeclarationWithType.Select<object>(_ => _)),
+            Try(compositeStateStart.Select<object>(_ => "composite:" + _)),
+            Try(compositeStateEnd.ThenReturn<object>("end_composite")),
+            Try(transitionParser.Select<object>(_ => _)),
+            Try(stateWithDescription.Select<object>(_ => _)),
+            Try(simpleStateDeclaration.Select<object>(_ => _)),
+            skipLine.ThenReturn<object>(Unit.Value)
         );
 
         return element

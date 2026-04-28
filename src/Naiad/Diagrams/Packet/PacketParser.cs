@@ -42,8 +42,8 @@ public class PacketParser : IDiagramParser<PacketModel>
     // Content item
     static Parser<char, PacketField?> ContentItem =>
         OneOf(
-            Try(fieldParser.Select(_ => (PacketField?)_)),
-            skipLine.ThenReturn((PacketField?)null)
+            Try(fieldParser.Select<PacketField?>(_ => _)),
+            skipLine.ThenReturn<PacketField?>(null)
         );
 
     public static Parser<char, PacketModel> Parser =>

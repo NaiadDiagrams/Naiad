@@ -1,5 +1,3 @@
-namespace MermaidSharp.Layout;
-
 static class Acyclic
 {
     public static void Run(LayoutGraph graph)
@@ -23,13 +21,16 @@ static class Acyclic
             // Swap source and target in the graph
             var source = graph.GetNode(edge.SourceId);
             var target = graph.GetNode(edge.TargetId);
-            if (source is not null && target is not null)
+            if (source is null ||
+                target is null)
             {
-                source.OutEdges.Remove(edge);
-                target.InEdges.Remove(edge);
-                target.OutEdges.Add(edge);
-                source.InEdges.Add(edge);
+                continue;
             }
+
+            source.OutEdges.Remove(edge);
+            target.InEdges.Remove(edge);
+            target.OutEdges.Add(edge);
+            source.InEdges.Add(edge);
         }
     }
 
@@ -69,13 +70,15 @@ static class Acyclic
             // Swap back
             var source = graph.GetNode(edge.SourceId);
             var target = graph.GetNode(edge.TargetId);
-            if (source is not null && target is not null)
+            if (source is null || target is null)
             {
-                target.OutEdges.Remove(edge);
-                source.InEdges.Remove(edge);
-                source.OutEdges.Add(edge);
-                target.InEdges.Add(edge);
+                continue;
             }
+
+            target.OutEdges.Remove(edge);
+            source.InEdges.Remove(edge);
+            source.OutEdges.Add(edge);
+            target.InEdges.Add(edge);
         }
     }
 }
