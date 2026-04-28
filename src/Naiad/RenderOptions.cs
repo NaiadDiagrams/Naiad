@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp;
+namespace MermaidSharp;
 
 public class RenderOptions
 {
@@ -9,4 +9,5 @@ public class RenderOptions
     public double FontSize { get; set; } = 14;
     public string FontFamily { get; set; } = "Arial, sans-serif";
     public bool ShowBoundingBox { get; set; }
+    public bool AllowHtmlElements { get; set; } = true;
 }
