@@ -1,15 +1,13 @@
-namespace MermaidSharp.Diagrams.Timeline;
-
-public class TimelineParser : IDiagramParser<TimelineModel>
+class TimelineParser : IDiagramParser<TimelineModel>
 {
     public DiagramType DiagramType => DiagramType.Timeline;
 
     // Rest of line (for text content)
-    static Parser<char, string> restOfLine =
+    public static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Timeline
-    static Parser<char, string> titleParser =
+    public static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -18,7 +16,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select title.Trim();
 
     // Section: section Section Name
-    static Parser<char, string> sectionParser =
+    public static Parser<char, string> sectionParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("section")
         from ___ in CommonParsers.RequiredWhitespace
@@ -27,7 +25,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select name.Trim();
 
     // Period with event: 2020 : Event description
-    static Parser<char, (string period, string eventText)> periodEventParser =
+    public static Parser<char, (string period, string eventText)> periodEventParser =
         from _ in CommonParsers.InlineWhitespace
         from period in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in CommonParsers.InlineWhitespace
@@ -38,7 +36,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select (period.Trim(), eventText.Trim());
 
     // Continuation event: : Another event (no period, just event)
-    static Parser<char, string> continuationEventParser =
+    public static Parser<char, string> continuationEventParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in Char(':')
         from ___ in CommonParsers.InlineWhitespace
@@ -47,12 +45,12 @@ public class TimelineParser : IDiagramParser<TimelineModel>
         select eventText.Trim();
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, ITimelineContent?> ContentItem =>
+    public static Parser<char, ITimelineContent?> ContentItem =>
         OneOf(
             Try(titleParser.Select<ITimelineContent?>(_ => new TitleItem(_))),
             Try(sectionParser.Select<ITimelineContent?>(_ => new SectionItem(_))),
@@ -120,7 +118,7 @@ public class TimelineParser : IDiagramParser<TimelineModel>
 
     public Result<char, TimelineModel> Parse(string input) => Parser.Parse(input);
 
-    interface ITimelineContent;
+    internal interface ITimelineContent;
     readonly record struct TitleItem(string Value) : ITimelineContent;
     readonly record struct SectionItem(string Name) : ITimelineContent;
     readonly record struct PeriodItem(string Period, string EventText) : ITimelineContent;

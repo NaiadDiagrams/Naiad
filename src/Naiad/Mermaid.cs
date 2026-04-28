@@ -40,7 +40,7 @@ public static class Mermaid
         };
     }
 
-    public static DiagramType DetectDiagramType(string input)
+    static DiagramType DetectDiagramType(string input)
     {
         var firstLine = input.TrimStart();
 

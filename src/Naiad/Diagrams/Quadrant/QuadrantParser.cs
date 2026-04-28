@@ -1,15 +1,13 @@
-namespace MermaidSharp.Diagrams.Quadrant;
-
-public class QuadrantParser : IDiagramParser<QuadrantModel>
+class QuadrantParser : IDiagramParser<QuadrantModel>
 {
     public DiagramType DiagramType => DiagramType.Quadrant;
 
     // Rest of line (for text content)
-    static Parser<char, string> restOfLine =
+    public static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Chart
-    static Parser<char, string> titleParser =
+    public static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -18,7 +16,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select title.Trim();
 
     // X-axis: x-axis Low --> High
-    static Parser<char, (string left, string right)> xAxisParser =
+    public static Parser<char, (string left, string right)> xAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -32,7 +30,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select (left.Trim().TrimEnd('-').Trim(), right.Trim());
 
     // Y-axis: y-axis Low --> High
-    static Parser<char, (string bottom, string top)> yAxisParser =
+    public static Parser<char, (string bottom, string top)> yAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -46,7 +44,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select (bottom.Trim().TrimEnd('-').Trim(), top.Trim());
 
     // Quadrant labels: quadrant-1 Label
-    static Parser<char, (int quadrant, string label)> quadrantLabelParser =
+    public static Parser<char, (int quadrant, string label)> quadrantLabelParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("quadrant-")
         from num in Digit.Select(_ => _ - '0')
@@ -56,7 +54,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         select (num, label.Trim());
 
     // Number parser for coordinates
-    static Parser<char, double> numberParser =
+    public static Parser<char, double> numberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()
         from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
@@ -65,7 +63,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
             CultureInfo.InvariantCulture);
 
     // Point: Name: [0.5, 0.7]
-    static Parser<char, QuadrantPoint> pointParser =
+    public static Parser<char, QuadrantPoint> pointParser =
         from _ in CommonParsers.InlineWhitespace
         from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in Char(':')
@@ -89,12 +87,12 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, IQuadrantContent?> ContentItem =>
+    public static Parser<char, IQuadrantContent?> ContentItem =>
         OneOf(
             Try(titleParser.Select<IQuadrantContent?>(_ => new TitleItem(_))),
             Try(xAxisParser.Select<IQuadrantContent?>(_ => new XAxisItem(_.left, _.right))),
@@ -155,7 +153,7 @@ public class QuadrantParser : IDiagramParser<QuadrantModel>
 
     public Result<char, QuadrantModel> Parse(string input) => Parser.Parse(input);
 
-    interface IQuadrantContent;
+    internal interface IQuadrantContent;
     readonly record struct TitleItem(string Value) : IQuadrantContent;
     readonly record struct XAxisItem(string Left, string Right) : IQuadrantContent;
     readonly record struct YAxisItem(string Bottom, string Top) : IQuadrantContent;

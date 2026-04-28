@@ -2,7 +2,7 @@ namespace MermaidSharp.Rendering;
 
 public static class ShapePathGenerator
 {
-    public static string Rectangle(double x, double y, double width, double height, double rx = 0)
+    static string Rectangle(double x, double y, double width, double height, double rx = 0)
     {
         if (rx > 0)
         {
@@ -22,7 +22,7 @@ public static class ShapePathGenerator
         return $"M{Fmt(x)},{Fmt(y)} H{Fmt(x + width)} V{Fmt(y + height)} H{Fmt(x)} Z";
     }
 
-    public static string Circle(double cx, double cy, double r) =>
+    static string Circle(double cx, double cy, double r) =>
         $"""
          M{Fmt(cx)},{Fmt(cy - r)}
          A{Fmt(r)},{Fmt(r)} 0 1 1 {Fmt(cx)},{Fmt(cy + r)}
@@ -36,7 +36,7 @@ public static class ShapePathGenerator
          A{Fmt(rx)},{Fmt(ry)} 0 1 1 {Fmt(cx)},{Fmt(cy - ry)} Z
          """;
 
-    public static string Diamond(double cx, double cy, double width, double height)
+    static string Diamond(double cx, double cy, double width, double height)
     {
         var w2 = width / 2;
         var h2 = height / 2;
@@ -48,7 +48,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Hexagon(double cx, double cy, double width, double height)
+    static string Hexagon(double cx, double cy, double width, double height)
     {
         var w4 = width / 4;
         var w2 = width / 2;
@@ -63,7 +63,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Stadium(double x, double y, double width, double height)
+    static string Stadium(double x, double y, double width, double height)
     {
         var r = height / 2;
         return $"""
@@ -89,7 +89,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Parallelogram(double x, double y, double width, double height, double skew = 0.2)
+    static string Parallelogram(double x, double y, double width, double height, double skew = 0.2)
     {
         var offset = width * skew;
         return $"""
@@ -132,7 +132,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Asymmetric(double x, double y, double width, double height)
+    static string Asymmetric(double x, double y, double width, double height)
     {
         var notch = width * 0.15;
         return $"""
@@ -144,7 +144,7 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string Subroutine(double x, double y, double width, double height)
+    static string Subroutine(double x, double y, double width, double height)
     {
         var inset = width * 0.1;
         return $"""
@@ -159,13 +159,13 @@ public static class ShapePathGenerator
                 """;
     }
 
-    public static string DoubleCircle(double cx, double cy, double r)
+    static string DoubleCircle(double cx, double cy, double r)
     {
         var innerR = r * 0.85;
         return $"{Circle(cx, cy, r)} {Circle(cx, cy, innerR)}";
     }
 
-    public static string Document(double x, double y, double width, double height)
+    static string Document(double x, double y, double width, double height)
     {
         var waveHeight = height * 0.15;
         var bodyHeight = height - waveHeight;

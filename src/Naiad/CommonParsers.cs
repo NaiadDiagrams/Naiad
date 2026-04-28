@@ -50,7 +50,7 @@ public static class CommonParsers
             .Before(Char('"'))
             .Labelled("double-quoted string");
 
-    public static Parser<char, string> SingleQuotedString =>
+    static Parser<char, string> SingleQuotedString =>
         Char('\'')
             .Then(Token(_ => _ != '\'').ManyString())
             .Before(Char('\''))
@@ -151,7 +151,7 @@ public static class CommonParsers
             });
 
     // Keyword helpers
-    public static Parser<char, Unit> Keyword(string keyword) =>
+    static Parser<char, Unit> Keyword(string keyword) =>
         Try(String(keyword)).ThenReturn(Unit.Value);
 
     public static Parser<char, Unit> KeywordLine(string keyword) =>
@@ -161,7 +161,7 @@ public static class CommonParsers
             .Then(LineEnd);
 
     // Color parsing (#rgb, #rrggbb, named colors)
-    public static Parser<char, string> HexColor =>
+    static Parser<char, string> HexColor =>
         Char('#')
             .Then(Token(_ => char.IsLetterOrDigit(_)).AtLeastOnceString())
             .Select(_ => "#" + _);

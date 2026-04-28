@@ -1,17 +1,15 @@
-namespace MermaidSharp.Diagrams.Gantt;
-
-public class GanttParser : IDiagramParser<GanttModel>
+class GanttParser : IDiagramParser<GanttModel>
 {
     public DiagramType DiagramType => DiagramType.Gantt;
 
     // Basic parsers
-    static Parser<char, string> restOfLine =
+    public static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' &&
                    _ != '\n')
             .ManyString();
 
     // Title: title My Chart Title
-    static Parser<char, string> titleParser =
+    public static Parser<char, string> titleParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from title in CIString("title")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -20,7 +18,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         select innerTitle.Trim();
 
     // Date format: dateFormat YYYY-MM-DD
-    static Parser<char, string> dateFormatParser =
+    public static Parser<char, string> dateFormatParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from dateFormat in CIString("dateFormat")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -29,7 +27,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         select format.Trim();
 
     // Axis format: axisFormat %Y-%m-%d
-    static Parser<char, string> axisFormatParser =
+    public static Parser<char, string> axisFormatParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from axisFormat in CIString("axisFormat")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -38,7 +36,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         select format.Trim();
 
     // Excludes: excludes weekends
-    static Parser<char, List<string>> excludesParser =
+    public static Parser<char, List<string>> excludesParser =
         from whitespace in CommonParsers.InlineWhitespace
         from excludes in CIString("excludes")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -47,7 +45,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         select innerExcludes.Trim().Split(',').Select(_ => _.Trim()).ToList();
 
     // Section: section Section Name
-    static Parser<char, string> sectionParser =
+    public static Parser<char, string> sectionParser =
         from inlienWhitespace in CommonParsers.InlineWhitespace
         from section in CIString("section")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -85,7 +83,7 @@ public class GanttParser : IDiagramParser<GanttModel>
     //   Task A :a1, 2024-01-01, 30d
     //   Task B :done, after a1, 20d
     //   Task C :crit, milestone, 2024-02-01, 0d
-    static Parser<char, GanttTask> taskParser =
+    public static Parser<char, GanttTask> taskParser =
         from _ in CommonParsers.InlineWhitespace
         from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from __ in CommonParsers.InlineWhitespace
@@ -184,12 +182,12 @@ public class GanttParser : IDiagramParser<GanttModel>
     }
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Content item
-    static Parser<char, IGanttContent?> ContentItem =>
+    public static Parser<char, IGanttContent?> ContentItem =>
         OneOf(
             Try(titleParser.Select<IGanttContent?>(_ => new TitleItem(_))),
             Try(dateFormatParser.Select<IGanttContent?>(_ => new DateFormatItem(_))),
@@ -263,7 +261,7 @@ public class GanttParser : IDiagramParser<GanttModel>
 
     public Result<char, GanttModel> Parse(string input) => Parser.Parse(input);
 
-    interface IGanttContent;
+    internal interface IGanttContent;
     readonly record struct TitleItem(string Value) : IGanttContent;
     readonly record struct DateFormatItem(string Value) : IGanttContent;
     readonly record struct AxisFormatItem(string Value) : IGanttContent;

@@ -1,23 +1,21 @@
-namespace MermaidSharp.Diagrams.C4;
-
-public class C4Parser : IDiagramParser<C4Model>
+class C4Parser : IDiagramParser<C4Model>
 {
     public DiagramType DiagramType => DiagramType.C4Context;
 
     // identifier
-    static Parser<char, string> identifier =
+    public static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Quoted string
-    static Parser<char, string> quotedString =
+    public static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Rest of line
-    static Parser<char, string> restOfLine =
+    public static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Title: title My Diagram
-    static Parser<char, string> titleParser =
+    public static Parser<char, string> titleParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("title")
         from ___ in CommonParsers.RequiredWhitespace
@@ -26,7 +24,7 @@ public class C4Parser : IDiagramParser<C4Model>
         select title.Trim();
 
     // Person(id, "label", "description")
-    static Parser<char, C4Element> personParser =
+    public static Parser<char, C4Element> personParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("Person_Ext")), CIString("Person"))
         from __ in Char('(')
@@ -50,7 +48,7 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // System(id, "label", "description") or System_Ext
-    static Parser<char, C4Element> systemParser =
+    public static Parser<char, C4Element> systemParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("System_Ext")), CIString("System"))
         from __ in Char('(')
@@ -74,12 +72,12 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Optional quoted string with comma prefix
-    static Parser<char, string> optionalQuotedArg =
+    public static Parser<char, string> optionalQuotedArg =
         CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
             .Then(quotedString);
 
     // SystemDb(id, "label", "description") or SystemDb_Ext
-    static Parser<char, C4Element> systemDbParser =
+    public static Parser<char, C4Element> systemDbParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("SystemDb_Ext")), CIString("SystemDb"))
         from __ in Char('(')
@@ -100,7 +98,7 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Container(id, "label", "tech", "description") or Container_Ext
-    static Parser<char, C4Element> containerParser =
+    public static Parser<char, C4Element> containerParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(CIString("Container_Ext")),
@@ -131,7 +129,7 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Component(id, "label", "tech", "description")
-    static Parser<char, C4Element> componentParser =
+    public static Parser<char, C4Element> componentParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(Try(CIString("Component_Ext")), CIString("Component"))
         from __ in Char('(')
@@ -154,7 +152,7 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Rel(from, to, "label", "tech")
-    static Parser<char, C4Relationship> relParser =
+    public static Parser<char, C4Relationship> relParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(
             Try(CIString("Rel_D")), Try(CIString("Rel_U")),
@@ -179,12 +177,12 @@ public class C4Parser : IDiagramParser<C4Model>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Boundary opening: Type_Boundary(id, "label") {
-    static Parser<char, (string id, string label, C4BoundaryType type)> BoundaryOpen =>
+    public static Parser<char, (string id, string label, C4BoundaryType type)> BoundaryOpen =>
         from _ in CommonParsers.InlineWhitespace
         from boundaryType in OneOf(
             Try(CIString("Container_Boundary")).ThenReturn(C4BoundaryType.Container),
@@ -207,7 +205,7 @@ public class C4Parser : IDiagramParser<C4Model>
         select (id, label, boundaryType);
 
     // Boundary closing: }
-    static Parser<char, Unit> boundaryClose =
+    public static Parser<char, Unit> boundaryClose =
         from _ in CommonParsers.InlineWhitespace
         from __ in Char('}')
         from ___ in CommonParsers.InlineWhitespace
@@ -215,7 +213,7 @@ public class C4Parser : IDiagramParser<C4Model>
         select Unit.Value;
 
     // Element inside boundary (sets BoundaryId later)
-    static Parser<char, IC4Content?> BoundaryContentItem =>
+    public static Parser<char, IC4Content?> BoundaryContentItem =>
         OneOf(
             Try(personParser.Select<IC4Content?>(_ => new ElementItem(_))),
             Try(systemDbParser.Select<IC4Content?>(_ => new ElementItem(_))),
@@ -227,7 +225,7 @@ public class C4Parser : IDiagramParser<C4Model>
         );
 
     // Recursive boundary parser - parses boundary with nested content
-    static Parser<char, BoundaryItem> BoundaryParser =>
+    public static Parser<char, BoundaryItem> BoundaryParser =>
         from open in BoundaryOpen
         from content in BoundaryContentOrNestedBoundary.Until(Lookahead(Try(boundaryClose)))
         from close in boundaryClose
@@ -237,14 +235,14 @@ public class C4Parser : IDiagramParser<C4Model>
         );
 
     // Content inside boundary: either nested boundary or regular element
-    static Parser<char, IC4Content?> BoundaryContentOrNestedBoundary =>
+    public static Parser<char, IC4Content?> BoundaryContentOrNestedBoundary =>
         OneOf(
             Try(BoundaryParser.Select<IC4Content?>(_ => _)),
             BoundaryContentItem
         );
 
     // Content item (top level)
-    static Parser<char, IC4Content?> ContentItem =>
+    public static Parser<char, IC4Content?> ContentItem =>
         OneOf(
             Try(titleParser.Select<IC4Content?>(_ => new TitleItem(_))),
             Try(BoundaryParser.Select<IC4Content?>(_ => _)),
@@ -258,7 +256,7 @@ public class C4Parser : IDiagramParser<C4Model>
         );
 
     // Diagram type header
-    static Parser<char, C4DiagramType> diagramTypeParser =
+    public static Parser<char, C4DiagramType> diagramTypeParser =
         OneOf(
             Try(CIString("C4Context")).ThenReturn(C4DiagramType.Context),
             Try(CIString("C4Container")).ThenReturn(C4DiagramType.Container),
@@ -329,9 +327,10 @@ public class C4Parser : IDiagramParser<C4Model>
 
     public Result<char, C4Model> Parse(string input) => Parser.Parse(input);
 
-    interface IC4Content;
-    readonly record struct TitleItem(string Value) : IC4Content;
-    readonly record struct ElementItem(C4Element Element) : IC4Content;
-    readonly record struct RelItem(C4Relationship Value) : IC4Content;
-    readonly record struct BoundaryItem(C4Boundary Boundary, List<IC4Content?> Content) : IC4Content;
+    internal interface IC4Content;
+    internal readonly record struct TitleItem(string Value) : IC4Content;
+    internal readonly record struct ElementItem(C4Element Element) : IC4Content;
+    internal readonly record struct RelItem(C4Relationship Value) : IC4Content;
+
+    internal readonly record struct BoundaryItem(C4Boundary Boundary, List<IC4Content?> Content) : IC4Content;
 }

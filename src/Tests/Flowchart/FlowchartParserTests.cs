@@ -1,5 +1,4 @@
 using MermaidSharp.Models;
-using MermaidSharp.Diagrams.Flowchart;
 
 public class FlowchartParserTests
 {

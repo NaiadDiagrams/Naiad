@@ -1,11 +1,9 @@
-namespace MermaidSharp.Diagrams.XYChart;
-
-public class XYChartParser : IDiagramParser<XYChartModel>
+class XYChartParser : IDiagramParser<XYChartModel>
 {
     public DiagramType DiagramType => DiagramType.XYChart;
 
     // Rest of line (for text content)
-    static Parser<char, string> restOfLine =
+    public static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Quoted string
@@ -47,7 +45,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select items.ToList();
 
     // X-axis: x-axis [cat1, cat2] or x-axis "Label" [cat1, cat2]
-    static Parser<char, (string label, List<string> categories)> xAxisParser =
+    public static Parser<char, (string label, List<string> categories)> xAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("x-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -58,7 +56,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select (label.GetValueOrDefault() ?? "", categories);
 
     // Y-axis: y-axis "Label" min --> max or y-axis min --> max
-    static Parser<char, (string label, double min, double max)> yAxisParser =
+    public static Parser<char, (string label, double min, double max)> yAxisParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("y-axis")
         from ___ in CommonParsers.RequiredWhitespace
@@ -78,7 +76,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
                 range.HasValue ? range.Value.max : 100);
 
     // Data list: [100, 200, 300]
-    static Parser<char, List<double>> dataListParser =
+    public static Parser<char, List<double>> dataListParser =
         from _ in Char('[')
         from __ in CommonParsers.InlineWhitespace
         from items in numberParser.SeparatedAtLeastOnce(
@@ -88,7 +86,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select items.ToList();
 
     // Bar series: bar [100, 200, 300]
-    static Parser<char, ChartSeries> barParser =
+    public static Parser<char, ChartSeries> barParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("bar")
         from ___ in CommonParsers.RequiredWhitespace
@@ -98,7 +96,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select new ChartSeries { Type = ChartSeriesType.Bar, Data = data };
 
     // Line series: line [100, 200, 300]
-    static Parser<char, ChartSeries> lineParser =
+    public static Parser<char, ChartSeries> lineParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("line")
         from ___ in CommonParsers.RequiredWhitespace
@@ -108,12 +106,12 @@ public class XYChartParser : IDiagramParser<XYChartModel>
         select new ChartSeries { Type = ChartSeriesType.Line, Data = data };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, IXYContent?> ContentItem =>
+    public static Parser<char, IXYContent?> ContentItem =>
         OneOf(
             Try(titleParser.Select<IXYContent?>(_ => new TitleItem(_))),
             Try(xAxisParser.Select<IXYContent?>(_ => new XAxisItem(_.label, _.categories))),
@@ -165,7 +163,7 @@ public class XYChartParser : IDiagramParser<XYChartModel>
 
     public Result<char, XYChartModel> Parse(string input) => Parser.Parse(input);
 
-    interface IXYContent;
+    internal interface IXYContent;
     readonly record struct TitleItem(string Value) : IXYContent;
     readonly record struct XAxisItem(string Label, List<string> Categories) : IXYContent;
     readonly record struct YAxisItem(string Label, double Min, double Max) : IXYContent;

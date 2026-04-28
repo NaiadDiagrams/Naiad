@@ -1,19 +1,17 @@
-namespace MermaidSharp.Diagrams.Requirement;
-
-public class RequirementParser : IDiagramParser<RequirementModel>
+class RequirementParser : IDiagramParser<RequirementModel>
 {
     public DiagramType DiagramType => DiagramType.Requirement;
 
     // identifier
-    static Parser<char, string> identifier =
+    public static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Rest of line
-    static Parser<char, string> restOfLine =
+    public static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 
     // Requirement type
-    static Parser<char, RequirementType> requirementTypeParser =
+    public static Parser<char, RequirementType> requirementTypeParser =
         OneOf(
             Try(CIString("functionalRequirement")).ThenReturn(RequirementType.FunctionalRequirement),
             Try(CIString("interfaceRequirement")).ThenReturn(RequirementType.InterfaceRequirement),
@@ -24,7 +22,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         );
 
     // Property: key: value
-    static Parser<char, (string key, string value)> propertyParser =
+    public static Parser<char, (string key, string value)> propertyParser =
         from _ in CommonParsers.InlineWhitespace
         from key in identifier
         from __ in CommonParsers.InlineWhitespace
@@ -35,7 +33,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         select (key.ToLowerInvariant(), value.Trim());
 
     // Requirement block
-    static Parser<char, Requirement> requirementBlockParser =
+    public static Parser<char, Requirement> requirementBlockParser =
         from _ in CommonParsers.InlineWhitespace
         from type in requirementTypeParser
         from __ in CommonParsers.RequiredWhitespace
@@ -82,7 +80,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
     }
 
     // Element block
-    static Parser<char, RequirementElement> elementBlockParser =
+    public static Parser<char, RequirementElement> elementBlockParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("element")
         from ___ in CommonParsers.RequiredWhitespace
@@ -112,7 +110,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
     }
 
     // Relation type
-    static Parser<char, RelationType> relationTypeParser =
+    public static Parser<char, RelationType> relationTypeParser =
         OneOf(
             Try(CIString("contains")).ThenReturn(RelationType.Contains),
             Try(CIString("copies")).ThenReturn(RelationType.Copies),
@@ -124,7 +122,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         );
 
     // Relation: source - type -> target
-    static Parser<char, RequirementRelation> relationParser =
+    public static Parser<char, RequirementRelation> relationParser =
         from _ in CommonParsers.InlineWhitespace
         from source in identifier
         from __ in CommonParsers.InlineWhitespace
@@ -145,12 +143,12 @@ public class RequirementParser : IDiagramParser<RequirementModel>
         };
 
     // Skip line
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, IRequirementContent?> ContentItem =>
+    public static Parser<char, IRequirementContent?> ContentItem =>
         OneOf(
             Try(requirementBlockParser.Select<IRequirementContent?>(_ => new RequirementBlockItem(_))),
             Try(elementBlockParser.Select<IRequirementContent?>(_ => new ElementBlockItem(_))),
@@ -193,7 +191,7 @@ public class RequirementParser : IDiagramParser<RequirementModel>
 
     public Result<char, RequirementModel> Parse(string input) => Parser.Parse(input);
 
-    interface IRequirementContent;
+    internal interface IRequirementContent;
     readonly record struct RequirementBlockItem(Requirement Value) : IRequirementContent;
     readonly record struct ElementBlockItem(RequirementElement Value) : IRequirementContent;
     readonly record struct RelationItem(RequirementRelation Value) : IRequirementContent;

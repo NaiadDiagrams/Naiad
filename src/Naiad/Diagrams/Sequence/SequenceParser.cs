@@ -1,17 +1,17 @@
-namespace MermaidSharp.Diagrams.Sequence;
+using NotePosition = MermaidSharp.Diagrams.Sequence.NotePosition;
 
-public class SequenceParser : IDiagramParser<SequenceModel>
+class SequenceParser : IDiagramParser<SequenceModel>
 {
     public DiagramType DiagramType => DiagramType.Sequence;
 
     // Sequence diagram identifier (no dash to avoid conflicts with arrows)
-    static Parser<char, string> seqIdentifier =
+    public static Parser<char, string> seqIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')
             .AtLeastOnceString()
             .Labelled("identifier");
 
     // Participant declaration: participant/actor Name as Alias
-    static Parser<char, Participant> participantParser =
+    public static Parser<char, Participant> participantParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(String("actor")).ThenReturn(ParticipantType.Actor),
@@ -34,7 +34,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Message arrows
-    static Parser<char, MessageType> messageArrowParser =
+    public static Parser<char, MessageType> messageArrowParser =
         OneOf(
             Try(String("-->>")).ThenReturn(MessageType.DottedArrow),
             Try(String("->>")).ThenReturn(MessageType.SolidArrow),
@@ -47,7 +47,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         );
 
     // Message: From->>To: Text
-    static Parser<char, Message> messageParser =
+    public static Parser<char, Message> messageParser =
         from _ in CommonParsers.InlineWhitespace
         from fromId in seqIdentifier
         from __ in CommonParsers.InlineWhitespace
@@ -74,7 +74,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Note: Note right of/left of/over Participant: Text
-    static Parser<char, Note> noteParser =
+    public static Parser<char, Note> noteParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("Note")).Or(String("note"))
         from __ in CommonParsers.RequiredWhitespace
@@ -104,7 +104,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Activate/Deactivate
-    static Parser<char, Activation> activationParser =
+    public static Parser<char, Activation> activationParser =
         from _ in CommonParsers.InlineWhitespace
         from isActivate in OneOf(
             String("activate").ThenReturn(true),
@@ -120,14 +120,14 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // AutoNumber
-    static Parser<char, bool> autoNumberParser =
+    public static Parser<char, bool> autoNumberParser =
         CommonParsers.InlineWhitespace
             .Then(String("autonumber"))
             .Then(CommonParsers.LineEnd)
             .ThenReturn(true);
 
     // Title
-    static Parser<char, string> titleParser =
+    public static Parser<char, string> titleParser =
         CommonParsers.InlineWhitespace
             .Then(String("title"))
             .Then(CommonParsers.InlineWhitespace)
@@ -136,7 +136,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
 
     // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
     // These are skipped for now - content renders without visual grouping
-    static Parser<char, Unit> blockStartParser =
+    public static Parser<char, Unit> blockStartParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in OneOf(
             Try(String("alt")),
@@ -155,7 +155,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         select Unit.Value;
 
     // Skip line
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         OneOf(
             Try(blockStartParser),
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
@@ -169,7 +169,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, IEnumerable<ISequenceContent?>> ParseContent()
+    public static Parser<char, IEnumerable<ISequenceContent?>> ParseContent()
     {
         var element = OneOf(
             Try(participantParser.Select<ISequenceContent?>(_ => new ParticipantItem(_))),
@@ -238,7 +238,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
 
     public Result<char, SequenceModel> Parse(string input) => Parser.Parse(input);
 
-    interface ISequenceContent;
+    internal interface ISequenceContent;
     readonly record struct ParticipantItem(Participant Value) : ISequenceContent;
     readonly record struct MessageItem(Message Value) : ISequenceContent;
     readonly record struct NoteItem(Note Value) : ISequenceContent;

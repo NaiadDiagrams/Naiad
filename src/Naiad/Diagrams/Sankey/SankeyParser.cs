@@ -1,11 +1,9 @@
-namespace MermaidSharp.Diagrams.Sankey;
-
-public class SankeyParser : IDiagramParser<SankeyModel>
+class SankeyParser : IDiagramParser<SankeyModel>
 {
     public DiagramType DiagramType => DiagramType.Sankey;
 
     // Number parser
-    static Parser<char, double> numberParser =
+    public static Parser<char, double> numberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()
         from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
@@ -14,20 +12,20 @@ public class SankeyParser : IDiagramParser<SankeyModel>
             CultureInfo.InvariantCulture);
 
     // Quoted string
-    static Parser<char, string> quotedString =
+    public static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Unquoted name (no commas or newlines)
-    static Parser<char, string> unquotedName =
+    public static Parser<char, string> unquotedName =
         Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
             .Select(_ => _.Trim());
 
     // Name (quoted or unquoted)
-    static Parser<char, string> name =
+    public static Parser<char, string> name =
         quotedString.Or(unquotedName);
 
     // Link: source,target,value
-    static Parser<char, SankeyLink> linkParser =
+    public static Parser<char, SankeyLink> linkParser =
         from _ in CommonParsers.InlineWhitespace
         from source in name
         from __ in Char(',')
@@ -46,12 +44,12 @@ public class SankeyParser : IDiagramParser<SankeyModel>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, SankeyLink?> ContentItem =>
+    public static Parser<char, SankeyLink?> ContentItem =>
         OneOf(
             Try(linkParser.Select<SankeyLink?>(_ => _)),
             skipLine.ThenReturn<SankeyLink?>(null)

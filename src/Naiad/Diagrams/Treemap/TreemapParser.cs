@@ -1,28 +1,26 @@
-namespace MermaidSharp.Diagrams.Treemap;
-
-public class TreemapParser : IDiagramParser<TreemapModel>
+class TreemapParser : IDiagramParser<TreemapModel>
 {
     public DiagramType DiagramType => DiagramType.Treemap;
 
     // Quoted string: "text"
-    static Parser<char, string> quotedString =
+    public static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Number
-    static Parser<char, double> number =
+    public static Parser<char, double> number =
         from neg in Char('-').Optional()
         from digits in Digit.AtLeastOnceString()
         from dec in Char('.').Then(Digit.AtLeastOnceString()).Optional()
         select double.Parse((neg.HasValue ? "-" : "") + digits + (dec.HasValue ? "." + dec.Value : ""));
 
     // CSS class: :::className
-    static Parser<char, string> cssClass =
+    public static Parser<char, string> cssClass =
         String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
 
     // Node line
-    record NodeLine(int Indent, string Name, double? Value, string? CssClass);
+    internal record NodeLine(int Indent, string Name, double? Value, string? CssClass);
 
-    static Parser<char, NodeLine> nodeLineParser =
+    public static Parser<char, NodeLine> nodeLineParser =
         from indent in CommonParsers.Indentation
         from name in quotedString
         from value in (
@@ -42,13 +40,13 @@ public class TreemapParser : IDiagramParser<TreemapModel>
         select new NodeLine(indent, name, value.GetValueOrDefault(), cssClass.GetValueOrDefault());
 
     // Skip line
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, NodeLine?> ContentItem =>
-        Try(nodeLineParser.Select(_ => (NodeLine?)_))
+    public static Parser<char, NodeLine?> ContentItem =>
+        Try(nodeLineParser.Select<NodeLine?>(_ => _))
             .Or(skipLine.ThenReturn<NodeLine?>(null));
 
     public static Parser<char, TreemapModel> Parser =>

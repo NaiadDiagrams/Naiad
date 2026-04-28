@@ -1,10 +1,8 @@
-namespace MermaidSharp.Diagrams.Pie;
-
-public class PieParser : IDiagramParser<PieModel>
+class PieParser : IDiagramParser<PieModel>
 {
     public DiagramType DiagramType => DiagramType.Pie;
 
-    static Parser<char, PieSection> sectionParser =
+    public static Parser<char, PieSection> sectionParser =
         from _ in CommonParsers.InlineWhitespace
         from label in CommonParsers.QuotedString
         from __ in CommonParsers.InlineWhitespace
@@ -15,7 +13,7 @@ public class PieParser : IDiagramParser<PieModel>
         from _____ in CommonParsers.LineEnd
         select new PieSection { Label = label, Value = value };
 
-    static Parser<char, string> titleLine =
+    public static Parser<char, string> titleLine =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("title")
         from __ in CommonParsers.RequiredWhitespace
@@ -23,15 +21,15 @@ public class PieParser : IDiagramParser<PieModel>
         from ___ in CommonParsers.LineEnd
         select title;
 
-    static Parser<char, bool> showDataParser =
+    public static Parser<char, bool> showDataParser =
         Try(String("showData")).ThenReturn(true).Or(Return(false));
 
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Inline title: pie title My Title (on same line)
-    static Parser<char, string> inlineTitleParser =
+    public static Parser<char, string> inlineTitleParser =
         from keyword in String("title")
         from _ in CommonParsers.RequiredWhitespace
         from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
@@ -49,7 +47,7 @@ public class PieParser : IDiagramParser<PieModel>
         from content in ParseContent()
         select BuildModel(showData, inlineTitle.HasValue ? inlineTitle.Value : content.title, content.sections);
 
-    static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
+    public static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
         from lines in Try(titleLine.Select(_ => (title: (string?)_, section: (PieSection?)null)))
             .Or(Try(sectionParser.Select(_ => (title: (string?)null, section: (PieSection?)_))))
             .Or(skipLine.ThenReturn((title: (string?)null, section: (PieSection?)null))).Many()

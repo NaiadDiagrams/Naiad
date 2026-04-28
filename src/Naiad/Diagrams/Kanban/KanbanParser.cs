@@ -1,22 +1,20 @@
-namespace MermaidSharp.Diagrams.Kanban;
-
-public class KanbanParser : IDiagramParser<KanbanModel>
+class KanbanParser : IDiagramParser<KanbanModel>
 {
     public DiagramType DiagramType => DiagramType.Kanban;
 
     // identifier
-    static Parser<char, string> identifier =
+    public static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label in brackets: [Label Text]
-    static Parser<char, string> labelParser =
+    public static Parser<char, string> labelParser =
         from _ in Char('[')
         from label in Token(_ => _ != ']').ManyString()
         from __ in Char(']')
         select label.Trim();
 
     // Column: id[Name] (no leading whitespace or minimal)
-    static Parser<char, (string id, string name)> columnParser =
+    public static Parser<char, (string id, string name)> columnParser =
         from indent in CommonParsers.Indentation.Where(_ => _ < 4)
         from id in identifier
         from name in labelParser
@@ -25,7 +23,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         select (id, name);
 
     // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
-    static Parser<char, (string id, string name)> taskParser =
+    public static Parser<char, (string id, string name)> taskParser =
         from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
         from id in identifier
         from name in labelParser
@@ -34,12 +32,12 @@ public class KanbanParser : IDiagramParser<KanbanModel>
         select (id, name);
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, IKanbanContent?> ContentItem =>
+    public static Parser<char, IKanbanContent?> ContentItem =>
         OneOf(
             Try(taskParser.Select<IKanbanContent?>(_ => new TaskItem(_.id, _.name))),
             Try(columnParser.Select<IKanbanContent?>(_ => new ColumnItem(_.id, _.name))),
@@ -79,7 +77,7 @@ public class KanbanParser : IDiagramParser<KanbanModel>
 
     public Result<char, KanbanModel> Parse(string input) => Parser.Parse(input);
 
-    interface IKanbanContent;
+    internal interface IKanbanContent;
     readonly record struct ColumnItem(string Id, string Name) : IKanbanContent;
     readonly record struct TaskItem(string Id, string Name) : IKanbanContent;
 }

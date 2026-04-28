@@ -1,5 +1,3 @@
-using MermaidSharp.Diagrams.Pie;
-
 public class PieParserTests
 {
     [Test]

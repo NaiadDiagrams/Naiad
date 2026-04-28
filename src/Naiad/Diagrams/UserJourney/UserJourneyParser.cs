@@ -1,6 +1,4 @@
-namespace MermaidSharp.Diagrams.UserJourney;
-
-public class UserJourneyParser : IDiagramParser<UserJourneyModel>
+class UserJourneyParser : IDiagramParser<UserJourneyModel>
 {
     public DiagramType DiagramType => DiagramType.UserJourney;
 
@@ -33,7 +31,7 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
             .Select(actors => actors.Select(_ => _.Trim()).ToList());
 
     // Task: Task Name: 5: Me, Cat
-    static Parser<char, JourneyTask> taskParser =
+    public static Parser<char, JourneyTask> taskParser =
         from _ in CommonParsers.InlineWhitespace
         from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
         from colon in Char(':')
@@ -51,12 +49,12 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, IUserJourneyContent?> ContentItem =>
+    public static Parser<char, IUserJourneyContent?> ContentItem =>
         OneOf(
             Try(titleParser.Select<IUserJourneyContent?>(_ => new TitleItem(_))),
             Try(sectionParser.Select<IUserJourneyContent?>(_ => new SectionItem(_))),
@@ -106,7 +104,7 @@ public class UserJourneyParser : IDiagramParser<UserJourneyModel>
 
     public Result<char, UserJourneyModel> Parse(string input) => Parser.Parse(input);
 
-    interface IUserJourneyContent;
+    internal interface IUserJourneyContent;
     readonly record struct TitleItem(string Value) : IUserJourneyContent;
     readonly record struct SectionItem(string Name) : IUserJourneyContent;
     readonly record struct TaskItem(JourneyTask Task) : IUserJourneyContent;
