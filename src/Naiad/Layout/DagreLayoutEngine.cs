@@ -54,21 +54,21 @@ class DagreLayoutEngine : ILayoutEngine
         {
             graph.AddNode(
                 new()
-            {
-                Id = node.Id,
-                Width = node.Width,
-                Height = node.Height
-            });
+                {
+                    Id = node.Id,
+                    Width = node.Width,
+                    Height = node.Height
+                });
         }
 
         foreach (var edge in diagram.Edges)
         {
             graph.AddEdge(
                 new()
-            {
-                SourceId = edge.SourceId,
-                TargetId = edge.TargetId
-            });
+                {
+                    SourceId = edge.SourceId,
+                    TargetId = edge.TargetId
+                });
         }
 
         return graph;
@@ -80,12 +80,14 @@ class DagreLayoutEngine : ILayoutEngine
         foreach (var node in diagram.Nodes)
         {
             var layoutNode = graph.GetNode(node.Id);
-            if (layoutNode is not null)
+            if (layoutNode is null)
             {
-                node.Position = new(layoutNode.X, layoutNode.Y);
-                node.Rank = layoutNode.Rank;
-                node.Order = layoutNode.Order;
+                continue;
             }
+
+            node.Position = new(layoutNode.X, layoutNode.Y);
+            node.Rank = layoutNode.Rank;
+            node.Order = layoutNode.Order;
         }
 
         // Build edge lookup for O(1) access instead of O(n) FirstOrDefault per edge
@@ -144,7 +146,14 @@ class DagreLayoutEngine : ILayoutEngine
                 node.OriginalEdgeSource == edge.SourceId &&
                 node.OriginalEdgeTarget == edge.TargetId)
             {
-                (dummies ??= []).Add(node);
+                if (dummies == null)
+                {
+                    dummies = [node];
+                }
+                else
+                {
+                    dummies.Add(node);
+                }
             }
         }
 

@@ -74,9 +74,9 @@ static class CoordinateAssignment
         for (var iteration = 0; iteration < 4; iteration++)
         {
             // Down pass
-            for (var r = 1; r < graph.Ranks.Length; r++)
+            for (var index = 1; index < graph.Ranks.Length; index++)
             {
-                AlignToNeighbors(graph, r, true, nodeSep, isHorizontal);
+                AlignToNeighbors(graph, index, true, nodeSep, isHorizontal);
             }
 
             // Up pass
@@ -123,23 +123,29 @@ static class CoordinateAssignment
             if (Math.Abs(delta) > 0.1)
             {
                 var canMove = CanMoveNode(graph, node, delta, nodeSep, isHorizontal);
-                if (canMove)
+                if (!canMove)
                 {
-                    if (isHorizontal)
-                    {
-                        node.Y = targetPos;
-                    }
-                    else
-                    {
-                        node.X = targetPos;
-                    }
+                    continue;
+                }
+
+                if (isHorizontal)
+                {
+                    node.Y = targetPos;
+                }
+                else
+                {
+                    node.X = targetPos;
                 }
             }
         }
     }
 
-    static bool CanMoveNode(LayoutGraph graph, LayoutNode node, double delta,
-        double nodeSep, bool isHorizontal)
+    static bool CanMoveNode(
+        LayoutGraph graph,
+        LayoutNode node,
+        double delta,
+        double nodeSep,
+        bool isHorizontal)
     {
         var nodesInRank = graph.Ranks[node.Rank];
         var nodePos = isHorizontal ? node.Y : node.X;

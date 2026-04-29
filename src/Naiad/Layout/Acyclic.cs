@@ -34,8 +34,12 @@ static class Acyclic
         }
     }
 
-    static void Dfs(LayoutGraph graph, string nodeId, HashSet<string> visited,
-        HashSet<string> stack, List<LayoutEdge> edgesToReverse)
+    static void Dfs(
+        LayoutGraph graph,
+        string nodeId,
+        HashSet<string> visited,
+        HashSet<string> stack,
+        List<LayoutEdge> edgesToReverse)
     {
         visited.Add(nodeId);
         stack.Add(nodeId);
@@ -46,7 +50,7 @@ static class Acyclic
             return;
         }
 
-        foreach (var edge in node.OutEdges.ToList())
+        foreach (var edge in node.OutEdges)
         {
             if (stack.Contains(edge.TargetId))
             {
@@ -69,8 +73,13 @@ static class Acyclic
             edge.IsReversed = false;
             // Swap back
             var source = graph.GetNode(edge.SourceId);
+            if (source is null)
+            {
+                continue;
+            }
+
             var target = graph.GetNode(edge.TargetId);
-            if (source is null || target is null)
+            if (target is null)
             {
                 continue;
             }

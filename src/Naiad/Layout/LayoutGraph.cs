@@ -26,7 +26,11 @@ class LayoutGraph
 
     public IEnumerable<LayoutNode> GetSuccessors(string nodeId)
     {
-        if (!Nodes.TryGetValue(nodeId, out var node)) yield break;
+        if (!Nodes.TryGetValue(nodeId, out var node))
+        {
+            yield break;
+        }
+
         foreach (var edge in node.OutEdges)
         {
             if (Nodes.TryGetValue(edge.TargetId, out var target))
@@ -56,10 +60,12 @@ class LayoutGraph
     {
         var maxRank = Nodes.Values.Max(_ => _.Rank);
         Ranks = new List<LayoutNode>[maxRank + 1];
+
         for (var i = 0; i <= maxRank; i++)
         {
             Ranks[i] = [];
         }
+
         foreach (var node in Nodes.Values)
         {
             Ranks[node.Rank].Add(node);

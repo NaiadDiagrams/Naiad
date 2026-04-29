@@ -137,6 +137,7 @@ internal static class Ordering
         {
             total += CountCrossingsBetweenRanks(graph, r, r + 1);
         }
+
         return total;
     }
 
