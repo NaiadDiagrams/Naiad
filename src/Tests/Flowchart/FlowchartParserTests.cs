@@ -1,4 +1,4 @@
-using MermaidSharp.Models;
+using Naiad.Models;
 
 public class FlowchartParserTests
 {

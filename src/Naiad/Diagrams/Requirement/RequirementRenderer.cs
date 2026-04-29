@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Requirement;
+namespace Naiad.Diagrams.Requirement;
 
 public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 {

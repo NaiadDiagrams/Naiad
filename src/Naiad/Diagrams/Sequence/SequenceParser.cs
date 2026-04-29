@@ -1,4 +1,4 @@
-using NotePosition = MermaidSharp.Diagrams.Sequence.NotePosition;
+using NotePosition = Naiad.Diagrams.Sequence.NotePosition;
 
 class SequenceParser : IDiagramParser<SequenceModel>
 {

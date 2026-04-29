@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Packet;
+﻿namespace Naiad.Diagrams.Packet;
 
 public class PacketField
 {

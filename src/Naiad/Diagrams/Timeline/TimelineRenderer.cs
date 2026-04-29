@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Timeline;
+namespace Naiad.Diagrams.Timeline;
 
 public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 {

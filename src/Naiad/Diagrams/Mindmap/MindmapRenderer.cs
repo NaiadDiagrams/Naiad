@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Mindmap;
+namespace Naiad.Diagrams.Mindmap;
 
 public class MindmapRenderer : IDiagramRenderer<MindmapModel>
 {

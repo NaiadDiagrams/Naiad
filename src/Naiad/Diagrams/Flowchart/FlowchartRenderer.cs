@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Flowchart;
+namespace Naiad.Diagrams.Flowchart;
 
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<FlowchartModel>

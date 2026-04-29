@@ -1,3 +1,3 @@
-﻿namespace MermaidSharp.Diagrams.Sequence;
+﻿namespace Naiad.Diagrams.Sequence;
 
 public abstract class SequenceElement;

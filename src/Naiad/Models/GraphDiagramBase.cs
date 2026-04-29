@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Models;
+﻿namespace Naiad.Models;
 
 public abstract class GraphDiagramBase : DiagramBase
 {

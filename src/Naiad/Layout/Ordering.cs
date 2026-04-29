@@ -1,4 +1,4 @@
-namespace MermaidSharp.Layout;
+namespace Naiad.Layout;
 
 internal static class Ordering
 {

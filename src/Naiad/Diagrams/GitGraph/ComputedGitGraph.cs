@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.GitGraph;
+﻿namespace Naiad.Diagrams.GitGraph;
 
 public class ComputedGitGraph
 {

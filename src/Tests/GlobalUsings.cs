@@ -1,4 +1,4 @@
-global using MermaidSharp;
+global using Naiad;
 global using NUnit.Framework;
 global using System.Runtime.CompilerServices;
 global using System.Text;

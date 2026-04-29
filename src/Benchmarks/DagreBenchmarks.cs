@@ -1,7 +1,7 @@
 using BenchmarkDotNet.Attributes;
-using MermaidSharp;
-using MermaidSharp.Diagrams.Flowchart;
-using MermaidSharp.Models;
+using Naiad;
+using Naiad.Diagrams.Flowchart;
+using Naiad.Models;
 
 namespace Benchmarks;
 

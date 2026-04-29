@@ -1,4 +1,4 @@
-namespace MermaidSharp.Layout;
+namespace Naiad.Layout;
 
 class LayoutGraph
 {

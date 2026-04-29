@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.UserJourney;
+namespace Naiad.Diagrams.UserJourney;
 
 public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 {

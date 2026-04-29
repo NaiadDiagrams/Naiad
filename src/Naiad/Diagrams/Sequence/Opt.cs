@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Sequence;
+﻿namespace Naiad.Diagrams.Sequence;
 
 public class Opt : SequenceElement
 {

@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Sankey;
+﻿namespace Naiad.Diagrams.Sankey;
 
 public class SankeyLink
 {

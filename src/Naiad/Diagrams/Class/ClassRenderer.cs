@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Class;
+namespace Naiad.Diagrams.Class;
 
 public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ClassModel>

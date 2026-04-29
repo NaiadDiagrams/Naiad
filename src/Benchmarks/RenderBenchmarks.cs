@@ -1,5 +1,5 @@
 using BenchmarkDotNet.Attributes;
-using MermaidSharp;
+using Naiad;
 
 namespace Benchmarks;
 
@@ -200,4 +200,12 @@ public class RenderBenchmarks
     [Benchmark] public string Architecture_Render() => Mermaid.Render(Architecture);
     [Benchmark] public string Radar_Render() => Mermaid.Render(Radar);
     [Benchmark] public string Treemap_Render() => Mermaid.Render(Treemap);
+
+    [Benchmark] public string Flowchart_Large() => Mermaid.Render(LargeFixtures.Flowchart);
+    [Benchmark] public string Sequence_Large() => Mermaid.Render(LargeFixtures.Sequence);
+    [Benchmark] public string Class_Large() => Mermaid.Render(LargeFixtures.Class);
+    [Benchmark] public string State_Large() => Mermaid.Render(LargeFixtures.State);
+    [Benchmark] public string ER_Large() => Mermaid.Render(LargeFixtures.ER);
+    [Benchmark] public string Mindmap_Large() => Mermaid.Render(LargeFixtures.Mindmap);
+    [Benchmark] public string Gantt_Large() => Mermaid.Render(LargeFixtures.Gantt);
 }

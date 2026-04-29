@@ -1,4 +1,4 @@
-namespace MermaidSharp.Rendering;
+namespace Naiad.Rendering;
 
 /// <summary>
 /// Provides CSS styles that match mermaid.ink output exactly.

@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Quadrant;
+namespace Naiad.Diagrams.Quadrant;
 
 public class QuadrantModel : DiagramBase
 {

@@ -1,4 +1,4 @@
-using NotePosition = MermaidSharp.Diagrams.State.NotePosition;
+using NotePosition = Naiad.Diagrams.State.NotePosition;
 
 class StateParser : IDiagramParser<StateModel>
 {

@@ -1,5 +1,5 @@
 // ReSharper disable MemberCanBeMadeStatic.Local
-namespace MermaidSharp.Diagrams.State;
+namespace Naiad.Diagrams.State;
 
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
 public class StateRenderer(ILayoutEngine? layoutEngine = null) :

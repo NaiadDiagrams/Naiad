@@ -1,25 +1,25 @@
 using BenchmarkDotNet.Attributes;
-using MermaidSharp.Diagrams.Architecture;
-using MermaidSharp.Diagrams.Block;
-using MermaidSharp.Diagrams.C4;
-using MermaidSharp.Diagrams.Class;
-using MermaidSharp.Diagrams.EntityRelationship;
-using MermaidSharp.Diagrams.Flowchart;
-using MermaidSharp.Diagrams.Gantt;
-using MermaidSharp.Diagrams.GitGraph;
-using MermaidSharp.Diagrams.Kanban;
-using MermaidSharp.Diagrams.Mindmap;
-using MermaidSharp.Diagrams.Packet;
-using MermaidSharp.Diagrams.Pie;
-using MermaidSharp.Diagrams.Quadrant;
-using MermaidSharp.Diagrams.Radar;
-using MermaidSharp.Diagrams.Requirement;
-using MermaidSharp.Diagrams.Sankey;
-using MermaidSharp.Diagrams.Sequence;
-using MermaidSharp.Diagrams.State;
-using MermaidSharp.Diagrams.Timeline;
-using MermaidSharp.Diagrams.UserJourney;
-using MermaidSharp.Diagrams.XYChart;
+using Naiad.Diagrams.Architecture;
+using Naiad.Diagrams.Block;
+using Naiad.Diagrams.C4;
+using Naiad.Diagrams.Class;
+using Naiad.Diagrams.EntityRelationship;
+using Naiad.Diagrams.Flowchart;
+using Naiad.Diagrams.Gantt;
+using Naiad.Diagrams.GitGraph;
+using Naiad.Diagrams.Kanban;
+using Naiad.Diagrams.Mindmap;
+using Naiad.Diagrams.Packet;
+using Naiad.Diagrams.Pie;
+using Naiad.Diagrams.Quadrant;
+using Naiad.Diagrams.Radar;
+using Naiad.Diagrams.Requirement;
+using Naiad.Diagrams.Sankey;
+using Naiad.Diagrams.Sequence;
+using Naiad.Diagrams.State;
+using Naiad.Diagrams.Timeline;
+using Naiad.Diagrams.UserJourney;
+using Naiad.Diagrams.XYChart;
 
 namespace Benchmarks;
 
@@ -210,4 +210,12 @@ public class ParseBenchmarks
     [Benchmark] public RequirementModel Requirement_Parse() => new RequirementParser().Parse(Requirement).Value;
     [Benchmark] public ArchitectureModel Architecture_Parse() => new ArchitectureParser().Parse(Architecture).Value;
     [Benchmark] public RadarModel Radar_Parse() => new RadarParser().Parse(Radar).Value;
+
+    [Benchmark] public FlowchartModel Flowchart_Large_Parse() => new FlowchartParser().Parse(LargeFixtures.Flowchart).Value;
+    [Benchmark] public SequenceModel Sequence_Large_Parse() => new SequenceParser().Parse(LargeFixtures.Sequence).Value;
+    [Benchmark] public ClassModel Class_Large_Parse() => new ClassParser().Parse(LargeFixtures.Class).Value;
+    [Benchmark] public StateModel State_Large_Parse() => new StateParser().Parse(LargeFixtures.State).Value;
+    [Benchmark] public ERModel ER_Large_Parse() => new ERParser().Parse(LargeFixtures.ER).Value;
+    [Benchmark] public MindmapModel Mindmap_Large_Parse() => new MindmapParser().Parse(LargeFixtures.Mindmap).Value;
+    [Benchmark] public GanttModel Gantt_Large_Parse() => new GanttParser().Parse(LargeFixtures.Gantt).Value;
 }

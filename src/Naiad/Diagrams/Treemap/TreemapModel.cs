@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Treemap;
+namespace Naiad.Diagrams.Treemap;
 
 public class TreemapModel : DiagramBase
 {

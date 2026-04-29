@@ -1,4 +1,4 @@
-namespace MermaidSharp.Rendering;
+namespace Naiad.Rendering;
 
 public abstract class SvgElement
 {

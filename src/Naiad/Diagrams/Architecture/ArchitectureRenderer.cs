@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Architecture;
+namespace Naiad.Diagrams.Architecture;
 
 public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 {
@@ -39,7 +39,12 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         if (model.Services.Count == 0 && model.Groups.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
                 fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }

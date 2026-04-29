@@ -1,4 +1,4 @@
-namespace MermaidSharp.Models;
+namespace Naiad.Models;
 
 public readonly record struct Position(double X, double Y)
 {
