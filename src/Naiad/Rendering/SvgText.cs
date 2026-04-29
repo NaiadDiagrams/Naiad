@@ -2,16 +2,17 @@ namespace Naiad.Rendering;
 
 public class SvgText : SvgElement
 {
-    public double X { get; set; }
-    public double Y { get; set; }
-    public bool OmitXY { get; set; } // When true, don't output x/y attributes (for transformed text)
-    public required string Content { get; set; }
-    public string? TextAnchor { get; set; }
-    public string? DominantBaseline { get; set; }
-    public string? FontSize { get; set; }
-    public string? FontFamily { get; set; }
-    public string? FontWeight { get; set; }
-    public string? Fill { get; set; }
+    public double X { get; init; }
+    public double Y { get; init; }
+    // When true, don't output x/y attributes (for transformed text)
+    public bool OmitXY { get; init; }
+    public required string Content { get; init; }
+    public string? TextAnchor { get; init; }
+    public string? DominantBaseline { get; init; }
+    public string? FontSize { get; init; }
+    public string? FontFamily { get; init; }
+    public string? FontWeight { get; init; }
+    public string? Fill { get; init; }
 
     public override void ToXml(StringBuilder builder)
     {
