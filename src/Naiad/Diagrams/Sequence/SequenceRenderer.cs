@@ -297,10 +297,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             // Self-referencing message - draw as a loop
             var loopWidth = 40;
             var loopHeight = 30;
-            var path = $"M{Fmt(fromX)},{Fmt(y)} " +
-                       $"L{Fmt(fromX + loopWidth)},{Fmt(y)} " +
-                       $"L{Fmt(fromX + loopWidth)},{Fmt(y + loopHeight)} " +
-                       $"L{Fmt(fromX)},{Fmt(y + loopHeight)}";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M{fromX:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y + loopHeight:0.##} L{fromX:0.##},{y + loopHeight:0.##}");
             builder.AddPath(path,
                 fill: "none",
                 stroke: "#333",
@@ -422,11 +421,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         // Note box (folded corner style)
         var foldSize = 8;
-        var path = $"M{Fmt(noteX)},{Fmt(y)} " +
-                   $"L{Fmt(noteX + NoteWidth - foldSize)},{Fmt(y)} " +
-                   $"L{Fmt(noteX + NoteWidth)},{Fmt(y + foldSize)} " +
-                   $"L{Fmt(noteX + NoteWidth)},{Fmt(y + NoteHeight)} " +
-                   $"L{Fmt(noteX)},{Fmt(y + NoteHeight)} Z";
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"M{noteX:0.##},{y:0.##} L{noteX + NoteWidth - foldSize:0.##},{y:0.##} L{noteX + NoteWidth:0.##},{y + foldSize:0.##} L{noteX + NoteWidth:0.##},{y + NoteHeight:0.##} L{noteX:0.##},{y + NoteHeight:0.##} Z");
 
         builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
@@ -465,5 +462,4 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

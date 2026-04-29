@@ -137,10 +137,12 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Use a simple path with control points
         var midX = (fromX + toX) / 2;
 
-        var path = $"""
-                    M {Fmt(fromX)} {Fmt(fromY)}
-                    C {Fmt(midX)} {Fmt(fromY)}, {Fmt(midX)} {Fmt(toY)}, {Fmt(toX)} {Fmt(toY)}
-                    """;
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"""
+             M {fromX:0.##} {fromY:0.##}
+             C {midX:0.##} {fromY:0.##}, {midX:0.##} {toY:0.##}, {toX:0.##} {toY:0.##}
+             """);
 
         builder.AddPath(path, stroke: toColor, strokeWidth: 2, fill: "none");
     }
@@ -365,5 +367,4 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.55;
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

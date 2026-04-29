@@ -110,20 +110,14 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Build path from points
         var points = edge.Points;
-        var pathData = $"M{Fmt(points[0].X)},{Fmt(points[0].Y)}";
+        var pathBuilder = new StringBuilder();
+        pathBuilder.Append(CultureInfo.InvariantCulture, $"M{points[0].X:0.##},{points[0].Y:0.##}");
+        for (var i = 1; i < points.Count; i++)
+        {
+            pathBuilder.Append(CultureInfo.InvariantCulture, $" L{points[i].X:0.##},{points[i].Y:0.##}");
+        }
 
-        if (points.Count == 2)
-        {
-            pathData += $" L{Fmt(points[1].X)},{Fmt(points[1].Y)}";
-        }
-        else
-        {
-            // Use curve for smoother edges
-            for (var i = 1; i < points.Count; i++)
-            {
-                pathData += $" L{Fmt(points[i].X)},{Fmt(points[i].Y)}";
-            }
-        }
+        var pathData = pathBuilder.ToString();
 
         var strokeDasharray = edge.LineStyle switch
         {
@@ -143,7 +137,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         var markerStart = edge.HasArrowTail ? "url(#mermaid-svg_flowchart-v2-pointStart)" : null;
 
-        builder.AddPath(pathData,
+        builder.AddPath(
+            pathData,
             fill: "none",
             stroke: edgeStroke,
             strokeWidth: strokeWidth,
@@ -221,6 +216,4 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var height = fontSize * 1.5;
         return new(width, height);
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

@@ -123,7 +123,12 @@ internal static class Ordering
         nodesInRank.Sort((a, b) =>
         {
             var cmp = positions[a.Id].CompareTo(positions[b.Id]);
-            return cmp != 0 ? cmp : a.Order.CompareTo(b.Order);
+            if (cmp == 0)
+            {
+                return a.Order.CompareTo(b.Order);
+            }
+
+            return cmp;
         });
 
         for (var i = 0; i < nodesInRank.Count; i++)

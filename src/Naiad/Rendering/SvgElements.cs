@@ -31,6 +31,4 @@ public abstract class SvgElement
             builder.Append($" transform=\"{Transform}\"");
         }
     }
-
-    protected static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

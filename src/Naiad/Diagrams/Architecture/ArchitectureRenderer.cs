@@ -197,7 +197,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         {
             var iconX = x + (ServiceWidth - IconSize) / 2;
             var iconY = y + 8;
-            builder.BeginGroup(transform: $"translate({Fmt(iconX)},{Fmt(iconY)}) scale(0.64)");
+            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({iconX:0.##},{iconY:0.##}) scale(0.64)"));
             builder.AddPath(path, fill: color, stroke: "#333", strokeWidth: 1);
             builder.EndGroup();
         }
@@ -266,9 +266,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var ax2 = x - arrowSize * Math.Cos(angle + arrowAngle);
         var ay2 = y - arrowSize * Math.Sin(angle + arrowAngle);
 
-        builder.AddPath($"M {Fmt(x)} {Fmt(y)} L {Fmt(ax1)} {Fmt(ay1)} L {Fmt(ax2)} {Fmt(ay2)} Z",
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {x:0.##} {y:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
             fill: "#666", stroke: "none");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

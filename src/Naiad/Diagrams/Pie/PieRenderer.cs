@@ -56,7 +56,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         builder.EndGroup();
 
         // Main pie group with transform to center
-        builder.BeginGroup(transform: $"translate({Fmt(cx)},{Fmt(cy)})");
+        builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({cx:0.##},{cy:0.##})"));
 
         // Outer circle
         builder.AddCircle(0, 0, OuterRadius, cssClass: "pieOuterCircle");
@@ -138,7 +138,9 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         if (Math.Abs(y2) < 1e-10) y2 = 0;
 
         // Match mermaid's precision (2-3 decimal places)
-        return $"M{FmtPath(x1)},{FmtPath(y1)}A{Radius},{Radius},0,{largeArc},1,{FmtPath(x2)},{FmtPath(y2)}L0,0Z";
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"M{Math.Round(x1, 3):0.###},{Math.Round(y1, 3):0.###}A{Radius},{Radius},0,{largeArc},1,{Math.Round(x2, 3):0.###},{Math.Round(y2, 3):0.###}L0,0Z");
     }
 
     static string GetRgbColor(string? color, int index)
@@ -163,8 +165,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
     }
 
     static double ToRadians(double degrees) => degrees * Math.PI / 180;
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
-    static string FmtPath(double value) => Math.Round(value, 3).ToString("0.###", CultureInfo.InvariantCulture);
+
     // Use R format to get full precision, then remove unnecessary trailing zeros
     static string FmtMermaid(double value)
     {

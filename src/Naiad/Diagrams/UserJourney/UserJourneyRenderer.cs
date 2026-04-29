@@ -181,6 +181,4 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         string[] colors = ["#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD", "#98D8C8"];
         return colors[index % colors.Length];
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

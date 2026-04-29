@@ -129,6 +129,4 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
 
         return builder.Build();
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

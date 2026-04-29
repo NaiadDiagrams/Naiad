@@ -92,16 +92,23 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             else
             {
                 // Polygon using path
-                var pathData = new List<string>();
+                var pathBuilder = new StringBuilder();
                 for (var j = 0; j < axisCount; j++)
                 {
                     var angle = 2 * Math.PI * j / axisCount - Math.PI / 2;
                     var x = cx + radius * Math.Cos(angle);
                     var y = cy + radius * Math.Sin(angle);
-                    pathData.Add(j == 0 ? $"M {Fmt(x)} {Fmt(y)}" : $"L {Fmt(x)} {Fmt(y)}");
+                    if (j == 0)
+                    {
+                        pathBuilder.Append(CultureInfo.InvariantCulture, $"M {x:0.##} {y:0.##}");
+                    }
+                    else
+                    {
+                        pathBuilder.Append(CultureInfo.InvariantCulture, $" L {x:0.##} {y:0.##}");
+                    }
                 }
-                pathData.Add("Z");
-                builder.AddPath(string.Join(" ", pathData), fill: "none", stroke: "#E0E0E0", strokeWidth: 1);
+                pathBuilder.Append(" Z");
+                builder.AddPath(pathBuilder.ToString(), fill: "none", stroke: "#E0E0E0", strokeWidth: 1);
             }
         }
     }
@@ -144,7 +151,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             return;
         }
 
-        var pathData = new List<string>();
+        var pathBuilder = new StringBuilder();
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
         {
             var value = curve.Values[i];
@@ -154,14 +161,21 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             var angle = 2 * Math.PI * i / axisCount - Math.PI / 2;
             var x = cx + radius * Math.Cos(angle);
             var y = cy + radius * Math.Sin(angle);
-            pathData.Add(i == 0 ? $"M {Fmt(x)} {Fmt(y)}" : $"L {Fmt(x)} {Fmt(y)}");
+            if (i == 0)
+            {
+                pathBuilder.Append(CultureInfo.InvariantCulture, $"M {x:0.##} {y:0.##}");
+            }
+            else
+            {
+                pathBuilder.Append(CultureInfo.InvariantCulture, $" L {x:0.##} {y:0.##}");
+            }
         }
-        pathData.Add("Z");
+        pathBuilder.Append(" Z");
 
         // Draw filled polygon using path
         // Convert color to semi-transparent by using rgba
         var fillColor = ColorToRgba(color, 0.3);
-        builder.AddPath(string.Join(" ", pathData),
+        builder.AddPath(pathBuilder.ToString(),
             fill: fillColor, stroke: color, strokeWidth: 2);
 
         // Draw points
@@ -192,8 +206,6 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
                 fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily);
         }
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 
     static string ColorToRgba(string hexColor, double alpha)
     {

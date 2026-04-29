@@ -186,7 +186,8 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
         var ay2 = toY - arrowSize * Math.Sin(angle + arrowAngle);
 
-        builder.AddPath($"M {Fmt(toX)} {Fmt(toY)} L {Fmt(ax1)} {Fmt(ay1)} L {Fmt(ax2)} {Fmt(ay2)} Z",
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
             fill: "#666", stroke: "none");
 
         // Draw label
@@ -200,5 +201,4 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             fill: "#666");
     }
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

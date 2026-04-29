@@ -62,6 +62,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Align start/end nodes and their single children
         AlignSingleChildNodes(model);
 
+        // Resize fork/join bars to span their connected states
+        AdjustForkJoinWidths(model);
+
         // Calculate extra space needed for notes
         var stateMap = BuildStateMap(model.States);
         var (noteExtraWidth, noteExtraHeight, noteExtraLeft) = CalculateNoteExtraSpace(model, stateMap, options);
@@ -753,10 +756,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Diamond
                 var halfW = state.Width / 2;
                 var halfH = state.Height / 2;
-                var diamondPath = $"M{Fmt(x)},{Fmt(y - halfH)} " +
-                                  $"L{Fmt(x + halfW)},{Fmt(y)} " +
-                                  $"L{Fmt(x)},{Fmt(y + halfH)} " +
-                                  $"L{Fmt(x - halfW)},{Fmt(y)} Z";
+                var diamondPath = string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"M{x:0.##},{y - halfH:0.##} L{x + halfW:0.##},{y:0.##} L{x:0.##},{y + halfH:0.##} L{x - halfW:0.##},{y:0.##} Z");
                 builder.AddPath(diamondPath, fill: "#fff", stroke: "#333", strokeWidth: 1);
 #if DEBUG
                 TrackNode(x, y, state.Width, state.Height, state.Id);
@@ -980,19 +982,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Path: smooth curve out, vertical line, smooth curve in
             // Curves gradually transition - tangent horizontal at state, tangent vertical at line
-            var path = $"M {Fmt(startX)} {Fmt(startY)} " +
-                       // Exit curve: gradual from horizontal to vertical
-                       // P1 horizontal from start, P2 vertical from end
-                       $"C {Fmt(startX + curveRadius)} {Fmt(startY)}, " +
-                       $"{Fmt(rightEdge)} {Fmt(startY - curveRadius)}, " +
-                       $"{Fmt(rightEdge)} {Fmt(startY - curveRadius * 2)} " +
-                       // Vertical line up
-                       $"L {Fmt(rightEdge)} {Fmt(endY + curveRadius * 2)} " +
-                       // Entry curve: gradual from vertical to horizontal (mirrored)
-                       // P1 vertical from start, P2 horizontal from end
-                       $"C {Fmt(rightEdge)} {Fmt(endY + curveRadius)}, " +
-                       $"{Fmt(endX + curveRadius)} {Fmt(endY)}, " +
-                       $"{Fmt(endX)} {Fmt(endY)}";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {startX:0.##} {startY:0.##} C {startX + curveRadius:0.##} {startY:0.##}, {rightEdge:0.##} {startY - curveRadius:0.##}, {rightEdge:0.##} {startY - curveRadius * 2:0.##} L {rightEdge:0.##} {endY + curveRadius * 2:0.##} C {rightEdge:0.##} {endY + curveRadius:0.##}, {endX + curveRadius:0.##} {endY:0.##}, {endX:0.##} {endY:0.##}");
 
             builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
 
@@ -1060,17 +1052,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Path: smooth curve out to left, vertical line down, smooth curve in
             // Mirror of back-edge algorithm
-            var path = $"M {Fmt(startX)} {Fmt(startY)} " +
-                       // Exit curve: gradual from horizontal to vertical (going left then down)
-                       $"C {Fmt(startX - curveRadius)} {Fmt(startY)}, " +
-                       $"{Fmt(leftEdge)} {Fmt(startY + curveRadius)}, " +
-                       $"{Fmt(leftEdge)} {Fmt(startY + curveRadius * 2)} " +
-                       // Vertical line down
-                       $"L {Fmt(leftEdge)} {Fmt(endY - curveRadius * 2)} " +
-                       // Entry curve: gradual from vertical to horizontal (mirrored)
-                       $"C {Fmt(leftEdge)} {Fmt(endY - curveRadius)}, " +
-                       $"{Fmt(endX - curveRadius)} {Fmt(endY)}, " +
-                       $"{Fmt(endX)} {Fmt(endY)}";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {startX:0.##} {startY:0.##} C {startX - curveRadius:0.##} {startY:0.##}, {leftEdge:0.##} {startY + curveRadius:0.##}, {leftEdge:0.##} {startY + curveRadius * 2:0.##} L {leftEdge:0.##} {endY - curveRadius * 2:0.##} C {leftEdge:0.##} {endY - curveRadius:0.##}, {endX - curveRadius:0.##} {endY:0.##}, {endX:0.##} {endY:0.##}");
 
             builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
 
@@ -1376,12 +1360,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             : toState.Position.Y + toState.Height / 2;
         var horizontalY = Math.Max(obstacleBottom, targetBottom) + margin;
 
-        var path = $"M {Fmt(startX)} {Fmt(startY)} " +
-                   $"L {Fmt(startX)} {Fmt(obstacleTop - margin)} " +
-                   $"L {Fmt(routeX)} {Fmt(obstacleTop - margin)} " +
-                   $"L {Fmt(routeX)} {Fmt(horizontalY)} " +
-                   $"L {Fmt(endX)} {Fmt(horizontalY)} " +
-                   $"L {Fmt(endX)} {Fmt(endY)}";
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"M {startX:0.##} {startY:0.##} L {startX:0.##} {obstacleTop - margin:0.##} L {routeX:0.##} {obstacleTop - margin:0.##} L {routeX:0.##} {horizontalY:0.##} L {endX:0.##} {horizontalY:0.##} L {endX:0.##} {endY:0.##}");
 
         builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
 
@@ -1645,11 +1626,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Note box with folded corner
             var foldSize = 8;
-            var path = $"M{Fmt(noteX)},{Fmt(noteY)} " +
-                       $"L{Fmt(noteX + noteWidth - foldSize)},{Fmt(noteY)} " +
-                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + foldSize)} " +
-                       $"L{Fmt(noteX + noteWidth)},{Fmt(noteY + noteHeight)} " +
-                       $"L{Fmt(noteX)},{Fmt(noteY + noteHeight)} Z";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M{noteX:0.##},{noteY:0.##} L{noteX + noteWidth - foldSize:0.##},{noteY:0.##} L{noteX + noteWidth:0.##},{noteY + foldSize:0.##} L{noteX + noteWidth:0.##},{noteY + noteHeight:0.##} L{noteX:0.##},{noteY + noteHeight:0.##} Z");
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
@@ -1696,8 +1675,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Draw curved dashed line
             var midY = (stateConnectY + noteConnectY) / 2;
-            var curvePath = $"M {Fmt(stateConnectX)} {Fmt(stateConnectY)} " +
-                           $"Q {Fmt(stateConnectX)} {Fmt(midY)}, {Fmt(noteConnectX)} {Fmt(noteConnectY)}";
+            var curvePath = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {stateConnectX:0.##} {stateConnectY:0.##} Q {stateConnectX:0.##} {midY:0.##}, {noteConnectX:0.##} {noteConnectY:0.##}");
 
             builder.AddPath(curvePath, fill: "none", stroke: "#333", strokeWidth: 1, strokeDasharray: "5,5");
         }
@@ -1705,8 +1685,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.6;
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }
 
 // Internal graph model for layout

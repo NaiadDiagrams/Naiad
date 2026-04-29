@@ -102,6 +102,4 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
 
         return builder.Build();
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

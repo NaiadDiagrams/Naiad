@@ -344,8 +344,6 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var factor = bold ? 0.65 : 0.55;
         return text.Length * fontSize * factor;
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }
 
 // Internal graph model for layout

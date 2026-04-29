@@ -70,7 +70,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 stroke: "#e0e0e0", strokeWidth: 1);
 
             // Y-axis label
-            builder.AddText(chartLeft - 10, y, Fmt(value),
+            builder.AddText(chartLeft - 10, y, value.ToString("0.##", CultureInfo.InvariantCulture),
                 anchor: "end", baseline: "middle",
                 fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
                 fill: "#666");
@@ -99,7 +99,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         {
             var labelX = options.Padding + 15;
             var labelY = chartTop + ChartHeight / 2;
-            builder.BeginGroup(transform: $"rotate(-90, {Fmt(labelX)}, {Fmt(labelY)})");
+            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"rotate(-90, {labelX:0.##}, {labelY:0.##})"));
             builder.AddText(labelX, labelY, model.YAxisLabel,
                 anchor: "middle", baseline: "middle",
                 fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
@@ -156,12 +156,13 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 // Draw line
                 if (points.Count >= 2)
                 {
-                    var pathData = $"M {Fmt(points[0].x)} {Fmt(points[0].y)}";
+                    var pathBuilder = new StringBuilder();
+                    pathBuilder.Append(CultureInfo.InvariantCulture, $"M {points[0].x:0.##} {points[0].y:0.##}");
                     for (var i = 1; i < points.Count; i++)
                     {
-                        pathData += $" L {Fmt(points[i].x)} {Fmt(points[i].y)}";
+                        pathBuilder.Append(CultureInfo.InvariantCulture, $" L {points[i].x:0.##} {points[i].y:0.##}");
                     }
-                    builder.AddPath(pathData, stroke: color, strokeWidth: 2, fill: "none");
+                    builder.AddPath(pathBuilder.ToString(), stroke: color, strokeWidth: 2, fill: "none");
                 }
 
                 // Draw points
@@ -177,5 +178,4 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         return builder.Build();
     }
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

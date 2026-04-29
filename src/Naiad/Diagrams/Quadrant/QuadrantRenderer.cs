@@ -163,6 +163,4 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 
         return builder.Build();
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

@@ -140,21 +140,17 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 break;
 
             case BlockShape.Diamond:
-                var diamondPath = $"M {Fmt(centerX)} {Fmt(y)} " +
-                    $"L {Fmt(x + width)} {Fmt(centerY)} " +
-                    $"L {Fmt(centerX)} {Fmt(y + height)} " +
-                    $"L {Fmt(x)} {Fmt(centerY)} Z";
+                var diamondPath = string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"M {centerX:0.##} {y:0.##} L {x + width:0.##} {centerY:0.##} L {centerX:0.##} {y + height:0.##} L {x:0.##} {centerY:0.##} Z");
                 builder.AddPath(diamondPath, fill: color, stroke: "#333", strokeWidth: 1);
                 break;
 
             case BlockShape.Hexagon:
                 var hOffset = width * 0.15;
-                var hexPath = $"M {Fmt(x + hOffset)} {Fmt(y)} " +
-                    $"L {Fmt(x + width - hOffset)} {Fmt(y)} " +
-                    $"L {Fmt(x + width)} {Fmt(centerY)} " +
-                    $"L {Fmt(x + width - hOffset)} {Fmt(y + height)} " +
-                    $"L {Fmt(x + hOffset)} {Fmt(y + height)} " +
-                    $"L {Fmt(x)} {Fmt(centerY)} Z";
+                var hexPath = string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"M {x + hOffset:0.##} {y:0.##} L {x + width - hOffset:0.##} {y:0.##} L {x + width:0.##} {centerY:0.##} L {x + width - hOffset:0.##} {y + height:0.##} L {x + hOffset:0.##} {y + height:0.##} L {x:0.##} {centerY:0.##} Z");
                 builder.AddPath(hexPath, fill: color, stroke: "#333", strokeWidth: 1);
                 break;
         }
@@ -166,5 +162,4 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             fill: "#333");
     }
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

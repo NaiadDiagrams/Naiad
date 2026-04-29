@@ -189,10 +189,9 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             // Draw milestone as diamond
             var cx = taskX;
             var cy = y + rowHeight / 2;
-            var path = $"M {Fmt(cx)} {Fmt(cy - milestoneSize)} " +
-                       $"L {Fmt(cx + milestoneSize)} {Fmt(cy)} " +
-                       $"L {Fmt(cx)} {Fmt(cy + milestoneSize)} " +
-                       $"L {Fmt(cx - milestoneSize)} {Fmt(cy)} Z";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {cx:0.##} {cy - milestoneSize:0.##} L {cx + milestoneSize:0.##} {cy:0.##} L {cx:0.##} {cy + milestoneSize:0.##} L {cx - milestoneSize:0.##} {cy:0.##} Z");
             builder.AddPath(path, fill: milestoneColor, stroke: "#333", strokeWidth: 1);
         }
         else
@@ -286,5 +285,4 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         return allTasks;
     }
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

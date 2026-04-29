@@ -206,12 +206,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         var halfHeight = height / 2;
         var cx = (x1 + x2) / 2;
 
-        return $"M {Fmt(x1)} {Fmt(y1 - halfHeight)} " +
-               $"C {Fmt(cx)} {Fmt(y1 - halfHeight)} {Fmt(cx)} {Fmt(y2 - halfHeight)} {Fmt(x2)} {Fmt(y2 - halfHeight)} " +
-               $"L {Fmt(x2)} {Fmt(y2 + halfHeight)} " +
-               $"C {Fmt(cx)} {Fmt(y2 + halfHeight)} {Fmt(cx)} {Fmt(y1 + halfHeight)} {Fmt(x1)} {Fmt(y1 + halfHeight)} " +
-               $"Z";
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"M {x1:0.##} {y1 - halfHeight:0.##} C {cx:0.##} {y1 - halfHeight:0.##} {cx:0.##} {y2 - halfHeight:0.##} {x2:0.##} {y2 - halfHeight:0.##} L {x2:0.##} {y2 + halfHeight:0.##} C {cx:0.##} {y2 + halfHeight:0.##} {cx:0.##} {y1 + halfHeight:0.##} {x1:0.##} {y1 + halfHeight:0.##} Z");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }
