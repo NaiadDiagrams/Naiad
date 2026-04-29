@@ -20,19 +20,54 @@ public class SvgText : SvgElement
         // For transformed text (OmitXY=true), mermaid.ink uses: transform, class, style order
         if (OmitXY)
         {
-            if (Transform is not null) builder.Append($" transform=\"{Transform}\"");
-            if (Class is not null) builder.Append($" class=\"{Class}\"");
-            if (Style is not null) builder.Append($" style=\"{Style}\"");
+            if (Transform is not null)
+            {
+                builder.Append($" transform=\"{Transform}\"");
+            }
+
+            if (Class is not null)
+            {
+                builder.Append($" class=\"{Class}\"");
+            }
+
+            if (Style is not null)
+            {
+                builder.Append($" style=\"{Style}\"");
+            }
         }
         else
         {
             builder.Append(CultureInfo.InvariantCulture, $" x=\"{X:0.##}\" y=\"{Y:0.##}\"");
-            if (TextAnchor is not null) builder.Append($" text-anchor=\"{TextAnchor}\"");
-            if (DominantBaseline is not null) builder.Append($" dominant-baseline=\"{DominantBaseline}\"");
-            if (FontSize is not null) builder.Append($" font-size=\"{FontSize}\"");
-            if (FontFamily is not null) builder.Append($" font-family=\"{FontFamily}\"");
-            if (FontWeight is not null) builder.Append($" font-weight=\"{FontWeight}\"");
-            if (Fill is not null) builder.Append($" fill=\"{Fill}\"");
+            if (TextAnchor is not null)
+            {
+                builder.Append($" text-anchor=\"{TextAnchor}\"");
+            }
+
+            if (DominantBaseline is not null)
+            {
+                builder.Append($" dominant-baseline=\"{DominantBaseline}\"");
+            }
+
+            if (FontSize is not null)
+            {
+                builder.Append($" font-size=\"{FontSize}\"");
+            }
+
+            if (FontFamily is not null)
+            {
+                builder.Append($" font-family=\"{FontFamily}\"");
+            }
+
+            if (FontWeight is not null)
+            {
+                builder.Append($" font-weight=\"{FontWeight}\"");
+            }
+
+            if (Fill is not null)
+            {
+                builder.Append($" fill=\"{Fill}\"");
+            }
+
             CommonAttributes(builder);
         }
 
