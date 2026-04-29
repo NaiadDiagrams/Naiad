@@ -60,7 +60,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         }
 
         // Draw quadrant backgrounds
-        var halfSize = ChartSize / 2;
+        const double halfSize = ChartSize / 2;
 
         // Q2 (top-left)
         builder.AddRect(chartLeft, chartTop, halfSize, halfSize,

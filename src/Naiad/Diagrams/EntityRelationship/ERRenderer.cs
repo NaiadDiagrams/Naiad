@@ -147,8 +147,13 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         // Separator line
         if (entity.Attributes.Count > 0)
         {
-            builder.AddLine(x, y + HeaderHeight, x + entity.Width, y + HeaderHeight,
-                stroke: "#9370DB", strokeWidth: 1);
+            builder.AddLine(
+                x,
+                y + HeaderHeight,
+                x + entity.Width,
+                y + HeaderHeight,
+                stroke: "#9370DB",
+                strokeWidth: 1);
         }
 
         // Attributes
@@ -160,7 +165,9 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
             if (!string.IsNullOrEmpty(keyIndicator))
             {
-                builder.AddText(x + EntityPadding, attrY + LineHeight / 2, keyIndicator,
+                builder.AddText(
+                    x + EntityPadding,
+                    attrY + LineHeight / 2, keyIndicator,
                     anchor: "start",
                     baseline: "middle",
                     fontSize: $"{options.FontSize - 2}px",
@@ -168,7 +175,9 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#666");
             }
 
-            builder.AddText(x + EntityPadding + AttributeIndent + 20, attrY + LineHeight / 2, attrText,
+            builder.AddText(
+                x + EntityPadding + AttributeIndent + 20,
+                attrY + LineHeight / 2, attrText,
                 anchor: "start",
                 baseline: "middle",
                 fontSize: $"{options.FontSize}px",
@@ -181,10 +190,16 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
     {
         var fromEntity = model.Entities.Find(_ => _.Name == rel.FromEntity);
-        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
-
-        if (fromEntity == null || toEntity == null)
+        if (fromEntity == null)
+        {
             return;
+        }
+
+        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
+        if (toEntity == null)
+        {
+            return;
+        }
 
         var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
         var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
@@ -192,7 +207,11 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var dashArray = rel.Identifying ? null : "5,5";
 
         // Draw line
-        builder.AddLine(startX, startY, endX, endY,
+        builder.AddLine(
+            startX,
+            startY,
+            endX,
+            endY,
             stroke: "#333",
             strokeWidth: 1,
             strokeDasharray: dashArray);
@@ -228,14 +247,20 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         if (Math.Abs(dx) > Math.Abs(dy))
         {
-            return dx > 0
-                ? (from.Position.X + from.Width / 2, from.Position.Y)
-                : (from.Position.X - from.Width / 2, from.Position.Y);
+            if (dx > 0)
+            {
+                return (from.Position.X + from.Width / 2, from.Position.Y);
+            }
+
+            return (from.Position.X - from.Width / 2, from.Position.Y);
         }
 
-        return dy > 0
-            ? (from.Position.X, from.Position.Y + from.Height / 2)
-            : (from.Position.X, from.Position.Y - from.Height / 2);
+        if (dy > 0)
+        {
+            return (from.Position.X, from.Position.Y + from.Height / 2);
+        }
+
+        return (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
     static void DrawCardinalityMarker(
@@ -247,8 +272,8 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         Cardinality cardinality)
     {
         var angle = Math.Atan2(toY - y, toX - x);
-        var markerDistance = 15.0;
-        var perpDistance = 8.0;
+        const double markerDistance = 15.0;
+        const double perpDistance = 8.0;
 
         // Position for the marker (offset from the entity)
         var mx = x + markerDistance * Math.Cos(angle);
@@ -296,9 +321,12 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
     static void DrawLine(SvgBuilder builder, double x, double y, double perpX, double perpY, double length) =>
         builder.AddLine(
-            x - perpX * length / 2, y - perpY * length / 2,
-            x + perpX * length / 2, y + perpY * length / 2,
-            stroke: "#333", strokeWidth: 1);
+            x - perpX * length / 2,
+            y - perpY * length / 2,
+            x + perpX * length / 2,
+            y + perpY * length / 2,
+            stroke: "#333",
+            strokeWidth: 1);
 
     static void DrawCrowFoot(SvgBuilder builder, double x, double y, double angle, double spread)
     {
@@ -327,6 +355,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         {
             result += $" \"{attr.Comment}\"";
         }
+
         return result;
     }
 
@@ -347,4 +376,3 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 }
 
 // Internal graph model for layout
-internal class ERLayoutGraph : GraphDiagramBase;

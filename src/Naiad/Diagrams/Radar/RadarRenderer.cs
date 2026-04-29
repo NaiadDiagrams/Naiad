@@ -28,10 +28,10 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var legendOffset = model is {ShowLegend: true, Curves.Count: > 0} ? LegendHeight * model.Curves.Count : 0;
 
-        var contentWidth = (ChartRadius + LabelOffsetX) * 2;
+        const double contentWidth = (ChartRadius + LabelOffsetX) * 2;
         var contentHeight = (ChartRadius + LabelOffsetY) * 2 + titleOffset + legendOffset;
 
-        var centerX = ChartRadius + LabelOffsetX;
+        const double centerX = ChartRadius + LabelOffsetX;
         var centerY = ChartRadius + LabelOffsetY + titleOffset;
 
         var builder = new SvgBuilder()

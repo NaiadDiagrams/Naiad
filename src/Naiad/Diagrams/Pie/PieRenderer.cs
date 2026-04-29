@@ -42,9 +42,9 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Match mermaid.ink exact dimensions - width varies based on legend text
         var width = model.ShowData ? 613.140625 : 551.6875;
-        var height = 450.0;
-        var cx = 225.0;
-        var cy = 225.0;
+        const double height = 450.0;
+        const double cx = 225.0;
+        const double cy = 225.0;
 
         var builder = new SvgBuilder()
             .Size(width, height)
@@ -85,7 +85,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
             // Mermaid uses a label radius factor of 0.75 (138.75 / 185)
             var midAngle = startAngle + sweepAngle / 2;
-            var labelDist = Radius * 0.75; // Exact mermaid factor
+            const double labelDist = Radius * 0.75; // Exact mermaid factor
             var labelX = labelDist * Math.Sin(ToRadians(midAngle));
             var labelY = -labelDist * Math.Cos(ToRadians(midAngle));
 

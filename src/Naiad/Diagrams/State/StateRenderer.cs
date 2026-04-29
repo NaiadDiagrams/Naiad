@@ -181,7 +181,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Skip if line is connected to this node (endpoint is near/inside the node)
                 var nodeRight = node.X + node.Width;
                 var nodeBottom = node.Y + node.Height;
-                var margin = 10.0; // Allow endpoints near edges
+                const double margin = 10.0; // Allow endpoints near edges
 
                 var startInNode = line.X1 >= node.X - margin && line.X1 <= nodeRight + margin &&
                                   line.Y1 >= node.Y - margin && line.Y1 <= nodeBottom + margin;
@@ -213,7 +213,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var b = nodeBounds[j];
 
                 // Check for rectangle overlap with margin
-                var margin = 2.0;
+                const double margin = 2.0;
                 var overlapsX = a.X < b.X + b.Width - margin && a.X + a.Width > b.X + margin;
                 var overlapsY = a.Y < b.Y + b.Height - margin && a.Y + a.Height > b.Y + margin;
 
@@ -281,7 +281,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var bottom = ry + rh;
 
         // Shrink the rect slightly to avoid edge cases at connection points
-        var margin = 2.0;
+        const double margin = 2.0;
         left += margin;
         right -= margin;
         top += margin;
@@ -295,7 +295,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Use Cohen-Sutherland style clipping to find if line passes through interior
         // Sample points along the line and check if any are inside
-        var steps = 20;
+        const int steps = 20;
         for (var i = 1; i < steps; i++) // Skip endpoints (i=0 and i=steps)
         {
             var t = i / (double)steps;
@@ -363,11 +363,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             .ToList();
 
         if (backEdges.Count == 0)
+        {
             return 0;
+        }
 
         double maxExtraNeeded = 0;
         var baseRightEdge = rightEdge + 50;
-        var lineSpacing = 50;
+        const int lineSpacing = 50;
 
         for (var i = 0; i < backEdges.Count; i++)
         {
@@ -425,7 +427,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var targetBottom = toState.Type == StateType.End
                 ? toState.Position.Y + specialStateSize / 2
                 : toState.Position.Y + toState.Height / 2;
-            var margin = 30.0;
+            const double margin = 30.0;
             var horizontalY = Math.Max(obstacleBottom, targetBottom) + margin;
 
             var extraNeeded = horizontalY - layoutHeight;
@@ -638,7 +640,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (endNode == null) return;
 
         const double margin = 30;
-        var endHalfSize = specialStateSize / 2;
+        const double endHalfSize = specialStateSize / 2;
 
         // Find siblings at similar Y level (within 100 pixels) and move end node to the right
         foreach (var state in model.States)
@@ -964,7 +966,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var baseRightEdge = (normalStates.Count > 0 ? normalStates.Max(_ => _.Position.X + _.Width / 2) : 100) + 50;
 
             // Use spacing of 50px between lines - enough for typical labels
-            var lineSpacing = 50;
+            const int lineSpacing = 50;
             var rightEdge = baseRightEdge + backEdgeIndex * lineSpacing;
 
             // Back-edges use smooth curves: angle out, go vertical, angle back in
@@ -974,7 +976,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Enter right side of target state - offset each line so they don't overlap
             // Outer lines (higher index, further right) enter higher to avoid crossing
             var endX = toState.Position.X + toState.Width / 2;
-            var entrySpacing = 15.0;
+            const double entrySpacing = 15.0;
             var endY = toState.Position.Y - backEdgeIndex * entrySpacing;
 
             // Radius for the quarter-circle curves at corners
@@ -1036,7 +1038,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var baseLeftEdge = (normalStates.Count > 0 ? normalStates.Min(_ => _.Position.X - _.Width / 2) : 0) - 50;
 
             // Use same spacing as back-edges
-            var lineSpacing = 50;
+            const int lineSpacing = 50;
             var leftEdge = baseLeftEdge - backEdgeIndex * lineSpacing;
 
             // Exit from left side of source state (center Y)
@@ -1044,7 +1046,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var startY = fromState.Position.Y;
             // Enter left side of target state
             var endX = toState.Position.X - toState.Width / 2;
-            var entrySpacing = 15.0;
+            const double entrySpacing = 15.0;
             var endY = toState.Position.Y + backEdgeIndex * entrySpacing;
 
             // Radius for the quarter-circle curves at corners (mirror of back-edge)
@@ -1208,7 +1210,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 {
                     var state = kvp.Value;
                     // Use larger margin (20px) to account for state label text which may extend beyond box
-                    var margin = 20.0;
+                    const double margin = 20.0;
                     var stateLeft = state.Position.X - state.Width / 2 - margin;
                     var stateRight = state.Position.X + state.Width / 2 + margin;
                     var stateTop = state.Position.Y - state.Height / 2 - margin;
@@ -1309,7 +1311,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             ? toState.Position.Y + specialStateSize / 2
             : toState.Position.Y + toState.Height / 2;
 
-        var margin = 30.0;
+        const double margin = 30.0;
 
         // Find all states that are in the vertical path region (between startX/endX and obstacle)
         // and calculate routeX that avoids them all
@@ -1433,7 +1435,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 foreach (var kvp in stateMap)
                 {
                     var state = kvp.Value;
-                    var margin = 20.0;
+                    const double margin = 20.0;
                     var stateLeft = state.Position.X - state.Width / 2 - margin;
                     var stateRight = state.Position.X + state.Width / 2 + margin;
                     var stateTop = state.Position.Y - state.Height / 2 - margin;
@@ -1490,7 +1492,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (state.Type is StateType.Start or StateType.End)
         {
             var angle = Math.Atan2(dy, dx);
-            var radius = specialStateSize / 2;
+            const double radius = specialStateSize / 2;
             return (cx + radius * Math.Cos(angle), cy + radius * Math.Sin(angle));
         }
 
@@ -1532,7 +1534,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     static void DrawArrowhead(SvgBuilder builder, double fromX, double fromY, double toX, double toY)
     {
         var angle = Math.Atan2(toY - fromY, toX - fromX);
-        var arrowSize = 8;
+        const int arrowSize = 8;
 
         var backAngle1 = angle + Math.PI - Math.PI / 6;
         var backAngle2 = angle + Math.PI + Math.PI / 6;
@@ -1625,7 +1627,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             }
 
             // Note box with folded corner
-            var foldSize = 8;
+            const int foldSize = 8;
             var path = string.Create(
                 CultureInfo.InvariantCulture,
                 $"M{noteX:0.##},{noteY:0.##} L{noteX + noteWidth - foldSize:0.##},{noteY:0.##} L{noteX + noteWidth:0.##},{noteY + foldSize:0.##} L{noteX + noteWidth:0.##},{noteY + noteHeight:0.##} L{noteX:0.##},{noteY + noteHeight:0.##} Z");
@@ -1666,7 +1668,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var dx = state.Position.X - noteCenterX;
             var dy = state.Position.Y - noteCenterY;
             var noteHalfW = noteWidth / 2;
-            var noteHalfH = noteHeight / 2;
+            const double noteHalfH = noteHeight / 2;
             var tX = Math.Abs(dx) > 0.001 ? noteHalfW / Math.Abs(dx) : double.MaxValue;
             var tY = Math.Abs(dy) > 0.001 ? noteHalfH / Math.Abs(dy) : double.MaxValue;
             var t = Math.Min(tX, tY);

@@ -51,7 +51,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         var actorsHeight = allActors.Count * ActorRowHeight + SectionPadding;
 
         var width = maxTasks * (TaskWidth + TaskMargin) + options.Padding * 2 + TaskMargin;
-        var sectionHeight = TaskHeight + SectionPadding * 2;
+        const double sectionHeight = TaskHeight + SectionPadding * 2;
         var height = titleOffset + model.Sections.Count * sectionHeight + actorsHeight + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);

@@ -179,8 +179,8 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             stroke: "#666", strokeWidth: 1.5);
 
         // Draw arrowhead
-        var arrowSize = 8;
-        var arrowAngle = Math.PI / 6;
+        const int arrowSize = 8;
+        const double arrowAngle = Math.PI / 6;
         var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
         var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
         var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
@@ -188,17 +188,22 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         builder.AddPath(
             string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
-            fill: "#666", stroke: "none");
+            fill: "#666",
+            stroke: "none");
 
         // Draw label
         var midX = (fromX + toX) / 2;
         var midY = (fromY + toY) / 2;
         var label = type.ToString().ToLowerInvariant();
 
-        builder.AddText(midX, midY - 8, $"<<{label}>>",
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+        builder.AddText(
+            midX,
+            midY - 8,
+            $"<<{label}>>",
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: $"{options.FontSize - 3}px",
+            fontFamily: options.FontFamily,
             fill: "#666");
     }
-
 }

@@ -112,6 +112,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var points = edge.Points;
         var pathBuilder = new StringBuilder();
         pathBuilder.Append(CultureInfo.InvariantCulture, $"M{points[0].X:0.##},{points[0].Y:0.##}");
+
         for (var i = 1; i < points.Count; i++)
         {
             pathBuilder.Append(CultureInfo.InvariantCulture, $" L{points[i].X:0.##},{points[i].Y:0.##}");
@@ -153,16 +154,18 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             var labelX = edge.LabelPosition.X;
             var labelY = edge.LabelPosition.Y;
             var labelWidth = edge.Label.Length * 8 + 16;
-            var labelHeight = 24;
+            const int labelHeight = 24;
 
             builder.AddRect(
-                labelX - labelWidth / 2, labelY - labelHeight / 2,
+                labelX - labelWidth / 2,
+                labelY - labelHeight / 2,
                 labelWidth, labelHeight,
                 fill: labelBackground, stroke: "none",
                 cssClass: "edgeLabel");
 
             builder.AddForeignObject(
-                labelX - labelWidth / 2, labelY - labelHeight / 2,
+                labelX - labelWidth / 2,
+                labelY - labelHeight / 2,
                 labelWidth, labelHeight,
                 $"<p>{System.Net.WebUtility.HtmlEncode(edge.Label)}</p>",
                 className: "edgeLabel");

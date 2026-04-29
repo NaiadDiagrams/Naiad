@@ -38,11 +38,18 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         foreach (var relationship in model.Relationships)
         {
             var fromNode = graphModel.GetNode(relationship.FromId);
-            var toNode = graphModel.GetNode(relationship.ToId);
-            if (fromNode != null && toNode != null)
+            if (fromNode == null)
             {
-                RenderRelationship(builder, relationship, fromNode, toNode, options);
+                continue;
             }
+
+            var toNode = graphModel.GetNode(relationship.ToId);
+            if (toNode == null)
+            {
+                continue;
+            }
+
+            RenderRelationship(builder, relationship, fromNode, toNode, options);
         }
 
         // Render class boxes
@@ -296,7 +303,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     static void DrawRelationshipMarker(SvgBuilder builder, RelationshipType type, double x, double y, double fromX, double fromY)
     {
         var angle = Math.Atan2(y - fromY, x - fromX);
-        var markerSize = 10.0;
+        const double markerSize = 10.0;
 
         switch (type)
         {

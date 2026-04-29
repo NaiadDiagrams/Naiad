@@ -82,7 +82,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
                 var task = column.Tasks[j];
                 var taskX = x + TaskPadding;
                 var taskY = y + HeaderHeight + ColumnPadding + j * (TaskHeight + TaskPadding);
-                var taskWidth = ColumnWidth - TaskPadding * 2;
+                const double taskWidth = ColumnWidth - TaskPadding * 2;
 
                 // Task card
                 builder.AddRect(taskX, taskY, taskWidth, TaskHeight,

@@ -9,8 +9,14 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
 
     static readonly string[] BlockColors =
     [
-        "#E3F2FD", "#E8F5E9", "#FFF3E0", "#F3E5F5",
-        "#FCE4EC", "#E0F7FA", "#FFF8E1", "#F1F8E9"
+        "#E3F2FD",
+        "#E8F5E9",
+        "#FFF3E0",
+        "#F3E5F5",
+        "#FCE4EC",
+        "#E0F7FA",
+        "#FFF8E1",
+        "#F1F8E9"
     ];
 
     public SvgDocument Render(BlockModel model, RenderOptions options)
@@ -18,8 +24,14 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         if (model.Elements.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize}px",
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -37,7 +49,10 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: $"{options.FontSize + 4}px",
@@ -53,7 +68,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         foreach (var element in model.Elements)
         {
             var span = Math.Min(element.Span, columns - currentColumn);
-            if (span <= 0 || currentColumn + span > columns)
+            if (span <= 0 ||
+                currentColumn + span > columns)
             {
                 currentRow++;
                 currentColumn = 0;
@@ -63,7 +79,7 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             var x = options.Padding + currentColumn * CellWidth + CellPadding;
             var y = titleOffset + options.Padding + currentRow * CellHeight + CellPadding;
             var blockWidth = span * CellWidth - CellPadding * 2;
-            var blockHeight = CellHeight - CellPadding * 2;
+            const double blockHeight = CellHeight - CellPadding * 2;
 
             var color = BlockColors[colorIndex % BlockColors.Length];
             var label = element.Label ?? element.Id;
@@ -107,11 +123,24 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             }
         }
 
-        return rows == 1 || currentColumn > 0 ? rows : rows - 1;
+        if (rows == 1 || currentColumn > 0)
+        {
+            return rows;
+        }
+
+        return rows - 1;
     }
 
-    static void DrawBlock(SvgBuilder builder, double x, double y, double width, double height,
-        string label, BlockShape shape, string color, RenderOptions options)
+    static void DrawBlock(
+        SvgBuilder builder,
+        double x,
+        double y,
+        double width,
+        double height,
+        string label,
+        BlockShape shape,
+        string color,
+        RenderOptions options)
     {
         var centerX = x + width / 2;
         var centerY = y + height / 2;
@@ -119,31 +148,56 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         switch (shape)
         {
             case BlockShape.Rectangle:
-                builder.AddRect(x, y, width, height, rx: 4,
-                    fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddRect(
+                    x,
+                    y,
+                    width,
+                    height, rx: 4,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case BlockShape.Rounded:
-                builder.AddRect(x, y, width, height, rx: height / 2,
-                    fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddRect(
+                    x, y, width, height,
+                    rx: height / 2,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case BlockShape.Stadium:
-                builder.AddRect(x, y, width, height, rx: height / 2,
-                    fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddRect(
+                    x,
+                    y,
+                    width,
+                    height,
+                    rx: height / 2,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case BlockShape.Circle:
                 var radius = Math.Min(width, height) / 2;
-                builder.AddCircle(centerX, centerY, radius,
-                    fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddCircle(
+                    centerX, centerY,
+                    radius,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case BlockShape.Diamond:
                 var diamondPath = string.Create(
                     CultureInfo.InvariantCulture,
                     $"M {centerX:0.##} {y:0.##} L {x + width:0.##} {centerY:0.##} L {centerX:0.##} {y + height:0.##} L {x:0.##} {centerY:0.##} Z");
-                builder.AddPath(diamondPath, fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddPath(
+                    diamondPath,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case BlockShape.Hexagon:
@@ -151,14 +205,23 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 var hexPath = string.Create(
                     CultureInfo.InvariantCulture,
                     $"M {x + hOffset:0.##} {y:0.##} L {x + width - hOffset:0.##} {y:0.##} L {x + width:0.##} {centerY:0.##} L {x + width - hOffset:0.##} {y + height:0.##} L {x + hOffset:0.##} {y + height:0.##} L {x:0.##} {centerY:0.##} Z");
-                builder.AddPath(hexPath, fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddPath(
+                    hexPath,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
         }
 
         // Label
-        builder.AddText(centerX, centerY, label,
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 1}px", fontFamily: options.FontFamily,
+        builder.AddText(
+            centerX,
+            centerY,
+            label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: $"{options.FontSize - 1}px",
+            fontFamily: options.FontFamily,
             fill: "#333");
     }
 

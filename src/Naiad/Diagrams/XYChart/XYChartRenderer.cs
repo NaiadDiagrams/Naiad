@@ -59,7 +59,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         var categoryWidth = ChartWidth / categoryCount;
 
         // Draw grid lines
-        var gridLines = 5;
+        const int gridLines = 5;
         for (var i = 0; i <= gridLines; i++)
         {
             var y = chartBottom - ChartHeight * i / gridLines;

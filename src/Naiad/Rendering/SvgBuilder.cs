@@ -379,11 +379,20 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder AddText(double x, double y, string content,
-        string? anchor = null, string? baseline = null,
-        string? fontSize = null, string? fontFamily = null, string? fontWeight = null,
-        string? fill = null, string? id = null, string? cssClass = null,
-        string? transform = null, string? style = null, bool omitXY = false)
+    public SvgBuilder AddText(
+        double x, double y,
+        string content,
+        string? anchor = null,
+        string? baseline = null,
+        string? fontSize = null,
+        string? fontFamily = null,
+        string? fontWeight = null,
+        string? fill = null,
+        string? id = null,
+        string? cssClass = null,
+        string? transform = null,
+        string? style = null,
+        bool omitXY = false)
     {
         var text = new SvgText
         {
@@ -421,7 +430,8 @@ public class SvgBuilder
     public SvgDocument Build()
     {
         // If padding is set, wrap all elements in a transform group
-        if (padding > 0 && document.Elements.Count > 0)
+        if (padding > 0 &&
+            document.Elements.Count > 0)
         {
             var paddingGroup = new SvgGroup
             {

@@ -24,15 +24,15 @@ public class C4Renderer : IDiagramRenderer<C4Model>
     const string BoundaryFill = "#FFFFFF";
 
     // Cached dimensions during rendering
-    readonly Dictionary<string, (double w, double h)> _boundaryDimensions = new();
-    readonly Dictionary<string, (double x, double y, double w, double h)> _elementPositions = new();
-    readonly Dictionary<string, (double x, double y, double w, double h)> _boundaryPositions = new();
+    readonly Dictionary<string, (double w, double h)> boundaryDimensions = new();
+    readonly Dictionary<string, (double x, double y, double w, double h)> elementPositions = new();
+    readonly Dictionary<string, (double x, double y, double w, double h)> boundaryPositions = new();
 
     public SvgDocument Render(C4Model model, RenderOptions options)
     {
-        _boundaryDimensions.Clear();
-        _elementPositions.Clear();
-        _boundaryPositions.Clear();
+        boundaryDimensions.Clear();
+        elementPositions.Clear();
+        boundaryPositions.Clear();
 
         if (model.Elements.Count == 0 && model.Boundaries.Count == 0)
         {
@@ -67,13 +67,13 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var outsideComponentsHeight = outsideComponents.Count > 0 ? ElementHeight + RowSpacing : 0;
 
         // Calculate top-level boundary row dimensions
-        var boundaryRowWidth = topLevelBoundaries.Sum(_ => _boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
+        var boundaryRowWidth = topLevelBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
         var boundaryRowHeight = topLevelBoundaries.Count > 0
-            ? topLevelBoundaries.Max(_ => _boundaryDimensions[_.Id].h) + RowSpacing
+            ? topLevelBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing
             : 0;
 
         // Calculate width based on elements and boundaries
-        var maxElementsPerRow = 4;
+        const int maxElementsPerRow = 4;
         var outsideElementsWidth = Math.Max(
             Math.Max(outsidePersons.Count, outsideSystems.Count),
             Math.Max(outsideContainers.Count, outsideComponents.Count)
@@ -94,9 +94,14 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize + 6}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize + 6}px",
+                fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
 
@@ -114,11 +119,11 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             var boundaryStartX = (width - boundaryRowWidth) / 2;
             foreach (var boundary in topLevelBoundaries)
             {
-                var (bw, bh) = _boundaryDimensions[boundary.Id];
+                var (bw, bh) = boundaryDimensions[boundary.Id];
                 DrawBoundaryRecursive(builder, model, boundary, boundaryStartX, currentY, bw, bh, options);
                 boundaryStartX += bw + BoundarySpacing;
             }
-            currentY += topLevelBoundaries.Max(_ => _boundaryDimensions[_.Id].h) + RowSpacing;
+            currentY += topLevelBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing;
         }
 
         // Draw outside containers
@@ -130,8 +135,8 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         // Draw relationships
         foreach (var rel in model.Relationships)
         {
-            if (_elementPositions.TryGetValue(rel.From, out var fromPos) &&
-                _elementPositions.TryGetValue(rel.To, out var toPos))
+            if (elementPositions.TryGetValue(rel.From, out var fromPos) &&
+                elementPositions.TryGetValue(rel.To, out var toPos))
             {
                 DrawRelationship(builder, fromPos, toPos, rel.Label, options);
             }
@@ -164,8 +169,8 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         // Layout: child boundaries in a row, then direct elements below
         if (childBoundaries.Count > 0)
         {
-            var childrenWidth = childBoundaries.Sum(_ => _boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
-            var childrenHeight = childBoundaries.Max(_ => _boundaryDimensions[_.Id].h);
+            var childrenWidth = childBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
+            var childrenHeight = childBoundaries.Max(_ => boundaryDimensions[_.Id].h);
             contentWidth = Math.Max(contentWidth, childrenWidth);
             contentHeight += childrenHeight + (directElements.Count > 0 ? RowSpacing : 0);
         }
@@ -187,7 +192,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var totalWidth = contentWidth + BoundaryPadding * 2;
         var totalHeight = contentHeight + BoundaryPadding * 2 + BoundaryTitleHeight;
 
-        _boundaryDimensions[boundary.Id] = (totalWidth, totalHeight);
+        boundaryDimensions[boundary.Id] = (totalWidth, totalHeight);
         return (totalWidth, totalHeight);
     }
 
@@ -198,20 +203,35 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         SvgBuilder builder,
         C4Model model,
         C4Boundary boundary,
-        double x, double y,
-        double width, double height,
+        double x,
+        double y,
+        double width,
+        double height,
         RenderOptions options)
     {
         // Draw boundary box
-        builder.AddRect(x, y, width, height, rx: 5,
-            fill: BoundaryFill, stroke: BoundaryStroke, strokeWidth: 2,
+        builder.AddRect(
+            x,
+            y,
+            width,
+            height,
+            rx: 5,
+            fill: BoundaryFill,
+            stroke: BoundaryStroke,
+            strokeWidth: 2,
             style: "stroke-dasharray: 8 4");
 
         // Draw boundary label
-        builder.AddText(x + width / 2, y + BoundaryTitleHeight / 2 - 5, boundary.Label,
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
-            fontWeight: "bold", fill: "#333333");
+        builder.AddText(
+            x + width / 2,
+            y + BoundaryTitleHeight / 2 - 5,
+            boundary.Label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: $"{options.FontSize}px",
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: "#333333");
 
         // Draw boundary type indicator
         var typeLabel = boundary.Type switch
@@ -225,13 +245,18 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         };
         if (!string.IsNullOrEmpty(typeLabel))
         {
-            builder.AddText(x + width / 2, y + BoundaryTitleHeight / 2 + 10, typeLabel,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x + width / 2,
+                y + BoundaryTitleHeight / 2 + 10,
+                typeLabel,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 3}px",
+                fontFamily: options.FontFamily,
                 fill: "#666666");
         }
 
-        _boundaryPositions[boundary.Id] = (x + width / 2, y + height / 2, width, height);
+        boundaryPositions[boundary.Id] = (x + width / 2, y + height / 2, width, height);
 
         // Content area starts after title
         var contentY = y + BoundaryTitleHeight + BoundaryPadding;
@@ -243,18 +268,18 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         // Draw child boundaries first (in a row)
         if (childBoundaries.Count > 0)
         {
-            var childrenTotalWidth = childBoundaries.Sum(_ => _boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
+            var childrenTotalWidth = childBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
             var childStartX = x + (width - childrenTotalWidth) / 2;
 
             foreach (var child in childBoundaries)
             {
-                var (cw, ch) = _boundaryDimensions[child.Id];
+                var (cw, ch) = boundaryDimensions[child.Id];
                 DrawBoundaryRecursive(builder, model, child, childStartX, contentY, cw, ch, options);
                 childStartX += cw + BoundarySpacing;
             }
 
             // Move content Y down past child boundaries
-            contentY += childBoundaries.Max(_ => _boundaryDimensions[_.Id].h) + RowSpacing;
+            contentY += childBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing;
         }
 
         // Draw direct elements in this boundary
@@ -266,7 +291,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             foreach (var element in directElements)
             {
                 var eh = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
-                _elementPositions[element.Id] = (startX + ElementWidth / 2, contentY + eh / 2, ElementWidth, eh);
+                elementPositions[element.Id] = (startX + ElementWidth / 2, contentY + eh / 2, ElementWidth, eh);
                 DrawElement(builder, element, startX, contentY, options);
                 startX += ElementWidth + ElementSpacing;
             }
@@ -294,7 +319,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             var x = startX + i * (ElementWidth + ElementSpacing);
             var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
 
-            _elementPositions[element.Id] = (x + ElementWidth / 2, startY + h / 2, ElementWidth, h);
+            elementPositions[element.Id] = (x + ElementWidth / 2, startY + h / 2, ElementWidth, h);
             DrawElement(builder, element, x, startY, options);
         }
 
@@ -305,90 +330,145 @@ public class C4Renderer : IDiagramRenderer<C4Model>
     static void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
     {
         var color = GetElementColor(element);
-        var textColor = "#FFFFFF";
+        const string textColor = "#FFFFFF";
 
         if (element.Type == C4ElementType.Person)
         {
             // Draw person shape (head + body)
-            var headRadius = 20;
-            var bodyHeight = 60;
-            var bodyWidth = 80;
+            const int headRadius = 20;
+            const int bodyHeight = 60;
+            const int bodyWidth = 80;
 
             // Head
-            builder.AddCircle(x + ElementWidth / 2, y + headRadius + 5, headRadius,
-                fill: color, stroke: "none");
+            builder.AddCircle(
+                x + ElementWidth / 2,
+                y + headRadius + 5,
+                headRadius,
+                fill: color,
+                stroke: "none");
 
             // Body (rounded rect)
-            builder.AddRect(x + (ElementWidth - bodyWidth) / 2, y + headRadius * 2 + 10,
-                bodyWidth, bodyHeight, rx: 10,
-                fill: color, stroke: "none");
+            builder.AddRect(
+                x + (ElementWidth - bodyWidth) / 2,
+                y + headRadius * 2 + 10,
+                bodyWidth,
+                bodyHeight,
+                rx: 10,
+                fill: color,
+                stroke: "none");
 
             // Label
-            builder.AddText(x + ElementWidth / 2, y + PersonHeight - 20, element.Label,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 1}px", fontFamily: options.FontFamily,
-                fill: textColor, fontWeight: "bold");
+            builder.AddText(
+                x + ElementWidth / 2,
+                y + PersonHeight - 20,
+                element.Label,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 1}px",
+                fontFamily: options.FontFamily,
+                fill: textColor,
+                fontWeight: "bold");
 
             // Description
             if (!string.IsNullOrEmpty(element.Description))
             {
-                builder.AddText(x + ElementWidth / 2, y + PersonHeight - 5,
+                builder.AddText(
+                    x + ElementWidth / 2,
+                    y + PersonHeight - 5,
                     TruncateText(element.Description, 25),
-                    anchor: "middle", baseline: "middle",
-                    fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: $"{options.FontSize - 3}px",
+                    fontFamily: options.FontFamily,
                     fill: textColor);
             }
         }
-        else if (element.Type is C4ElementType.ContainerDb or C4ElementType.SystemDb)
+        else if (element.Type is
+                 C4ElementType.ContainerDb or
+                 C4ElementType.SystemDb)
         {
             // Draw database shape (cylinder)
-            var ellipseHeight = 15;
+            const int ellipseHeight = 15;
 
             // Top ellipse
-            builder.AddEllipse(x + ElementWidth / 2, y + ellipseHeight,
-                ElementWidth / 2 - 5, ellipseHeight,
+            builder.AddEllipse(
+                x + ElementWidth / 2,
+                y + ellipseHeight,
+                ElementWidth / 2 - 5,
+                ellipseHeight,
                 fill: color, stroke: "none");
 
             // Body
-            builder.AddRect(x + 5, y + ellipseHeight, ElementWidth - 10, ElementHeight - ellipseHeight * 2,
-                fill: color, stroke: "none");
+            builder.AddRect(
+                x + 5,
+                y + ellipseHeight,
+                ElementWidth - 10,
+                ElementHeight - ellipseHeight * 2,
+                fill: color,
+                stroke: "none");
 
             // Bottom ellipse
-            builder.AddEllipse(x + ElementWidth / 2, y + ElementHeight - ellipseHeight,
-                ElementWidth / 2 - 5, ellipseHeight,
-                fill: color, stroke: "none");
+            builder.AddEllipse(
+                x + ElementWidth / 2,
+                y + ElementHeight - ellipseHeight,
+                ElementWidth / 2 - 5,
+                ellipseHeight,
+                fill: color,
+                stroke: "none");
 
             DrawElementText(builder, element, x, y, options, textColor);
         }
         else
         {
             // Standard box
-            builder.AddRect(x, y, ElementWidth, ElementHeight, rx: 5,
-                fill: color, stroke: "none");
+            builder.AddRect(
+                x,
+                y,
+                ElementWidth,
+                ElementHeight,
+                rx: 5,
+                fill: color,
+                stroke: "none");
 
             DrawElementText(builder, element, x, y, options, textColor);
         }
     }
 
-    static void DrawElementText(SvgBuilder builder, C4Element element, double x, double y,
-        RenderOptions options, string textColor)
+    static void DrawElementText(
+        SvgBuilder builder,
+        C4Element element,
+        double x,
+        double y,
+        RenderOptions options,
+        string textColor)
     {
         var centerX = x + ElementWidth / 2;
         var textY = y + 25;
 
         // Label
-        builder.AddText(centerX, textY, element.Label,
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 1}px", fontFamily: options.FontFamily,
-            fill: textColor, fontWeight: "bold");
+        builder.AddText(
+            centerX,
+            textY,
+            element.Label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: $"{options.FontSize - 1}px",
+            fontFamily: options.FontFamily,
+            fill: textColor,
+            fontWeight: "bold");
 
         // Technology
         if (!string.IsNullOrEmpty(element.Technology))
         {
             textY += 18;
-            builder.AddText(centerX, textY, $"[{element.Technology}]",
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                centerX,
+                textY,
+                $"[{element.Technology}]",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 3}px",
+                fontFamily: options.FontFamily,
                 fill: textColor);
         }
 
@@ -396,17 +476,24 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         if (!string.IsNullOrEmpty(element.Description))
         {
             textY += 18;
-            builder.AddText(centerX, textY, TruncateText(element.Description, 22),
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                centerX,
+                textY,
+                TruncateText(element.Description, 22),
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 3}px",
+                fontFamily: options.FontFamily,
                 fill: textColor);
         }
     }
 
-    static void DrawRelationship(SvgBuilder builder,
+    static void DrawRelationship(
+        SvgBuilder builder,
         (double x, double y, double w, double h) from,
         (double x, double y, double w, double h) to,
-        string? label, RenderOptions options)
+        string? label,
+        RenderOptions options)
     {
         // Calculate connection points
         var dx = to.x - from.x;
@@ -423,8 +510,8 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             stroke: "#666", strokeWidth: 1.5, strokeDasharray: "5,5");
 
         // Draw arrowhead manually
-        var arrowSize = 8;
-        var arrowAngle = Math.PI / 6;
+        const int arrowSize = 8;
+        const double arrowAngle = Math.PI / 6;
         var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
         var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
         var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
@@ -432,7 +519,8 @@ public class C4Renderer : IDiagramRenderer<C4Model>
 
         builder.AddPath(
             string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
-            fill: "#666", stroke: "none");
+            fill: "#666",
+            stroke: "none");
 
         // Draw label
         if (!string.IsNullOrEmpty(label))
@@ -440,9 +528,14 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             var midX = (fromX + toX) / 2;
             var midY = (fromY + toY) / 2;
 
-            builder.AddText(midX, midY - 8, label,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                midX,
+                midY - 8,
+                label,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize - 3}px",
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
     }

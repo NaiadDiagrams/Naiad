@@ -295,8 +295,8 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         if (isSelfMessage)
         {
             // Self-referencing message - draw as a loop
-            var loopWidth = 40;
-            var loopHeight = 30;
+            const int loopWidth = 40;
+            const int loopHeight = 30;
             var path = string.Create(
                 CultureInfo.InvariantCulture,
                 $"M{fromX:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y + loopHeight:0.##} L{fromX:0.##},{y + loopHeight:0.##}");
@@ -350,7 +350,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     static void DrawArrowhead(SvgBuilder builder, double fromX, double toX, double y, MessageType type)
     {
         var direction = Math.Sign(toX - fromX);
-        var arrowSize = 8;
+        const int arrowSize = 8;
 
         switch (type)
         {
@@ -420,7 +420,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
 
         // Note box (folded corner style)
-        var foldSize = 8;
+        const int foldSize = 8;
         var path = string.Create(
             CultureInfo.InvariantCulture,
             $"M{noteX:0.##},{y:0.##} L{noteX + NoteWidth - foldSize:0.##},{y:0.##} L{noteX + NoteWidth:0.##},{y + foldSize:0.##} L{noteX + NoteWidth:0.##},{y + NoteHeight:0.##} L{noteX:0.##},{y + NoteHeight:0.##} Z");
@@ -436,14 +436,18 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             stroke: "#AAAA33", strokeWidth: 1);
 
         // Note text
-        builder.AddText(noteX + NoteWidth / 2, y + NoteHeight / 2, note.Text,
+        builder.AddText(
+            noteX + NoteWidth / 2,
+            y + NoteHeight / 2,
+            note.Text,
             anchor: "middle",
             baseline: "middle",
             fontSize: $"{options.FontSize}px",
             fontFamily: options.FontFamily);
     }
 
-    static void DrawActivations(SvgBuilder builder,
+    static void DrawActivations(
+        SvgBuilder builder,
         Dictionary<string, List<(double startY, double endY)>> activations,
         Dictionary<string, double> positions)
     {
@@ -453,8 +457,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             foreach (var (startY, endY) in ranges)
             {
                 builder.AddRect(
-                    x - ActivationWidth / 2, startY,
-                    ActivationWidth, endY - startY,
+                    x - ActivationWidth / 2,
+                    startY,
+                    ActivationWidth,
+                    endY - startY,
                     fill: "#F4F4F4",
                     stroke: "#666",
                     strokeWidth: 1);
