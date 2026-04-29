@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace MermaidSharp.Rendering;
 
 public class SvgCircle : SvgElement
 {
@@ -11,7 +11,7 @@ public class SvgCircle : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append($"<circle cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" r=\"{Fmt(R)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<circle cx=\"{Cx:0.##}\" cy=\"{Cy:0.##}\" r=\"{R:0.##}\"");
 
         if (Fill is not null)
         {
@@ -25,7 +25,7 @@ public class SvgCircle : SvgElement
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
         }
 
         CommonAttributes(builder);

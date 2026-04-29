@@ -5,7 +5,7 @@ public class SvgDocument
     public double Width { get; set; }
     public double Height { get; set; }
     public string? ViewBoxOverride { get; set; }
-    public string ViewBox => ViewBoxOverride ?? $"0 0 {FmtWidth(Width)} {Fmt(Height)}";
+    public string ViewBox => ViewBoxOverride ?? string.Create(CultureInfo.InvariantCulture, $"0 0 {Width:0.######} {Height:0.##}");
     public List<SvgElement> Elements { get; } = [];
     public SvgDefs Defs { get; } = new();
     public string? CssStyles { get; set; }
@@ -28,7 +28,7 @@ public class SvgDocument
         }
 
         builder.Append($" viewBox=\"{ViewBox}\"");
-        builder.Append($" style=\"max-width: {FmtWidth(Width)}px;\"");
+        builder.Append(CultureInfo.InvariantCulture, $" style=\"max-width: {Width:0.######}px;\"");
 
         if (!string.IsNullOrEmpty(Role))
         {
@@ -66,7 +66,4 @@ public class SvgDocument
 
         builder.Append("</svg>");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
-    static string FmtWidth(double value) => value.ToString("0.######", CultureInfo.InvariantCulture);
 }

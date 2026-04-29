@@ -33,18 +33,18 @@ public class SvgMarker
             builder.Append($" viewBox=\"{ViewBox}\"");
         }
 
-        builder.Append($" refX=\"{Fmt(RefX)}\" refY=\"{Fmt(RefY)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $" refX=\"{RefX:0.##}\" refY=\"{RefY:0.##}\"");
         if (MarkerUnits is not null)
         {
             builder.Append($" markerUnits=\"{MarkerUnits}\"");
         }
 
-        builder.Append($" markerWidth=\"{Fmt(MarkerWidth)}\" markerHeight=\"{Fmt(MarkerHeight)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $" markerWidth=\"{MarkerWidth:0.##}\" markerHeight=\"{MarkerHeight:0.##}\"");
         builder.Append($" orient=\"{Orient}\">");
 
         if (UseCircle)
         {
-            builder.Append($"<circle cx=\"{Fmt(CircleCx)}\" cy=\"{Fmt(CircleCy)}\" r=\"{Fmt(CircleR)}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+            builder.Append(CultureInfo.InvariantCulture, $"<circle cx=\"{CircleCx:0.##}\" cy=\"{CircleCy:0.##}\" r=\"{CircleR:0.##}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
         }
         else
         {
@@ -53,6 +53,4 @@ public class SvgMarker
 
         builder.Append("</marker>");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

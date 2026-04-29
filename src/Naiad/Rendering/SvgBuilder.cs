@@ -419,7 +419,7 @@ public class SvgBuilder
         {
             var paddingGroup = new SvgGroup
             {
-                Transform = $"translate({Fmt(padding)},{Fmt(padding)})"
+                Transform = string.Create(CultureInfo.InvariantCulture, $"translate({padding:0.##},{padding:0.##})")
             };
             paddingGroup.Children.AddRange(document.Elements);
             document.Elements.Clear();
@@ -428,6 +428,4 @@ public class SvgBuilder
 
         return document;
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

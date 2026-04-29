@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace MermaidSharp.Rendering;
 
 public class SvgText : SvgElement
 {
@@ -26,7 +26,7 @@ public class SvgText : SvgElement
         }
         else
         {
-            builder.Append($" x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" x=\"{X:0.##}\" y=\"{Y:0.##}\"");
             if (TextAnchor is not null) builder.Append($" text-anchor=\"{TextAnchor}\"");
             if (DominantBaseline is not null) builder.Append($" dominant-baseline=\"{DominantBaseline}\"");
             if (FontSize is not null) builder.Append($" font-size=\"{FontSize}\"");
@@ -42,43 +42,50 @@ public class SvgText : SvgElement
         }
         else
         {
-            builder.Append($">{EscapeXml(Content)}</text>");
+            builder.Append('>');
+            AppendEscapedXml(builder, Content);
+            builder.Append("</text>");
         }
     }
 
-    static string EscapeXml(string text)
+    static void AppendEscapedXml(StringBuilder builder, string text)
     {
-        // Fast path: check if escaping is needed at all
-        var needsEscape = false;
-        foreach (var c in text)
+        // Fast path: if no escaping needed, append directly without scanning twice.
+        var start = 0;
+        for (var i = 0; i < text.Length; i++)
         {
-            if (c is '&' or '<' or '>' or '"' or '\'')
+            var c = text[i];
+            var replacement = c switch
             {
-                needsEscape = true;
-                break;
-            }
-        }
+                '&' => "&amp;",
+                '<' => "&lt;",
+                '>' => "&gt;",
+                '"' => "&quot;",
+                '\'' => "&apos;",
+                _ => null
+            };
 
-        if (!needsEscape)
-        {
-            return text;
-        }
-
-        // Single-pass escape
-        var sb = new StringBuilder(text.Length + 8);
-        foreach (var c in text)
-        {
-            switch (c)
+            if (replacement is null)
             {
-                case '&': sb.Append("&amp;"); break;
-                case '<': sb.Append("&lt;"); break;
-                case '>': sb.Append("&gt;"); break;
-                case '"': sb.Append("&quot;"); break;
-                case '\'': sb.Append("&apos;"); break;
-                default: sb.Append(c); break;
+                continue;
             }
+
+            if (i > start)
+            {
+                builder.Append(text, start, i - start);
+            }
+
+            builder.Append(replacement);
+            start = i + 1;
         }
 
-        return sb.ToString();
+        if (start == 0)
+        {
+            builder.Append(text);
+        }
+        else if (start < text.Length)
+        {
+            builder.Append(text, start, text.Length - start);
+        }
     }
 }

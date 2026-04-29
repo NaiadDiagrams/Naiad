@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace MermaidSharp.Rendering;
 
 public class SvgPath : SvgElement
 {
@@ -27,7 +27,7 @@ public class SvgPath : SvgElement
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
         }
 
         if (StrokeDasharray is not null)
@@ -47,7 +47,7 @@ public class SvgPath : SvgElement
 
         if (Opacity.HasValue)
         {
-            builder.Append($" opacity=\"{Fmt(Opacity.Value)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" opacity=\"{Opacity.Value:0.##}\"");
         }
 
         CommonAttributes(builder);

@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace MermaidSharp.Rendering;
 
 public class SvgRectNoXY : SvgElement
 {
@@ -7,7 +7,7 @@ public class SvgRectNoXY : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append($"<rect width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<rect width=\"{Width:0.##}\" height=\"{Height:0.##}\"");
         CommonAttributes(builder);
         builder.Append("/>");
     }

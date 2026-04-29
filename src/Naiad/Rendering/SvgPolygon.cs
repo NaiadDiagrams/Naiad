@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace MermaidSharp.Rendering;
 
 public class SvgPolygon : SvgElement
 {
@@ -16,9 +16,8 @@ public class SvgPolygon : SvgElement
                 builder.Append(' ');
             }
 
-            builder.Append(Fmt(Points[i].X));
-            builder.Append(',');
-            builder.Append(Fmt(Points[i].Y));
+            var point = Points[i];
+            builder.Append(CultureInfo.InvariantCulture, $"{point.X:0.##},{point.Y:0.##}");
         }
 
         builder.Append('"');
