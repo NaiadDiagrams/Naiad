@@ -15,8 +15,14 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         if (model.Requirements.Count == 0 && model.Elements.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: $"{options.FontSize}px",
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -84,8 +90,15 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
     static void DrawRequirement(SvgBuilder builder, Requirement req, double x, double y, RenderOptions options)
     {
         // Box
-        builder.AddRect(x, y, BoxWidth, BoxHeight, rx: 5,
-            fill: RequirementColor, stroke: "#4CAF50", strokeWidth: 2);
+        builder.AddRect(
+            x,
+            y,
+            BoxWidth,
+            BoxHeight,
+            rx: 5,
+            fill: RequirementColor,
+            stroke: "#4CAF50",
+            strokeWidth: 2);
 
         // Type label
         var typeLabel = req.Type switch
@@ -104,9 +117,11 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             fill: "#666");
 
         // Name
-        builder.AddText(x + BoxWidth / 2, y + 35, req.Name,
+        builder.AddText(
+            x + BoxWidth / 2, y + 35, req.Name,
             anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+            fontSize: $"{options.FontSize}px",
+            fontFamily: options.FontFamily,
             fontWeight: "bold", fill: "#333");
 
         // Risk indicator
