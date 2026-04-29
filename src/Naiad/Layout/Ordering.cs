@@ -9,26 +9,36 @@ internal static class Ordering
         graph.BuildRanks();
         InitializeOrder(graph);
 
-        var bestCrossings = CountCrossings(graph);
-        var bestOrders = SaveOrders(graph);
+        var nodeCount = graph.Nodes.Count;
+        var bestOrders = new int[nodeCount];
+        SaveOrders(graph, bestOrders);
+
+        // Reusable buffers for OrderByMedian and CountCrossings.
+        var positions = new Dictionary<string, double>();
+        var neighborOrders = new List<double>();
+        var crossingsEdges = new List<(int sourceOrder, int targetOrder)>();
+        var targetOrders = new int[graph.Edges.Count];
+        var mergeBuffer = new int[graph.Edges.Count];
+
+        var bestCrossings = CountCrossings(graph, crossingsEdges, targetOrders, mergeBuffer);
 
         for (var i = 0; i < MaxIterations && bestCrossings > 0; i++)
         {
             // Alternate between sweeping down and up
             if (i % 2 == 0)
             {
-                SweepDown(graph);
+                SweepDown(graph, positions, neighborOrders);
             }
             else
             {
-                SweepUp(graph);
+                SweepUp(graph, positions, neighborOrders);
             }
 
-            var crossings = CountCrossings(graph);
+            var crossings = CountCrossings(graph, crossingsEdges, targetOrders, mergeBuffer);
             if (crossings < bestCrossings)
             {
                 bestCrossings = crossings;
-                bestOrders = SaveOrders(graph);
+                SaveOrders(graph, bestOrders);
             }
         }
 
@@ -48,36 +58,54 @@ internal static class Ordering
         }
     }
 
-    static void SweepDown(LayoutGraph graph)
+    static void SweepDown(LayoutGraph graph, Dictionary<string, double> positions, List<double> neighborOrders)
     {
         for (var r = 1; r < graph.Ranks.Length; r++)
         {
-            OrderByMedian(graph, r, true);
+            OrderByMedian(graph, r, true, positions, neighborOrders);
         }
     }
 
-    static void SweepUp(LayoutGraph graph)
+    static void SweepUp(LayoutGraph graph, Dictionary<string, double> positions, List<double> neighborOrders)
     {
         for (var r = graph.Ranks.Length - 2; r >= 0; r--)
         {
-            OrderByMedian(graph, r, false);
+            OrderByMedian(graph, r, false, positions, neighborOrders);
         }
     }
 
-    static void OrderByMedian(LayoutGraph graph, int rank, bool useInEdges)
+    static void OrderByMedian(
+        LayoutGraph graph,
+        int rank,
+        bool useInEdges,
+        Dictionary<string, double> positions,
+        List<double> neighborOrders)
     {
         var nodesInRank = graph.Ranks[rank];
-        var positions = new Dictionary<string, double>(nodesInRank.Count);
-        var neighborOrders = new List<double>();
+        positions.Clear();
 
         foreach (var node in nodesInRank)
         {
             neighborOrders.Clear();
-            foreach (var neighbor in useInEdges
-                         ? graph.GetPredecessors(node.Id)
-                         : graph.GetSuccessors(node.Id))
+            if (useInEdges)
             {
-                neighborOrders.Add(neighbor.Order);
+                foreach (var edge in node.InEdges)
+                {
+                    if (edge.Source is { } source)
+                    {
+                        neighborOrders.Add(source.Order);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var edge in node.OutEdges)
+                {
+                    if (edge.Target is { } target)
+                    {
+                        neighborOrders.Add(target.Order);
+                    }
+                }
             }
 
             if (neighborOrders.Count == 0)
@@ -130,27 +158,36 @@ internal static class Ordering
         return values[mid];
     }
 
-    static int CountCrossings(LayoutGraph graph)
+    static int CountCrossings(
+        LayoutGraph graph,
+        List<(int sourceOrder, int targetOrder)> edges,
+        int[] targetOrders,
+        int[] mergeBuffer)
     {
         var total = 0;
         for (var r = 0; r < graph.Ranks.Length - 1; r++)
         {
-            total += CountCrossingsBetweenRanks(graph, r, r + 1);
+            total += CountCrossingsBetweenRanks(graph, r, r + 1, edges, targetOrders, mergeBuffer);
         }
 
         return total;
     }
 
-    static int CountCrossingsBetweenRanks(LayoutGraph graph, int rank1, int rank2)
+    static int CountCrossingsBetweenRanks(
+        LayoutGraph graph,
+        int rank1,
+        int rank2,
+        List<(int sourceOrder, int targetOrder)> edges,
+        int[] targetOrders,
+        int[] mergeBuffer)
     {
-        // Build list of edges between the two ranks, sorted by source order
-        var edges = new List<(int sourceOrder, int targetOrder)>();
+        edges.Clear();
 
         foreach (var node in graph.Ranks[rank1])
         {
             foreach (var edge in node.OutEdges)
             {
-                var target = graph.GetNode(edge.TargetId);
+                var target = edge.Target;
                 if (target is not null && target.Rank == rank2)
                 {
                     edges.Add((node.Order, target.Order));
@@ -171,14 +208,12 @@ internal static class Ordering
             return cmp != 0 ? cmp : a.targetOrder.CompareTo(b.targetOrder);
         });
 
-        var targetOrders = new int[edges.Count];
         for (var i = 0; i < edges.Count; i++)
         {
             targetOrders[i] = edges[i].targetOrder;
         }
 
-        var buffer = new int[targetOrders.Length];
-        return MergeSortCount(targetOrders, buffer, 0, targetOrders.Length - 1);
+        return MergeSortCount(targetOrders, mergeBuffer, 0, edges.Count - 1);
     }
 
     static int MergeSortCount(int[] arr, int[] buffer, int left, int right)
@@ -225,15 +260,21 @@ internal static class Ordering
         return count;
     }
 
-    static Dictionary<string, int> SaveOrders(LayoutGraph graph) =>
-        graph.Nodes.Values.ToDictionary(_ => _.Id, _ => _.Order);
-
-    static void RestoreOrders(LayoutGraph graph, Dictionary<string, int> orders)
+    static void SaveOrders(LayoutGraph graph, int[] orders)
     {
-        foreach (var (id, order) in orders)
+        var i = 0;
+        foreach (var node in graph.Nodes.Values)
         {
-            var node = graph.GetNode(id);
-            node?.Order = order;
+            orders[i++] = node.Order;
+        }
+    }
+
+    static void RestoreOrders(LayoutGraph graph, int[] orders)
+    {
+        var i = 0;
+        foreach (var node in graph.Nodes.Values)
+        {
+            node.Order = orders[i++];
         }
     }
 }

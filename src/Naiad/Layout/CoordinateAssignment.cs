@@ -71,18 +71,19 @@ static class CoordinateAssignment
         }
 
         // Pass 2: Center alignment based on connected nodes
+        var positions = new List<double>();
         for (var iteration = 0; iteration < 4; iteration++)
         {
             // Down pass
             for (var index = 1; index < graph.Ranks.Length; index++)
             {
-                AlignToNeighbors(graph, index, true, nodeSep, isHorizontal);
+                AlignToNeighbors(graph, index, true, nodeSep, isHorizontal, positions);
             }
 
             // Up pass
             for (var r = graph.Ranks.Length - 2; r >= 0; r--)
             {
-                AlignToNeighbors(graph, r, false, nodeSep, isHorizontal);
+                AlignToNeighbors(graph, r, false, nodeSep, isHorizontal, positions);
             }
         }
 
@@ -91,21 +92,33 @@ static class CoordinateAssignment
     }
 
     static void AlignToNeighbors(LayoutGraph graph, int rank, bool useInEdges,
-        double nodeSep, bool isHorizontal)
+        double nodeSep, bool isHorizontal, List<double> positions)
     {
         var nodesInRank = graph.Ranks[rank];
         nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
 
-        var positions = new List<double>();
-
         foreach (var node in nodesInRank)
         {
             positions.Clear();
-            foreach (var neighbor in useInEdges
-                         ? graph.GetPredecessors(node.Id)
-                         : graph.GetSuccessors(node.Id))
+            if (useInEdges)
             {
-                positions.Add(isHorizontal ? neighbor.Y : neighbor.X);
+                foreach (var edge in node.InEdges)
+                {
+                    if (edge.Source is { } source)
+                    {
+                        positions.Add(isHorizontal ? source.Y : source.X);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var edge in node.OutEdges)
+                {
+                    if (edge.Target is { } target)
+                    {
+                        positions.Add(isHorizontal ? target.Y : target.X);
+                    }
+                }
             }
 
             if (positions.Count == 0)

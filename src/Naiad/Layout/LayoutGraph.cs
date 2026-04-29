@@ -13,10 +13,12 @@ class LayoutGraph
         Edges.Add(edge);
         if (Nodes.TryGetValue(edge.SourceId, out var source))
         {
+            edge.Source = source;
             source.OutEdges.Add(edge);
         }
         if (Nodes.TryGetValue(edge.TargetId, out var target))
         {
+            edge.Target = target;
             target.InEdges.Add(edge);
         }
     }
@@ -76,13 +78,12 @@ class LayoutGraph
     {
         for (var r = 0; r < Ranks.Length; r++)
         {
-            var nodesInRank = Ranks[r].OrderBy(_ => _.Order).ToList();
+            var nodesInRank = Ranks[r];
+            nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
             for (var i = 0; i < nodesInRank.Count; i++)
             {
                 nodesInRank[i].Order = i;
             }
-
-            Ranks[r] = nodesInRank;
         }
     }
 }
