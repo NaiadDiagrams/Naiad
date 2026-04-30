@@ -226,7 +226,11 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         Direction direction,
         List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> statements)
     {
-        var model = new FlowchartModel {Direction = direction};
+        var model = new FlowchartModel
+        {
+            Direction = direction
+        };
+
         var nodeDict = new Dictionary<string, Node>();
 
         foreach (var (nodes, edges) in statements)
@@ -241,7 +245,8 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     nodeDict[node.Id] = node;
                     model.Nodes.Add(node);
                 }
-                else if (node.Label != null && existingNode.Label == null)
+                else if (node.Label != null &&
+                         existingNode.Label == null)
                 {
                     existingNode.Label = node.Label;
                     existingNode.Shape = node.Shape;
