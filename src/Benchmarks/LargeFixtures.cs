@@ -17,12 +17,33 @@ static class LargeFixtures
         sb.AppendLine("flowchart TD");
         const int layers = 5;
         const int width = 10;
+        string[] icons = ["server", "database", "cog", "cloud", "user", "lock"];
+        string[] prefixes = ["fa", "fas", "fab", "far"];
+        var declared = new HashSet<string>();
+
+        string Decl(int layer, int index)
+        {
+            var id = $"L{layer}_{index}";
+            if (!declared.Add(id))
+            {
+                return id;
+            }
+            var idx = layer * width + index;
+            if (idx % 2 == 0)
+            {
+                var prefix = prefixes[idx % prefixes.Length];
+                var icon = icons[idx % icons.Length];
+                return $"{id}[{prefix}:fa-{icon} Service {layer}-{index}]";
+            }
+            return $"{id}[Service {layer}-{index}]";
+        }
+
         for (var l = 0; l < layers - 1; l++)
         {
             for (var i = 0; i < width; i++)
             {
-                sb.AppendLine($"    L{l}_{i} --> L{l + 1}_{i}");
-                sb.AppendLine($"    L{l}_{i} --> L{l + 1}_{(i + 1) % width}");
+                sb.AppendLine($"    {Decl(l, i)} --> {Decl(l + 1, i)}");
+                sb.AppendLine($"    {Decl(l, i)} --> {Decl(l + 1, (i + 1) % width)}");
             }
         }
         return sb.ToString();

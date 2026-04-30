@@ -21,16 +21,16 @@ public class RenderBenchmarks
 
     const string FlowchartComplex = """
         flowchart TD
-            A[Start] --> B{Decision}
-            B -->|Yes| C[Process 1]
-            B -->|No| D[Process 2]
-            C --> E[Merge]
+            A[fa:fa-play Start] --> B{fa:fa-question Decision}
+            B -->|Yes| C[fa:fa-cog Process 1]
+            B -->|No| D[fab:fa-docker Process 2]
+            C --> E[fa:fa-database Merge]
             D --> E
-            E --> F{Another Decision}
-            F -->|Path 1| G[Result 1]
-            F -->|Path 2| H[Result 2]
-            F -->|Path 3| I[Result 3]
-            G --> J[End]
+            E --> F{fas:fa-question-circle Another Decision}
+            F -->|Path 1| G[fas:fa-check Result 1]
+            F -->|Path 2| H[far:fa-circle Result 2]
+            F -->|Path 3| I[fa:fa-exclamation Result 3]
+            G --> J[fa:fa-stop End]
             H --> J
             I --> J
         """;
