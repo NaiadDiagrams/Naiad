@@ -10,16 +10,34 @@
 
     public async Task VerifySvg(
         string input,
-        [CallerFilePath] string sourceFile = "")
+        [CallerFilePath] string sourceFile = "",
+        [CallerMemberName] string testMethod = "")
     {
         var svg = Mermaid.Render(input);
         svg = PrettyPrint(svg);
-        var png = await ConvertSvgToPngAsync(svg);
+        var png = await GetOrCreatePngAsync(svg, sourceFile, testMethod);
         await Verify(
                 svg,
                 extension: "svg",
                 sourceFile: sourceFile)
             .AppendFile(png, "png");
+    }
+
+    async Task<Stream> GetOrCreatePngAsync(string svg, string sourceFile, string testMethod)
+    {
+        var directory = Path.GetDirectoryName(sourceFile)!;
+        var prefix = $"{GetType().Name}.{testMethod}.verified";
+        var verifiedSvg = Path.Combine(directory, $"{prefix}.svg");
+        var verifiedPng = Path.Combine(directory, $"{prefix}.png");
+
+        if (File.Exists(verifiedSvg) &&
+            File.Exists(verifiedPng) &&
+            File.ReadAllText(verifiedSvg).ReplaceLineEndings("\n") == svg.ReplaceLineEndings("\n"))
+        {
+            return File.OpenRead(verifiedPng);
+        }
+
+        return await ConvertSvgToPngAsync(svg);
     }
 
     static string PrettyPrint(string svg)
