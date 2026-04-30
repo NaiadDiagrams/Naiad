@@ -25,7 +25,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         {
             var label = node.Label ?? node.Id;
             // Strip icon syntax for measurement
-            var textForMeasure = iconPattern.Replace(label, "").Trim();
+            var textForMeasure = iconPattern.Replace(label, "");
             var textSize = MeasureText(textForMeasure, options.FontSize);
             // Add extra width for icon if present
             var hasIcon = iconPattern.IsMatch(label);
@@ -99,7 +99,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var htmlLabel = ConvertIconsToHtml(label);
 
         builder.AddForeignObject(
-            x, y, node.Width, node.Height,
+            x, y,
+            node.Width,
+            node.Height,
             htmlLabel,
             className: "nodeLabel");
     }
@@ -170,7 +172,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 labelX - labelWidth / 2,
                 labelY - labelHeight / 2,
                 labelWidth, labelHeight,
-                $"<p>{System.Net.WebUtility.HtmlEncode(edge.Label)}</p>",
+                $"<p>{WebUtility.HtmlEncode(edge.Label)}</p>",
                 className: "edgeLabel");
         }
     }
@@ -180,28 +182,28 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     /// </summary>
     static string ConvertIconsToHtml(string text)
     {
-        // If no icons, just encode and wrap in paragraph
         if (!iconPattern.IsMatch(text))
         {
             return $"<p>{WebUtility.HtmlEncode(text)}</p>";
         }
 
-        // Build HTML by processing text segments and icons
+        var span = text.AsSpan();
+
         var html = new StringBuilder();
         var lastIndex = 0;
 
-        foreach (Match match in iconPattern.Matches(text))
+        foreach (var match in iconPattern.EnumerateMatches(text))
         {
-            // Add text before this icon (encoded)
             if (match.Index > lastIndex)
             {
                 var textBefore = text[lastIndex..match.Index];
                 html.Append(WebUtility.HtmlEncode(textBefore));
             }
 
-            // Add the icon element
-            var prefix = match.Groups[1].Value;
-            var iconName = match.Groups[2].Value;
+            var matched = span.Slice(match.Index, match.Length);
+            var colonIndex = matched.IndexOf(':');
+            var prefix = matched[..colonIndex];
+            var iconName = matched[(colonIndex + 4)..];
             html.Append($"<i class=\"{prefix} fa-{iconName}\"></i>");
 
             lastIndex = match.Index + match.Length;
@@ -216,9 +218,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         return $"<p>{html.ToString().Trim()}</p>";
     }
 
-    static Size MeasureText(string text, double fontSize)
+    static Size MeasureText(CharSpan text, double fontSize)
     {
-        var width = text.Length * fontSize * 0.55;
+        var width = text.Trim().Length * fontSize * 0.55;
         var height = fontSize * 1.5;
         return new(width, height);
     }
