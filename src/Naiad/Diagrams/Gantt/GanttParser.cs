@@ -135,11 +135,17 @@ class GanttParser : IDiagramParser<GanttModel>
             }
 
             // Check for duration (ends with d, w, h)
-            if (part.Length > 1 && char.IsDigit(part[0]) && char.IsLetter(part[^1]))
+            if (part.Length > 1 &&
+                char.IsDigit(part[0]) &&
+                char.IsLetter(part[^1]))
             {
-                var numStr = new string(part.TakeWhile(char.IsDigit).ToArray());
+                var digitEnd = 0;
+                while (digitEnd < part.Length && char.IsAsciiDigit(part[digitEnd]))
+                {
+                    digitEnd++;
+                }
                 var unit = part[^1];
-                if (int.TryParse(numStr, out var num))
+                if (int.TryParse(part.AsSpan(0, digitEnd), out var num))
                 {
                     task.Duration = unit switch
                     {
@@ -156,7 +162,8 @@ class GanttParser : IDiagramParser<GanttModel>
             if (DateTime.TryParseExact(part, "yyyy-MM-dd", CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var date))
             {
-                if (task.StartDate == null && task.AfterTaskId == null)
+                if (task.StartDate == null &&
+                    task.AfterTaskId == null)
                 {
                     task.StartDate = date;
                 }
@@ -171,10 +178,7 @@ class GanttParser : IDiagramParser<GanttModel>
             // Must be an ID (alphanumeric identifier)
             if (part.All(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-'))
             {
-                if (task.Id == null)
-                {
-                    task.Id = part;
-                }
+                task.Id ??= part;
             }
         }
 

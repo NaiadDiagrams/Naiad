@@ -134,7 +134,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         ).Many()
         select (
             new List<Node>([first, .. rest.Select(_ => _.node)]),
-            rest.Select(_ => (_.Type, _.Style, (string?)_.Item4)).ToList()
+            rest.Select(_ => (_.Type, _.Style, (string?) _.Item4)).ToList()
         );
 
     // Style directive: style NodeName fill:#color,stroke:#color
@@ -228,7 +228,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         Direction direction,
         List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> statements)
     {
-        var model = new FlowchartModel { Direction = direction };
+        var model = new FlowchartModel {Direction = direction};
         var nodeDict = new Dictionary<string, Node>();
 
         foreach (var (nodes, edges) in statements)
@@ -255,13 +255,13 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     var edge = edges[i];
                     model.Edges.Add(
                         new()
-                    {
-                        SourceId = nodes[i].Id,
-                        TargetId = nodes[i + 1].Id,
-                        Type = edge.Type,
-                        LineStyle = edge.Style,
-                        Label = edge.Label
-                    });
+                        {
+                            SourceId = nodes[i].Id,
+                            TargetId = nodes[i + 1].Id,
+                            Type = edge.Type,
+                            LineStyle = edge.Style,
+                            Label = edge.Label
+                        });
                 }
             }
         }

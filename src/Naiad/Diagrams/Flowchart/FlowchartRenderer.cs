@@ -189,7 +189,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         var span = text.AsSpan();
 
-        var html = new StringBuilder();
+        var html = new StringBuilder("<p>");
         var lastIndex = 0;
 
         foreach (var match in iconPattern.EnumerateMatches(text))
@@ -215,7 +215,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             html.Append(WebUtility.HtmlEncode(text[lastIndex..]));
         }
 
-        return $"<p>{html.ToString().Trim()}</p>";
+        html.Append("</p>");
+        return html.ToString();
     }
 
     static Size MeasureText(CharSpan text, double fontSize)

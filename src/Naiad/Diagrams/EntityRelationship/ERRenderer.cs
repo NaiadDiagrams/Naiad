@@ -314,9 +314,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
             case Cardinality.ZeroOrOne:
                 // Circle and line o|
-                var circleX = mx;
-                var circleY = my;
-                builder.AddCircle(circleX, circleY, 4, fill: "#fff", stroke: "#333", strokeWidth: 1);
+                builder.AddCircle(mx, my, 4, fill: "#fff", stroke: "#333", strokeWidth: 1);
                 var lineX = mx + 8 * Math.Cos(angle);
                 var lineY = my + 8 * Math.Sin(angle);
                 DrawLine(builder, lineX, lineY, perpX, perpY, perpDistance);
