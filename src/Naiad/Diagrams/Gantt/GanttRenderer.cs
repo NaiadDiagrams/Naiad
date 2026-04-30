@@ -233,11 +233,10 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         if (task.IsMilestone)
         {
             // Draw milestone as diamond
-            var cx = taskX;
             var cy = y + rowHeight / 2;
             var path = string.Create(
                 CultureInfo.InvariantCulture,
-                $"M {cx:0.##} {cy - milestoneSize:0.##} L {cx + milestoneSize:0.##} {cy:0.##} L {cx:0.##} {cy + milestoneSize:0.##} L {cx - milestoneSize:0.##} {cy:0.##} Z");
+                $"M {taskX:0.##} {cy - milestoneSize:0.##} L {taskX + milestoneSize:0.##} {cy:0.##} L {taskX:0.##} {cy + milestoneSize:0.##} L {taskX - milestoneSize:0.##} {cy:0.##} Z");
             builder.AddPath(path, fill: milestoneColor, stroke: "#333", strokeWidth: 1);
         }
         else

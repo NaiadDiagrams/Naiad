@@ -171,9 +171,8 @@ class StateParser : IDiagramParser<StateModel>
     public static Parser<char, IEnumerable<IStateContent?>> ParseContent() =>
         ParseContentRecursive();
 
-    public static Parser<char, IEnumerable<IStateContent?>> ParseContentRecursive()
-    {
-        var element = OneOf(
+    public static Parser<char, IEnumerable<IStateContent?>> ParseContentRecursive() =>
+        OneOf(
             Try(directionParser.Select<IStateContent?>(_ => new DirectionItem(_))),
             Try(noteParser.Select<IStateContent?>(_ => new NoteItem(_))),
             Try(stateDeclarationWithAlias.Select<IStateContent?>(_ => new StateItem(_))),
@@ -184,10 +183,7 @@ class StateParser : IDiagramParser<StateModel>
             Try(stateWithDescription.Select<IStateContent?>(_ => new StateItem(_))),
             Try(simpleStateDeclaration.Select<IStateContent?>(_ => new StateItem(_))),
             skipLine.ThenReturn<IStateContent?>(null)
-        );
-
-        return element.Many();
-    }
+        ).Many();
 
     static StateModel BuildModel(IEnumerable<IStateContent?> content)
     {
@@ -204,22 +200,30 @@ class StateParser : IDiagramParser<StateModel>
                     break;
 
                 case StateItem stateItem:
-                    var s = stateItem.Value;
-                    if (stateMap.TryGetValue(s.Id, out var existing))
+                    var value = stateItem.Value;
+                    if (stateMap.TryGetValue(value.Id, out var existing))
                     {
                         // Update existing state with description/type
-                        if (!string.IsNullOrEmpty(s.Description))
-                            existing.Description = s.Description;
-                        if (s.Type != StateType.Normal)
-                            existing.Type = s.Type;
+                        if (!string.IsNullOrEmpty(value.Description))
+                        {
+                            existing.Description = value.Description;
+                        }
+                        if (value.Type != StateType.Normal)
+                        {
+                            existing.Type = value.Type;
+                        }
                     }
                     else
                     {
-                        stateMap[s.Id] = s;
-                        if (compositeStack.Count > 0)
-                            compositeStack.Peek().NestedStates.Add(s);
+                        stateMap[value.Id] = value;
+                        if (compositeStack.TryPeek(out var parent))
+                        {
+                            parent.NestedStates.Add(value);
+                        }
                         else
-                            model.States.Add(s);
+                        {
+                            model.States.Add(value);
+                        }
                     }
 
                     break;
@@ -250,11 +254,20 @@ class StateParser : IDiagramParser<StateModel>
                         EnsureState(toId, stateMap, model, compositeStack);
                     }
 
-                    var transition = new StateTransition { FromId = fromId, ToId = toId, Label = t.Label };
-                    if (compositeStack.Count > 0)
-                        compositeStack.Peek().NestedTransitions.Add(transition);
+                    var transition = new StateTransition
+                    {
+                        FromId = fromId,
+                        ToId = toId,
+                        Label = t.Label
+                    };
+                    if (compositeStack.TryPeek(out var transitionParent))
+                    {
+                        transitionParent.NestedTransitions.Add(transition);
+                    }
                     else
+                    {
                         model.Transitions.Add(transition);
+                    }
                     break;
 
                 case NoteItem note:
@@ -262,20 +275,29 @@ class StateParser : IDiagramParser<StateModel>
                     break;
 
                 case CompositeStartItem cs:
-                    var compositeState = new State { Id = cs.Id };
+                    var compositeState = new State
+                    {
+                        Id = cs.Id
+                    };
                     stateMap[cs.Id] = compositeState;
 
-                    if (compositeStack.Count > 0)
-                        compositeStack.Peek().NestedStates.Add(compositeState);
+                    if (compositeStack.TryPeek(out var compositeParent))
+                    {
+                        compositeParent.NestedStates.Add(compositeState);
+                    }
                     else
+                    {
                         model.States.Add(compositeState);
+                    }
 
                     compositeStack.Push(compositeState);
                     break;
 
                 case CompositeEndItem:
                     if (compositeStack.Count > 0)
+                    {
                         compositeStack.Pop();
+                    }
                     break;
             }
         }
@@ -286,33 +308,53 @@ class StateParser : IDiagramParser<StateModel>
     static void EnsureState(string id, Dictionary<string, State> stateMap, StateModel model, Stack<State> compositeStack)
     {
         if (stateMap.ContainsKey(id))
+        {
             return;
+        }
 
         var stateType = id == "[*]"
             ? compositeStack.Count == 0 ? StateType.Start : StateType.Normal
             : StateType.Normal;
 
-        var state = new State { Id = id, Type = stateType };
+        var state = new State
+        {
+            Id = id,
+            Type = stateType
+        };
         stateMap[id] = state;
 
-        if (compositeStack.Count > 0)
-            compositeStack.Peek().NestedStates.Add(state);
+        if (compositeStack.TryPeek(out var parent))
+        {
+            parent.NestedStates.Add(state);
+        }
         else
+        {
             model.States.Add(state);
+        }
     }
 
     static void EnsureSpecialState(string id, StateType type, Dictionary<string, State> stateMap, StateModel model, Stack<State> compositeStack)
     {
         if (stateMap.ContainsKey(id))
+        {
             return;
+        }
 
-        var state = new State { Id = id, Type = type };
+        var state = new State
+        {
+            Id = id,
+            Type = type
+        };
         stateMap[id] = state;
 
-        if (compositeStack.Count > 0)
-            compositeStack.Peek().NestedStates.Add(state);
+        if (compositeStack.TryPeek(out var parent))
+        {
+            parent.NestedStates.Add(state);
+        }
         else
+        {
             model.States.Add(state);
+        }
     }
 
     public Result<char, StateModel> Parse(string input) => Parser.Parse(input);

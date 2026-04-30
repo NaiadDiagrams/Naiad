@@ -86,8 +86,6 @@ class DagreLayoutEngine : ILayoutEngine
             }
 
             node.Position = new(layoutNode.X, layoutNode.Y);
-            node.Rank = layoutNode.Rank;
-            node.Order = layoutNode.Order;
         }
 
         // Build edge lookup for O(1) access instead of O(n) FirstOrDefault per edge

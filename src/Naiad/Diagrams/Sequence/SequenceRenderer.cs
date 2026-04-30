@@ -407,10 +407,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             case MessageType.SolidAsync:
             case MessageType.DottedAsync:
                 // Filled arrowhead
-                var tipX = toX;
                 var backX = toX - direction * arrowSize;
                 builder.AddPolygon([
-                    new(tipX, y),
+                    new(toX, y),
                     new(backX, y - arrowSize / 2),
                     new(backX, y + arrowSize / 2)
                 ], fill: "#333");

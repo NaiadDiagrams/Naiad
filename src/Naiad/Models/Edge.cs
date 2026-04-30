@@ -7,8 +7,6 @@ public class Edge
     public string? Label { get; set; }
     public EdgeType Type { get; set; } = EdgeType.Arrow;
     public EdgeStyle LineStyle { get; set; } = EdgeStyle.Solid;
-    public Style Style { get; set; } = new();
-    public string? CssClass { get; set; }
 
     // Layout properties (set by layout engine)
     public List<Position> Points { get; } = [];

@@ -146,7 +146,8 @@ class MindmapParser : IDiagramParser<MindmapModel>
             var node = nodes[i];
 
             // Pop stack until we find a parent with smaller indentation
-            while (indentStack.Count > 0 && indentStack.Peek().indent >= indent)
+            while (indentStack.Count > 0 &&
+                   indentStack.Peek().indent >= indent)
             {
                 indentStack.Pop();
             }
