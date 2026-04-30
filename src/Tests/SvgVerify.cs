@@ -32,7 +32,7 @@
 
         if (File.Exists(verifiedSvg) &&
             File.Exists(verifiedPng) &&
-            File.ReadAllText(verifiedSvg).ReplaceLineEndings("\n") == svg.ReplaceLineEndings("\n"))
+            (await File.ReadAllTextAsync(verifiedSvg)).ReplaceLineEndings("\n") == svg.ReplaceLineEndings("\n"))
         {
             return File.OpenRead(verifiedPng);
         }
