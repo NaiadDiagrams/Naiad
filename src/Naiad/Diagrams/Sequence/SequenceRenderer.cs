@@ -21,7 +21,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             .Size(width, height)
             .AddArrowMarker("arrowhead", "#333")
             .AddArrowMarker("arrowhead-dotted", "#333")
-            .AddCrossMarker("cross", "#333");
+            .AddCrossMarker("cross");
 
         // Add title if present
         var titleOffset = 0.0;

@@ -46,13 +46,15 @@ class ClassParser : IDiagramParser<ClassModel>
             var parts = param.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 1)
             {
-                parameters.Add(new()
-                {
-                    Name = parts.Length >= 2 ? parts[1] : parts[0],
-                    Type = parts.Length >= 2 ? parts[0] : null
-                });
+                parameters.Add(
+                    new()
+                    {
+                        Name = parts.Length >= 2 ? parts[1] : parts[0],
+                        Type = parts.Length >= 2 ? parts[0] : null
+                    });
             }
         }
+
         return parameters;
     }
 
@@ -176,7 +178,7 @@ class ClassParser : IDiagramParser<ClassModel>
         string id,
         Maybe<(ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
-        var classDef = new ClassDefinition { Id = id };
+        var classDef = new ClassDefinition {Id = id};
 
         if (body.HasValue)
         {
@@ -294,6 +296,7 @@ class ClassParser : IDiagramParser<ClassModel>
                         model.Classes.Add(c);
                         classIds.Add(c.Id);
                     }
+
                     break;
 
                 case RelationshipItem rel:
@@ -301,14 +304,24 @@ class ClassParser : IDiagramParser<ClassModel>
                     // Auto-add classes from relationships
                     if (!classIds.Contains(r.FromId))
                     {
-                        model.Classes.Add(new() { Id = r.FromId });
+                        model.Classes.Add(
+                            new()
+                            {
+                                Id = r.FromId
+                            });
                         classIds.Add(r.FromId);
                     }
+
                     if (!classIds.Contains(r.ToId))
                     {
-                        model.Classes.Add(new() { Id = r.ToId });
+                        model.Classes.Add(
+                            new()
+                            {
+                                Id = r.ToId
+                            });
                         classIds.Add(r.ToId);
                     }
+
                     model.Relationships.Add(r);
                     break;
             }
@@ -320,12 +333,18 @@ class ClassParser : IDiagramParser<ClassModel>
     public Result<char, ClassModel> Parse(string input) => Parser.Parse(input);
 
     interface IClassBodyContent;
+
     readonly record struct AnnotationItem(ClassAnnotation Value) : IClassBodyContent;
+
     readonly record struct MemberItem(ClassMember Value) : IClassBodyContent;
+
     readonly record struct MethodItem(ClassMethod Value) : IClassBodyContent;
 
     internal interface IClassContent;
+
     readonly record struct DirectionItem(Direction Value) : IClassContent;
+
     readonly record struct ClassDefinitionItem(ClassDefinition Value) : IClassContent;
+
     readonly record struct RelationshipItem(ClassRelationship Value) : IClassContent;
 }
