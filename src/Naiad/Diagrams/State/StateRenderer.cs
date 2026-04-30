@@ -724,8 +724,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             case StateType.Start:
                 // Filled circle
-                builder.AddCircle(x, y, specialStateSize / 2,
-                    fill: "#333", stroke: "#333", strokeWidth: 1);
+                builder.AddCircle(
+                    x,
+                    y,
+                    specialStateSize / 2,
+                    fill: "#333",
+                    stroke: "#333",
+                    strokeWidth: 1);
 #if DEBUG
                 TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
 #endif
@@ -733,10 +738,20 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             case StateType.End:
                 // Double circle
-                builder.AddCircle(x, y, specialStateSize / 2,
-                    fill: "none", stroke: "#333", strokeWidth: 2);
-                builder.AddCircle(x, y, specialStateSize / 4,
-                    fill: "#333", stroke: "#333", strokeWidth: 1);
+                builder.AddCircle(
+                    x,
+                    y,
+                    specialStateSize / 2,
+                    fill: "none",
+                    stroke: "#333",
+                    strokeWidth: 2);
+                builder.AddCircle(
+                    x,
+                    y,
+                    specialStateSize / 4,
+                    fill: "#333",
+                    stroke: "#333",
+                    strokeWidth: 1);
 #if DEBUG
                 TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
 #endif
@@ -746,9 +761,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             case StateType.Join:
                 // Horizontal bar
                 builder.AddRect(
-                    x - state.Width / 2, y - state.Height / 2,
-                    state.Width, state.Height,
-                    fill: "#333", stroke: "#333");
+                    x - state.Width / 2,
+                    y - state.Height / 2,
+                    state.Width,
+                    state.Height,
+                    fill: "#333",
+                    stroke: "#333");
 #if DEBUG
                 TrackNode(x, y, state.Width, state.Height, state.Id);
 #endif
@@ -787,7 +805,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var x = state.Position.X - state.Width / 2;
         var y = state.Position.Y - state.Height / 2;
 
-        builder.AddRect(x, y, state.Width, state.Height,
+        builder.AddRect(
+            x,
+            y,
+            state.Width,
+            state.Height,
             rx: stateRadius,
             fill: "#ECECFF",
             stroke: "#9370DB",
@@ -821,14 +843,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var x = state.Position.X - state.Width / 2;
         var y = state.Position.Y - state.Height / 2;
 
-        builder.AddRect(x, y, state.Width, state.Height,
+        builder.AddRect(
+            x,
+            y,
+            state.Width,
+            state.Height,
             rx: stateRadius,
             fill: "#F4F4F4",
             stroke: "#666",
             strokeWidth: 2);
 
         // Title
-        builder.AddText(state.Position.X, y + 15, state.Id,
+        builder.AddText(
+            state.Position.X,
+            y + 15,
+            state.Id,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,
@@ -839,8 +868,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 #endif
 
         // Separator line
-        builder.AddLine(x, y + 30, x + state.Width, y + 30,
-            stroke: "#666", strokeWidth: 1);
+        builder.AddLine(
+            x,
+            y + 30,
+            x + state.Width,
+            y + 30,
+            stroke: "#666",
+            strokeWidth: 1);
 
         // Render nested states
         RenderStates(builder, state.NestedStates, options);
@@ -1655,12 +1689,20 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 #endif
 
             // Fold corner
-            builder.AddLine(noteX + noteWidth - foldSize, noteY,
-                           noteX + noteWidth - foldSize, noteY + foldSize,
-                           stroke: "#AAAA33", strokeWidth: 1);
-            builder.AddLine(noteX + noteWidth - foldSize, noteY + foldSize,
-                           noteX + noteWidth, noteY + foldSize,
-                           stroke: "#AAAA33", strokeWidth: 1);
+            builder.AddLine(
+                noteX + noteWidth - foldSize,
+                noteY,
+                noteX + noteWidth - foldSize,
+                noteY + foldSize,
+                stroke: "#AAAA33",
+                strokeWidth: 1);
+            builder.AddLine(
+                noteX + noteWidth - foldSize,
+                noteY + foldSize,
+                noteX + noteWidth,
+                noteY + foldSize,
+                stroke: "#AAAA33",
+                strokeWidth: 1);
 
             // Note text
             builder.AddText(

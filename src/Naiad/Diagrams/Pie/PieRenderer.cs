@@ -89,7 +89,10 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             var labelX = labelDist * Math.Sin(ToRadians(midAngle));
             var labelY = -labelDist * Math.Cos(ToRadians(midAngle));
 
-            builder.AddText(0, 0, $"{percentage}%",
+            builder.AddText(
+                0,
+                0,
+                $"{percentage}%",
                 cssClass: "slice",
                 style: "text-anchor: middle;",
                 transform: $"translate({FmtMermaid(labelX)},{FmtMermaid(labelY)})",

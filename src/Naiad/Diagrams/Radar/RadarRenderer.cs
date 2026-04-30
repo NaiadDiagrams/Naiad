@@ -71,8 +71,15 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         // Draw curves
         for (var i = 0; i < model.Curves.Count; i++)
         {
-            DrawCurve(builder, centerX, centerY, model.Curves[i], model.Axes.Count,
-                minValue, maxValue, CurveColors[i % CurveColors.Length]);
+            DrawCurve(
+                builder,
+                centerX,
+                centerY,
+                model.Curves[i],
+                model.Axes.Count,
+                minValue,
+                maxValue,
+                CurveColors[i % CurveColors.Length]);
         }
 
         // Draw legend
@@ -191,8 +198,11 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         // Draw filled polygon using path
         // Convert color to semi-transparent by using rgba
         var fillColor = ColorToRgba(color, 0.3);
-        builder.AddPath(pathBuilder.ToString(),
-            fill: fillColor, stroke: color, strokeWidth: 2);
+        builder.AddPath(
+            pathBuilder.ToString(),
+            fill: fillColor,
+            stroke: color,
+            strokeWidth: 2);
 
         // Draw points
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)

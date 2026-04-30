@@ -124,19 +124,30 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var centerX = entity.Position.X;
 
         // Entity box
-        builder.AddRect(x, y, entity.Width, entity.Height,
+        builder.AddRect(
+            x,
+            y,
+            entity.Width,
+            entity.Height,
             rx: 0,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 2);
 
         // Entity name header
-        builder.AddRect(x, y, entity.Width, HeaderHeight,
+        builder.AddRect(
+            x,
+            y,
+            entity.Width,
+            HeaderHeight,
             fill: "#9370DB",
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        builder.AddText(centerX, y + HeaderHeight / 2, entity.Name,
+        builder.AddText(
+            centerX,
+            y + HeaderHeight / 2,
+            entity.Name,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,
@@ -228,10 +239,18 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Background for label
             var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
-            builder.AddRect(labelX - labelWidth / 2, labelY - 10, labelWidth, 20,
-                fill: "#fff", stroke: "none");
+            builder.AddRect(
+                labelX - labelWidth / 2,
+                labelY - 10,
+                labelWidth,
+                20,
+                fill: "#fff",
+                stroke: "none");
 
-            builder.AddText(labelX, labelY, rel.Label,
+            builder.AddText(
+                labelX,
+                labelY,
+                rel.Label,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize - 2,
@@ -340,12 +359,22 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         // Upper line
         var perpX = Math.Cos(angle + Math.PI / 2);
         var perpY = Math.Sin(angle + Math.PI / 2);
-        builder.AddLine(x, y, tipX + perpX * spread / 2, tipY + perpY * spread / 2,
-            stroke: "#333", strokeWidth: 1);
+        builder.AddLine(
+            x,
+            y,
+            tipX + perpX * spread / 2,
+            tipY + perpY * spread / 2,
+            stroke: "#333",
+            strokeWidth: 1);
 
         // Lower line
-        builder.AddLine(x, y, tipX - perpX * spread / 2, tipY - perpY * spread / 2,
-            stroke: "#333", strokeWidth: 1);
+        builder.AddLine(
+            x,
+            y,
+            tipX - perpX * spread / 2,
+            tipY - perpY * spread / 2,
+            stroke: "#333",
+            strokeWidth: 1);
     }
 
     static string FormatAttribute(EntityAttribute attr)

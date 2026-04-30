@@ -28,7 +28,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         if (!string.IsNullOrEmpty(model.Title))
         {
             titleOffset = 30;
-            builder.AddText(width / 2, 20, model.Title,
+            builder.AddText(
+                width / 2,
+                20,
+                model.Title,
                 anchor: "middle",
                 fontSize: 16,
                 fontFamily: options.FontFamily,
@@ -126,15 +129,18 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         string text, RenderOptions options)
     {
         builder.AddRect(
-            cx - ParticipantWidth / 2, y,
-            ParticipantWidth, ParticipantHeight,
+            cx - ParticipantWidth / 2,
+            y,
+            ParticipantWidth,
+            ParticipantHeight,
             rx: 3,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
 
         builder.AddText(
-            cx, y + ParticipantHeight / 2,
+            cx,
+            y + ParticipantHeight / 2,
             text,
             anchor: "middle",
             baseline: "middle",
@@ -153,32 +159,52 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var legBottom = y + ParticipantHeight;
 
         // Head
-        builder.AddCircle(cx, headY, ActorHeadRadius,
+        builder.AddCircle(
+            cx,
+            headY,
+            ActorHeadRadius,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Body
-        builder.AddLine(cx, bodyTop, cx, bodyBottom,
+        builder.AddLine(
+            cx,
+            bodyTop,
+            cx,
+            bodyBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Arms
-        builder.AddLine(cx - 15, armY, cx + 15, armY,
+        builder.AddLine(
+            cx - 15,
+            armY,
+            cx + 15,
+            armY,
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Legs
-        builder.AddLine(cx, bodyBottom, cx - 10, legBottom,
+        builder.AddLine(
+            cx,
+            bodyBottom,
+            cx - 10,
+            legBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
-        builder.AddLine(cx, bodyBottom, cx + 10, legBottom,
+        builder.AddLine(
+            cx,
+            bodyBottom,
+            cx + 10,
+            legBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Label below
         builder.AddText(
-            cx, y + ParticipantHeight + 15,
+            cx,
+            y + ParticipantHeight + 15,
             text,
             anchor: "middle",
             baseline: "top",
@@ -192,7 +218,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         foreach (var participant in model.Participants)
         {
             var x = positions[participant.Id];
-            builder.AddLine(x, startY, x, endY,
+            builder.AddLine(
+                x,
+                startY,
+                x,
+                endY,
                 stroke: "#999",
                 strokeWidth: 1,
                 strokeDasharray: "5,5");
@@ -217,7 +247,12 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             {
                 case Message msg:
                     messageNumber++;
-                    DrawMessage(builder, msg, positions, y, options,
+                    DrawMessage(
+                        builder,
+                        msg,
+                        positions,
+                        y,
+                        options,
                         model.AutoNumber ? messageNumber : null);
 
                     // Handle activation on message
@@ -300,7 +335,8 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             var path = string.Create(
                 CultureInfo.InvariantCulture,
                 $"M{fromX:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y + loopHeight:0.##} L{fromX:0.##},{y + loopHeight:0.##}");
-            builder.AddPath(path,
+            builder.AddPath(
+                path,
                 fill: "none",
                 stroke: "#333",
                 strokeWidth: 1,
@@ -311,7 +347,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             if (!string.IsNullOrEmpty(msg.Text))
             {
                 var labelText = number.HasValue ? $"{number}. {msg.Text}" : msg.Text;
-                builder.AddText(fromX + loopWidth + 5, y + loopHeight / 2, labelText,
+                builder.AddText(
+                    fromX + loopWidth + 5,
+                    y + loopHeight / 2,
+                    labelText,
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize,
@@ -320,7 +359,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
         else
         {
-            builder.AddLine(fromX, y, toX, y,
+            builder.AddLine(
+                fromX,
+                y,
+                toX,
+                y,
                 stroke: "#333",
                 strokeWidth: 1,
                 strokeDasharray: dashArray);
@@ -338,7 +381,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         : msg.Text!;
 
                 var midX = (fromX + toX) / 2;
-                builder.AddText(midX, y - 8, labelText,
+                builder.AddText(
+                    midX,
+                    y - 8,
+                    labelText,
                     anchor: "middle",
                     baseline: "bottom",
                     fontSize: options.FontSize,
@@ -373,19 +419,39 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             case MessageType.SolidOpen:
             case MessageType.DottedOpen:
                 // Open arrowhead (just lines)
-                builder.AddLine(toX - direction * arrowSize, y - arrowSize / 2, toX, y,
-                    stroke: "#333", strokeWidth: 1);
-                builder.AddLine(toX - direction * arrowSize, y + arrowSize / 2, toX, y,
-                    stroke: "#333", strokeWidth: 1);
+                builder.AddLine(
+                    toX - direction * arrowSize,
+                    y - arrowSize / 2,
+                    toX,
+                    y,
+                    stroke: "#333",
+                    strokeWidth: 1);
+                builder.AddLine(
+                    toX - direction * arrowSize,
+                    y + arrowSize / 2,
+                    toX,
+                    y,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case MessageType.SolidCross:
             case MessageType.DottedCross:
                 // X mark
-                builder.AddLine(toX - arrowSize / 2, y - arrowSize / 2, toX + arrowSize / 2, y + arrowSize / 2,
-                    stroke: "#333", strokeWidth: 2);
-                builder.AddLine(toX - arrowSize / 2, y + arrowSize / 2, toX + arrowSize / 2, y - arrowSize / 2,
-                    stroke: "#333", strokeWidth: 2);
+                builder.AddLine(
+                    toX - arrowSize / 2,
+                    y - arrowSize / 2,
+                    toX + arrowSize / 2,
+                    y + arrowSize / 2,
+                    stroke: "#333",
+                    strokeWidth: 2);
+                builder.AddLine(
+                    toX - arrowSize / 2,
+                    y + arrowSize / 2,
+                    toX + arrowSize / 2,
+                    y - arrowSize / 2,
+                    stroke: "#333",
+                    strokeWidth: 2);
                 break;
         }
     }
@@ -428,12 +494,20 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
         // Fold line
-        builder.AddLine(noteX + NoteWidth - foldSize, y,
-            noteX + NoteWidth - foldSize, y + foldSize,
-            stroke: "#AAAA33", strokeWidth: 1);
-        builder.AddLine(noteX + NoteWidth - foldSize, y + foldSize,
-            noteX + NoteWidth, y + foldSize,
-            stroke: "#AAAA33", strokeWidth: 1);
+        builder.AddLine(
+            noteX + NoteWidth - foldSize,
+            y,
+            noteX + NoteWidth - foldSize,
+            y + foldSize,
+            stroke: "#AAAA33",
+            strokeWidth: 1);
+        builder.AddLine(
+            noteX + NoteWidth - foldSize,
+            y + foldSize,
+            noteX + NoteWidth,
+            y + foldSize,
+            stroke: "#AAAA33",
+            strokeWidth: 1);
 
         // Note text
         builder.AddText(

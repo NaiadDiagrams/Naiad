@@ -512,8 +512,14 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         var toY = to.y - Math.Sin(angle) * to.h / 2;
 
         // Draw line
-        builder.AddLine(fromX, fromY, toX, toY,
-            stroke: "#666", strokeWidth: 1.5, strokeDasharray: "5,5");
+        builder.AddLine(
+            fromX,
+            fromY,
+            toX,
+            toY,
+            stroke: "#666",
+            strokeWidth: 1.5,
+            strokeDasharray: "5,5");
 
         // Draw arrowhead manually
         const int arrowSize = 8;

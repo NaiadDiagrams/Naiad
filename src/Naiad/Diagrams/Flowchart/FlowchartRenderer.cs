@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Naiad.Diagrams.Flowchart;
 
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
@@ -86,7 +88,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
 
-        builder.AddPath(shapePath,
+        builder.AddPath(
+            shapePath,
             fill: nodeFill,
             stroke: nodeStroke,
             strokeWidth: 1);
@@ -180,7 +183,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // If no icons, just encode and wrap in paragraph
         if (!iconPattern.IsMatch(text))
         {
-            return $"<p>{System.Net.WebUtility.HtmlEncode(text)}</p>";
+            return $"<p>{WebUtility.HtmlEncode(text)}</p>";
         }
 
         // Build HTML by processing text segments and icons
@@ -193,7 +196,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             if (match.Index > lastIndex)
             {
                 var textBefore = text[lastIndex..match.Index];
-                html.Append(System.Net.WebUtility.HtmlEncode(textBefore));
+                html.Append(WebUtility.HtmlEncode(textBefore));
             }
 
             // Add the icon element
@@ -207,7 +210,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Add remaining text after last icon
         if (lastIndex < text.Length)
         {
-            html.Append(System.Net.WebUtility.HtmlEncode(text[lastIndex..]));
+            html.Append(WebUtility.HtmlEncode(text[lastIndex..]));
         }
 
         return $"<p>{html.ToString().Trim()}</p>";

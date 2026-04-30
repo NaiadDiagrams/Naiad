@@ -153,7 +153,10 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
 
             // Date label
             var label = date.ToString("MM/dd", CultureInfo.InvariantCulture);
-            builder.AddText(x, offsetY + axisHeight - 20, label,
+            builder.AddText(
+                x,
+                offsetY + axisHeight - 20,
+                label,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize - 2,
@@ -254,7 +257,10 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             // Task ID or duration inside bar if fits
             if (task.Id != null && taskWidth > 40)
             {
-                builder.AddText(taskX + taskWidth / 2, barY + taskBarHeight / 2, task.Id,
+                builder.AddText(
+                    taskX + taskWidth / 2,
+                    barY + taskBarHeight / 2,
+                    task.Id,
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize - 2,

@@ -169,39 +169,71 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         {
             case MindmapShape.Circle:
                 var radius = Math.Max(node.Width, node.Height) / 2;
-                builder.AddCircle(node.Position.X, node.Position.Y, radius,
-                    fill: color, stroke: strokeColor, strokeWidth: 2);
+                builder.AddCircle(
+                    node.Position.X,
+                    node.Position.Y,
+                    radius,
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 2);
                 break;
 
             case MindmapShape.Square:
-                builder.AddRect(x, y, node.Width, node.Height,
-                    fill: color, stroke: strokeColor, strokeWidth: 2);
+                builder.AddRect(
+                    x,
+                    y,
+                    node.Width,
+                    node.Height,
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 2);
                 break;
 
             case MindmapShape.Hexagon:
-                DrawHexagon(builder, node.Position.X, node.Position.Y, node.Width, node.Height,
-                    color, strokeColor);
+                DrawHexagon(
+                    builder,
+                    node.Position.X,
+                    node.Position.Y,
+                    node.Width,
+                    node.Height,
+                    color,
+                    strokeColor);
                 break;
 
             case MindmapShape.Cloud:
             case MindmapShape.Bang:
                 // Simplified: draw as rounded rect with extra styling
-                builder.AddRect(x, y, node.Width, node.Height,
+                builder.AddRect(
+                    x,
+                    y,
+                    node.Width,
+                    node.Height,
                     rx: node.Height / 2,
-                    fill: color, stroke: strokeColor, strokeWidth: 3);
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 3);
                 break;
 
             case MindmapShape.Rounded:
             case MindmapShape.Default:
             default:
-                builder.AddRect(x, y, node.Width, node.Height,
+                builder.AddRect(
+                    x,
+                    y,
+                    node.Width,
+                    node.Height,
                     rx: 8,
-                    fill: color, stroke: strokeColor, strokeWidth: 2);
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 2);
                 break;
         }
 
         // Draw text
-        builder.AddText(node.Position.X, node.Position.Y, node.Text,
+        builder.AddText(
+            node.Position.X,
+            node.Position.Y,
+            node.Text,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,

@@ -49,7 +49,10 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize + 4,
@@ -68,19 +71,43 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
             var taskColor = TaskColors[i % TaskColors.Length];
 
             // Column background
-            builder.AddRect(x, y, ColumnWidth, contentHeight,
-                rx: 8, fill: columnColor, stroke: "#ccc", strokeWidth: 1);
+            builder.AddRect(
+                x,
+                y,
+                ColumnWidth,
+                contentHeight,
+                rx: 8,
+                fill: columnColor,
+                stroke: "#ccc",
+                strokeWidth: 1);
 
             // Column header
-            builder.AddRect(x, y, ColumnWidth, HeaderHeight,
-                rx: 8, fill: columnColor, stroke: "none");
-            builder.AddRect(x, y + HeaderHeight - 8, ColumnWidth, 8,
-                fill: columnColor, stroke: "none");
+            builder.AddRect(
+                x,
+                y,
+                ColumnWidth,
+                HeaderHeight,
+                rx: 8,
+                fill: columnColor,
+                stroke: "none");
+            builder.AddRect(
+                x,
+                y + HeaderHeight - 8,
+                ColumnWidth,
+                8,
+                fill: columnColor,
+                stroke: "none");
 
-            builder.AddText(x + ColumnWidth / 2, y + HeaderHeight / 2, column.Name,
-                anchor: "middle", baseline: "middle",
-                fontSize: options.FontSize, fontFamily: options.FontFamily,
-                fontWeight: "bold", fill: "#333");
+            builder.AddText(
+                x + ColumnWidth / 2,
+                y + HeaderHeight / 2,
+                column.Name,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
+                fontWeight: "bold",
+                fill: "#333");
 
             // Tasks
             for (var j = 0; j < column.Tasks.Count; j++)
@@ -91,17 +118,35 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
                 const double taskWidth = ColumnWidth - TaskPadding * 2;
 
                 // Task card
-                builder.AddRect(taskX, taskY, taskWidth, TaskHeight,
-                    rx: 4, fill: "#fff", stroke: "#ddd", strokeWidth: 1);
+                builder.AddRect(
+                    taskX,
+                    taskY,
+                    taskWidth,
+                    TaskHeight,
+                    rx: 4,
+                    fill: "#fff",
+                    stroke: "#ddd",
+                    strokeWidth: 1);
 
                 // Color bar on left
-                builder.AddRect(taskX, taskY, 4, TaskHeight,
-                    rx: 2, fill: taskColor, stroke: "none");
+                builder.AddRect(
+                    taskX,
+                    taskY,
+                    4,
+                    TaskHeight,
+                    rx: 2,
+                    fill: taskColor,
+                    stroke: "none");
 
                 // Task text
-                builder.AddText(taskX + 12, taskY + TaskHeight / 2, task.Name,
-                    anchor: "start", baseline: "middle",
-                    fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
+                builder.AddText(
+                    taskX + 12,
+                    taskY + TaskHeight / 2,
+                    task.Name,
+                    anchor: "start",
+                    baseline: "middle",
+                    fontSize: options.FontSize - 2,
+                    fontFamily: options.FontFamily,
                     fill: "#333");
             }
         }

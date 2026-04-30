@@ -75,12 +75,18 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             var value = dataMin + dataRange * i / gridLines;
 
             // Grid line
-            builder.AddLine(chartLeft, y, chartRight, y,
-                stroke: "#e0e0e0", strokeWidth: 1);
+            builder.AddLine(
+                chartLeft,
+                y,
+                chartRight,
+                y,
+                stroke: "#e0e0e0",
+                strokeWidth: 1);
 
             // Y-axis label
             builder.AddText(
-                chartLeft - 10, y,
+                chartLeft - 10,
+                y,
                 value.ToString("0.##", CultureInfo.InvariantCulture),
                 anchor: "end",
                 baseline: "middle",
@@ -90,10 +96,20 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         }
 
         // Draw axes
-        builder.AddLine(chartLeft, chartTop, chartLeft, chartBottom,
-            stroke: "#333", strokeWidth: 2);
-        builder.AddLine(chartLeft, chartBottom, chartRight, chartBottom,
-            stroke: "#333", strokeWidth: 2);
+        builder.AddLine(
+            chartLeft,
+            chartTop,
+            chartLeft,
+            chartBottom,
+            stroke: "#333",
+            strokeWidth: 2);
+        builder.AddLine(
+            chartLeft,
+            chartBottom,
+            chartRight,
+            chartBottom,
+            stroke: "#333",
+            strokeWidth: 2);
 
         // Draw X-axis categories
         for (var i = 0; i < categoryCount; i++)
@@ -163,8 +179,14 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                     var x = chartLeft + (i + 0.5) * categoryWidth + barOffset - barWidth / 2;
                     var y = chartBottom - barHeight;
 
-                    builder.AddRect(x, y, barWidth - 2, barHeight,
-                        fill: color, stroke: "none", rx: 2);
+                    builder.AddRect(
+                        x,
+                        y,
+                        barWidth - 2,
+                        barHeight,
+                        fill: color,
+                        stroke: "none",
+                        rx: 2);
                 }
                 barSeriesIndex++;
             }

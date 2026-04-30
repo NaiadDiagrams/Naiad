@@ -18,8 +18,14 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         if (model.Fields.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty packet", anchor: "middle", baseline: "middle",
-                fontSize: options.FontSize, fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty packet",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -38,7 +44,10 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize + 4,
@@ -80,12 +89,23 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                 var x = options.Padding + startCol * BitWidth;
                 var y = baseY + BitNumberHeight + startRow * RowHeight;
 
-                builder.AddRect(x, y, fieldWidth * BitWidth, RowHeight,
-                    fill: color, stroke: "#333", strokeWidth: 1);
+                builder.AddRect(
+                    x,
+                    y,
+                    fieldWidth * BitWidth,
+                    RowHeight,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
 
-                builder.AddText(x + fieldWidth * BitWidth / 2, y + RowHeight / 2, field.Label,
-                    anchor: "middle", baseline: "middle",
-                    fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
+                builder.AddText(
+                    x + fieldWidth * BitWidth / 2,
+                    y + RowHeight / 2,
+                    field.Label,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: options.FontSize - 2,
+                    fontFamily: options.FontFamily,
                     fill: "#333");
             }
             else
@@ -115,15 +135,26 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     var x = options.Padding + colStart * BitWidth;
                     var y = baseY + BitNumberHeight + row * RowHeight;
 
-                    builder.AddRect(x, y, fieldWidth * BitWidth, RowHeight,
-                        fill: color, stroke: "#333", strokeWidth: 1);
+                    builder.AddRect(
+                        x,
+                        y,
+                        fieldWidth * BitWidth,
+                        RowHeight,
+                        fill: color,
+                        stroke: "#333",
+                        strokeWidth: 1);
 
                     // Only show label in first row
                     if (row == startRow)
                     {
-                        builder.AddText(x + fieldWidth * BitWidth / 2, y + RowHeight / 2, field.Label,
-                            anchor: "middle", baseline: "middle",
-                            fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
+                        builder.AddText(
+                            x + fieldWidth * BitWidth / 2,
+                            y + RowHeight / 2,
+                            field.Label,
+                            anchor: "middle",
+                            baseline: "middle",
+                            fontSize: options.FontSize - 2,
+                            fontFamily: options.FontFamily,
                             fill: "#333");
                     }
                 }

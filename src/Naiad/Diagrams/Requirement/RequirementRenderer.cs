@@ -41,7 +41,10 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize + 4,
@@ -111,18 +114,27 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             _ => "Requirement"
         };
 
-        builder.AddText(x + BoxWidth / 2, y + 15, $"<<{typeLabel}>>",
-            anchor: "middle", baseline: "middle",
-            fontSize: options.FontSize - 3, fontFamily: options.FontFamily,
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 15,
+            $"<<{typeLabel}>>",
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 3,
+            fontFamily: options.FontFamily,
             fill: "#666");
 
         // Name
         builder.AddText(
-            x + BoxWidth / 2, y + 35, req.Name,
-            anchor: "middle", baseline: "middle",
+            x + BoxWidth / 2,
+            y + 35,
+            req.Name,
+            anchor: "middle",
+            baseline: "middle",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
-            fontWeight: "bold", fill: "#333");
+            fontWeight: "bold",
+            fill: "#333");
 
         // Risk indicator
         var riskColor = req.Risk switch
@@ -152,27 +164,50 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
     static void DrawElement(SvgBuilder builder, RequirementElement elem, double x, double y, RenderOptions options)
     {
         // Box
-        builder.AddRect(x, y, BoxWidth, BoxHeight, rx: 5,
-            fill: ElementColor, stroke: "#2196F3", strokeWidth: 2);
+        builder.AddRect(
+            x,
+            y,
+            BoxWidth,
+            BoxHeight,
+            rx: 5,
+            fill: ElementColor,
+            stroke: "#2196F3",
+            strokeWidth: 2);
 
         // Type label
-        builder.AddText(x + BoxWidth / 2, y + 15, "<<Element>>",
-            anchor: "middle", baseline: "middle",
-            fontSize: options.FontSize - 3, fontFamily: options.FontFamily,
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 15,
+            "<<Element>>",
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 3,
+            fontFamily: options.FontFamily,
             fill: "#666");
 
         // Name
-        builder.AddText(x + BoxWidth / 2, y + 35, elem.Name,
-            anchor: "middle", baseline: "middle",
-            fontSize: options.FontSize, fontFamily: options.FontFamily,
-            fontWeight: "bold", fill: "#333");
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 35,
+            elem.Name,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize,
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: "#333");
 
         // Type
         if (!string.IsNullOrEmpty(elem.Type))
         {
-            builder.AddText(x + BoxWidth / 2, y + 55, $"Type: {elem.Type}",
-                anchor: "middle", baseline: "middle",
-                fontSize: options.FontSize - 3, fontFamily: options.FontFamily,
+            builder.AddText(
+                x + BoxWidth / 2,
+                y + 55,
+                $"Type: {elem.Type}",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 3,
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
     }
@@ -195,8 +230,13 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         var toY = to.y - Math.Sin(angle) * BoxHeight / 2;
 
         // Draw line
-        builder.AddLine(fromX, fromY, toX, toY,
-            stroke: "#666", strokeWidth: 1.5);
+        builder.AddLine(
+            fromX,
+            fromY,
+            toX,
+            toY,
+            stroke: "#666",
+            strokeWidth: 1.5);
 
         // Draw arrowhead
         const int arrowSize = 8;

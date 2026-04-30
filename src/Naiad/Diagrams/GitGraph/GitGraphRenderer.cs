@@ -170,14 +170,20 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
         var strokeWidth = commit.Type == CommitType.Reverse ? 3 : 2;
 
-        builder.AddCircle(x, y, commitRadius,
+        builder.AddCircle(
+            x,
+            y,
+            commitRadius,
             fill: fill,
             stroke: color,
             strokeWidth: strokeWidth);
 
         // Commit ID (abbreviated)
         var displayId = commit.Id.Length > 7 ? commit.Id[..7] : commit.Id;
-        builder.AddText(x, y, displayId,
+        builder.AddText(
+            x,
+            y,
+            displayId,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize - 4,
@@ -191,13 +197,20 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             var tagX = x - tagWidth / 2;
             var tagY = y - commitRadius - tagHeight - 5;
 
-            builder.AddRect(tagX, tagY, tagWidth, tagHeight,
+            builder.AddRect(
+                tagX,
+                tagY,
+                tagWidth,
+                tagHeight,
                 rx: 3,
                 fill: "#FFF9C4",
                 stroke: "#FBC02D",
                 strokeWidth: 1);
 
-            builder.AddText(x, tagY + tagHeight / 2, commit.Tag,
+            builder.AddText(
+                x,
+                tagY + tagHeight / 2,
+                commit.Tag,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize - 2,

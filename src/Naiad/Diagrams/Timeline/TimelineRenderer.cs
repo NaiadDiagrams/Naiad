@@ -86,11 +86,20 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             // Draw section background
             if (!string.IsNullOrEmpty(section.Name))
             {
-                builder.AddRect(currentX, titleOffset + options.Padding, sectionWidth, height - titleOffset - options.Padding * 2,
-                    fill: sectionColor, stroke: "none", rx: 5);
+                builder.AddRect(
+                    currentX,
+                    titleOffset + options.Padding,
+                    sectionWidth,
+                    height - titleOffset - options.Padding * 2,
+                    fill: sectionColor,
+                    stroke: "none",
+                    rx: 5);
 
                 // Section name
-                builder.AddText(currentX + sectionWidth / 2, titleOffset + options.Padding + 15, section.Name,
+                builder.AddText(
+                    currentX + sectionWidth / 2,
+                    titleOffset + options.Padding + 15,
+                    section.Name,
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize,
@@ -106,11 +115,19 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                 var periodColor = PeriodColors[globalPeriodIndex % PeriodColors.Length];
 
                 // Period marker
-                builder.AddCircle(periodX, timelineYPos, PeriodMarkerRadius,
-                    fill: periodColor, stroke: "#333", strokeWidth: 2);
+                builder.AddCircle(
+                    periodX,
+                    timelineYPos,
+                    PeriodMarkerRadius,
+                    fill: periodColor,
+                    stroke: "#333",
+                    strokeWidth: 2);
 
                 // Period label
-                builder.AddText(periodX, timelineYPos - 25, period.Label,
+                builder.AddText(
+                    periodX,
+                    timelineYPos - 25,
+                    period.Label,
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize,
@@ -126,7 +143,11 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                     var eventWidth = MeasureText(evt, options.FontSize) + EventPadding * 2;
                     var eventX = periodX - eventWidth / 2;
 
-                    builder.AddRect(eventX, eventY, eventWidth, EventHeight - 5,
+                    builder.AddRect(
+                        eventX,
+                        eventY,
+                        eventWidth,
+                        EventHeight - 5,
                         rx: 4,
                         fill: "#fff",
                         stroke: periodColor,
@@ -154,8 +175,13 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         // Draw timeline line
         var lineStartX = options.Padding + PeriodWidth / 2;
         var lineEndX = currentX - SectionPadding - PeriodWidth / 2;
-        builder.AddLine(lineStartX, timelineYPos, lineEndX, timelineYPos,
-            stroke: "#333", strokeWidth: 3);
+        builder.AddLine(
+            lineStartX,
+            timelineYPos,
+            lineEndX,
+            timelineYPos,
+            stroke: "#333",
+            strokeWidth: 3);
 
         return builder.Build();
     }

@@ -125,8 +125,14 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
     static void DrawLeafNode(SvgBuilder builder, TreemapNode node, double x, double y,
         double width, double height, string color, RenderOptions options)
     {
-        builder.AddRect(x, y, width, height,
-            fill: color, stroke: "#333", strokeWidth: 1);
+        builder.AddRect(
+            x,
+            y,
+            width,
+            height,
+            fill: color,
+            stroke: "#333",
+            strokeWidth: 1);
 
         // Draw label if there's enough space
         if (width > 40 && height > 20)
@@ -142,7 +148,8 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 x + width / 2,
                 y + height / 2 - spacing / 2,
                 label,
-                anchor: "middle", baseline: "middle",
+                anchor: "middle",
+                baseline: "middle",
                 fontSize: labelFontSize,
                 fontFamily: options.FontFamily,
                 fill: "#333");
@@ -168,8 +175,14 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         // Draw section header
         var headerHeight = Math.Min(20, height * 0.2);
 
-        builder.AddRect(x, y, width, headerHeight,
-            fill: DarkenColor(color, 0.2), stroke: "#333", strokeWidth: 1);
+        builder.AddRect(
+            x,
+            y,
+            width,
+            headerHeight,
+            fill: DarkenColor(color, 0.2),
+            stroke: "#333",
+            strokeWidth: 1);
 
         if (width > 40)
         {
@@ -183,7 +196,8 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 baseline: "middle",
                 fontSize: Math.Min(options.FontSize - 2, 10),
                 fontFamily: options.FontFamily,
-                fill: "#333", fontWeight: "bold");
+                fill: "#333",
+                fontWeight: "bold");
 
             // Section total (right-aligned)
             builder.AddText(
@@ -194,7 +208,8 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 baseline: "middle",
                 fontSize: Math.Min(options.FontSize - 2, 10),
                 fontFamily: options.FontFamily,
-                fill: "#333", fontWeight: "bold");
+                fill: "#333",
+                fontWeight: "bold");
         }
 
         // Draw children in remaining space

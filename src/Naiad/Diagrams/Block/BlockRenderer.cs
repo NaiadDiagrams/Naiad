@@ -152,7 +152,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                     x,
                     y,
                     width,
-                    height, rx: 4,
+                    height,
+                    rx: 4,
                     fill: color,
                     stroke: "#333",
                     strokeWidth: 1);
@@ -160,7 +161,10 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
 
             case BlockShape.Rounded:
                 builder.AddRect(
-                    x, y, width, height,
+                    x,
+                    y,
+                    width,
+                    height,
                     rx: height / 2,
                     fill: color,
                     stroke: "#333",
@@ -182,7 +186,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             case BlockShape.Circle:
                 var radius = Math.Min(width, height) / 2;
                 builder.AddCircle(
-                    centerX, centerY,
+                    centerX,
+                    centerY,
                     radius,
                     fill: color,
                     stroke: "#333",
