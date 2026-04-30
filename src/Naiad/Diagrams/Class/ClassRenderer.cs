@@ -29,7 +29,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             .Size(layoutResult.Width, layoutResult.Height)
             .Padding(options.Padding)
             .AddArrowMarker()
-            .AddArrowMarker("arrowhead-open", "#333");
+            .AddArrowMarker("arrowhead-open");
 
         // Add relationship markers
         AddRelationshipMarkers(builder);
@@ -127,7 +127,9 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         // Calculate height
         var height = ClassPadding; // Top padding
         if (classDef.Annotation.HasValue)
+        {
             height += LineHeight;
+        }
         height += LineHeight; // Class name
         height += ClassPadding; // After name
 
@@ -429,15 +431,6 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         // Aggregation marker (hollow diamond)
         builder.AddMarker("aggregation", "M0,5 L5,0 L10,5 L5,10 Z", 12, 12, 10, 5, "#fff");
     }
-
-    static string GetMarkerId(RelationshipType type) =>
-        type switch
-        {
-            RelationshipType.Inheritance or RelationshipType.Realization => "inheritance",
-            RelationshipType.Composition => "composition",
-            RelationshipType.Aggregation => "aggregation",
-            _ => "arrowhead"
-        };
 
     static string FormatMember(ClassMember member)
     {

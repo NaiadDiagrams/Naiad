@@ -1,7 +1,5 @@
 class C4Parser : IDiagramParser<C4Model>
 {
-    public DiagramType DiagramType => DiagramType.C4Context;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 

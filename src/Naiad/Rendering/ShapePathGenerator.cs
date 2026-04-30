@@ -35,15 +35,6 @@ public static class ShapePathGenerator
              A{r:0.##},{r:0.##} 0 1 1 {cx:0.##},{cy - r:0.##} Z
              """);
 
-    public static string Ellipse(double cx, double cy, double rx, double ry) =>
-        string.Create(
-            Inv,
-            $"""
-             M{cx:0.##},{cy - ry:0.##}
-             A{rx:0.##},{ry:0.##} 0 1 1 {cx:0.##},{cy + ry:0.##}
-             A{rx:0.##},{ry:0.##} 0 1 1 {cx:0.##},{cy - ry:0.##} Z
-             """);
-
     static string Diamond(double cx, double cy, double width, double height)
     {
         var w2 = width / 2;

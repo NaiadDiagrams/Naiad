@@ -1,7 +1,5 @@
 class BlockParser : IDiagramParser<BlockModel>
 {
-    public DiagramType DiagramType => DiagramType.Block;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 

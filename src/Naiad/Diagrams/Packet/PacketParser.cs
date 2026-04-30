@@ -1,7 +1,5 @@
 class PacketParser : IDiagramParser<PacketModel>
 {
-    public DiagramType DiagramType => DiagramType.Packet;
-
     static Parser<char, string> quotedLabel =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 

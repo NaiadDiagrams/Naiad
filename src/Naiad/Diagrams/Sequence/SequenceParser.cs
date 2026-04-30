@@ -2,8 +2,6 @@ using NotePosition = Naiad.Diagrams.Sequence.NotePosition;
 
 class SequenceParser : IDiagramParser<SequenceModel>
 {
-    public DiagramType DiagramType => DiagramType.Sequence;
-
     // Sequence diagram identifier (no dash to avoid conflicts with arrows)
     static Parser<char, string> seqIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')

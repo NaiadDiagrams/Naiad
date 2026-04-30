@@ -48,12 +48,11 @@ internal static class Ordering
 
     static void InitializeOrder(LayoutGraph graph)
     {
-        for (var r = 0; r < graph.Ranks.Length; r++)
+        foreach (var rank in graph.Ranks)
         {
-            var nodesInRank = graph.Ranks[r];
-            for (var i = 0; i < nodesInRank.Count; i++)
+            for (var i = 0; i < rank.Count; i++)
             {
-                nodesInRank[i].Order = i;
+                rank[i].Order = i;
             }
         }
     }

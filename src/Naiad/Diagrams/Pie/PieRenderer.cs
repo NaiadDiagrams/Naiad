@@ -77,9 +77,8 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Add percentage labels with mermaid.ink exact positions
         startAngle = 0;
-        for (var i = 0; i < model.Sections.Count; i++)
+        foreach (var section in model.Sections)
         {
-            var section = model.Sections[i];
             var sweepAngle = section.Value / total * 360;
             var percentage = (int)Math.Round(section.Value / total * 100);
 

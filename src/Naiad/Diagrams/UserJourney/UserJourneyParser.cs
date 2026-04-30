@@ -1,7 +1,5 @@
 class UserJourneyParser : IDiagramParser<UserJourneyModel>
 {
-    public DiagramType DiagramType => DiagramType.UserJourney;
-
     // Rest of line (for text content)
     static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();

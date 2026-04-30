@@ -76,13 +76,12 @@ class LayoutGraph
 
     public void UpdateOrderInRanks()
     {
-        for (var r = 0; r < Ranks.Length; r++)
+        foreach (var rank in Ranks)
         {
-            var nodesInRank = Ranks[r];
-            nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
-            for (var i = 0; i < nodesInRank.Count; i++)
+            rank.Sort((a, b) => a.Order.CompareTo(b.Order));
+            for (var i = 0; i < rank.Count; i++)
             {
-                nodesInRank[i].Order = i;
+                rank[i].Order = i;
             }
         }
     }

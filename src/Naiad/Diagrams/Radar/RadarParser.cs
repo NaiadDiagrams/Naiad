@@ -1,7 +1,5 @@
 class RadarParser : IDiagramParser<RadarModel>
 {
-    public DiagramType DiagramType => DiagramType.Radar;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 

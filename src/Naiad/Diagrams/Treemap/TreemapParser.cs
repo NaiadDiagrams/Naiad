@@ -1,7 +1,5 @@
 class TreemapParser : IDiagramParser<TreemapModel>
 {
-    public DiagramType DiagramType => DiagramType.Treemap;
-
     // Quoted string: "text"
     static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
@@ -72,20 +70,20 @@ class TreemapParser : IDiagramParser<TreemapModel>
             };
 
             // Pop nodes from stack until we find parent
-            while (stack.Count > 0 && stack.Peek().indent >= line.Indent)
+            while (stack.TryPeek(out var top) && top.indent >= line.Indent)
             {
                 stack.Pop();
             }
 
-            if (stack.Count == 0)
+            if (stack.TryPeek(out var parent))
             {
-                // Root level node
-                model.RootNodes.Add(node);
+                // Child of current parent
+                parent.node.Children.Add(node);
             }
             else
             {
-                // Child of current parent
-                stack.Peek().node.Children.Add(node);
+                // Root level node
+                model.RootNodes.Add(node);
             }
 
             // Push this node as potential parent

@@ -1,7 +1,5 @@
 class TimelineParser : IDiagramParser<TimelineModel>
 {
-    public DiagramType DiagramType => DiagramType.Timeline;
-
     // Rest of line (for text content)
     static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();

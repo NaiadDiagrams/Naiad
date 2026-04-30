@@ -1,7 +1,5 @@
 class GitGraphParser : IDiagramParser<GitGraphModel>
 {
-    public DiagramType DiagramType => DiagramType.GitGraph;
-
     // Identifiers
     static Parser<char, string> branchName =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-' || _ == '/')

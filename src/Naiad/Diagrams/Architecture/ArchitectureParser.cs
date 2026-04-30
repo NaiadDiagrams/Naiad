@@ -1,7 +1,5 @@
 class ArchitectureParser : IDiagramParser<ArchitectureModel>
 {
-    public DiagramType DiagramType => DiagramType.Architecture;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 

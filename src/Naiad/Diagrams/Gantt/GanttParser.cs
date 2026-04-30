@@ -1,7 +1,5 @@
 class GanttParser : IDiagramParser<GanttModel>
 {
-    public DiagramType DiagramType => DiagramType.Gantt;
-
     // Basic parsers
     static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' &&
@@ -52,30 +50,6 @@ class GanttParser : IDiagramParser<GanttModel>
         from name in restOfLine
         from lineEnd in CommonParsers.LineEnd
         select name.Trim();
-
-    static (bool active, bool done, bool crit, bool milestone) ParseModifiers(List<string> parts)
-    {
-        bool active = false, done = false, crit = false, milestone = false;
-        foreach (var part in parts)
-        {
-            var lower = part.ToLowerInvariant();
-            if (lower == "active") active = true;
-            else if (lower == "done") done = true;
-            else if (lower == "crit") crit = true;
-            else if (lower == "milestone") milestone = true;
-        }
-
-        return (active, done, crit, milestone);
-    }
-
-    static TimeSpan ParseDuration(int num, char unit) =>
-        unit switch
-        {
-            'd' => TimeSpan.FromDays(num),
-            'w' => TimeSpan.FromDays(num * 7),
-            'h' => TimeSpan.FromHours(num),
-            _ => TimeSpan.FromDays(num)
-        };
 
     // Task line parser - handles multiple formats
     // Format: Task name :modifiers, id, start, duration

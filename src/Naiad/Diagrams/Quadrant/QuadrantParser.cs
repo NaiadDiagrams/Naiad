@@ -1,7 +1,5 @@
 class QuadrantParser : IDiagramParser<QuadrantModel>
 {
-    public DiagramType DiagramType => DiagramType.Quadrant;
-
     static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();
 

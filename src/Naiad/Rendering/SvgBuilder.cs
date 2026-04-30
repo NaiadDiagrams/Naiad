@@ -26,12 +26,6 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder ViewBox(string viewBox)
-    {
-        document.ViewBoxOverride = viewBox;
-        return this;
-    }
-
     public SvgBuilder DiagramType(string diagramClass, string ariaRoledescription)
     {
         document.DiagramClass = diagramClass;
@@ -72,24 +66,6 @@ public class SvgBuilder
         string id = "arrowhead",
         string fill = "#333") =>
         AddMarker(id, "M0,0 L10,3.5 L0,7 Z", 10, 7, 9, 3.5, fill);
-
-    public SvgBuilder AddCircleMarker(
-        string id = "circle",
-        string fill = "#333")
-    {
-        document.Defs.Markers.Add(
-            new()
-            {
-                Id = id,
-                Path = "M4,4 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0",
-                MarkerWidth = 8,
-                MarkerHeight = 8,
-                RefX = 4,
-                RefY = 4,
-                Fill = fill
-            });
-        return this;
-    }
 
     public SvgBuilder AddCrossMarker(string id = "cross")
     {
@@ -240,9 +216,9 @@ public class SvgBuilder
             Transform = transform
         };
 
-        if (groupStack.Count > 0)
+        if (groupStack.TryPeek(out var parent))
         {
-            groupStack.Peek().Children.Add(group);
+            parent.Children.Add(group);
         }
         else
         {
@@ -412,29 +388,9 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder AddPolyline(
-        IEnumerable<Position> points,
-        string? fill = null,
-        string? stroke = null,
-        double? strokeWidth = null,
-        string? strokeDasharray = null,
-        string? markerEnd = null)
-    {
-        var polyline = new SvgPolyline
-        {
-            Fill = fill,
-            Stroke = stroke,
-            StrokeWidth = strokeWidth,
-            StrokeDasharray = strokeDasharray,
-            MarkerEnd = markerEnd
-        };
-        polyline.Points.AddRange(points);
-        AddElement(polyline);
-        return this;
-    }
-
     public SvgBuilder AddText(
-        double x, double y,
+        double x,
+        double y,
         string content,
         string? anchor = null,
         string? baseline = null,
@@ -471,9 +427,9 @@ public class SvgBuilder
 
     void AddElement(SvgElement element)
     {
-        if (groupStack.Count > 0)
+        if (groupStack.TryPeek(out var parent))
         {
-            groupStack.Peek().Children.Add(element);
+            parent.Children.Add(element);
         }
         else
         {

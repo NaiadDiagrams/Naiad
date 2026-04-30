@@ -1,7 +1,5 @@
 class FlowchartParser : IDiagramParser<FlowchartModel>
 {
-    public DiagramType DiagramType => DiagramType.Flowchart;
-
     // Node shape parsers - returns (label, shape)
     static Parser<char, (string Label, NodeShape Shape)> doubleCircleShape =
         String("(((")

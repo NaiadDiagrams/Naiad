@@ -1,7 +1,5 @@
 class KanbanParser : IDiagramParser<KanbanModel>
 {
-    public DiagramType DiagramType => DiagramType.Kanban;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 

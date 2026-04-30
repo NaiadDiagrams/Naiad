@@ -19,9 +19,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         var builder = new SvgBuilder()
             .Size(width, height)
-            .AddArrowMarker("arrowhead", "#333")
-            .AddArrowMarker("arrowhead-dotted", "#333")
-            .AddCrossMarker("cross");
+            .AddArrowMarker()
+            .AddArrowMarker("arrowhead-dotted")
+            .AddCrossMarker();
 
         // Add title if present
         var titleOffset = 0.0;

@@ -2,8 +2,6 @@ using NotePosition = Naiad.Diagrams.State.NotePosition;
 
 class StateParser : IDiagramParser<StateModel>
 {
-    public DiagramType DiagramType => DiagramType.State;
-
     // State identifier (alphanumeric, underscore, or [*] for start/end)
     static Parser<char, string> stateIdentifier =
         Try(String("[*]")).Or(

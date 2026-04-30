@@ -1,7 +1,5 @@
 class XYChartParser : IDiagramParser<XYChartModel>
 {
-    public DiagramType DiagramType => DiagramType.XYChart;
-
     // Rest of line (for text content)
     static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' && _ != '\n').ManyString();

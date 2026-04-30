@@ -1,7 +1,5 @@
 class ClassParser : IDiagramParser<ClassModel>
 {
-    public DiagramType DiagramType => DiagramType.Class;
-
     // Identifier for class names (alphanumeric and underscore)
     static Parser<char, string> classIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')

@@ -1,7 +1,5 @@
 class PieParser : IDiagramParser<PieModel>
 {
-    public DiagramType DiagramType => DiagramType.Pie;
-
     static Parser<char, PieSection> sectionParser =
         from _ in CommonParsers.InlineWhitespace
         from label in CommonParsers.QuotedString

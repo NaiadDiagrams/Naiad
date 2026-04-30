@@ -1,7 +1,5 @@
 class MindmapParser : IDiagramParser<MindmapModel>
 {
-    public DiagramType DiagramType => DiagramType.Mindmap;
-
     // Parse indentation (spaces or tabs)
     static Parser<char, int> indentationParser =
         Token(_ => _ is ' ' or '\t')
@@ -146,8 +144,8 @@ class MindmapParser : IDiagramParser<MindmapModel>
             var node = nodes[i];
 
             // Pop stack until we find a parent with smaller indentation
-            while (indentStack.Count > 0 &&
-                   indentStack.Peek().indent >= indent)
+            while (indentStack.TryPeek(out var top) &&
+                   top.indent >= indent)
             {
                 indentStack.Pop();
             }

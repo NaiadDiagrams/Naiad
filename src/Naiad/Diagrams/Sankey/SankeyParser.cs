@@ -1,7 +1,5 @@
 class SankeyParser : IDiagramParser<SankeyModel>
 {
-    public DiagramType DiagramType => DiagramType.Sankey;
-
     static Parser<char, double> numberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()

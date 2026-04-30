@@ -1,7 +1,5 @@
 class ERParser : IDiagramParser<ERModel>
 {
-    public DiagramType DiagramType => DiagramType.EntityRelationship;
-
     // Entity name (alphanumeric, underscore, hyphen)
     static Parser<char, string> entityName =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')

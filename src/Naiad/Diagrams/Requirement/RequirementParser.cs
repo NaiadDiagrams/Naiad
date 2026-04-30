@@ -1,7 +1,5 @@
 class RequirementParser : IDiagramParser<RequirementModel>
 {
-    public DiagramType DiagramType => DiagramType.Requirement;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
