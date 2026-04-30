@@ -177,7 +177,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddText(centerX, currentY + LineHeight / 2, annotationText,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fontWeight: "normal",
                 fill: "#666");
@@ -188,7 +188,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         builder.AddText(centerX, currentY + LineHeight / 2, classDef.Name,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
         currentY += LineHeight + ClassPadding;
@@ -205,7 +205,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
                 builder.AddText(x + ClassPadding, currentY + LineHeight / 2, memberText,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
                 currentY += LineHeight;
             }
@@ -223,7 +223,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
                 builder.AddText(x + ClassPadding, currentY + LineHeight / 2, methodText,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
                 currentY += LineHeight;
             }
@@ -255,7 +255,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddText(labelX, labelY, rel.Label,
                 anchor: "middle",
                 baseline: "bottom",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
 
@@ -265,7 +265,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddText(startX + 10, startY - 10, rel.FromCardinality,
                 anchor: "start",
                 baseline: "bottom",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
 
@@ -274,7 +274,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddText(endX - 10, endY - 10, rel.ToCardinality,
                 anchor: "end",
                 baseline: "bottom",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
     }

@@ -800,10 +800,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var label = state.Description ?? state.Id;
         if (state.Type == StateType.Normal)
         {
-            builder.AddText(state.Position.X, state.Position.Y, label,
+            builder.AddText(
+                state.Position.X,
+                state.Position.Y,
+                label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px",
+                fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
 #if DEBUG
             TrackText(state.Position.X, state.Position.Y, label, "middle", options.FontSize);
@@ -828,7 +831,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         builder.AddText(state.Position.X, y + 15, state.Id,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
 #if DEBUG
@@ -1016,12 +1019,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
 
                 // Register this label's position to prevent future overlaps
-                placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+                placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddText(labelX, labelY, transition.Label,
+                builder.AddText(
+                    labelX,
+                    labelY,
+                    transition.Label,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#666");
 #if DEBUG
@@ -1084,10 +1090,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-                builder.AddText(labelX, labelY, transition.Label,
+                builder.AddText(
+                    labelX,
+                    labelY,
+                    transition.Label,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily);
 #if DEBUG
                 TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
@@ -1161,10 +1170,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-                builder.AddText(labelX, labelY, transition.Label,
+                builder.AddText(
+                    labelX,
+                    labelY,
+                    transition.Label,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily);
 #if DEBUG
                 TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
@@ -1397,10 +1409,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
             builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-            builder.AddText(labelX, labelY, transition.Label,
+            builder.AddText(
+                labelX,
+                labelY,
+                transition.Label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
 #if DEBUG
             TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
@@ -1648,10 +1663,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                            stroke: "#AAAA33", strokeWidth: 1);
 
             // Note text
-            builder.AddText(noteX + noteWidth / 2, noteY + noteHeight / 2, note.Text,
+            builder.AddText(
+                noteX + noteWidth / 2,
+                noteY + noteHeight / 2,
+                note.Text,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
 #if DEBUG
             TrackText(noteX + noteWidth / 2, noteY + noteHeight / 2, note.Text, "middle", options.FontSize - 2);

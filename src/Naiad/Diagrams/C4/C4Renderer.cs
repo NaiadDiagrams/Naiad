@@ -37,8 +37,14 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         if (model.Elements.Count == 0 && model.Boundaries.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty C4 diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty C4 diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -100,7 +106,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 6}px",
+                fontSize: options.FontSize + 6,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -228,7 +234,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             boundary.Label,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold",
             fill: "#333333");
@@ -251,7 +257,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 typeLabel,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px",
+                fontSize: options.FontSize - 3,
                 fontFamily: options.FontFamily,
                 fill: "#666666");
         }
@@ -364,7 +370,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 element.Label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 1}px",
+                fontSize: options.FontSize - 1,
                 fontFamily: options.FontFamily,
                 fill: textColor,
                 fontWeight: "bold");
@@ -378,7 +384,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                     TruncateText(element.Description, 25),
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 3}px",
+                    fontSize: options.FontSize - 3,
                     fontFamily: options.FontFamily,
                     fill: textColor);
             }
@@ -452,7 +458,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             element.Label,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize - 1}px",
+            fontSize: options.FontSize - 1,
             fontFamily: options.FontFamily,
             fill: textColor,
             fontWeight: "bold");
@@ -467,7 +473,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 $"[{element.Technology}]",
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px",
+                fontSize: options.FontSize - 3,
                 fontFamily: options.FontFamily,
                 fill: textColor);
         }
@@ -482,7 +488,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 TruncateText(element.Description, 22),
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px",
+                fontSize: options.FontSize - 3,
                 fontFamily: options.FontFamily,
                 fill: textColor);
         }
@@ -534,7 +540,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px",
+                fontSize: options.FontSize - 3,
                 fontFamily: options.FontFamily,
                 fill: "#666");
         }

@@ -139,7 +139,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         builder.AddText(centerX, y + HeaderHeight / 2, entity.Name,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold",
             fill: "#fff");
@@ -170,7 +170,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
                     attrY + LineHeight / 2, keyIndicator,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#666");
             }
@@ -180,7 +180,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
                 attrY + LineHeight / 2, attrText,
                 anchor: "start",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px",
+                fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
 
             attrY += LineHeight;
@@ -234,7 +234,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddText(labelX, labelY, rel.Label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: "#333");
         }

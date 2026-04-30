@@ -26,8 +26,14 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
         if (model.Columns.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty board", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty board",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -46,7 +52,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
             builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -73,7 +79,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
 
             builder.AddText(x + ColumnWidth / 2, y + HeaderHeight / 2, column.Name,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize, fontFamily: options.FontFamily,
                 fontWeight: "bold", fill: "#333");
 
             // Tasks
@@ -95,7 +101,7 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
                 // Task text
                 builder.AddText(taskX + 12, taskY + TaskHeight / 2, task.Name,
                     anchor: "start", baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                    fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                     fill: "#333");
             }
         }

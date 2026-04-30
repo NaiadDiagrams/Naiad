@@ -9,7 +9,7 @@ public class SvgText : SvgElement
     public required string Content { get; init; }
     public string? TextAnchor { get; init; }
     public string? DominantBaseline { get; init; }
-    public string? FontSize { get; init; }
+    public double? FontSize { get; init; }
     public string? FontFamily { get; init; }
     public string? FontWeight { get; init; }
     public string? Fill { get; init; }
@@ -51,7 +51,7 @@ public class SvgText : SvgElement
 
             if (FontSize is not null)
             {
-                builder.Append($" font-size=\"{FontSize}\"");
+                builder.Append($" font-size=\"{FontSize}px\"");
             }
 
             if (FontFamily is not null)

@@ -18,8 +18,14 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         if (model.Series.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty chart", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty chart",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -37,10 +43,13 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -70,9 +79,13 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 stroke: "#e0e0e0", strokeWidth: 1);
 
             // Y-axis label
-            builder.AddText(chartLeft - 10, y, value.ToString("0.##", CultureInfo.InvariantCulture),
-                anchor: "end", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                chartLeft - 10, y,
+                value.ToString("0.##", CultureInfo.InvariantCulture),
+                anchor: "end",
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
 
@@ -88,9 +101,14 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             var x = chartLeft + (i + 0.5) * categoryWidth;
             var label = i < model.XAxisCategories.Count ? model.XAxisCategories[i] : $"{i + 1}";
 
-            builder.AddText(x, chartBottom + 20, label,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x,
+                chartBottom + 20,
+                label,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily,
                 fill: "#333");
         }
 
@@ -100,18 +118,28 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             var labelX = options.Padding + 15;
             var labelY = chartTop + ChartHeight / 2;
             builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"rotate(-90, {labelX:0.##}, {labelY:0.##})"));
-            builder.AddText(labelX, labelY, model.YAxisLabel,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                labelX,
+                labelY,
+                model.YAxisLabel,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
                 fill: "#333");
             builder.EndGroup();
         }
 
         if (!string.IsNullOrEmpty(model.XAxisLabel))
         {
-            builder.AddText(chartLeft + ChartWidth / 2, chartBottom + 45, model.XAxisLabel,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                chartLeft + ChartWidth / 2,
+                chartBottom + 45,
+                model.XAxisLabel,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
                 fill: "#333");
         }
 

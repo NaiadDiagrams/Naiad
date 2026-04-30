@@ -32,7 +32,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 "No tasks",
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px",
+                fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
@@ -74,7 +74,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 2}px",
+                fontSize: options.FontSize + 2,
                 fontFamily: options.FontFamily);
             offsetY += 30;
         }
@@ -107,7 +107,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                     section.Name,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
                     fontWeight: "bold");
                 currentRow++;
@@ -156,7 +156,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             builder.AddText(x, offsetY + axisHeight - 20, label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: "#666");
         }
@@ -216,7 +216,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             task.Name,
             anchor: "start",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
 
         // Determine task color
@@ -257,7 +257,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 builder.AddText(taskX + taskWidth / 2, barY + taskBarHeight / 2, task.Id,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#fff");
             }

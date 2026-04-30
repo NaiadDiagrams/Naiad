@@ -384,7 +384,7 @@ public class SvgBuilder
         string content,
         string? anchor = null,
         string? baseline = null,
-        string? fontSize = null,
+        double? fontSize = null,
         string? fontFamily = null,
         string? fontWeight = null,
         string? fill = null,

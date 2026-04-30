@@ -24,8 +24,14 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         if (model.Root == null)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty mindmap", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty mindmap",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -198,7 +204,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         builder.AddText(node.Position.X, node.Position.Y, node.Text,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: node.Level == 0 ? "bold" : "normal");
 

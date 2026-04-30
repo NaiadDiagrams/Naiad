@@ -51,7 +51,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 options.Padding + 5, y, branch.Name,
                 anchor: "start",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: color,
                 fontWeight: "bold");
@@ -180,7 +180,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         builder.AddText(x, y, displayId,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize - 4}px",
+            fontSize: options.FontSize - 4,
             fontFamily: options.FontFamily,
             fill: commit.Type == CommitType.Highlight ? "#000" : "#fff");
 
@@ -200,7 +200,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             builder.AddText(x, tagY + tagHeight / 2, commit.Tag,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: "#333");
         }

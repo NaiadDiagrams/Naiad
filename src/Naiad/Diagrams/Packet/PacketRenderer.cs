@@ -19,7 +19,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
             emptyBuilder.AddText(100, 50, "Empty packet", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+                fontSize: options.FontSize, fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -41,7 +41,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
             builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -52,9 +52,14 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         for (var i = 0; i < bitsPerRow; i++)
         {
             var x = options.Padding + i * BitWidth + BitWidth / 2;
-            builder.AddText(x, baseY + BitNumberHeight / 2, i.ToString(),
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 4}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x,
+                baseY + BitNumberHeight / 2,
+                i.ToString(),
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 4,
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
 
@@ -80,7 +85,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
 
                 builder.AddText(x + fieldWidth * BitWidth / 2, y + RowHeight / 2, field.Label,
                     anchor: "middle", baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                    fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                     fill: "#333");
             }
             else
@@ -118,7 +123,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     {
                         builder.AddText(x + fieldWidth * BitWidth / 2, y + RowHeight / 2, field.Label,
                             anchor: "middle", baseline: "middle",
-                            fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                            fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                             fill: "#333");
                     }
                 }

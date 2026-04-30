@@ -20,8 +20,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         if (model.Axes.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -41,9 +47,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(contentWidth / 2, TitleHeight / 2, model.Title,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                contentWidth / 2,
+                TitleHeight / 2,
+                model.Title,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize + 4,
+                fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
 
@@ -130,9 +141,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             var anchor = Math.Abs(Math.Cos(angle)) < 0.1 ? "middle" :
                          Math.Cos(angle) > 0 ? "start" : "end";
 
-            builder.AddText(labelX, labelY, axes[i].Label ?? axes[i].Id,
-                anchor: anchor, baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily);
+            builder.AddText(
+                labelX,
+                labelY,
+                axes[i].Label ?? axes[i].Id,
+                anchor: anchor,
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily);
         }
     }
 
@@ -201,9 +217,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             var color = CurveColors[i % CurveColors.Length];
 
             builder.AddRect(x, legendY, 16, 12, fill: color);
-            builder.AddText(x + 24, legendY + 6, curves[i].Label ?? curves[i].Id,
-                anchor: "start", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily);
+            builder.AddText(
+                x + 24,
+                legendY + 6,
+                curves[i].Label ?? curves[i].Id,
+                anchor: "start",
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily);
         }
     }
 

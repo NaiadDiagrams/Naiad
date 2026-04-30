@@ -45,7 +45,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
                 "Empty diagram",
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -199,7 +200,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             label,
             anchor: "start",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold",
             fill: "#333");
@@ -238,7 +239,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             label,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize - 2}px",
+            fontSize: options.FontSize - 2,
             fontFamily: options.FontFamily,
             fill: "#333");
     }

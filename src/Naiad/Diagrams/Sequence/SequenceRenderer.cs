@@ -30,7 +30,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             titleOffset = 30;
             builder.AddText(width / 2, 20, model.Title,
                 anchor: "middle",
-                fontSize: "16px",
+                fontSize: 16,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -138,7 +138,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             text,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
 
@@ -182,7 +182,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             text,
             anchor: "middle",
             baseline: "top",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
 
@@ -314,7 +314,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                 builder.AddText(fromX + loopWidth + 5, y + loopHeight / 2, labelText,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
             }
         }
@@ -341,7 +341,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                 builder.AddText(midX, y - 8, labelText,
                     anchor: "middle",
                     baseline: "bottom",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
             }
         }
@@ -442,7 +442,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             note.Text,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
 

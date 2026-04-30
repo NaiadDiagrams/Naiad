@@ -54,7 +54,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -80,28 +80,28 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         {
             builder.AddText(centerX + halfSize / 2, chartTop + 20, model.Quadrant1Label,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                 fill: "#666");
         }
         if (!string.IsNullOrEmpty(model.Quadrant2Label))
         {
             builder.AddText(chartLeft + halfSize / 2, chartTop + 20, model.Quadrant2Label,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                 fill: "#666");
         }
         if (!string.IsNullOrEmpty(model.Quadrant3Label))
         {
             builder.AddText(chartLeft + halfSize / 2, centerY + 20, model.Quadrant3Label,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                 fill: "#666");
         }
         if (!string.IsNullOrEmpty(model.Quadrant4Label))
         {
             builder.AddText(centerX + halfSize / 2, centerY + 20, model.Quadrant4Label,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                 fill: "#666");
         }
 
@@ -116,28 +116,28 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         {
             builder.AddText(chartLeft, chartBottom + 30, model.XAxisLeft,
                 anchor: "start", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize, fontFamily: options.FontFamily,
                 fill: "#333");
         }
         if (!string.IsNullOrEmpty(model.XAxisRight))
         {
             builder.AddText(chartRight, chartBottom + 30, model.XAxisRight,
                 anchor: "end", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize, fontFamily: options.FontFamily,
                 fill: "#333");
         }
         if (!string.IsNullOrEmpty(model.YAxisBottom))
         {
             builder.AddText(chartLeft - 10, chartBottom, model.YAxisBottom,
                 anchor: "end", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize, fontFamily: options.FontFamily,
                 fill: "#333");
         }
         if (!string.IsNullOrEmpty(model.YAxisTop))
         {
             builder.AddText(chartLeft - 10, chartTop, model.YAxisTop,
                 anchor: "end", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize, fontFamily: options.FontFamily,
                 fill: "#333");
         }
 
@@ -157,7 +157,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             // Point label
             builder.AddText(px + PointRadius + 5, py, point.Name,
                 anchor: "start", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize - 2, fontFamily: options.FontFamily,
                 fill: "#333");
         }
 

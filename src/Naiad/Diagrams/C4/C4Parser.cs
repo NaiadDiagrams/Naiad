@@ -227,7 +227,12 @@ class C4Parser : IDiagramParser<C4Model>
         from content in BoundaryContentOrNestedBoundary.Until(Lookahead(Try(boundaryClose)))
         from close in boundaryClose
         select new BoundaryItem(
-            new C4Boundary { Id = open.id, Label = open.label, Type = open.type },
+            new()
+            {
+                Id = open.id,
+                Label = open.label,
+                Type = open.type
+            },
             content.ToList()
         );
 

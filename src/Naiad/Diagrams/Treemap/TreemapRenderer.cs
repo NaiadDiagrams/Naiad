@@ -18,8 +18,14 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         if (model.RootNodes.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -32,9 +38,14 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(defaultWidth / 2, options.Padding + titleHeight / 2, model.Title,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                defaultWidth / 2,
+                options.Padding + titleHeight / 2,
+                model.Title,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize + 4,
+                fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
 
@@ -127,16 +138,25 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
             var spacing = labelFontSize * 0.6;
 
             var label = TruncateLabel(node.Name, width - 20, labelFontSize);
-            builder.AddText(x + width / 2, y + height / 2 - spacing / 2, label,
+            builder.AddText(
+                x + width / 2,
+                y + height / 2 - spacing / 2,
+                label,
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{labelFontSize:0}px", fontFamily: options.FontFamily,
+                fontSize: labelFontSize,
+                fontFamily: options.FontFamily,
                 fill: "#333");
 
             if (node.Value.HasValue && height > labelFontSize + valueFontSize + 10)
             {
-                builder.AddText(x + width / 2, y + height / 2 + spacing, node.Value.Value.ToString("0.#"),
-                    anchor: "middle", baseline: "middle",
-                    fontSize: $"{valueFontSize:0}px", fontFamily: options.FontFamily,
+                builder.AddText(
+                    x + width / 2,
+                    y + height / 2 + spacing,
+                    node.Value.Value.ToString("0.#"),
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: valueFontSize,
+                    fontFamily: options.FontFamily,
                     fill: "#666");
             }
         }
@@ -155,15 +175,25 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         {
             // Section name (left-aligned)
             var label = TruncateLabel(node.Name, width - 50, options.FontSize - 2);
-            builder.AddText(x + 5, y + headerHeight / 2, label,
-                anchor: "start", baseline: "middle",
-                fontSize: $"{Math.Min(options.FontSize - 2, 10)}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x + 5,
+                y + headerHeight / 2,
+                label,
+                anchor: "start",
+                baseline: "middle",
+                fontSize: Math.Min(options.FontSize - 2, 10),
+                fontFamily: options.FontFamily,
                 fill: "#333", fontWeight: "bold");
 
             // Section total (right-aligned)
-            builder.AddText(x + width - 5, y + headerHeight / 2, node.TotalValue.ToString("0.#"),
-                anchor: "end", baseline: "middle",
-                fontSize: $"{Math.Min(options.FontSize - 2, 10)}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x + width - 5,
+                y + headerHeight / 2,
+                node.TotalValue.ToString("0.#"),
+                anchor: "end",
+                baseline: "middle",
+                fontSize: Math.Min(options.FontSize - 2, 10),
+                fontFamily: options.FontFamily,
                 fill: "#333", fontWeight: "bold");
         }
 

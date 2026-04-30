@@ -35,8 +35,14 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         if (model.Sections.Count == 0 || model.Sections.All(_ => _.Periods.Count == 0))
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty timeline", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty timeline",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -56,10 +62,13 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -84,7 +93,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                 builder.AddText(currentX + sectionWidth / 2, titleOffset + options.Padding + 15, section.Name,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
                     fontWeight: "bold",
                     fill: "#333");
@@ -104,7 +113,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                 builder.AddText(periodX, timelineYPos - 25, period.Label,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
                     fontWeight: "bold",
                     fill: periodColor);
@@ -123,10 +132,13 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                         stroke: periodColor,
                         strokeWidth: 1);
 
-                    builder.AddText(periodX, eventY + (EventHeight - 5) / 2, evt,
+                    builder.AddText(
+                        periodX,
+                        eventY + (EventHeight - 5) / 2,
+                        evt,
                         anchor: "middle",
                         baseline: "middle",
-                        fontSize: $"{options.FontSize - 2}px",
+                        fontSize: options.FontSize - 2,
                         fontFamily: options.FontFamily);
 
                     eventY += EventHeight;

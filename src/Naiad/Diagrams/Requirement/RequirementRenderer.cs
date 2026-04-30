@@ -21,7 +21,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
                 "Empty diagram",
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px",
+                fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
@@ -44,7 +44,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -113,14 +113,14 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         builder.AddText(x + BoxWidth / 2, y + 15, $"<<{typeLabel}>>",
             anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            fontSize: options.FontSize - 3, fontFamily: options.FontFamily,
             fill: "#666");
 
         // Name
         builder.AddText(
             x + BoxWidth / 2, y + 35, req.Name,
             anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold", fill: "#333");
 
@@ -137,9 +137,14 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         if (!string.IsNullOrEmpty(req.Text))
         {
             var text = req.Text.Length > 25 ? string.Concat(req.Text.AsSpan(0, 22), "...") : req.Text;
-            builder.AddText(x + BoxWidth / 2, y + BoxHeight - 15, text,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x + BoxWidth / 2,
+                y + BoxHeight - 15,
+                text,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 3,
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
     }
@@ -153,13 +158,13 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         // Type label
         builder.AddText(x + BoxWidth / 2, y + 15, "<<Element>>",
             anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            fontSize: options.FontSize - 3, fontFamily: options.FontFamily,
             fill: "#666");
 
         // Name
         builder.AddText(x + BoxWidth / 2, y + 35, elem.Name,
             anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
+            fontSize: options.FontSize, fontFamily: options.FontFamily,
             fontWeight: "bold", fill: "#333");
 
         // Type
@@ -167,7 +172,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         {
             builder.AddText(x + BoxWidth / 2, y + 55, $"Type: {elem.Type}",
                 anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+                fontSize: options.FontSize - 3, fontFamily: options.FontFamily,
                 fill: "#666");
         }
     }
@@ -217,7 +222,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             $"<<{label}>>",
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px",
+            fontSize: options.FontSize - 3,
             fontFamily: options.FontFamily,
             fill: "#666");
     }

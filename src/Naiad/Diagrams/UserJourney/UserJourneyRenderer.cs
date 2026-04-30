@@ -34,7 +34,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
             emptyBuilder.AddText(100, 50, "Empty journey", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+                fontSize: options.FontSize, fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -62,7 +62,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -74,7 +74,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         builder.AddText(legendX, legendY, "Actors:",
             anchor: "start",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
 
@@ -87,7 +87,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             builder.AddText(legendX + 25, actorY, allActors[i],
                 anchor: "start",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
 
@@ -109,7 +109,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                 builder.AddText(options.Padding + 10, currentY + 15, section.Name,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
                     fontWeight: "bold",
                     fill: "#333");
@@ -144,14 +144,14 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                 builder.AddText(taskX + TaskWidth / 2, taskY + 25, task.Name,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 1}px",
+                    fontSize: options.FontSize - 1,
                     fontFamily: options.FontFamily);
 
                 // Score badge
                 builder.AddText(taskX + TaskWidth / 2, taskY + 45, $"Score: {task.Score}",
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#666");
 

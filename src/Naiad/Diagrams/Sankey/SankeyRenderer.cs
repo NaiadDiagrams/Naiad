@@ -30,7 +30,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 "Empty diagram",
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px",
+                fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
@@ -61,7 +61,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -130,7 +130,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 name,
                 anchor: anchor,
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 1}px",
+                fontSize: options.FontSize - 1,
                 fontFamily: options.FontFamily,
                 fill: "#333");
 
