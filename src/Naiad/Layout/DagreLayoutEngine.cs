@@ -36,8 +36,22 @@ class DagreLayoutEngine : ILayoutEngine
         ApplyLayout(graph, diagram, options);
 
         // Calculate bounds (don't add margin again - positions already include it)
-        var width = diagram.Nodes.Max(_ => _.Position.X + _.Width / 2);
-        var height = diagram.Nodes.Max(_ => _.Position.Y + _.Height / 2);
+        var width = 0.0;
+        var height = 0.0;
+        foreach (var node in diagram.Nodes)
+        {
+            var w = node.Position.X + node.Width / 2;
+            var h = node.Position.Y + node.Height / 2;
+            if (w > width)
+            {
+                width = w;
+            }
+
+            if (h > height)
+            {
+                height = h;
+            }
+        }
 
         return new()
         {
@@ -95,15 +109,17 @@ class DagreLayoutEngine : ILayoutEngine
             edgeLookup.TryAdd((le.SourceId, le.TargetId), le);
         }
 
+        Dictionary<(string, string), List<LayoutNode>>? dummyLookup = null;
+
         foreach (var edge in diagram.Edges)
         {
-            // Find the original edge or reconstruct from dummies
             edgeLookup.TryGetValue((edge.SourceId, edge.TargetId), out var layoutEdge);
 
             if (layoutEdge is null)
             {
                 // Edge was split by dummy nodes - collect points
-                CollectEdgePoints(graph, edge, options);
+                dummyLookup ??= BuildDummyLookup(graph);
+                CollectEdgePoints(graph, edge, options, dummyLookup);
             }
             else
             {
@@ -116,7 +132,39 @@ class DagreLayoutEngine : ILayoutEngine
         }
     }
 
-    static void CollectEdgePoints(LayoutGraph graph, Edge edge, LayoutOptions options)
+    static Dictionary<(string, string), List<LayoutNode>> BuildDummyLookup(LayoutGraph graph)
+    {
+        var lookup = new Dictionary<(string, string), List<LayoutNode>>();
+        foreach (var node in graph.Nodes.Values)
+        {
+            if (!node.IsDummy)
+            {
+                continue;
+            }
+
+            var key = (node.OriginalEdgeSource ?? "", node.OriginalEdgeTarget ?? "");
+            if (!lookup.TryGetValue(key, out var list))
+            {
+                list = [];
+                lookup[key] = list;
+            }
+
+            list.Add(node);
+        }
+
+        foreach (var list in lookup.Values)
+        {
+            list.Sort((a, b) => a.Rank.CompareTo(b.Rank));
+        }
+
+        return lookup;
+    }
+
+    static void CollectEdgePoints(
+        LayoutGraph graph,
+        Edge edge,
+        LayoutOptions options,
+        Dictionary<(string, string), List<LayoutNode>> dummyLookup)
     {
         edge.Points.Clear();
 
@@ -136,28 +184,8 @@ class DagreLayoutEngine : ILayoutEngine
         var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
         edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
 
-        // Find dummy nodes
-        List<LayoutNode>? dummies = null;
-        foreach (var node in graph.Nodes.Values)
+        if (dummyLookup.TryGetValue((edge.SourceId, edge.TargetId), out var dummies))
         {
-            if (node.IsDummy &&
-                node.OriginalEdgeSource == edge.SourceId &&
-                node.OriginalEdgeTarget == edge.TargetId)
-            {
-                if (dummies == null)
-                {
-                    dummies = [node];
-                }
-                else
-                {
-                    dummies.Add(node);
-                }
-            }
-        }
-
-        if (dummies is not null)
-        {
-            dummies.Sort((a, b) => a.Rank.CompareTo(b.Rank));
             foreach (var dummy in dummies)
             {
                 edge.Points.Add(new(dummy.X, dummy.Y));

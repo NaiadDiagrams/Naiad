@@ -24,11 +24,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         foreach (var node in model.Nodes)
         {
             var label = node.Label ?? node.Id;
-            // Strip icon syntax for measurement
-            var textForMeasure = iconPattern.Replace(label, "");
-            var textSize = MeasureText(textForMeasure, options.FontSize);
-            // Add extra width for icon if present
             var hasIcon = iconPattern.IsMatch(label);
+            var textForMeasure = hasIcon ? iconPattern.Replace(label, "") : label;
+            var textSize = MeasureText(textForMeasure, options.FontSize);
             node.Width = textSize.Width + 30 + (hasIcon ? 20 : 0);
             node.Height = textSize.Height + 27;
 
