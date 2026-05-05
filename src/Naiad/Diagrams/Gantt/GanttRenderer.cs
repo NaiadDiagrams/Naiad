@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Gantt;
+namespace Naiad.Diagrams.Gantt;
 
 public class GanttRenderer : IDiagramRenderer<GanttModel>
 {
@@ -26,8 +26,14 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         {
             // Empty chart
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "No tasks", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "No tasks",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -41,7 +47,10 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         foreach (var section in model.Sections)
         {
             if (!string.IsNullOrEmpty(section.Name))
+            {
                 totalRows++; // Section header
+            }
+
             totalRows += section.Tasks.Count;
         }
 
@@ -59,10 +68,13 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, offsetY + 15, model.Title,
+            builder.AddText(
+                width / 2,
+                offsetY + 15,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 2}px",
+                fontSize: options.FontSize + 2,
                 fontFamily: options.FontFamily);
             offsetY += 30;
         }
@@ -82,12 +94,20 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             if (!string.IsNullOrEmpty(section.Name))
             {
                 var sectionY = offsetY + currentRow * rowHeight;
-                builder.AddRect(options.Padding, sectionY, leftMargin + chartWidth, sectionHeaderHeight,
-                    fill: sectionColor, stroke: "none");
-                builder.AddText(options.Padding + 10, sectionY + sectionHeaderHeight / 2, section.Name,
+                builder.AddRect(
+                    options.Padding,
+                    sectionY,
+                    leftMargin + chartWidth,
+                    sectionHeaderHeight,
+                    fill: sectionColor,
+                    stroke: "none");
+                builder.AddText(
+                    options.Padding + 10,
+                    sectionY + sectionHeaderHeight / 2,
+                    section.Name,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
                     fontWeight: "bold");
                 currentRow++;
@@ -108,7 +128,11 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         double chartWidth, RenderOptions options)
     {
         // Axis line
-        builder.AddLine(offsetX, offsetY + axisHeight - 5, offsetX + chartWidth, offsetY + axisHeight - 5,
+        builder.AddLine(
+            offsetX,
+            offsetY + axisHeight - 5,
+            offsetX + chartWidth,
+            offsetY + axisHeight - 5,
             stroke: "#333", strokeWidth: 1);
 
         // Date labels (show every few days based on scale)
@@ -119,15 +143,23 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             var date = startDate.AddDays(i);
 
             // Tick mark
-            builder.AddLine(x, offsetY + axisHeight - 10, x, offsetY + axisHeight - 5,
-                stroke: "#333", strokeWidth: 1);
+            builder.AddLine(
+                x,
+                offsetY + axisHeight - 10,
+                x,
+                offsetY + axisHeight - 5,
+                stroke: "#333",
+                strokeWidth: 1);
 
             // Date label
             var label = date.ToString("MM/dd", CultureInfo.InvariantCulture);
-            builder.AddText(x, offsetY + axisHeight - 20, label,
+            builder.AddText(
+                x,
+                offsetY + axisHeight - 20,
+                label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: "#666");
         }
@@ -154,13 +186,24 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         for (var i = 0; i <= numRows; i++)
         {
             var y = offsetY + i * rowHeight;
-            builder.AddLine(offsetX, y, offsetX + chartWidth, y,
-                stroke: "#eee", strokeWidth: 1);
+            builder.AddLine(
+                offsetX,
+                y,
+                offsetX + chartWidth,
+                y,
+                stroke: "#eee",
+                strokeWidth: 1);
         }
     }
 
-    static void DrawTask(SvgBuilder builder, GanttTask task, DateTime startDate, int row,
-        double offsetX, double offsetY, RenderOptions options)
+    static void DrawTask(
+        SvgBuilder builder,
+        GanttTask task,
+        DateTime startDate,
+        int row,
+        double offsetX,
+        double offsetY,
+        RenderOptions options)
     {
         var y = offsetY + row * rowHeight;
         var startDays = (task.ComputedStart - startDate).Days;
@@ -170,10 +213,13 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         var taskWidth = durationDays * dayWidth;
 
         // Task name on the left
-        builder.AddText(options.Padding + 10, y + rowHeight / 2, task.Name,
+        builder.AddText(
+            options.Padding + 10,
+            y + rowHeight / 2,
+            task.Name,
             anchor: "start",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
 
         // Determine task color
@@ -187,19 +233,21 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         if (task.IsMilestone)
         {
             // Draw milestone as diamond
-            var cx = taskX;
             var cy = y + rowHeight / 2;
-            var path = $"M {Fmt(cx)} {Fmt(cy - milestoneSize)} " +
-                       $"L {Fmt(cx + milestoneSize)} {Fmt(cy)} " +
-                       $"L {Fmt(cx)} {Fmt(cy + milestoneSize)} " +
-                       $"L {Fmt(cx - milestoneSize)} {Fmt(cy)} Z";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {taskX:0.##} {cy - milestoneSize:0.##} L {taskX + milestoneSize:0.##} {cy:0.##} L {taskX:0.##} {cy + milestoneSize:0.##} L {taskX - milestoneSize:0.##} {cy:0.##} Z");
             builder.AddPath(path, fill: milestoneColor, stroke: "#333", strokeWidth: 1);
         }
         else
         {
             // Draw task bar
             var barY = y + (rowHeight - taskBarHeight) / 2;
-            builder.AddRect(taskX, barY, taskWidth, taskBarHeight,
+            builder.AddRect(
+                taskX,
+                barY,
+                taskWidth,
+                taskBarHeight,
                 rx: 3,
                 fill: color,
                 stroke: "#333",
@@ -208,10 +256,13 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             // Task ID or duration inside bar if fits
             if (task.Id != null && taskWidth > 40)
             {
-                builder.AddText(taskX + taskWidth / 2, barY + taskBarHeight / 2, task.Id,
+                builder.AddText(
+                    taskX + taskWidth / 2,
+                    barY + taskBarHeight / 2,
+                    task.Id,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#fff");
             }
@@ -260,31 +311,35 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             changed = false;
             foreach (var task in allTasks)
             {
-                if (!string.IsNullOrEmpty(task.AfterTaskId))
+                if (string.IsNullOrEmpty(task.AfterTaskId))
                 {
-                    if (taskMap.TryGetValue(task.AfterTaskId, out var dependsOn))
-                    {
-                        var newStart = dependsOn.ComputedEnd;
-                        if (newStart != task.ComputedStart)
-                        {
-                            task.ComputedStart = newStart;
-                            if (task.Duration.HasValue)
-                            {
-                                task.ComputedEnd = task.ComputedStart.Add(task.Duration.Value);
-                            }
-                            else if (!task.EndDate.HasValue)
-                            {
-                                task.ComputedEnd = task.ComputedStart.AddDays(1);
-                            }
-                            changed = true;
-                        }
-                    }
+                    continue;
                 }
+
+                if (!taskMap.TryGetValue(task.AfterTaskId, out var dependsOn))
+                {
+                    continue;
+                }
+
+                var newStart = dependsOn.ComputedEnd;
+                if (newStart == task.ComputedStart)
+                {
+                    continue;
+                }
+
+                task.ComputedStart = newStart;
+                if (task.Duration.HasValue)
+                {
+                    task.ComputedEnd = task.ComputedStart.Add(task.Duration.Value);
+                }
+                else if (!task.EndDate.HasValue)
+                {
+                    task.ComputedEnd = task.ComputedStart.AddDays(1);
+                }
+                changed = true;
             }
         }
 
         return allTasks;
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

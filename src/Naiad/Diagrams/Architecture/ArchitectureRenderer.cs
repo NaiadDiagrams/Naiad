@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Architecture;
+namespace Naiad.Diagrams.Architecture;
 
 public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 {
@@ -39,13 +39,20 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         if (model.Services.Count == 0 && model.Groups.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
         // Check if any services belong to groups
-        var hasGroups = model.Groups.Count > 0 && model.Services.Any(s => !string.IsNullOrEmpty(s.Parent));
+        var hasGroups = model.Groups.Count > 0 &&
+                        model.Services.Any(s => !string.IsNullOrEmpty(s.Parent));
 
         // Offset for group padding (to make room for group bounds)
         var offsetX = hasGroups ? GroupPadding : 0;
@@ -101,12 +108,14 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         foreach (var group in model.Groups)
         {
             var bounds = CalculateGroupBounds(group.Id, model.Services, servicePositions);
-            if (bounds.HasValue)
+            if (!bounds.HasValue)
             {
-                var color = GroupColors[colorIndex % GroupColors.Length];
-                DrawGroup(builder, group, bounds.Value, color, options);
-                colorIndex++;
+                continue;
             }
+
+            var color = GroupColors[colorIndex % GroupColors.Length];
+            DrawGroup(builder, group, bounds.Value, color, options);
+            colorIndex++;
         }
 
         // Draw services
@@ -119,8 +128,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         // Draw junctions
         foreach (var junction in model.Junctions)
         {
-            var pos = junctionPositions[junction.Id];
-            DrawJunction(builder, pos.x, pos.y);
+            var (x, y) = junctionPositions[junction.Id];
+            DrawJunction(builder, x, y);
         }
 
         // Draw edges
@@ -172,15 +181,29 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var borderColor = iconColors.GetValueOrDefault(icon, "#90A4AE");
 
         // Group background with dashed border
-        builder.AddRect(bounds.x, bounds.y, bounds.width, bounds.height, rx: 8,
-            fill: color, stroke: borderColor, strokeWidth: 2, style: "stroke-dasharray: 5,3");
+        builder.AddRect(
+            bounds.x,
+            bounds.y,
+            bounds.width,
+            bounds.height,
+            rx: 8,
+            fill: color,
+            stroke: borderColor,
+            strokeWidth: 2,
+            style: "stroke-dasharray: 5,3");
 
         // Group label
         var label = group.Label ?? group.Id;
-        builder.AddText(bounds.x + GroupPadding, bounds.y + GroupLabelHeight / 2 + GroupPadding / 2, label,
-            anchor: "start", baseline: "middle",
-            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
-            fontWeight: "bold", fill: "#333");
+        builder.AddText(
+            bounds.x + GroupPadding,
+            bounds.y + GroupLabelHeight / 2 + GroupPadding / 2,
+            label,
+            anchor: "start",
+            baseline: "middle",
+            fontSize: options.FontSize,
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: "#333");
     }
 
     static void DrawService(SvgBuilder builder, ArchitectureService service, double x, double y, RenderOptions options)
@@ -189,24 +212,35 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var color = iconColors.GetValueOrDefault(icon, "#90A4AE");
 
         // Background
-        builder.AddRect(x, y, ServiceWidth, ServiceHeight, rx: 8,
-            fill: "#FAFAFA", stroke: color, strokeWidth: 2);
+        builder.AddRect(
+            x, y,
+            ServiceWidth,
+            ServiceHeight,
+            rx: 8,
+            fill: "#FAFAFA",
+            stroke: color,
+            strokeWidth: 2);
 
         // Icon
         if (IconPaths.TryGetValue(icon, out var path))
         {
             var iconX = x + (ServiceWidth - IconSize) / 2;
             var iconY = y + 8;
-            builder.BeginGroup(transform: $"translate({Fmt(iconX)},{Fmt(iconY)}) scale(0.64)");
+            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({iconX:0.##},{iconY:0.##}) scale(0.64)"));
             builder.AddPath(path, fill: color, stroke: "#333", strokeWidth: 1);
             builder.EndGroup();
         }
 
         // Label
         var label = service.Label ?? service.Id;
-        builder.AddText(x + ServiceWidth / 2, y + ServiceHeight - 12, label,
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily,
+        builder.AddText(
+            x + ServiceWidth / 2,
+            y + ServiceHeight - 12,
+            label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 2,
+            fontFamily: options.FontFamily,
             fill: "#333");
     }
 
@@ -259,16 +293,16 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 
     static void DrawArrow(SvgBuilder builder, double x, double y, double angle)
     {
-        var arrowSize = 8;
-        var arrowAngle = Math.PI / 6;
+        const int arrowSize = 8;
+        const double arrowAngle = Math.PI / 6;
         var ax1 = x - arrowSize * Math.Cos(angle - arrowAngle);
         var ay1 = y - arrowSize * Math.Sin(angle - arrowAngle);
         var ax2 = x - arrowSize * Math.Cos(angle + arrowAngle);
         var ay2 = y - arrowSize * Math.Sin(angle + arrowAngle);
 
-        builder.AddPath($"M {Fmt(x)} {Fmt(y)} L {Fmt(ax1)} {Fmt(ay1)} L {Fmt(ax2)} {Fmt(ay2)} Z",
-            fill: "#666", stroke: "none");
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {x:0.##} {y:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
+            fill: "#666",
+            stroke: "none");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

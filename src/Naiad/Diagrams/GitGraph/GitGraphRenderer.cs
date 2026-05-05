@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.GitGraph;
+namespace Naiad.Diagrams.GitGraph;
 
 public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 {
@@ -51,7 +51,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 options.Padding + 5, y, branch.Name,
                 anchor: "start",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: color,
                 fontWeight: "bold");
@@ -137,10 +137,12 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Use a simple path with control points
         var midX = (fromX + toX) / 2;
 
-        var path = $"""
-                    M {Fmt(fromX)} {Fmt(fromY)}
-                    C {Fmt(midX)} {Fmt(fromY)}, {Fmt(midX)} {Fmt(toY)}, {Fmt(toX)} {Fmt(toY)}
-                    """;
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"""
+             M {fromX:0.##} {fromY:0.##}
+             C {midX:0.##} {fromY:0.##}, {midX:0.##} {toY:0.##}, {toX:0.##} {toY:0.##}
+             """);
 
         builder.AddPath(path, stroke: toColor, strokeWidth: 2, fill: "none");
     }
@@ -168,17 +170,23 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
         var strokeWidth = commit.Type == CommitType.Reverse ? 3 : 2;
 
-        builder.AddCircle(x, y, commitRadius,
+        builder.AddCircle(
+            x,
+            y,
+            commitRadius,
             fill: fill,
             stroke: color,
             strokeWidth: strokeWidth);
 
         // Commit ID (abbreviated)
         var displayId = commit.Id.Length > 7 ? commit.Id[..7] : commit.Id;
-        builder.AddText(x, y, displayId,
+        builder.AddText(
+            x,
+            y,
+            displayId,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize - 4}px",
+            fontSize: options.FontSize - 4,
             fontFamily: options.FontFamily,
             fill: commit.Type == CommitType.Highlight ? "#000" : "#fff");
 
@@ -189,16 +197,23 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             var tagX = x - tagWidth / 2;
             var tagY = y - commitRadius - tagHeight - 5;
 
-            builder.AddRect(tagX, tagY, tagWidth, tagHeight,
+            builder.AddRect(
+                tagX,
+                tagY,
+                tagWidth,
+                tagHeight,
                 rx: 3,
                 fill: "#FFF9C4",
                 stroke: "#FBC02D",
                 strokeWidth: 1);
 
-            builder.AddText(x, tagY + tagHeight / 2, commit.Tag,
+            builder.AddText(
+                x,
+                tagY + tagHeight / 2,
+                commit.Tag,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: "#333");
         }
@@ -365,5 +380,4 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.55;
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

@@ -1,4 +1,4 @@
-namespace MermaidSharp.Layout;
+namespace Naiad.Layout;
 
 static class Ranker
 {
@@ -52,38 +52,59 @@ static class Ranker
         return node.Rank;
     }
 
+    static readonly Comparison<LayoutNode> rankDescending = (a, b) => b.Rank.CompareTo(a.Rank);
+
     static void TightTree(LayoutGraph graph)
     {
         // Tight tree is similar to longest path but considers edge weights
         // For simplicity, we'll use longest path with slight optimization
         LongestPath(graph);
 
+        var nodes = new List<LayoutNode>(graph.Nodes.Values);
+
         // Pull nodes down to minimize edge length where possible
         bool changed;
         do
         {
             changed = false;
-            foreach (var node in graph.Nodes.Values.OrderByDescending(_ => _.Rank))
+            nodes.Sort(rankDescending);
+            foreach (var node in nodes)
             {
-                var successors = graph.GetSuccessors(node.Id).ToList();
-                if (successors.Count > 0)
+                var minSuccRank = int.MaxValue;
+                foreach (var edge in node.OutEdges)
                 {
-                    var minSuccRank = successors.Min(_ => _.Rank);
-                    var targetRank = minSuccRank - 1;
-                    if (targetRank > node.Rank)
+                    if (edge.Target is { } succ && succ.Rank < minSuccRank)
                     {
-                        // Can we move this node down?
-                        var predecessors = graph.GetPredecessors(node.Id).ToList();
-                        var minAllowedRank = predecessors.Count > 0
-                            ? predecessors.Max(_ => _.Rank) + 1
-                            : 0;
-
-                        if (targetRank >= minAllowedRank)
-                        {
-                            node.Rank = targetRank;
-                            changed = true;
-                        }
+                        minSuccRank = succ.Rank;
                     }
+                }
+
+                if (minSuccRank == int.MaxValue)
+                {
+                    continue;
+                }
+
+                var targetRank = minSuccRank - 1;
+                if (targetRank <= node.Rank)
+                {
+                    continue;
+                }
+
+                var maxPredRank = -1;
+                foreach (var edge in node.InEdges)
+                {
+                    if (edge.Source is { } pred && pred.Rank > maxPredRank)
+                    {
+                        maxPredRank = pred.Rank;
+                    }
+                }
+
+                var minAllowedRank = maxPredRank == -1 ? 0 : maxPredRank + 1;
+
+                if (targetRank >= minAllowedRank)
+                {
+                    node.Rank = targetRank;
+                    changed = true;
                 }
             }
         } while (changed);

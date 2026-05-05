@@ -1,4 +1,4 @@
-namespace MermaidSharp;
+namespace Naiad;
 
 public interface IDiagramRenderer<in TModel> where TModel : DiagramBase
 {

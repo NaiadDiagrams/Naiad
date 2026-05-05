@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Pie;
+namespace Naiad.Diagrams.Pie;
 
 public class PieModel : DiagramBase
 {

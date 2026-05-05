@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.C4;
+﻿namespace Naiad.Diagrams.C4;
 
 public enum C4DiagramType
 {

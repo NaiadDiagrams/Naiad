@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Gantt;
+﻿namespace Naiad.Diagrams.Gantt;
 
 public class GanttTask
 {
@@ -15,6 +15,5 @@ public class GanttTask
     // Computed properties for rendering
     public DateTime ComputedStart { get; set; }
     public DateTime ComputedEnd { get; set; }
-    public int Row { get; set; }
     public string? SectionName { get; set; }
 }

@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Requirement;
+namespace Naiad.Diagrams.Requirement;
 
 public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 {
@@ -15,8 +15,14 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         if (model.Requirements.Count == 0 && model.Elements.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -35,10 +41,13 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -84,8 +93,15 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
     static void DrawRequirement(SvgBuilder builder, Requirement req, double x, double y, RenderOptions options)
     {
         // Box
-        builder.AddRect(x, y, BoxWidth, BoxHeight, rx: 5,
-            fill: RequirementColor, stroke: "#4CAF50", strokeWidth: 2);
+        builder.AddRect(
+            x,
+            y,
+            BoxWidth,
+            BoxHeight,
+            rx: 5,
+            fill: RequirementColor,
+            stroke: "#4CAF50",
+            strokeWidth: 2);
 
         // Type label
         var typeLabel = req.Type switch
@@ -98,16 +114,27 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             _ => "Requirement"
         };
 
-        builder.AddText(x + BoxWidth / 2, y + 15, $"<<{typeLabel}>>",
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 15,
+            $"<<{typeLabel}>>",
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 3,
+            fontFamily: options.FontFamily,
             fill: "#666");
 
         // Name
-        builder.AddText(x + BoxWidth / 2, y + 35, req.Name,
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
-            fontWeight: "bold", fill: "#333");
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 35,
+            req.Name,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize,
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: "#333");
 
         // Risk indicator
         var riskColor = req.Risk switch
@@ -122,9 +149,14 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         if (!string.IsNullOrEmpty(req.Text))
         {
             var text = req.Text.Length > 25 ? string.Concat(req.Text.AsSpan(0, 22), "...") : req.Text;
-            builder.AddText(x + BoxWidth / 2, y + BoxHeight - 15, text,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x + BoxWidth / 2,
+                y + BoxHeight - 15,
+                text,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 3,
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
     }
@@ -132,27 +164,50 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
     static void DrawElement(SvgBuilder builder, RequirementElement elem, double x, double y, RenderOptions options)
     {
         // Box
-        builder.AddRect(x, y, BoxWidth, BoxHeight, rx: 5,
-            fill: ElementColor, stroke: "#2196F3", strokeWidth: 2);
+        builder.AddRect(
+            x,
+            y,
+            BoxWidth,
+            BoxHeight,
+            rx: 5,
+            fill: ElementColor,
+            stroke: "#2196F3",
+            strokeWidth: 2);
 
         // Type label
-        builder.AddText(x + BoxWidth / 2, y + 15, "<<Element>>",
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 15,
+            "<<Element>>",
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 3,
+            fontFamily: options.FontFamily,
             fill: "#666");
 
         // Name
-        builder.AddText(x + BoxWidth / 2, y + 35, elem.Name,
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily,
-            fontWeight: "bold", fill: "#333");
+        builder.AddText(
+            x + BoxWidth / 2,
+            y + 35,
+            elem.Name,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize,
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: "#333");
 
         // Type
         if (!string.IsNullOrEmpty(elem.Type))
         {
-            builder.AddText(x + BoxWidth / 2, y + 55, $"Type: {elem.Type}",
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                x + BoxWidth / 2,
+                y + 55,
+                $"Type: {elem.Type}",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 3,
+                fontFamily: options.FontFamily,
                 fill: "#666");
         }
     }
@@ -175,30 +230,40 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         var toY = to.y - Math.Sin(angle) * BoxHeight / 2;
 
         // Draw line
-        builder.AddLine(fromX, fromY, toX, toY,
-            stroke: "#666", strokeWidth: 1.5);
+        builder.AddLine(
+            fromX,
+            fromY,
+            toX,
+            toY,
+            stroke: "#666",
+            strokeWidth: 1.5);
 
         // Draw arrowhead
-        var arrowSize = 8;
-        var arrowAngle = Math.PI / 6;
+        const int arrowSize = 8;
+        const double arrowAngle = Math.PI / 6;
         var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
         var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
         var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
         var ay2 = toY - arrowSize * Math.Sin(angle + arrowAngle);
 
-        builder.AddPath($"M {Fmt(toX)} {Fmt(toY)} L {Fmt(ax1)} {Fmt(ay1)} L {Fmt(ax2)} {Fmt(ay2)} Z",
-            fill: "#666", stroke: "none");
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
+            fill: "#666",
+            stroke: "none");
 
         // Draw label
         var midX = (fromX + toX) / 2;
         var midY = (fromY + toY) / 2;
         var label = type.ToString().ToLowerInvariant();
 
-        builder.AddText(midX, midY - 8, $"<<{label}>>",
-            anchor: "middle", baseline: "middle",
-            fontSize: $"{options.FontSize - 3}px", fontFamily: options.FontFamily,
+        builder.AddText(
+            midX,
+            midY - 8,
+            $"<<{label}>>",
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 3,
+            fontFamily: options.FontFamily,
             fill: "#666");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

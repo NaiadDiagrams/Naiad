@@ -1,9 +1,5 @@
-namespace MermaidSharp.Diagrams.Class;
-
-public class ClassParser : IDiagramParser<ClassModel>
+class ClassParser : IDiagramParser<ClassModel>
 {
-    public DiagramType DiagramType => DiagramType.Class;
-
     // Identifier for class names (alphanumeric and underscore)
     static Parser<char, string> classIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')
@@ -48,18 +44,20 @@ public class ClassParser : IDiagramParser<ClassModel>
             var parts = param.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 1)
             {
-                parameters.Add(new()
-                {
-                    Name = parts.Length >= 2 ? parts[1] : parts[0],
-                    Type = parts.Length >= 2 ? parts[0] : null
-                });
+                parameters.Add(
+                    new()
+                    {
+                        Name = parts.Length >= 2 ? parts[1] : parts[0],
+                        Type = parts.Length >= 2 ? parts[0] : null
+                    });
             }
         }
+
         return parameters;
     }
 
     // Member: +String name (type first) or +name : String (type after colon)
-    static Parser<char, ClassMember> memberParser =
+    public static Parser<char, ClassMember> memberParser =
         from _ in CommonParsers.InlineWhitespace
         from visibility in visibilityParser.Optional()
         from isStatic in Char('$').Optional()
@@ -85,7 +83,7 @@ public class ClassParser : IDiagramParser<ClassModel>
         };
 
     // Method: +makeSound() void or +makeSound(String s) : void
-    static Parser<char, ClassMethod> methodParser =
+    public static Parser<char, ClassMethod> methodParser =
         from _ in CommonParsers.InlineWhitespace
         from visibility in visibilityParser.Optional()
         from isStatic in Char('$').Optional()
@@ -105,7 +103,7 @@ public class ClassParser : IDiagramParser<ClassModel>
         };
 
     // Class annotation: <<interface>>, <<abstract>>, etc.
-    static Parser<char, ClassAnnotation> annotationParser =
+    public static Parser<char, ClassAnnotation> annotationParser =
         CommonParsers.InlineWhitespace
             .Then(String("<<"))
             .Then(OneOf(
@@ -119,12 +117,13 @@ public class ClassParser : IDiagramParser<ClassModel>
             .Before(CommonParsers.LineEnd);
 
     // Class body content: { ... }
-    static Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> ParseClassBody()
+    public static Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> ParseClassBody()
     {
-        var annotationLine = Try(annotationParser.Select(_ => (object)_));
-        var methodLine = Try(methodParser.Select(_ => (object)_));
-        var memberLine = Try(memberParser.Select(_ => (object)_));
-        var emptyLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd).ThenReturn((object)Unit.Value);
+        var annotationLine = Try(annotationParser.Select<IClassBodyContent?>(_ => new AnnotationItem(_)));
+        var methodLine = Try(methodParser.Select<IClassBodyContent?>(_ => new MethodItem(_)));
+        var memberLine = Try(memberParser.Select<IClassBodyContent?>(_ => new MemberItem(_)));
+        var emptyLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)
+            .ThenReturn<IClassBodyContent?>(null);
 
         var contentLine = OneOf(annotationLine, methodLine, memberLine, emptyLine);
 
@@ -138,14 +137,14 @@ public class ClassParser : IDiagramParser<ClassModel>
             {
                 switch (item)
                 {
-                    case ClassAnnotation a:
-                        annotation = a;
+                    case AnnotationItem a:
+                        annotation = a.Value;
                         break;
-                    case ClassMember m:
-                        members.Add(m);
+                    case MemberItem m:
+                        members.Add(m.Value);
                         break;
-                    case ClassMethod m:
-                        methods.Add(m);
+                    case MethodItem m:
+                        methods.Add(m.Value);
                         break;
                 }
             }
@@ -155,7 +154,7 @@ public class ClassParser : IDiagramParser<ClassModel>
     }
 
     // Class definition: class ClassName { ... } or class ClassName
-    static Parser<char, ClassDefinition> classDefinitionParser =
+    public static Parser<char, ClassDefinition> classDefinitionParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("class")
         from __ in CommonParsers.RequiredWhitespace
@@ -177,7 +176,7 @@ public class ClassParser : IDiagramParser<ClassModel>
         string id,
         Maybe<(ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
-        var classDef = new ClassDefinition { Id = id };
+        var classDef = new ClassDefinition {Id = id};
 
         if (body.HasValue)
         {
@@ -191,7 +190,7 @@ public class ClassParser : IDiagramParser<ClassModel>
     }
 
     // Relationship arrows
-    static Parser<char, RelationshipType> relationshipArrowParser =
+    public static Parser<char, RelationshipType> relationshipArrowParser =
         OneOf(
             Try(String("<|--")).ThenReturn(RelationshipType.Inheritance),
             Try(String("--|>")).ThenReturn(RelationshipType.Inheritance),
@@ -209,13 +208,13 @@ public class ClassParser : IDiagramParser<ClassModel>
         );
 
     // Cardinality like "1", "0..1", "1..*", "*"
-    static Parser<char, string> cardinalityParser =
+    public static Parser<char, string> cardinalityParser =
         Char('"')
             .Then(Token(_ => _ != '"').AtLeastOnceString())
             .Before(Char('"'));
 
     // Relationship: ClassA <|-- ClassB : label
-    static Parser<char, ClassRelationship> relationshipParser =
+    public static Parser<char, ClassRelationship> relationshipParser =
         from _ in CommonParsers.InlineWhitespace
         from fromCardinality in Try(cardinalityParser.Before(CommonParsers.InlineWhitespace)).Optional()
         from fromId in classIdentifier
@@ -243,7 +242,7 @@ public class ClassParser : IDiagramParser<ClassModel>
         };
 
     // Direction directive
-    static Parser<char, Direction> directionDirectiveParser =
+    public static Parser<char, Direction> directionDirectiveParser =
         CommonParsers.InlineWhitespace
             .Then(String("direction"))
             .Then(CommonParsers.RequiredWhitespace)
@@ -251,7 +250,7 @@ public class ClassParser : IDiagramParser<ClassModel>
             .Before(CommonParsers.LineEnd);
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
@@ -263,19 +262,19 @@ public class ClassParser : IDiagramParser<ClassModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent()
+    public static Parser<char, IEnumerable<IClassContent?>> ParseContent()
     {
         var element = OneOf(
-            Try(directionDirectiveParser.Select(_ => (object)_)),
-            Try(classDefinitionParser.Select(_ => (object)_)),
-            Try(relationshipParser.Select(_ => (object)_)),
-            skipLine.ThenReturn((object)Unit.Value)
+            Try(directionDirectiveParser.Select<IClassContent?>(_ => new DirectionItem(_))),
+            Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
+            Try(relationshipParser.Select<IClassContent?>(_ => new RelationshipItem(_))),
+            skipLine.ThenReturn<IClassContent?>(null)
         );
 
-        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
+        return element.Many();
     }
 
-    static ClassModel BuildModel(List<object> content)
+    static ClassModel BuildModel(IEnumerable<IClassContent?> content)
     {
         var model = new ClassModel();
         var classIds = new HashSet<string>();
@@ -284,30 +283,43 @@ public class ClassParser : IDiagramParser<ClassModel>
         {
             switch (item)
             {
-                case Direction d:
-                    model.Direction = d;
+                case DirectionItem d:
+                    model.Direction = d.Value;
                     break;
 
-                case ClassDefinition c:
+                case ClassDefinitionItem cdef:
+                    var c = cdef.Value;
                     if (!classIds.Contains(c.Id))
                     {
                         model.Classes.Add(c);
                         classIds.Add(c.Id);
                     }
+
                     break;
 
-                case ClassRelationship r:
+                case RelationshipItem rel:
+                    var r = rel.Value;
                     // Auto-add classes from relationships
                     if (!classIds.Contains(r.FromId))
                     {
-                        model.Classes.Add(new() { Id = r.FromId });
+                        model.Classes.Add(
+                            new()
+                            {
+                                Id = r.FromId
+                            });
                         classIds.Add(r.FromId);
                     }
+
                     if (!classIds.Contains(r.ToId))
                     {
-                        model.Classes.Add(new() { Id = r.ToId });
+                        model.Classes.Add(
+                            new()
+                            {
+                                Id = r.ToId
+                            });
                         classIds.Add(r.ToId);
                     }
+
                     model.Relationships.Add(r);
                     break;
             }
@@ -317,4 +329,20 @@ public class ClassParser : IDiagramParser<ClassModel>
     }
 
     public Result<char, ClassModel> Parse(string input) => Parser.Parse(input);
+
+    interface IClassBodyContent;
+
+    readonly record struct AnnotationItem(ClassAnnotation Value) : IClassBodyContent;
+
+    readonly record struct MemberItem(ClassMember Value) : IClassBodyContent;
+
+    readonly record struct MethodItem(ClassMethod Value) : IClassBodyContent;
+
+    internal interface IClassContent;
+
+    readonly record struct DirectionItem(Direction Value) : IClassContent;
+
+    readonly record struct ClassDefinitionItem(ClassDefinition Value) : IClassContent;
+
+    readonly record struct RelationshipItem(ClassRelationship Value) : IClassContent;
 }

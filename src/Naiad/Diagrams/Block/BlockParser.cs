@@ -1,10 +1,6 @@
-namespace MermaidSharp.Diagrams.Block;
-
-public class BlockParser : IDiagramParser<BlockModel>
+class BlockParser : IDiagramParser<BlockModel>
 {
-    public DiagramType DiagramType => DiagramType.Block;
-
-    static Parser<char, string> Identifier =
+    static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
     // Label content (text inside shape brackets)
@@ -85,7 +81,7 @@ public class BlockParser : IDiagramParser<BlockModel>
 
     // Block element: id["label"]:2
     static Parser<char, BlockElement> elementParser =
-        from id in Identifier
+        from id in identifier
         from shape in shapeParser.Optional()
         from span in spanParser.Optional()
         select new BlockElement
@@ -110,11 +106,11 @@ public class BlockParser : IDiagramParser<BlockModel>
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    public static Parser<char, IBlockContent?> ContentItem =>
         OneOf(
-            Try(columnsParser.Select(_ => (object?)("columns", _))),
-            Try(elementsLineParser.Select(_ => (object?)("elements", _))),
-            skipLine.ThenReturn((object?)null)
+            Try(columnsParser.Select<IBlockContent?>(_ => new ColumnsItem(_))),
+            Try(elementsLineParser.Select<IBlockContent?>(_ => new ElementsItem(_))),
+            skipLine.ThenReturn<IBlockContent?>(null)
         );
 
     public static Parser<char, BlockModel> Parser =>
@@ -123,9 +119,9 @@ public class BlockParser : IDiagramParser<BlockModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static BlockModel BuildModel(List<object?> content)
+    static BlockModel BuildModel(IEnumerable<IBlockContent?> content)
     {
         var model = new BlockModel();
 
@@ -133,12 +129,12 @@ public class BlockParser : IDiagramParser<BlockModel>
         {
             switch (item)
             {
-                case ("columns", int columns):
-                    model.Columns = columns;
+                case ColumnsItem columns:
+                    model.Columns = columns.Count;
                     break;
 
-                case ("elements", List<BlockElement> elements):
-                    model.Elements.AddRange(elements);
+                case ElementsItem elements:
+                    model.Elements.AddRange(elements.Elements);
                     break;
             }
         }
@@ -147,4 +143,8 @@ public class BlockParser : IDiagramParser<BlockModel>
     }
 
     public Result<char, BlockModel> Parse(string input) => Parser.Parse(input);
+
+    internal interface IBlockContent;
+    readonly record struct ColumnsItem(int Count) : IBlockContent;
+    readonly record struct ElementsItem(List<BlockElement> Elements) : IBlockContent;
 }

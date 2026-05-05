@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Radar;
+﻿namespace Naiad.Diagrams.Radar;
 
 public class RadarAxis
 {

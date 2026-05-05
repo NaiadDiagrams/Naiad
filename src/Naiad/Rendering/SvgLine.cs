@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace Naiad.Rendering;
 
 public class SvgLine : SvgElement
 {
@@ -12,7 +12,7 @@ public class SvgLine : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append($"<line x1=\"{Fmt(X1)}\" y1=\"{Fmt(Y1)}\" x2=\"{Fmt(X2)}\" y2=\"{Fmt(Y2)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<line x1=\"{X1:0.##}\" y1=\"{Y1:0.##}\" x2=\"{X2:0.##}\" y2=\"{Y2:0.##}\"");
 
         if (Stroke is not null)
         {
@@ -21,7 +21,7 @@ public class SvgLine : SvgElement
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
         }
 
         if (StrokeDasharray is not null)

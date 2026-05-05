@@ -1,5 +1,5 @@
 using BenchmarkDotNet.Attributes;
-using MermaidSharp;
+using Naiad;
 
 namespace Benchmarks;
 
@@ -21,16 +21,16 @@ public class RenderBenchmarks
 
     const string FlowchartComplex = """
         flowchart TD
-            A[Start] --> B{Decision}
-            B -->|Yes| C[Process 1]
-            B -->|No| D[Process 2]
-            C --> E[Merge]
+            A[fa:fa-play Start] --> B{fa:fa-question Decision}
+            B -->|Yes| C[fa:fa-cog Process 1]
+            B -->|No| D[fab:fa-docker Process 2]
+            C --> E[fa:fa-database Merge]
             D --> E
-            E --> F{Another Decision}
-            F -->|Path 1| G[Result 1]
-            F -->|Path 2| H[Result 2]
-            F -->|Path 3| I[Result 3]
-            G --> J[End]
+            E --> F{fas:fa-question-circle Another Decision}
+            F -->|Path 1| G[fas:fa-check Result 1]
+            F -->|Path 2| H[far:fa-circle Result 2]
+            F -->|Path 3| I[fa:fa-exclamation Result 3]
+            G --> J[fa:fa-stop End]
             H --> J
             I --> J
         """;
@@ -200,4 +200,12 @@ public class RenderBenchmarks
     [Benchmark] public string Architecture_Render() => Mermaid.Render(Architecture);
     [Benchmark] public string Radar_Render() => Mermaid.Render(Radar);
     [Benchmark] public string Treemap_Render() => Mermaid.Render(Treemap);
+
+    [Benchmark] public string Flowchart_Large() => Mermaid.Render(LargeFixtures.Flowchart);
+    [Benchmark] public string Sequence_Large() => Mermaid.Render(LargeFixtures.Sequence);
+    [Benchmark] public string Class_Large() => Mermaid.Render(LargeFixtures.Class);
+    [Benchmark] public string State_Large() => Mermaid.Render(LargeFixtures.State);
+    [Benchmark] public string ER_Large() => Mermaid.Render(LargeFixtures.ER);
+    [Benchmark] public string Mindmap_Large() => Mermaid.Render(LargeFixtures.Mindmap);
+    [Benchmark] public string Gantt_Large() => Mermaid.Render(LargeFixtures.Gantt);
 }

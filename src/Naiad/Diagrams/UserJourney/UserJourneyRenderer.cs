@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.UserJourney;
+namespace Naiad.Diagrams.UserJourney;
 
 public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 {
@@ -33,8 +33,14 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         if (model.Sections.Count == 0 || model.Sections.All(_ => _.Tasks.Count == 0))
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty journey", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty journey",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -51,7 +57,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         var actorsHeight = allActors.Count * ActorRowHeight + SectionPadding;
 
         var width = maxTasks * (TaskWidth + TaskMargin) + options.Padding * 2 + TaskMargin;
-        var sectionHeight = TaskHeight + SectionPadding * 2;
+        const double sectionHeight = TaskHeight + SectionPadding * 2;
         var height = titleOffset + model.Sections.Count * sectionHeight + actorsHeight + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);
@@ -59,10 +65,13 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -71,10 +80,13 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         var legendX = width - options.Padding - 100;
         var legendY = titleOffset + options.Padding + 10;
 
-        builder.AddText(legendX, legendY, "Actors:",
+        builder.AddText(
+            legendX,
+            legendY,
+            "Actors:",
             anchor: "start",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
 
@@ -84,10 +96,13 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             var actorColor = GetActorColor(i);
 
             builder.AddCircle(legendX + 10, actorY, 8, fill: actorColor, stroke: "#333", strokeWidth: 1);
-            builder.AddText(legendX + 25, actorY, allActors[i],
+            builder.AddText(
+                legendX + 25,
+                actorY,
+                allActors[i],
                 anchor: "start",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
 
@@ -100,16 +115,25 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             var sectionColor = SectionColors[sectionIndex % SectionColors.Length];
 
             // Section background
-            builder.AddRect(options.Padding, currentY, width - options.Padding * 2 - 120, sectionHeight,
-                fill: sectionColor, stroke: "none", rx: 5);
+            builder.AddRect(
+                options.Padding,
+                currentY,
+                width - options.Padding * 2 - 120,
+                sectionHeight,
+                fill: sectionColor,
+                stroke: "none",
+                rx: 5);
 
             // Section name
             if (!string.IsNullOrEmpty(section.Name))
             {
-                builder.AddText(options.Padding + 10, currentY + 15, section.Name,
+                builder.AddText(
+                    options.Padding + 10,
+                    currentY + 15,
+                    section.Name,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
                     fontWeight: "bold",
                     fill: "#333");
@@ -124,34 +148,52 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                 var scoreColor = ScoreColors[Math.Clamp(task.Score - 1, 0, 4)];
 
                 // Task card
-                builder.AddRect(taskX, taskY, TaskWidth, TaskHeight,
+                builder.AddRect(
+                    taskX,
+                    taskY,
+                    TaskWidth,
+                    TaskHeight,
                     fill: "#fff",
                     stroke: scoreColor,
                     strokeWidth: 2,
                     rx: 8);
 
                 // Score indicator bar at top
-                builder.AddRect(taskX, taskY, TaskWidth, 8,
+                builder.AddRect(
+                    taskX,
+                    taskY,
+                    TaskWidth,
+                    8,
                     fill: scoreColor,
                     stroke: "none",
                     rx: 8);
                 // Cover bottom corners of score bar
-                builder.AddRect(taskX, taskY + 4, TaskWidth, 4,
+                builder.AddRect(
+                    taskX,
+                    taskY + 4,
+                    TaskWidth,
+                    4,
                     fill: scoreColor,
                     stroke: "none");
 
                 // Task name
-                builder.AddText(taskX + TaskWidth / 2, taskY + 25, task.Name,
+                builder.AddText(
+                    taskX + TaskWidth / 2,
+                    taskY + 25,
+                    task.Name,
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 1}px",
+                    fontSize: options.FontSize - 1,
                     fontFamily: options.FontFamily);
 
                 // Score badge
-                builder.AddText(taskX + TaskWidth / 2, taskY + 45, $"Score: {task.Score}",
+                builder.AddText(
+                    taskX + TaskWidth / 2,
+                    taskY + 45,
+                    $"Score: {task.Score}",
                     anchor: "middle",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#666");
 
@@ -161,8 +203,13 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                 {
                     var actorIndex = allActors.IndexOf(actor);
                     var actorColor = GetActorColor(actorIndex);
-                    builder.AddCircle(actorX + 5, taskY + TaskHeight - 8, 5,
-                        fill: actorColor, stroke: "#333", strokeWidth: 1);
+                    builder.AddCircle(
+                        actorX + 5,
+                        taskY + TaskHeight - 8,
+                        5,
+                        fill: actorColor,
+                        stroke: "#333",
+                        strokeWidth: 1);
                     actorX += 15;
                 }
 
@@ -181,6 +228,4 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         string[] colors = ["#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD", "#98D8C8"];
         return colors[index % colors.Length];
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

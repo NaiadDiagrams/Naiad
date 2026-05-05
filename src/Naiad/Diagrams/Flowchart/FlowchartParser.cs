@@ -1,9 +1,5 @@
-namespace MermaidSharp.Diagrams.Flowchart;
-
-public class FlowchartParser : IDiagramParser<FlowchartModel>
+class FlowchartParser : IDiagramParser<FlowchartModel>
 {
-    public DiagramType DiagramType => DiagramType.Flowchart;
-
     // Node shape parsers - returns (label, shape)
     static Parser<char, (string Label, NodeShape Shape)> doubleCircleShape =
         String("(((")
@@ -121,7 +117,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         );
 
     // Statement: A --> B --> C (chain of nodes with edges)
-    static Parser<char, (List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> StatementParser =>
+    public static Parser<char, (List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> StatementParser =>
         from first in nodeParser
         from rest in (
             from _1 in CommonParsers.InlineWhitespace
@@ -136,7 +132,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         ).Many()
         select (
             new List<Node>([first, .. rest.Select(_ => _.node)]),
-            rest.Select(_ => (_.Type, _.Style, (string?)_.Item4)).ToList()
+            rest.Select(_ => (_.Type, _.Style, (string?) _.Item4)).ToList()
         );
 
     // Style directive: style NodeName fill:#color,stroke:#color
@@ -213,7 +209,7 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         from statements in ParseStatements()
         select BuildModel(direction.GetValueOrDefault(Direction.TopToBottom), statements);
 
-    static Parser<char, List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)>> ParseStatements()
+    public static Parser<char, List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)>> ParseStatements()
     {
         var statement =
             CommonParsers.InlineWhitespace
@@ -230,7 +226,11 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
         Direction direction,
         List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> statements)
     {
-        var model = new FlowchartModel { Direction = direction };
+        var model = new FlowchartModel
+        {
+            Direction = direction
+        };
+
         var nodeDict = new Dictionary<string, Node>();
 
         foreach (var (nodes, edges) in statements)
@@ -245,7 +245,8 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
                     nodeDict[node.Id] = node;
                     model.Nodes.Add(node);
                 }
-                else if (node.Label != null && existingNode.Label == null)
+                else if (node.Label != null &&
+                         existingNode.Label == null)
                 {
                     existingNode.Label = node.Label;
                     existingNode.Shape = node.Shape;
@@ -255,14 +256,15 @@ public class FlowchartParser : IDiagramParser<FlowchartModel>
                 if (i < edges.Count)
                 {
                     var edge = edges[i];
-                    model.Edges.Add(new()
-                    {
-                        SourceId = nodes[i].Id,
-                        TargetId = nodes[i + 1].Id,
-                        Type = edge.Type,
-                        LineStyle = edge.Style,
-                        Label = edge.Label
-                    });
+                    model.Edges.Add(
+                        new()
+                        {
+                            SourceId = nodes[i].Id,
+                            TargetId = nodes[i + 1].Id,
+                            Type = edge.Type,
+                            LineStyle = edge.Style,
+                            Label = edge.Label
+                        });
                 }
             }
         }

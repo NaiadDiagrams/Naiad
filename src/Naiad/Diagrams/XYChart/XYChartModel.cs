@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.XYChart;
+namespace Naiad.Diagrams.XYChart;
 
 public class XYChartModel : DiagramBase
 {

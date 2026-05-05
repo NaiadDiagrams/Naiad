@@ -1,10 +1,6 @@
-namespace MermaidSharp.Diagrams.Pie;
-
-public class PieParser : IDiagramParser<PieModel>
+class PieParser : IDiagramParser<PieModel>
 {
-    public DiagramType DiagramType => DiagramType.Pie;
-
-    static Parser<char, PieSection> SectionParser =
+    static Parser<char, PieSection> sectionParser =
         from _ in CommonParsers.InlineWhitespace
         from label in CommonParsers.QuotedString
         from __ in CommonParsers.InlineWhitespace
@@ -15,7 +11,7 @@ public class PieParser : IDiagramParser<PieModel>
         from _____ in CommonParsers.LineEnd
         select new PieSection { Label = label, Value = value };
 
-    static Parser<char, string> TitleLine =
+    static Parser<char, string> titleLine =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("title")
         from __ in CommonParsers.RequiredWhitespace
@@ -23,15 +19,15 @@ public class PieParser : IDiagramParser<PieModel>
         from ___ in CommonParsers.LineEnd
         select title;
 
-    static Parser<char, bool> ShowDataParser =
+    static Parser<char, bool> showDataParser =
         Try(String("showData")).ThenReturn(true).Or(Return(false));
 
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Inline title: pie title My Title (on same line)
-    static Parser<char, string> InlineTitleParser =
+    static Parser<char, string> inlineTitleParser =
         from keyword in String("title")
         from _ in CommonParsers.RequiredWhitespace
         from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
@@ -41,18 +37,18 @@ public class PieParser : IDiagramParser<PieModel>
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("pie")
         from __ in CommonParsers.InlineWhitespace
-        from showData in ShowDataParser
+        from showData in showDataParser
         from ___ in CommonParsers.InlineWhitespace
-        from inlineTitle in Try(InlineTitleParser).Optional()
+        from inlineTitle in Try(inlineTitleParser).Optional()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         from content in ParseContent()
         select BuildModel(showData, inlineTitle.HasValue ? inlineTitle.Value : content.title, content.sections);
 
-    static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
-        from lines in Try(TitleLine.Select(_ => (title: (string?)_, section: (PieSection?)null)))
-            .Or(Try(SectionParser.Select(_ => (title: (string?)null, section: (PieSection?)_))))
-            .Or(SkipLine.ThenReturn((title: (string?)null, section: (PieSection?)null))).Many()
+    public static Parser<char, (string? title, List<PieSection> sections)> ParseContent() =>
+        from lines in Try(titleLine.Select(_ => (title: (string?)_, section: (PieSection?)null)))
+            .Or(Try(sectionParser.Select(_ => (title: (string?)null, section: (PieSection?)_))))
+            .Or(skipLine.ThenReturn((title: (string?)null, section: (PieSection?)null))).Many()
         select (
             title: lines.FirstOrDefault(_ => _.title != null).title,
             sections: lines.Where(_ => _.section != null).Select(_ => _.section!).ToList()

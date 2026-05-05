@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Block;
+﻿namespace Naiad.Diagrams.Block;
 
 public class BlockElement
 {

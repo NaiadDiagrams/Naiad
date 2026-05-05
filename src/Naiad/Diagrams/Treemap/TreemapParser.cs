@@ -1,9 +1,5 @@
-namespace MermaidSharp.Diagrams.Treemap;
-
-public class TreemapParser : IDiagramParser<TreemapModel>
+class TreemapParser : IDiagramParser<TreemapModel>
 {
-    public DiagramType DiagramType => DiagramType.Treemap;
-
     // Quoted string: "text"
     static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
@@ -20,9 +16,9 @@ public class TreemapParser : IDiagramParser<TreemapModel>
         String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
 
     // Node line
-    record NodeLine(int Indent, string Name, double? Value, string? CssClass);
+    internal record NodeLine(int Indent, string Name, double? Value, string? CssClass);
 
-    static Parser<char, NodeLine> nodeLineParser =
+    public static Parser<char, NodeLine> nodeLineParser =
         from indent in CommonParsers.Indentation
         from name in quotedString
         from value in (
@@ -42,14 +38,14 @@ public class TreemapParser : IDiagramParser<TreemapModel>
         select new NodeLine(indent, name, value.GetValueOrDefault(), cssClass.GetValueOrDefault());
 
     // Skip line
-    static Parser<char, Unit> skipLine =
+    public static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
     // Content item
-    static Parser<char, NodeLine?> ContentItem =>
-        Try(nodeLineParser.Select(_ => (NodeLine?)_))
-            .Or(skipLine.ThenReturn((NodeLine?)null));
+    public static Parser<char, NodeLine?> ContentItem =>
+        Try(nodeLineParser.Select<NodeLine?>(_ => _))
+            .Or(skipLine.ThenReturn<NodeLine?>(null));
 
     public static Parser<char, TreemapModel> Parser =>
         from whitespance in CommonParsers.InlineWhitespace
@@ -74,20 +70,20 @@ public class TreemapParser : IDiagramParser<TreemapModel>
             };
 
             // Pop nodes from stack until we find parent
-            while (stack.Count > 0 && stack.Peek().indent >= line.Indent)
+            while (stack.TryPeek(out var top) && top.indent >= line.Indent)
             {
                 stack.Pop();
             }
 
-            if (stack.Count == 0)
+            if (stack.TryPeek(out var parent))
             {
-                // Root level node
-                model.RootNodes.Add(node);
+                // Child of current parent
+                parent.node.Children.Add(node);
             }
             else
             {
-                // Child of current parent
-                stack.Peek().node.Children.Add(node);
+                // Root level node
+                model.RootNodes.Add(node);
             }
 
             // Push this node as potential parent

@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+﻿namespace Naiad.Rendering;
 
 public class SvgGradient
 {
@@ -13,7 +13,7 @@ public class SvgGradient
 
         foreach (var stop in Stops)
         {
-            builder.Append($"<stop offset=\"{stop.Offset}%\" style=\"stop-color:{stop.Color}\" />");
+            builder.Append(CultureInfo.InvariantCulture, $"<stop offset=\"{stop.Offset}%\" style=\"stop-color:{stop.Color}\" />");
         }
 
         builder.Append($"</{tag}>");

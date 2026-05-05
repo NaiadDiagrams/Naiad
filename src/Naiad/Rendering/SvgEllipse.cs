@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace Naiad.Rendering;
 
 public class SvgEllipse : SvgElement
 {
@@ -11,7 +11,7 @@ public class SvgEllipse : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append($"<ellipse cx=\"{Fmt(Cx)}\" cy=\"{Fmt(Cy)}\" rx=\"{Fmt(Rx)}\" ry=\"{Fmt(Ry)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<ellipse cx=\"{Cx:0.##}\" cy=\"{Cy:0.##}\" rx=\"{Rx:0.##}\" ry=\"{Ry:0.##}\"");
 
         if (Fill is not null)
         {

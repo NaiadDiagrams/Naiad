@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.GitGraph;
+﻿namespace Naiad.Diagrams.GitGraph;
 
 public class GitCommit
 {
@@ -10,7 +10,5 @@ public class GitCommit
     public List<string> Parents { get; } = [];
 
     // Layout properties
-    public Position Position { get; set; }
-    public int Column { get; set; }
     public int Row { get; set; }
 }

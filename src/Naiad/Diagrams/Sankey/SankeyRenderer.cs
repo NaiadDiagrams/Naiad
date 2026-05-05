@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Sankey;
+namespace Naiad.Diagrams.Sankey;
 
 public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 {
@@ -10,8 +10,14 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
     static readonly string[] NodeColors =
     [
-        "#4CAF50", "#2196F3", "#FF9800", "#E91E63",
-        "#9C27B0", "#00BCD4", "#FF5722", "#607D8B"
+        "#4CAF50",
+        "#2196F3",
+        "#FF9800",
+        "#E91E63",
+        "#9C27B0",
+        "#00BCD4",
+        "#FF5722",
+        "#607D8B"
     ];
 
     public SvgDocument Render(SankeyModel model, RenderOptions options)
@@ -19,8 +25,13 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         if (model.Links.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100, 50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -44,10 +55,13 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(width / 2, options.Padding + TitleHeight / 2, model.Title,
+            builder.AddText(
+                width / 2,
+                options.Padding + TitleHeight / 2,
+                model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px",
+                fontSize: options.FontSize + 4,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -56,14 +70,25 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         PositionNodes(nodes, chartHeight, titleOffset + options.Padding);
 
         // Draw links first (behind nodes)
+        var sourceOffsets = new Dictionary<string, double>();
+        var targetOffsets = new Dictionary<string, double>();
         foreach (var link in model.Links)
         {
             var sourceNode = nodes[link.Source];
             var targetNode = nodes[link.Target];
 
             var linkHeight = link.Value / Math.Max(1, sourceNode.OutputValue) * sourceNode.Height;
-            var sourceY = GetLinkSourceY(sourceNode, link, model.Links);
-            var targetY = GetLinkTargetY(targetNode, link, model.Links);
+            var sourceBand = link.Value / sourceNode.OutputValue * sourceNode.Height;
+            var targetBand = link.Value / targetNode.InputValue * targetNode.Height;
+
+            sourceOffsets.TryGetValue(link.Source, out var sOff);
+            targetOffsets.TryGetValue(link.Target, out var tOff);
+
+            var sourceY = sourceNode.Y + sOff + sourceBand / 2;
+            var targetY = targetNode.Y + tOff + targetBand / 2;
+
+            sourceOffsets[link.Source] = sOff + sourceBand;
+            targetOffsets[link.Target] = tOff + targetBand;
 
             var sourceX = options.Padding + sourceNode.Column * ColumnSpacing + NodeWidth;
             var targetX = options.Padding + targetNode.Column * ColumnSpacing;
@@ -71,7 +96,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             // Draw bezier curve for link
             var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, linkHeight);
             var colorIndex = Array.IndexOf(nodes.Keys.ToArray(), link.Source) % NodeColors.Length;
-            builder.AddPath(pathData,
+            builder.AddPath(
+                pathData,
                 fill: NodeColors[colorIndex],
                 stroke: "none");
         }
@@ -83,8 +109,14 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var x = options.Padding + node.Column * ColumnSpacing;
             var color = NodeColors[nodeIndex % NodeColors.Length];
 
-            builder.AddRect(x, node.Y, NodeWidth, node.Height,
-                fill: color, stroke: "#333", strokeWidth: 1);
+            builder.AddRect(
+                x,
+                node.Y,
+                NodeWidth,
+                node.Height,
+                fill: color,
+                stroke: "#333",
+                strokeWidth: 1);
 
             // Node label
             var labelX = node.Column == maxColumn
@@ -92,9 +124,14 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 : x - 5;
             var anchor = node.Column == maxColumn ? "start" : "end";
 
-            builder.AddText(labelX, node.Y + node.Height / 2, name,
-                anchor: anchor, baseline: "middle",
-                fontSize: $"{options.FontSize - 1}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                labelX,
+                node.Y + node.Height / 2,
+                name,
+                anchor: anchor,
+                baseline: "middle",
+                fontSize: options.FontSize - 1,
+                fontFamily: options.FontFamily,
                 fill: "#333");
 
             nodeIndex++;
@@ -109,13 +146,25 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
         foreach (var link in model.Links)
         {
-            if (!nodes.ContainsKey(link.Source))
-                nodes[link.Source] = new() { Name = link.Source };
-            if (!nodes.ContainsKey(link.Target))
-                nodes[link.Target] = new() { Name = link.Target };
+            if (!nodes.TryGetValue(link.Source, out var sourceValue))
+            {
+                sourceValue = new()
+                {
+                    Name = link.Source
+                };
+                nodes[link.Source] = sourceValue;
+            }
+            if (!nodes.TryGetValue(link.Target, out var targetValue))
+            {
+                targetValue = new()
+                {
+                    Name = link.Target
+                };
+                nodes[link.Target] = targetValue;
+            }
 
-            nodes[link.Source].OutputValue += link.Value;
-            nodes[link.Target].InputValue += link.Value;
+            sourceValue.OutputValue += link.Value;
+            targetValue.InputValue += link.Value;
         }
 
         return nodes;
@@ -124,10 +173,9 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
     static void AssignColumns(Dictionary<string, SankeyNode> nodes, SankeyModel model)
     {
         // Find source nodes (no incoming links)
-        var targets = model.Links.Select(_ => _.Target).ToHashSet();
-        var sources = model.Links.Select(_ => _.Source).ToHashSet();
-
-        var sourceOnly = sources.Except(targets).ToList();
+        var links = model.Links;
+        var targets = links.Select(_ => _.Target).ToHashSet();
+        var sourceOnly = links.Select(_ => _.Source).Except(targets);
 
         // BFS to assign columns
         var queue = new Queue<string>();
@@ -142,7 +190,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var current = queue.Dequeue();
             var currentColumn = nodes[current].Column;
 
-            foreach (var link in model.Links.Where(_ => _.Source == current))
+            foreach (var link in links.Where(_ => _.Source == current))
             {
                 var targetNode = nodes[link.Target];
                 if (targetNode.Column <= currentColumn)
@@ -175,43 +223,13 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
     }
 
-    static double GetLinkSourceY(SankeyNode sourceNode, SankeyLink link, List<SankeyLink> allLinks)
-    {
-        var outgoingLinks = allLinks.Where(_ => _.Source == link.Source).ToList();
-        double offset = 0;
-        foreach (var l in outgoingLinks)
-        {
-            if (l == link) break;
-            offset += l.Value / sourceNode.OutputValue * sourceNode.Height;
-        }
-        var linkHeight = link.Value / sourceNode.OutputValue * sourceNode.Height;
-        return sourceNode.Y + offset + linkHeight / 2;
-    }
-
-    static double GetLinkTargetY(SankeyNode targetNode, SankeyLink link, List<SankeyLink> allLinks)
-    {
-        var incomingLinks = allLinks.Where(_ => _.Target == link.Target).ToList();
-        double offset = 0;
-        foreach (var l in incomingLinks)
-        {
-            if (l == link) break;
-            offset += l.Value / targetNode.InputValue * targetNode.Height;
-        }
-        var linkHeight = link.Value / targetNode.InputValue * targetNode.Height;
-        return targetNode.Y + offset + linkHeight / 2;
-    }
-
     static string CreateLinkPath(double x1, double y1, double x2, double y2, double height)
     {
         var halfHeight = height / 2;
         var cx = (x1 + x2) / 2;
 
-        return $"M {Fmt(x1)} {Fmt(y1 - halfHeight)} " +
-               $"C {Fmt(cx)} {Fmt(y1 - halfHeight)} {Fmt(cx)} {Fmt(y2 - halfHeight)} {Fmt(x2)} {Fmt(y2 - halfHeight)} " +
-               $"L {Fmt(x2)} {Fmt(y2 + halfHeight)} " +
-               $"C {Fmt(cx)} {Fmt(y2 + halfHeight)} {Fmt(cx)} {Fmt(y1 + halfHeight)} {Fmt(x1)} {Fmt(y1 + halfHeight)} " +
-               $"Z";
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"M {x1:0.##} {y1 - halfHeight:0.##} C {cx:0.##} {y1 - halfHeight:0.##} {cx:0.##} {y2 - halfHeight:0.##} {x2:0.##} {y2 - halfHeight:0.##} L {x2:0.##} {y2 + halfHeight:0.##} C {cx:0.##} {y2 + halfHeight:0.##} {cx:0.##} {y1 + halfHeight:0.##} {x1:0.##} {y1 + halfHeight:0.##} Z");
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

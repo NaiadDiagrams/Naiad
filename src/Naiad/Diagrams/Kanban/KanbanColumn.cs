@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Kanban;
+﻿namespace Naiad.Diagrams.Kanban;
 
 public class KanbanColumn
 {

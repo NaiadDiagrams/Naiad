@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Architecture;
+﻿namespace Naiad.Diagrams.Architecture;
 
 public enum EdgeDirection
 {

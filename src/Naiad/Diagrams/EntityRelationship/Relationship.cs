@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.EntityRelationship;
+﻿namespace Naiad.Diagrams.EntityRelationship;
 
 public class Relationship
 {

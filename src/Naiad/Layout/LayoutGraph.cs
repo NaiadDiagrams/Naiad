@@ -1,4 +1,4 @@
-namespace MermaidSharp.Layout;
+namespace Naiad.Layout;
 
 class LayoutGraph
 {
@@ -13,10 +13,12 @@ class LayoutGraph
         Edges.Add(edge);
         if (Nodes.TryGetValue(edge.SourceId, out var source))
         {
+            edge.Source = source;
             source.OutEdges.Add(edge);
         }
         if (Nodes.TryGetValue(edge.TargetId, out var target))
         {
+            edge.Target = target;
             target.InEdges.Add(edge);
         }
     }
@@ -26,7 +28,11 @@ class LayoutGraph
 
     public IEnumerable<LayoutNode> GetSuccessors(string nodeId)
     {
-        if (!Nodes.TryGetValue(nodeId, out var node)) yield break;
+        if (!Nodes.TryGetValue(nodeId, out var node))
+        {
+            yield break;
+        }
+
         foreach (var edge in node.OutEdges)
         {
             if (Nodes.TryGetValue(edge.TargetId, out var target))
@@ -38,7 +44,11 @@ class LayoutGraph
 
     public IEnumerable<LayoutNode> GetPredecessors(string nodeId)
     {
-        if (!Nodes.TryGetValue(nodeId, out var node)) yield break;
+        if (!Nodes.TryGetValue(nodeId, out var node))
+        {
+            yield break;
+        }
+
         foreach (var edge in node.InEdges)
         {
             if (Nodes.TryGetValue(edge.SourceId, out var source))
@@ -52,10 +62,12 @@ class LayoutGraph
     {
         var maxRank = Nodes.Values.Max(_ => _.Rank);
         Ranks = new List<LayoutNode>[maxRank + 1];
+
         for (var i = 0; i <= maxRank; i++)
         {
             Ranks[i] = [];
         }
+
         foreach (var node in Nodes.Values)
         {
             Ranks[node.Rank].Add(node);
@@ -64,40 +76,13 @@ class LayoutGraph
 
     public void UpdateOrderInRanks()
     {
-        for (var r = 0; r < Ranks.Length; r++)
+        foreach (var rank in Ranks)
         {
-            var nodesInRank = Ranks[r].OrderBy(_ => _.Order).ToList();
-            for (var i = 0; i < nodesInRank.Count; i++)
+            rank.Sort((a, b) => a.Order.CompareTo(b.Order));
+            for (var i = 0; i < rank.Count; i++)
             {
-                nodesInRank[i].Order = i;
+                rank[i].Order = i;
             }
-            Ranks[r] = nodesInRank;
         }
     }
-}
-
-internal class LayoutNode
-{
-    public required string Id { get; init; }
-    public double Width { get; set; }
-    public double Height { get; set; }
-    public int Rank { get; set; } = -1;
-    public int Order { get; set; }
-    public double X { get; set; }
-    public double Y { get; set; }
-    public bool IsDummy { get; set; }
-    public string? OriginalEdgeSource { get; set; }
-    public string? OriginalEdgeTarget { get; set; }
-
-    public List<LayoutEdge> InEdges { get; } = [];
-    public List<LayoutEdge> OutEdges { get; } = [];
-}
-
-internal class LayoutEdge
-{
-    public required string SourceId { get; init; }
-    public required string TargetId { get; init; }
-    public int Weight { get; set; } = 1;
-    public bool IsReversed { get; set; }
-    public List<Position> Points { get; } = [];
 }

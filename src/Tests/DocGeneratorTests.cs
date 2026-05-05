@@ -252,9 +252,9 @@ public class DocGeneratorTests
 
     private class TestInfo
     {
-        public string Name { get; set; } = "";
+        public string Name { get; init; } = "";
         public string ClassName { get; set; } = "";
-        public string Input { get; set; } = "";
+        public string Input { get; init; } = "";
         public required string VerifiedPngPath { get; init; }
     }
 }

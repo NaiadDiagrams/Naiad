@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Class;
+﻿namespace Naiad.Diagrams.Class;
 
 public class ClassDefinition
 {
@@ -7,8 +7,6 @@ public class ClassDefinition
     public List<ClassMember> Members { get; } = [];
     public List<ClassMethod> Methods { get; } = [];
     public ClassAnnotation? Annotation { get; set; }
-    public string? Namespace { get; set; }
-    public string? CssClass { get; set; }
 
     public string Name => DisplayName ?? Id;
 }

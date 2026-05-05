@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace Naiad.Rendering;
 
 public class SvgPolyline : SvgElement
 {
@@ -19,9 +19,8 @@ public class SvgPolyline : SvgElement
                 builder.Append(' ');
             }
 
-            builder.Append(Fmt(Points[i].X));
-            builder.Append(',');
-            builder.Append(Fmt(Points[i].Y));
+            var point = Points[i];
+            builder.Append(CultureInfo.InvariantCulture, $"{point.X:0.##},{point.Y:0.##}");
         }
 
         builder.Append('"');
@@ -38,7 +37,7 @@ public class SvgPolyline : SvgElement
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
         }
 
         if (StrokeDasharray is not null)

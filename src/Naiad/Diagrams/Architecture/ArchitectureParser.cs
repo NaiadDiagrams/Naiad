@@ -1,9 +1,5 @@
-namespace MermaidSharp.Diagrams.Architecture;
-
-public class ArchitectureParser : IDiagramParser<ArchitectureModel>
+class ArchitectureParser : IDiagramParser<ArchitectureModel>
 {
-    public DiagramType DiagramType => DiagramType.Architecture;
-
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
@@ -131,22 +127,18 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         TargetArrow = target.arrow
     };
 
-    // Skip line
     static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    // Content item
-    static Parser<char, object?> ContentItem =>
+    static Parser<char, IArchitectureContent?> ContentItem =>
         OneOf(
-            Try(groupParser.Select(_ => (object?)(ItemType.Group, _))),
-            Try(serviceParser.Select(_ => (object?)(ItemType.Service, _))),
-            Try(junctionParser.Select(_ => (object?)(ItemType.Junction, _))),
-            Try(edgeParser.Select(_ => (object?)(ItemType.Edge, _))),
-            skipLine.ThenReturn((object?)null)
+            Try(groupParser.Select<IArchitectureContent?>(_ => new GroupItem(_))),
+            Try(serviceParser.Select<IArchitectureContent?>(_ => new ServiceItem(_))),
+            Try(junctionParser.Select<IArchitectureContent?>(_ => new JunctionItem(_))),
+            Try(edgeParser.Select<IArchitectureContent?>(_ => new EdgeItem(_))),
+            skipLine.ThenReturn<IArchitectureContent?>(null)
         );
-
-    enum ItemType { Group, Service, Junction, Edge }
 
     public static Parser<char, ArchitectureModel> Parser =>
         from inlineWhitespace in CommonParsers.InlineWhitespace
@@ -154,9 +146,9 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         from innerInlineWhitespace in CommonParsers.InlineWhitespace
         from lineEnd in CommonParsers.LineEnd
         from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+        select BuildModel(result.Item1);
 
-    static ArchitectureModel BuildModel(List<object?> content)
+    static ArchitectureModel BuildModel(IEnumerable<IArchitectureContent?> content)
     {
         var model = new ArchitectureModel();
 
@@ -164,20 +156,20 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
         {
             switch (item)
             {
-                case (ItemType.Group, ArchitectureGroup group):
-                    model.Groups.Add(group);
+                case GroupItem group:
+                    model.Groups.Add(group.Value);
                     break;
 
-                case (ItemType.Service, ArchitectureService service):
-                    model.Services.Add(service);
+                case ServiceItem service:
+                    model.Services.Add(service.Value);
                     break;
 
-                case (ItemType.Junction, ArchitectureJunction junction):
-                    model.Junctions.Add(junction);
+                case JunctionItem junction:
+                    model.Junctions.Add(junction.Value);
                     break;
 
-                case (ItemType.Edge, ArchitectureEdge edge):
-                    model.Edges.Add(edge);
+                case EdgeItem edge:
+                    model.Edges.Add(edge.Value);
                     break;
             }
         }
@@ -186,4 +178,10 @@ public class ArchitectureParser : IDiagramParser<ArchitectureModel>
     }
 
     public Result<char, ArchitectureModel> Parse(string input) => Parser.Parse(input);
+
+    internal interface IArchitectureContent;
+    readonly record struct GroupItem(ArchitectureGroup Value) : IArchitectureContent;
+    readonly record struct ServiceItem(ArchitectureService Value) : IArchitectureContent;
+    readonly record struct JunctionItem(ArchitectureJunction Value) : IArchitectureContent;
+    readonly record struct EdgeItem(ArchitectureEdge Value) : IArchitectureContent;
 }

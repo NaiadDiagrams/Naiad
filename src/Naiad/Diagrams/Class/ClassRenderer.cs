@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Class;
+namespace Naiad.Diagrams.Class;
 
 public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ClassModel>
@@ -29,7 +29,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             .Size(layoutResult.Width, layoutResult.Height)
             .Padding(options.Padding)
             .AddArrowMarker()
-            .AddArrowMarker("arrowhead-open", "#333");
+            .AddArrowMarker("arrowhead-open");
 
         // Add relationship markers
         AddRelationshipMarkers(builder);
@@ -38,11 +38,18 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         foreach (var relationship in model.Relationships)
         {
             var fromNode = graphModel.GetNode(relationship.FromId);
-            var toNode = graphModel.GetNode(relationship.ToId);
-            if (fromNode != null && toNode != null)
+            if (fromNode == null)
             {
-                RenderRelationship(builder, relationship, fromNode, toNode, options);
+                continue;
             }
+
+            var toNode = graphModel.GetNode(relationship.ToId);
+            if (toNode == null)
+            {
+                continue;
+            }
+
+            RenderRelationship(builder, relationship, fromNode, toNode, options);
         }
 
         // Render class boxes
@@ -120,7 +127,9 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         // Calculate height
         var height = ClassPadding; // Top padding
         if (classDef.Annotation.HasValue)
+        {
             height += LineHeight;
+        }
         height += LineHeight; // Class name
         height += ClassPadding; // After name
 
@@ -157,8 +166,15 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             _ => "#FFFFDE"
         };
 
-        builder.AddRect(x, y, width, height, rx: 0,
-            fill: fillColor, stroke: "#333", strokeWidth: 1);
+        builder.AddRect(
+            x,
+            y,
+            width,
+            height,
+            rx: 0,
+            fill: fillColor,
+            stroke: "#333",
+            strokeWidth: 1);
 
         var currentY = y + ClassPadding;
         var centerX = node.Position.X;
@@ -167,10 +183,13 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         if (classDef.Annotation.HasValue)
         {
             var annotationText = $"<<{classDef.Annotation.Value.ToString().ToLower()}>>";
-            builder.AddText(centerX, currentY + LineHeight / 2, annotationText,
+            builder.AddText(
+                centerX,
+                currentY + LineHeight / 2,
+                annotationText,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fontWeight: "normal",
                 fill: "#666");
@@ -178,10 +197,13 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         // Class name
-        builder.AddText(centerX, currentY + LineHeight / 2, classDef.Name,
+        builder.AddText(
+            centerX,
+            currentY + LineHeight / 2,
+            classDef.Name,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
         currentY += LineHeight + ClassPadding;
@@ -189,16 +211,25 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         // Members separator and list
         if (classDef.Members.Count > 0)
         {
-            builder.AddLine(x, currentY, x + width, currentY, stroke: "#333", strokeWidth: 1);
+            builder.AddLine(
+                x,
+                currentY,
+                x + width,
+                currentY,
+                stroke: "#333",
+                strokeWidth: 1);
             currentY += SeparatorHeight;
 
             foreach (var member in classDef.Members)
             {
                 var memberText = FormatMember(member);
-                builder.AddText(x + ClassPadding, currentY + LineHeight / 2, memberText,
+                builder.AddText(
+                    x + ClassPadding,
+                    currentY + LineHeight / 2,
+                    memberText,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
                 currentY += LineHeight;
             }
@@ -207,16 +238,25 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         // Methods separator and list
         if (classDef.Methods.Count > 0)
         {
-            builder.AddLine(x, currentY, x + width, currentY, stroke: "#333", strokeWidth: 1);
+            builder.AddLine(
+                x,
+                currentY,
+                x + width,
+                currentY,
+                stroke: "#333",
+                strokeWidth: 1);
             currentY += SeparatorHeight;
 
             foreach (var method in classDef.Methods)
             {
                 var methodText = FormatMethod(method);
-                builder.AddText(x + ClassPadding, currentY + LineHeight / 2, methodText,
+                builder.AddText(
+                    x + ClassPadding,
+                    currentY + LineHeight / 2,
+                    methodText,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
                 currentY += LineHeight;
             }
@@ -232,7 +272,11 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         var isDotted = rel.Type is RelationshipType.DependencyLeft or RelationshipType.DependencyRight or RelationshipType.Realization;
         var dashArray = isDotted ? "5,5" : null;
 
-        builder.AddLine(startX, startY, endX, endY,
+        builder.AddLine(
+            startX,
+            startY,
+            endX,
+            endY,
             stroke: "#333",
             strokeWidth: 1,
             strokeDasharray: dashArray);
@@ -245,29 +289,38 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         {
             var labelX = (startX + endX) / 2;
             var labelY = (startY + endY) / 2 - 10;
-            builder.AddText(labelX, labelY, rel.Label,
+            builder.AddText(
+                labelX,
+                labelY,
+                rel.Label,
                 anchor: "middle",
                 baseline: "bottom",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
 
         // Draw cardinalities
         if (!string.IsNullOrEmpty(rel.FromCardinality))
         {
-            builder.AddText(startX + 10, startY - 10, rel.FromCardinality,
+            builder.AddText(
+                startX + 10,
+                startY - 10,
+                rel.FromCardinality,
                 anchor: "start",
                 baseline: "bottom",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
 
         if (!string.IsNullOrEmpty(rel.ToCardinality))
         {
-            builder.AddText(endX - 10, endY - 10, rel.ToCardinality,
+            builder.AddText(
+                endX - 10,
+                endY - 10,
+                rel.ToCardinality,
                 anchor: "end",
                 baseline: "bottom",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
     }
@@ -296,7 +349,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     static void DrawRelationshipMarker(SvgBuilder builder, RelationshipType type, double x, double y, double fromX, double fromY)
     {
         var angle = Math.Atan2(y - fromY, x - fromX);
-        var markerSize = 10.0;
+        const double markerSize = 10.0;
 
         switch (type)
         {
@@ -379,15 +432,6 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         builder.AddMarker("aggregation", "M0,5 L5,0 L10,5 L5,10 Z", 12, 12, 10, 5, "#fff");
     }
 
-    static string GetMarkerId(RelationshipType type) =>
-        type switch
-        {
-            RelationshipType.Inheritance or RelationshipType.Realization => "inheritance",
-            RelationshipType.Composition => "composition",
-            RelationshipType.Aggregation => "aggregation",
-            _ => "arrowhead"
-        };
-
     static string FormatMember(ClassMember member)
     {
         var visibility = GetVisibilitySymbol(member.Visibility);
@@ -420,8 +464,6 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
         var factor = bold ? 0.65 : 0.55;
         return text.Length * fontSize * factor;
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }
 
 // Temporary model for layout - reusing flowchart structure

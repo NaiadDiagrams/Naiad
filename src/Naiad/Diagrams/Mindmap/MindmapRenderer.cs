@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Mindmap;
+namespace Naiad.Diagrams.Mindmap;
 
 public class MindmapRenderer : IDiagramRenderer<MindmapModel>
 {
@@ -24,8 +24,14 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         if (model.Root == null)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty mindmap", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty mindmap",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
@@ -140,8 +146,9 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             var controlX1 = startX + HorizontalSpacing / 2;
             var controlX2 = endX - HorizontalSpacing / 2;
 
-            var path = $"M {Fmt(startX)} {Fmt(startY)} " +
-                       $"C {Fmt(controlX1)} {Fmt(startY)}, {Fmt(controlX2)} {Fmt(endY)}, {Fmt(endX)} {Fmt(endY)}";
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {startX:0.##} {startY:0.##} C {controlX1:0.##} {startY:0.##}, {controlX2:0.##} {endY:0.##}, {endX:0.##} {endY:0.##}");
 
             var color = GetLevelColor(child.Level);
             builder.AddPath(path, stroke: color, strokeWidth: 2, fill: "none");
@@ -162,42 +169,74 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         {
             case MindmapShape.Circle:
                 var radius = Math.Max(node.Width, node.Height) / 2;
-                builder.AddCircle(node.Position.X, node.Position.Y, radius,
-                    fill: color, stroke: strokeColor, strokeWidth: 2);
+                builder.AddCircle(
+                    node.Position.X,
+                    node.Position.Y,
+                    radius,
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 2);
                 break;
 
             case MindmapShape.Square:
-                builder.AddRect(x, y, node.Width, node.Height,
-                    fill: color, stroke: strokeColor, strokeWidth: 2);
+                builder.AddRect(
+                    x,
+                    y,
+                    node.Width,
+                    node.Height,
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 2);
                 break;
 
             case MindmapShape.Hexagon:
-                DrawHexagon(builder, node.Position.X, node.Position.Y, node.Width, node.Height,
-                    color, strokeColor);
+                DrawHexagon(
+                    builder,
+                    node.Position.X,
+                    node.Position.Y,
+                    node.Width,
+                    node.Height,
+                    color,
+                    strokeColor);
                 break;
 
             case MindmapShape.Cloud:
             case MindmapShape.Bang:
                 // Simplified: draw as rounded rect with extra styling
-                builder.AddRect(x, y, node.Width, node.Height,
+                builder.AddRect(
+                    x,
+                    y,
+                    node.Width,
+                    node.Height,
                     rx: node.Height / 2,
-                    fill: color, stroke: strokeColor, strokeWidth: 3);
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 3);
                 break;
 
             case MindmapShape.Rounded:
             case MindmapShape.Default:
             default:
-                builder.AddRect(x, y, node.Width, node.Height,
+                builder.AddRect(
+                    x,
+                    y,
+                    node.Width,
+                    node.Height,
                     rx: 8,
-                    fill: color, stroke: strokeColor, strokeWidth: 2);
+                    fill: color,
+                    stroke: strokeColor,
+                    strokeWidth: 2);
                 break;
         }
 
         // Draw text
-        builder.AddText(node.Position.X, node.Position.Y, node.Text,
+        builder.AddText(
+            node.Position.X,
+            node.Position.Y,
+            node.Text,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: node.Level == 0 ? "bold" : "normal");
 
@@ -225,9 +264,14 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             (cx - hw, cy)
         };
 
-        var path = $"M {Fmt(points[0].Item1)} {Fmt(points[0].Item2)} " +
-                   string.Join(" ", points.Skip(1).Select(_ => $"L {Fmt(_.Item1)} {Fmt(_.Item2)}")) +
-                   " Z";
+        var pathBuilder = new StringBuilder();
+        pathBuilder.Append(CultureInfo.InvariantCulture, $"M {points[0].Item1:0.##} {points[0].Item2:0.##}");
+        for (var i = 1; i < points.Length; i++)
+        {
+            pathBuilder.Append(CultureInfo.InvariantCulture, $" L {points[i].Item1:0.##} {points[i].Item2:0.##}");
+        }
+        pathBuilder.Append(" Z");
+        var path = pathBuilder.ToString();
 
         builder.AddPath(path, fill: fill, stroke: stroke, strokeWidth: 2);
     }
@@ -255,5 +299,4 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.55;
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

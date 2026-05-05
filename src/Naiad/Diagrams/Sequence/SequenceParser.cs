@@ -1,24 +1,22 @@
-namespace MermaidSharp.Diagrams.Sequence;
+using NotePosition = Naiad.Diagrams.Sequence.NotePosition;
 
-public class SequenceParser : IDiagramParser<SequenceModel>
+class SequenceParser : IDiagramParser<SequenceModel>
 {
-    public DiagramType DiagramType => DiagramType.Sequence;
-
     // Sequence diagram identifier (no dash to avoid conflicts with arrows)
-    static Parser<char, string> SeqIdentifier =
+    static Parser<char, string> seqIdentifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_')
             .AtLeastOnceString()
             .Labelled("identifier");
 
     // Participant declaration: participant/actor Name as Alias
-    static Parser<char, Participant> ParticipantParser =
+    static Parser<char, Participant> participantParser =
         from _ in CommonParsers.InlineWhitespace
         from type in OneOf(
             Try(String("actor")).ThenReturn(ParticipantType.Actor),
             String("participant").ThenReturn(ParticipantType.Participant)
         )
         from __ in CommonParsers.RequiredWhitespace
-        from id in SeqIdentifier
+        from id in seqIdentifier
         from alias in Try(
             CommonParsers.RequiredWhitespace
                 .Then(String("as"))
@@ -34,7 +32,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Message arrows
-    static Parser<char, MessageType> MessageArrowParser =
+    static Parser<char, MessageType> messageArrowParser =
         OneOf(
             Try(String("-->>")).ThenReturn(MessageType.DottedArrow),
             Try(String("->>")).ThenReturn(MessageType.SolidArrow),
@@ -47,15 +45,15 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         );
 
     // Message: From->>To: Text
-    static Parser<char, Message> MessageParser =
+    static Parser<char, Message> messageParser =
         from _ in CommonParsers.InlineWhitespace
-        from fromId in SeqIdentifier
+        from fromId in seqIdentifier
         from __ in CommonParsers.InlineWhitespace
-        from arrow in MessageArrowParser
+        from arrow in messageArrowParser
         from activate in Char('+').Optional()
         from deactivate in Char('-').Optional()
         from ___ in CommonParsers.InlineWhitespace
-        from toId in SeqIdentifier
+        from toId in seqIdentifier
         from ____ in CommonParsers.InlineWhitespace
         from text in Try(
             Char(':')
@@ -74,7 +72,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         };
 
     // Note: Note right of/left of/over Participant: Text
-    static Parser<char, Note> NoteParser =
+    static Parser<char, Note> noteParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("Note")).Or(String("note"))
         from __ in CommonParsers.RequiredWhitespace
@@ -84,11 +82,11 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             String("over").ThenReturn(NotePosition.Over)
         )
         from ___ in CommonParsers.RequiredWhitespace
-        from participantId in SeqIdentifier
+        from participantId in seqIdentifier
         from participant2 in Try(
             Char(',')
                 .Then(CommonParsers.InlineWhitespace)
-                .Then(SeqIdentifier)
+                .Then(seqIdentifier)
         ).Optional()
         from ____ in CommonParsers.InlineWhitespace
         from colon in Char(':')
@@ -103,15 +101,14 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             OverParticipantId2 = participant2.HasValue ? participant2.Value : null
         };
 
-    // Activate/Deactivate
-    static Parser<char, Activation> ActivationParser =
+    static Parser<char, Activation> activationParser =
         from _ in CommonParsers.InlineWhitespace
         from isActivate in OneOf(
             String("activate").ThenReturn(true),
             String("deactivate").ThenReturn(false)
         )
         from __ in CommonParsers.RequiredWhitespace
-        from participantId in SeqIdentifier
+        from participantId in seqIdentifier
         from ___ in CommonParsers.LineEnd
         select new Activation
         {
@@ -119,15 +116,13 @@ public class SequenceParser : IDiagramParser<SequenceModel>
             IsActivate = isActivate
         };
 
-    // AutoNumber
-    static Parser<char, bool> AutoNumberParser =
+    static Parser<char, bool> autoNumberParser =
         CommonParsers.InlineWhitespace
             .Then(String("autonumber"))
             .Then(CommonParsers.LineEnd)
             .ThenReturn(true);
 
-    // Title
-    static Parser<char, string> TitleParser =
+    static Parser<char, string> titleParser =
         CommonParsers.InlineWhitespace
             .Then(String("title"))
             .Then(CommonParsers.InlineWhitespace)
@@ -136,7 +131,7 @@ public class SequenceParser : IDiagramParser<SequenceModel>
 
     // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
     // These are skipped for now - content renders without visual grouping
-    static Parser<char, Unit> BlockStartParser =
+    static Parser<char, Unit> blockStartParser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in OneOf(
             Try(String("alt")),
@@ -154,10 +149,9 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from ___ in CommonParsers.LineEnd
         select Unit.Value;
 
-    // Skip line
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         OneOf(
-            Try(BlockStartParser),
+            Try(blockStartParser),
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
         );
 
@@ -169,22 +163,22 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    static Parser<char, List<object>> ParseContent()
+    public static Parser<char, IEnumerable<ISequenceContent?>> ParseContent()
     {
         var element = OneOf(
-            Try(ParticipantParser.Select(_ => (object)_)),
-            Try(MessageParser.Select(_ => (object)_)),
-            Try(NoteParser.Select(_ => (object)_)),
-            Try(ActivationParser.Select(_ => (object)_)),
-            Try(AutoNumberParser.Select(_ => (object)_)),
-            Try(TitleParser.Select(_ => (object)("title:" + _))),
-            SkipLine.ThenReturn((object)Unit.Value)
+            Try(participantParser.Select<ISequenceContent?>(_ => new ParticipantItem(_))),
+            Try(messageParser.Select<ISequenceContent?>(_ => new MessageItem(_))),
+            Try(noteParser.Select<ISequenceContent?>(_ => new NoteItem(_))),
+            Try(activationParser.Select<ISequenceContent?>(_ => new ActivationItem(_))),
+            Try(autoNumberParser.Select<ISequenceContent?>(_ => new AutoNumberItem(_))),
+            Try(titleParser.Select<ISequenceContent?>(_ => new TitleItem(_))),
+            skipLine.ThenReturn<ISequenceContent?>(null)
         );
 
-        return element.Many().Select(_ => _.Where(_ => _ is not Unit).ToList());
+        return element.Many();
     }
 
-    static SequenceModel BuildModel(List<object> content)
+    static SequenceModel BuildModel(IEnumerable<ISequenceContent?> content)
     {
         var model = new SequenceModel();
         var participantIds = new HashSet<string>();
@@ -193,40 +187,50 @@ public class SequenceParser : IDiagramParser<SequenceModel>
         {
             switch (item)
             {
-                case Participant p:
+                case ParticipantItem participant:
+                    var p = participant.Value;
                     model.Participants.Add(p);
                     participantIds.Add(p.Id);
                     break;
 
-                case Message m:
+                case MessageItem message:
+                    var m = message.Value;
                     // Auto-add participants from messages
                     if (!participantIds.Contains(m.FromId))
                     {
-                        model.Participants.Add(new() { Id = m.FromId });
+                        model.Participants.Add(
+                            new()
+                            {
+                                Id = m.FromId
+                            });
                         participantIds.Add(m.FromId);
                     }
                     if (!participantIds.Contains(m.ToId))
                     {
-                        model.Participants.Add(new() { Id = m.ToId });
+                        model.Participants.Add(
+                            new()
+                            {
+                                Id = m.ToId
+                            });
                         participantIds.Add(m.ToId);
                     }
                     model.Elements.Add(m);
                     break;
 
-                case Note n:
-                    model.Elements.Add(n);
+                case NoteItem note:
+                    model.Elements.Add(note.Value);
                     break;
 
-                case Activation a:
-                    model.Elements.Add(a);
+                case ActivationItem activation:
+                    model.Elements.Add(activation.Value);
                     break;
 
-                case bool autoNumber:
-                    model.AutoNumber = autoNumber;
+                case AutoNumberItem autoNumber:
+                    model.AutoNumber = autoNumber.Value;
                     break;
 
-                case string s when s.StartsWith("title:"):
-                    model.Title = s[6..];
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
             }
         }
@@ -235,4 +239,12 @@ public class SequenceParser : IDiagramParser<SequenceModel>
     }
 
     public Result<char, SequenceModel> Parse(string input) => Parser.Parse(input);
+
+    internal interface ISequenceContent;
+    readonly record struct ParticipantItem(Participant Value) : ISequenceContent;
+    readonly record struct MessageItem(Message Value) : ISequenceContent;
+    readonly record struct NoteItem(Note Value) : ISequenceContent;
+    readonly record struct ActivationItem(Activation Value) : ISequenceContent;
+    readonly record struct AutoNumberItem(bool Value) : ISequenceContent;
+    readonly record struct TitleItem(string Value) : ISequenceContent;
 }

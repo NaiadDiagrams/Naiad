@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp;
+﻿namespace Naiad;
 
 public enum DiagramType
 {

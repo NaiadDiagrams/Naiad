@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Radar;
+namespace Naiad.Diagrams.Radar;
 
 public class RadarRenderer : IDiagramRenderer<RadarModel>
 {
@@ -20,18 +20,24 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         if (model.Axes.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
-            emptyBuilder.AddText(100, 50, "Empty diagram", anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize}px", fontFamily: options.FontFamily);
+            emptyBuilder.AddText(
+                100,
+                50,
+                "Empty diagram",
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
             return emptyBuilder.Build();
         }
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var legendOffset = model is {ShowLegend: true, Curves.Count: > 0} ? LegendHeight * model.Curves.Count : 0;
 
-        var contentWidth = (ChartRadius + LabelOffsetX) * 2;
+        const double contentWidth = (ChartRadius + LabelOffsetX) * 2;
         var contentHeight = (ChartRadius + LabelOffsetY) * 2 + titleOffset + legendOffset;
 
-        var centerX = ChartRadius + LabelOffsetX;
+        const double centerX = ChartRadius + LabelOffsetX;
         var centerY = ChartRadius + LabelOffsetY + titleOffset;
 
         var builder = new SvgBuilder()
@@ -41,9 +47,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
-            builder.AddText(contentWidth / 2, TitleHeight / 2, model.Title,
-                anchor: "middle", baseline: "middle",
-                fontSize: $"{options.FontSize + 4}px", fontFamily: options.FontFamily,
+            builder.AddText(
+                contentWidth / 2,
+                TitleHeight / 2,
+                model.Title,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize + 4,
+                fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
 
@@ -60,8 +71,15 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         // Draw curves
         for (var i = 0; i < model.Curves.Count; i++)
         {
-            DrawCurve(builder, centerX, centerY, model.Curves[i], model.Axes.Count,
-                minValue, maxValue, CurveColors[i % CurveColors.Length]);
+            DrawCurve(
+                builder,
+                centerX,
+                centerY,
+                model.Curves[i],
+                model.Axes.Count,
+                minValue,
+                maxValue,
+                CurveColors[i % CurveColors.Length]);
         }
 
         // Draw legend
@@ -92,16 +110,23 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             else
             {
                 // Polygon using path
-                var pathData = new List<string>();
+                var pathBuilder = new StringBuilder();
                 for (var j = 0; j < axisCount; j++)
                 {
                     var angle = 2 * Math.PI * j / axisCount - Math.PI / 2;
                     var x = cx + radius * Math.Cos(angle);
                     var y = cy + radius * Math.Sin(angle);
-                    pathData.Add(j == 0 ? $"M {Fmt(x)} {Fmt(y)}" : $"L {Fmt(x)} {Fmt(y)}");
+                    if (j == 0)
+                    {
+                        pathBuilder.Append(CultureInfo.InvariantCulture, $"M {x:0.##} {y:0.##}");
+                    }
+                    else
+                    {
+                        pathBuilder.Append(CultureInfo.InvariantCulture, $" L {x:0.##} {y:0.##}");
+                    }
                 }
-                pathData.Add("Z");
-                builder.AddPath(string.Join(" ", pathData), fill: "none", stroke: "#E0E0E0", strokeWidth: 1);
+                pathBuilder.Append(" Z");
+                builder.AddPath(pathBuilder.ToString(), fill: "none", stroke: "#E0E0E0", strokeWidth: 1);
             }
         }
     }
@@ -123,9 +148,14 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             var anchor = Math.Abs(Math.Cos(angle)) < 0.1 ? "middle" :
                          Math.Cos(angle) > 0 ? "start" : "end";
 
-            builder.AddText(labelX, labelY, axes[i].Label ?? axes[i].Id,
-                anchor: anchor, baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily);
+            builder.AddText(
+                labelX,
+                labelY,
+                axes[i].Label ?? axes[i].Id,
+                anchor: anchor,
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily);
         }
     }
 
@@ -144,7 +174,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             return;
         }
 
-        var pathData = new List<string>();
+        var pathBuilder = new StringBuilder();
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
         {
             var value = curve.Values[i];
@@ -154,15 +184,25 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             var angle = 2 * Math.PI * i / axisCount - Math.PI / 2;
             var x = cx + radius * Math.Cos(angle);
             var y = cy + radius * Math.Sin(angle);
-            pathData.Add(i == 0 ? $"M {Fmt(x)} {Fmt(y)}" : $"L {Fmt(x)} {Fmt(y)}");
+            if (i == 0)
+            {
+                pathBuilder.Append(CultureInfo.InvariantCulture, $"M {x:0.##} {y:0.##}");
+            }
+            else
+            {
+                pathBuilder.Append(CultureInfo.InvariantCulture, $" L {x:0.##} {y:0.##}");
+            }
         }
-        pathData.Add("Z");
+        pathBuilder.Append(" Z");
 
         // Draw filled polygon using path
         // Convert color to semi-transparent by using rgba
         var fillColor = ColorToRgba(color, 0.3);
-        builder.AddPath(string.Join(" ", pathData),
-            fill: fillColor, stroke: color, strokeWidth: 2);
+        builder.AddPath(
+            pathBuilder.ToString(),
+            fill: fillColor,
+            stroke: color,
+            strokeWidth: 2);
 
         // Draw points
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
@@ -187,13 +227,16 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             var color = CurveColors[i % CurveColors.Length];
 
             builder.AddRect(x, legendY, 16, 12, fill: color);
-            builder.AddText(x + 24, legendY + 6, curves[i].Label ?? curves[i].Id,
-                anchor: "start", baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px", fontFamily: options.FontFamily);
+            builder.AddText(
+                x + 24,
+                legendY + 6,
+                curves[i].Label ?? curves[i].Id,
+                anchor: "start",
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily);
         }
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 
     static string ColorToRgba(string hexColor, double alpha)
     {

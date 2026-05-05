@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.Gantt;
+﻿namespace Naiad.Diagrams.Gantt;
 
 public class GanttSection
 {

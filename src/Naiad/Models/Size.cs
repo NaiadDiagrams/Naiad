@@ -1,6 +1,3 @@
-﻿namespace MermaidSharp.Models;
+namespace Naiad.Models;
 
-public readonly record struct Size(double Width, double Height)
-{
-    public static Size Zero => new(0, 0);
-}
+public readonly record struct Size(double Width, double Height);

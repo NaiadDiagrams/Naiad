@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Pie;
+namespace Naiad.Diagrams.Pie;
 
 public class PieRenderer : IDiagramRenderer<PieModel>
 {
@@ -42,9 +42,9 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Match mermaid.ink exact dimensions - width varies based on legend text
         var width = model.ShowData ? 613.140625 : 551.6875;
-        var height = 450.0;
-        var cx = 225.0;
-        var cy = 225.0;
+        const double height = 450.0;
+        const double cx = 225.0;
+        const double cy = 225.0;
 
         var builder = new SvgBuilder()
             .Size(width, height)
@@ -56,7 +56,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         builder.EndGroup();
 
         // Main pie group with transform to center
-        builder.BeginGroup(transform: $"translate({Fmt(cx)},{Fmt(cy)})");
+        builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({cx:0.##},{cy:0.##})"));
 
         // Outer circle
         builder.AddCircle(0, 0, OuterRadius, cssClass: "pieOuterCircle");
@@ -77,19 +77,21 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
         // Add percentage labels with mermaid.ink exact positions
         startAngle = 0;
-        for (var i = 0; i < model.Sections.Count; i++)
+        foreach (var section in model.Sections)
         {
-            var section = model.Sections[i];
             var sweepAngle = section.Value / total * 360;
             var percentage = (int)Math.Round(section.Value / total * 100);
 
             // Mermaid uses a label radius factor of 0.75 (138.75 / 185)
             var midAngle = startAngle + sweepAngle / 2;
-            var labelDist = Radius * 0.75; // Exact mermaid factor
+            const double labelDist = Radius * 0.75; // Exact mermaid factor
             var labelX = labelDist * Math.Sin(ToRadians(midAngle));
             var labelY = -labelDist * Math.Cos(ToRadians(midAngle));
 
-            builder.AddText(0, 0, $"{percentage}%",
+            builder.AddText(
+                0,
+                0,
+                $"{percentage}%",
                 cssClass: "slice",
                 style: "text-anchor: middle;",
                 transform: $"translate({FmtMermaid(labelX)},{FmtMermaid(labelY)})",
@@ -138,7 +140,9 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         if (Math.Abs(y2) < 1e-10) y2 = 0;
 
         // Match mermaid's precision (2-3 decimal places)
-        return $"M{FmtPath(x1)},{FmtPath(y1)}A{Radius},{Radius},0,{largeArc},1,{FmtPath(x2)},{FmtPath(y2)}L0,0Z";
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"M{Math.Round(x1, 3):0.###},{Math.Round(y1, 3):0.###}A{Radius},{Radius},0,{largeArc},1,{Math.Round(x2, 3):0.###},{Math.Round(y2, 3):0.###}L0,0Z");
     }
 
     static string GetRgbColor(string? color, int index)
@@ -163,8 +167,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
     }
 
     static double ToRadians(double degrees) => degrees * Math.PI / 180;
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
-    static string FmtPath(double value) => Math.Round(value, 3).ToString("0.###", CultureInfo.InvariantCulture);
+
     // Use R format to get full precision, then remove unnecessary trailing zeros
     static string FmtMermaid(double value)
     {

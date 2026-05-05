@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.Sequence;
+namespace Naiad.Diagrams.Sequence;
 
 public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 {
@@ -19,18 +19,21 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         var builder = new SvgBuilder()
             .Size(width, height)
-            .AddArrowMarker("arrowhead", "#333")
-            .AddArrowMarker("arrowhead-dotted", "#333")
-            .AddCrossMarker("cross", "#333");
+            .AddArrowMarker()
+            .AddArrowMarker("arrowhead-dotted")
+            .AddCrossMarker();
 
         // Add title if present
         var titleOffset = 0.0;
         if (!string.IsNullOrEmpty(model.Title))
         {
             titleOffset = 30;
-            builder.AddText(width / 2, 20, model.Title,
+            builder.AddText(
+                width / 2,
+                20,
+                model.Title,
                 anchor: "middle",
-                fontSize: "16px",
+                fontSize: 16,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
@@ -126,19 +129,22 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         string text, RenderOptions options)
     {
         builder.AddRect(
-            cx - ParticipantWidth / 2, y,
-            ParticipantWidth, ParticipantHeight,
+            cx - ParticipantWidth / 2,
+            y,
+            ParticipantWidth,
+            ParticipantHeight,
             rx: 3,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
 
         builder.AddText(
-            cx, y + ParticipantHeight / 2,
+            cx,
+            y + ParticipantHeight / 2,
             text,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
 
@@ -153,36 +159,56 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var legBottom = y + ParticipantHeight;
 
         // Head
-        builder.AddCircle(cx, headY, ActorHeadRadius,
+        builder.AddCircle(
+            cx,
+            headY,
+            ActorHeadRadius,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Body
-        builder.AddLine(cx, bodyTop, cx, bodyBottom,
+        builder.AddLine(
+            cx,
+            bodyTop,
+            cx,
+            bodyBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Arms
-        builder.AddLine(cx - 15, armY, cx + 15, armY,
+        builder.AddLine(
+            cx - 15,
+            armY,
+            cx + 15,
+            armY,
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Legs
-        builder.AddLine(cx, bodyBottom, cx - 10, legBottom,
+        builder.AddLine(
+            cx,
+            bodyBottom,
+            cx - 10,
+            legBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
-        builder.AddLine(cx, bodyBottom, cx + 10, legBottom,
+        builder.AddLine(
+            cx,
+            bodyBottom,
+            cx + 10,
+            legBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
 
         // Label below
         builder.AddText(
-            cx, y + ParticipantHeight + 15,
+            cx,
+            y + ParticipantHeight + 15,
             text,
             anchor: "middle",
             baseline: "top",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
 
@@ -192,7 +218,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         foreach (var participant in model.Participants)
         {
             var x = positions[participant.Id];
-            builder.AddLine(x, startY, x, endY,
+            builder.AddLine(
+                x,
+                startY,
+                x,
+                endY,
                 stroke: "#999",
                 strokeWidth: 1,
                 strokeDasharray: "5,5");
@@ -217,7 +247,12 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             {
                 case Message msg:
                     messageNumber++;
-                    DrawMessage(builder, msg, positions, y, options,
+                    DrawMessage(
+                        builder,
+                        msg,
+                        positions,
+                        y,
+                        options,
                         model.AutoNumber ? messageNumber : null);
 
                     // Handle activation on message
@@ -295,13 +330,13 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         if (isSelfMessage)
         {
             // Self-referencing message - draw as a loop
-            var loopWidth = 40;
-            var loopHeight = 30;
-            var path = $"M{Fmt(fromX)},{Fmt(y)} " +
-                       $"L{Fmt(fromX + loopWidth)},{Fmt(y)} " +
-                       $"L{Fmt(fromX + loopWidth)},{Fmt(y + loopHeight)} " +
-                       $"L{Fmt(fromX)},{Fmt(y + loopHeight)}";
-            builder.AddPath(path,
+            const int loopWidth = 40;
+            const int loopHeight = 30;
+            var path = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M{fromX:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y + loopHeight:0.##} L{fromX:0.##},{y + loopHeight:0.##}");
+            builder.AddPath(
+                path,
                 fill: "none",
                 stroke: "#333",
                 strokeWidth: 1,
@@ -312,16 +347,23 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             if (!string.IsNullOrEmpty(msg.Text))
             {
                 var labelText = number.HasValue ? $"{number}. {msg.Text}" : msg.Text;
-                builder.AddText(fromX + loopWidth + 5, y + loopHeight / 2, labelText,
+                builder.AddText(
+                    fromX + loopWidth + 5,
+                    y + loopHeight / 2,
+                    labelText,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
             }
         }
         else
         {
-            builder.AddLine(fromX, y, toX, y,
+            builder.AddLine(
+                fromX,
+                y,
+                toX,
+                y,
                 stroke: "#333",
                 strokeWidth: 1,
                 strokeDasharray: dashArray);
@@ -339,10 +381,13 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         : msg.Text!;
 
                 var midX = (fromX + toX) / 2;
-                builder.AddText(midX, y - 8, labelText,
+                builder.AddText(
+                    midX,
+                    y - 8,
+                    labelText,
                     anchor: "middle",
                     baseline: "bottom",
-                    fontSize: $"{options.FontSize}px",
+                    fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
             }
         }
@@ -351,7 +396,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     static void DrawArrowhead(SvgBuilder builder, double fromX, double toX, double y, MessageType type)
     {
         var direction = Math.Sign(toX - fromX);
-        var arrowSize = 8;
+        const int arrowSize = 8;
 
         switch (type)
         {
@@ -362,10 +407,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             case MessageType.SolidAsync:
             case MessageType.DottedAsync:
                 // Filled arrowhead
-                var tipX = toX;
                 var backX = toX - direction * arrowSize;
                 builder.AddPolygon([
-                    new(tipX, y),
+                    new(toX, y),
                     new(backX, y - arrowSize / 2),
                     new(backX, y + arrowSize / 2)
                 ], fill: "#333");
@@ -374,19 +418,39 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             case MessageType.SolidOpen:
             case MessageType.DottedOpen:
                 // Open arrowhead (just lines)
-                builder.AddLine(toX - direction * arrowSize, y - arrowSize / 2, toX, y,
-                    stroke: "#333", strokeWidth: 1);
-                builder.AddLine(toX - direction * arrowSize, y + arrowSize / 2, toX, y,
-                    stroke: "#333", strokeWidth: 1);
+                builder.AddLine(
+                    toX - direction * arrowSize,
+                    y - arrowSize / 2,
+                    toX,
+                    y,
+                    stroke: "#333",
+                    strokeWidth: 1);
+                builder.AddLine(
+                    toX - direction * arrowSize,
+                    y + arrowSize / 2,
+                    toX,
+                    y,
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case MessageType.SolidCross:
             case MessageType.DottedCross:
                 // X mark
-                builder.AddLine(toX - arrowSize / 2, y - arrowSize / 2, toX + arrowSize / 2, y + arrowSize / 2,
-                    stroke: "#333", strokeWidth: 2);
-                builder.AddLine(toX - arrowSize / 2, y + arrowSize / 2, toX + arrowSize / 2, y - arrowSize / 2,
-                    stroke: "#333", strokeWidth: 2);
+                builder.AddLine(
+                    toX - arrowSize / 2,
+                    y - arrowSize / 2,
+                    toX + arrowSize / 2,
+                    y + arrowSize / 2,
+                    stroke: "#333",
+                    strokeWidth: 2);
+                builder.AddLine(
+                    toX - arrowSize / 2,
+                    y + arrowSize / 2,
+                    toX + arrowSize / 2,
+                    y - arrowSize / 2,
+                    stroke: "#333",
+                    strokeWidth: 2);
                 break;
         }
     }
@@ -421,32 +485,42 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
 
         // Note box (folded corner style)
-        var foldSize = 8;
-        var path = $"M{Fmt(noteX)},{Fmt(y)} " +
-                   $"L{Fmt(noteX + NoteWidth - foldSize)},{Fmt(y)} " +
-                   $"L{Fmt(noteX + NoteWidth)},{Fmt(y + foldSize)} " +
-                   $"L{Fmt(noteX + NoteWidth)},{Fmt(y + NoteHeight)} " +
-                   $"L{Fmt(noteX)},{Fmt(y + NoteHeight)} Z";
+        const int foldSize = 8;
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"M{noteX:0.##},{y:0.##} L{noteX + NoteWidth - foldSize:0.##},{y:0.##} L{noteX + NoteWidth:0.##},{y + foldSize:0.##} L{noteX + NoteWidth:0.##},{y + NoteHeight:0.##} L{noteX:0.##},{y + NoteHeight:0.##} Z");
 
         builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
         // Fold line
-        builder.AddLine(noteX + NoteWidth - foldSize, y,
-            noteX + NoteWidth - foldSize, y + foldSize,
-            stroke: "#AAAA33", strokeWidth: 1);
-        builder.AddLine(noteX + NoteWidth - foldSize, y + foldSize,
-            noteX + NoteWidth, y + foldSize,
-            stroke: "#AAAA33", strokeWidth: 1);
+        builder.AddLine(
+            noteX + NoteWidth - foldSize,
+            y,
+            noteX + NoteWidth - foldSize,
+            y + foldSize,
+            stroke: "#AAAA33",
+            strokeWidth: 1);
+        builder.AddLine(
+            noteX + NoteWidth - foldSize,
+            y + foldSize,
+            noteX + NoteWidth,
+            y + foldSize,
+            stroke: "#AAAA33",
+            strokeWidth: 1);
 
         // Note text
-        builder.AddText(noteX + NoteWidth / 2, y + NoteHeight / 2, note.Text,
+        builder.AddText(
+            noteX + NoteWidth / 2,
+            y + NoteHeight / 2,
+            note.Text,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
 
-    static void DrawActivations(SvgBuilder builder,
+    static void DrawActivations(
+        SvgBuilder builder,
         Dictionary<string, List<(double startY, double endY)>> activations,
         Dictionary<string, double> positions)
     {
@@ -456,8 +530,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             foreach (var (startY, endY) in ranges)
             {
                 builder.AddRect(
-                    x - ActivationWidth / 2, startY,
-                    ActivationWidth, endY - startY,
+                    x - ActivationWidth / 2,
+                    startY,
+                    ActivationWidth,
+                    endY - startY,
                     fill: "#F4F4F4",
                     stroke: "#666",
                     strokeWidth: 1);
@@ -465,5 +541,4 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }

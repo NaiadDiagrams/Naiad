@@ -1,12 +1,14 @@
-namespace MermaidSharp.Layout;
-
-public class DagreLayoutEngine : ILayoutEngine
+class DagreLayoutEngine : ILayoutEngine
 {
     public LayoutResult Layout(GraphDiagramBase diagram, LayoutOptions options)
     {
         if (diagram.Nodes.Count == 0)
         {
-            return new() { Width = 0, Height = 0 };
+            return new()
+            {
+                Width = 0,
+                Height = 0
+            };
         }
 
         // Build internal graph
@@ -34,8 +36,22 @@ public class DagreLayoutEngine : ILayoutEngine
         ApplyLayout(graph, diagram, options);
 
         // Calculate bounds (don't add margin again - positions already include it)
-        var width = diagram.Nodes.Max(_ => _.Position.X + _.Width / 2);
-        var height = diagram.Nodes.Max(_ => _.Position.Y + _.Height / 2);
+        var width = 0.0;
+        var height = 0.0;
+        foreach (var node in diagram.Nodes)
+        {
+            var w = node.Position.X + node.Width / 2;
+            var h = node.Position.Y + node.Height / 2;
+            if (w > width)
+            {
+                width = w;
+            }
+
+            if (h > height)
+            {
+                height = h;
+            }
+        }
 
         return new()
         {
@@ -50,21 +66,23 @@ public class DagreLayoutEngine : ILayoutEngine
 
         foreach (var node in diagram.Nodes)
         {
-            graph.AddNode(new()
-            {
-                Id = node.Id,
-                Width = node.Width,
-                Height = node.Height
-            });
+            graph.AddNode(
+                new()
+                {
+                    Id = node.Id,
+                    Width = node.Width,
+                    Height = node.Height
+                });
         }
 
         foreach (var edge in diagram.Edges)
         {
-            graph.AddEdge(new()
-            {
-                SourceId = edge.SourceId,
-                TargetId = edge.TargetId
-            });
+            graph.AddEdge(
+                new()
+                {
+                    SourceId = edge.SourceId,
+                    TargetId = edge.TargetId
+                });
         }
 
         return graph;
@@ -76,12 +94,12 @@ public class DagreLayoutEngine : ILayoutEngine
         foreach (var node in diagram.Nodes)
         {
             var layoutNode = graph.GetNode(node.Id);
-            if (layoutNode is not null)
+            if (layoutNode is null)
             {
-                node.Position = new(layoutNode.X, layoutNode.Y);
-                node.Rank = layoutNode.Rank;
-                node.Order = layoutNode.Order;
+                continue;
             }
+
+            node.Position = new(layoutNode.X, layoutNode.Y);
         }
 
         // Build edge lookup for O(1) access instead of O(n) FirstOrDefault per edge
@@ -91,12 +109,19 @@ public class DagreLayoutEngine : ILayoutEngine
             edgeLookup.TryAdd((le.SourceId, le.TargetId), le);
         }
 
+        Dictionary<(string, string), List<LayoutNode>>? dummyLookup = null;
+
         foreach (var edge in diagram.Edges)
         {
-            // Find the original edge or reconstruct from dummies
             edgeLookup.TryGetValue((edge.SourceId, edge.TargetId), out var layoutEdge);
 
-            if (layoutEdge is not null)
+            if (layoutEdge is null)
+            {
+                // Edge was split by dummy nodes - collect points
+                dummyLookup ??= BuildDummyLookup(graph);
+                CollectEdgePoints(graph, edge, options, dummyLookup);
+            }
+            else
             {
                 edge.Points.Clear();
                 foreach (var point in layoutEdge.Points)
@@ -104,15 +129,42 @@ public class DagreLayoutEngine : ILayoutEngine
                     edge.Points.Add(new(point.X, point.Y));
                 }
             }
-            else
-            {
-                // Edge was split by dummy nodes - collect points
-                CollectEdgePoints(graph, edge, options);
-            }
         }
     }
 
-    static void CollectEdgePoints(LayoutGraph graph, Edge edge, LayoutOptions options)
+    static Dictionary<(string, string), List<LayoutNode>> BuildDummyLookup(LayoutGraph graph)
+    {
+        var lookup = new Dictionary<(string, string), List<LayoutNode>>();
+        foreach (var node in graph.Nodes.Values)
+        {
+            if (!node.IsDummy)
+            {
+                continue;
+            }
+
+            var key = (node.OriginalEdgeSource ?? "", node.OriginalEdgeTarget ?? "");
+            if (!lookup.TryGetValue(key, out var list))
+            {
+                list = [];
+                lookup[key] = list;
+            }
+
+            list.Add(node);
+        }
+
+        foreach (var list in lookup.Values)
+        {
+            list.Sort((a, b) => a.Rank.CompareTo(b.Rank));
+        }
+
+        return lookup;
+    }
+
+    static void CollectEdgePoints(
+        LayoutGraph graph,
+        Edge edge,
+        LayoutOptions options,
+        Dictionary<(string, string), List<LayoutNode>> dummyLookup)
     {
         edge.Points.Clear();
 
@@ -132,17 +184,12 @@ public class DagreLayoutEngine : ILayoutEngine
         var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
         edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
 
-        // Find dummy nodes
-        var dummies = graph.Nodes.Values
-            .Where(_ => _.IsDummy &&
-                        _.OriginalEdgeSource == edge.SourceId &&
-                        _.OriginalEdgeTarget == edge.TargetId)
-            .OrderBy(_ => _.Rank)
-            .ToList();
-
-        foreach (var dummy in dummies)
+        if (dummyLookup.TryGetValue((edge.SourceId, edge.TargetId), out var dummies))
         {
-            edge.Points.Add(new(dummy.X, dummy.Y));
+            foreach (var dummy in dummies)
+            {
+                edge.Points.Add(new(dummy.X, dummy.Y));
+            }
         }
 
         var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;

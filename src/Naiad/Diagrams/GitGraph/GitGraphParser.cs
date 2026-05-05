@@ -1,22 +1,17 @@
-namespace MermaidSharp.Diagrams.GitGraph;
-
-public class GitGraphParser : IDiagramParser<GitGraphModel>
+class GitGraphParser : IDiagramParser<GitGraphModel>
 {
-    public DiagramType DiagramType => DiagramType.GitGraph;
-
     // Identifiers
-    static Parser<char, string> BranchName =
+    static Parser<char, string> branchName =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-' || _ == '/')
             .AtLeastOnceString()
             .Labelled("branch name");
 
-    static Parser<char, string> CommitId =
+    static Parser<char, string> commitId =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
             .AtLeastOnceString()
             .Labelled("commit id");
 
-    // Commit type
-    static Parser<char, CommitType> CommitTypeParser =
+    static Parser<char, CommitType> commitTypeParser =
         OneOf(
             Try(CIString("REVERSE")).ThenReturn(CommitType.Reverse),
             Try(CIString("HIGHLIGHT")).ThenReturn(CommitType.Highlight),
@@ -24,15 +19,15 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         );
 
     // Attribute parsers
-    static Parser<char, string> IdAttribute =>
+    public static Parser<char, string> IdAttribute =>
         from _ in Try(CIString("id"))
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from id in CommonParsers.QuotedString.Or(CommitId)
+        from id in CommonParsers.QuotedString.Or(commitId)
         select id;
 
-    static Parser<char, string> MessageAttribute =>
+    public static Parser<char, string> MessageAttribute =>
         from _ in Try(CIString("msg"))
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
@@ -40,7 +35,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from msg in CommonParsers.QuotedString
         select msg;
 
-    static Parser<char, string> TagAttribute =>
+    public static Parser<char, string> TagAttribute =>
         from _ in Try(CIString("tag"))
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
@@ -48,15 +43,15 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from tag in CommonParsers.QuotedString
         select tag;
 
-    static Parser<char, CommitType> TypeAttribute =>
+    public static Parser<char, CommitType> TypeAttribute =>
         from _ in Try(CIString("type"))
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
         from ____ in CommonParsers.InlineWhitespace
-        from type in CommitTypeParser
+        from type in commitTypeParser
         select type;
 
-    static Parser<char, int> OrderAttribute =>
+    public static Parser<char, int> OrderAttribute =>
         from _ in Try(CIString("order"))
         from __ in CommonParsers.InlineWhitespace
         from ___ in Char(':')
@@ -65,7 +60,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         select order;
 
     // Commit: commit id: "abc" msg: "message" tag: "v1.0" type: NORMAL
-    static Parser<char, CommitOperation> CommitParser =
+    public static Parser<char, CommitOperation> commitParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("commit")
         from attrs in ParseCommitAttributes()
@@ -73,39 +68,39 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         from ____ in CommonParsers.LineEnd
         select CreateCommit(attrs);
 
-    static Parser<char, List<(string key, object value)>> ParseCommitAttributes()
+    public static Parser<char, IEnumerable<ICommitAttr>> ParseCommitAttributes()
     {
         var attr = OneOf(
-            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select ("id", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in MessageAttribute select ("msg", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select ("tag", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select ("type", (object)a))
+            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select (ICommitAttr)new IdAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in MessageAttribute select (ICommitAttr)new MsgAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select (ICommitAttr)new TagAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select (ICommitAttr)new TypeAttr(a))
         );
-        return attr.Many().Select(_ => _.ToList());
+        return attr.Many();
     }
 
-    static CommitOperation CreateCommit(List<(string key, object value)> attrs)
+    static CommitOperation CreateCommit(IEnumerable<ICommitAttr> attrs)
     {
         var commit = new CommitOperation();
-        foreach (var (key, value) in attrs)
+        foreach (var attr in attrs)
         {
-            switch (key)
+            switch (attr)
             {
-                case "id": commit.Id = (string)value; break;
-                case "msg": commit.Message = (string)value; break;
-                case "tag": commit.Tag = (string)value; break;
-                case "type": commit.Type = (CommitType)value; break;
+                case IdAttr id: commit.Id = id.Value; break;
+                case MsgAttr msg: commit.Message = msg.Value; break;
+                case TagAttr tag: commit.Tag = tag.Value; break;
+                case TypeAttr type: commit.Type = type.Value; break;
             }
         }
         return commit;
     }
 
     // Branch: branch develop order: 1
-    static Parser<char, BranchOperation> BranchParser =
+    static Parser<char, BranchOperation> branchParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("branch")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in BranchName
+        from name in branchName
         from order in Try(
             from ____ in CommonParsers.InlineWhitespace
             from o in OrderAttribute
@@ -120,53 +115,53 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         };
 
     // Checkout: checkout develop
-    static Parser<char, CheckoutOperation> CheckoutParser =
+    static Parser<char, CheckoutOperation> checkoutParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("checkout")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in BranchName
+        from name in branchName
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         select new CheckoutOperation { BranchName = name };
 
     // Merge: merge develop id: "merge1" tag: "v1.0" type: NORMAL
-    static Parser<char, MergeOperation> MergeParser =
+    static Parser<char, MergeOperation> mergeParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("merge")
         from ___ in CommonParsers.RequiredWhitespace
-        from name in BranchName
+        from name in branchName
         from attrs in ParseMergeAttributes()
         from ____ in CommonParsers.InlineWhitespace
         from _____ in CommonParsers.LineEnd
         select CreateMerge(name, attrs);
 
-    static Parser<char, List<(string key, object value)>> ParseMergeAttributes()
+    public static Parser<char, IEnumerable<ICommitAttr>> ParseMergeAttributes()
     {
         var attr = OneOf(
-            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select ("id", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select ("tag", (object)a)),
-            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select ("type", (object)a))
+            Try(from __ in CommonParsers.InlineWhitespace from a in IdAttribute select (ICommitAttr)new IdAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TagAttribute select (ICommitAttr)new TagAttr(a)),
+            Try(from __ in CommonParsers.InlineWhitespace from a in TypeAttribute select (ICommitAttr)new TypeAttr(a))
         );
-        return attr.Many().Select(_ => _.ToList());
+        return attr.Many();
     }
 
-    static MergeOperation CreateMerge(string name, List<(string key, object value)> attrs)
+    static MergeOperation CreateMerge(string name, IEnumerable<ICommitAttr> attrs)
     {
         var merge = new MergeOperation { BranchName = name };
-        foreach (var (key, value) in attrs)
+        foreach (var attr in attrs)
         {
-            switch (key)
+            switch (attr)
             {
-                case "id": merge.Id = (string)value; break;
-                case "tag": merge.Tag = (string)value; break;
-                case "type": merge.Type = (CommitType)value; break;
+                case IdAttr id: merge.Id = id.Value; break;
+                case TagAttr tag: merge.Tag = tag.Value; break;
+                case TypeAttr type: merge.Type = type.Value; break;
             }
         }
         return merge;
     }
 
     // Cherry-pick: cherry-pick id: "abc" tag: "v1.0"
-    static Parser<char, CherryPickOperation> CherryPickParser =
+    static Parser<char, CherryPickOperation> cherryPickParser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("cherry-pick")
         from ___ in CommonParsers.InlineWhitespace
@@ -185,20 +180,20 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Main content parser
-    static Parser<char, List<GitOperation>> ParseContent()
+    public static Parser<char, List<GitOperation>> ParseContent()
     {
         var operation = OneOf(
-            Try(CommitParser.Select(_ => (GitOperation?)_)),
-            Try(BranchParser.Select(_ => (GitOperation?)_)),
-            Try(CheckoutParser.Select(_ => (GitOperation?)_)),
-            Try(MergeParser.Select(_ => (GitOperation?)_)),
-            Try(CherryPickParser.Select(_ => (GitOperation?)_)),
-            SkipLine.ThenReturn((GitOperation?)null)
+            Try(commitParser.Select<GitOperation?>(_ => _)),
+            Try(branchParser.Select<GitOperation?>(_ => _)),
+            Try(checkoutParser.Select<GitOperation?>(_ => _)),
+            Try(mergeParser.Select<GitOperation?>(_ => _)),
+            Try(cherryPickParser.Select<GitOperation?>(_ => _)),
+            skipLine.ThenReturn<GitOperation?>(null)
         );
 
         return operation.Many()
@@ -206,7 +201,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     // Options parser (gitGraph TB: or gitGraph LR:)
-    static Parser<char, (string? direction, string? mainBranch)> OptionsParser =
+    static Parser<char, (string? direction, string? mainBranch)> optionsParser =
         from _ in CommonParsers.InlineWhitespace
         from options in Try(
             from dir in OneOf(
@@ -224,7 +219,7 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     public static Parser<char, GitGraphModel> Parser =>
         from _ in CommonParsers.InlineWhitespace
         from keyword in CIString("gitGraph")
-        from options in OptionsParser
+        from options in optionsParser
         from __ in CommonParsers.InlineWhitespace
         from ___ in CommonParsers.LineEnd
         from operations in ParseContent()
@@ -266,4 +261,10 @@ public class GitGraphParser : IDiagramParser<GitGraphModel>
     }
 
     public Result<char, GitGraphModel> Parse(string input) => Parser.Parse(input);
+
+    internal interface ICommitAttr;
+    readonly record struct IdAttr(string Value) : ICommitAttr;
+    readonly record struct MsgAttr(string Value) : ICommitAttr;
+    readonly record struct TagAttr(string Value) : ICommitAttr;
+    readonly record struct TypeAttr(CommitType Value) : ICommitAttr;
 }

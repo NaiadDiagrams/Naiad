@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Diagrams.State;
+﻿namespace Naiad.Diagrams.State;
 
 public enum NotePosition
 {

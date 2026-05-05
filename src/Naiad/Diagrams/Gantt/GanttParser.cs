@@ -1,9 +1,5 @@
-namespace MermaidSharp.Diagrams.Gantt;
-
-public class GanttParser : IDiagramParser<GanttModel>
+class GanttParser : IDiagramParser<GanttModel>
 {
-    public DiagramType DiagramType => DiagramType.Gantt;
-
     // Basic parsers
     static Parser<char, string> restOfLine =
         Token(_ => _ != '\r' &&
@@ -29,7 +25,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         select format.Trim();
 
     // Axis format: axisFormat %Y-%m-%d
-    static Parser<char, string> axisFormatParser =
+    public static Parser<char, string> axisFormatParser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from axisFormat in CIString("axisFormat")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -38,7 +34,7 @@ public class GanttParser : IDiagramParser<GanttModel>
         select format.Trim();
 
     // Excludes: excludes weekends
-    static Parser<char, List<string>> excludesParser =
+    public static Parser<char, List<string>> excludesParser =
         from whitespace in CommonParsers.InlineWhitespace
         from excludes in CIString("excludes")
         from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -54,30 +50,6 @@ public class GanttParser : IDiagramParser<GanttModel>
         from name in restOfLine
         from lineEnd in CommonParsers.LineEnd
         select name.Trim();
-
-    static (bool active, bool done, bool crit, bool milestone) ParseModifiers(List<string> parts)
-    {
-        bool active = false, done = false, crit = false, milestone = false;
-        foreach (var part in parts)
-        {
-            var lower = part.ToLowerInvariant();
-            if (lower == "active") active = true;
-            else if (lower == "done") done = true;
-            else if (lower == "crit") crit = true;
-            else if (lower == "milestone") milestone = true;
-        }
-
-        return (active, done, crit, milestone);
-    }
-
-    static TimeSpan ParseDuration(int num, char unit) =>
-        unit switch
-        {
-            'd' => TimeSpan.FromDays(num),
-            'w' => TimeSpan.FromDays(num * 7),
-            'h' => TimeSpan.FromHours(num),
-            _ => TimeSpan.FromDays(num)
-        };
 
     // Task line parser - handles multiple formats
     // Format: Task name :modifiers, id, start, duration
@@ -137,11 +109,17 @@ public class GanttParser : IDiagramParser<GanttModel>
             }
 
             // Check for duration (ends with d, w, h)
-            if (part.Length > 1 && char.IsDigit(part[0]) && char.IsLetter(part[^1]))
+            if (part.Length > 1 &&
+                char.IsDigit(part[0]) &&
+                char.IsLetter(part[^1]))
             {
-                var numStr = new string(part.TakeWhile(char.IsDigit).ToArray());
+                var digitEnd = 0;
+                while (digitEnd < part.Length && char.IsAsciiDigit(part[digitEnd]))
+                {
+                    digitEnd++;
+                }
                 var unit = part[^1];
-                if (int.TryParse(numStr, out var num))
+                if (int.TryParse(part.AsSpan(0, digitEnd), out var num))
                 {
                     task.Duration = unit switch
                     {
@@ -158,7 +136,8 @@ public class GanttParser : IDiagramParser<GanttModel>
             if (DateTime.TryParseExact(part, "yyyy-MM-dd", CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var date))
             {
-                if (task.StartDate == null && task.AfterTaskId == null)
+                if (task.StartDate == null &&
+                    task.AfterTaskId == null)
                 {
                     task.StartDate = date;
                 }
@@ -173,10 +152,7 @@ public class GanttParser : IDiagramParser<GanttModel>
             // Must be an ID (alphanumeric identifier)
             if (part.All(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-'))
             {
-                if (task.Id == null)
-                {
-                    task.Id = part;
-                }
+                task.Id ??= part;
             }
         }
 
@@ -189,15 +165,15 @@ public class GanttParser : IDiagramParser<GanttModel>
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
     // Content item
-    static Parser<char, object?> ContentItem =>
+    public static Parser<char, IGanttContent?> ContentItem =>
         OneOf(
-            Try(titleParser.Select(_ => (object?) ("title", _))),
-            Try(dateFormatParser.Select(_ => (object?) ("dateFormat", _))),
-            Try(axisFormatParser.Select(_ => (object?) ("axisFormat", _))),
-            Try(excludesParser.Select(_ => (object?) ("excludes", _))),
-            Try(sectionParser.Select(_ => (object?) ("section", _))),
-            Try(taskParser.Select(_ => (object?) _)),
-            skipLine.ThenReturn((object?) null)
+            Try(titleParser.Select<IGanttContent?>(_ => new TitleItem(_))),
+            Try(dateFormatParser.Select<IGanttContent?>(_ => new DateFormatItem(_))),
+            Try(axisFormatParser.Select<IGanttContent?>(_ => new AxisFormatItem(_))),
+            Try(excludesParser.Select<IGanttContent?>(_ => new ExcludesItem(_))),
+            Try(sectionParser.Select<IGanttContent?>(_ => new SectionItem(_))),
+            Try(taskParser.Select<IGanttContent?>(_ => new TaskItem(_))),
+            skipLine.ThenReturn<IGanttContent?>(null)
         );
 
     public static Parser<char, GanttModel> Parser =>
@@ -206,9 +182,9 @@ public class GanttParser : IDiagramParser<GanttModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in CommonParsers.LineEnd
         from content in ContentItem.Many()
-        select BuildModel(content.Where(_ => _ != null).ToList());
+        select BuildModel(content);
 
-    static GanttModel BuildModel(List<object?> content)
+    static GanttModel BuildModel(IEnumerable<IGanttContent?> content)
     {
         var model = new GanttModel();
         GanttSection? currentSection = null;
@@ -217,20 +193,20 @@ public class GanttParser : IDiagramParser<GanttModel>
         {
             switch (item)
             {
-                case ("title", string value):
-                    model.Title = value;
+                case TitleItem title:
+                    model.Title = title.Value;
                     break;
 
-                case ("dateFormat", string value):
-                    model.DateFormat = value;
+                case DateFormatItem df:
+                    model.DateFormat = df.Value;
                     break;
 
-                case ("axisFormat", string value):
-                    model.AxisFormat = value;
+                case AxisFormatItem af:
+                    model.AxisFormat = af.Value;
                     break;
 
-                case ("excludes", List<string> excludes):
-                    foreach (var ex in excludes)
+                case ExcludesItem excludes:
+                    foreach (var ex in excludes.Values)
                     {
                         if (ex.Equals("weekends", StringComparison.InvariantCultureIgnoreCase))
                             model.ExcludeWeekends = true;
@@ -240,20 +216,20 @@ public class GanttParser : IDiagramParser<GanttModel>
 
                     break;
 
-                case ("section", string sectionName):
-                    currentSection = new() {Name = sectionName};
+                case SectionItem section:
+                    currentSection = new() {Name = section.Name};
                     model.Sections.Add(currentSection);
                     break;
 
-                case GanttTask task:
+                case TaskItem taskItem:
                     if (currentSection == null)
                     {
                         currentSection = new() {Name = ""};
                         model.Sections.Add(currentSection);
                     }
 
-                    task.SectionName = currentSection.Name;
-                    currentSection.Tasks.Add(task);
+                    taskItem.Task.SectionName = currentSection.Name;
+                    currentSection.Tasks.Add(taskItem.Task);
                     break;
             }
         }
@@ -262,4 +238,12 @@ public class GanttParser : IDiagramParser<GanttModel>
     }
 
     public Result<char, GanttModel> Parse(string input) => Parser.Parse(input);
+
+    internal interface IGanttContent;
+    readonly record struct TitleItem(string Value) : IGanttContent;
+    readonly record struct DateFormatItem(string Value) : IGanttContent;
+    readonly record struct AxisFormatItem(string Value) : IGanttContent;
+    readonly record struct ExcludesItem(List<string> Values) : IGanttContent;
+    readonly record struct SectionItem(string Name) : IGanttContent;
+    readonly record struct TaskItem(GanttTask Task) : IGanttContent;
 }

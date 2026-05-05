@@ -1,4 +1,4 @@
-namespace MermaidSharp.Diagrams.EntityRelationship;
+namespace Naiad.Diagrams.EntityRelationship;
 
 public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ERModel>
@@ -124,22 +124,33 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var centerX = entity.Position.X;
 
         // Entity box
-        builder.AddRect(x, y, entity.Width, entity.Height,
+        builder.AddRect(
+            x,
+            y,
+            entity.Width,
+            entity.Height,
             rx: 0,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 2);
 
         // Entity name header
-        builder.AddRect(x, y, entity.Width, HeaderHeight,
+        builder.AddRect(
+            x,
+            y,
+            entity.Width,
+            HeaderHeight,
             fill: "#9370DB",
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        builder.AddText(centerX, y + HeaderHeight / 2, entity.Name,
+        builder.AddText(
+            centerX,
+            y + HeaderHeight / 2,
+            entity.Name,
             anchor: "middle",
             baseline: "middle",
-            fontSize: $"{options.FontSize}px",
+            fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold",
             fill: "#fff");
@@ -147,8 +158,13 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         // Separator line
         if (entity.Attributes.Count > 0)
         {
-            builder.AddLine(x, y + HeaderHeight, x + entity.Width, y + HeaderHeight,
-                stroke: "#9370DB", strokeWidth: 1);
+            builder.AddLine(
+                x,
+                y + HeaderHeight,
+                x + entity.Width,
+                y + HeaderHeight,
+                stroke: "#9370DB",
+                strokeWidth: 1);
         }
 
         // Attributes
@@ -160,18 +176,22 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
             if (!string.IsNullOrEmpty(keyIndicator))
             {
-                builder.AddText(x + EntityPadding, attrY + LineHeight / 2, keyIndicator,
+                builder.AddText(
+                    x + EntityPadding,
+                    attrY + LineHeight / 2, keyIndicator,
                     anchor: "start",
                     baseline: "middle",
-                    fontSize: $"{options.FontSize - 2}px",
+                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
                     fill: "#666");
             }
 
-            builder.AddText(x + EntityPadding + AttributeIndent + 20, attrY + LineHeight / 2, attrText,
+            builder.AddText(
+                x + EntityPadding + AttributeIndent + 20,
+                attrY + LineHeight / 2, attrText,
                 anchor: "start",
                 baseline: "middle",
-                fontSize: $"{options.FontSize}px",
+                fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
 
             attrY += LineHeight;
@@ -181,10 +201,16 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
     {
         var fromEntity = model.Entities.Find(_ => _.Name == rel.FromEntity);
-        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
-
-        if (fromEntity == null || toEntity == null)
+        if (fromEntity == null)
+        {
             return;
+        }
+
+        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
+        if (toEntity == null)
+        {
+            return;
+        }
 
         var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
         var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
@@ -192,7 +218,11 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var dashArray = rel.Identifying ? null : "5,5";
 
         // Draw line
-        builder.AddLine(startX, startY, endX, endY,
+        builder.AddLine(
+            startX,
+            startY,
+            endX,
+            endY,
             stroke: "#333",
             strokeWidth: 1,
             strokeDasharray: dashArray);
@@ -209,13 +239,21 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Background for label
             var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
-            builder.AddRect(labelX - labelWidth / 2, labelY - 10, labelWidth, 20,
-                fill: "#fff", stroke: "none");
+            builder.AddRect(
+                labelX - labelWidth / 2,
+                labelY - 10,
+                labelWidth,
+                20,
+                fill: "#fff",
+                stroke: "none");
 
-            builder.AddText(labelX, labelY, rel.Label,
+            builder.AddText(
+                labelX,
+                labelY,
+                rel.Label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: $"{options.FontSize - 2}px",
+                fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
                 fill: "#333");
         }
@@ -228,14 +266,20 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         if (Math.Abs(dx) > Math.Abs(dy))
         {
-            return dx > 0
-                ? (from.Position.X + from.Width / 2, from.Position.Y)
-                : (from.Position.X - from.Width / 2, from.Position.Y);
+            if (dx > 0)
+            {
+                return (from.Position.X + from.Width / 2, from.Position.Y);
+            }
+
+            return (from.Position.X - from.Width / 2, from.Position.Y);
         }
 
-        return dy > 0
-            ? (from.Position.X, from.Position.Y + from.Height / 2)
-            : (from.Position.X, from.Position.Y - from.Height / 2);
+        if (dy > 0)
+        {
+            return (from.Position.X, from.Position.Y + from.Height / 2);
+        }
+
+        return (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
     static void DrawCardinalityMarker(
@@ -247,8 +291,8 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         Cardinality cardinality)
     {
         var angle = Math.Atan2(toY - y, toX - x);
-        var markerDistance = 15.0;
-        var perpDistance = 8.0;
+        const double markerDistance = 15.0;
+        const double perpDistance = 8.0;
 
         // Position for the marker (offset from the entity)
         var mx = x + markerDistance * Math.Cos(angle);
@@ -270,9 +314,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
             case Cardinality.ZeroOrOne:
                 // Circle and line o|
-                var circleX = mx;
-                var circleY = my;
-                builder.AddCircle(circleX, circleY, 4, fill: "#fff", stroke: "#333", strokeWidth: 1);
+                builder.AddCircle(mx, my, 4, fill: "#fff", stroke: "#333", strokeWidth: 1);
                 var lineX = mx + 8 * Math.Cos(angle);
                 var lineY = my + 8 * Math.Sin(angle);
                 DrawLine(builder, lineX, lineY, perpX, perpY, perpDistance);
@@ -296,9 +338,12 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
     static void DrawLine(SvgBuilder builder, double x, double y, double perpX, double perpY, double length) =>
         builder.AddLine(
-            x - perpX * length / 2, y - perpY * length / 2,
-            x + perpX * length / 2, y + perpY * length / 2,
-            stroke: "#333", strokeWidth: 1);
+            x - perpX * length / 2,
+            y - perpY * length / 2,
+            x + perpX * length / 2,
+            y + perpY * length / 2,
+            stroke: "#333",
+            strokeWidth: 1);
 
     static void DrawCrowFoot(SvgBuilder builder, double x, double y, double angle, double spread)
     {
@@ -312,12 +357,22 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         // Upper line
         var perpX = Math.Cos(angle + Math.PI / 2);
         var perpY = Math.Sin(angle + Math.PI / 2);
-        builder.AddLine(x, y, tipX + perpX * spread / 2, tipY + perpY * spread / 2,
-            stroke: "#333", strokeWidth: 1);
+        builder.AddLine(
+            x,
+            y,
+            tipX + perpX * spread / 2,
+            tipY + perpY * spread / 2,
+            stroke: "#333",
+            strokeWidth: 1);
 
         // Lower line
-        builder.AddLine(x, y, tipX - perpX * spread / 2, tipY - perpY * spread / 2,
-            stroke: "#333", strokeWidth: 1);
+        builder.AddLine(
+            x,
+            y,
+            tipX - perpX * spread / 2,
+            tipY - perpY * spread / 2,
+            stroke: "#333",
+            strokeWidth: 1);
     }
 
     static string FormatAttribute(EntityAttribute attr)
@@ -327,6 +382,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         {
             result += $" \"{attr.Comment}\"";
         }
+
         return result;
     }
 
@@ -344,9 +400,6 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var factor = bold ? 0.65 : 0.55;
         return text.Length * fontSize * factor;
     }
-
-    static string Fmt(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
 }
 
 // Internal graph model for layout
-internal class ERLayoutGraph : GraphDiagramBase;

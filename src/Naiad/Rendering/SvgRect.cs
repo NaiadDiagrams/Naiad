@@ -1,4 +1,4 @@
-﻿namespace MermaidSharp.Rendering;
+namespace Naiad.Rendering;
 
 public class SvgRect : SvgElement
 {
@@ -14,16 +14,16 @@ public class SvgRect : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append($"<rect x=\"{Fmt(X)}\" y=\"{Fmt(Y)}\" width=\"{Fmt(Width)}\" height=\"{Fmt(Height)}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<rect x=\"{X:0.##}\" y=\"{Y:0.##}\" width=\"{Width:0.##}\" height=\"{Height:0.##}\"");
 
         if (Rx > 0)
         {
-            builder.Append($" rx=\"{Fmt(Rx)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" rx=\"{Rx:0.##}\"");
         }
 
         if (Ry > 0)
         {
-            builder.Append($" ry=\"{Fmt(Ry)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" ry=\"{Ry:0.##}\"");
         }
 
         if (Fill is not null)
@@ -38,7 +38,7 @@ public class SvgRect : SvgElement
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append($" stroke-width=\"{Fmt(StrokeWidth.Value)}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
         }
 
         CommonAttributes(builder);

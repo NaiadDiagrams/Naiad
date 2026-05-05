@@ -1,5 +1,3 @@
-namespace MermaidSharp.Layout;
-
 static class CoordinateAssignment
 {
     public static void Run(LayoutGraph graph, double nodeSep, double rankSep, Direction direction)
@@ -13,24 +11,23 @@ static class CoordinateAssignment
         AssignRankCoordinates(graph, rankSep, isHorizontal);
 
         // Assign X coordinates using simplified Brandes-Köpf
-        AssignPositionCoordinates(graph, nodeSep, isHorizontal);
+        var (maxX, maxY) = AssignPositionCoordinates(graph, nodeSep, isHorizontal);
 
         // Handle direction reversal
-        AdjustForDirection(graph, direction);
+        AdjustForDirection(graph, direction, maxX, maxY);
     }
 
     static void AssignRankCoordinates(LayoutGraph graph, double rankSep, bool isHorizontal)
     {
         double currentY = 0;
 
-        for (var r = 0; r < graph.Ranks.Length; r++)
+        foreach (var rank in graph.Ranks)
         {
-            var nodesInRank = graph.Ranks[r];
-            var maxHeight = nodesInRank.Count > 0
-                ? nodesInRank.Max(_ => isHorizontal ? _.Width : _.Height)
+            var maxHeight = rank.Count > 0
+                ? rank.Max(_ => isHorizontal ? _.Width : _.Height)
                 : 0;
 
-            foreach (var node in nodesInRank)
+            foreach (var node in rank)
             {
                 if (isHorizontal)
                 {
@@ -46,19 +43,18 @@ static class CoordinateAssignment
         }
     }
 
-    static void AssignPositionCoordinates(LayoutGraph graph, double nodeSep, bool isHorizontal)
+    static (double maxX, double maxY) AssignPositionCoordinates(LayoutGraph graph, double nodeSep, bool isHorizontal)
     {
         // Use block positioning with median alignment
         // This is a simplified version of Brandes-Köpf
 
         // Pass 1: Position nodes left-aligned within ranks
-        for (var r = 0; r < graph.Ranks.Length; r++)
+        foreach (var rank in graph.Ranks)
         {
-            var nodesInRank = graph.Ranks[r];
-            nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
+            rank.Sort((a, b) => a.Order.CompareTo(b.Order));
             double currentX = 0;
 
-            foreach (var node in nodesInRank)
+            foreach (var node in rank)
             {
                 var nodeWidth = isHorizontal ? node.Height : node.Width;
                 if (isHorizontal)
@@ -69,46 +65,60 @@ static class CoordinateAssignment
                 {
                     node.X = currentX + nodeWidth / 2;
                 }
+
                 currentX += nodeWidth + nodeSep;
             }
         }
 
         // Pass 2: Center alignment based on connected nodes
+        var positions = new List<double>();
         for (var iteration = 0; iteration < 4; iteration++)
         {
             // Down pass
-            for (var r = 1; r < graph.Ranks.Length; r++)
+            for (var index = 1; index < graph.Ranks.Length; index++)
             {
-                AlignToNeighbors(graph, r, true, nodeSep, isHorizontal);
+                AlignToNeighbors(graph, index, true, nodeSep, isHorizontal, positions);
             }
 
             // Up pass
             for (var r = graph.Ranks.Length - 2; r >= 0; r--)
             {
-                AlignToNeighbors(graph, r, false, nodeSep, isHorizontal);
+                AlignToNeighbors(graph, r, false, nodeSep, isHorizontal, positions);
             }
         }
 
         // Normalize positions to start at 0
-        NormalizePositions(graph);
+        return NormalizePositions(graph);
     }
 
     static void AlignToNeighbors(LayoutGraph graph, int rank, bool useInEdges,
-        double nodeSep, bool isHorizontal)
+        double nodeSep, bool isHorizontal, List<double> positions)
     {
         var nodesInRank = graph.Ranks[rank];
         nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
 
-        var positions = new List<double>();
-
         foreach (var node in nodesInRank)
         {
             positions.Clear();
-            foreach (var neighbor in useInEdges
-                         ? graph.GetPredecessors(node.Id)
-                         : graph.GetSuccessors(node.Id))
+            if (useInEdges)
             {
-                positions.Add(isHorizontal ? neighbor.Y : neighbor.X);
+                foreach (var edge in node.InEdges)
+                {
+                    if (edge.Source is { } source)
+                    {
+                        positions.Add(isHorizontal ? source.Y : source.X);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var edge in node.OutEdges)
+                {
+                    if (edge.Target is { } target)
+                    {
+                        positions.Add(isHorizontal ? target.Y : target.X);
+                    }
+                }
             }
 
             if (positions.Count == 0)
@@ -126,23 +136,29 @@ static class CoordinateAssignment
             if (Math.Abs(delta) > 0.1)
             {
                 var canMove = CanMoveNode(graph, node, delta, nodeSep, isHorizontal);
-                if (canMove)
+                if (!canMove)
                 {
-                    if (isHorizontal)
-                    {
-                        node.Y = targetPos;
-                    }
-                    else
-                    {
-                        node.X = targetPos;
-                    }
+                    continue;
+                }
+
+                if (isHorizontal)
+                {
+                    node.Y = targetPos;
+                }
+                else
+                {
+                    node.X = targetPos;
                 }
             }
         }
     }
 
-    static bool CanMoveNode(LayoutGraph graph, LayoutNode node, double delta,
-        double nodeSep, bool isHorizontal)
+    static bool CanMoveNode(
+        LayoutGraph graph,
+        LayoutNode node,
+        double delta,
+        double nodeSep,
+        bool isHorizontal)
     {
         var nodesInRank = graph.Ranks[node.Rank];
         var nodePos = isHorizontal ? node.Y : node.X;
@@ -190,52 +206,74 @@ static class CoordinateAssignment
         return values[mid];
     }
 
-    static void NormalizePositions(LayoutGraph graph)
+    static (double maxX, double maxY) NormalizePositions(LayoutGraph graph)
     {
         if (graph.Nodes.Count == 0)
         {
-            return;
+            return (0, 0);
         }
 
-        var minX = graph.Nodes.Values.Min(_ => _.X - _.Width / 2);
-        var minY = graph.Nodes.Values.Min(_ => _.Y - _.Height / 2);
+        var minX = double.PositiveInfinity;
+        var minY = double.PositiveInfinity;
+        foreach (var node in graph.Nodes.Values)
+        {
+            var left = node.X - node.Width / 2;
+            var top = node.Y - node.Height / 2;
+            if (left < minX)
+            {
+                minX = left;
+            }
 
+            if (top < minY)
+            {
+                minY = top;
+            }
+        }
+
+        var maxX = double.NegativeInfinity;
+        var maxY = double.NegativeInfinity;
         foreach (var node in graph.Nodes.Values)
         {
             node.X -= minX;
             node.Y -= minY;
+            if (node.X > maxX)
+            {
+                maxX = node.X;
+            }
+
+            if (node.Y > maxY)
+            {
+                maxY = node.Y;
+            }
         }
+
+        return (maxX, maxY);
     }
 
-    static void AdjustForDirection(LayoutGraph graph, Direction direction)
+    static void AdjustForDirection(LayoutGraph graph, Direction direction, double maxX, double maxY)
     {
-        if (graph.Nodes.Count == 0)
-        {
-            return;
-        }
-
         switch (direction)
         {
             case Direction.BottomToTop:
-                var maxY = graph.Nodes.Values.Max(_ => _.Y);
                 foreach (var node in graph.Nodes.Values)
                 {
                     node.Y = maxY - node.Y;
                 }
+
                 break;
 
             case Direction.RightToLeft:
-                var maxX = graph.Nodes.Values.Max(_ => _.X);
                 foreach (var node in graph.Nodes.Values)
                 {
                     node.X = maxX - node.X;
                 }
+
                 break;
         }
     }
 
     // Arrow marker size - the arrowhead extends this far past the line endpoint
-    const double ArrowMarkerOffset = 5;
+    const double arrowMarkerOffset = 5;
 
     public static void RouteEdges(LayoutGraph graph, Direction direction)
     {
@@ -245,15 +283,24 @@ static class CoordinateAssignment
         var dummyLookup = new Dictionary<(string, string), List<LayoutNode>>();
         foreach (var node in graph.Nodes.Values)
         {
-            if (node.IsDummy && node.OriginalEdgeSource is not null && node.OriginalEdgeTarget is not null)
-            {
-                var key = (node.OriginalEdgeSource, node.OriginalEdgeTarget);
-                if (!dummyLookup.TryGetValue(key, out var list))
+            if (node is not
                 {
-                    list = [];
-                    dummyLookup[key] = list;
-                }
+                    IsDummy: true,
+                    OriginalEdgeSource: not null,
+                    OriginalEdgeTarget: not null
+                })
+            {
+                continue;
+            }
+
+            var key = (node.OriginalEdgeSource, node.OriginalEdgeTarget);
+            if (dummyLookup.TryGetValue(key, out var list))
+            {
                 list.Add(node);
+            }
+            else
+            {
+                dummyLookup[key] = [node];
             }
         }
 
@@ -268,7 +315,8 @@ static class CoordinateAssignment
             var source = graph.GetNode(edge.SourceId);
             var target = graph.GetNode(edge.TargetId);
 
-            if (source is null || target is null)
+            if (source is null ||
+                target is null)
             {
                 continue;
             }
@@ -280,45 +328,44 @@ static class CoordinateAssignment
                 // Part of a long edge - just add the node positions
                 edge.Points.Add(new(source.X, source.Y));
                 edge.Points.Add(new(target.X, target.Y));
+                continue;
             }
-            else
+
+            // Regular edge - create path through dummy nodes if any
+            var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
+            var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
+            edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
+
+            // Find dummy nodes for this edge using pre-built lookup
+            if (dummyLookup.TryGetValue((edge.SourceId, edge.TargetId), out var dummies))
             {
-                // Regular edge - create path through dummy nodes if any
-                var sourceEdgeX = isHorizontal ? source.X + source.Width / 2 : source.X;
-                var sourceEdgeY = isHorizontal ? source.Y : source.Y + source.Height / 2;
-                edge.Points.Add(new(sourceEdgeX, sourceEdgeY));
-
-                // Find dummy nodes for this edge using pre-built lookup
-                if (dummyLookup.TryGetValue((edge.SourceId, edge.TargetId), out var dummies))
+                foreach (var dummy in dummies)
                 {
-                    foreach (var dummy in dummies)
-                    {
-                        edge.Points.Add(new(dummy.X, dummy.Y));
-                    }
+                    edge.Points.Add(new(dummy.X, dummy.Y));
                 }
-
-                // Calculate the target endpoint, offset to account for arrow marker
-                // For horizontal layout: connect left edge of target
-                // For vertical layout: connect top edge of target
-                var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;
-                var targetEdgeY = isHorizontal ? target.Y : target.Y - target.Height / 2;
-
-                // Get the last point before target to determine edge direction
-                var lastPoint = edge.Points[^1];
-                var dx = targetEdgeX - lastPoint.X;
-                var dy = targetEdgeY - lastPoint.Y;
-                var length = Math.Sqrt(dx * dx + dy * dy);
-
-                if (length > ArrowMarkerOffset)
-                {
-                    // Shorten the endpoint by the arrow marker size
-                    var ratio = (length - ArrowMarkerOffset) / length;
-                    targetEdgeX = lastPoint.X + dx * ratio;
-                    targetEdgeY = lastPoint.Y + dy * ratio;
-                }
-
-                edge.Points.Add(new(targetEdgeX, targetEdgeY));
             }
+
+            // Calculate the target endpoint, offset to account for arrow marker
+            // For horizontal layout: connect left edge of target
+            // For vertical layout: connect top edge of target
+            var targetEdgeX = isHorizontal ? target.X - target.Width / 2 : target.X;
+            var targetEdgeY = isHorizontal ? target.Y : target.Y - target.Height / 2;
+
+            // Get the last point before target to determine edge direction
+            var lastPoint = edge.Points[^1];
+            var dx = targetEdgeX - lastPoint.X;
+            var dy = targetEdgeY - lastPoint.Y;
+            var length = Math.Sqrt(dx * dx + dy * dy);
+
+            if (length > arrowMarkerOffset)
+            {
+                // Shorten the endpoint by the arrow marker size
+                var ratio = (length - arrowMarkerOffset) / length;
+                targetEdgeX = lastPoint.X + dx * ratio;
+                targetEdgeY = lastPoint.Y + dy * ratio;
+            }
+
+            edge.Points.Add(new(targetEdgeX, targetEdgeY));
         }
     }
 }

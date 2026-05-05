@@ -1,11 +1,6 @@
-namespace MermaidSharp.Diagrams.Sankey;
-
-public class SankeyParser : IDiagramParser<SankeyModel>
+class SankeyParser : IDiagramParser<SankeyModel>
 {
-    public DiagramType DiagramType => DiagramType.Sankey;
-
-    // Number parser
-    static Parser<char, double> NumberParser =
+    static Parser<char, double> numberParser =
         from sign in Char('-').Optional()
         from integer in Digit.AtLeastOnceString()
         from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
@@ -13,29 +8,28 @@ public class SankeyParser : IDiagramParser<SankeyModel>
             (sign.HasValue ? "-" : "") + integer + (frac.HasValue ? "." + frac.Value : ""),
             CultureInfo.InvariantCulture);
 
-    // Quoted string
-    static Parser<char, string> QuotedString =
+    static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
     // Unquoted name (no commas or newlines)
-    static Parser<char, string> UnquotedName =
+    static Parser<char, string> unquotedName =
         Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
             .Select(_ => _.Trim());
 
     // Name (quoted or unquoted)
-    static Parser<char, string> Name =
-        QuotedString.Or(UnquotedName);
+    static Parser<char, string> name =
+        quotedString.Or(unquotedName);
 
     // Link: source,target,value
-    static Parser<char, SankeyLink> LinkParser =
+    static Parser<char, SankeyLink> linkParser =
         from _ in CommonParsers.InlineWhitespace
-        from source in Name
+        from source in name
         from __ in Char(',')
         from ___ in CommonParsers.InlineWhitespace
-        from target in Name
+        from target in name
         from ____ in Char(',')
         from _____ in CommonParsers.InlineWhitespace
-        from value in NumberParser
+        from value in numberParser
         from ______ in CommonParsers.InlineWhitespace
         from _______ in CommonParsers.LineEnd
         select new SankeyLink
@@ -46,15 +40,14 @@ public class SankeyParser : IDiagramParser<SankeyModel>
         };
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> SkipLine =
+    static Parser<char, Unit> skipLine =
         Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
             .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    // Content item
-    static Parser<char, SankeyLink?> ContentItem =>
+    public static Parser<char, SankeyLink?> ContentItem =>
         OneOf(
-            Try(LinkParser.Select(_ => (SankeyLink?)_)),
-            SkipLine.ThenReturn((SankeyLink?)null)
+            Try(linkParser.Select<SankeyLink?>(_ => _)),
+            skipLine.ThenReturn<SankeyLink?>(null)
         );
 
     public static Parser<char, SankeyModel> Parser =>

@@ -1,8 +1,10 @@
-global using MermaidSharp;
+global using Naiad;
 global using NUnit.Framework;
 global using System.Runtime.CompilerServices;
 global using System.Text;
 global using System.Text.RegularExpressions;
+global using System.Xml;
+global using System.Xml.Linq;
 global using Microsoft.CodeAnalysis;
 global using Microsoft.CodeAnalysis.CSharp;
 global using Microsoft.CodeAnalysis.CSharp.Syntax;
