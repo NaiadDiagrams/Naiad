@@ -45,6 +45,20 @@ public class MindmapTests : TestBase
     }
 
     [Test]
+    public Task NodeIds()
+    {
+        const string input =
+            """
+            mindmap
+              root((Project))
+                api[API]
+                db(Database)
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task Nested()
     {
         const string input =

@@ -70,10 +70,22 @@ class MindmapParser : IDiagramParser<MindmapModel>
             )
         );
 
+    // Optional node id preceding a shape, e.g. the "root" in root((text)). Mindmap
+    // nodes have no edges, so the id is not used when rendering — the shape's text
+    // is the label.
+    static Parser<char, string> nodeIdParser =
+        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+
+    // A shape with an optional leading id: id((circle)), id[square], or just ((circle)).
+    static Parser<char, (string text, MindmapShape shape)> ShapedNodeWithIdParser =>
+        from _ in Try(nodeIdParser).Optional()
+        from shaped in ShapedNodeParser
+        select shaped;
+
     // Node line: indentation + optional shape + text + optional icon/class
     static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)> nodeLineParser =
         from indent in indentationParser
-        from shaped in Try(ShapedNodeParser).Optional()
+        from shaped in Try(ShapedNodeWithIdParser).Optional()
         from plainText in shaped.HasValue
             ? Return("")
             : Token(_ => _ != ':' && _ != '\r' && _ != '\n').ManyString()

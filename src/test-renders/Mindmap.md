@@ -52,6 +52,31 @@ mindmap
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBQcm9qZWN0XG4gICAgU3RvcmFnZSA6Omljb24oc2FtcGxlOmJveClcbiAgICBUcmFuc3BvcnQgOjppY29uKGZhIGZhLWNhcikiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## NodeIds
+
+**Input:**
+```
+mindmap
+  root((Project))
+    api[API]
+    db(Database)
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.NodeIds.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+mindmap
+  root((Project))
+    api[API]
+    db(Database)
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICByb290KChQcm9qZWN0KSlcbiAgICBhcGlbQVBJXVxuICAgIGRiKERhdGFiYXNlKSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
 ## Nested
 
 **Input:**
