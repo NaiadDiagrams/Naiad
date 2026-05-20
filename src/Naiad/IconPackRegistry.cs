@@ -77,7 +77,8 @@ static class IconPackRegistry
 
         var prefix = reference[..colon];
         var name = reference[(colon + 1)..];
-        if (packs.TryGetValue(prefix, out var pack) && pack.TryGetValue(name, out var icon))
+        if (packs.TryGetValue(prefix, out var pack) &&
+            pack.TryGetValue(name, out var icon))
         {
             return icon;
         }
