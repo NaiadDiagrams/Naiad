@@ -13,9 +13,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     const string edgeStroke = "#333333";
     const string labelBackground = "rgba(232,232,232,0.8)";
 
-    // FontAwesome icon pattern: fa:fa-icon-name or fab:fa-icon-name
+    // Matches "prefix:name" icon tokens in labels — FontAwesome (fa:fa-bell) or a
+    // registered iconify pack (logos:aws). Tokens that resolve to neither stay as text.
     static Regex iconPattern = IconPatternMyRegex();
-    [GeneratedRegex("(fa[bsr]?):fa-([a-z0-9-]+)", RegexOptions.Compiled)]
+    [GeneratedRegex("[A-Za-z0-9]+:[A-Za-z0-9][A-Za-z0-9_-]*", RegexOptions.Compiled)]
     private static partial Regex IconPatternMyRegex();
 
     public SvgDocument Render(FlowchartModel model, RenderOptions options)
@@ -24,10 +25,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         foreach (var node in model.Nodes)
         {
             var label = node.Label ?? node.Id;
-            var hasIcon = iconPattern.IsMatch(label);
-            var textForMeasure = hasIcon ? iconPattern.Replace(label, "") : label;
+            var (textForMeasure, iconCount) = AnalyzeLabel(label);
             var textSize = MeasureText(textForMeasure, options.FontSize);
-            node.Width = textSize.Width + 30 + (hasIcon ? 20 : 0);
+            node.Width = textSize.Width + 30 + iconCount * 20;
             node.Height = textSize.Height + 27;
 
             // Adjust size for different shapes
@@ -176,38 +176,31 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     }
 
     /// <summary>
-    /// Converts FontAwesome icon syntax (fa:fa-icon) to HTML elements.
+    /// Converts inline icon tokens within a label to HTML: FontAwesome
+    /// (<c>fa:fa-name</c>) becomes an <c>&lt;i&gt;</c> element, a registered iconify
+    /// pack icon (<c>prefix:name</c>) becomes inline SVG. Other text is HTML-encoded.
     /// </summary>
     static string ConvertIconsToHtml(string text)
     {
-        if (!iconPattern.IsMatch(text))
-        {
-            return $"<p>{WebUtility.HtmlEncode(text)}</p>";
-        }
-
-        var span = text.AsSpan();
-
         var html = new StringBuilder("<p>");
         var lastIndex = 0;
 
-        foreach (var match in iconPattern.EnumerateMatches(text))
+        foreach (Match match in iconPattern.Matches(text))
         {
-            if (match.Index > lastIndex)
+            if (IconTokenToHtml(match.Value) is not { } iconHtml)
             {
-                var textBefore = text[lastIndex..match.Index];
-                html.Append(WebUtility.HtmlEncode(textBefore));
+                continue;
             }
 
-            var matched = span.Slice(match.Index, match.Length);
-            var colonIndex = matched.IndexOf(':');
-            var prefix = matched[..colonIndex];
-            var iconName = matched[(colonIndex + 4)..];
-            html.Append($"<i class=\"{prefix} fa-{iconName}\"></i>");
+            if (match.Index > lastIndex)
+            {
+                html.Append(WebUtility.HtmlEncode(text[lastIndex..match.Index]));
+            }
 
+            html.Append(iconHtml);
             lastIndex = match.Index + match.Length;
         }
 
-        // Add remaining text after last icon
         if (lastIndex < text.Length)
         {
             html.Append(WebUtility.HtmlEncode(text[lastIndex..]));
@@ -215,6 +208,54 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         html.Append("</p>");
         return html.ToString();
+    }
+
+    // Removes recognised icon tokens from a label and counts them, for sizing.
+    static (string text, int iconCount) AnalyzeLabel(string label)
+    {
+        var builder = new StringBuilder();
+        var lastIndex = 0;
+        var count = 0;
+
+        foreach (Match match in iconPattern.Matches(label))
+        {
+            if (IconTokenToHtml(match.Value) is null)
+            {
+                continue;
+            }
+
+            builder.Append(label, lastIndex, match.Index - lastIndex);
+            lastIndex = match.Index + match.Length;
+            count++;
+        }
+
+        builder.Append(label, lastIndex, label.Length - lastIndex);
+        return (builder.ToString(), count);
+    }
+
+    // Renders a single "prefix:name" token to inline HTML, or null if it is not an icon.
+    static string? IconTokenToHtml(string token)
+    {
+        var colon = token.IndexOf(':');
+        var prefix = token[..colon];
+        var name = token[(colon + 1)..];
+
+        // FontAwesome: fa/fab/fas/far + fa-name
+        if ((prefix is "fa" or "fab" or "fas" or "far") &&
+            name.StartsWith("fa-", StringComparison.Ordinal))
+        {
+            return $"<i class=\"{prefix} {name}\"></i>";
+        }
+
+        // Registered iconify pack icon, rendered as inline SVG sized to the text.
+        if (IconPackRegistry.Resolve(token) is { } icon)
+        {
+            return string.Create(
+                CultureInfo.InvariantCulture,
+                $"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 {icon.Width:0.##} {icon.Height:0.##}\" style=\"width:1em;height:1em;vertical-align:-0.125em\">{icon.Body}</svg>");
+        }
+
+        return null;
     }
 
     static Size MeasureText(CharSpan text, double fontSize)

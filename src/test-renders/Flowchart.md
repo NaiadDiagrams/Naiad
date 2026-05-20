@@ -50,6 +50,27 @@ flowchart TD
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZmxvd2NoYXJ0IFREXG4gICAgQVtDaHJpc3RtYXNdIC0tXHUwMDNFfEdldCBtb25leXwgQihHbyBzaG9wcGluZylcbiAgICBCIC0tXHUwMDNFIEN7TGV0IG1lIHRoaW5rfVxuICAgIEMgLS1cdTAwM0V8T25lfCBEW0xhcHRvcF1cbiAgICBDIC0tXHUwMDNFfFR3b3wgRVtpUGhvbmVdXG4gICAgQyAtLVx1MDAzRXxUaHJlZXwgRltmYTpmYS1jYXIgQ2FyXSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+## IconPackIcon
+
+**Input:**
+```
+flowchart LR
+    A[sample:box Storage] --> B[sample:ring Cache]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.IconPackIcon.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+flowchart LR
+    A[sample:box Storage] --> B[sample:ring Cache]
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZmxvd2NoYXJ0IExSXG4gICAgQVtzYW1wbGU6Ym94IFN0b3JhZ2VdIC0tXHUwMDNFIEJbc2FtcGxlOnJpbmcgQ2FjaGVdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
 ## Shapes
 
 **Input:**

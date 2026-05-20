@@ -29,6 +29,34 @@ public class FlowchartTests : TestBase
     }
 
     [Test]
+    public Task IconPackIcon()
+    {
+        const string input =
+            """
+            flowchart LR
+                A[sample:box Storage] --> B[sample:ring Cache]
+            """;
+
+        // A registered iconify pack icon (prefix:name) renders inline, like FontAwesome.
+        const string pack =
+            """
+            {
+              "prefix": "sample",
+              "width": 24,
+              "height": 24,
+              "icons": {
+                "box": {"body": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"3\" fill=\"currentColor\"/>"},
+                "ring": {"body": "<circle cx=\"12\" cy=\"12\" r=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>"}
+              }
+            }
+            """;
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(pack));
+        IconPack.Load(stream);
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task Shapes()
     {
         const string input =

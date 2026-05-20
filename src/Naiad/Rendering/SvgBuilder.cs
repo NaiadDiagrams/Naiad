@@ -377,6 +377,12 @@ public class SvgBuilder
         return this;
     }
 
+    public SvgBuilder AddRawSvg(string markup)
+    {
+        AddElement(new SvgRaw {Markup = markup});
+        return this;
+    }
+
     public SvgBuilder AddPolygon(
         IEnumerable<Position> points,
         string? fill = null,

@@ -32,3 +32,11 @@ public abstract class SvgElement
         }
     }
 }
+
+// Emits pre-formed SVG markup verbatim (e.g. an iconify icon body wrapped in a group).
+public class SvgRaw : SvgElement
+{
+    public required string Markup { get; set; }
+
+    public override void ToXml(StringBuilder builder) => builder.Append(Markup);
+}
