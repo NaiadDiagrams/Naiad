@@ -33,6 +33,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
     ];
 
     const double GroupLabelHeight = 24;
+    const double GroupIconScale = 0.4;
+    const double GroupIconReservedWidth = 34;
 
     public SvgDocument Render(ArchitectureModel model, RenderOptions options)
     {
@@ -58,14 +60,15 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var offsetX = hasGroups ? GroupPadding : 0;
         var offsetY = hasGroups ? GroupPadding + GroupLabelHeight : 0;
 
-        // Simple grid layout for services
+        // Assign each service/junction a grid cell, honoring edge directions
+        var cells = ComputeCells(model);
         var positions = new Dictionary<string, (double x, double y)>();
-        var cols = (int)Math.Ceiling(Math.Sqrt(model.Services.Count + model.Junctions.Count));
-        var rows = (int)Math.Ceiling((double)(model.Services.Count + model.Junctions.Count) / cols);
+        var gridCols = cells.Count == 0 ? 0 : cells.Values.Max(c => c.col) + 1;
+        var gridRows = cells.Count == 0 ? 0 : cells.Values.Max(c => c.row) + 1;
 
         // Content dimensions (with extra space for groups if needed)
-        var contentWidth = cols * ServiceWidth + Math.Max(0, cols - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 : 0);
-        var contentHeight = rows * ServiceHeight + Math.Max(0, rows - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 + GroupLabelHeight : 0);
+        var contentWidth = gridCols * ServiceWidth + Math.Max(0, gridCols - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 : 0);
+        var contentHeight = gridRows * ServiceHeight + Math.Max(0, gridRows - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 + GroupLabelHeight : 0);
 
         var builder = new SvgBuilder()
             .Size(contentWidth, contentHeight)
@@ -76,31 +79,26 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 
         // Position services (calculate positions first, draw later)
         var servicePositions = new Dictionary<string, (double x, double y, double width, double height)>();
-        var idx = 0;
         foreach (var service in model.Services)
         {
-            var col = idx % cols;
-            var row = idx / cols;
+            var (col, row) = cells[service.Id];
             var x = offsetX + col * (ServiceWidth + ServiceSpacing);
             var y = offsetY + row * (ServiceHeight + ServiceSpacing);
 
             positions[service.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
             servicePositions[service.Id] = (x, y, ServiceWidth, ServiceHeight);
-            idx++;
         }
 
         // Position junctions
         var junctionPositions = new Dictionary<string, (double x, double y)>();
         foreach (var junction in model.Junctions)
         {
-            var col = idx % cols;
-            var row = idx / cols;
+            var (col, row) = cells[junction.Id];
             var x = offsetX + col * (ServiceWidth + ServiceSpacing);
             var y = offsetY + row * (ServiceHeight + ServiceSpacing);
 
             positions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
             junctionPositions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
-            idx++;
         }
 
         // Draw groups first (as background)
@@ -144,6 +142,114 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 
         return builder.Build();
     }
+
+    // Assigns a (col, row) grid cell to every service and junction.
+    // When edges are present, neighbours are placed relative to their source
+    // according to the edge's source side (e.g. "a:R -- L:b" puts b to the
+    // right of a). Diagrams without edges fall back to a square-ish grid in
+    // declaration order.
+    static Dictionary<string, (int col, int row)> ComputeCells(ArchitectureModel model)
+    {
+        var ids = model.Services.Select(s => s.Id)
+            .Concat(model.Junctions.Select(j => j.Id))
+            .ToList();
+
+        var cells = new Dictionary<string, (int col, int row)>();
+        if (ids.Count == 0)
+        {
+            return cells;
+        }
+
+        if (model.Edges.Count == 0)
+        {
+            var cols = (int)Math.Ceiling(Math.Sqrt(ids.Count));
+            for (var i = 0; i < ids.Count; i++)
+            {
+                cells[ids[i]] = (i % cols, i / cols);
+            }
+
+            return cells;
+        }
+
+        // Build adjacency with directional offsets from the edges
+        var idSet = new HashSet<string>(ids);
+        var adjacency = ids.ToDictionary(id => id, _ => new List<(string neighbor, int dCol, int dRow)>());
+        foreach (var edge in model.Edges)
+        {
+            if (!idSet.Contains(edge.SourceId) || !idSet.Contains(edge.TargetId))
+            {
+                continue;
+            }
+
+            var (dCol, dRow) = CellOffset(edge.SourceSide);
+            adjacency[edge.SourceId].Add((edge.TargetId, dCol, dRow));
+            adjacency[edge.TargetId].Add((edge.SourceId, -dCol, -dRow));
+        }
+
+        // Place each connected component with a BFS that honours the offsets
+        var occupied = new HashSet<(int col, int row)>();
+        foreach (var start in ids)
+        {
+            if (cells.ContainsKey(start))
+            {
+                continue;
+            }
+
+            // Start new components below everything placed so far
+            var startCell = (col: 0, row: occupied.Count == 0 ? 0 : occupied.Max(c => c.row) + 2);
+            while (occupied.Contains(startCell))
+            {
+                startCell = (startCell.col + 1, startCell.row);
+            }
+
+            var queue = new Queue<string>();
+            cells[start] = startCell;
+            occupied.Add(startCell);
+            queue.Enqueue(start);
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                var (col, row) = cells[current];
+                foreach (var (neighbor, dCol, dRow) in adjacency[current])
+                {
+                    if (cells.ContainsKey(neighbor))
+                    {
+                        continue;
+                    }
+
+                    var cell = (col: col + dCol, row: row + dRow);
+                    while (occupied.Contains(cell))
+                    {
+                        cell = (cell.col + dCol, cell.row + dRow);
+                    }
+
+                    cells[neighbor] = cell;
+                    occupied.Add(cell);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+
+        // Normalize so the minimum column and row are zero
+        var minCol = cells.Values.Min(c => c.col);
+        var minRow = cells.Values.Min(c => c.row);
+        foreach (var id in cells.Keys.ToList())
+        {
+            var (col, row) = cells[id];
+            cells[id] = (col - minCol, row - minRow);
+        }
+
+        return cells;
+    }
+
+    static (int col, int row) CellOffset(EdgeDirection dir) => dir switch
+    {
+        EdgeDirection.Left => (-1, 0),
+        EdgeDirection.Right => (1, 0),
+        EdgeDirection.Top => (0, -1),
+        EdgeDirection.Bottom => (0, 1),
+        _ => (0, 0)
+    };
 
     static (double x, double y, double width, double height)? CalculateGroupBounds(
         string groupId,
@@ -192,10 +298,22 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             strokeWidth: 2,
             style: "stroke-dasharray: 5,3");
 
+        // Group icon (top-left of the header)
+        var labelX = bounds.x + GroupPadding;
+        if (IconPaths.TryGetValue(icon, out var iconPath))
+        {
+            var iconX = bounds.x + 10;
+            var iconY = bounds.y + 8;
+            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({iconX:0.##},{iconY:0.##}) scale({GroupIconScale})"));
+            builder.AddPath(iconPath, fill: borderColor, stroke: "#333", strokeWidth: 1);
+            builder.EndGroup();
+            labelX = iconX + GroupIconReservedWidth;
+        }
+
         // Group label
         var label = group.Label ?? group.Id;
         builder.AddText(
-            bounds.x + GroupPadding,
+            labelX,
             bounds.y + GroupLabelHeight / 2 + GroupPadding / 2,
             label,
             anchor: "start",

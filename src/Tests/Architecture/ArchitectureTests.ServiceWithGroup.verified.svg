@@ -35,8 +35,16 @@
       stroke="#4FC3F7"
       stroke-width="2"
       style="stroke-dasharray: 5,3" />
+    <g
+      transform="translate(10,8) scale(0.4)">
+      <path
+        d="M25,60 Q0,60 0,45 Q0,30 15,30 Q15,15 35,15 Q55,15 55,30 Q70,30 70,45 Q70,60 45,60 Z"
+        fill="#4FC3F7"
+        stroke="#333"
+        stroke-width="1" />
+    </g>
     <text
-      x="20"
+      x="44"
       y="22"
       text-anchor="start"
       dominant-baseline="middle"

@@ -77,7 +77,7 @@
       font-family="Arial, sans-serif"
       fill="#333">Server</text>
     <rect
-      x="0"
+      x="140"
       y="120"
       width="100"
       height="80"
@@ -87,7 +87,7 @@
       stroke="#81C784"
       stroke-width="2" />
     <g
-      transform="translate(34,128) scale(0.64)">
+      transform="translate(174,128) scale(0.64)">
       <path
         d="M10,20 L10,50 Q25,60 40,50 L40,20 Q25,10 10,20 M10,20 Q25,30 40,20"
         fill="#81C784"
@@ -95,7 +95,7 @@
         stroke-width="1" />
     </g>
     <text
-      x="50"
+      x="190"
       y="188"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -120,12 +120,12 @@
     <line
       x1="190"
       y1="80"
-      x2="50"
+      x2="190"
       y2="120"
       stroke="#666"
       stroke-width="1.5" />
     <path
-      d="M 50 120 L 55.56 114.25 L 57.76 121.94 Z"
+      d="M 190 120 L 186 113.07 L 194 113.07 Z"
       fill="#666"
       stroke="none" />
   </g>

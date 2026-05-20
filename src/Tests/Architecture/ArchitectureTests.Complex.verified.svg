@@ -35,8 +35,16 @@
       stroke="#4FC3F7"
       stroke-width="2"
       style="stroke-dasharray: 5,3" />
+    <g
+      transform="translate(10,8) scale(0.4)">
+      <path
+        d="M25,60 Q0,60 0,45 Q0,30 15,30 Q15,15 35,15 Q55,15 55,30 Q70,30 70,45 Q70,60 45,60 Z"
+        fill="#4FC3F7"
+        stroke="#333"
+        stroke-width="1" />
+    </g>
     <text
-      x="20"
+      x="44"
       y="22"
       text-anchor="start"
       dominant-baseline="middle"
@@ -71,8 +79,8 @@
       font-family="Arial, sans-serif"
       fill="#333">API Server</text>
     <rect
-      x="160"
-      y="44"
+      x="20"
+      y="164"
       width="100"
       height="80"
       rx="8"
@@ -81,36 +89,10 @@
       stroke="#81C784"
       stroke-width="2" />
     <g
-      transform="translate(194,52) scale(0.64)">
+      transform="translate(54,172) scale(0.64)">
       <path
         d="M10,20 L10,50 Q25,60 40,50 L40,20 Q25,10 10,20 M10,20 Q25,30 40,20"
         fill="#81C784"
-        stroke="#333"
-        stroke-width="1" />
-    </g>
-    <text
-      x="210"
-      y="112"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="12px"
-      font-family="Arial, sans-serif"
-      fill="#333">Database</text>
-    <rect
-      x="20"
-      y="164"
-      width="100"
-      height="80"
-      rx="8"
-      ry="8"
-      fill="#FAFAFA"
-      stroke="#FFB74D"
-      stroke-width="2" />
-    <g
-      transform="translate(54,172) scale(0.64)">
-      <path
-        d="M5,40 L5,20 A20,10 0 1,1 45,20 L45,40 A20,10 0 1,1 5,40 M5,20 A20,10 0 1,0 45,20"
-        fill="#FFB74D"
         stroke="#333"
         stroke-width="1" />
     </g>
@@ -121,19 +103,45 @@
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
+      fill="#333">Database</text>
+    <rect
+      x="160"
+      y="44"
+      width="100"
+      height="80"
+      rx="8"
+      ry="8"
+      fill="#FAFAFA"
+      stroke="#FFB74D"
+      stroke-width="2" />
+    <g
+      transform="translate(194,52) scale(0.64)">
+      <path
+        d="M5,40 L5,20 A20,10 0 1,1 45,20 L45,40 A20,10 0 1,1 5,40 M5,20 A20,10 0 1,0 45,20"
+        fill="#FFB74D"
+        stroke="#333"
+        stroke-width="1" />
+    </g>
+    <text
+      x="210"
+      y="112"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
       fill="#333">Storage</text>
     <line
       x1="70"
       y1="124"
-      x2="210"
-      y2="44"
+      x2="70"
+      y2="164"
       stroke="#666"
       stroke-width="1.5" />
     <line
       x1="120"
       y1="84"
-      x2="20"
-      y2="204"
+      x2="160"
+      y2="84"
       stroke="#666"
       stroke-width="1.5" />
   </g>
