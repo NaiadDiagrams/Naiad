@@ -5,10 +5,27 @@ static class IconPackRegistry
 {
     public readonly record struct PackIcon(string Body, double Width, double Height);
 
-    static readonly ConcurrentDictionary<string, IReadOnlyDictionary<string, PackIcon>> packs = new();
+    static readonly Dictionary<string, IReadOnlyDictionary<string, PackIcon>> packs = new();
+    static bool rendered;
+
+    // Marks that rendering has begun, after which packs are frozen.
+    public static void MarkRendered() => rendered = true;
+
+    // Test hook: clears registered packs and the render flag.
+    public static void Reset()
+    {
+        packs.Clear();
+        rendered = false;
+    }
 
     public static string Register(Stream stream)
     {
+        if (rendered)
+        {
+            throw new MermaidException(
+                "Icon packs must be registered before the first render; IconPack.Load cannot be called after Mermaid.Render.");
+        }
+
         using var json = JsonDocument.Parse(stream);
         var root = json.RootElement;
 

@@ -4,6 +4,7 @@ public static class Mermaid
 {
     public static string Render(string input, RenderOptions? options = null)
     {
+        IconPackRegistry.MarkRendered();
         input = input.Trim();
         options ??= RenderOptions.Default;
         input = StripInitBlock(input);

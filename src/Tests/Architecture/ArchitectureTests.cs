@@ -84,6 +84,20 @@ public class ArchitectureTests : TestBase
     }
 
     [Test]
+    public void IconPackLoadAfterRenderThrows()
+    {
+        // Packs may only be registered before the first render.
+        Mermaid.Render(
+            """
+            architecture-beta
+            service db(database)[Database]
+            """);
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(SamplePack));
+        Assert.Throws<MermaidException>(() => IconPack.Load(stream));
+    }
+
+    [Test]
     public Task ServiceWithGroup()
     {
         var input =
