@@ -38,6 +38,53 @@ var svg = Mermaid.Render(
 ```
 
 
+### Icon packs
+
+Naiad can render icons from [iconify](https://iconify.design) icon packs. Packs are not bundled — load the ones you need (in the iconify JSON format) from a file or a stream:
+
+```cs
+IconPack.Load("logos.json");
+
+// ...or from a stream
+using var stream = File.OpenRead("logos.json");
+IconPack.Load(stream);
+```
+
+Pack files are published as [`@iconify-json/*`](https://icon-sets.iconify.design/) packages (the `icons.json` file), e.g. `@iconify-json/logos`. `Load` registers the pack under its prefix and returns it. Register all packs once at startup — calling `IconPack.Load` after the first `Mermaid.Render` throws a `MermaidException`.
+
+Once loaded, reference icons as `prefix:name` wherever a diagram supports icons — architecture services and groups, flowchart node labels, and mindmap nodes:
+
+```cs
+// Architecture
+Mermaid.Render(
+    """
+    architecture-beta
+    service fn(logos:aws-lambda)[Lambda]
+    service db(logos:postgresql)[Database]
+    fn:R -- L:db
+    """);
+
+// Flowchart (inline in labels)
+Mermaid.Render(
+    """
+    flowchart LR
+        A[logos:redis Cache] --> B[logos:postgresql DB]
+    """);
+
+// Mindmap
+Mermaid.Render(
+    """
+    mindmap
+      Project
+        Storage ::icon(logos:aws-s3)
+    """);
+```
+
+Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.
+
+[FontAwesome](https://fontawesome.com) icons also work in flowcharts (`fa:fa-name`) and mindmaps (`::icon(fa fa-name)`) without loading a pack.
+
+
 ## Supported Diagram Types
 
  * [Flowchart / Graph](https://mermaid.js.org/syntax/flowchart.html)

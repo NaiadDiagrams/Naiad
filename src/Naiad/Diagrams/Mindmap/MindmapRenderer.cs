@@ -7,6 +7,8 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     const double NodeHeight = 35;
     const double HorizontalSpacing = 40;
     const double VerticalSpacing = 15;
+    const double IconSize = 18;
+    const double IconGap = 6;
 
     static readonly string[] LevelColors =
     [
@@ -63,7 +65,8 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     static void CalculateNodeSizes(MindmapNode node, RenderOptions options)
     {
         var textWidth = MeasureText(node.Text, options.FontSize);
-        node.Width = Math.Max(NodeMinWidth, textWidth + NodePadding * 2);
+        var iconAllowance = node.Icon is null ? 0 : IconSize + IconGap;
+        node.Width = Math.Max(NodeMinWidth, textWidth + NodePadding * 2 + iconAllowance);
         node.Height = NodeHeight;
 
         foreach (var child in node.Children)
@@ -229,9 +232,16 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
                 break;
         }
 
-        // Draw text
+        // Draw icon (left of the text) if present
+        var iconAllowance = node.Icon is null ? 0 : IconSize + IconGap;
+        if (node.Icon is { } icon)
+        {
+            DrawIcon(builder, icon, x + NodePadding, node.Position.Y - IconSize / 2, IconSize);
+        }
+
+        // Draw text, shifted right to leave room for the icon
         builder.AddText(
-            node.Position.X,
+            node.Position.X + iconAllowance / 2,
             node.Position.Y,
             node.Text,
             anchor: "middle",
@@ -245,6 +255,28 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         {
             DrawNodes(builder, child, options);
         }
+    }
+
+    // Draws a node icon: a registered iconify pack icon (prefix:name) as inline
+    // SVG, otherwise a FontAwesome class string (e.g. "fa fa-book") as an <i>.
+    static void DrawIcon(SvgBuilder builder, string icon, double x, double y, double size)
+    {
+        if (icon.Contains(':') &&
+            IconPackRegistry.Resolve(icon) is { } packIcon)
+        {
+            var scale = size / Math.Max(packIcon.Width, packIcon.Height);
+            var drawnWidth = packIcon.Width * scale;
+            var drawnHeight = packIcon.Height * scale;
+            var tx = x + (size - drawnWidth) / 2;
+            var ty = y + (size - drawnHeight) / 2;
+            builder.AddRawSvg(string.Create(
+                CultureInfo.InvariantCulture,
+                $"<g transform=\"translate({tx:0.##},{ty:0.##}) scale({scale:0.####})\" style=\"color:#333\">{packIcon.Body}</g>"));
+            return;
+        }
+
+        // FontAwesome class string, e.g. "fa fa-book"
+        builder.AddForeignObject(x, y, size, size, $"<i class=\"{icon}\"></i>");
     }
 
     static void DrawHexagon(SvgBuilder builder, double cx, double cy, double width, double height,

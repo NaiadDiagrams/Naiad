@@ -35,6 +35,24 @@ service cloud1(cloud)[Cloud]
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiYXJjaGl0ZWN0dXJlLWJldGFcbnNlcnZpY2UgZGIoZGF0YWJhc2UpW0RhdGFiYXNlXVxuc2VydmljZSBzcnYoc2VydmVyKVtTZXJ2ZXJdXG5zZXJ2aWNlIGRpc2sxKGRpc2spW1N0b3JhZ2VdXG5zZXJ2aWNlIGNsb3VkMShjbG91ZClbQ2xvdWRdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+## IconPackFromStream
+
+**Input:**
+```
+architecture-beta
+service a(sample:box)[Box]
+service b(sample:ring)[Ring]
+a:R -- L:b
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Architecture/ArchitectureTests.IconPackFromStream.verified.png" />
+</p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiYXJjaGl0ZWN0dXJlLWJldGFcbnNlcnZpY2UgYShzYW1wbGU6Ym94KVtCb3hdXG5zZXJ2aWNlIGIoc2FtcGxlOnJpbmcpW1JpbmddXG5hOlIgLS0gTDpiIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
 ## ServiceWithGroup
 
 **Input:**

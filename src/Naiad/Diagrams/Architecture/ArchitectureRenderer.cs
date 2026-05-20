@@ -35,6 +35,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
     const double GroupLabelHeight = 24;
     const double GroupIconScale = 0.4;
     const double GroupIconReservedWidth = 34;
+    const double GroupIconBox = 28;
 
     public SvgDocument Render(ArchitectureModel model, RenderOptions options)
     {
@@ -300,14 +301,9 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 
         // Group icon (top-left of the header)
         var labelX = bounds.x + GroupPadding;
-        if (IconPaths.TryGetValue(icon, out var iconPath))
+        if (DrawIcon(builder, icon, borderColor, bounds.x + 10, bounds.y + 8, GroupIconBox, GroupIconScale))
         {
-            var iconX = bounds.x + 10;
-            var iconY = bounds.y + 8;
-            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({iconX:0.##},{iconY:0.##}) scale({GroupIconScale})"));
-            builder.AddPath(iconPath, fill: borderColor, stroke: "#333", strokeWidth: 1);
-            builder.EndGroup();
-            labelX = iconX + GroupIconReservedWidth;
+            labelX = bounds.x + 10 + GroupIconReservedWidth;
         }
 
         // Group label
@@ -340,14 +336,9 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             strokeWidth: 2);
 
         // Icon
-        if (IconPaths.TryGetValue(icon, out var path))
-        {
-            var iconX = x + (ServiceWidth - IconSize) / 2;
-            var iconY = y + 8;
-            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({iconX:0.##},{iconY:0.##}) scale(0.64)"));
-            builder.AddPath(path, fill: color, stroke: "#333", strokeWidth: 1);
-            builder.EndGroup();
-        }
+        var iconX = x + (ServiceWidth - IconSize) / 2;
+        var iconY = y + 8;
+        DrawIcon(builder, icon, color, iconX, iconY, IconSize, 0.64);
 
         // Label
         var label = service.Label ?? service.Id;
@@ -360,6 +351,36 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             fontSize: options.FontSize - 2,
             fontFamily: options.FontFamily,
             fill: "#333");
+    }
+
+    // Draws an icon at (x,y) within a box-sized square. Resolves "prefix:name"
+    // references against the bundled iconify packs, otherwise falls back to the
+    // built-in icon paths. Returns false when no icon could be drawn.
+    static bool DrawIcon(SvgBuilder builder, string icon, string accent, double x, double y, double box, double builtinScale)
+    {
+        if (icon.Contains(':') &&
+            IconPackRegistry.Resolve(icon) is { } packIcon)
+        {
+            var scale = box / Math.Max(packIcon.Width, packIcon.Height);
+            var drawnWidth = packIcon.Width * scale;
+            var drawnHeight = packIcon.Height * scale;
+            var tx = x + (box - drawnWidth) / 2;
+            var ty = y + (box - drawnHeight) / 2;
+            builder.AddRawSvg(string.Create(
+                CultureInfo.InvariantCulture,
+                $"<g transform=\"translate({tx:0.##},{ty:0.##}) scale({scale:0.####})\" style=\"color:{accent}\">{packIcon.Body}</g>"));
+            return true;
+        }
+
+        if (IconPaths.TryGetValue(icon, out var path))
+        {
+            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({x:0.##},{y:0.##}) scale({builtinScale})"));
+            builder.AddPath(path, fill: accent, stroke: "#333", strokeWidth: 1);
+            builder.EndGroup();
+            return true;
+        }
+
+        return false;
     }
 
     static void DrawJunction(

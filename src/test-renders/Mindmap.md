@@ -27,6 +27,31 @@ mindmap
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBSb290XG4gICAgQnJhbmNoIEFcbiAgICBCcmFuY2ggQlxuICAgIEJyYW5jaCBDIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+## Icons
+
+**Input:**
+```
+mindmap
+  Project
+    Storage ::icon(sample:box)
+    Transport ::icon(fa fa-car)
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Mindmap/MindmapTests.Icons.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+mindmap
+  Project
+    Storage ::icon(sample:box)
+    Transport ::icon(fa fa-car)
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoibWluZG1hcFxuICBQcm9qZWN0XG4gICAgU3RvcmFnZSA6Omljb24oc2FtcGxlOmJveClcbiAgICBUcmFuc3BvcnQgOjppY29uKGZhIGZhLWNhcikiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
 ## Nested
 
 **Input:**

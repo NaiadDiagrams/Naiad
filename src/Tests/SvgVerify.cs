@@ -8,6 +8,11 @@
             DeviceScaleFactor = 2
         };
 
+    // Icon pack registration is frozen after the first render and is process-global,
+    // so reset it before each test to keep tests isolated.
+    [SetUp]
+    public void ResetIconPacks() => IconPackRegistry.Reset();
+
     public async Task VerifySvg(
         string input,
         [CallerFilePath] string sourceFile = "",

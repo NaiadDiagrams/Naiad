@@ -1,5 +1,21 @@
 public class ArchitectureTests : TestBase
 {
+    // A minimal icon pack in the iconify JSON format, used to exercise the
+    // IconPack.Load API. "box" is fill-based, "ring" is stroke-based; both use
+    // currentColor so they pick up the service's accent colour.
+    const string SamplePack =
+        """
+        {
+          "prefix": "sample",
+          "width": 24,
+          "height": 24,
+          "icons": {
+            "box": {"body": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"3\" fill=\"currentColor\"/>"},
+            "ring": {"body": "<circle cx=\"12\" cy=\"12\" r=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>"}
+          }
+        }
+        """;
+
     [Test]
     public Task BasicService()
     {
@@ -25,6 +41,60 @@ public class ArchitectureTests : TestBase
             """;
 
         return VerifySvg(input);
+    }
+
+    [Test]
+    public Task IconPackFromStream()
+    {
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(SamplePack));
+        IconPack.Load(stream);
+
+        var input =
+            """
+            architecture-beta
+            service a(sample:box)[Box]
+            service b(sample:ring)[Ring]
+            a:R -- L:b
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public async Task IconPackFromFile()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"naiad-iconpack-{Guid.NewGuid():N}.json");
+        await File.WriteAllTextAsync(path, SamplePack);
+        try
+        {
+            var prefix = IconPack.Load(path);
+            Assert.That(prefix, Is.EqualTo("sample"));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+
+        var svg = Mermaid.Render(
+            """
+            architecture-beta
+            service a(sample:box)[Box]
+            """);
+        Assert.That(svg, Does.Contain("width=\"18\""));
+    }
+
+    [Test]
+    public void IconPackLoadAfterRenderThrows()
+    {
+        // Packs may only be registered before the first render.
+        Mermaid.Render(
+            """
+            architecture-beta
+            service db(database)[Database]
+            """);
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(SamplePack));
+        Assert.Throws<MermaidException>(() => IconPack.Load(stream));
     }
 
     [Test]

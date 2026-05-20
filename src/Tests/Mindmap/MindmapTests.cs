@@ -16,6 +16,35 @@ public class MindmapTests : TestBase
     }
 
     [Test]
+    public Task Icons()
+    {
+        const string input =
+            """
+            mindmap
+              Project
+                Storage ::icon(sample:box)
+                Transport ::icon(fa fa-car)
+            """;
+
+        // sample:box comes from a registered iconify pack; fa fa-car is FontAwesome.
+        const string pack =
+            """
+            {
+              "prefix": "sample",
+              "width": 24,
+              "height": 24,
+              "icons": {
+                "box": {"body": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"3\" fill=\"currentColor\"/>"}
+              }
+            }
+            """;
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(pack));
+        IconPack.Load(stream);
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task Nested()
     {
         const string input =
