@@ -1,0 +1,27 @@
+image:
+- Visual Studio 2022
+environment:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+build_script:
+- appveyor DownloadFile https://dot.net/v1/dotnet-install.ps1
+- pwsh: ./dotnet-install.ps1 -JSonFile global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
+- dotnet build src --configuration Release
+on_finish:
+- ps: |
+    Get-ChildItem TestResults\*.trx -ErrorAction SilentlyContinue | % {
+      (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", $_.FullName)
+    }
+    Get-ChildItem TestResults\*.cobertura.xml -ErrorAction SilentlyContinue | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+on_failure:
+  - ps: |
+      $root = (Get-Location).Path
+      Get-ChildItem *.received.* -Recurse | % {
+        $rel = $_.FullName.Substring($root.Length + 1)
+        Push-AppveyorArtifact $_.FullName -FileName $rel
+      }
+test: off
+artifacts:
+- path: nugets\*.nupkg
+- path: TestResults\*.cobertura.xml
