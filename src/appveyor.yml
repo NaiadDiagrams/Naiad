@@ -8,6 +8,7 @@ build_script:
 - appveyor DownloadFile https://dot.net/v1/dotnet-install.ps1
 - pwsh: ./dotnet-install.ps1 -JSonFile global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
 - dotnet build src --configuration Release
+- dotnet test src --configuration Release --no-build --results-directory TestResults -- --report-trx --report-trx-filename Tests.trx --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
 on_finish:
 - ps: |
     Get-ChildItem TestResults\*.trx -ErrorAction SilentlyContinue | % {
