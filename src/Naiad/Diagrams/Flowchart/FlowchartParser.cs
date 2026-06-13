@@ -171,21 +171,28 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         from lineEnd in CommonParsers.LineEnd
         select Unit.Value;
 
-    // Subgraph start: subgraph name[Label] or subgraph name
-    static Parser<char, Unit> subgraphStart =
+    // Subgraph start: "subgraph id", "subgraph id[Label]" or "subgraph id [Label]"
+    static Parser<char, FlowStatement> subgraphStart =
         from _ in CommonParsers.InlineWhitespace
-        from subGraph in String("subgraph")
-        from ___ in Token(_ => _ != '\r' && _ != '\n').ManyString()
+        from keyword in String("subgraph")
+        from __ in CommonParsers.RequiredWhitespace
+        from id in CommonParsers.Identifier
+        from label in (
+            from _w in CommonParsers.InlineWhitespace
+            from text in Char('[').Then(Token(_ => _ != ']').ManyString()).Before(Char(']'))
+            select text
+        ).Optional()
+        from rest in Token(_ => _ != '\r' && _ != '\n').ManyString()
         from lineEnd in CommonParsers.LineEnd
-        select Unit.Value;
+        select (FlowStatement) new SubgraphStartStatement(id, label.HasValue ? label.Value : null);
 
     // Subgraph end: end
-    static Parser<char, Unit> subgraphEnd =
+    static Parser<char, FlowStatement> subgraphEnd =
         from _ in CommonParsers.InlineWhitespace
         from end in String("end")
         from ___ in CommonParsers.InlineWhitespace
         from lineEnd in CommonParsers.LineEnd
-        select Unit.Value;
+        select (FlowStatement) new SubgraphEndStatement();
 
     // Skip empty lines, comments, and directives
     static Parser<char, Unit> skipLine =
@@ -194,8 +201,6 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             Try(classDefDirective),
             Try(classDirective),
             Try(clickDirective),
-            Try(subgraphStart),
-            Try(subgraphEnd),
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
         );
 
@@ -209,22 +214,24 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         from statements in ParseStatements()
         select BuildModel(direction.GetValueOrDefault(Direction.TopToBottom), statements);
 
-    public static Parser<char, List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)>> ParseStatements()
+    static Parser<char, List<FlowStatement>> ParseStatements()
     {
-        var statement =
+        var nodeStatement =
             CommonParsers.InlineWhitespace
                 .Then(StatementParser)
-                .Before(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd));
+                .Before(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd))
+                .Select(_ => (FlowStatement?) new NodeChainStatement(_.Nodes, _.Edges));
 
-        var skipLine = FlowchartParser.skipLine.ThenReturn((new List<Node>(), new List<(EdgeType, EdgeStyle, string?)>()));
+        var item = OneOf(
+            Try(subgraphStart.Select(_ => (FlowStatement?) _)),
+            Try(subgraphEnd.Select(_ => (FlowStatement?) _)),
+            Try(nodeStatement),
+            skipLine.Select(_ => (FlowStatement?) null));
 
-        return Try(statement).Or(skipLine).Many()
-            .Select(_ => _.Where(__ => __.Nodes.Count > 0).ToList());
+        return item.Many().Select(_ => _.OfType<FlowStatement>().ToList());
     }
 
-    static FlowchartModel BuildModel(
-        Direction direction,
-        List<(List<Node> Nodes, List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges)> statements)
+    static FlowchartModel BuildModel(Direction direction, List<FlowStatement> statements)
     {
         var model = new FlowchartModel
         {
@@ -232,40 +239,83 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         };
 
         var nodeDict = new Dictionary<string, Node>();
+        var subgraphStack = new Stack<Subgraph>();
+        var assignedToSubgraph = new HashSet<string>();
 
-        foreach (var (nodes, edges) in statements)
+        foreach (var statement in statements)
         {
-            for (var i = 0; i < nodes.Count; i++)
+            switch (statement)
             {
-                var node = nodes[i];
+                case SubgraphStartStatement start:
+                    var subgraph = new Subgraph
+                    {
+                        Id = start.Id,
+                        Title = start.Label ?? start.Id,
+                        Direction = direction
+                    };
+                    if (subgraphStack.Count > 0)
+                    {
+                        subgraphStack.Peek().NestedSubgraphs.Add(subgraph);
+                    }
+                    else
+                    {
+                        model.Subgraphs.Add(subgraph);
+                    }
 
-                // Add or update node
-                if (!nodeDict.TryGetValue(node.Id, out var existingNode))
-                {
-                    nodeDict[node.Id] = node;
-                    model.Nodes.Add(node);
-                }
-                else if (node.Label != null &&
-                         existingNode.Label == null)
-                {
-                    existingNode.Label = node.Label;
-                    existingNode.Shape = node.Shape;
-                }
+                    subgraphStack.Push(subgraph);
+                    break;
 
-                // Add edge to next node
-                if (i < edges.Count)
-                {
-                    var edge = edges[i];
-                    model.Edges.Add(
-                        new()
+                case SubgraphEndStatement:
+                    if (subgraphStack.Count > 0)
+                    {
+                        subgraphStack.Pop();
+                    }
+
+                    break;
+
+                case NodeChainStatement chain:
+                    for (var i = 0; i < chain.Nodes.Count; i++)
+                    {
+                        var node = chain.Nodes[i];
+
+                        // Add or update node.
+                        if (!nodeDict.TryGetValue(node.Id, out var existingNode))
                         {
-                            SourceId = nodes[i].Id,
-                            TargetId = nodes[i + 1].Id,
-                            Type = edge.Type,
-                            LineStyle = edge.Style,
-                            Label = edge.Label
-                        });
-                }
+                            nodeDict[node.Id] = node;
+                            model.Nodes.Add(node);
+                        }
+                        else if (node.Label != null &&
+                                 existingNode.Label == null)
+                        {
+                            existingNode.Label = node.Label;
+                            existingNode.Shape = node.Shape;
+                        }
+
+                        // A node belongs to the subgraph it first appears inside,
+                        // even if it was first referenced outside one.
+                        if (subgraphStack.Count > 0 &&
+                            assignedToSubgraph.Add(node.Id))
+                        {
+                            subgraphStack.Peek().NodeIds.Add(node.Id);
+                        }
+
+                        // Add edge to next node
+                        if (i < chain.Edges.Count)
+                        {
+                            var edge = chain.Edges[i];
+                            model.Edges.Add(
+                                new()
+                                {
+                                    SourceId = chain.Nodes[i].Id,
+                                    TargetId = chain.Nodes[i + 1].Id,
+                                    Type = edge.Type,
+                                    LineStyle = edge.Style,
+                                    Label = edge.Label
+                                });
+                        }
+                    }
+
+                    break;
             }
         }
 
@@ -273,4 +323,14 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
     }
 
     public Result<char, FlowchartModel> Parse(string input) => Parser.Parse(input);
+
+    abstract record FlowStatement;
+
+    sealed record NodeChainStatement(
+        List<Node> Nodes,
+        List<(EdgeType Type, EdgeStyle Style, string? Label)> Edges) : FlowStatement;
+
+    sealed record SubgraphStartStatement(string Id, string? Label) : FlowStatement;
+
+    sealed record SubgraphEndStatement : FlowStatement;
 }

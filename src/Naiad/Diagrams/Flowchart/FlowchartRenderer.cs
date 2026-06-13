@@ -12,6 +12,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     const string nodeStroke = "#9370DB";
     const string edgeStroke = "#333333";
     const string labelBackground = "rgba(232,232,232,0.8)";
+    const string subgraphFill = "#ffffff";
+    const string subgraphStroke = "#bbbbbb";
 
     // Matches "prefix:name" icon tokens in labels — FontAwesome (fa:fa-bell) or a
     // registered iconify pack (logos:aws). Tokens that resolve to neither stay as text.
@@ -64,6 +66,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Add mermaid.ink CSS styles
         builder.AddStyles(MermaidStyles.FlowchartStyles);
 
+        // Render subgraph boxes first (behind everything), outermost first.
+        RenderSubgraphs(builder, model.Subgraphs, options);
+
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
         {
@@ -77,6 +82,47 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         return builder.Build();
+    }
+
+    static void RenderSubgraphs(SvgBuilder builder, IEnumerable<Subgraph> subgraphs, RenderOptions options)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            RenderSubgraphBox(builder, subgraph, options);
+
+            // Nested subgraphs after their parent so they sit on top of it.
+            RenderSubgraphs(builder, subgraph.NestedSubgraphs, options);
+        }
+    }
+
+    static void RenderSubgraphBox(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    {
+        var bounds = subgraph.Bounds;
+
+        builder.AddRect(
+            bounds.X,
+            bounds.Y,
+            bounds.Width,
+            bounds.Height,
+            rx: 6,
+            fill: subgraphFill,
+            stroke: subgraphStroke,
+            strokeWidth: 1);
+
+        var title = subgraph.Title ?? subgraph.Id;
+        if (!string.IsNullOrEmpty(title))
+        {
+            builder.AddText(
+                subgraph.Position.X,
+                bounds.Y + 14,
+                title,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
+                fontWeight: "bold",
+                fill: edgeStroke);
+        }
     }
 
     static void RenderNode(SvgBuilder builder, Node node)
