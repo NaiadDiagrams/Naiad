@@ -30,24 +30,24 @@
     font-size="20px"
     font-family="Arial, sans-serif"
     font-weight="bold">Banking System Context</text>
-  <circle
-    cx="220"
-    cy="95"
-    r="20"
+  <rect
+    x="140"
+    y="98"
+    width="160"
+    height="92"
+    rx="8"
+    ry="8"
     fill="#08427B"
     stroke="none" />
-  <rect
-    x="180"
-    y="120"
-    width="80"
-    height="60"
-    rx="10"
-    ry="10"
+  <circle
+    cx="220"
+    cy="90"
+    r="20"
     fill="#08427B"
     stroke="none" />
   <text
     x="220"
-    y="170"
+    y="141"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
@@ -56,7 +56,7 @@
     fill="#FFFFFF">Banking Customer</text>
   <text
     x="220"
-    y="185"
+    y="159"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"

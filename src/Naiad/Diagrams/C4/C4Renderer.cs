@@ -11,6 +11,7 @@ public class C4Renderer : IDiagramRenderer<C4Model>
     const double BoundaryPadding = 15;
     const double BoundaryTitleHeight = 40;
     const double BoundarySpacing = 20;
+    const int MaxElementsPerRow = 4;
 
     const string PersonColor = "#08427B";
     const string PersonExtColor = "#999999";
@@ -66,11 +67,12 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         // Step 3: Calculate total diagram dimensions
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
 
-        // Calculate outside element rows
-        var outsidePersonsHeight = outsidePersons.Count > 0 ? PersonHeight + RowSpacing : 0;
-        var outsideSystemsHeight = outsideSystems.Count > 0 ? ElementHeight + RowSpacing : 0;
-        var outsideContainersHeight = outsideContainers.Count > 0 ? ElementHeight + RowSpacing : 0;
-        var outsideComponentsHeight = outsideComponents.Count > 0 ? ElementHeight + RowSpacing : 0;
+        // Calculate outside element rows. Each kind wraps at MaxElementsPerRow,
+        // so its block height grows with the number of wrapped rows.
+        var outsidePersonsHeight = RowCount(outsidePersons.Count) * (PersonHeight + RowSpacing);
+        var outsideSystemsHeight = RowCount(outsideSystems.Count) * (ElementHeight + RowSpacing);
+        var outsideContainersHeight = RowCount(outsideContainers.Count) * (ElementHeight + RowSpacing);
+        var outsideComponentsHeight = RowCount(outsideComponents.Count) * (ElementHeight + RowSpacing);
 
         // Calculate top-level boundary row dimensions
         var boundaryRowWidth = topLevelBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
@@ -78,13 +80,13 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             ? topLevelBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing
             : 0;
 
-        // Calculate width based on elements and boundaries
-        const int maxElementsPerRow = 4;
+        // Calculate width based on elements and boundaries. Rows wrap at
+        // MaxElementsPerRow, so the widest possible row caps at that many.
         var outsideElementsWidth = Math.Max(
             Math.Max(outsidePersons.Count, outsideSystems.Count),
             Math.Max(outsideContainers.Count, outsideComponents.Count)
         );
-        outsideElementsWidth = Math.Min(outsideElementsWidth, maxElementsPerRow);
+        outsideElementsWidth = Math.Min(outsideElementsWidth, MaxElementsPerRow);
         var outsideWidth = outsideElementsWidth * (ElementWidth + ElementSpacing) - ElementSpacing;
 
         var width = Math.Max(Math.Max(outsideWidth, boundaryRowWidth), 400) + options.Padding * 2;
@@ -340,33 +342,40 @@ public class C4Renderer : IDiagramRenderer<C4Model>
 
         if (element.Type == C4ElementType.Person)
         {
-            // Draw person shape (head + body)
+            // Draw person shape: a circular head sitting on top of a full-width
+            // rounded body. The body spans the full element width so labels and
+            // descriptions stay inside the shape.
             const int headRadius = 20;
-            const int bodyHeight = 60;
-            const int bodyWidth = 80;
+            var centerX = x + ElementWidth / 2;
+            var bodyTop = y + headRadius + 8;
+            var bodyHeight = PersonHeight - (headRadius + 8);
+
+            // Body first so the head circle overlaps its top edge (shoulders).
+            builder.AddRect(
+                x,
+                bodyTop,
+                ElementWidth,
+                bodyHeight,
+                rx: 8,
+                fill: color,
+                stroke: "none");
 
             // Head
             builder.AddCircle(
-                x + ElementWidth / 2,
-                y + headRadius + 5,
+                centerX,
+                y + headRadius,
                 headRadius,
                 fill: color,
                 stroke: "none");
 
-            // Body (rounded rect)
-            builder.AddRect(
-                x + (ElementWidth - bodyWidth) / 2,
-                y + headRadius * 2 + 10,
-                bodyWidth,
-                bodyHeight,
-                rx: 10,
-                fill: color,
-                stroke: "none");
+            // Center the text in the body region below the head.
+            var textCenterY = (y + headRadius * 2 + (y + PersonHeight)) / 2;
+            var hasDescription = !string.IsNullOrEmpty(element.Description);
 
             // Label
             builder.AddText(
-                x + ElementWidth / 2,
-                y + PersonHeight - 20,
+                centerX,
+                hasDescription ? textCenterY - 9 : textCenterY,
                 element.Label,
                 anchor: "middle",
                 baseline: "middle",
@@ -376,12 +385,12 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 fontWeight: "bold");
 
             // Description
-            if (!string.IsNullOrEmpty(element.Description))
+            if (hasDescription)
             {
                 builder.AddText(
-                    x + ElementWidth / 2,
-                    y + PersonHeight - 5,
-                    TruncateText(element.Description, 25),
+                    centerX,
+                    textCenterY + 9,
+                    TruncateText(element.Description!, 22),
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize - 3,

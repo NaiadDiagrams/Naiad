@@ -30,24 +30,24 @@
     font-size="20px"
     font-family="Arial, sans-serif"
     font-weight="bold">Enterprise Architecture Overview</text>
-  <circle
-    cx="290"
-    cy="95"
-    r="20"
+  <rect
+    x="210"
+    y="98"
+    width="160"
+    height="92"
+    rx="8"
+    ry="8"
     fill="#08427B"
     stroke="none" />
-  <rect
-    x="250"
-    y="120"
-    width="80"
-    height="60"
-    rx="10"
-    ry="10"
+  <circle
+    cx="290"
+    cy="90"
+    r="20"
     fill="#08427B"
     stroke="none" />
   <text
     x="290"
-    y="170"
+    y="141"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
@@ -56,30 +56,30 @@
     fill="#FFFFFF">Administrator</text>
   <text
     x="290"
-    y="185"
+    y="159"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#FFFFFF">System administrator w...</text>
-  <circle
-    cx="480"
-    cy="95"
-    r="20"
+    fill="#FFFFFF">System administrato...</text>
+  <rect
+    x="400"
+    y="98"
+    width="160"
+    height="92"
+    rx="8"
+    ry="8"
     fill="#08427B"
     stroke="none" />
-  <rect
-    x="440"
-    y="120"
-    width="80"
-    height="60"
-    rx="10"
-    ry="10"
+  <circle
+    cx="480"
+    cy="90"
+    r="20"
     fill="#08427B"
     stroke="none" />
   <text
     x="480"
-    y="170"
+    y="141"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
@@ -88,12 +88,12 @@
     fill="#FFFFFF">Regular User</text>
   <text
     x="480"
-    y="185"
+    y="159"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#FFFFFF">End user of the applic...</text>
+    fill="#FFFFFF">End user of the app...</text>
   <rect
     x="-170"
     y="230"

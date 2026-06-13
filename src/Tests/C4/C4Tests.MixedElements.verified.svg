@@ -30,24 +30,24 @@
     font-size="20px"
     font-family="Arial, sans-serif"
     font-weight="bold">E-commerce Platform</text>
-  <circle
-    cx="195"
-    cy="95"
-    r="20"
+  <rect
+    x="115"
+    y="98"
+    width="160"
+    height="92"
+    rx="8"
+    ry="8"
     fill="#08427B"
     stroke="none" />
-  <rect
-    x="155"
-    y="120"
-    width="80"
-    height="60"
-    rx="10"
-    ry="10"
+  <circle
+    cx="195"
+    cy="90"
+    r="20"
     fill="#08427B"
     stroke="none" />
   <text
     x="195"
-    y="170"
+    y="141"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
@@ -56,30 +56,30 @@
     fill="#FFFFFF">Buyer</text>
   <text
     x="195"
-    y="185"
+    y="159"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#FFFFFF">Online shopper</text>
-  <circle
-    cx="385"
-    cy="95"
-    r="20"
+  <rect
+    x="305"
+    y="98"
+    width="160"
+    height="92"
+    rx="8"
+    ry="8"
     fill="#08427B"
     stroke="none" />
-  <rect
-    x="345"
-    y="120"
-    width="80"
-    height="60"
-    rx="10"
-    ry="10"
+  <circle
+    cx="385"
+    cy="90"
+    r="20"
     fill="#08427B"
     stroke="none" />
   <text
     x="385"
-    y="170"
+    y="141"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
@@ -88,7 +88,7 @@
     fill="#FFFFFF">Seller</text>
   <text
     x="385"
-    y="185"
+    y="159"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
