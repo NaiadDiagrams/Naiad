@@ -306,6 +306,11 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         }
     }
 
+    /// <summary>
+    /// Number of wrapped rows needed to lay out <paramref name="count"/> elements.
+    /// </summary>
+    static int RowCount(int count) => (count + MaxElementsPerRow - 1) / MaxElementsPerRow;
+
     double DrawElementRow(
         SvgBuilder builder,
         List<C4Element> elements,
@@ -318,21 +323,32 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             return startY;
         }
 
-        var rowWidth = elements.Count * (ElementWidth + ElementSpacing) - ElementSpacing;
-        var startX = (totalWidth - rowWidth) / 2;
+        var currentY = startY;
 
-        for (var i = 0; i < elements.Count; i++)
+        // Wrap at MaxElementsPerRow so wide rows flow onto subsequent rows
+        // instead of overflowing the canvas width.
+        for (var rowStart = 0; rowStart < elements.Count; rowStart += MaxElementsPerRow)
         {
-            var element = elements[i];
-            var x = startX + i * (ElementWidth + ElementSpacing);
-            var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+            var rowCount = Math.Min(MaxElementsPerRow, elements.Count - rowStart);
+            var rowWidth = rowCount * (ElementWidth + ElementSpacing) - ElementSpacing;
+            var startX = (totalWidth - rowWidth) / 2;
 
-            elementPositions[element.Id] = (x + ElementWidth / 2, startY + h / 2, ElementWidth, h);
-            DrawElement(builder, element, x, startY, options);
+            var maxHeight = ElementHeight;
+            for (var i = 0; i < rowCount; i++)
+            {
+                var element = elements[rowStart + i];
+                var x = startX + i * (ElementWidth + ElementSpacing);
+                var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+                maxHeight = Math.Max(maxHeight, h);
+
+                elementPositions[element.Id] = (x + ElementWidth / 2, currentY + h / 2, ElementWidth, h);
+                DrawElement(builder, element, x, currentY, options);
+            }
+
+            currentY += maxHeight + RowSpacing;
         }
 
-        var maxHeight = elements.Max(_ => _.Type == C4ElementType.Person ? PersonHeight : ElementHeight);
-        return startY + maxHeight + RowSpacing;
+        return currentY;
     }
 
     static void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
