@@ -188,6 +188,15 @@
     d="M 162.79 249.02 L 165.75 241.59 L 170.71 247.86 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="177.8"
+    y="191.6"
+    width="34.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="195"
     y="200.1"
@@ -208,6 +217,15 @@
     d="M 210 280 L 203.07 284 L 203.07 276 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="174.5"
+    y="263.5"
+    width="41"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="195"
     y="272"
@@ -227,6 +245,15 @@
   <path
     d="M 400 280 L 393.07 284 L 393.07 276 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="341.4"
+    y="263.5"
+    width="87.2"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="385"

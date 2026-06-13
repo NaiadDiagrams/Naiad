@@ -126,6 +126,15 @@
     d="M 167.8 237.76 L 168.13 229.77 L 174.89 234.05 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="109.1"
+    y="192.72"
+    width="126.8"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="172.5"
     y="201.22"
@@ -145,6 +154,15 @@
   <path
     d="M 235 280 L 228.07 284 L 228.07 276 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="176.4"
+    y="263.5"
+    width="87.2"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="220"

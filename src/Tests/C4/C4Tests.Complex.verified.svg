@@ -262,6 +262,15 @@
     d="M 162.79 249.02 L 165.75 241.59 L 170.71 247.86 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="167.9"
+    y="191.6"
+    width="54.2"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="195"
     y="200.1"
@@ -281,6 +290,15 @@
   <path
     d="M 174.41 261.64 L 179.39 255.38 L 182.33 262.82 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="272.8"
+    y="190.34"
+    width="34.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="290"
@@ -302,6 +320,15 @@
     d="M 210 280 L 203.07 284 L 203.07 276 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="134.9"
+    y="263.5"
+    width="120.2"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="195"
     y="272"
@@ -321,6 +348,15 @@
   <path
     d="M 400 280 L 393.07 284 L 393.07 276 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="246.4"
+    y="263.5"
+    width="87.2"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="290"
@@ -342,6 +378,15 @@
     d="M 590 280 L 583.07 284 L 583.07 276 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="321.6"
+    y="263.5"
+    width="126.8"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="385"
     y="272"
@@ -362,6 +407,15 @@
     d="M 225.6 390.34 L 217.65 389.45 L 222.39 383.01 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="128.3"
+    y="333.5"
+    width="133.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="195"
     y="342"
@@ -381,6 +435,15 @@
   <path
     d="M 404.93 402.71 L 397.05 404.07 L 399.81 396.57 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="243.1"
+    y="333.5"
+    width="93.8"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="290"

@@ -563,15 +563,29 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         if (!string.IsNullOrEmpty(label))
         {
             var midX = (fromX + toX) / 2;
-            var midY = (fromY + toY) / 2;
+            var midY = (fromY + toY) / 2 - 8;
+            var fontSize = options.FontSize - 3;
+
+            // White chip behind the label so it stays legible where a line
+            // crosses an element box or another relationship.
+            var labelWidth = label.Length * (fontSize * 0.6) + 8;
+            var labelHeight = fontSize + 6;
+            builder.AddRect(
+                midX - labelWidth / 2,
+                midY - labelHeight / 2.0,
+                labelWidth,
+                labelHeight,
+                rx: 3,
+                fill: "#FFFFFF",
+                stroke: "none");
 
             builder.AddText(
                 midX,
-                midY - 8,
+                midY,
                 label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: options.FontSize - 3,
+                fontSize: fontSize,
                 fontFamily: options.FontFamily,
                 fill: "#666");
         }

@@ -100,6 +100,15 @@
     d="M 220 230 L 216 223.07 L 224 223.07 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="202.8"
+    y="193.5"
+    width="34.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="220"
     y="202"

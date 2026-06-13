@@ -144,6 +144,15 @@
     d="M 400 120 L 393.07 124 L 393.07 116 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="272.8"
+    y="103.5"
+    width="34.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="290"
     y="112"
@@ -163,6 +172,15 @@
   <path
     d="M 400 120 L 393.07 124 L 393.07 116 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="367.8"
+    y="103.5"
+    width="34.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="385"

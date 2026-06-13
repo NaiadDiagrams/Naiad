@@ -184,6 +184,15 @@
     d="M 142.8 237.76 L 143.13 229.77 L 149.89 234.05 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="90.7"
+    y="192.72"
+    width="113.6"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="147.5"
     y="201.22"
@@ -203,6 +212,15 @@
   <path
     d="M 170.79 256.71 L 175.06 249.95 L 178.79 257.03 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="192.3"
+    y="190.83"
+    width="100.4"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="242.5"
@@ -224,6 +242,15 @@
     d="M 210 280 L 203.07 284 L 203.07 276 Z"
     fill="#666"
     stroke="none" />
+  <rect
+    x="131.6"
+    y="263.5"
+    width="126.8"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
+    stroke="none" />
   <text
     x="195"
     y="272"
@@ -243,6 +270,15 @@
   <path
     d="M 400 280 L 393.07 284 L 393.07 276 Z"
     fill="#666"
+    stroke="none" />
+  <rect
+    x="246.4"
+    y="263.5"
+    width="87.2"
+    height="17"
+    rx="3"
+    ry="3"
+    fill="#FFFFFF"
     stroke="none" />
   <text
     x="290"
