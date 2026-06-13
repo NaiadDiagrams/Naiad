@@ -1,17 +1,15 @@
 namespace Naiad.Diagrams.C4;
 
-public class C4Renderer : IDiagramRenderer<C4Model>
+public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C4Model>
 {
+    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+
     const double ElementWidth = 160;
     const double ElementHeight = 100;
     const double PersonHeight = 120;
-    const double ElementSpacing = 30;
     const double TitleHeight = 50;
-    const double RowSpacing = 40;
     const double BoundaryPadding = 15;
     const double BoundaryTitleHeight = 40;
-    const double BoundarySpacing = 20;
-    const int MaxElementsPerRow = 4;
 
     const string PersonColor = "#08427B";
     const string PersonExtColor = "#999999";
@@ -24,17 +22,17 @@ public class C4Renderer : IDiagramRenderer<C4Model>
     const string BoundaryStroke = "#444444";
     const string BoundaryFill = "#FFFFFF";
 
-    // Cached dimensions during rendering
-    readonly Dictionary<string, (double w, double h)> boundaryDimensions = new();
-    readonly Dictionary<string, (double x, double y, double w, double h)> elementPositions = new();
-    readonly Dictionary<string, (double x, double y, double w, double h)> boundaryPositions = new();
+    // Boundary layout state (recursive composite layout). Keyed by boundary id;
+    // the top-level container uses the empty-string key.
+    readonly Dictionary<string, ContainerLayout> containerLayouts = new();
+    readonly Dictionary<string, (double w, double h)> boundarySizes = new();
+    readonly Dictionary<string, (double x, double y, double w, double h)> elementAbs = new();
+    readonly Dictionary<string, (double x, double y, double w, double h)> boundaryAbs = new();
+    Dictionary<string, C4Element> elementsById = new();
+    Dictionary<string, C4Boundary> boundariesById = new();
 
     public SvgDocument Render(C4Model model, RenderOptions options)
     {
-        boundaryDimensions.Clear();
-        elementPositions.Clear();
-        boundaryPositions.Clear();
-
         if (model.Elements.Count == 0 && model.Boundaries.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
@@ -49,62 +47,86 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             return emptyBuilder.Build();
         }
 
-        // Step 1: Calculate all boundary dimensions (bottom-up)
-        var topLevelBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == null).ToList();
-        foreach (var boundary in topLevelBoundaries)
+        // Both paths place related elements adjacently with the shared
+        // Sugiyama/Dagre engine. Boundary diagrams additionally lay out each
+        // boundary's contents in isolation and treat the boundary as a single
+        // composite node in its parent container.
+        if (model.Boundaries.Count == 0)
         {
-            CalculateBoundaryDimensions(model, boundary);
+            return RenderWithLayoutEngine(model, options);
         }
 
-        // Step 2: Get elements outside any boundary
-        var outsideElements = model.Elements.Where(_ => _.BoundaryId == null).ToList();
-        var outsidePersons = outsideElements.Where(_ => _.Type == C4ElementType.Person).ToList();
-        var outsideSystems = outsideElements.Where(_ => _.Type is C4ElementType.System or C4ElementType.SystemDb).ToList();
-        var outsideContainers = outsideElements.Where(_ =>
-            _.Type is C4ElementType.Container or C4ElementType.ContainerDb or C4ElementType.ContainerQueue).ToList();
-        var outsideComponents = outsideElements.Where(_ => _.Type == C4ElementType.Component).ToList();
+        return RenderWithBoundaries(model, options);
+    }
 
-        // Step 3: Calculate total diagram dimensions
+    /// <summary>
+    /// Layout-engine path for boundary-free diagrams: builds a graph from the
+    /// elements and relationships, runs the shared Sugiyama/Dagre engine for
+    /// placement and edge routing, then draws C4 shapes at the computed
+    /// positions with edges following the routed polylines.
+    /// </summary>
+    SvgDocument RenderWithLayoutEngine(C4Model model, RenderOptions options)
+    {
+        var graph = new C4LayoutGraph();
+
+        foreach (var element in model.Elements)
+        {
+            graph.AddNode(
+                new()
+                {
+                    Id = element.Id,
+                    Label = element.Label,
+                    Width = ElementWidth,
+                    Height = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight
+                });
+        }
+
+        foreach (var rel in model.Relationships)
+        {
+            // Skip relationships that reference unknown elements.
+            if (graph.GetNode(rel.From) is null ||
+                graph.GetNode(rel.To) is null)
+            {
+                continue;
+            }
+
+            graph.AddEdge(
+                new()
+                {
+                    SourceId = rel.From,
+                    TargetId = rel.To,
+                    Label = rel.Label,
+                    LineStyle = EdgeStyle.Dotted
+                });
+        }
+
+        var layoutOptions = new LayoutOptions
+        {
+            Direction = Direction.TopToBottom,
+            NodeSeparation = 60,
+            RankSeparation = 90
+        };
+        var layoutResult = layoutEngine.Layout(graph, layoutOptions);
+
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
 
-        // Calculate outside element rows. Each kind wraps at MaxElementsPerRow,
-        // so its block height grows with the number of wrapped rows.
-        var outsidePersonsHeight = RowCount(outsidePersons.Count) * (PersonHeight + RowSpacing);
-        var outsideSystemsHeight = RowCount(outsideSystems.Count) * (ElementHeight + RowSpacing);
-        var outsideContainersHeight = RowCount(outsideContainers.Count) * (ElementHeight + RowSpacing);
-        var outsideComponentsHeight = RowCount(outsideComponents.Count) * (ElementHeight + RowSpacing);
+        // Ensure the canvas is wide enough for the title, which can be wider
+        // than a narrow (e.g. single-column) diagram body.
+        var titleWidth = string.IsNullOrEmpty(model.Title)
+            ? 0
+            : model.Title.Length * (options.FontSize + 6) * 0.6 + 20;
+        var contentWidth = Math.Max(layoutResult.Width, titleWidth);
+        var contentHeight = layoutResult.Height + titleOffset;
 
-        // Calculate top-level boundary row dimensions
-        var boundaryRowWidth = topLevelBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
-        var boundaryRowHeight = topLevelBoundaries.Count > 0
-            ? topLevelBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing
-            : 0;
+        var builder = new SvgBuilder()
+            .Size(contentWidth, contentHeight)
+            .Padding(options.Padding);
 
-        // Calculate width based on elements and boundaries. Rows wrap at
-        // MaxElementsPerRow, so the widest possible row caps at that many.
-        var outsideElementsWidth = Math.Max(
-            Math.Max(outsidePersons.Count, outsideSystems.Count),
-            Math.Max(outsideContainers.Count, outsideComponents.Count)
-        );
-        outsideElementsWidth = Math.Min(outsideElementsWidth, MaxElementsPerRow);
-        var outsideWidth = outsideElementsWidth * (ElementWidth + ElementSpacing) - ElementSpacing;
-
-        var width = Math.Max(Math.Max(outsideWidth, boundaryRowWidth), 400) + options.Padding * 2;
-        var height = titleOffset + outsidePersonsHeight + outsideSystemsHeight +
-                    boundaryRowHeight + outsideContainersHeight + outsideComponentsHeight +
-                    options.Padding * 2 + 50;
-
-        var builder = new SvgBuilder().Size(width, height);
-
-        // Add arrow marker
-        builder.AddArrowMarker("c4arrow", "#666");
-
-        // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
-                width / 2,
-                options.Padding + TitleHeight / 2,
+                contentWidth / 2,
+                TitleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -113,103 +135,435 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 fontWeight: "bold");
         }
 
-        var currentY = options.Padding + titleOffset;
+        // Center the diagram body horizontally and offset it below the title.
+        var bodyOffsetX = (contentWidth - layoutResult.Width) / 2;
+        builder.BeginGroup(transform: string.Create(
+            CultureInfo.InvariantCulture, $"translate({bodyOffsetX:0.##},{titleOffset:0.##})"));
 
-        // Draw outside persons
-        currentY = DrawElementRow(builder, outsidePersons, currentY, width, options);
-
-        // Draw outside systems
-        currentY = DrawElementRow(builder, outsideSystems, currentY, width, options);
-
-        // Draw top-level boundaries (recursively handles nested)
-        if (topLevelBoundaries.Count > 0)
+        // Edge lines first so element boxes sit on top of them.
+        foreach (var edge in graph.Edges)
         {
-            var boundaryStartX = (width - boundaryRowWidth) / 2;
-            foreach (var boundary in topLevelBoundaries)
-            {
-                var (bw, bh) = boundaryDimensions[boundary.Id];
-                DrawBoundaryRecursive(builder, model, boundary, boundaryStartX, currentY, bw, bh, options);
-                boundaryStartX += bw + BoundarySpacing;
-            }
-            currentY += topLevelBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing;
+            DrawRoutedEdge(builder, edge);
         }
 
-        // Draw outside containers
-        currentY = DrawElementRow(builder, outsideContainers, currentY, width, options);
+        // Element boxes.
+        foreach (var element in model.Elements)
+        {
+            var node = graph.GetNode(element.Id);
+            if (node is null)
+            {
+                continue;
+            }
 
-        // Draw outside components
-        DrawElementRow(builder, outsideComponents, currentY, width, options);
+            var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+            DrawElement(builder, element, node.Position.X - ElementWidth / 2, node.Position.Y - h / 2, options);
+        }
 
-        // Draw relationships
+        // Edge labels last so their chips stay legible on top of everything.
+        foreach (var edge in graph.Edges)
+        {
+            if (!string.IsNullOrEmpty(edge.Label))
+            {
+                DrawLabelChip(builder, edge.LabelPosition.X, edge.LabelPosition.Y, edge.Label, options);
+            }
+        }
+
+        builder.EndGroup();
+
+        return builder.Build();
+    }
+
+    /// <summary>
+    /// Layout path for diagrams with boundaries. Each boundary's contents are
+    /// laid out in isolation (recursively), the boundary is treated as a single
+    /// composite node in its parent, and edges are drawn leaf-to-leaf once every
+    /// element has an absolute position.
+    /// </summary>
+    SvgDocument RenderWithBoundaries(C4Model model, RenderOptions options)
+    {
+        containerLayouts.Clear();
+        boundarySizes.Clear();
+        elementAbs.Clear();
+        boundaryAbs.Clear();
+        elementsById = model.Elements.ToDictionary(_ => _.Id);
+        boundariesById = model.Boundaries.ToDictionary(_ => _.Id);
+
+        // Pass 1: lay out each container, children before parents.
+        var topLayout = LayoutContainer(model, null);
+        containerLayouts[""] = topLayout;
+
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleWidth = string.IsNullOrEmpty(model.Title)
+            ? 0
+            : model.Title.Length * (options.FontSize + 6) * 0.6 + 20;
+        var contentWidth = Math.Max(topLayout.ContentWidth, titleWidth);
+        var contentHeight = topLayout.ContentHeight + titleOffset;
+
+        // Pass 2: assign absolute positions, parents before children.
+        var bodyOffsetX = (contentWidth - topLayout.ContentWidth) / 2;
+        PlaceContainer(null, bodyOffsetX, titleOffset);
+
+        var builder = new SvgBuilder()
+            .Size(contentWidth, contentHeight)
+            .Padding(options.Padding);
+
+        if (!string.IsNullOrEmpty(model.Title))
+        {
+            builder.AddText(
+                contentWidth / 2,
+                TitleHeight / 2,
+                model.Title,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize + 6,
+                fontFamily: options.FontFamily,
+                fontWeight: "bold");
+        }
+
+        // Draw order: boundary boxes (outermost first) so their fills don't
+        // cover nested content, then edge lines, then element boxes, then edge
+        // label chips on top.
+        foreach (var boundary in model.Boundaries.OrderBy(BoundaryDepth))
+        {
+            if (boundaryAbs.TryGetValue(boundary.Id, out var b))
+            {
+                DrawBoundaryBox(builder, boundary, b.x, b.y, b.w, b.h, options);
+            }
+        }
+
+        var labels = new List<(double x, double y, string label)>();
         foreach (var rel in model.Relationships)
         {
-            if (elementPositions.TryGetValue(rel.From, out var fromPos) &&
-                elementPositions.TryGetValue(rel.To, out var toPos))
+            if (elementAbs.TryGetValue(rel.From, out var from) &&
+                elementAbs.TryGetValue(rel.To, out var to))
             {
-                DrawRelationship(builder, fromPos, toPos, rel.Label, options);
+                var (mx, my) = DrawRelationshipLine(builder, from, to);
+                if (!string.IsNullOrEmpty(rel.Label))
+                {
+                    labels.Add((mx, my, rel.Label));
+                }
             }
+        }
+
+        foreach (var element in model.Elements)
+        {
+            if (elementAbs.TryGetValue(element.Id, out var e))
+            {
+                var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+                DrawElement(builder, element, e.x - ElementWidth / 2, e.y - h / 2, options);
+            }
+        }
+
+        foreach (var (x, y, label) in labels)
+        {
+            DrawLabelChip(builder, x, y, label, options);
         }
 
         return builder.Build();
     }
 
     /// <summary>
-    /// Recursively calculate boundary dimensions (bottom-up).
+    /// Lays out a single container (the top level when <paramref name="boundaryId"/>
+    /// is null, otherwise one boundary) using the shared engine, treating child
+    /// boundaries as composite nodes. Returns the content size and each direct
+    /// member's center relative to the content's top-left.
     /// </summary>
-    (double w, double h) CalculateBoundaryDimensions(C4Model model, C4Boundary boundary)
+    ContainerLayout LayoutContainer(C4Model model, string? boundaryId)
     {
-        // Get direct elements in this boundary
-        var directElements = model.Elements.Where(_ => _.BoundaryId == boundary.Id).ToList();
+        var directElements = model.Elements.Where(_ => _.BoundaryId == boundaryId).ToList();
+        var childBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == boundaryId).ToList();
 
-        // Get child boundaries
-        var childBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == boundary.Id).ToList();
-
-        // Recursively calculate child boundary dimensions first
+        // Lay out child boundaries first so their composite sizes are known.
         foreach (var child in childBoundaries)
         {
-            CalculateBoundaryDimensions(model, child);
+            var childLayout = LayoutContainer(model, child.Id);
+            containerLayouts[child.Id] = childLayout;
+            boundarySizes[child.Id] = (
+                childLayout.ContentWidth + BoundaryPadding * 2,
+                childLayout.ContentHeight + BoundaryPadding * 2 + BoundaryTitleHeight);
         }
 
-        // Calculate content dimensions
-        double contentWidth = 0;
-        double contentHeight = 0;
-
-        // Layout: child boundaries in a row, then direct elements below
-        if (childBoundaries.Count > 0)
+        var graph = new C4LayoutGraph();
+        foreach (var element in directElements)
         {
-            var childrenWidth = childBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
-            var childrenHeight = childBoundaries.Max(_ => boundaryDimensions[_.Id].h);
-            contentWidth = Math.Max(contentWidth, childrenWidth);
-            contentHeight += childrenHeight + (directElements.Count > 0 ? RowSpacing : 0);
+            graph.AddNode(
+                new()
+                {
+                    Id = element.Id,
+                    Width = ElementWidth,
+                    Height = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight
+                });
         }
 
-        // Add direct elements (laid out in a row)
-        if (directElements.Count > 0)
+        foreach (var child in childBoundaries)
         {
-            var elementsWidth = directElements.Count * (ElementWidth + ElementSpacing) - ElementSpacing;
-            var elementsHeight = directElements.Max(_ => _.Type == C4ElementType.Person ? PersonHeight : ElementHeight);
-            contentWidth = Math.Max(contentWidth, elementsWidth);
-            contentHeight += elementsHeight;
+            var (w, h) = boundarySizes[child.Id];
+            graph.AddNode(new() { Id = child.Id, Width = w, Height = h });
         }
 
-        // Ensure minimum dimensions
-        contentWidth = Math.Max(contentWidth, ElementWidth);
-        contentHeight = Math.Max(contentHeight, ElementHeight);
+        // Add an edge between two members only at the level where they first
+        // become distinct direct members (their lowest common container).
+        foreach (var rel in model.Relationships)
+        {
+            var from = DirectRepresentative(rel.From, boundaryId);
+            var to = DirectRepresentative(rel.To, boundaryId);
+            if (from is not null &&
+                to is not null &&
+                from != to &&
+                graph.GetNode(from) is not null &&
+                graph.GetNode(to) is not null)
+            {
+                graph.AddEdge(new() { SourceId = from, TargetId = to });
+            }
+        }
 
-        // Add boundary padding and title
-        var totalWidth = contentWidth + BoundaryPadding * 2;
-        var totalHeight = contentHeight + BoundaryPadding * 2 + BoundaryTitleHeight;
+        var layout = new ContainerLayout();
+        if (graph.Nodes.Count == 0)
+        {
+            layout.ContentWidth = ElementWidth;
+            layout.ContentHeight = ElementHeight;
+            return layout;
+        }
 
-        boundaryDimensions[boundary.Id] = (totalWidth, totalHeight);
-        return (totalWidth, totalHeight);
+        // Actors flow top-to-bottom at the top level; a boundary's contents are
+        // laid out left-to-right so an edge leaving the boundary downward does
+        // not pass through a sibling box stacked below it.
+        var layoutOptions = new LayoutOptions
+        {
+            Direction = boundaryId is null ? Direction.TopToBottom : Direction.LeftToRight,
+            NodeSeparation = 60,
+            RankSeparation = 90
+        };
+        layoutEngine.Layout(graph, layoutOptions);
+
+        var minX = double.MaxValue;
+        var minY = double.MaxValue;
+        var maxX = double.MinValue;
+        var maxY = double.MinValue;
+        foreach (var node in graph.Nodes)
+        {
+            minX = Math.Min(minX, node.Position.X - node.Width / 2);
+            minY = Math.Min(minY, node.Position.Y - node.Height / 2);
+            maxX = Math.Max(maxX, node.Position.X + node.Width / 2);
+            maxY = Math.Max(maxY, node.Position.Y + node.Height / 2);
+        }
+
+        foreach (var node in graph.Nodes)
+        {
+            layout.MemberCenters[node.Id] = (node.Position.X - minX, node.Position.Y - minY);
+        }
+
+        layout.ContentWidth = maxX - minX;
+        layout.ContentHeight = maxY - minY;
+        return layout;
     }
 
     /// <summary>
-    /// Recursively draw a boundary and its contents.
+    /// Returns the id of the direct child of <paramref name="containerId"/> (an
+    /// element or a child boundary) that contains <paramref name="elementId"/>,
+    /// or null if the element is not within that container.
     /// </summary>
-    void DrawBoundaryRecursive(
+    string? DirectRepresentative(string elementId, string? containerId)
+    {
+        if (!elementsById.TryGetValue(elementId, out var element))
+        {
+            return null;
+        }
+
+        // The element sits directly inside this container.
+        if (element.BoundaryId == containerId)
+        {
+            return elementId;
+        }
+
+        // Otherwise find the boundary ancestor that is a direct child of the
+        // container; that boundary is the element's representative here.
+        var current = element.BoundaryId;
+        while (current is not null)
+        {
+            if (!boundariesById.TryGetValue(current, out var boundary))
+            {
+                return null;
+            }
+
+            if (boundary.ParentBoundaryId == containerId)
+            {
+                return current;
+            }
+
+            current = boundary.ParentBoundaryId;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Recursively assigns absolute positions. <paramref name="contentOriginX"/>
+    /// / <paramref name="contentOriginY"/> are the absolute top-left of the
+    /// container's content area; each member's center is offset from there.
+    /// </summary>
+    void PlaceContainer(string? boundaryId, double contentOriginX, double contentOriginY)
+    {
+        if (!containerLayouts.TryGetValue(boundaryId ?? "", out var layout))
+        {
+            return;
+        }
+
+        foreach (var (memberId, center) in layout.MemberCenters)
+        {
+            var centerX = contentOriginX + center.X;
+            var centerY = contentOriginY + center.Y;
+
+            if (boundariesById.ContainsKey(memberId))
+            {
+                var (w, h) = boundarySizes[memberId];
+                var topLeftX = centerX - w / 2;
+                var topLeftY = centerY - h / 2;
+                boundaryAbs[memberId] = (topLeftX, topLeftY, w, h);
+                PlaceContainer(
+                    memberId,
+                    topLeftX + BoundaryPadding,
+                    topLeftY + BoundaryTitleHeight + BoundaryPadding);
+            }
+            else if (elementsById.TryGetValue(memberId, out var element))
+            {
+                var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+                elementAbs[memberId] = (centerX, centerY, ElementWidth, h);
+            }
+        }
+    }
+
+    /// <summary>Nesting depth of a boundary (0 for a top-level boundary).</summary>
+    int BoundaryDepth(C4Boundary boundary)
+    {
+        var depth = 0;
+        var current = boundary.ParentBoundaryId;
+        while (current is not null && boundariesById.TryGetValue(current, out var parent))
+        {
+            depth++;
+            current = parent.ParentBoundaryId;
+        }
+
+        return depth;
+    }
+
+    /// <summary>
+    /// Draws a routed relationship edge: a dashed polyline through the layout
+    /// points with a manual arrowhead on the final segment.
+    /// </summary>
+    static void DrawRoutedEdge(SvgBuilder builder, Edge edge)
+    {
+        var points = edge.Points;
+        if (points.Count < 2)
+        {
+            return;
+        }
+
+        var path = new StringBuilder();
+        path.Append(CultureInfo.InvariantCulture, $"M {points[0].X:0.##} {points[0].Y:0.##}");
+        for (var i = 1; i < points.Count; i++)
+        {
+            path.Append(CultureInfo.InvariantCulture, $" L {points[i].X:0.##} {points[i].Y:0.##}");
+        }
+
+        builder.AddPath(
+            path.ToString(),
+            fill: "none",
+            stroke: "#666",
+            strokeWidth: 1.5,
+            strokeDasharray: "5,5");
+
+        // Arrowhead along the final segment.
+        var p1 = points[^2];
+        var p2 = points[^1];
+        var angle = Math.Atan2(p2.Y - p1.Y, p2.X - p1.X);
+        const int arrowSize = 8;
+        const double arrowAngle = Math.PI / 6;
+        var ax1 = p2.X - arrowSize * Math.Cos(angle - arrowAngle);
+        var ay1 = p2.Y - arrowSize * Math.Sin(angle - arrowAngle);
+        var ax2 = p2.X - arrowSize * Math.Cos(angle + arrowAngle);
+        var ay2 = p2.Y - arrowSize * Math.Sin(angle + arrowAngle);
+
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {p2.X:0.##} {p2.Y:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
+            fill: "#666",
+            stroke: "none");
+    }
+
+    /// <summary>
+    /// Draws a relationship as a dashed line with an arrowhead, trimmed to the
+    /// box edges, and returns the point where its label chip should sit.
+    /// </summary>
+    static (double x, double y) DrawRelationshipLine(
         SvgBuilder builder,
-        C4Model model,
+        (double x, double y, double w, double h) from,
+        (double x, double y, double w, double h) to)
+    {
+        var dx = to.x - from.x;
+        var dy = to.y - from.y;
+        var angle = Math.Atan2(dy, dx);
+
+        var fromX = from.x + Math.Cos(angle) * from.w / 2;
+        var fromY = from.y + Math.Sin(angle) * from.h / 2;
+        var toX = to.x - Math.Cos(angle) * to.w / 2;
+        var toY = to.y - Math.Sin(angle) * to.h / 2;
+
+        builder.AddLine(
+            fromX,
+            fromY,
+            toX,
+            toY,
+            stroke: "#666",
+            strokeWidth: 1.5,
+            strokeDasharray: "5,5");
+
+        const int arrowSize = 8;
+        const double arrowAngle = Math.PI / 6;
+        var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
+        var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
+        var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
+        var ay2 = toY - arrowSize * Math.Sin(angle + arrowAngle);
+
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
+            fill: "#666",
+            stroke: "none");
+
+        return ((fromX + toX) / 2, (fromY + toY) / 2 - 8);
+    }
+
+    /// <summary>
+    /// Draws a relationship label centered at the given point on a white chip so
+    /// it stays legible where it crosses lines or boxes.
+    /// </summary>
+    static void DrawLabelChip(SvgBuilder builder, double x, double y, string label, RenderOptions options)
+    {
+        var fontSize = options.FontSize - 3;
+        var labelWidth = label.Length * (fontSize * 0.6) + 8;
+        var labelHeight = fontSize + 6;
+
+        builder.AddRect(
+            x - labelWidth / 2,
+            y - labelHeight / 2.0,
+            labelWidth,
+            labelHeight,
+            rx: 3,
+            fill: "#FFFFFF",
+            stroke: "none");
+
+        builder.AddText(
+            x,
+            y,
+            label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: fontSize,
+            fontFamily: options.FontFamily,
+            fill: "#666");
+    }
+
+    static void DrawBoundaryBox(
+        SvgBuilder builder,
         C4Boundary boundary,
         double x,
         double y,
@@ -217,7 +571,6 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         double height,
         RenderOptions options)
     {
-        // Draw boundary box
         builder.AddRect(
             x,
             y,
@@ -229,7 +582,6 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             strokeWidth: 2,
             style: "stroke-dasharray: 8 4");
 
-        // Draw boundary label
         builder.AddText(
             x + width / 2,
             y + BoundaryTitleHeight / 2 - 5,
@@ -241,7 +593,6 @@ public class C4Renderer : IDiagramRenderer<C4Model>
             fontWeight: "bold",
             fill: "#333333");
 
-        // Draw boundary type indicator
         var typeLabel = boundary.Type switch
         {
             C4BoundaryType.Container => "[Container]",
@@ -263,92 +614,6 @@ public class C4Renderer : IDiagramRenderer<C4Model>
                 fontFamily: options.FontFamily,
                 fill: "#666666");
         }
-
-        boundaryPositions[boundary.Id] = (x + width / 2, y + height / 2, width, height);
-
-        // Content area starts after title
-        var contentY = y + BoundaryTitleHeight + BoundaryPadding;
-
-        // Get child boundaries and direct elements
-        var childBoundaries = model.Boundaries.Where(_ => _.ParentBoundaryId == boundary.Id).ToList();
-        var directElements = model.Elements.Where(_ => _.BoundaryId == boundary.Id).ToList();
-
-        // Draw child boundaries first (in a row)
-        if (childBoundaries.Count > 0)
-        {
-            var childrenTotalWidth = childBoundaries.Sum(_ => boundaryDimensions[_.Id].w + BoundarySpacing) - BoundarySpacing;
-            var childStartX = x + (width - childrenTotalWidth) / 2;
-
-            foreach (var child in childBoundaries)
-            {
-                var (cw, ch) = boundaryDimensions[child.Id];
-                DrawBoundaryRecursive(builder, model, child, childStartX, contentY, cw, ch, options);
-                childStartX += cw + BoundarySpacing;
-            }
-
-            // Move content Y down past child boundaries
-            contentY += childBoundaries.Max(_ => boundaryDimensions[_.Id].h) + RowSpacing;
-        }
-
-        // Draw direct elements in this boundary
-        if (directElements.Count > 0)
-        {
-            var elementsWidth = directElements.Count * (ElementWidth + ElementSpacing) - ElementSpacing;
-            var startX = x + (width - elementsWidth) / 2;
-
-            foreach (var element in directElements)
-            {
-                var eh = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
-                elementPositions[element.Id] = (startX + ElementWidth / 2, contentY + eh / 2, ElementWidth, eh);
-                DrawElement(builder, element, startX, contentY, options);
-                startX += ElementWidth + ElementSpacing;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Number of wrapped rows needed to lay out <paramref name="count"/> elements.
-    /// </summary>
-    static int RowCount(int count) => (count + MaxElementsPerRow - 1) / MaxElementsPerRow;
-
-    double DrawElementRow(
-        SvgBuilder builder,
-        List<C4Element> elements,
-        double startY,
-        double totalWidth,
-        RenderOptions options)
-    {
-        if (elements.Count == 0)
-        {
-            return startY;
-        }
-
-        var currentY = startY;
-
-        // Wrap at MaxElementsPerRow so wide rows flow onto subsequent rows
-        // instead of overflowing the canvas width.
-        for (var rowStart = 0; rowStart < elements.Count; rowStart += MaxElementsPerRow)
-        {
-            var rowCount = Math.Min(MaxElementsPerRow, elements.Count - rowStart);
-            var rowWidth = rowCount * (ElementWidth + ElementSpacing) - ElementSpacing;
-            var startX = (totalWidth - rowWidth) / 2;
-
-            var maxHeight = ElementHeight;
-            for (var i = 0; i < rowCount; i++)
-            {
-                var element = elements[rowStart + i];
-                var x = startX + i * (ElementWidth + ElementSpacing);
-                var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
-                maxHeight = Math.Max(maxHeight, h);
-
-                elementPositions[element.Id] = (x + ElementWidth / 2, currentY + h / 2, ElementWidth, h);
-                DrawElement(builder, element, x, currentY, options);
-            }
-
-            currentY += maxHeight + RowSpacing;
-        }
-
-        return currentY;
     }
 
     static void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
@@ -519,78 +784,6 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         }
     }
 
-    static void DrawRelationship(
-        SvgBuilder builder,
-        (double x, double y, double w, double h) from,
-        (double x, double y, double w, double h) to,
-        string? label,
-        RenderOptions options)
-    {
-        // Calculate connection points
-        var dx = to.x - from.x;
-        var dy = to.y - from.y;
-        var angle = Math.Atan2(dy, dx);
-
-        var fromX = from.x + Math.Cos(angle) * from.w / 2;
-        var fromY = from.y + Math.Sin(angle) * from.h / 2;
-        var toX = to.x - Math.Cos(angle) * to.w / 2;
-        var toY = to.y - Math.Sin(angle) * to.h / 2;
-
-        // Draw line
-        builder.AddLine(
-            fromX,
-            fromY,
-            toX,
-            toY,
-            stroke: "#666",
-            strokeWidth: 1.5,
-            strokeDasharray: "5,5");
-
-        // Draw arrowhead manually
-        const int arrowSize = 8;
-        const double arrowAngle = Math.PI / 6;
-        var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
-        var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
-        var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
-        var ay2 = toY - arrowSize * Math.Sin(angle + arrowAngle);
-
-        builder.AddPath(
-            string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
-            fill: "#666",
-            stroke: "none");
-
-        // Draw label
-        if (!string.IsNullOrEmpty(label))
-        {
-            var midX = (fromX + toX) / 2;
-            var midY = (fromY + toY) / 2 - 8;
-            var fontSize = options.FontSize - 3;
-
-            // White chip behind the label so it stays legible where a line
-            // crosses an element box or another relationship.
-            var labelWidth = label.Length * (fontSize * 0.6) + 8;
-            var labelHeight = fontSize + 6;
-            builder.AddRect(
-                midX - labelWidth / 2,
-                midY - labelHeight / 2.0,
-                labelWidth,
-                labelHeight,
-                rx: 3,
-                fill: "#FFFFFF",
-                stroke: "none");
-
-            builder.AddText(
-                midX,
-                midY,
-                label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: fontSize,
-                fontFamily: options.FontFamily,
-                fill: "#666");
-        }
-    }
-
     static string GetElementColor(C4Element element)
     {
         if (element.IsExternal)
@@ -621,4 +814,22 @@ public class C4Renderer : IDiagramRenderer<C4Model>
         return string.Concat(text.AsSpan(0, maxLength - 3), "...");
     }
 
+    /// <summary>
+    /// Concrete graph model used to feed C4 elements and relationships to the
+    /// shared layout engine.
+    /// </summary>
+    sealed class C4LayoutGraph : GraphDiagramBase
+    {
+    }
+
+    /// <summary>
+    /// Result of laying out one container: its content size and each direct
+    /// member's center relative to the content's top-left corner.
+    /// </summary>
+    sealed class ContainerLayout
+    {
+        public double ContentWidth { get; set; }
+        public double ContentHeight { get; set; }
+        public Dictionary<string, (double X, double Y)> MemberCenters { get; } = new();
+    }
 }

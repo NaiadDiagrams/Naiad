@@ -2,119 +2,109 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 440 440"
-  style="max-width: 440px;"
+  viewBox="0 0 324 400"
+  style="max-width: 324px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <defs>
-    <marker
-      id="c4arrow"
-      refX="9"
-      refY="3.5"
-      markerWidth="10"
-      markerHeight="7"
-      orient="auto">
+  <g
+    transform="translate(20,20)">
+    <text
+      x="142"
+      y="25"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="20px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">System Context diagram</text>
+    <g
+      transform="translate(62,50)">
       <path
-        d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
-    </marker>
-  </defs>
-  <text
-    x="220"
-    y="45"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="20px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">System Context diagram</text>
-  <rect
-    x="140"
-    y="98"
-    width="160"
-    height="92"
-    rx="8"
-    ry="8"
-    fill="#08427B"
-    stroke="none" />
-  <circle
-    cx="220"
-    cy="90"
-    r="20"
-    fill="#08427B"
-    stroke="none" />
-  <text
-    x="220"
-    y="141"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">User</text>
-  <text
-    x="220"
-    y="159"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">A user of the system</text>
-  <rect
-    x="140"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#1168BD"
-    stroke="none" />
-  <text
-    x="220"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">System</text>
-  <text
-    x="220"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">The main system</text>
-  <line
-    x1="220"
-    y1="190"
-    x2="220"
-    y2="230"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 220 230 L 216 223.07 L 224 223.07 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="202.8"
-    y="193.5"
-    width="34.4"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="220"
-    y="202"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Uses</text>
+        d="M 80 120 L 80 205"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 205 L 76 198.07 L 84 198.07 Z"
+        fill="#666"
+        stroke="none" />
+      <rect
+        x="0"
+        y="28"
+        width="160"
+        height="92"
+        rx="8"
+        ry="8"
+        fill="#08427B"
+        stroke="none" />
+      <circle
+        cx="80"
+        cy="20"
+        r="20"
+        fill="#08427B"
+        stroke="none" />
+      <text
+        x="80"
+        y="71"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">User</text>
+      <text
+        x="80"
+        y="89"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">A user of the system</text>
+      <rect
+        x="0"
+        y="210"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="80"
+        y="235"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">System</text>
+      <text
+        x="80"
+        y="253"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">The main system</text>
+      <rect
+        x="62.8"
+        y="154"
+        width="34.4"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="162.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Uses</text>
+    </g>
+  </g>
 </svg>

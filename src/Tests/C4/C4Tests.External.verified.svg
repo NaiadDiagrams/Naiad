@@ -2,174 +2,162 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 440 440"
-  style="max-width: 440px;"
+  viewBox="0 0 324 590"
+  style="max-width: 324px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <defs>
-    <marker
-      id="c4arrow"
-      refX="9"
-      refY="3.5"
-      markerWidth="10"
-      markerHeight="7"
-      orient="auto">
+  <g
+    transform="translate(20,20)">
+    <text
+      x="142"
+      y="25"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="20px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Banking System Context</text>
+    <g
+      transform="translate(62,50)">
       <path
-        d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
-    </marker>
-  </defs>
-  <text
-    x="220"
-    y="45"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="20px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">Banking System Context</text>
-  <rect
-    x="140"
-    y="98"
-    width="160"
-    height="92"
-    rx="8"
-    ry="8"
-    fill="#08427B"
-    stroke="none" />
-  <circle
-    cx="220"
-    cy="90"
-    r="20"
-    fill="#08427B"
-    stroke="none" />
-  <text
-    x="220"
-    y="141"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Banking Customer</text>
-  <text
-    x="220"
-    y="159"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">A customer of the bank</text>
-  <rect
-    x="45"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#1168BD"
-    stroke="none" />
-  <text
-    x="125"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Internet Banking</text>
-  <text
-    x="125"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Allows customers to...</text>
-  <rect
-    x="235"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#999999"
-    stroke="none" />
-  <text
-    x="315"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">E-mail System</text>
-  <text
-    x="315"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">External email prov...</text>
-  <line
-    x1="177.2"
-    y1="180.69"
-    x2="167.8"
-    y2="237.76"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 167.8 237.76 L 168.13 229.77 L 174.89 234.05 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="109.1"
-    y="192.72"
-    width="126.8"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="172.5"
-    y="201.22"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Views account info</text>
-  <line
-    x1="205"
-    y1="280"
-    x2="235"
-    y2="280"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 235 280 L 228.07 284 L 228.07 276 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="176.4"
-    y="263.5"
-    width="87.2"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="220"
-    y="272"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Sends emails</text>
+        d="M 80 120 L 80 205"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 205 L 76 198.07 L 84 198.07 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 80 310 L 80 395"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 395 L 76 388.07 L 84 388.07 Z"
+        fill="#666"
+        stroke="none" />
+      <rect
+        x="0"
+        y="28"
+        width="160"
+        height="92"
+        rx="8"
+        ry="8"
+        fill="#08427B"
+        stroke="none" />
+      <circle
+        cx="80"
+        cy="20"
+        r="20"
+        fill="#08427B"
+        stroke="none" />
+      <text
+        x="80"
+        y="71"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Banking Customer</text>
+      <text
+        x="80"
+        y="89"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">A customer of the bank</text>
+      <rect
+        x="0"
+        y="210"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="80"
+        y="235"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Internet Banking</text>
+      <text
+        x="80"
+        y="253"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Allows customers to...</text>
+      <rect
+        x="0"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#999999"
+        stroke="none" />
+      <text
+        x="80"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">E-mail System</text>
+      <text
+        x="80"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">External email prov...</text>
+      <rect
+        x="16.6"
+        y="154"
+        width="126.8"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="162.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Views account info</text>
+      <rect
+        x="36.4"
+        y="344"
+        width="87.2"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="352.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Sends emails</text>
+    </g>
+  </g>
 </svg>

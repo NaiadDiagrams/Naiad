@@ -134,4 +134,57 @@ public class C4Tests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task Boundaries()
+    {
+        const string input =
+            """
+            C4Container
+                title Internet Banking System
+
+                Person(customer, "Customer", "A bank customer")
+
+                System_Boundary(banking, "Internet Banking") {
+                    Container(web, "Web App", "React", "Delivers content to the customer")
+                    Container(api, "API", "Node.js", "Handles business logic")
+                    ContainerDb(db, "Database", "PostgreSQL", "Stores user accounts")
+                }
+
+                System_Ext(email, "Email System", "Sends email to customers")
+
+                Rel(customer, web, "Uses", "HTTPS")
+                Rel(web, api, "Calls", "JSON/HTTPS")
+                Rel(api, db, "Reads/Writes", "SQL")
+                Rel(api, email, "Sends email using", "SMTP")
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task NestedBoundaries()
+    {
+        const string input =
+            """
+            C4Container
+                title Internet Banking - Nested Boundaries
+
+                Person(customer, "Customer", "A bank customer")
+
+                System_Boundary(banking, "Internet Banking") {
+                    Container_Boundary(apiapp, "API Application") {
+                        Container(controller, "Controller", "MVC", "Handles requests")
+                        Container(service, "Service", "Spring", "Business logic")
+                    }
+                    ContainerDb(db, "Database", "Oracle", "Stores accounts")
+                }
+
+                Rel(customer, controller, "Makes requests", "HTTPS")
+                Rel(controller, service, "Uses")
+                Rel(service, db, "Reads/Writes", "JDBC")
+            """;
+
+        return VerifySvg(input);
+    }
 }

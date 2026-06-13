@@ -2,455 +2,433 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 770 580"
-  style="max-width: 770px;"
+  viewBox="0 0 1080 590"
+  style="max-width: 1080px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <defs>
-    <marker
-      id="c4arrow"
-      refX="9"
-      refY="3.5"
-      markerWidth="10"
-      markerHeight="7"
-      orient="auto">
+  <g
+    transform="translate(20,20)">
+    <text
+      x="520"
+      y="25"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="20px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Enterprise Architecture Overview</text>
+    <g
+      transform="translate(0,50)">
       <path
-        d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
-    </marker>
-  </defs>
-  <text
-    x="385"
-    y="45"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="20px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">Enterprise Architecture Overview</text>
-  <rect
-    x="210"
-    y="98"
-    width="160"
-    height="92"
-    rx="8"
-    ry="8"
-    fill="#08427B"
-    stroke="none" />
-  <circle
-    cx="290"
-    cy="90"
-    r="20"
-    fill="#08427B"
-    stroke="none" />
-  <text
-    x="290"
-    y="141"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Administrator</text>
-  <text
-    x="290"
-    y="159"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">System administrato...</text>
-  <rect
-    x="400"
-    y="98"
-    width="160"
-    height="92"
-    rx="8"
-    ry="8"
-    fill="#08427B"
-    stroke="none" />
-  <circle
-    cx="480"
-    cy="90"
-    r="20"
-    fill="#08427B"
-    stroke="none" />
-  <text
-    x="480"
-    y="141"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Regular User</text>
-  <text
-    x="480"
-    y="159"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">End user of the app...</text>
-  <rect
-    x="20"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#1168BD"
-    stroke="none" />
-  <text
-    x="100"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Core System</text>
-  <text
-    x="100"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Main application se...</text>
-  <rect
-    x="210"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#1168BD"
-    stroke="none" />
-  <text
-    x="290"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Auth Service</text>
-  <text
-    x="290"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Authentication and ...</text>
-  <rect
-    x="400"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#1168BD"
-    stroke="none" />
-  <text
-    x="480"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Database</text>
-  <text
-    x="480"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">PostgreSQL database...</text>
-  <rect
-    x="590"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#999999"
-    stroke="none" />
-  <text
-    x="670"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Payment Gateway</text>
-  <text
-    x="670"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Third-party payment...</text>
-  <rect
-    x="210"
-    y="370"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#999999"
-    stroke="none" />
-  <text
-    x="290"
-    y="395"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Email Service</text>
-  <text
-    x="290"
-    y="413"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">SendGrid email deli...</text>
-  <rect
-    x="400"
-    y="370"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#999999"
-    stroke="none" />
-  <text
-    x="480"
-    y="395"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">CDN</text>
-  <text
-    x="480"
-    y="413"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Content delivery ne...</text>
-  <line
-    x1="227.21"
-    y1="167.18"
-    x2="162.79"
-    y2="249.02"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 162.79 249.02 L 165.75 241.59 L 170.71 247.86 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="167.9"
-    y="191.6"
-    width="54.2"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="195"
-    y="200.1"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Manages</text>
-  <line
-    x1="405.59"
-    y1="152.03"
-    x2="174.41"
-    y2="261.64"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 174.41 261.64 L 179.39 255.38 L 182.33 262.82 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="272.8"
-    y="190.34"
-    width="34.4"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="290"
-    y="198.84"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Uses</text>
-  <line
-    x1="180"
-    y1="280"
-    x2="210"
-    y2="280"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 210 280 L 203.07 284 L 203.07 276 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="134.9"
-    y="263.5"
-    width="120.2"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="195"
-    y="272"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Authenticates via</text>
-  <line
-    x1="180"
-    y1="280"
-    x2="400"
-    y2="280"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 400 280 L 393.07 284 L 393.07 276 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="246.4"
-    y="263.5"
-    width="87.2"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="290"
-    y="272"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Reads/Writes</text>
-  <line
-    x1="180"
-    y1="280"
-    x2="590"
-    y2="280"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 590 280 L 583.07 284 L 583.07 276 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="321.6"
-    y="263.5"
-    width="126.8"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="385"
-    y="272"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Processes payments</text>
-  <line
-    x1="164.4"
-    y1="309.66"
-    x2="225.6"
-    y2="390.34"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 225.6 390.34 L 217.65 389.45 L 222.39 383.01 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="128.3"
-    y="333.5"
-    width="133.4"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="195"
-    y="342"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Sends notifications</text>
-  <line
-    x1="175.07"
-    y1="297.29"
-    x2="404.93"
-    y2="402.71"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 404.93 402.71 L 397.05 404.07 L 399.81 396.57 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="243.1"
-    y="333.5"
-    width="93.8"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="290"
-    y="342"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Serves assets</text>
+        d="M 520 120 L 520 205"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 520 205 L 516 198.07 L 524 198.07 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 300 120 L 515.37 208.11"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 515.37 208.11 L 507.45 209.19 L 510.47 201.78 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 520 310 L 84.9 399"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 84.9 399 L 90.88 393.69 L 92.49 401.53 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 520 310 L 304.63 398.11"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 304.63 398.11 L 309.53 391.78 L 312.55 399.19 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 520 310 L 520 395"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 520 395 L 516 388.07 L 524 388.07 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 520 310 L 735.37 398.11"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 735.37 398.11 L 727.45 399.19 L 730.47 391.78 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 520 310 L 955.1 399"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 955.1 399 L 947.51 401.53 L 949.12 393.69 Z"
+        fill="#666"
+        stroke="none" />
+      <rect
+        x="440"
+        y="28"
+        width="160"
+        height="92"
+        rx="8"
+        ry="8"
+        fill="#08427B"
+        stroke="none" />
+      <circle
+        cx="520"
+        cy="20"
+        r="20"
+        fill="#08427B"
+        stroke="none" />
+      <text
+        x="520"
+        y="71"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Administrator</text>
+      <text
+        x="520"
+        y="89"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">System administrato...</text>
+      <rect
+        x="220"
+        y="28"
+        width="160"
+        height="92"
+        rx="8"
+        ry="8"
+        fill="#08427B"
+        stroke="none" />
+      <circle
+        cx="300"
+        cy="20"
+        r="20"
+        fill="#08427B"
+        stroke="none" />
+      <text
+        x="300"
+        y="71"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Regular User</text>
+      <text
+        x="300"
+        y="89"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">End user of the app...</text>
+      <rect
+        x="440"
+        y="210"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="520"
+        y="235"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Core System</text>
+      <text
+        x="520"
+        y="253"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Main application se...</text>
+      <rect
+        x="0"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="80"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Auth Service</text>
+      <text
+        x="80"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Authentication and ...</text>
+      <rect
+        x="220"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="300"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Database</text>
+      <text
+        x="300"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">PostgreSQL database...</text>
+      <rect
+        x="440"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#999999"
+        stroke="none" />
+      <text
+        x="520"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Payment Gateway</text>
+      <text
+        x="520"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Third-party payment...</text>
+      <rect
+        x="660"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#999999"
+        stroke="none" />
+      <text
+        x="740"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Email Service</text>
+      <text
+        x="740"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">SendGrid email deli...</text>
+      <rect
+        x="880"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#999999"
+        stroke="none" />
+      <text
+        x="960"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">CDN</text>
+      <text
+        x="960"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Content delivery ne...</text>
+      <rect
+        x="492.9"
+        y="154"
+        width="54.2"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="520"
+        y="162.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Manages</text>
+      <rect
+        x="390.49"
+        y="155.55"
+        width="34.4"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="407.69"
+        y="164.05"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Uses</text>
+      <rect
+        x="242.35"
+        y="346"
+        width="120.2"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="302.45"
+        y="354.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Authenticates via</text>
+      <rect
+        x="368.71"
+        y="345.55"
+        width="87.2"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="412.31"
+        y="354.05"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Reads/Writes</text>
+      <rect
+        x="456.6"
+        y="344"
+        width="126.8"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="520"
+        y="352.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Processes payments</text>
+      <rect
+        x="560.99"
+        y="345.55"
+        width="133.4"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="627.69"
+        y="354.05"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Sends notifications</text>
+      <rect
+        x="690.65"
+        y="346"
+        width="93.8"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="737.55"
+        y="354.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Serves assets</text>
+    </g>
+  </g>
 </svg>

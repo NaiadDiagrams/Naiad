@@ -2,265 +2,251 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 580 440"
-  style="max-width: 580px;"
+  viewBox="0 0 492 780"
+  style="max-width: 492px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <defs>
-    <marker
-      id="c4arrow"
-      refX="9"
-      refY="3.5"
-      markerWidth="10"
-      markerHeight="7"
-      orient="auto">
+  <g
+    transform="translate(20,20)">
+    <text
+      x="226"
+      y="25"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="20px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Container diagram for Banking System</text>
+    <g
+      transform="translate(146,50)">
       <path
-        d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
-    </marker>
-  </defs>
-  <text
-    x="290"
-    y="45"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="20px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">Container diagram for Banking System</text>
-  <rect
-    x="210"
-    y="98"
-    width="160"
-    height="92"
-    rx="8"
-    ry="8"
-    fill="#08427B"
-    stroke="none" />
-  <circle
-    cx="290"
-    cy="90"
-    r="20"
-    fill="#08427B"
-    stroke="none" />
-  <text
-    x="290"
-    y="141"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Customer</text>
-  <text
-    x="290"
-    y="159"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Bank customer</text>
-  <rect
-    x="20"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#438DD5"
-    stroke="none" />
-  <text
-    x="100"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Web Application</text>
-  <text
-    x="100"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">[React]</text>
-  <text
-    x="100"
-    y="291"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Provides banking UI</text>
-  <rect
-    x="210"
-    y="230"
-    width="160"
-    height="100"
-    rx="5"
-    ry="5"
-    fill="#438DD5"
-    stroke="none" />
-  <text
-    x="290"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">API Server</text>
-  <text
-    x="290"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">[Node.js]</text>
-  <text
-    x="290"
-    y="291"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Handles requests</text>
-  <ellipse
-    cx="480"
-    cy="245"
-    rx="75"
-    ry="15"
-    fill="#438DD5"
-    stroke="none" />
-  <rect
-    x="405"
-    y="245"
-    width="150"
-    height="70"
-    fill="#438DD5"
-    stroke="none" />
-  <ellipse
-    cx="480"
-    cy="315"
-    rx="75"
-    ry="15"
-    fill="#438DD5"
-    stroke="none" />
-  <text
-    x="480"
-    y="255"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FFFFFF">Database</text>
-  <text
-    x="480"
-    y="273"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">[PostgreSQL]</text>
-  <text
-    x="480"
-    y="291"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#FFFFFF">Stores user data</text>
-  <line
-    x1="227.21"
-    y1="167.18"
-    x2="162.79"
-    y2="249.02"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 162.79 249.02 L 165.75 241.59 L 170.71 247.86 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="177.8"
-    y="191.6"
-    width="34.4"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="195"
-    y="200.1"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Uses</text>
-  <line
-    x1="180"
-    y1="280"
-    x2="210"
-    y2="280"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 210 280 L 203.07 284 L 203.07 276 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="174.5"
-    y="263.5"
-    width="41"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="195"
-    y="272"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Calls</text>
-  <line
-    x1="370"
-    y1="280"
-    x2="400"
-    y2="280"
-    stroke="#666"
-    stroke-width="1.5"
-    stroke-dasharray="5,5" />
-  <path
-    d="M 400 280 L 393.07 284 L 393.07 276 Z"
-    fill="#666"
-    stroke="none" />
-  <rect
-    x="341.4"
-    y="263.5"
-    width="87.2"
-    height="17"
-    rx="3"
-    ry="3"
-    fill="#FFFFFF"
-    stroke="none" />
-  <text
-    x="385"
-    y="272"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11px"
-    font-family="Arial, sans-serif"
-    fill="#666">Reads/Writes</text>
+        d="M 80 120 L 80 205"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 205 L 76 198.07 L 84 198.07 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 80 310 L 80 395"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 395 L 76 388.07 L 84 388.07 Z"
+        fill="#666"
+        stroke="none" />
+      <path
+        d="M 80 500 L 80 585"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 585 L 76 578.07 L 84 578.07 Z"
+        fill="#666"
+        stroke="none" />
+      <rect
+        x="0"
+        y="28"
+        width="160"
+        height="92"
+        rx="8"
+        ry="8"
+        fill="#08427B"
+        stroke="none" />
+      <circle
+        cx="80"
+        cy="20"
+        r="20"
+        fill="#08427B"
+        stroke="none" />
+      <text
+        x="80"
+        y="71"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Customer</text>
+      <text
+        x="80"
+        y="89"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Bank customer</text>
+      <rect
+        x="0"
+        y="210"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#438DD5"
+        stroke="none" />
+      <text
+        x="80"
+        y="235"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Web Application</text>
+      <text
+        x="80"
+        y="253"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[React]</text>
+      <text
+        x="80"
+        y="271"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Provides banking UI</text>
+      <rect
+        x="0"
+        y="400"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#438DD5"
+        stroke="none" />
+      <text
+        x="80"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">API Server</text>
+      <text
+        x="80"
+        y="443"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Node.js]</text>
+      <text
+        x="80"
+        y="461"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Handles requests</text>
+      <ellipse
+        cx="80"
+        cy="605"
+        rx="75"
+        ry="15"
+        fill="#438DD5"
+        stroke="none" />
+      <rect
+        x="5"
+        y="605"
+        width="150"
+        height="70"
+        fill="#438DD5"
+        stroke="none" />
+      <ellipse
+        cx="80"
+        cy="675"
+        rx="75"
+        ry="15"
+        fill="#438DD5"
+        stroke="none" />
+      <text
+        x="80"
+        y="615"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Database</text>
+      <text
+        x="80"
+        y="633"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[PostgreSQL]</text>
+      <text
+        x="80"
+        y="651"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Stores user data</text>
+      <rect
+        x="62.8"
+        y="154"
+        width="34.4"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="162.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Uses</text>
+      <rect
+        x="59.5"
+        y="344"
+        width="41"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="352.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Calls</text>
+      <rect
+        x="36.4"
+        y="534"
+        width="87.2"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="542.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Reads/Writes</text>
+    </g>
+  </g>
 </svg>

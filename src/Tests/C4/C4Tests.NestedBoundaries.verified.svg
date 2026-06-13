@@ -1,0 +1,311 @@
+﻿<svg
+  id="mermaid-svg"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 760 540"
+  style="max-width: 760px;"
+  role="graphics-document document"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="360"
+      y="25"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="20px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Internet Banking - Nested Boundaries</text>
+    <rect
+      x="0"
+      y="260"
+      width="720"
+      height="240"
+      rx="5"
+      ry="5"
+      fill="#FFFFFF"
+      stroke="#444444"
+      stroke-width="2"
+      style="stroke-dasharray: 8 4" />
+    <text
+      x="360"
+      y="275"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333">Internet Banking</text>
+    <text
+      x="360"
+      y="290"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#666666">[System]</text>
+    <rect
+      x="15"
+      y="315"
+      width="440"
+      height="170"
+      rx="5"
+      ry="5"
+      fill="#FFFFFF"
+      stroke="#444444"
+      stroke-width="2"
+      style="stroke-dasharray: 8 4" />
+    <text
+      x="235"
+      y="330"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333">API Application</text>
+    <text
+      x="235"
+      y="345"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#666666">[Container]</text>
+    <line
+      x1="309.78"
+      y1="156.7"
+      x2="160.22"
+      y2="381.08"
+      stroke="#666"
+      stroke-width="1.5"
+      stroke-dasharray="5,5" />
+    <path
+      d="M 160.22 381.08 L 161.46 373.18 L 167.68 378.2 Z"
+      fill="#666"
+      stroke="none" />
+    <line
+      x1="190"
+      y1="420"
+      x2="280"
+      y2="420"
+      stroke="#666"
+      stroke-width="1.5"
+      stroke-dasharray="5,5" />
+    <path
+      d="M 280 420 L 273.07 424 L 273.07 416 Z"
+      fill="#666"
+      stroke="none" />
+    <line
+      x1="439.77"
+      y1="416.24"
+      x2="545.23"
+      y2="403.76"
+      stroke="#666"
+      stroke-width="1.5"
+      stroke-dasharray="5,5" />
+    <path
+      d="M 545.23 403.76 L 538.62 408.27 L 538.02 400.3 Z"
+      fill="#666"
+      stroke="none" />
+    <rect
+      x="280"
+      y="78"
+      width="160"
+      height="92"
+      rx="8"
+      ry="8"
+      fill="#08427B"
+      stroke="none" />
+    <circle
+      cx="360"
+      cy="70"
+      r="20"
+      fill="#08427B"
+      stroke="none" />
+    <text
+      x="360"
+      y="121"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="13px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#FFFFFF">Customer</text>
+    <text
+      x="360"
+      y="139"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">A bank customer</text>
+    <rect
+      x="30"
+      y="370"
+      width="160"
+      height="100"
+      rx="5"
+      ry="5"
+      fill="#438DD5"
+      stroke="none" />
+    <text
+      x="110"
+      y="395"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="13px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#FFFFFF">Controller</text>
+    <text
+      x="110"
+      y="413"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">[MVC]</text>
+    <text
+      x="110"
+      y="431"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Handles requests</text>
+    <rect
+      x="280"
+      y="370"
+      width="160"
+      height="100"
+      rx="5"
+      ry="5"
+      fill="#438DD5"
+      stroke="none" />
+    <text
+      x="360"
+      y="395"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="13px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#FFFFFF">Service</text>
+    <text
+      x="360"
+      y="413"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">[Spring]</text>
+    <text
+      x="360"
+      y="431"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Business logic</text>
+    <ellipse
+      cx="625"
+      cy="365"
+      rx="75"
+      ry="15"
+      fill="#438DD5"
+      stroke="none" />
+    <rect
+      x="550"
+      y="365"
+      width="150"
+      height="70"
+      fill="#438DD5"
+      stroke="none" />
+    <ellipse
+      cx="625"
+      cy="435"
+      rx="75"
+      ry="15"
+      fill="#438DD5"
+      stroke="none" />
+    <text
+      x="625"
+      y="375"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="13px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#FFFFFF">Database</text>
+    <text
+      x="625"
+      y="393"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">[Oracle]</text>
+    <text
+      x="625"
+      y="411"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Stores accounts</text>
+    <rect
+      x="184.8"
+      y="252.39"
+      width="100.4"
+      height="17"
+      rx="3"
+      ry="3"
+      fill="#FFFFFF"
+      stroke="none" />
+    <text
+      x="235"
+      y="260.89"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#666">Makes requests</text>
+    <rect
+      x="217.8"
+      y="403.5"
+      width="34.4"
+      height="17"
+      rx="3"
+      ry="3"
+      fill="#FFFFFF"
+      stroke="none" />
+    <text
+      x="235"
+      y="412"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#666">Uses</text>
+    <rect
+      x="448.9"
+      y="393.5"
+      width="87.2"
+      height="17"
+      rx="3"
+      ry="3"
+      fill="#FFFFFF"
+      stroke="none" />
+    <text
+      x="492.5"
+      y="402"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#666">Reads/Writes</text>
+  </g>
+</svg>
