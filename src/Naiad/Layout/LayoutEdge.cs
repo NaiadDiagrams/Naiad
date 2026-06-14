@@ -5,5 +5,9 @@
     public LayoutNode? Source { get; set; }
     public LayoutNode? Target { get; set; }
     public bool IsReversed { get; set; }
+    public RankConstraint RankConstraint { get; set; }
+
+    public bool IsSameRank =>
+        RankConstraint is RankConstraint.Same or RankConstraint.SameBefore or RankConstraint.SameAfter;
     public List<Position> Points { get; } = [];
 }

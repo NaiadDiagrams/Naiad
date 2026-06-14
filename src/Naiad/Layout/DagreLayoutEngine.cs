@@ -30,6 +30,7 @@ class DagreLayoutEngine : ILayoutEngine
 
         // Phase 3: Order nodes within ranks
         Ordering.Run(graph);
+        Ordering.EnforceSameRankOrder(graph);
 
         // Phase 4: Assign coordinates
         CoordinateAssignment.Run(graph, options.NodeSeparation, options.RankSeparation, options.Direction);
@@ -89,7 +90,8 @@ class DagreLayoutEngine : ILayoutEngine
                 new()
                 {
                     SourceId = edge.SourceId,
-                    TargetId = edge.TargetId
+                    TargetId = edge.TargetId,
+                    RankConstraint = edge.RankConstraint
                 });
         }
 

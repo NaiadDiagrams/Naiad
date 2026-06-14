@@ -8,6 +8,9 @@ public class Edge
     public EdgeType Type { get; set; } = EdgeType.Arrow;
     public EdgeStyle LineStyle { get; set; } = EdgeStyle.Solid;
 
+    // Optional layout hint (e.g. "place these on the same rank").
+    public RankConstraint RankConstraint { get; set; } = RankConstraint.None;
+
     // Layout properties (set by layout engine)
     public List<Position> Points { get; } = [];
 

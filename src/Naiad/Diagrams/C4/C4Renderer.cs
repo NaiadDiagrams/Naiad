@@ -31,6 +31,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     readonly Dictionary<string, (double x, double y)> containerOriginAbs = new();
     Dictionary<string, C4Element> elementsById = new();
     Dictionary<string, C4Boundary> boundariesById = new();
+    double nodeSeparation = DefaultNodeSeparation;
+
+    const double DefaultNodeSeparation = 60;
 
     public SvgDocument Render(C4Model model, RenderOptions options)
     {
@@ -92,12 +95,16 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 continue;
             }
 
+            // "Up" is honored by orienting the layout edge so the target ranks
+            // above the source; Left/Right/Neighbor become same-rank constraints.
+            var up = rel.Direction == C4RelationshipDirection.Up;
             var edge = new Edge
             {
-                SourceId = rel.From,
-                TargetId = rel.To,
+                SourceId = up ? rel.To : rel.From,
+                TargetId = up ? rel.From : rel.To,
                 Label = rel.Label,
-                LineStyle = EdgeStyle.Dotted
+                LineStyle = EdgeStyle.Dotted,
+                RankConstraint = ToRankConstraint(rel.Direction)
             };
             graph.AddEdge(edge);
             edgePairs.Add((edge, rel));
@@ -106,10 +113,42 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         var layoutOptions = new LayoutOptions
         {
             Direction = Direction.TopToBottom,
-            NodeSeparation = 60,
+            NodeSeparation = ComputeNodeSeparation(model, options),
             RankSeparation = 90
         };
         var layoutResult = layoutEngine.Layout(graph, layoutOptions);
+
+        // Resolve each edge's polyline and label point. Positional relationships
+        // (Up/Left/Right/Neighbor) are drawn as straight border-to-border lines
+        // between the placed nodes; other edges follow the engine-routed polyline.
+        var drawn = new List<(IReadOnlyList<Position> route, bool reversed, double labelX, double labelY, string? label, string? technology)>();
+        foreach (var (edge, rel) in edgePairs)
+        {
+            IReadOnlyList<Position> route;
+            bool reversed;
+            double labelX;
+            double labelY;
+
+            if (IsPositional(rel.Direction) &&
+                graph.GetNode(rel.From) is { } fromNode &&
+                graph.GetNode(rel.To) is { } toNode)
+            {
+                route = StraightRoute(
+                    (fromNode.Position.X, fromNode.Position.Y, fromNode.Width, fromNode.Height),
+                    (toNode.Position.X, toNode.Position.Y, toNode.Width, toNode.Height));
+                reversed = false;
+                (labelX, labelY) = PolylineLabelPoint(route);
+            }
+            else
+            {
+                route = edge.Points;
+                reversed = rel.Direction == C4RelationshipDirection.Back;
+                labelX = edge.LabelPosition.X;
+                labelY = edge.LabelPosition.Y;
+            }
+
+            drawn.Add((route, reversed, labelX, labelY, rel.Label, rel.Technology));
+        }
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
 
@@ -119,20 +158,19 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         double minY = 0;
         var maxX = layoutResult.Width;
         var maxY = layoutResult.Height;
-        foreach (var (edge, rel) in edgePairs)
+        foreach (var (_, _, labelX, labelY, label, technology) in drawn)
         {
-            if (string.IsNullOrEmpty(rel.Label))
+            if (string.IsNullOrEmpty(label))
             {
                 continue;
             }
 
-            var chipWidth = LabelChipWidth(rel.Label, rel.Technology, options);
-            var chipHeight = LabelChipHeight(rel.Technology, options);
-            var labelPos = edge.LabelPosition;
-            minX = Math.Min(minX, labelPos.X - chipWidth / 2);
-            maxX = Math.Max(maxX, labelPos.X + chipWidth / 2);
-            minY = Math.Min(minY, labelPos.Y - chipHeight / 2);
-            maxY = Math.Max(maxY, labelPos.Y + chipHeight / 2);
+            var chipWidth = LabelChipWidth(label, technology, options);
+            var chipHeight = LabelChipHeight(technology, options);
+            minX = Math.Min(minX, labelX - chipWidth / 2);
+            maxX = Math.Max(maxX, labelX + chipWidth / 2);
+            minY = Math.Min(minY, labelY - chipHeight / 2);
+            maxY = Math.Max(maxY, labelY + chipHeight / 2);
         }
 
         var bodyWidth = maxX - minX;
@@ -170,9 +208,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             CultureInfo.InvariantCulture, $"translate({bodyOffsetX:0.##},{bodyOffsetY:0.##})"));
 
         // Edge lines first so element boxes sit on top of them.
-        foreach (var (edge, rel) in edgePairs)
+        foreach (var (route, reversed, _, _, _, _) in drawn)
         {
-            DrawRoutedPolyline(builder, edge.Points, rel.Direction == C4RelationshipDirection.Back);
+            DrawRoutedPolyline(builder, route, reversed);
         }
 
         // Element boxes.
@@ -189,11 +227,11 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         }
 
         // Edge labels last so their chips stay legible on top of everything.
-        foreach (var (edge, rel) in edgePairs)
+        foreach (var (_, _, labelX, labelY, label, technology) in drawn)
         {
-            if (!string.IsNullOrEmpty(rel.Label))
+            if (!string.IsNullOrEmpty(label))
             {
-                DrawLabelChip(builder, edge.LabelPosition.X, edge.LabelPosition.Y, rel.Label, rel.Technology, options);
+                DrawLabelChip(builder, labelX, labelY, label, technology, options);
             }
         }
 
@@ -217,6 +255,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         containerOriginAbs.Clear();
         elementsById = model.Elements.ToDictionary(_ => _.Id);
         boundariesById = model.Boundaries.ToDictionary(_ => _.Id);
+        nodeSeparation = ComputeNodeSeparation(model, options);
 
         // Pass 1: lay out each container, children before parents.
         var topLayout = LayoutContainer(model, null);
@@ -239,7 +278,11 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 continue;
             }
 
-            var route = TryGetRoutedPolyline(rel, out var routed) ? routed : StraightRoute(from, to);
+            // Positional relationships are drawn straight between the placed
+            // boxes; other same-container edges follow the engine-routed polyline.
+            var route = !IsPositional(rel.Direction) && TryGetRoutedPolyline(rel, out var routed)
+                ? routed
+                : StraightRoute(from, to);
             edges.Add((route, rel.Direction == C4RelationshipDirection.Back, rel.Label, rel.Technology));
         }
 
@@ -434,7 +477,14 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 graph.GetNode(from) is not null &&
                 graph.GetNode(to) is not null)
             {
-                graph.AddEdge(new() { SourceId = from, TargetId = to });
+                var up = rel.Direction == C4RelationshipDirection.Up;
+                graph.AddEdge(
+                    new()
+                    {
+                        SourceId = up ? to : from,
+                        TargetId = up ? from : to,
+                        RankConstraint = ToRankConstraint(rel.Direction)
+                    });
             }
         }
 
@@ -452,7 +502,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         var layoutOptions = new LayoutOptions
         {
             Direction = boundaryId is null ? Direction.TopToBottom : Direction.LeftToRight,
-            NodeSeparation = 60,
+            NodeSeparation = nodeSeparation,
             RankSeparation = 90
         };
         layoutEngine.Layout(graph, layoutOptions);
@@ -667,6 +717,47 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             new(from.x + Math.Cos(angle) * from.w / 2, from.y + Math.Sin(angle) * from.h / 2),
             new(to.x - Math.Cos(angle) * to.w / 2, to.y - Math.Sin(angle) * to.h / 2)
         ];
+    }
+
+    /// <summary>
+    /// Whether a direction pins the target relative to the source (so the edge is
+    /// drawn straight between the placed boxes rather than engine-routed).
+    /// </summary>
+    static bool IsPositional(C4RelationshipDirection direction) =>
+        direction is C4RelationshipDirection.Up
+            or C4RelationshipDirection.Left
+            or C4RelationshipDirection.Right
+            or C4RelationshipDirection.Neighbor;
+
+    static RankConstraint ToRankConstraint(C4RelationshipDirection direction) =>
+        direction switch
+        {
+            C4RelationshipDirection.Left => RankConstraint.SameBefore,
+            C4RelationshipDirection.Right => RankConstraint.SameAfter,
+            C4RelationshipDirection.Neighbor => RankConstraint.Same,
+            _ => RankConstraint.None
+        };
+
+    /// <summary>
+    /// Node separation widened so that a same-rank relationship's label chip fits
+    /// in the gap between the two boxes it connects, instead of overlapping them.
+    /// </summary>
+    static double ComputeNodeSeparation(C4Model model, RenderOptions options)
+    {
+        var widest = 0.0;
+        foreach (var rel in model.Relationships)
+        {
+            if (!string.IsNullOrEmpty(rel.Label) &&
+                rel.Direction is C4RelationshipDirection.Left
+                    or C4RelationshipDirection.Right
+                    or C4RelationshipDirection.Neighbor)
+            {
+                widest = Math.Max(widest, LabelChipWidth(rel.Label, rel.Technology, options));
+            }
+        }
+
+        // 8px of breathing room on each side of the chip.
+        return Math.Max(DefaultNodeSeparation, widest + 16);
     }
 
     /// <summary>

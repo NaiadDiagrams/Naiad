@@ -1,3 +1,5 @@
+using System.Xml.Linq;
+
 public class C4Tests : TestBase
 {
     [Test]
@@ -248,6 +250,29 @@ public class C4Tests : TestBase
     }
 
     [Test]
+    public Task DirectionalRelationships()
+    {
+        // Each suffix pins the target relative to the core: up above, down below,
+        // left and right on the same rank to either side.
+        const string input =
+            """
+            C4Context
+                title Directional Relationships
+                System(core, "Core", "Central system")
+                System(up, "Upstream", "Above the core")
+                System(down, "Downstream", "Below the core")
+                System(left, "Left Service", "Left of the core")
+                System(right, "Right Service", "Right of the core")
+                Rel_U(core, up, "Publishes to")
+                Rel_D(core, down, "Calls")
+                Rel_L(core, left, "Reads from")
+                Rel_R(core, right, "Writes to")
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task BackRelationship()
     {
         // Rel_Back draws the arrowhead at the source end (here, back up at "client").
@@ -262,4 +287,110 @@ public class C4Tests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public void DirectionalLabelsDoNotOverlapNodes()
+    {
+        const string input =
+            """
+            C4Context
+                title Directional Relationships
+                System(core, "Core", "Central system")
+                System(up, "Upstream", "Above the core")
+                System(down, "Downstream", "Below the core")
+                System(left, "Left Service", "Left of the core")
+                System(right, "Right Service", "Right of the core")
+                Rel_U(core, up, "Publishes to")
+                Rel_D(core, down, "Calls")
+                Rel_L(core, left, "Reads from")
+                Rel_R(core, right, "Writes to")
+            """;
+
+        var rects = ParseRects(Mermaid.Render(input));
+
+        // System boxes are filled with the C4 system colour; label chips are white.
+        var nodeBoxes = rects.Where(_ => _.Fill == "#1168BD").ToList();
+        var labelChips = rects.Where(_ => _.Fill == "#FFFFFF").ToList();
+
+        Assert.That(nodeBoxes, Has.Count.EqualTo(5), "expected five system boxes");
+        Assert.That(labelChips, Is.Not.Empty, "expected relationship label chips");
+
+        // Boxes and chips share the same coordinate space (one body group), so a
+        // raw rectangle-intersection test is valid.
+        foreach (var chip in labelChips)
+        {
+            foreach (var box in nodeBoxes)
+            {
+                Assert.That(
+                    Intersects(chip, box),
+                    Is.False,
+                    $"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
+            }
+        }
+    }
+
+    [Test]
+    public void NeighborLabelDoesNotOverlapInterveningNode()
+    {
+        // a and c are neighbours; b is declared between them. Without keeping the
+        // neighbour group contiguous, b would land between a and c and the wide
+        // "Exchanges data with" label would be drawn across it.
+        const string input =
+            """
+            C4Context
+                title Neighbor Adjacency
+                System(a, "Service A", "first")
+                System(b, "Service B", "middle")
+                System(c, "Service C", "third")
+                Rel_Neighbor(a, c, "Exchanges data with")
+            """;
+
+        var rects = ParseRects(Mermaid.Render(input));
+        var nodeBoxes = rects.Where(_ => _.Fill == "#1168BD").ToList();
+        var labelChips = rects.Where(_ => _.Fill == "#FFFFFF").ToList();
+
+        Assert.That(nodeBoxes, Has.Count.EqualTo(3), "expected three system boxes");
+        Assert.That(labelChips, Is.Not.Empty, "expected the neighbour label chip");
+
+        foreach (var chip in labelChips)
+        {
+            foreach (var box in nodeBoxes)
+            {
+                Assert.That(
+                    Intersects(chip, box),
+                    Is.False,
+                    $"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
+            }
+        }
+    }
+
+    static bool Intersects(SvgRect a, SvgRect b)
+    {
+        const double tolerance = 1.0;
+        return a.X < b.X + b.W - tolerance &&
+               b.X < a.X + a.W - tolerance &&
+               a.Y < b.Y + b.H - tolerance &&
+               b.Y < a.Y + a.H - tolerance;
+    }
+
+    static List<SvgRect> ParseRects(string svg)
+    {
+        XNamespace ns = "http://www.w3.org/2000/svg";
+        return XDocument.Parse(svg)
+            .Descendants(ns + "rect")
+            .Where(_ =>
+                _.Attribute("x") is not null &&
+                _.Attribute("y") is not null &&
+                _.Attribute("width") is not null &&
+                _.Attribute("height") is not null)
+            .Select(_ => new SvgRect(
+                (double)_.Attribute("x")!,
+                (double)_.Attribute("y")!,
+                (double)_.Attribute("width")!,
+                (double)_.Attribute("height")!,
+                (string?)_.Attribute("fill")))
+            .ToList();
+    }
+
+    record SvgRect(double X, double Y, double W, double H, string? Fill);
 }
