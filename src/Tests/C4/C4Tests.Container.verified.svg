@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 492 780"
+  viewBox="0 0 492 748"
   style="max-width: 492px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -21,40 +21,40 @@
     <g
       transform="translate(146,50)">
       <path
-        d="M 80 120 L 80 205"
+        d="M 80 94 L 80 179"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 205 L 76 198.07 L 84 198.07 Z"
+        d="M 80 179 L 76 172.07 L 84 172.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 310 L 80 395"
+        d="M 80 282 L 80 367"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 395 L 76 388.07 L 84 388.07 Z"
+        d="M 80 367 L 76 360.07 L 84 360.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 500 L 80 585"
+        d="M 80 470 L 80 555"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 585 L 76 578.07 L 84 578.07 Z"
+        d="M 80 555 L 76 548.07 L 84 548.07 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="0"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -67,7 +67,7 @@
         stroke="none" />
       <text
         x="80"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -76,7 +76,7 @@
         fill="#FFFFFF">Customer</text>
       <text
         x="80"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -84,16 +84,16 @@
         fill="#FFFFFF">Bank customer</text>
       <rect
         x="0"
-        y="210"
+        y="184"
         width="160"
-        height="100"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
         stroke="none" />
       <text
         x="80"
-        y="235"
+        y="215"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -102,7 +102,7 @@
         fill="#FFFFFF">Web Application</text>
       <text
         x="80"
-        y="253"
+        y="233"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -110,7 +110,7 @@
         fill="#FFFFFF">[React]</text>
       <text
         x="80"
-        y="271"
+        y="251"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -118,16 +118,16 @@
         fill="#FFFFFF">Provides banking UI</text>
       <rect
         x="0"
-        y="400"
+        y="372"
         width="160"
-        height="100"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
         stroke="none" />
       <text
         x="80"
-        y="425"
+        y="403"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -136,7 +136,7 @@
         fill="#FFFFFF">API Server</text>
       <text
         x="80"
-        y="443"
+        y="421"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -144,7 +144,7 @@
         fill="#FFFFFF">[Node.js]</text>
       <text
         x="80"
-        y="461"
+        y="439"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -152,28 +152,28 @@
         fill="#FFFFFF">Handles requests</text>
       <ellipse
         cx="80"
-        cy="605"
+        cy="575"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <rect
         x="5"
-        y="605"
+        y="575"
         width="150"
-        height="70"
+        height="68"
         fill="#438DD5"
         stroke="none" />
       <ellipse
         cx="80"
-        cy="675"
+        cy="643"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <text
         x="80"
-        y="615"
+        y="591"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -182,7 +182,7 @@
         fill="#FFFFFF">Database</text>
       <text
         x="80"
-        y="633"
+        y="609"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -190,7 +190,7 @@
         fill="#FFFFFF">[PostgreSQL]</text>
       <text
         x="80"
-        y="651"
+        y="627"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -198,7 +198,7 @@
         fill="#FFFFFF">Stores user data</text>
       <rect
         x="55"
-        y="146.5"
+        y="120.5"
         width="50"
         height="32"
         rx="3"
@@ -207,7 +207,7 @@
         stroke="none" />
       <text
         x="80"
-        y="156"
+        y="130"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -215,7 +215,7 @@
         fill="#666">Uses</text>
       <text
         x="80"
-        y="170"
+        y="144"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -223,7 +223,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="40"
-        y="336.5"
+        y="308.5"
         width="80"
         height="32"
         rx="3"
@@ -232,7 +232,7 @@
         stroke="none" />
       <text
         x="80"
-        y="346"
+        y="318"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -240,7 +240,7 @@
         fill="#666">Calls</text>
       <text
         x="80"
-        y="360"
+        y="332"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -248,7 +248,7 @@
         fill="#888">[JSON/HTTPS]</text>
       <rect
         x="36.4"
-        y="526.5"
+        y="496.5"
         width="87.2"
         height="32"
         rx="3"
@@ -257,7 +257,7 @@
         stroke="none" />
       <text
         x="80"
-        y="536"
+        y="506"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -265,7 +265,7 @@
         fill="#666">Reads/Writes</text>
       <text
         x="80"
-        y="550"
+        y="520"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

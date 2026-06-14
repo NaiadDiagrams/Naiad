@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 730 660"
+  viewBox="0 0 730 612"
   style="max-width: 730px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -22,9 +22,9 @@
       transform="translate(0,50)">
       <rect
         x="0"
-        y="210"
+        y="184"
         width="690"
-        height="170"
+        height="168"
         rx="5"
         ry="5"
         fill="#FFFFFF"
@@ -33,7 +33,7 @@
         style="stroke-dasharray: 8 4" />
       <text
         x="345"
-        y="225"
+        y="199"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="14px"
@@ -42,57 +42,57 @@
         fill="#333333">Internet Banking</text>
       <text
         x="345"
-        y="240"
+        y="214"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666666">[System]</text>
       <path
-        d="M 288.99 102.84 L 151.01 279.3"
+        d="M 287.4 79.62 L 152.6 253.99"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 151.01 279.3 L 152.12 271.37 L 158.42 276.3 Z"
+        d="M 152.6 253.99 L 153.67 246.06 L 160 250.96 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 175 315 L 260 315"
+        d="M 175 288 L 260 288"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 260 315 L 253.07 319 L 253.07 311 Z"
+        d="M 260 288 L 253.07 292 L 253.07 284 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 425 315 L 510 315"
+        d="M 425 288 L 510 288"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 510 315 L 503.07 319 L 503.07 311 Z"
+        d="M 510 288 L 503.07 292 L 503.07 284 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 345 365 L 345 470"
+        d="M 345 337 L 345 442"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 345 470 L 341 463.07 L 349 463.07 Z"
+        d="M 345 442 L 341 435.07 L 349 435.07 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="265"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -105,7 +105,7 @@
         stroke="none" />
       <text
         x="345"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -114,7 +114,7 @@
         fill="#FFFFFF">Customer</text>
       <text
         x="345"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -122,16 +122,16 @@
         fill="#FFFFFF">A bank customer</text>
       <rect
         x="15"
-        y="265"
+        y="239"
         width="160"
-        height="100"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
         stroke="none" />
       <text
         x="95"
-        y="290"
+        y="270"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -140,7 +140,7 @@
         fill="#FFFFFF">Web App</text>
       <text
         x="95"
-        y="308"
+        y="288"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -148,7 +148,7 @@
         fill="#FFFFFF">[React]</text>
       <text
         x="95"
-        y="326"
+        y="306"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -156,16 +156,16 @@
         fill="#FFFFFF">Delivers content to...</text>
       <rect
         x="265"
-        y="265"
+        y="239"
         width="160"
-        height="100"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
         stroke="none" />
       <text
         x="345"
-        y="290"
+        y="270"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -174,7 +174,7 @@
         fill="#FFFFFF">API</text>
       <text
         x="345"
-        y="308"
+        y="288"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -182,7 +182,7 @@
         fill="#FFFFFF">[Node.js]</text>
       <text
         x="345"
-        y="326"
+        y="306"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -190,28 +190,28 @@
         fill="#FFFFFF">Handles business logic</text>
       <ellipse
         cx="595"
-        cy="280"
+        cy="254"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <rect
         x="520"
-        y="280"
+        y="254"
         width="150"
-        height="70"
+        height="68"
         fill="#438DD5"
         stroke="none" />
       <ellipse
         cx="595"
-        cy="350"
+        cy="322"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <text
         x="595"
-        y="290"
+        y="270"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -220,7 +220,7 @@
         fill="#FFFFFF">Database</text>
       <text
         x="595"
-        y="308"
+        y="288"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -228,7 +228,7 @@
         fill="#FFFFFF">[PostgreSQL]</text>
       <text
         x="595"
-        y="326"
+        y="306"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -236,16 +236,16 @@
         fill="#FFFFFF">Stores user accounts</text>
       <rect
         x="265"
-        y="470"
+        y="442"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="345"
-        y="495"
+        y="473"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -254,7 +254,7 @@
         fill="#FFFFFF">Email System</text>
       <text
         x="345"
-        y="513"
+        y="491"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -262,7 +262,7 @@
         fill="#FFFFFF">Sends email to cust...</text>
       <rect
         x="195"
-        y="167.07"
+        y="142.81"
         width="50"
         height="32"
         rx="3"
@@ -271,7 +271,7 @@
         stroke="none" />
       <text
         x="220"
-        y="176.57"
+        y="152.31"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -279,7 +279,7 @@
         fill="#666">Uses</text>
       <text
         x="220"
-        y="190.57"
+        y="166.31"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -287,7 +287,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="177.5"
-        y="291"
+        y="264"
         width="80"
         height="32"
         rx="3"
@@ -296,7 +296,7 @@
         stroke="none" />
       <text
         x="217.5"
-        y="300.5"
+        y="273.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -304,7 +304,7 @@
         fill="#666">Calls</text>
       <text
         x="217.5"
-        y="314.5"
+        y="287.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -312,7 +312,7 @@
         fill="#888">[JSON/HTTPS]</text>
       <rect
         x="423.9"
-        y="291"
+        y="264"
         width="87.2"
         height="32"
         rx="3"
@@ -321,7 +321,7 @@
         stroke="none" />
       <text
         x="467.5"
-        y="300.5"
+        y="273.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -329,7 +329,7 @@
         fill="#666">Reads/Writes</text>
       <text
         x="467.5"
-        y="314.5"
+        y="287.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -337,7 +337,7 @@
         fill="#888">[SQL]</text>
       <rect
         x="284.9"
-        y="393.5"
+        y="365.5"
         width="120.2"
         height="32"
         rx="3"
@@ -346,7 +346,7 @@
         stroke="none" />
       <text
         x="345"
-        y="403"
+        y="375"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -354,7 +354,7 @@
         fill="#666">Sends email using</text>
       <text
         x="345"
-        y="417"
+        y="389"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

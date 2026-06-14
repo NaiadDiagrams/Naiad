@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 324 590"
+  viewBox="0 0 324 524"
   style="max-width: 324px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -21,30 +21,30 @@
     <g
       transform="translate(62,50)">
       <path
-        d="M 80 120 L 80 205"
+        d="M 80 94 L 80 179"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 205 L 76 198.07 L 84 198.07 Z"
+        d="M 80 179 L 76 172.07 L 84 172.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 310 L 80 395"
+        d="M 80 264 L 80 349"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 395 L 76 388.07 L 84 388.07 Z"
+        d="M 80 349 L 76 342.07 L 84 342.07 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="0"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -57,7 +57,7 @@
         stroke="none" />
       <text
         x="80"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -66,7 +66,7 @@
         fill="#FFFFFF">Banking Customer</text>
       <text
         x="80"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -74,16 +74,16 @@
         fill="#FFFFFF">A customer of the bank</text>
       <rect
         x="0"
-        y="210"
+        y="184"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="80"
-        y="235"
+        y="215"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -92,7 +92,7 @@
         fill="#FFFFFF">Internet Banking</text>
       <text
         x="80"
-        y="253"
+        y="233"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -100,16 +100,16 @@
         fill="#FFFFFF">Allows customers to...</text>
       <rect
         x="0"
-        y="400"
+        y="354"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="80"
-        y="425"
+        y="385"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -118,7 +118,7 @@
         fill="#FFFFFF">E-mail System</text>
       <text
         x="80"
-        y="443"
+        y="403"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -126,7 +126,7 @@
         fill="#FFFFFF">External email prov...</text>
       <rect
         x="16.6"
-        y="154"
+        y="128"
         width="126.8"
         height="17"
         rx="3"
@@ -135,7 +135,7 @@
         stroke="none" />
       <text
         x="80"
-        y="162.5"
+        y="136.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -143,7 +143,7 @@
         fill="#666">Views account info</text>
       <rect
         x="36.4"
-        y="336.5"
+        y="290.5"
         width="87.2"
         height="32"
         rx="3"
@@ -152,7 +152,7 @@
         stroke="none" />
       <text
         x="80"
-        y="346"
+        y="300"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -160,7 +160,7 @@
         fill="#666">Sends emails</text>
       <text
         x="80"
-        y="360"
+        y="314"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

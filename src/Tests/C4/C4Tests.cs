@@ -364,6 +364,44 @@ public class C4Tests : TestBase
         }
     }
 
+    [Test]
+    public void RoutedLabelDoesNotOverlapNodes()
+    {
+        // user -> api is a long edge whose wide label rides the routed mid-point,
+        // which would otherwise land on the Web App box on the same rank.
+        const string input =
+            """
+            C4Context
+                title Wide Side Label
+                Person(user, "User", "A user")
+                System(web, "Web App", "Frontend")
+                System(api, "API", "Backend")
+                Rel(user, web, "Uses", "HTTPS")
+                Rel(web, api, "Calls", "REST")
+                Rel(user, api, "Receives push notifications from", "WebSocket")
+            """;
+
+        var rects = ParseRects(Mermaid.Render(input));
+
+        // Person bodies and system boxes are the node shapes; chips are white.
+        var nodeBoxes = rects.Where(_ => _.Fill is "#1168BD" or "#08427B").ToList();
+        var labelChips = rects.Where(_ => _.Fill == "#FFFFFF").ToList();
+
+        Assert.That(nodeBoxes, Has.Count.EqualTo(3), "expected two systems and one person body");
+        Assert.That(labelChips, Is.Not.Empty, "expected relationship label chips");
+
+        foreach (var chip in labelChips)
+        {
+            foreach (var box in nodeBoxes)
+            {
+                Assert.That(
+                    Intersects(chip, box),
+                    Is.False,
+                    $"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
+            }
+        }
+    }
+
     static bool Intersects(SvgRect a, SvgRect b)
     {
         const double tolerance = 1.0;

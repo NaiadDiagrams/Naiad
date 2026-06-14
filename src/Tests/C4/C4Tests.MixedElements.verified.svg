@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 420 590"
+  viewBox="0 0 420 524"
   style="max-width: 420px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -21,50 +21,50 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 80 120 L 186.13 206.83"
+        d="M 80 94 L 186.13 180.83"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 186.13 206.83 L 178.24 205.54 L 183.3 199.35 Z"
+        d="M 186.13 180.83 L 178.24 179.54 L 183.3 173.35 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 300 120 L 193.87 206.83"
+        d="M 300 94 L 193.87 180.83"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 193.87 206.83 L 196.7 199.35 L 201.76 205.54 Z"
+        d="M 193.87 180.83 L 196.7 173.35 L 201.76 179.54 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 190 310 L 83.87 396.83"
+        d="M 190 264 L 83.87 350.83"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 83.87 396.83 L 86.7 389.35 L 91.76 395.54 Z"
+        d="M 83.87 350.83 L 86.7 343.35 L 91.76 349.54 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 190 310 L 296.13 396.83"
+        d="M 190 264 L 296.13 350.83"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 296.13 396.83 L 288.24 395.54 L 293.3 389.35 Z"
+        d="M 296.13 350.83 L 288.24 349.54 L 293.3 343.35 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="0"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -77,7 +77,7 @@
         stroke="none" />
       <text
         x="80"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -86,7 +86,7 @@
         fill="#FFFFFF">Buyer</text>
       <text
         x="80"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -96,7 +96,7 @@
         x="220"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -109,7 +109,7 @@
         stroke="none" />
       <text
         x="300"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -118,7 +118,7 @@
         fill="#FFFFFF">Seller</text>
       <text
         x="300"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -126,16 +126,16 @@
         fill="#FFFFFF">Product vendor</text>
       <rect
         x="110"
-        y="210"
+        y="184"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="190"
-        y="235"
+        y="215"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -144,7 +144,7 @@
         fill="#FFFFFF">E-commerce Platform</text>
       <text
         x="190"
-        y="253"
+        y="233"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -152,16 +152,16 @@
         fill="#FFFFFF">Online marketplace</text>
       <rect
         x="0"
-        y="400"
+        y="354"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="80"
-        y="425"
+        y="385"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -170,7 +170,7 @@
         fill="#FFFFFF">Payment Gateway</text>
       <text
         x="80"
-        y="443"
+        y="403"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -178,16 +178,16 @@
         fill="#FFFFFF">Processes payments</text>
       <rect
         x="220"
-        y="400"
+        y="354"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="300"
-        y="425"
+        y="385"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -196,7 +196,7 @@
         fill="#FFFFFF">Shipping Service</text>
       <text
         x="300"
-        y="443"
+        y="403"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -204,7 +204,7 @@
         fill="#FFFFFF">Handles delivery</text>
       <rect
         x="76.27"
-        y="154.92"
+        y="128.92"
         width="113.6"
         height="17"
         rx="3"
@@ -213,7 +213,7 @@
         stroke="none" />
       <text
         x="133.07"
-        y="163.42"
+        y="137.42"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -221,7 +221,7 @@
         fill="#666">Browses and buys</text>
       <rect
         x="196.73"
-        y="154.92"
+        y="128.92"
         width="100.4"
         height="17"
         rx="3"
@@ -230,7 +230,7 @@
         stroke="none" />
       <text
         x="246.93"
-        y="163.42"
+        y="137.42"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -238,7 +238,7 @@
         fill="#666">Lists products</text>
       <rect
         x="73.53"
-        y="344.92"
+        y="298.92"
         width="126.8"
         height="17"
         rx="3"
@@ -247,7 +247,7 @@
         stroke="none" />
       <text
         x="136.93"
-        y="353.42"
+        y="307.42"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -255,7 +255,7 @@
         fill="#666">Processes payments</text>
       <rect
         x="199.47"
-        y="344.92"
+        y="298.92"
         width="87.2"
         height="17"
         rx="3"
@@ -264,7 +264,7 @@
         stroke="none" />
       <text
         x="243.07"
-        y="353.42"
+        y="307.42"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

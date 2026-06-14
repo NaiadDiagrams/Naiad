@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 324 400"
+  viewBox="0 0 324 354"
   style="max-width: 324px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -21,20 +21,20 @@
     <g
       transform="translate(62,50)">
       <path
-        d="M 80 120 L 80 205"
+        d="M 80 94 L 80 179"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 205 L 76 198.07 L 84 198.07 Z"
+        d="M 80 179 L 76 172.07 L 84 172.07 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="0"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -47,7 +47,7 @@
         stroke="none" />
       <text
         x="80"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -56,7 +56,7 @@
         fill="#FFFFFF">User</text>
       <text
         x="80"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -64,16 +64,16 @@
         fill="#FFFFFF">A user of the system</text>
       <rect
         x="0"
-        y="210"
+        y="184"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="80"
-        y="235"
+        y="215"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -82,7 +82,7 @@
         fill="#FFFFFF">System</text>
       <text
         x="80"
-        y="253"
+        y="233"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -90,7 +90,7 @@
         fill="#FFFFFF">The main system</text>
       <rect
         x="62.8"
-        y="154"
+        y="128"
         width="34.4"
         height="17"
         rx="3"
@@ -99,7 +99,7 @@
         stroke="none" />
       <text
         x="80"
-        y="162.5"
+        y="136.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

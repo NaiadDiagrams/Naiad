@@ -11,6 +11,11 @@ public class Edge
     // Optional layout hint (e.g. "place these on the same rank").
     public RankConstraint RankConstraint { get; set; } = RankConstraint.None;
 
+    // Size to reserve for this edge's label so the layout keeps nodes clear of
+    // it (0 = no reservation). Used for long edges whose label sits on a rank.
+    public double LabelWidth { get; set; }
+    public double LabelHeight { get; set; }
+
     // Layout properties (set by layout engine)
     public List<Position> Points { get; } = [];
 

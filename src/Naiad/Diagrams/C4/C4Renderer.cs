@@ -6,7 +6,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
 
     const double ElementWidth = 160;
     const double ElementHeight = 100;
-    const double PersonHeight = 120;
+    const double LineHeight = 18;
     const double TitleHeight = 50;
     const double BoundaryPadding = 15;
     const double BoundaryTitleHeight = 40;
@@ -81,7 +81,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                     Id = element.Id,
                     Label = element.Label,
                     Width = ElementWidth,
-                    Height = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight
+                    Height = NodeHeight(element)
                 });
         }
 
@@ -98,13 +98,19 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             // "Up" is honored by orienting the layout edge so the target ranks
             // above the source; Left/Right/Neighbor become same-rank constraints.
             var up = rel.Direction == C4RelationshipDirection.Up;
+
+            // Reserve space for the label of a routed (non-positional) edge so a
+            // long edge's chip doesn't land on a node it passes alongside.
+            var reservesLabel = !IsPositional(rel.Direction) && !string.IsNullOrEmpty(rel.Label);
             var edge = new Edge
             {
                 SourceId = up ? rel.To : rel.From,
                 TargetId = up ? rel.From : rel.To,
                 Label = rel.Label,
                 LineStyle = EdgeStyle.Dotted,
-                RankConstraint = ToRankConstraint(rel.Direction)
+                RankConstraint = ToRankConstraint(rel.Direction),
+                LabelWidth = reservesLabel ? LabelChipWidth(rel.Label!, rel.Technology, options) : 0,
+                LabelHeight = reservesLabel ? LabelChipHeight(rel.Technology, options) : 0
             };
             graph.AddEdge(edge);
             edgePairs.Add((edge, rel));
@@ -222,7 +228,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 continue;
             }
 
-            var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+            var h = NodeHeight(element);
             DrawElement(builder, element, node.Position.X - ElementWidth / 2, node.Position.Y - h / 2, options);
         }
 
@@ -384,7 +390,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         {
             if (elementAbs.TryGetValue(element.Id, out var e))
             {
-                var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+                var h = NodeHeight(element);
                 DrawElement(builder, element, e.x - ElementWidth / 2, e.y - h / 2, options);
             }
         }
@@ -455,7 +461,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 {
                     Id = element.Id,
                     Width = ElementWidth,
-                    Height = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight
+                    Height = NodeHeight(element)
                 });
         }
 
@@ -613,7 +619,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             }
             else if (elementsById.TryGetValue(memberId, out var element))
             {
-                var h = element.Type == C4ElementType.Person ? PersonHeight : ElementHeight;
+                var h = NodeHeight(element);
                 elementAbs[memberId] = (centerX, centerY, ElementWidth, h);
             }
         }
@@ -884,10 +890,31 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         }
     }
 
+    /// <summary>Number of text lines an element shows (label, optional technology, optional description).</summary>
+    static int ContentLineCount(C4Element element) =>
+        1
+        + (string.IsNullOrEmpty(element.Technology) ? 0 : 1)
+        + (string.IsNullOrEmpty(element.Description) ? 0 : 1);
+
+    /// <summary>Box height sized to the element's text rather than a fixed value.</summary>
+    static double NodeHeight(C4Element element)
+    {
+        var lines = ContentLineCount(element);
+        if (element.Type == C4ElementType.Person)
+        {
+            // Head clearance plus the centered text block.
+            return 40 + lines * LineHeight + 18;
+        }
+
+        // ~22px of padding above and below the text block.
+        return lines * LineHeight + 44;
+    }
+
     static void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
     {
         var color = GetElementColor(element);
         const string textColor = "#FFFFFF";
+        var height = NodeHeight(element);
 
         if (element.Type == C4ElementType.Person)
         {
@@ -897,7 +924,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             const int headRadius = 20;
             var centerX = x + ElementWidth / 2;
             var bodyTop = y + headRadius + 8;
-            var bodyHeight = PersonHeight - (headRadius + 8);
+            var bodyHeight = height - (headRadius + 8);
 
             // Body first so the head circle overlaps its top edge (shoulders).
             builder.AddRect(
@@ -918,7 +945,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 stroke: "none");
 
             // Center the text in the body region below the head.
-            var textCenterY = (y + headRadius * 2 + (y + PersonHeight)) / 2;
+            var textCenterY = (y + headRadius * 2 + (y + height)) / 2;
             var hasDescription = !string.IsNullOrEmpty(element.Description);
 
             // Label
@@ -967,20 +994,20 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 x + 5,
                 y + ellipseHeight,
                 ElementWidth - 10,
-                ElementHeight - ellipseHeight * 2,
+                height - ellipseHeight * 2,
                 fill: color,
                 stroke: "none");
 
             // Bottom ellipse
             builder.AddEllipse(
                 x + ElementWidth / 2,
-                y + ElementHeight - ellipseHeight,
+                y + height - ellipseHeight,
                 ElementWidth / 2 - 5,
                 ellipseHeight,
                 fill: color,
                 stroke: "none");
 
-            DrawElementText(builder, element, x, y, options, textColor);
+            DrawElementText(builder, element, x, y, height, options, textColor);
         }
         else
         {
@@ -989,12 +1016,12 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 x,
                 y,
                 ElementWidth,
-                ElementHeight,
+                height,
                 rx: 5,
                 fill: color,
                 stroke: "none");
 
-            DrawElementText(builder, element, x, y, options, textColor);
+            DrawElementText(builder, element, x, y, height, options, textColor);
         }
     }
 
@@ -1003,11 +1030,14 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         C4Element element,
         double x,
         double y,
+        double height,
         RenderOptions options,
         string textColor)
     {
         var centerX = x + ElementWidth / 2;
-        var textY = y + 25;
+
+        // Center the block of lines vertically within the box.
+        var textY = y + height / 2 - (ContentLineCount(element) - 1) * (LineHeight / 2);
 
         // Label
         builder.AddText(
@@ -1024,7 +1054,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         // Technology
         if (!string.IsNullOrEmpty(element.Technology))
         {
-            textY += 18;
+            textY += LineHeight;
             builder.AddText(
                 centerX,
                 textY,
@@ -1039,7 +1069,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         // Description
         if (!string.IsNullOrEmpty(element.Description))
         {
-            textY += 18;
+            textY += LineHeight;
             builder.AddText(
                 centerX,
                 textY,

@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 640 190"
+  viewBox="0 0 640 170"
   style="max-width: 640px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -24,14 +24,14 @@
         x="0"
         y="0"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="80"
-        y="25"
+        y="31"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -40,7 +40,7 @@
         fill="#FFFFFF">System A</text>
       <text
         x="80"
-        y="43"
+        y="49"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -50,14 +50,14 @@
         x="220"
         y="0"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="300"
-        y="25"
+        y="31"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -66,7 +66,7 @@
         fill="#FFFFFF">System B</text>
       <text
         x="300"
-        y="43"
+        y="49"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -76,14 +76,14 @@
         x="440"
         y="0"
         width="160"
-        height="100"
+        height="80"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="520"
-        y="25"
+        y="31"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -92,7 +92,7 @@
         fill="#FFFFFF">System C</text>
       <text
         x="520"
-        y="43"
+        y="49"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

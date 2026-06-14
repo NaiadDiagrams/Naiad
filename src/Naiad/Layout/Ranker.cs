@@ -257,16 +257,21 @@ static class Ranker
             var rankDiff = target.Rank - source.Rank;
             if (rankDiff > 1)
             {
+                // The label rides the middle waypoint; sizing that dummy to the
+                // label reserves space so neighbouring nodes are kept clear of it.
+                var labelRank = source.Rank + rankDiff / 2;
+
                 // Need dummy nodes
                 var prevNodeId = edge.SourceId;
                 for (var r = source.Rank + 1; r < target.Rank; r++)
                 {
                     var dummyId = $"_dummy_{dummyCount++}";
+                    var carriesLabel = edge.LabelWidth > 0 && r == labelRank;
                     var dummy = new LayoutNode
                     {
                         Id = dummyId,
-                        Width = 0,
-                        Height = 0,
+                        Width = carriesLabel ? edge.LabelWidth : 0,
+                        Height = carriesLabel ? edge.LabelHeight : 0,
                         Rank = r,
                         IsDummy = true,
                         OriginalEdgeSource = edge.SourceId,

@@ -2,7 +2,7 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 760 540"
+  viewBox="0 0 760 512"
   style="max-width: 760px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -22,9 +22,9 @@
       transform="translate(0,50)">
       <rect
         x="0"
-        y="210"
+        y="184"
         width="720"
-        height="240"
+        height="238"
         rx="5"
         ry="5"
         fill="#FFFFFF"
@@ -33,7 +33,7 @@
         style="stroke-dasharray: 8 4" />
       <text
         x="360"
-        y="225"
+        y="199"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="14px"
@@ -42,7 +42,7 @@
         fill="#333333">Internet Banking</text>
       <text
         x="360"
-        y="240"
+        y="214"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -50,9 +50,9 @@
         fill="#666666">[System]</text>
       <rect
         x="15"
-        y="265"
+        y="239"
         width="440"
-        height="170"
+        height="168"
         rx="5"
         ry="5"
         fill="#FFFFFF"
@@ -61,7 +61,7 @@
         style="stroke-dasharray: 8 4" />
       <text
         x="235"
-        y="280"
+        y="254"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="14px"
@@ -70,47 +70,47 @@
         fill="#333333">API Application</text>
       <text
         x="235"
-        y="295"
+        y="269"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666666">[Container]</text>
       <path
-        d="M 309.78 106.7 L 160.22 331.08"
+        d="M 308.38 82.91 L 161.62 305.57"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 160.22 331.08 L 160.73 323.1 L 167.39 327.53 Z"
+        d="M 161.62 305.57 L 162.09 297.58 L 168.77 301.98 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 190 370 L 275 370"
+        d="M 190 343 L 275 343"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 275 370 L 268.07 374 L 268.07 366 Z"
+        d="M 275 343 L 268.07 347 L 268.07 339 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 439.77 366.24 L 545.23 353.76"
+        d="M 439.77 339.31 L 545.23 326.69"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 545.23 353.76 L 538.82 358.55 L 537.88 350.6 Z"
+        d="M 545.23 326.69 L 538.82 331.48 L 537.87 323.54 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="280"
         y="28"
         width="160"
-        height="92"
+        height="66"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -123,7 +123,7 @@
         stroke="none" />
       <text
         x="360"
-        y="71"
+        y="58"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -132,7 +132,7 @@
         fill="#FFFFFF">Customer</text>
       <text
         x="360"
-        y="89"
+        y="76"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -140,16 +140,16 @@
         fill="#FFFFFF">A bank customer</text>
       <rect
         x="30"
-        y="320"
+        y="294"
         width="160"
-        height="100"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
         stroke="none" />
       <text
         x="110"
-        y="345"
+        y="325"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -158,7 +158,7 @@
         fill="#FFFFFF">Controller</text>
       <text
         x="110"
-        y="363"
+        y="343"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -166,7 +166,7 @@
         fill="#FFFFFF">[MVC]</text>
       <text
         x="110"
-        y="381"
+        y="361"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -174,16 +174,16 @@
         fill="#FFFFFF">Handles requests</text>
       <rect
         x="280"
-        y="320"
+        y="294"
         width="160"
-        height="100"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
         stroke="none" />
       <text
         x="360"
-        y="345"
+        y="325"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -192,7 +192,7 @@
         fill="#FFFFFF">Service</text>
       <text
         x="360"
-        y="363"
+        y="343"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -200,7 +200,7 @@
         fill="#FFFFFF">[Spring]</text>
       <text
         x="360"
-        y="381"
+        y="361"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -208,28 +208,28 @@
         fill="#FFFFFF">Business logic</text>
       <ellipse
         cx="625"
-        cy="315"
+        cy="289"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <rect
         x="550"
-        y="315"
+        y="289"
         width="150"
-        height="70"
+        height="68"
         fill="#438DD5"
         stroke="none" />
       <ellipse
         cx="625"
-        cy="385"
+        cy="357"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <text
         x="625"
-        y="325"
+        y="305"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -238,7 +238,7 @@
         fill="#FFFFFF">Database</text>
       <text
         x="625"
-        y="343"
+        y="323"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -246,7 +246,7 @@
         fill="#FFFFFF">[Oracle]</text>
       <text
         x="625"
-        y="361"
+        y="341"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -254,7 +254,7 @@
         fill="#FFFFFF">Stores accounts</text>
       <rect
         x="184.8"
-        y="194.89"
+        y="170.24"
         width="100.4"
         height="32"
         rx="3"
@@ -263,7 +263,7 @@
         stroke="none" />
       <text
         x="235"
-        y="204.39"
+        y="179.74"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -271,7 +271,7 @@
         fill="#666">Makes requests</text>
       <text
         x="235"
-        y="218.39"
+        y="193.74"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -279,7 +279,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="215.3"
-        y="353.5"
+        y="326.5"
         width="34.4"
         height="17"
         rx="3"
@@ -288,7 +288,7 @@
         stroke="none" />
       <text
         x="232.5"
-        y="362"
+        y="335"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -296,7 +296,7 @@
         fill="#666">Uses</text>
       <rect
         x="448.9"
-        y="336"
+        y="309"
         width="87.2"
         height="32"
         rx="3"
@@ -305,7 +305,7 @@
         stroke="none" />
       <text
         x="492.5"
-        y="345.5"
+        y="318.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -313,7 +313,7 @@
         fill="#666">Reads/Writes</text>
       <text
         x="492.5"
-        y="359.5"
+        y="332.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

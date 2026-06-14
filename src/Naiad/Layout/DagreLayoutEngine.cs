@@ -91,7 +91,9 @@ class DagreLayoutEngine : ILayoutEngine
                 {
                     SourceId = edge.SourceId,
                     TargetId = edge.TargetId,
-                    RankConstraint = edge.RankConstraint
+                    RankConstraint = edge.RankConstraint,
+                    LabelWidth = edge.LabelWidth,
+                    LabelHeight = edge.LabelHeight
                 });
         }
 
