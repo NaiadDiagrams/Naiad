@@ -228,6 +228,26 @@ public class C4Tests : TestBase
     }
 
     [Test]
+    public Task WideSideLabel()
+    {
+        // The user -> api relationship is a long edge routed down the right side
+        // with a wide label; the canvas must widen so its chip is not clipped.
+        const string input =
+            """
+            C4Context
+                title Wide Side Label
+                Person(user, "User", "A user")
+                System(web, "Web App", "Frontend")
+                System(api, "API", "Backend")
+                Rel(user, web, "Uses", "HTTPS")
+                Rel(web, api, "Calls", "REST")
+                Rel(user, api, "Receives push notifications from", "WebSocket")
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task BackRelationship()
     {
         // Rel_Back draws the arrowhead at the source end (here, back up at "client").

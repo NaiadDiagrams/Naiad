@@ -113,13 +113,37 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
 
-        // Ensure the canvas is wide enough for the title, which can be wider
-        // than a narrow (e.g. single-column) diagram body.
+        // Body bounding box: node bounds plus the label chips, which can extend
+        // past the nodes (e.g. a side label on a back edge).
+        double minX = 0;
+        double minY = 0;
+        var maxX = layoutResult.Width;
+        var maxY = layoutResult.Height;
+        foreach (var (edge, rel) in edgePairs)
+        {
+            if (string.IsNullOrEmpty(rel.Label))
+            {
+                continue;
+            }
+
+            var chipWidth = LabelChipWidth(rel.Label, rel.Technology, options);
+            var chipHeight = LabelChipHeight(rel.Technology, options);
+            var labelPos = edge.LabelPosition;
+            minX = Math.Min(minX, labelPos.X - chipWidth / 2);
+            maxX = Math.Max(maxX, labelPos.X + chipWidth / 2);
+            minY = Math.Min(minY, labelPos.Y - chipHeight / 2);
+            maxY = Math.Max(maxY, labelPos.Y + chipHeight / 2);
+        }
+
+        var bodyWidth = maxX - minX;
+        var bodyHeight = maxY - minY;
+
+        // Ensure the canvas is wide enough for the title too.
         var titleWidth = string.IsNullOrEmpty(model.Title)
             ? 0
             : model.Title.Length * (options.FontSize + 6) * 0.6 + 20;
-        var contentWidth = Math.Max(layoutResult.Width, titleWidth);
-        var contentHeight = layoutResult.Height + titleOffset;
+        var contentWidth = Math.Max(bodyWidth, titleWidth);
+        var contentHeight = bodyHeight + titleOffset;
 
         var builder = new SvgBuilder()
             .Size(contentWidth, contentHeight)
@@ -138,10 +162,12 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 fontWeight: "bold");
         }
 
-        // Center the diagram body horizontally and offset it below the title.
-        var bodyOffsetX = (contentWidth - layoutResult.Width) / 2;
+        // Center the body horizontally, offset it below the title, and shift so
+        // the leftmost/topmost chip sits inside the canvas.
+        var bodyOffsetX = (contentWidth - bodyWidth) / 2 - minX;
+        var bodyOffsetY = titleOffset - minY;
         builder.BeginGroup(transform: string.Create(
-            CultureInfo.InvariantCulture, $"translate({bodyOffsetX:0.##},{titleOffset:0.##})"));
+            CultureInfo.InvariantCulture, $"translate({bodyOffsetX:0.##},{bodyOffsetY:0.##})"));
 
         // Edge lines first so element boxes sit on top of them.
         foreach (var (edge, rel) in edgePairs)
@@ -196,16 +222,78 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         var topLayout = LayoutContainer(model, null);
         containerLayouts[""] = topLayout;
 
+        // Pass 2: assign absolute positions (origin-based; the body group below
+        // applies the title offset and centering).
+        PlaceContainer(null, 0, 0);
+
+        // Resolve each relationship's polyline up front so the canvas can account
+        // for the label chips (a wide side label can extend past the boxes). Use
+        // the engine-routed polyline when both ends sit in the same container (so
+        // a skipping edge routes around its siblings), otherwise a straight line.
+        var edges = new List<(List<Position> route, bool reversed, string? label, string? technology)>();
+        foreach (var rel in model.Relationships)
+        {
+            if (!elementAbs.TryGetValue(rel.From, out var from) ||
+                !elementAbs.TryGetValue(rel.To, out var to))
+            {
+                continue;
+            }
+
+            var route = TryGetRoutedPolyline(rel, out var routed) ? routed : StraightRoute(from, to);
+            edges.Add((route, rel.Direction == C4RelationshipDirection.Back, rel.Label, rel.Technology));
+        }
+
+        // Body bounding box over boundaries, elements and label chips.
+        var minX = double.MaxValue;
+        var minY = double.MaxValue;
+        var maxX = double.MinValue;
+        var maxY = double.MinValue;
+
+        void Expand(double x0, double y0, double x1, double y1)
+        {
+            minX = Math.Min(minX, x0);
+            minY = Math.Min(minY, y0);
+            maxX = Math.Max(maxX, x1);
+            maxY = Math.Max(maxY, y1);
+        }
+
+        foreach (var (x, y, w, h) in boundaryAbs.Values)
+        {
+            Expand(x, y, x + w, y + h);
+        }
+
+        foreach (var (x, y, w, h) in elementAbs.Values)
+        {
+            Expand(x - w / 2, y - h / 2, x + w / 2, y + h / 2);
+        }
+
+        foreach (var (route, _, label, technology) in edges)
+        {
+            if (string.IsNullOrEmpty(label))
+            {
+                continue;
+            }
+
+            var (lx, ly) = PolylineLabelPoint(route);
+            var chipWidth = LabelChipWidth(label, technology, options);
+            var chipHeight = LabelChipHeight(technology, options);
+            Expand(lx - chipWidth / 2, ly - chipHeight / 2, lx + chipWidth / 2, ly + chipHeight / 2);
+        }
+
+        if (minX > maxX)
+        {
+            (minX, minY, maxX, maxY) = (0, 0, topLayout.ContentWidth, topLayout.ContentHeight);
+        }
+
+        var bodyWidth = maxX - minX;
+        var bodyHeight = maxY - minY;
+
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
         var titleWidth = string.IsNullOrEmpty(model.Title)
             ? 0
             : model.Title.Length * (options.FontSize + 6) * 0.6 + 20;
-        var contentWidth = Math.Max(topLayout.ContentWidth, titleWidth);
-        var contentHeight = topLayout.ContentHeight + titleOffset;
-
-        // Pass 2: assign absolute positions, parents before children.
-        var bodyOffsetX = (contentWidth - topLayout.ContentWidth) / 2;
-        PlaceContainer(null, bodyOffsetX, titleOffset);
+        var contentWidth = Math.Max(bodyWidth, titleWidth);
+        var contentHeight = bodyHeight + titleOffset;
 
         var builder = new SvgBuilder()
             .Size(contentWidth, contentHeight)
@@ -224,9 +312,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 fontWeight: "bold");
         }
 
-        // Draw order: boundary boxes (outermost first) so their fills don't
-        // cover nested content, then edge lines, then element boxes, then edge
-        // label chips on top.
+        // Center the body, offset it below the title, and shift so nothing clips.
+        builder.BeginGroup(transform: string.Create(
+            CultureInfo.InvariantCulture,
+            $"translate({(contentWidth - bodyWidth) / 2 - minX:0.##},{titleOffset - minY:0.##})"));
+
+        // Draw order: boundary boxes (outermost first) so their fills don't cover
+        // nested content, then edge lines, then element boxes, then label chips.
         foreach (var boundary in model.Boundaries.OrderBy(BoundaryDepth))
         {
             if (boundaryAbs.TryGetValue(boundary.Id, out var b))
@@ -236,28 +328,12 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         }
 
         var labels = new List<(double x, double y, string label, string? technology)>();
-        foreach (var rel in model.Relationships)
+        foreach (var (route, reversed, label, technology) in edges)
         {
-            if (!elementAbs.TryGetValue(rel.From, out var from) ||
-                !elementAbs.TryGetValue(rel.To, out var to))
+            var (mx, my) = DrawRoutedPolyline(builder, route, reversed);
+            if (!string.IsNullOrEmpty(label))
             {
-                continue;
-            }
-
-            var reversed = rel.Direction == C4RelationshipDirection.Back;
-
-            // Use the engine-routed polyline when both ends sit in the same
-            // container (so a skipping edge routes around its siblings);
-            // otherwise fall back to a straight, border-trimmed line.
-            var (mx, my) = TryGetRoutedPolyline(rel, out var route)
-                ? DrawRoutedPolyline(builder, route, reversed)
-                : reversed
-                    ? DrawRelationshipLine(builder, to, from)
-                    : DrawRelationshipLine(builder, from, to);
-
-            if (!string.IsNullOrEmpty(rel.Label))
-            {
-                labels.Add((mx, my, rel.Label, rel.Technology));
+                labels.Add((mx, my, label, technology));
             }
         }
 
@@ -274,6 +350,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         {
             DrawLabelChip(builder, x, y, label, technology, options);
         }
+
+        builder.EndGroup();
 
         return builder.Build();
     }
@@ -518,7 +596,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     {
         if (points.Count < 2)
         {
-            return points.Count == 1 ? (points[0].X, points[0].Y - 8) : (0, 0);
+            return PolylineLabelPoint(points);
         }
 
         var path = new StringBuilder();
@@ -550,7 +628,22 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             fill: "#666",
             stroke: "none");
 
-        // Label sits at the polyline midpoint.
+        return PolylineLabelPoint(points);
+    }
+
+    /// <summary>Point on the polyline where its label chip should sit.</summary>
+    static (double x, double y) PolylineLabelPoint(IReadOnlyList<Position> points)
+    {
+        if (points.Count == 0)
+        {
+            return (0, 0);
+        }
+
+        if (points.Count == 1)
+        {
+            return (points[0].X, points[0].Y - 8);
+        }
+
         var mid = points.Count / 2;
         if (points.Count % 2 == 0)
         {
@@ -561,51 +654,41 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     }
 
     /// <summary>
-    /// Draws a relationship as a dashed line with an arrowhead, trimmed to the
-    /// box edges, and returns the point where its label chip should sit.
+    /// A straight relationship as a two-point polyline trimmed to the source and
+    /// target box borders.
     /// </summary>
-    static (double x, double y) DrawRelationshipLine(
-        SvgBuilder builder,
+    static List<Position> StraightRoute(
         (double x, double y, double w, double h) from,
         (double x, double y, double w, double h) to)
     {
-        var dx = to.x - from.x;
-        var dy = to.y - from.y;
-        var angle = Math.Atan2(dy, dx);
-
-        var fromX = from.x + Math.Cos(angle) * from.w / 2;
-        var fromY = from.y + Math.Sin(angle) * from.h / 2;
-        var toX = to.x - Math.Cos(angle) * to.w / 2;
-        var toY = to.y - Math.Sin(angle) * to.h / 2;
-
-        builder.AddLine(
-            fromX,
-            fromY,
-            toX,
-            toY,
-            stroke: "#666",
-            strokeWidth: 1.5,
-            strokeDasharray: "5,5");
-
-        const int arrowSize = 8;
-        const double arrowAngle = Math.PI / 6;
-        var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
-        var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
-        var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
-        var ay2 = toY - arrowSize * Math.Sin(angle + arrowAngle);
-
-        builder.AddPath(
-            string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
-            fill: "#666",
-            stroke: "none");
-
-        return ((fromX + toX) / 2, (fromY + toY) / 2 - 8);
+        var angle = Math.Atan2(to.y - from.y, to.x - from.x);
+        return
+        [
+            new(from.x + Math.Cos(angle) * from.w / 2, from.y + Math.Sin(angle) * from.h / 2),
+            new(to.x - Math.Cos(angle) * to.w / 2, to.y - Math.Sin(angle) * to.h / 2)
+        ];
     }
 
     /// <summary>
     /// Draws a relationship label centered at the given point on a white chip so
     /// it stays legible where it crosses lines or boxes.
     /// </summary>
+    static double LabelChipWidth(string label, string? technology, RenderOptions options)
+    {
+        var fontSize = options.FontSize - 3;
+        var techFontSize = options.FontSize - 4;
+        var techWidth = string.IsNullOrEmpty(technology)
+            ? 0
+            : $"[{technology}]".Length * (techFontSize * 0.6);
+        return Math.Max(label.Length * (fontSize * 0.6), techWidth) + 8;
+    }
+
+    static double LabelChipHeight(string? technology, RenderOptions options)
+    {
+        var fontSize = options.FontSize - 3;
+        return string.IsNullOrEmpty(technology) ? fontSize + 6 : (fontSize + 4) * 2 + 2;
+    }
+
     static void DrawLabelChip(
         SvgBuilder builder,
         double x,
@@ -619,11 +702,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         var hasTech = !string.IsNullOrEmpty(technology);
         var techText = hasTech ? $"[{technology}]" : null;
 
-        var width = Math.Max(
-            label.Length * (fontSize * 0.6),
-            hasTech ? techText!.Length * (techFontSize * 0.6) : 0) + 8;
+        var width = LabelChipWidth(label, technology, options);
         var lineHeight = fontSize + 4;
-        var height = hasTech ? lineHeight * 2 + 2 : fontSize + 6;
+        var height = LabelChipHeight(technology, options);
 
         builder.AddRect(
             x - width / 2,
