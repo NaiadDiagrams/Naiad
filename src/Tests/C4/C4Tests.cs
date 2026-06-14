@@ -1,5 +1,3 @@
-using System.Xml.Linq;
-
 public class C4Tests : TestBase
 {
     [Test]

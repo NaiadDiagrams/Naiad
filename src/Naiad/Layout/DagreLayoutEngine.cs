@@ -209,8 +209,8 @@ class DagreLayoutEngine : ILayoutEngine
         edge.Points.Add(new(targetEdgeX, targetEdgeY));
     }
 
-    const double ClusterPadding = 20;
-    const double ClusterLabelHeight = 25;
+    const double clusterPadding = 20;
+    const double clusterLabelHeight = 25;
 
     /// <summary>
     /// Lays out a diagram that contains subgraphs. Each container (the root, or
@@ -293,8 +293,8 @@ class DagreLayoutEngine : ILayoutEngine
                 var childContent = LayoutContainer(child);
                 clusterLayouts[child.Id] = childContent;
                 clusterSizes[child.Id] = (
-                    childContent.Width + ClusterPadding * 2,
-                    childContent.Height + ClusterPadding * 2 + ClusterLabelHeight);
+                    childContent.Width + clusterPadding * 2,
+                    childContent.Height + clusterPadding * 2 + clusterLabelHeight);
             }
 
             var graph = new ClusterGraph();
@@ -329,8 +329,8 @@ class DagreLayoutEngine : ILayoutEngine
             var content = new ClusterContent();
             if (graph.Nodes.Count == 0)
             {
-                content.Width = ClusterLabelHeight;
-                content.Height = ClusterLabelHeight;
+                content.Width = clusterLabelHeight;
+                content.Height = clusterLabelHeight;
                 return content;
             }
 
@@ -379,8 +379,8 @@ class DagreLayoutEngine : ILayoutEngine
                     childSubgraph.Height = h;
                     PlaceContainer(
                         childSubgraph,
-                        centerX - w / 2 + ClusterPadding,
-                        centerY - h / 2 + ClusterLabelHeight + ClusterPadding);
+                        centerX - w / 2 + clusterPadding,
+                        centerY - h / 2 + clusterLabelHeight + clusterPadding);
                 }
                 else if (nodeById.TryGetValue(memberId, out var node))
                 {
@@ -444,9 +444,7 @@ class DagreLayoutEngine : ILayoutEngine
         return new(node.Position.X + dx * t, node.Position.Y + dy * t);
     }
 
-    sealed class ClusterGraph : GraphDiagramBase
-    {
-    }
+    sealed class ClusterGraph : GraphDiagramBase;
 
     sealed class ClusterContent
     {

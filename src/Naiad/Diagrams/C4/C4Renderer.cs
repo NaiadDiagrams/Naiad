@@ -1,26 +1,27 @@
 namespace Naiad.Diagrams.C4;
 
-public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C4Model>
+public class C4Renderer(ILayoutEngine? layoutEngine = null) :
+    IDiagramRenderer<C4Model>
 {
-    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
-    const double ElementWidth = 160;
-    const double ElementHeight = 100;
-    const double LineHeight = 18;
-    const double TitleHeight = 50;
-    const double BoundaryPadding = 15;
-    const double BoundaryTitleHeight = 40;
+    const double elementWidth = 160;
+    const double elementHeight = 100;
+    const double lineHeight = 18;
+    const double titleHeight = 50;
+    const double boundaryPadding = 15;
+    const double boundaryTitleHeight = 40;
 
-    const string PersonColor = "#08427B";
-    const string PersonExtColor = "#999999";
-    const string SystemColor = "#1168BD";
-    const string SystemDbColor = "#1168BD";
-    const string SystemExtColor = "#999999";
-    const string ContainerColor = "#438DD5";
-    const string ContainerDbColor = "#438DD5";
-    const string ComponentColor = "#85BBF0";
-    const string BoundaryStroke = "#444444";
-    const string BoundaryFill = "#FFFFFF";
+    const string personColor = "#08427B";
+    const string personExtColor = "#999999";
+    const string systemColor = "#1168BD";
+    const string systemDbColor = "#1168BD";
+    const string systemExtColor = "#999999";
+    const string containerColor = "#438DD5";
+    const string containerDbColor = "#438DD5";
+    const string componentColor = "#85BBF0";
+    const string boundaryStroke = "#444444";
+    const string boundaryFill = "#FFFFFF";
 
     // Boundary layout state (recursive composite layout). Keyed by boundary id;
     // the top-level container uses the empty-string key.
@@ -31,9 +32,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     readonly Dictionary<string, (double x, double y)> containerOriginAbs = new();
     Dictionary<string, C4Element> elementsById = new();
     Dictionary<string, C4Boundary> boundariesById = new();
-    double nodeSeparation = DefaultNodeSeparation;
+    double nodeSeparation = defaultNodeSeparation;
 
-    const double DefaultNodeSeparation = 60;
+    const double defaultNodeSeparation = 60;
 
     public SvgDocument Render(C4Model model, RenderOptions options)
     {
@@ -80,7 +81,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 {
                     Id = element.Id,
                     Label = element.Label,
-                    Width = ElementWidth,
+                    Width = elementWidth,
                     Height = NodeHeight(element)
                 });
         }
@@ -156,7 +157,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             drawn.Add((route, reversed, labelX, labelY, rel.Label, rel.Technology));
         }
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
         // Body bounding box: node bounds plus the label chips, which can extend
         // past the nodes (e.g. a side label on a back edge).
@@ -197,7 +198,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         {
             builder.AddText(
                 contentWidth / 2,
-                TitleHeight / 2,
+                titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -229,7 +230,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             }
 
             var h = NodeHeight(element);
-            DrawElement(builder, element, node.Position.X - ElementWidth / 2, node.Position.Y - h / 2, options);
+            DrawElement(builder, element, node.Position.X - elementWidth / 2, node.Position.Y - h / 2, options);
         }
 
         // Edge labels last so their chips stay legible on top of everything.
@@ -337,7 +338,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         var bodyWidth = maxX - minX;
         var bodyHeight = maxY - minY;
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
         var titleWidth = string.IsNullOrEmpty(model.Title)
             ? 0
             : model.Title.Length * (options.FontSize + 6) * 0.6 + 20;
@@ -352,7 +353,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         {
             builder.AddText(
                 contentWidth / 2,
-                TitleHeight / 2,
+                titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -391,7 +392,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             if (elementAbs.TryGetValue(element.Id, out var e))
             {
                 var h = NodeHeight(element);
-                DrawElement(builder, element, e.x - ElementWidth / 2, e.y - h / 2, options);
+                DrawElement(builder, element, e.x - elementWidth / 2, e.y - h / 2, options);
             }
         }
 
@@ -449,8 +450,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             var childLayout = LayoutContainer(model, child.Id);
             containerLayouts[child.Id] = childLayout;
             boundarySizes[child.Id] = (
-                childLayout.ContentWidth + BoundaryPadding * 2,
-                childLayout.ContentHeight + BoundaryPadding * 2 + BoundaryTitleHeight);
+                childLayout.ContentWidth + boundaryPadding * 2,
+                childLayout.ContentHeight + boundaryPadding * 2 + boundaryTitleHeight);
         }
 
         var graph = new C4LayoutGraph();
@@ -460,7 +461,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 new()
                 {
                     Id = element.Id,
-                    Width = ElementWidth,
+                    Width = elementWidth,
                     Height = NodeHeight(element)
                 });
         }
@@ -497,8 +498,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         var layout = new ContainerLayout();
         if (graph.Nodes.Count == 0)
         {
-            layout.ContentWidth = ElementWidth;
-            layout.ContentHeight = ElementHeight;
+            layout.ContentWidth = elementWidth;
+            layout.ContentHeight = elementHeight;
             return layout;
         }
 
@@ -614,13 +615,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 boundaryAbs[memberId] = (topLeftX, topLeftY, w, h);
                 PlaceContainer(
                     memberId,
-                    topLeftX + BoundaryPadding,
-                    topLeftY + BoundaryTitleHeight + BoundaryPadding);
+                    topLeftX + boundaryPadding,
+                    topLeftY + boundaryTitleHeight + boundaryPadding);
             }
             else if (elementsById.TryGetValue(memberId, out var element))
             {
                 var h = NodeHeight(element);
-                elementAbs[memberId] = (centerX, centerY, ElementWidth, h);
+                elementAbs[memberId] = (centerX, centerY, elementWidth, h);
             }
         }
     }
@@ -763,7 +764,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         }
 
         // 8px of breathing room on each side of the chip.
-        return Math.Max(DefaultNodeSeparation, widest + 16);
+        return Math.Max(defaultNodeSeparation, widest + 16);
     }
 
     /// <summary>
@@ -851,14 +852,14 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             width,
             height,
             rx: 5,
-            fill: BoundaryFill,
-            stroke: BoundaryStroke,
+            fill: boundaryFill,
+            stroke: boundaryStroke,
             strokeWidth: 2,
             style: "stroke-dasharray: 8 4");
 
         builder.AddText(
             x + width / 2,
-            y + BoundaryTitleHeight / 2 - 5,
+            y + boundaryTitleHeight / 2 - 5,
             boundary.Label,
             anchor: "middle",
             baseline: "middle",
@@ -880,7 +881,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         {
             builder.AddText(
                 x + width / 2,
-                y + BoundaryTitleHeight / 2 + 10,
+                y + boundaryTitleHeight / 2 + 10,
                 typeLabel,
                 anchor: "middle",
                 baseline: "middle",
@@ -903,11 +904,11 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         if (element.Type == C4ElementType.Person)
         {
             // Head clearance plus the centered text block.
-            return 40 + lines * LineHeight + 18;
+            return 40 + lines * lineHeight + 18;
         }
 
         // ~22px of padding above and below the text block.
-        return lines * LineHeight + 44;
+        return lines * lineHeight + 44;
     }
 
     static void DrawElement(SvgBuilder builder, C4Element element, double x, double y, RenderOptions options)
@@ -922,7 +923,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             // rounded body. The body spans the full element width so labels and
             // descriptions stay inside the shape.
             const int headRadius = 20;
-            var centerX = x + ElementWidth / 2;
+            var centerX = x + elementWidth / 2;
             var bodyTop = y + headRadius + 8;
             var bodyHeight = height - (headRadius + 8);
 
@@ -930,7 +931,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             builder.AddRect(
                 x,
                 bodyTop,
-                ElementWidth,
+                elementWidth,
                 bodyHeight,
                 rx: 8,
                 fill: color,
@@ -983,9 +984,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
 
             // Top ellipse
             builder.AddEllipse(
-                x + ElementWidth / 2,
+                x + elementWidth / 2,
                 y + ellipseHeight,
-                ElementWidth / 2 - 5,
+                elementWidth / 2 - 5,
                 ellipseHeight,
                 fill: color, stroke: "none");
 
@@ -993,16 +994,16 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             builder.AddRect(
                 x + 5,
                 y + ellipseHeight,
-                ElementWidth - 10,
+                elementWidth - 10,
                 height - ellipseHeight * 2,
                 fill: color,
                 stroke: "none");
 
             // Bottom ellipse
             builder.AddEllipse(
-                x + ElementWidth / 2,
+                x + elementWidth / 2,
                 y + height - ellipseHeight,
-                ElementWidth / 2 - 5,
+                elementWidth / 2 - 5,
                 ellipseHeight,
                 fill: color,
                 stroke: "none");
@@ -1015,7 +1016,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             builder.AddRect(
                 x,
                 y,
-                ElementWidth,
+                elementWidth,
                 height,
                 rx: 5,
                 fill: color,
@@ -1034,10 +1035,10 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         RenderOptions options,
         string textColor)
     {
-        var centerX = x + ElementWidth / 2;
+        var centerX = x + elementWidth / 2;
 
         // Center the block of lines vertically within the box.
-        var textY = y + height / 2 - (ContentLineCount(element) - 1) * (LineHeight / 2);
+        var textY = y + height / 2 - (ContentLineCount(element) - 1) * (lineHeight / 2);
 
         // Label
         builder.AddText(
@@ -1054,7 +1055,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         // Technology
         if (!string.IsNullOrEmpty(element.Technology))
         {
-            textY += LineHeight;
+            textY += lineHeight;
             builder.AddText(
                 centerX,
                 textY,
@@ -1069,7 +1070,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         // Description
         if (!string.IsNullOrEmpty(element.Description))
         {
-            textY += LineHeight;
+            textY += lineHeight;
             builder.AddText(
                 centerX,
                 textY,
@@ -1086,19 +1087,19 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     {
         if (element.IsExternal)
         {
-            return element.Type == C4ElementType.Person ? PersonExtColor : SystemExtColor;
+            return element.Type == C4ElementType.Person ? personExtColor : systemExtColor;
         }
 
         return element.Type switch
         {
-            C4ElementType.Person => PersonColor,
-            C4ElementType.System => SystemColor,
-            C4ElementType.SystemDb => SystemDbColor,
-            C4ElementType.Container => ContainerColor,
-            C4ElementType.ContainerDb => ContainerDbColor,
-            C4ElementType.ContainerQueue => ContainerColor,
-            C4ElementType.Component => ComponentColor,
-            _ => SystemColor
+            C4ElementType.Person => personColor,
+            C4ElementType.System => systemColor,
+            C4ElementType.SystemDb => systemDbColor,
+            C4ElementType.Container => containerColor,
+            C4ElementType.ContainerDb => containerDbColor,
+            C4ElementType.ContainerQueue => containerColor,
+            C4ElementType.Component => componentColor,
+            _ => systemColor
         };
     }
 
@@ -1116,9 +1117,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     /// Concrete graph model used to feed C4 elements and relationships to the
     /// shared layout engine.
     /// </summary>
-    sealed class C4LayoutGraph : GraphDiagramBase
-    {
-    }
+    sealed class C4LayoutGraph : GraphDiagramBase;
 
     /// <summary>
     /// Result of laying out one container: its content size and each direct
