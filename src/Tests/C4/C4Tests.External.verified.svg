@@ -143,21 +143,29 @@
         fill="#666">Views account info</text>
       <rect
         x="36.4"
-        y="344"
+        y="336.5"
         width="87.2"
-        height="17"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="80"
-        y="352.5"
+        y="346"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Sends emails</text>
+      <text
+        x="80"
+        y="360"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[SMTP]</text>
     </g>
   </g>
 </svg>

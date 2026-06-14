@@ -28,6 +28,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     readonly Dictionary<string, (double w, double h)> boundarySizes = new();
     readonly Dictionary<string, (double x, double y, double w, double h)> elementAbs = new();
     readonly Dictionary<string, (double x, double y, double w, double h)> boundaryAbs = new();
+    readonly Dictionary<string, (double x, double y)> containerOriginAbs = new();
     Dictionary<string, C4Element> elementsById = new();
     Dictionary<string, C4Boundary> boundariesById = new();
 
@@ -81,6 +82,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 });
         }
 
+        var edgePairs = new List<(Edge edge, C4Relationship rel)>();
         foreach (var rel in model.Relationships)
         {
             // Skip relationships that reference unknown elements.
@@ -90,14 +92,15 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
                 continue;
             }
 
-            graph.AddEdge(
-                new()
-                {
-                    SourceId = rel.From,
-                    TargetId = rel.To,
-                    Label = rel.Label,
-                    LineStyle = EdgeStyle.Dotted
-                });
+            var edge = new Edge
+            {
+                SourceId = rel.From,
+                TargetId = rel.To,
+                Label = rel.Label,
+                LineStyle = EdgeStyle.Dotted
+            };
+            graph.AddEdge(edge);
+            edgePairs.Add((edge, rel));
         }
 
         var layoutOptions = new LayoutOptions
@@ -141,9 +144,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             CultureInfo.InvariantCulture, $"translate({bodyOffsetX:0.##},{titleOffset:0.##})"));
 
         // Edge lines first so element boxes sit on top of them.
-        foreach (var edge in graph.Edges)
+        foreach (var (edge, rel) in edgePairs)
         {
-            DrawRoutedEdge(builder, edge);
+            DrawRoutedPolyline(builder, edge.Points, rel.Direction == C4RelationshipDirection.Back);
         }
 
         // Element boxes.
@@ -160,11 +163,11 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         }
 
         // Edge labels last so their chips stay legible on top of everything.
-        foreach (var edge in graph.Edges)
+        foreach (var (edge, rel) in edgePairs)
         {
-            if (!string.IsNullOrEmpty(edge.Label))
+            if (!string.IsNullOrEmpty(rel.Label))
             {
-                DrawLabelChip(builder, edge.LabelPosition.X, edge.LabelPosition.Y, edge.Label, options);
+                DrawLabelChip(builder, edge.LabelPosition.X, edge.LabelPosition.Y, rel.Label, rel.Technology, options);
             }
         }
 
@@ -185,6 +188,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         boundarySizes.Clear();
         elementAbs.Clear();
         boundaryAbs.Clear();
+        containerOriginAbs.Clear();
         elementsById = model.Elements.ToDictionary(_ => _.Id);
         boundariesById = model.Boundaries.ToDictionary(_ => _.Id);
 
@@ -231,17 +235,29 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             }
         }
 
-        var labels = new List<(double x, double y, string label)>();
+        var labels = new List<(double x, double y, string label, string? technology)>();
         foreach (var rel in model.Relationships)
         {
-            if (elementAbs.TryGetValue(rel.From, out var from) &&
-                elementAbs.TryGetValue(rel.To, out var to))
+            if (!elementAbs.TryGetValue(rel.From, out var from) ||
+                !elementAbs.TryGetValue(rel.To, out var to))
             {
-                var (mx, my) = DrawRelationshipLine(builder, from, to);
-                if (!string.IsNullOrEmpty(rel.Label))
-                {
-                    labels.Add((mx, my, rel.Label));
-                }
+                continue;
+            }
+
+            var reversed = rel.Direction == C4RelationshipDirection.Back;
+
+            // Use the engine-routed polyline when both ends sit in the same
+            // container (so a skipping edge routes around its siblings);
+            // otherwise fall back to a straight, border-trimmed line.
+            var (mx, my) = TryGetRoutedPolyline(rel, out var route)
+                ? DrawRoutedPolyline(builder, route, reversed)
+                : reversed
+                    ? DrawRelationshipLine(builder, to, from)
+                    : DrawRelationshipLine(builder, from, to);
+
+            if (!string.IsNullOrEmpty(rel.Label))
+            {
+                labels.Add((mx, my, rel.Label, rel.Technology));
             }
         }
 
@@ -254,12 +270,39 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             }
         }
 
-        foreach (var (x, y, label) in labels)
+        foreach (var (x, y, label, technology) in labels)
         {
-            DrawLabelChip(builder, x, y, label, options);
+            DrawLabelChip(builder, x, y, label, technology, options);
         }
 
         return builder.Build();
+    }
+
+    /// <summary>
+    /// Tries to build the absolute engine-routed polyline for a relationship
+    /// whose endpoints share a container (so it can route around siblings).
+    /// </summary>
+    bool TryGetRoutedPolyline(C4Relationship rel, out List<Position> absolute)
+    {
+        absolute = [];
+        if (!elementsById.TryGetValue(rel.From, out var from) ||
+            !elementsById.TryGetValue(rel.To, out var to) ||
+            from.BoundaryId != to.BoundaryId)
+        {
+            return false;
+        }
+
+        var key = from.BoundaryId ?? "";
+        if (!containerLayouts.TryGetValue(key, out var layout) ||
+            !containerOriginAbs.TryGetValue(key, out var origin) ||
+            !layout.EdgeRoutes.TryGetValue((rel.From, rel.To), out var points) ||
+            points.Count < 2)
+        {
+            return false;
+        }
+
+        absolute = points.Select(_ => new Position(_.X + origin.x, _.Y + origin.y)).ToList();
+        return true;
     }
 
     /// <summary>
@@ -353,6 +396,19 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             layout.MemberCenters[node.Id] = (node.Position.X - minX, node.Position.Y - minY);
         }
 
+        // Keep the engine-routed polyline for each edge (content-relative) so a
+        // relationship that skips a sibling routes around it instead of crossing.
+        foreach (var edge in graph.Edges)
+        {
+            if (edge.Points.Count < 2)
+            {
+                continue;
+            }
+
+            layout.EdgeRoutes[(edge.SourceId, edge.TargetId)] =
+                edge.Points.Select(_ => new Position(_.X - minX, _.Y - minY)).ToList();
+        }
+
         layout.ContentWidth = maxX - minX;
         layout.ContentHeight = maxY - minY;
         return layout;
@@ -409,6 +465,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             return;
         }
 
+        containerOriginAbs[boundaryId ?? ""] = (contentOriginX, contentOriginY);
+
         foreach (var (memberId, center) in layout.MemberCenters)
         {
             var centerX = contentOriginX + center.X;
@@ -448,15 +506,19 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     }
 
     /// <summary>
-    /// Draws a routed relationship edge: a dashed polyline through the layout
-    /// points with a manual arrowhead on the final segment.
+    /// Draws a dashed polyline through the routed layout points with a manual
+    /// arrowhead, and returns the point where its label chip should sit. The
+    /// arrowhead is placed at the target end, or at the source end when
+    /// <paramref name="reversed"/> is set (a "back" relationship).
     /// </summary>
-    static void DrawRoutedEdge(SvgBuilder builder, Edge edge)
+    static (double x, double y) DrawRoutedPolyline(
+        SvgBuilder builder,
+        IReadOnlyList<Position> points,
+        bool reversed)
     {
-        var points = edge.Points;
         if (points.Count < 2)
         {
-            return;
+            return points.Count == 1 ? (points[0].X, points[0].Y - 8) : (0, 0);
         }
 
         var path = new StringBuilder();
@@ -473,21 +535,29 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
             strokeWidth: 1.5,
             strokeDasharray: "5,5");
 
-        // Arrowhead along the final segment.
-        var p1 = points[^2];
-        var p2 = points[^1];
-        var angle = Math.Atan2(p2.Y - p1.Y, p2.X - p1.X);
+        var tip = reversed ? points[0] : points[^1];
+        var prev = reversed ? points[1] : points[^2];
+        var angle = Math.Atan2(tip.Y - prev.Y, tip.X - prev.X);
         const int arrowSize = 8;
         const double arrowAngle = Math.PI / 6;
-        var ax1 = p2.X - arrowSize * Math.Cos(angle - arrowAngle);
-        var ay1 = p2.Y - arrowSize * Math.Sin(angle - arrowAngle);
-        var ax2 = p2.X - arrowSize * Math.Cos(angle + arrowAngle);
-        var ay2 = p2.Y - arrowSize * Math.Sin(angle + arrowAngle);
+        var ax1 = tip.X - arrowSize * Math.Cos(angle - arrowAngle);
+        var ay1 = tip.Y - arrowSize * Math.Sin(angle - arrowAngle);
+        var ax2 = tip.X - arrowSize * Math.Cos(angle + arrowAngle);
+        var ay2 = tip.Y - arrowSize * Math.Sin(angle + arrowAngle);
 
         builder.AddPath(
-            string.Create(CultureInfo.InvariantCulture, $"M {p2.X:0.##} {p2.Y:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
+            string.Create(CultureInfo.InvariantCulture, $"M {tip.X:0.##} {tip.Y:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
             fill: "#666",
             stroke: "none");
+
+        // Label sits at the polyline midpoint.
+        var mid = points.Count / 2;
+        if (points.Count % 2 == 0)
+        {
+            return ((points[mid - 1].X + points[mid].X) / 2, (points[mid - 1].Y + points[mid].Y) / 2 - 8);
+        }
+
+        return (points[mid].X, points[mid].Y - 8);
     }
 
     /// <summary>
@@ -536,30 +606,56 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
     /// Draws a relationship label centered at the given point on a white chip so
     /// it stays legible where it crosses lines or boxes.
     /// </summary>
-    static void DrawLabelChip(SvgBuilder builder, double x, double y, string label, RenderOptions options)
+    static void DrawLabelChip(
+        SvgBuilder builder,
+        double x,
+        double y,
+        string label,
+        string? technology,
+        RenderOptions options)
     {
         var fontSize = options.FontSize - 3;
-        var labelWidth = label.Length * (fontSize * 0.6) + 8;
-        var labelHeight = fontSize + 6;
+        var techFontSize = options.FontSize - 4;
+        var hasTech = !string.IsNullOrEmpty(technology);
+        var techText = hasTech ? $"[{technology}]" : null;
+
+        var width = Math.Max(
+            label.Length * (fontSize * 0.6),
+            hasTech ? techText!.Length * (techFontSize * 0.6) : 0) + 8;
+        var lineHeight = fontSize + 4;
+        var height = hasTech ? lineHeight * 2 + 2 : fontSize + 6;
 
         builder.AddRect(
-            x - labelWidth / 2,
-            y - labelHeight / 2.0,
-            labelWidth,
-            labelHeight,
+            x - width / 2,
+            y - height / 2.0,
+            width,
+            height,
             rx: 3,
             fill: "#FFFFFF",
             stroke: "none");
 
         builder.AddText(
             x,
-            y,
+            hasTech ? y - lineHeight / 2.0 + 1 : y,
             label,
             anchor: "middle",
             baseline: "middle",
             fontSize: fontSize,
             fontFamily: options.FontFamily,
             fill: "#666");
+
+        if (hasTech)
+        {
+            builder.AddText(
+                x,
+                y + lineHeight / 2.0,
+                techText!,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: techFontSize,
+                fontFamily: options.FontFamily,
+                fill: "#888");
+        }
     }
 
     static void DrawBoundaryBox(
@@ -831,5 +927,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) : IDiagramRenderer<C
         public double ContentWidth { get; set; }
         public double ContentHeight { get; set; }
         public Dictionary<string, (double X, double Y)> MemberCenters { get; } = new();
+
+        // Engine-routed polylines for edges laid out within this container,
+        // keyed by (source, target), in content-relative coordinates.
+        public Dictionary<(string From, string To), List<Position>> EdgeRoutes { get; } = new();
     }
 }

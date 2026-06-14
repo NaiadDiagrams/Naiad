@@ -312,38 +312,54 @@
         fill="#FFFFFF">Content delivery ne...</text>
       <rect
         x="492.9"
-        y="154"
+        y="146.5"
         width="54.2"
-        height="17"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="520"
-        y="162.5"
+        y="156"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Manages</text>
+      <text
+        x="520"
+        y="170"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTPS]</text>
       <rect
-        x="390.49"
-        y="155.55"
-        width="34.4"
-        height="17"
+        x="382.69"
+        y="148.05"
+        width="50"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="407.69"
-        y="164.05"
+        y="157.55"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Uses</text>
+      <text
+        x="407.69"
+        y="171.55"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTPS]</text>
       <rect
         x="242.35"
         y="346"
@@ -363,72 +379,104 @@
         fill="#666">Authenticates via</text>
       <rect
         x="368.71"
-        y="345.55"
+        y="338.05"
         width="87.2"
-        height="17"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="412.31"
-        y="354.05"
+        y="347.55"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Reads/Writes</text>
+      <text
+        x="412.31"
+        y="361.55"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[TCP/5432]</text>
       <rect
         x="456.6"
-        y="344"
+        y="336.5"
         width="126.8"
-        height="17"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="520"
-        y="352.5"
+        y="346"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Processes payments</text>
+      <text
+        x="520"
+        y="360"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTPS]</text>
       <rect
         x="560.99"
-        y="345.55"
+        y="338.05"
         width="133.4"
-        height="17"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="627.69"
-        y="354.05"
+        y="347.55"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Sends notifications</text>
+      <text
+        x="627.69"
+        y="361.55"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[SMTP]</text>
       <rect
         x="690.65"
-        y="346"
+        y="338.5"
         width="93.8"
-        height="17"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="737.55"
-        y="354.5"
+        y="348"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Serves assets</text>
+      <text
+        x="737.55"
+        y="362"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTPS]</text>
     </g>
   </g>
 </svg>

@@ -149,7 +149,7 @@ class C4Parser : IDiagramParser<C4Model>
     // Rel(from, to, "label", "tech")
     static Parser<char, C4Relationship> relParser =
         from _ in CommonParsers.InlineWhitespace
-        from __ in OneOf(
+        from keyword in OneOf(
             Try(CIString("Rel_D")), Try(CIString("Rel_U")),
             Try(CIString("Rel_L")), Try(CIString("Rel_R")),
             Try(CIString("Rel_Back")), Try(CIString("Rel_Neighbor")),
@@ -168,7 +168,20 @@ class C4Parser : IDiagramParser<C4Model>
             From = fromId,
             To = toId,
             Label = label.GetValueOrDefault(),
-            Technology = tech.GetValueOrDefault()
+            Technology = tech.GetValueOrDefault(),
+            Direction = MapRelationshipDirection(keyword)
+        };
+
+    static C4RelationshipDirection MapRelationshipDirection(string keyword) =>
+        keyword.ToUpperInvariant() switch
+        {
+            "REL_U" => C4RelationshipDirection.Up,
+            "REL_D" => C4RelationshipDirection.Down,
+            "REL_L" => C4RelationshipDirection.Left,
+            "REL_R" => C4RelationshipDirection.Right,
+            "REL_BACK" => C4RelationshipDirection.Back,
+            "REL_NEIGHBOR" => C4RelationshipDirection.Neighbor,
+            _ => C4RelationshipDirection.Default
         };
 
     // Skip line (comments, empty lines)

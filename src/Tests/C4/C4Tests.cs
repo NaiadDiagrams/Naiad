@@ -187,4 +187,59 @@ public class C4Tests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task RelationshipTechnology()
+    {
+        const string input =
+            """
+            C4Context
+                title Relationship Technology
+                Person(user, "User", "A user of the system")
+                System(sys, "System", "The main system")
+                System_Ext(email, "Email System", "Delivers email")
+                Rel(user, sys, "Uses", "HTTPS")
+                Rel(sys, email, "Sends notifications", "SMTP")
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task BoundaryEdgeRouting()
+    {
+        // The a -> c relationship skips the middle element in the same boundary
+        // row, so a straight line would cross the "B" box.
+        const string input =
+            """
+            C4Container
+                title Boundary Edge Routing
+                System_Boundary(b, "System") {
+                    Container(a, "A", "tech", "first")
+                    Container(mid, "B", "tech", "second")
+                    Container(c, "C", "tech", "third")
+                }
+                Rel(a, mid, "to b")
+                Rel(mid, c, "to c")
+                Rel(a, c, "skips b")
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task BackRelationship()
+    {
+        // Rel_Back draws the arrowhead at the source end (here, back up at "client").
+        const string input =
+            """
+            C4Context
+                title Back Relationship
+                System(client, "Client", "Sends requests")
+                System(server, "Server", "Returns responses")
+                Rel_Back(client, server, "Polls for updates", "HTTP")
+            """;
+
+        return VerifySvg(input);
+    }
 }

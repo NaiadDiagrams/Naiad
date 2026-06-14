@@ -58,28 +58,24 @@
       d="M 151.01 329.3 L 153 321.55 L 158.71 327.15 Z"
       fill="#666"
       stroke="none" />
-    <line
-      x1="175"
-      y1="365"
-      x2="265"
-      y2="365"
+    <path
+      d="M 175 365 L 260 365"
+      fill="none"
       stroke="#666"
       stroke-width="1.5"
       stroke-dasharray="5,5" />
     <path
-      d="M 265 365 L 258.07 369 L 258.07 361 Z"
+      d="M 260 365 L 253.07 369 L 253.07 361 Z"
       fill="#666"
       stroke="none" />
-    <line
-      x1="425"
-      y1="365"
-      x2="515"
-      y2="365"
+    <path
+      d="M 425 365 L 510 365"
+      fill="none"
       stroke="#666"
       stroke-width="1.5"
       stroke-dasharray="5,5" />
     <path
-      d="M 515 365 L 508.07 369 L 508.07 361 Z"
+      d="M 510 365 L 503.07 369 L 503.07 361 Z"
       fill="#666"
       stroke="none" />
     <line
@@ -267,72 +263,104 @@
       font-family="Arial, sans-serif"
       fill="#FFFFFF">Sends email to cust...</text>
     <rect
-      x="202.8"
-      y="224.57"
-      width="34.4"
-      height="17"
+      x="195"
+      y="217.07"
+      width="50"
+      height="32"
       rx="3"
       ry="3"
       fill="#FFFFFF"
       stroke="none" />
     <text
       x="220"
-      y="233.07"
+      y="226.57"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="11px"
       font-family="Arial, sans-serif"
       fill="#666">Uses</text>
+    <text
+      x="220"
+      y="240.57"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#888">[HTTPS]</text>
     <rect
-      x="199.5"
-      y="348.5"
-      width="41"
-      height="17"
+      x="177.5"
+      y="341"
+      width="80"
+      height="32"
       rx="3"
       ry="3"
       fill="#FFFFFF"
       stroke="none" />
     <text
-      x="220"
-      y="357"
+      x="217.5"
+      y="350.5"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="11px"
       font-family="Arial, sans-serif"
       fill="#666">Calls</text>
+    <text
+      x="217.5"
+      y="364.5"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#888">[JSON/HTTPS]</text>
     <rect
-      x="426.4"
-      y="348.5"
+      x="423.9"
+      y="341"
       width="87.2"
-      height="17"
+      height="32"
       rx="3"
       ry="3"
       fill="#FFFFFF"
       stroke="none" />
     <text
-      x="470"
-      y="357"
+      x="467.5"
+      y="350.5"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="11px"
       font-family="Arial, sans-serif"
       fill="#666">Reads/Writes</text>
+    <text
+      x="467.5"
+      y="364.5"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#888">[SQL]</text>
     <rect
       x="284.9"
-      y="451"
+      y="443.5"
       width="120.2"
-      height="17"
+      height="32"
       rx="3"
       ry="3"
       fill="#FFFFFF"
       stroke="none" />
     <text
       x="345"
-      y="459.5"
+      y="453"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="11px"
       font-family="Arial, sans-serif"
       fill="#666">Sends email using</text>
+    <text
+      x="345"
+      y="467"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#888">[SMTP]</text>
   </g>
 </svg>

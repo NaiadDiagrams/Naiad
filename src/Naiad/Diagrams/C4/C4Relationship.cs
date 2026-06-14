@@ -6,4 +6,5 @@ public class C4Relationship
     public required string To { get; init; }
     public string? Label { get; set; }
     public string? Technology { get; set; }
+    public C4RelationshipDirection Direction { get; set; } = C4RelationshipDirection.Default;
 }

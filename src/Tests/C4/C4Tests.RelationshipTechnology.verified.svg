@@ -2,8 +2,8 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 492 780"
-  style="max-width: 492px;"
+  viewBox="0 0 336 590"
+  style="max-width: 336px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
@@ -11,15 +11,15 @@
   <g
     transform="translate(20,20)">
     <text
-      x="226"
+      x="148"
       y="25"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="20px"
       font-family="Arial, sans-serif"
-      font-weight="bold">Container diagram for Banking System</text>
+      font-weight="bold">Relationship Technology</text>
     <g
-      transform="translate(146,50)">
+      transform="translate(68,50)">
       <path
         d="M 80 120 L 80 205"
         fill="none"
@@ -38,16 +38,6 @@
         stroke-dasharray="5,5" />
       <path
         d="M 80 395 L 76 388.07 L 84 388.07 Z"
-        fill="#666"
-        stroke="none" />
-      <path
-        d="M 80 500 L 80 585"
-        fill="none"
-        stroke="#666"
-        stroke-width="1.5"
-        stroke-dasharray="5,5" />
-      <path
-        d="M 80 585 L 76 578.07 L 84 578.07 Z"
         fill="#666"
         stroke="none" />
       <rect
@@ -73,7 +63,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">Customer</text>
+        fill="#FFFFFF">User</text>
       <text
         x="80"
         y="89"
@@ -81,7 +71,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">Bank customer</text>
+        fill="#FFFFFF">A user of the system</text>
       <rect
         x="0"
         y="210"
@@ -89,7 +79,7 @@
         height="100"
         rx="5"
         ry="5"
-        fill="#438DD5"
+        fill="#1168BD"
         stroke="none" />
       <text
         x="80"
@@ -99,7 +89,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">Web Application</text>
+        fill="#FFFFFF">System</text>
       <text
         x="80"
         y="253"
@@ -107,15 +97,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[React]</text>
-      <text
-        x="80"
-        y="271"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Provides banking UI</text>
+        fill="#FFFFFF">The main system</text>
       <rect
         x="0"
         y="400"
@@ -123,7 +105,7 @@
         height="100"
         rx="5"
         ry="5"
-        fill="#438DD5"
+        fill="#999999"
         stroke="none" />
       <text
         x="80"
@@ -133,7 +115,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">API Server</text>
+        fill="#FFFFFF">Email System</text>
       <text
         x="80"
         y="443"
@@ -141,61 +123,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[Node.js]</text>
-      <text
-        x="80"
-        y="461"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Handles requests</text>
-      <ellipse
-        cx="80"
-        cy="605"
-        rx="75"
-        ry="15"
-        fill="#438DD5"
-        stroke="none" />
-      <rect
-        x="5"
-        y="605"
-        width="150"
-        height="70"
-        fill="#438DD5"
-        stroke="none" />
-      <ellipse
-        cx="80"
-        cy="675"
-        rx="75"
-        ry="15"
-        fill="#438DD5"
-        stroke="none" />
-      <text
-        x="80"
-        y="615"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="13px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#FFFFFF">Database</text>
-      <text
-        x="80"
-        y="633"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">[PostgreSQL]</text>
-      <text
-        x="80"
-        y="651"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Stores user data</text>
+        fill="#FFFFFF">Delivers email</text>
       <rect
         x="55"
         y="146.5"
@@ -222,9 +150,9 @@
         font-family="Arial, sans-serif"
         fill="#888">[HTTPS]</text>
       <rect
-        x="40"
+        x="13.3"
         y="336.5"
-        width="80"
+        width="133.4"
         height="32"
         rx="3"
         ry="3"
@@ -237,7 +165,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#666">Calls</text>
+        fill="#666">Sends notifications</text>
       <text
         x="80"
         y="360"
@@ -245,32 +173,7 @@
         dominant-baseline="middle"
         font-size="10px"
         font-family="Arial, sans-serif"
-        fill="#888">[JSON/HTTPS]</text>
-      <rect
-        x="36.4"
-        y="526.5"
-        width="87.2"
-        height="32"
-        rx="3"
-        ry="3"
-        fill="#FFFFFF"
-        stroke="none" />
-      <text
-        x="80"
-        y="536"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#666">Reads/Writes</text>
-      <text
-        x="80"
-        y="550"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="10px"
-        font-family="Arial, sans-serif"
-        fill="#888">[SQL]</text>
+        fill="#888">[SMTP]</text>
     </g>
   </g>
 </svg>

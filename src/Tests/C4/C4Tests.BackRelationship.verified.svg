@@ -1,0 +1,112 @@
+﻿<svg
+  id="mermaid-svg"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 264 380"
+  style="max-width: 264px;"
+  role="graphics-document document"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="112"
+      y="25"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="20px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Back Relationship</text>
+    <g
+      transform="translate(32,50)">
+      <path
+        d="M 80 100 L 80 185"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 80 100 L 84 106.93 L 76 106.93 Z"
+        fill="#666"
+        stroke="none" />
+      <rect
+        x="0"
+        y="0"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="80"
+        y="25"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Client</text>
+      <text
+        x="80"
+        y="43"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Sends requests</text>
+      <rect
+        x="0"
+        y="190"
+        width="160"
+        height="100"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="80"
+        y="215"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Server</text>
+      <text
+        x="80"
+        y="233"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Returns responses</text>
+      <rect
+        x="19.9"
+        y="126.5"
+        width="120.2"
+        height="32"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="80"
+        y="136"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Polls for updates</text>
+      <text
+        x="80"
+        y="150"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTP]</text>
+    </g>
+  </g>
+</svg>
