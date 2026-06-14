@@ -2,8 +2,8 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 324 354"
-  style="max-width: 324px;"
+  viewBox="0 0 264 340"
+  style="max-width: 264px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
@@ -11,60 +11,28 @@
   <g
     transform="translate(20,20)">
     <text
-      x="142"
+      x="112"
       y="25"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="20px"
       font-family="Arial, sans-serif"
-      font-weight="bold">System Context diagram</text>
+      font-weight="bold">Back Relationship</text>
     <g
-      transform="translate(62,50)">
+      transform="translate(32,50)">
       <path
-        d="M 80 94 L 80 179"
+        d="M 80 80 L 80 165"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 179 L 76 172.07 L 84 172.07 Z"
+        d="M 80 80 L 84 86.93 L 76 86.93 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="0"
-        y="28"
-        width="160"
-        height="66"
-        rx="8"
-        ry="8"
-        fill="#08427B"
-        stroke="none" />
-      <circle
-        cx="80"
-        cy="20"
-        r="20"
-        fill="#08427B"
-        stroke="none" />
-      <text
-        x="80"
-        y="58"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="13px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#FFFFFF">User</text>
-      <text
-        x="80"
-        y="76"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">A user of the system</text>
-      <rect
-        x="0"
-        y="184"
+        y="0"
         width="160"
         height="80"
         rx="5"
@@ -73,38 +41,72 @@
         stroke="none" />
       <text
         x="80"
-        y="215"
+        y="31"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">System</text>
+        fill="#FFFFFF">Client</text>
       <text
         x="80"
-        y="233"
+        y="49"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">The main system</text>
+        fill="#FFFFFF">Sends requests</text>
       <rect
-        x="62.8"
-        y="128"
-        width="34.4"
-        height="17"
+        x="0"
+        y="170"
+        width="160"
+        height="80"
+        rx="5"
+        ry="5"
+        fill="#1168BD"
+        stroke="none" />
+      <text
+        x="80"
+        y="201"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Server</text>
+      <text
+        x="80"
+        y="219"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Returns responses</text>
+      <rect
+        x="19.9"
+        y="106.5"
+        width="120.2"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="80"
-        y="136.5"
+        y="116"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#666">Uses</text>
+        fill="#666">Polls for updates</text>
+      <text
+        x="80"
+        y="130"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTP]</text>
     </g>
   </g>
 </svg>

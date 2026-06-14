@@ -6,6 +6,158 @@ internal static class Ordering
 
     public static void Run(LayoutGraph graph) => new Runner(graph).Run();
 
+    /// <summary>
+    /// Reorders nodes within their ranks so that same-rank groups stay
+    /// contiguous (no foreign node lands between them) and <c>SameBefore</c>/
+    /// <c>SameAfter</c> edges are honored (target left/right of source),
+    /// preserving the crossing-minimized order as far as the constraints allow.
+    /// </summary>
+    public static void EnforceSameRankOrder(LayoutGraph graph)
+    {
+        var sameEdges = graph.Edges.Where(_ => _.IsSameRank).ToList();
+        if (sameEdges.Count == 0)
+        {
+            return;
+        }
+
+        // first must be ordered before second (within its group).
+        var before = new List<(string first, string second)>();
+        foreach (var edge in sameEdges)
+        {
+            switch (edge.RankConstraint)
+            {
+                case RankConstraint.SameBefore:
+                    before.Add((edge.TargetId, edge.SourceId));
+                    break;
+                case RankConstraint.SameAfter:
+                    before.Add((edge.SourceId, edge.TargetId));
+                    break;
+            }
+        }
+
+        foreach (var rank in graph.Ranks)
+        {
+            ReorderRank(rank, sameEdges, before);
+        }
+
+        graph.UpdateOrderInRanks();
+    }
+
+    static void ReorderRank(
+        List<LayoutNode> rank,
+        List<LayoutEdge> sameEdges,
+        List<(string first, string second)> before)
+    {
+        var ids = new HashSet<string>(rank.Select(_ => _.Id));
+
+        // Union nodes joined by a same-rank edge so each group stays contiguous.
+        var parent = rank.ToDictionary(_ => _.Id, _ => _.Id);
+
+        string Find(string x)
+        {
+            while (parent[x] != x)
+            {
+                parent[x] = parent[parent[x]];
+                x = parent[x];
+            }
+
+            return x;
+        }
+
+        var grouped = false;
+        foreach (var edge in sameEdges)
+        {
+            if (ids.Contains(edge.SourceId) &&
+                ids.Contains(edge.TargetId))
+            {
+                parent[Find(edge.SourceId)] = Find(edge.TargetId);
+                grouped = true;
+            }
+        }
+
+        if (!grouped)
+        {
+            return;
+        }
+
+        // Members of each group, in the current (crossing-minimized) order.
+        var groups = new Dictionary<string, List<LayoutNode>>();
+        foreach (var node in rank.OrderBy(_ => _.Order))
+        {
+            var key = Find(node.Id);
+            if (!groups.TryGetValue(key, out var list))
+            {
+                list = [];
+                groups[key] = list;
+            }
+
+            list.Add(node);
+        }
+
+        // Order multi-node groups by their before/after constraints, then place
+        // each group (and singleton) contiguously, anchored at its earliest
+        // member so the overall arrangement is preserved.
+        var blocks = groups.Values
+            .Select(members => (anchor: members.Min(_ => _.Order), members: SortGroup(members, before)))
+            .OrderBy(_ => _.anchor)
+            .ToList();
+
+        var order = 0;
+        foreach (var (_, members) in blocks)
+        {
+            foreach (var node in members)
+            {
+                node.Order = order++;
+            }
+        }
+    }
+
+    static List<LayoutNode> SortGroup(List<LayoutNode> members, List<(string first, string second)> before)
+    {
+        if (members.Count < 2)
+        {
+            return members;
+        }
+
+        var ids = new HashSet<string>(members.Select(_ => _.Id));
+        var indegree = members.ToDictionary(_ => _.Id, _ => 0);
+        var successors = members.ToDictionary(_ => _.Id, _ => new List<string>());
+        foreach (var (first, second) in before)
+        {
+            if (ids.Contains(first) &&
+                ids.Contains(second))
+            {
+                successors[first].Add(second);
+                indegree[second]++;
+            }
+        }
+
+        // Stable topological sort: among nodes with no unmet predecessor, take
+        // the one with the smallest current order.
+        var ordered = new List<LayoutNode>(members.Count);
+        var remaining = new List<LayoutNode>(members.OrderBy(_ => _.Order));
+        while (ordered.Count < members.Count)
+        {
+            var next = remaining.FirstOrDefault(_ => indegree[_.Id] == 0);
+            if (next is null)
+            {
+                // Constraint cycle - keep the remaining nodes in current order.
+                ordered.AddRange(remaining);
+                break;
+            }
+
+            ordered.Add(next);
+            remaining.Remove(next);
+            indegree[next.Id] = -1;
+            foreach (var successorId in successors[next.Id])
+            {
+                indegree[successorId]--;
+            }
+        }
+
+        return ordered;
+    }
+
     sealed class Runner
     {
         static readonly Comparison<(int sourceOrder, int targetOrder)> sortBySourceThenTarget = (a, b) =>

@@ -142,61 +142,81 @@ graph TD
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ3JhcGggVERcbiAgICBBIC0tXHUwMDNFIEIgLS1cdTAwM0UgQyIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
-## StyleDirective
+## Subgraphs
 
 **Input:**
 ```
-flowchart TD
-    Start([Start]) --> Process[Process Data]
-    Process --> Decision{Valid?}
-    Decision -->|Yes| Success[Success]
-    Decision -->|No| Error[Error]
-    Success --> End([End])
-    Error --> End
+flowchart TB
+    Start[Start] --> A
 
-    style Start fill:#e1f5e1
-    style End fill:#e1f5e1
-    style Error fill:#f8d7da
-    style Success fill:#d1ecf1
+    subgraph frontend [Frontend]
+        A[Web UI] --> B[Mobile UI]
+    end
+
+    subgraph backend [Backend]
+        C[API] --> D[(Database)]
+    end
+
+    A --> C
+    B --> C
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.Subgraphs.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
-flowchart TD
-    Start([Start]) --> Process[Process Data]
-    Process --> Decision{Valid?}
-    Decision -->|Yes| Success[Success]
-    Decision -->|No| Error[Error]
-    Success --> End([End])
-    Error --> End
+flowchart TB
+    Start[Start] --> A
 
-    style Start fill:#e1f5e1
-    style End fill:#e1f5e1
-    style Error fill:#f8d7da
-    style Success fill:#d1ecf1
+    subgraph frontend [Frontend]
+        A[Web UI] --> B[Mobile UI]
+    end
+
+    subgraph backend [Backend]
+        C[API] --> D[(Database)]
+    end
+
+    A --> C
+    B --> C
 ```
 
-## Subgraph
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZmxvd2NoYXJ0IFRCXG4gICAgU3RhcnRbU3RhcnRdIC0tXHUwMDNFIEFcblxuICAgIHN1YmdyYXBoIGZyb250ZW5kIFtGcm9udGVuZF1cbiAgICAgICAgQVtXZWIgVUldIC0tXHUwMDNFIEJbTW9iaWxlIFVJXVxuICAgIGVuZFxuXG4gICAgc3ViZ3JhcGggYmFja2VuZCBbQmFja2VuZF1cbiAgICAgICAgQ1tBUEldIC0tXHUwMDNFIERbKERhdGFiYXNlKV1cbiAgICBlbmRcblxuICAgIEEgLS1cdTAwM0UgQ1xuICAgIEIgLS1cdTAwM0UgQyIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
+## NestedSubgraphs
 
 **Input:**
 ```
-flowchart LR
-    subgraph Frontend
-        A[React App] --> B[Components]
+flowchart TB
+    User[User] --> A
+
+    subgraph system [Banking System]
+        subgraph api [API Application]
+            A[Controller] --> B[Service]
+        end
+        B --> C[(Database)]
     end
-    subgraph Backend
-        C[API Server] --> D[Database]
-    end
-    B --> C
 ```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Flowchart/FlowchartTests.NestedSubgraphs.verified.png" />
+</p>
+
 **Rendered by Mermaid:**
 ```mermaid
-flowchart LR
-    subgraph Frontend
-        A[React App] --> B[Components]
+flowchart TB
+    User[User] --> A
+
+    subgraph system [Banking System]
+        subgraph api [API Application]
+            A[Controller] --> B[Service]
+        end
+        B --> C[(Database)]
     end
-    subgraph Backend
-        C[API Server] --> D[Database]
-    end
-    B --> C
 ```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZmxvd2NoYXJ0IFRCXG4gICAgVXNlcltVc2VyXSAtLVx1MDAzRSBBXG5cbiAgICBzdWJncmFwaCBzeXN0ZW0gW0JhbmtpbmcgU3lzdGVtXVxuICAgICAgICBzdWJncmFwaCBhcGkgW0FQSSBBcHBsaWNhdGlvbl1cbiAgICAgICAgICAgIEFbQ29udHJvbGxlcl0gLS1cdTAwM0UgQltTZXJ2aWNlXVxuICAgICAgICBlbmRcbiAgICAgICAgQiAtLVx1MDAzRSBDWyhEYXRhYmFzZSldXG4gICAgZW5kIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 

@@ -2,8 +2,8 @@
   id="mermaid-svg"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 324 524"
-  style="max-width: 324px;"
+  viewBox="0 0 336 524"
+  style="max-width: 336px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
@@ -11,15 +11,15 @@
   <g
     transform="translate(20,20)">
     <text
-      x="142"
+      x="148"
       y="25"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="20px"
       font-family="Arial, sans-serif"
-      font-weight="bold">Banking System Context</text>
+      font-weight="bold">Relationship Technology</text>
     <g
-      transform="translate(62,50)">
+      transform="translate(68,50)">
       <path
         d="M 80 94 L 80 179"
         fill="none"
@@ -63,7 +63,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">Banking Customer</text>
+        fill="#FFFFFF">User</text>
       <text
         x="80"
         y="76"
@@ -71,7 +71,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">A customer of the bank</text>
+        fill="#FFFFFF">A user of the system</text>
       <rect
         x="0"
         y="184"
@@ -89,7 +89,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">Internet Banking</text>
+        fill="#FFFFFF">System</text>
       <text
         x="80"
         y="233"
@@ -97,7 +97,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">Allows customers to...</text>
+        fill="#FFFFFF">The main system</text>
       <rect
         x="0"
         y="354"
@@ -115,7 +115,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">E-mail System</text>
+        fill="#FFFFFF">Email System</text>
       <text
         x="80"
         y="403"
@@ -123,28 +123,36 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">External email prov...</text>
+        fill="#FFFFFF">Delivers email</text>
       <rect
-        x="16.6"
-        y="128"
-        width="126.8"
-        height="17"
+        x="55"
+        y="120.5"
+        width="50"
+        height="32"
         rx="3"
         ry="3"
         fill="#FFFFFF"
         stroke="none" />
       <text
         x="80"
-        y="136.5"
+        y="130"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#666">Views account info</text>
+        fill="#666">Uses</text>
+      <text
+        x="80"
+        y="144"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="10px"
+        font-family="Arial, sans-serif"
+        fill="#888">[HTTPS]</text>
       <rect
-        x="36.4"
+        x="13.3"
         y="290.5"
-        width="87.2"
+        width="133.4"
         height="32"
         rx="3"
         ry="3"
@@ -157,7 +165,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#666">Sends emails</text>
+        fill="#666">Sends notifications</text>
       <text
         x="80"
         y="314"

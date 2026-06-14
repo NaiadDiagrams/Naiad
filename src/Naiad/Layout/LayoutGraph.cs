@@ -11,6 +11,14 @@ class LayoutGraph
     public void AddEdge(LayoutEdge edge)
     {
         Edges.Add(edge);
+
+        // Same-rank edges are pure constraints; they must not feed the ranking,
+        // ordering or alignment adjacency, so they stay out of In/OutEdges.
+        if (edge.IsSameRank)
+        {
+            return;
+        }
+
         if (Nodes.TryGetValue(edge.SourceId, out var source))
         {
             edge.Source = source;

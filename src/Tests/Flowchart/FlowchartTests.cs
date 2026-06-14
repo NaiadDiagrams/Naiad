@@ -110,4 +110,46 @@ public class FlowchartTests : TestBase
 
         Assert.That(actual, Is.EqualTo(expected));
     }
+
+    [Test]
+    public Task Subgraphs()
+    {
+        const string input =
+            """
+            flowchart TB
+                Start[Start] --> A
+
+                subgraph frontend [Frontend]
+                    A[Web UI] --> B[Mobile UI]
+                end
+
+                subgraph backend [Backend]
+                    C[API] --> D[(Database)]
+                end
+
+                A --> C
+                B --> C
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task NestedSubgraphs()
+    {
+        const string input =
+            """
+            flowchart TB
+                User[User] --> A
+
+                subgraph system [Banking System]
+                    subgraph api [API Application]
+                        A[Controller] --> B[Service]
+                    end
+                    B --> C[(Database)]
+                end
+            """;
+
+        return VerifySvg(input);
+    }
 }
