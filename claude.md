@@ -12,14 +12,14 @@ Naiad is a .NET library that renders Mermaid diagram markup to SVG without requi
 # Build
 dotnet build src --configuration Release
 
-# Run all tests (requires Playwright/Chromium installed)
+# Run all tests
 dotnet test src --configuration Release
 
 # Run a single test
 dotnet test src --configuration Release --filter "FullyQualifiedName~PieTests.Simple"
 
-# Install Playwright browsers (required before first test run)
-dotnet exec --depsfile ./src/Tests/bin/Release/net10.0/Tests.deps.json --runtimeconfig ./src/Tests/bin/Release/net10.0/Tests.runtimeconfig.json ./src/Tests/bin/Release/net10.0/Microsoft.Playwright.dll install chromium
+# Regenerate all .verified.png baselines from the .verified.svg files (after a rendering change)
+dotnet test src --configuration Release --filter "FullyQualifiedName~PngRegenerator"
 ```
 
 ## Architecture
@@ -42,9 +42,11 @@ dotnet exec --depsfile ./src/Tests/bin/Release/net10.0/Tests.deps.json --runtime
 
 ## Testing
 
-Tests use NUnit + Playwright + Verify (snapshot testing). Each diagram type has a test folder under `src/Tests/`.
+Tests use NUnit + Svg.Skia + Verify (snapshot testing). Each diagram type has a test folder under `src/Tests/`.
 
-- `TestBase` (in `SvgVerify.cs`) renders SVG, then uses Playwright to screenshot it as PNG for visual regression via Verify.ImageSharp.Compare.
+- `TestBase` (in `SvgVerify.cs`) renders SVG, then rasterizes it to PNG in-process via `SvgRenderer` (Svg.Skia — no browser required) for visual regression via Verify.ImageSharp.Compare.
+- `SvgRenderer` flattens `<foreignObject>` labels (which Svg.Skia cannot render) into centered `<text>` elements for the PNG pass only; the `.verified.svg` files keep their original `<foreignObject>` markup.
+- `PngRegenerator` (explicit test) rebuilds all `.verified.png` baselines from the `.verified.svg` files; run it after changing the rasterization path.
 - `DocGeneratorTests` auto-generates markdown test renders in `src/test-renders/`.
 - When tests fail, `.received.*` files are created alongside `.verified.*` files — review and accept with your Verify diff tool.
 

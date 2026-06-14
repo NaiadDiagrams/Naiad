@@ -1,13 +1,5 @@
-﻿public class TestBase :
-    PageTest
+﻿public class TestBase
 {
-    // Set device scale factor for higher resolution screenshots
-    public override BrowserNewContextOptions ContextOptions() =>
-        new()
-        {
-            DeviceScaleFactor = 2
-        };
-
     // Icon pack registration is frozen after the first render and is process-global,
     // so reset it before each test to keep tests isolated.
     [SetUp]
@@ -42,7 +34,7 @@
             return File.OpenRead(verifiedPng);
         }
 
-        return await ConvertSvgToPngAsync(svg);
+        return new MemoryStream(SvgRenderer.RenderToPng(svg));
     }
 
     static string PrettyPrint(string svg)
@@ -60,44 +52,5 @@
             doc.Save(writer);
         }
         return sb.ToString();
-    }
-
-    async Task<MemoryStream> ConvertSvgToPngAsync(string svgContent)
-    {
-        // Create an HTML page with the SVG
-        var html =
-            $$"""
-              <!DOCTYPE html>
-              <html>
-              <head>
-                  <meta charset="UTF-8">
-                  <style>
-                      * { margin: 0; padding: 0; }
-                      body { background: white; display: inline-block; }
-                  </style>
-                  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-              </head>
-              <body>
-              {{svgContent}}
-              </body>
-              </html>
-              """;
-
-        await Page.SetContentAsync(
-            html,
-            new()
-            {
-                WaitUntil = WaitUntilState.NetworkIdle
-            });
-
-        // Get the SVG element and take a screenshot
-        var svg = await Page.QuerySelectorAsync("svg");
-        var screenshot = await svg!.ScreenshotAsync(new()
-        {
-            Type = ScreenshotType.Png,
-            OmitBackground = false
-        });
-
-        return new(screenshot);
     }
 }
