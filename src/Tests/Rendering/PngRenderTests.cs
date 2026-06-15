@@ -11,22 +11,60 @@ using SixLabors.ImageSharp.PixelFormats;
 public class PngRenderTests
 {
     // Arcs, fills, slice labels (text-anchor middle), legend swatches, title.
-    const string pie = "pie title Pets\n \"Dogs\" : 40\n \"Cats\" : 30\n \"Birds\" : 20";
+    const string pie =
+        """
+        pie title Pets
+         "Dogs" : 40
+         "Cats" : 30
+         "Birds" : 20
+        """;
 
     // H/V node paths, foreignObject labels, arrowhead markers, group transforms.
-    const string flowchart = "flowchart LR\n A[Start] --> B[Process] --> C[End]";
+    const string flowchart =
+        """
+        flowchart LR
+         A[Start] --> B[Process] --> C[End]
+        """;
 
     // Rounded actor boxes, dashed lifelines and return arrow, markers both directions.
-    const string sequence = "sequenceDiagram\n Alice->>John: Hello John\n John-->>Alice: Hi Alice";
+    const string sequence =
+        """
+        sequenceDiagram
+         Alice->>John: Hello John
+         John-->>Alice: Hi Alice
+        """;
 
     // Bold text, compartment lines, inheritance triangle polygon.
-    const string @class = "classDiagram\n    class Animal {\n        +String name\n        +int age\n        +makeSound() void\n    }\n    Animal <|-- Dog";
+    const string @class =
+        """
+        classDiagram
+            class Animal {
+                +String name
+                +int age
+                +makeSound() void
+            }
+            Animal <|-- Dog
+        """;
 
     // Composite nodes, curved edges, start/end markers.
-    const string state = "stateDiagram-v2\n    [*] --> Still\n    Still --> Moving\n    Moving --> Still\n    Moving --> Crash\n    Crash --> [*]";
+    const string state =
+        """
+        stateDiagram-v2
+            [*] --> Still
+            Still --> Moving
+            Moving --> Still
+            Moving --> Crash
+            Crash --> [*]
+        """;
 
     // Commit circles and colored branch lines.
-    const string gitGraph = "gitGraph\n    commit\n    commit\n    commit";
+    const string gitGraph =
+        """
+        gitGraph
+            commit
+            commit
+            commit
+        """;
 
     [Test]
     public Task SkiaPie() => VerifyPng(SkiaRenderer.RenderPng(pie, HighDpi));
@@ -69,13 +107,25 @@ public class PngRenderTests
     {
         const string source = "flowchart LR\n A[Start] --> B[End]";
         using var single = Image.Load<Rgba32>(SkiaRenderer.RenderPng(source));
-        using var doubled = Image.Load<Rgba32>(SkiaRenderer.RenderPng(source, new() {Png = {Scale = 2}}));
+        using var doubled = Image.Load<Rgba32>(SkiaRenderer.RenderPng(source, new()
+        {
+            Png =
+            {
+                Scale = 2
+            }
+        }));
         await Assert.That(doubled.Width).IsEqualTo(single.Width * 2).Within(2);
         await Assert.That(doubled.Height).IsEqualTo(single.Height * 2).Within(2);
     }
 
     // Render at 2x to match the device-pixel scale the SVG snapshot suite uses.
-    static RenderOptions HighDpi => new() {Png = {Scale = 2}};
+    static RenderOptions HighDpi => new()
+    {
+        Png =
+        {
+            Scale = 2
+        }
+    };
 
     static Task VerifyPng(byte[] png, [CallerFilePath] string sourceFile = "") =>
         Verify(new MemoryStream(png), extension: "png", sourceFile: sourceFile);
