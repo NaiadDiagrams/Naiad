@@ -1,4 +1,4 @@
-namespace Naiad.Skia;
+namespace Naiad;
 
 /// <summary>
 /// Renders Mermaid diagram markup to a PNG raster through

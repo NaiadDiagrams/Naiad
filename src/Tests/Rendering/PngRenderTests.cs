@@ -1,5 +1,3 @@
-using Naiad.ImageSharp;
-using Naiad.Skia;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

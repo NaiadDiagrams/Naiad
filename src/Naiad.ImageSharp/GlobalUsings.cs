@@ -1,4 +1,5 @@
 ﻿global using System.Numerics;
+global using Naiad.ImageSharp;
 global using Naiad.Rendering;
 global using SixLabors.Fonts;
 global using SixLabors.ImageSharp;
