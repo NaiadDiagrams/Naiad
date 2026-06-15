@@ -1,12 +1,13 @@
-namespace Tests;
-
 // Covers RenderOptions.AllowHtmlElements = false: labels become native <text> at build time
 // (no <foreignObject>) and the Font Awesome @import (xhtml) is dropped.
 public class AllowHtmlElementsTests : TestBase
 {
-    static RenderOptions NoHtml => new() { AllowHtmlElements = false };
+    static RenderOptions NoHtml => new()
+    {
+        AllowHtmlElements = false
+    };
 
-    const string SingleNode =
+    const string singleNode =
         """
         flowchart LR
             A[Hello]
@@ -15,10 +16,10 @@ public class AllowHtmlElementsTests : TestBase
     // The verified SVGs of these two are embedded in the readme via mdsnippets,
     // so the documented "with / without HTML" output stays in sync with the renderer.
     [Test]
-    public Task SingleNodeHtml() => VerifySvg(SingleNode);
+    public Task SingleNodeHtml() => VerifySvg(singleNode);
 
     [Test]
-    public Task SingleNodeNoHtml() => VerifySvg(SingleNode, NoHtml);
+    public Task SingleNodeNoHtml() => VerifySvg(singleNode, NoHtml);
 
     // Flowchart is one of only two diagram types that emit <foreignObject> (node + edge labels),
     // so snapshot its full no-HTML output: the fa icon is dropped, "Car"/"Yes"/"End" survive as <text>.
@@ -72,7 +73,7 @@ public class AllowHtmlElementsTests : TestBase
 
     public static IEnumerable<(string Name, string Input)> Diagrams()
     {
-        (string, string) Case(string name, string input) => (name, input);
+        static (string, string) Case(string name, string input) => (name, input);
 
         yield return Case("Pie",
             """
