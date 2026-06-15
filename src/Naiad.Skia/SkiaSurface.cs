@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Numerics;
 using Naiad.Rendering;
 using SkiaSharp;
@@ -12,7 +13,7 @@ namespace Naiad.Skia;
 /// </summary>
 sealed class SkiaSurface : IRenderSurface
 {
-    static readonly Dictionary<(string, bool, bool), SKTypeface> typefaceCache = new();
+    static readonly ConcurrentDictionary<(string, bool, bool), SKTypeface> typefaceCache = new();
 
     readonly SKBitmap bitmap;
     readonly SKCanvas canvas;
@@ -182,12 +183,11 @@ sealed class SkiaSurface : IRenderSurface
     static SKTypeface ResolveTypeface(TextStyle style)
     {
         var family = style.FontFamilies.Count > 0 ? style.FontFamilies[0] : "sans-serif";
-        var key = (family, style.Bold, style.Italic);
-        if (typefaceCache.TryGetValue(key, out var cached))
-        {
-            return cached;
-        }
+        return typefaceCache.GetOrAdd((family, style.Bold, style.Italic), _ => Lookup(style, family));
+    }
 
+    static SKTypeface Lookup(TextStyle style, string family)
+    {
         var fontStyle = new SKFontStyle(
             style.Bold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal,
             SKFontStyleWidth.Normal,
@@ -195,21 +195,17 @@ sealed class SkiaSurface : IRenderSurface
 
         // Try each requested family in order; take the first that resolves to a real match, otherwise
         // let Skia fall back to its default for the first name so something always renders.
-        SKTypeface? resolved = null;
         foreach (var name in style.FontFamilies)
         {
             var candidate = SKTypeface.FromFamilyName(name, fontStyle);
             if (candidate != null &&
                 string.Equals(candidate.FamilyName, name, StringComparison.OrdinalIgnoreCase))
             {
-                resolved = candidate;
-                break;
+                return candidate;
             }
         }
 
-        resolved ??= SKTypeface.FromFamilyName(family, fontStyle) ?? SKTypeface.Default;
-        typefaceCache[key] = resolved;
-        return resolved;
+        return SKTypeface.FromFamilyName(family, fontStyle) ?? SKTypeface.Default;
     }
 
     static SKMatrix ToMatrix(Matrix3x2 m) =>

@@ -1211,7 +1211,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
 
                 // Register this label's position to prevent future overlaps
-                placedLabels.Add(new LabelBounds(leftEdge - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+                placedLabels.Add(new(leftEdge - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
                 builder.AddRect(leftEdge - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
                 builder.AddText(
@@ -1565,7 +1565,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             const double labelHeight = 16;
 
             // Register this label's position to prevent future overlaps
-            placedLabels.Add(new LabelBounds(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
+            placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
             builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
             builder.AddText(

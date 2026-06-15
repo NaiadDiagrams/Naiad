@@ -90,7 +90,7 @@ static class CssColor
     {
         color = default;
         var parts = Components(value);
-        if (parts is not ({Length: 3 or 4} components))
+        if (parts is not {Length: 3 or 4} components)
         {
             return false;
         }
@@ -116,7 +116,7 @@ static class CssColor
     {
         color = default;
         var parts = Components(value);
-        if (parts is not ({Length: 3 or 4} components))
+        if (parts is not {Length: 3 or 4} components)
         {
             return false;
         }
@@ -142,7 +142,7 @@ static class CssColor
     // Standard HSL→RGB conversion (CSS Color 3). h in degrees, s/l in [0, 1].
     static (byte R, byte G, byte B) HslToRgb(double h, double s, double l)
     {
-        h = ((h % 360) + 360) % 360 / 360;
+        h = (h % 360 + 360) % 360 / 360;
         var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
         var p = 2 * l - q;
         var r = HueToChannel(p, q, h + 1d / 3);

@@ -68,7 +68,7 @@ public class ArchitectureTests : TestBase
         try
         {
             var prefix = IconPack.Load(path);
-            Assert.That(prefix, Is.EqualTo("sample"));
+            await Assert.That(prefix).IsEqualTo("sample");
         }
         finally
         {
@@ -80,11 +80,11 @@ public class ArchitectureTests : TestBase
             architecture-beta
             service a(sample:box)[Box]
             """);
-        Assert.That(svg, Does.Contain("width=\"18\""));
+        await Assert.That(svg).Contains("width=\"18\"");
     }
 
     [Test]
-    public void IconPackLoadAfterRenderThrows()
+    public async Task IconPackLoadAfterRenderThrows()
     {
         // Packs may only be registered before the first render.
         Mermaid.Render(
@@ -94,7 +94,7 @@ public class ArchitectureTests : TestBase
             """);
 
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(SamplePack));
-        Assert.Throws<MermaidException>(() => IconPack.Load(stream));
+        await Assert.That(() => IconPack.Load(stream)).Throws<MermaidException>();
     }
 
     [Test]

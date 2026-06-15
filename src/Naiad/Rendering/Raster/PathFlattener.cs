@@ -54,7 +54,6 @@ static class PathFlattener
                     sub = [current];
                     result.Add(new(sub, false));
                     start = current;
-                    lastCubicControl = lastQuadControl = null;
                     // Subsequent implicit pairs after a moveto are linetos.
                     while (scanner.PeekNumber())
                     {
@@ -358,7 +357,7 @@ static class PathFlattener
             }
 
             var c = text[position];
-            return c is '-' or '+' or '.' or (>= '0' and <= '9');
+            return c is '-' or '+' or '.' or >= '0' and <= '9';
         }
 
         public Vector2 ReadPoint() =>

@@ -15,11 +15,12 @@ dotnet build src --configuration Release
 # Run all tests
 dotnet test src --configuration Release
 
-# Run a single test
-dotnet test src --configuration Release --filter "FullyQualifiedName~PieTests.Simple"
+# Run a single test (TUnit uses Microsoft.Testing.Platform; filter goes after `--`)
+dotnet test src --configuration Release -- --treenode-filter "/*/*/PieTests/Simple"
 
-# Regenerate all .verified.png baselines from the .verified.svg files (after a rendering change)
-dotnet test src --configuration Release --filter "FullyQualifiedName~PngRegenerator"
+# Regenerate all .verified.png baselines from the .verified.svg files (after a rendering change).
+# PngRegenerator is [Explicit]; targeting it by filter runs it.
+dotnet test src --configuration Release -- --treenode-filter "/*/*/PngRegenerator/*"
 ```
 
 ## Architecture
@@ -44,9 +45,10 @@ dotnet test src --configuration Release --filter "FullyQualifiedName~PngRegenera
 
 ## Testing
 
-Tests use NUnit + Svg.Skia + Verify (snapshot testing). Each diagram type has a test folder under `src/Tests/`.
+Tests use TUnit + Svg.Skia + Verify (snapshot testing). Each diagram type has a test folder under `src/Tests/`. TUnit is Microsoft.Testing.Platform-native (good IDE/Rider discovery); assertions are async fluent (`await Assert.That(x).IsEqualTo(y)`). The suite runs serially (`[assembly: NotInParallel]` in `ModuleInitializer.cs`) because it shares process-global state (`IconPackRegistry`, reset per test via `[Before(Test)]`).
 
 - `TestBase` (in `SvgVerify.cs`) renders SVG, then rasterizes it to PNG in-process via `SvgRenderer` (Svg.Skia — no browser required) for visual regression via Verify.ImageSharp.Compare.
+- The Naiad.Skia / Naiad.ImageSharp PNG backends have their own Verify snapshot coverage in `src/Tests/Rendering/PngRenderTests.cs` (one baseline per backend per sample diagram).
 - `SvgRenderer` flattens `<foreignObject>` labels (which Svg.Skia cannot render) into centered `<text>` elements for the PNG pass only; the `.verified.svg` files keep their original `<foreignObject>` markup.
 - `PngRegenerator` (explicit test) rebuilds all `.verified.png` baselines from the `.verified.svg` files; run it after changing the rasterization path.
 - `DocGeneratorTests` auto-generates markdown test renders in `src/test-renders/`.

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Numerics;
 using Naiad.Rendering;
 using SixLabors.Fonts;
@@ -21,7 +22,7 @@ namespace Naiad.ImageSharp;
 /// </summary>
 sealed class ImageSharpSurface : IRenderSurface
 {
-    static readonly Dictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
+    static readonly ConcurrentDictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
 
     readonly Image<Rgba32> image;
 
@@ -54,7 +55,7 @@ sealed class ImageSharpSurface : IRenderSurface
         var ascent = metrics.HorizontalMetrics.Ascender * unitScale;
         var descent = metrics.HorizontalMetrics.Descender * unitScale;
 
-        var advance = TextMeasurer.MeasureAdvance(text, new TextOptions(font));
+        var advance = TextMeasurer.MeasureAdvance(text, new(font));
         var penX = style.Anchor switch
         {
             TextAnchorKind.Middle => x - advance.Width / 2,
@@ -83,14 +84,25 @@ sealed class ImageSharpSurface : IRenderSurface
     }
 
     public void Encode(Stream stream) =>
-        image.SaveAsPng(stream, new PngEncoder {CompressionLevel = PngCompressionLevel.BestCompression});
+        image.SaveAsPng(
+            stream,
+            new()
+            {
+                CompressionLevel = PngCompressionLevel.BestCompression
+            });
 
     static DrawingOptions Options(Matrix3x2 transform, FillRule rule) =>
         new()
         {
             Transform = new(transform),
-            GraphicsOptions = new() {Antialias = true},
-            ShapeOptions = new() {IntersectionRule = rule == FillRule.EvenOdd ? IntersectionRule.EvenOdd : IntersectionRule.NonZero},
+            GraphicsOptions = new()
+            {
+                Antialias = true
+            },
+            ShapeOptions = new()
+            {
+                IntersectionRule = rule == FillRule.EvenOdd ? IntersectionRule.EvenOdd : IntersectionRule.NonZero
+            },
         };
 
     // Uniform scale factor of the affine transform — used to keep stroke widths proportional.
@@ -182,43 +194,26 @@ sealed class ImageSharpSurface : IRenderSurface
         return family.CreateFont(style.FontSize, fontStyle);
     }
 
-    static FontFamily ResolveFamily(IReadOnlyList<string> families)
-    {
-        var key = families.Count > 0 ? families[0] : "sans-serif";
-        if (familyCache.TryGetValue(key, out var cached))
-        {
-            return cached;
-        }
+    static FontFamily ResolveFamily(IReadOnlyList<string> families) =>
+        familyCache.GetOrAdd(families.Count > 0 ? families[0] : "sans-serif", _ => Lookup(families));
 
-        FontFamily resolved = default;
-        var found = false;
+    static FontFamily Lookup(IReadOnlyList<string> families)
+    {
         foreach (var name in families)
         {
-            if (SystemFonts.TryGet(name, out resolved))
+            if (SystemFonts.TryGet(name, out var family))
             {
-                found = true;
-                break;
+                return family;
             }
         }
 
-        if (!found)
+        foreach (var fallback in SystemFonts.Families)
         {
-            foreach (var fallback in SystemFonts.Families)
-            {
-                resolved = fallback;
-                found = true;
-                break;
-            }
+            return fallback;
         }
 
-        if (!found)
-        {
-            throw new InvalidOperationException(
-                "No system fonts are installed for the ImageSharp render backend to draw text. Install a font, or use the Skia backend.");
-        }
-
-        familyCache[key] = resolved;
-        return resolved;
+        throw new InvalidOperationException(
+            "No system fonts are installed for the ImageSharp render backend to draw text. Install a font, or use the Skia backend.");
     }
 
     static Color ToColor(Rgba color) =>

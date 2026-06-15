@@ -145,7 +145,7 @@ static class SvgRasterizer
 
             if (style.StrokeWidth > 0 && ResolveColor(style.Stroke, style) is { } stroke)
             {
-                surface.StrokePath(subpaths, ctm, stroke, (float)style.StrokeWidth, ParseDash(style.StrokeDasharray, style.StrokeWidth), opacity * (float)style.StrokeOpacity);
+                surface.StrokePath(subpaths, ctm, stroke, (float)style.StrokeWidth, ParseDash(style.StrokeDasharray), opacity * (float)style.StrokeOpacity);
             }
         }
 
@@ -760,7 +760,7 @@ static class SvgRasterizer
         return (0, 0, marker.MarkerWidth, marker.MarkerHeight);
     }
 
-    static float[]? ParseDash(string? dasharray, double strokeWidth)
+    static float[]? ParseDash(string? dasharray)
     {
         if (string.IsNullOrWhiteSpace(dasharray) || dasharray.Equals("none", StringComparison.OrdinalIgnoreCase))
         {

@@ -287,7 +287,7 @@ public class C4Tests : TestBase
     }
 
     [Test]
-    public void DirectionalLabelsDoNotOverlapNodes()
+    public async Task DirectionalLabelsDoNotOverlapNodes()
     {
         const string input =
             """
@@ -310,8 +310,8 @@ public class C4Tests : TestBase
         var nodeBoxes = rects.Where(_ => _.Fill == "#1168BD").ToList();
         var labelChips = rects.Where(_ => _.Fill == "#FFFFFF").ToList();
 
-        Assert.That(nodeBoxes, Has.Count.EqualTo(5), "expected five system boxes");
-        Assert.That(labelChips, Is.Not.Empty, "expected relationship label chips");
+        await Assert.That(nodeBoxes.Count).IsEqualTo(5).Because("expected five system boxes");
+        await Assert.That(labelChips).IsNotEmpty().Because("expected relationship label chips");
 
         // Boxes and chips share the same coordinate space (one body group), so a
         // raw rectangle-intersection test is valid.
@@ -319,16 +319,15 @@ public class C4Tests : TestBase
         {
             foreach (var box in nodeBoxes)
             {
-                Assert.That(
-                    Intersects(chip, box),
-                    Is.False,
-                    $"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
+                await Assert.That(Intersects(chip, box))
+                    .IsFalse()
+                    .Because($"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
             }
         }
     }
 
     [Test]
-    public void NeighborLabelDoesNotOverlapInterveningNode()
+    public async Task NeighborLabelDoesNotOverlapInterveningNode()
     {
         // a and c are neighbours; b is declared between them. Without keeping the
         // neighbour group contiguous, b would land between a and c and the wide
@@ -347,23 +346,22 @@ public class C4Tests : TestBase
         var nodeBoxes = rects.Where(_ => _.Fill == "#1168BD").ToList();
         var labelChips = rects.Where(_ => _.Fill == "#FFFFFF").ToList();
 
-        Assert.That(nodeBoxes, Has.Count.EqualTo(3), "expected three system boxes");
-        Assert.That(labelChips, Is.Not.Empty, "expected the neighbour label chip");
+        await Assert.That(nodeBoxes.Count).IsEqualTo(3).Because("expected three system boxes");
+        await Assert.That(labelChips).IsNotEmpty().Because("expected the neighbour label chip");
 
         foreach (var chip in labelChips)
         {
             foreach (var box in nodeBoxes)
             {
-                Assert.That(
-                    Intersects(chip, box),
-                    Is.False,
-                    $"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
+                await Assert.That(Intersects(chip, box))
+                    .IsFalse()
+                    .Because($"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
             }
         }
     }
 
     [Test]
-    public void RoutedLabelDoesNotOverlapNodes()
+    public async Task RoutedLabelDoesNotOverlapNodes()
     {
         // user -> api is a long edge whose wide label rides the routed mid-point,
         // which would otherwise land on the Web App box on the same rank.
@@ -385,17 +383,16 @@ public class C4Tests : TestBase
         var nodeBoxes = rects.Where(_ => _.Fill is "#1168BD" or "#08427B").ToList();
         var labelChips = rects.Where(_ => _.Fill == "#FFFFFF").ToList();
 
-        Assert.That(nodeBoxes, Has.Count.EqualTo(3), "expected two systems and one person body");
-        Assert.That(labelChips, Is.Not.Empty, "expected relationship label chips");
+        await Assert.That(nodeBoxes.Count).IsEqualTo(3).Because("expected two systems and one person body");
+        await Assert.That(labelChips).IsNotEmpty().Because("expected relationship label chips");
 
         foreach (var chip in labelChips)
         {
             foreach (var box in nodeBoxes)
             {
-                Assert.That(
-                    Intersects(chip, box),
-                    Is.False,
-                    $"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
+                await Assert.That(Intersects(chip, box))
+                    .IsFalse()
+                    .Because($"label chip at ({chip.X},{chip.Y}) {chip.W}x{chip.H} overlaps a node box at ({box.X},{box.Y})");
             }
         }
     }

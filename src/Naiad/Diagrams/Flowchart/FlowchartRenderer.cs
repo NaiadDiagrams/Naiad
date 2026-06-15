@@ -287,7 +287,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var name = token[(colon + 1)..];
 
         // FontAwesome: fa/fab/fas/far + fa-name
-        if ((prefix is "fa" or "fab" or "fas" or "far") &&
+        if (prefix is "fa" or "fab" or "fas" or "far" &&
             name.StartsWith("fa-", StringComparison.Ordinal))
         {
             return $"<i class=\"{prefix} {name}\"></i>";
