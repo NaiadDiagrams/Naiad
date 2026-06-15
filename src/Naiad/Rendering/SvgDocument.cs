@@ -45,13 +45,18 @@ public class SvgDocument
         // Font Awesome import
         if (!string.IsNullOrEmpty(FontAwesomeImport))
         {
-            builder.Append($"<style xmlns=\"http://www.w3.org/1999/xhtml\">{FontAwesomeImport}</style>");
+            builder.Append($"<style xmlns='http://www.w3.org/1999/xhtml'>{FontAwesomeImport}</style>");
         }
 
         // Main CSS styles
         if (CssStyles is not null)
         {
-            builder.Append($"<style>{CssStyles}</style>");
+            builder.Append(
+                $"""
+                 <style>
+                 {CssStyles}
+                 </style>
+                 """);
         }
 
         if (Defs.HasContent)
