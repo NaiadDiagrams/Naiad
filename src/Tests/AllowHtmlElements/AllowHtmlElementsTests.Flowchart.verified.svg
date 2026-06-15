@@ -1,0 +1,158 @@
+﻿<svg
+  id="mermaid-svg"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 236.2 88"
+  style="max-width: 236.2px;"
+  role="graphics-document document"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <style>#mermaid-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-svg p{margin:0;}#mermaid-svg .marker{fill:#333333;stroke:#333333;}#mermaid-svg .marker.cross{stroke:#333333;}#mermaid-svg span{fill:#333;color:#333;}#mermaid-svg .flowchart-link{stroke:#333333;fill:none;}#mermaid-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}</style>
+  <defs>
+    <marker
+      id="mermaid-svg_flowchart-v2-pointEnd"
+      class="marker flowchart-v2"
+      viewBox="0 0 10 10"
+      refX="5"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        class="arrowMarkerPath"
+        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+    </marker>
+    <marker
+      id="mermaid-svg_flowchart-v2-pointStart"
+      class="marker flowchart-v2"
+      viewBox="0 0 10 10"
+      refX="4.5"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 5 L 10 10 L 10 0 z"
+        class="arrowMarkerPath"
+        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+    </marker>
+    <marker
+      id="mermaid-svg_flowchart-v2-circleEnd"
+      class="marker flowchart-v2"
+      viewBox="0 0 10 10"
+      refX="11"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath"
+        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+    </marker>
+    <marker
+      id="mermaid-svg_flowchart-v2-circleStart"
+      class="marker flowchart-v2"
+      viewBox="0 0 10 10"
+      refX="-1"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath"
+        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+    </marker>
+    <marker
+      id="mermaid-svg_flowchart-v2-crossEnd"
+      class="marker cross flowchart-v2"
+      viewBox="0 0 11 11"
+      refX="12"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+    </marker>
+    <marker
+      id="mermaid-svg_flowchart-v2-crossStart"
+      class="marker cross flowchart-v2"
+      viewBox="0 0 11 11"
+      refX="-1"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M73.1,24 L138.1,24"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#mermaid-svg_flowchart-v2-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="85.6"
+      y="12"
+      width="40"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="105.6"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      class="edgeLabel">Yes</text>
+    <path
+      d="M0,0 H73.1 V48 H0 Z"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="1" />
+    <text
+      x="36.55"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      class="nodeLabel">Car</text>
+    <path
+      d="M143.1,0 H196.2 V48 H143.1 Z"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="1" />
+    <text
+      x="169.65"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      class="nodeLabel">End</text>
+  </g>
+</svg>

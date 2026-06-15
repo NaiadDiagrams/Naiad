@@ -5,12 +5,19 @@
     [Before(Test)]
     public void ResetIconPacks() => IconPackRegistry.Reset();
 
+    public Task VerifySvg(
+        string input,
+        [CallerFilePath] string sourceFile = "",
+        [CallerMemberName] string testMethod = "") =>
+        VerifySvg(input, null, sourceFile, testMethod);
+
     public async Task VerifySvg(
         string input,
+        RenderOptions? options,
         [CallerFilePath] string sourceFile = "",
         [CallerMemberName] string testMethod = "")
     {
-        var svg = Mermaid.Render(input);
+        var svg = options is null ? Mermaid.Render(input) : Mermaid.Render(input, options);
         svg = PrettyPrint(svg);
         var png = await GetOrCreatePngAsync(svg, sourceFile, testMethod);
         await Verify(

@@ -27,5 +27,5 @@ public static class MermaidStyles
     /// CSS styles for flowcharts. Node and edge fills are set as attributes; these rules cover
     /// marker fills, HTML (foreignObject) label text colour, and edge-label backgrounds.
     /// </summary>
-    public const string FlowchartStyles = BaseStyles + """#mermaid-svg p{margin:0;}#mermaid-svg .marker{fill:#333333;stroke:#333333;}#mermaid-svg .marker.cross{stroke:#333333;}#mermaid-svg span{fill:#333;color:#333;}#mermaid-svg .flowchart-link{stroke:#333333;fill:none;}#mermaid-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}""";
+    public const string FlowchartStyles = BaseStyles + "#mermaid-svg p{margin:0;}#mermaid-svg .marker{fill:#333333;stroke:#333333;}#mermaid-svg .marker.cross{stroke:#333333;}#mermaid-svg span{fill:#333;color:#333;}#mermaid-svg .flowchart-link{stroke:#333333;fill:none;}#mermaid-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}";
 }

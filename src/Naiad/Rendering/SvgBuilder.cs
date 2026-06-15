@@ -7,6 +7,19 @@ public class SvgBuilder
     double padding;
     double contentWidth;
     double contentHeight;
+    bool allowHtmlElements = true;
+    double labelFontSize = 14;
+    string labelFontFamily = "Arial, sans-serif";
+
+    // Threads render options that affect element emission (currently the HTML/no-HTML
+    // label seam and the fonts used for the native-text fallback).
+    public SvgBuilder Options(RenderOptions options)
+    {
+        allowHtmlElements = options.AllowHtmlElements;
+        labelFontSize = options.FontSize;
+        labelFontFamily = options.FontFamily;
+        return this;
+    }
 
     public SvgBuilder Size(double width, double height)
     {
@@ -205,6 +218,40 @@ public class SvgBuilder
         };
         AddElement(foreignObject);
         return this;
+    }
+
+    // Adds a box-centered label. With HTML allowed this is a <foreignObject> carrying the
+    // rich html; otherwise it is a native <text> built from the already-structured plainText
+    // (icons dropped, since they need a web font we do not embed). Empty labels emit nothing.
+    public SvgBuilder AddLabel(
+        double x,
+        double y,
+        double width,
+        double height,
+        string html,
+        string plainText,
+        string? className = null)
+    {
+        if (allowHtmlElements)
+        {
+            return AddForeignObject(x, y, width, height, html, className);
+        }
+
+        var text = plainText.Trim();
+        if (text.Length == 0)
+        {
+            return this;
+        }
+
+        return AddText(
+            x + width / 2,
+            y + height / 2,
+            text,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: labelFontSize,
+            fontFamily: labelFontFamily,
+            cssClass: className);
     }
 
     public SvgBuilder BeginGroup(string? id = null, string? cssClass = null, string? transform = null)

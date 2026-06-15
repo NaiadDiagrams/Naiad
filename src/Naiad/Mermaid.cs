@@ -2,8 +2,11 @@ namespace Naiad;
 
 public static class Mermaid
 {
-    public static string Render(string input, RenderOptions? options = null) =>
-        ToXml(RenderToSvgDocument(input, options));
+    public static string Render(string input, RenderOptions? options = null)
+    {
+        options ??= RenderOptions.Default;
+        return ToXml(RenderToSvgDocument(input, options), options);
+    }
 
     /// <summary>
     /// Renders to the in-memory <see cref="SvgDocument"/> rather than serialised markup. This is the
@@ -149,8 +152,15 @@ public static class Mermaid
         return result;
     }
 
-    static string ToXml(SvgDocument svg)
+    static string ToXml(SvgDocument svg, RenderOptions options)
     {
+        if (!options.AllowHtmlElements)
+        {
+            // The Font Awesome @import is the only HTML (xhtml-namespaced) markup not produced
+            // through the label seam, so drop it here when HTML output is disabled.
+            svg.FontAwesomeImport = null;
+        }
+
         var builder = new StringBuilder();
         svg.ToXml(builder);
         return builder.ToString();
