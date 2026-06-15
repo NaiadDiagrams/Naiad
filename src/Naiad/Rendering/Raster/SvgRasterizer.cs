@@ -57,6 +57,11 @@ static class SvgRasterizer
     {
         readonly Dictionary<string, SvgMarker> markers = BuildMarkerLookup(defs);
 
+        // Reused across every element's cascade: Match clears and refills it, and it is fully consumed
+        // (sorted then applied) before the walk recurses or a marker re-cascades, so one buffer suffices
+        // for the whole document instead of allocating a list per element.
+        readonly List<MatchedDeclaration> matchBuffer = [];
+
         public ComputedStyle ResolveRootStyle(ElementMatch rootMatch)
         {
             var style = new ComputedStyle();
@@ -100,7 +105,13 @@ static class SvgRasterizer
                         DrawShape([new([new(ToF(line.X1), ToF(line.Y1)), new(ToF(line.X2), ToF(line.Y2))], false)], ctm, style, opacity);
                         break;
                     case SvgPolygon polygon:
-                        DrawShape([new(polygon.Points.Select(_ => new Vector2(ToF(_.X), ToF(_.Y))).ToList(), true)], ctm, style, opacity);
+                        var polygonPoints = new List<Vector2>(polygon.Points.Count);
+                        foreach (var point in polygon.Points)
+                        {
+                            polygonPoints.Add(new(ToF(point.X), ToF(point.Y)));
+                        }
+
+                        DrawShape([new(polygonPoints, true)], ctm, style, opacity);
                         break;
                     case SvgPath path:
                         var subpaths = PathFlattener.Flatten(path.D);
@@ -359,13 +370,17 @@ static class SvgRasterizer
                 }
             }
 
-            var matched = stylesheet.Match(chain);
+            stylesheet.Match(chain, matchBuffer);
+            SortByCascade(matchBuffer);
             var inline = InlineDeclarations(inlineStyle);
 
             // 2. normal stylesheet declarations, ascending specificity then source order.
-            foreach (var declaration in Ordered(matched, important: false))
+            foreach (var declaration in matchBuffer)
             {
-                style.Apply(declaration.Property, declaration.Value);
+                if (!declaration.Important)
+                {
+                    style.Apply(declaration.Property, declaration.Value);
+                }
             }
 
             // 3. normal inline declarations.
@@ -378,9 +393,12 @@ static class SvgRasterizer
             }
 
             // 4. important stylesheet declarations, then 5. important inline — these top the cascade.
-            foreach (var declaration in Ordered(matched, important: true))
+            foreach (var declaration in matchBuffer)
             {
-                style.Apply(declaration.Property, declaration.Value);
+                if (declaration.Important)
+                {
+                    style.Apply(declaration.Property, declaration.Value);
+                }
             }
 
             foreach (var (property, value, important) in inline)
@@ -392,11 +410,30 @@ static class SvgRasterizer
             }
         }
 
-        static IEnumerable<MatchedDeclaration> Ordered(List<MatchedDeclaration> matched, bool important) =>
-            matched
-                .Where(_ => _.Important == important)
-                .OrderBy(_ => _.Specificity)
-                .ThenBy(_ => _.Order);
+        // Stable insertion sort into ascending (specificity, source order). `matched` arrives in document
+        // order, so equal keys keep that order — the CSS tiebreaker — and the sort allocates nothing,
+        // unlike the LINQ Where/OrderBy/ThenBy this replaces (which ran twice per element).
+        static void SortByCascade(List<MatchedDeclaration> matched)
+        {
+            for (var i = 1; i < matched.Count; i++)
+            {
+                var current = matched[i];
+                var j = i - 1;
+                while (j >= 0 && Compare(matched[j], current) > 0)
+                {
+                    matched[j + 1] = matched[j];
+                    j--;
+                }
+
+                matched[j + 1] = current;
+            }
+
+            static int Compare(MatchedDeclaration a, MatchedDeclaration b)
+            {
+                var bySpecificity = a.Specificity.CompareTo(b.Specificity);
+                return bySpecificity != 0 ? bySpecificity : a.Order.CompareTo(b.Order);
+            }
+        }
 
         Paint? ResolveFill(string? raw, ComputedStyle style, IReadOnlyList<SubPath> subpaths)
         {

@@ -120,7 +120,9 @@ sealed class ComputedStyle
 
     static double? Length(string value, double emBasis)
     {
-        var text = value.Trim();
+        // Operate on a span: Trim and the unit-suffix slices below allocate no transient strings, and
+        // double.TryParse has a ReadOnlySpan<char> overload, so a length parse never touches the heap.
+        var text = value.AsSpan().Trim();
         if (text.EndsWith("px", StringComparison.OrdinalIgnoreCase))
         {
             text = text[..^2];
