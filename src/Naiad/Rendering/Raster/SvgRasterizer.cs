@@ -57,6 +57,11 @@ static class SvgRasterizer
     {
         readonly Dictionary<string, SvgMarker> markers = BuildMarkerLookup(defs);
 
+        // Reused across every element's cascade: Match clears and refills it, and it is fully consumed
+        // (sorted then applied) before the walk recurses or a marker re-cascades, so one buffer suffices
+        // for the whole document instead of allocating a list per element.
+        readonly List<MatchedDeclaration> matchBuffer = [];
+
         public ComputedStyle ResolveRootStyle(ElementMatch rootMatch)
         {
             var style = new ComputedStyle();
@@ -100,7 +105,13 @@ static class SvgRasterizer
                         DrawShape([new([new(ToF(line.X1), ToF(line.Y1)), new(ToF(line.X2), ToF(line.Y2))], false)], ctm, style, opacity);
                         break;
                     case SvgPolygon polygon:
-                        DrawShape([new(polygon.Points.Select(_ => new Vector2(ToF(_.X), ToF(_.Y))).ToList(), true)], ctm, style, opacity);
+                        var polygonPoints = new List<Vector2>(polygon.Points.Count);
+                        foreach (var point in polygon.Points)
+                        {
+                            polygonPoints.Add(new(ToF(point.X), ToF(point.Y)));
+                        }
+
+                        DrawShape([new(polygonPoints, true)], ctm, style, opacity);
                         break;
                     case SvgPath path:
                         var subpaths = PathFlattener.Flatten(path.D);
@@ -359,12 +370,12 @@ static class SvgRasterizer
                 }
             }
 
-            var matched = stylesheet.Match(chain);
-            SortByCascade(matched);
+            stylesheet.Match(chain, matchBuffer);
+            SortByCascade(matchBuffer);
             var inline = InlineDeclarations(inlineStyle);
 
             // 2. normal stylesheet declarations, ascending specificity then source order.
-            foreach (var declaration in matched)
+            foreach (var declaration in matchBuffer)
             {
                 if (!declaration.Important)
                 {
@@ -382,7 +393,7 @@ static class SvgRasterizer
             }
 
             // 4. important stylesheet declarations, then 5. important inline — these top the cascade.
-            foreach (var declaration in matched)
+            foreach (var declaration in matchBuffer)
             {
                 if (declaration.Important)
                 {
