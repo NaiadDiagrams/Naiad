@@ -67,21 +67,21 @@ sealed class Stylesheet
         return new(rules);
     }
 
-    public List<MatchedDeclaration> Match(IReadOnlyList<ElementMatch> chain)
+    // Fills the caller-supplied list (cleared first) rather than allocating a new one, so the rasterizer
+    // can reuse a single buffer across every element's cascade.
+    public void Match(IReadOnlyList<ElementMatch> chain, List<MatchedDeclaration> into)
     {
-        var result = new List<MatchedDeclaration>();
+        into.Clear();
         foreach (var rule in rules)
         {
             if (rule.Matches(chain))
             {
                 foreach (var declaration in rule.Declarations)
                 {
-                    result.Add(new(declaration.Property, declaration.Value, declaration.Important, rule.Specificity, rule.Order));
+                    into.Add(new(declaration.Property, declaration.Value, declaration.Important, rule.Specificity, rule.Order));
                 }
             }
         }
-
-        return result;
     }
 
     static int MatchingBrace(string css, int open)

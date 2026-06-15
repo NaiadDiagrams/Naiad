@@ -164,14 +164,21 @@ internal static class Ordering
             return cmp != 0 ? cmp : a.targetOrder.CompareTo(b.targetOrder);
         };
 
+        // Sort a rank by each node's median neighbour position (set in OrderByMedian), tie-broken by the
+        // existing order for stability. Reads LayoutNode.MedianPosition directly — no per-comparison
+        // dictionary lookup.
+        static Comparison<LayoutNode> sortByMedian = (a, b) =>
+        {
+            var cmp = a.MedianPosition.CompareTo(b.MedianPosition);
+            return cmp == 0 ? a.Order.CompareTo(b.Order) : cmp;
+        };
+
         LayoutGraph graph;
-        Dictionary<string, double> positions = [];
         List<double> neighborOrders = [];
         List<(int sourceOrder, int targetOrder)> crossingsEdges = [];
         int[] targetOrders;
         int[] mergeBuffer;
         int[] bestOrders;
-        Comparison<LayoutNode> sortByMedian;
 
         public Runner(LayoutGraph graph)
         {
@@ -179,11 +186,6 @@ internal static class Ordering
             targetOrders = new int[graph.Edges.Count];
             mergeBuffer = new int[graph.Edges.Count];
             bestOrders = new int[graph.Nodes.Count];
-            sortByMedian = (a, b) =>
-            {
-                var cmp = positions[a.Id].CompareTo(positions[b.Id]);
-                return cmp == 0 ? a.Order.CompareTo(b.Order) : cmp;
-            };
         }
 
         public void Run()
@@ -247,7 +249,6 @@ internal static class Ordering
         void OrderByMedian(int rank, bool useInEdges)
         {
             var nodesInRank = graph.Ranks[rank];
-            positions.Clear();
 
             foreach (var node in nodesInRank)
             {
@@ -275,12 +276,12 @@ internal static class Ordering
 
                 if (neighborOrders.Count == 0)
                 {
-                    positions[node.Id] = node.Order;
+                    node.MedianPosition = node.Order;
                 }
                 else
                 {
                     neighborOrders.Sort();
-                    positions[node.Id] = Median(neighborOrders);
+                    node.MedianPosition = Median(neighborOrders);
                 }
             }
 
