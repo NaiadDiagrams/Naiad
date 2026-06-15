@@ -1,9 +1,3 @@
-using System.Numerics;
-using System.Xml;
-using System.Xml.Linq;
-
-namespace Naiad.Rendering;
-
 /// <summary>
 /// The shared SVG → raster pipeline. Walks an <see cref="SvgDocument"/> once — resolving the CSS
 /// cascade, composing transforms, flattening geometry, drawing markers and laying out label text — and

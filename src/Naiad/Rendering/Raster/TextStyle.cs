@@ -1,24 +1,3 @@
-namespace Naiad.Rendering;
-
-enum TextAnchorKind
-{
-    Start,
-    Middle,
-    End,
-}
-
-enum TextBaselineKind
-{
-    /// <summary>Baseline sits on y (the SVG default).</summary>
-    Alphabetic,
-
-    /// <summary>y is the visual centre of the text (dominant-baseline middle/central).</summary>
-    Middle,
-
-    /// <summary>y is the top of the text (dominant-baseline hanging/text-before-edge).</summary>
-    Hanging,
-}
-
 /// <summary>
 /// The fully-resolved styling for one run of text, handed to a surface's
 /// <see cref="IRenderSurface.DrawText"/>. The surface owns horizontal alignment and baseline placement

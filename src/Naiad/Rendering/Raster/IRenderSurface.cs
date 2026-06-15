@@ -1,6 +1,4 @@
-using System.Numerics;
-
-namespace Naiad.Rendering;
+namespace Naiad;
 
 /// <summary>
 /// The drawing sink the shared SVG walker (<see cref="SvgRasterizer"/>) paints into. Geometry arrives

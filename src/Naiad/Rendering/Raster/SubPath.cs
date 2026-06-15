@@ -1,7 +1,3 @@
-using System.Numerics;
-
-namespace Naiad.Rendering;
-
 /// <summary>
 /// A single flattened contour produced by <see cref="PathFlattener"/>: a run of points plus whether
 /// the contour closes back to its start. Curves and arcs in the source path data are already

@@ -1,4 +1,4 @@
-namespace Naiad.Rendering;
+namespace Naiad;
 
 public class SvgBuilder
 {

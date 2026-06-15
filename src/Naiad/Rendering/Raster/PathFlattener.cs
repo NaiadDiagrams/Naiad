@@ -1,7 +1,3 @@
-using System.Numerics;
-
-namespace Naiad.Rendering;
-
 /// <summary>
 /// Parses SVG path <c>d</c> data and flattens it to polyline <see cref="SubPath"/>s. Every command in
 /// the grammar is handled — <c>M/L/H/V/C/S/Q/T/A/Z</c> and their relative lowercase forms, including

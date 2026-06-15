@@ -1,5 +1,3 @@
-namespace Naiad.Rendering;
-
 /// <summary>One element's identity for selector matching: its tag, id and classes.</summary>
 readonly record struct ElementMatch(string Tag, string? Id, IReadOnlyList<string> Classes);
 

@@ -1,5 +1,3 @@
-namespace Naiad.Rendering;
-
 /// <summary>
 /// Parses the CSS colour syntaxes that appear in Naiad/Mermaid output — hex (<c>#rgb</c>,
 /// <c>#rgba</c>, <c>#rrggbb</c>, <c>#rrggbbaa</c>), <c>rgb()</c>/<c>rgba()</c>,

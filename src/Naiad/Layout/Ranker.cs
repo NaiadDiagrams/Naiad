@@ -1,5 +1,3 @@
-namespace Naiad.Layout;
-
 static class Ranker
 {
     public static void Run(LayoutGraph graph, RankerType rankerType)

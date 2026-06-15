@@ -1,8 +1,6 @@
-namespace Naiad.Layout;
-
 internal static class Ordering
 {
-    const int MaxIterations = 24;
+    const int maxIterations = 24;
 
     public static void Run(LayoutGraph graph) => new Runner(graph).Run();
 
@@ -160,20 +158,20 @@ internal static class Ordering
 
     sealed class Runner
     {
-        static readonly Comparison<(int sourceOrder, int targetOrder)> sortBySourceThenTarget = (a, b) =>
+        static Comparison<(int sourceOrder, int targetOrder)> sortBySourceThenTarget = (a, b) =>
         {
             var cmp = a.sourceOrder.CompareTo(b.sourceOrder);
             return cmp != 0 ? cmp : a.targetOrder.CompareTo(b.targetOrder);
         };
 
-        readonly LayoutGraph graph;
-        readonly Dictionary<string, double> positions = [];
-        readonly List<double> neighborOrders = [];
-        readonly List<(int sourceOrder, int targetOrder)> crossingsEdges = [];
-        readonly int[] targetOrders;
-        readonly int[] mergeBuffer;
-        readonly int[] bestOrders;
-        readonly Comparison<LayoutNode> sortByMedian;
+        LayoutGraph graph;
+        Dictionary<string, double> positions = [];
+        List<double> neighborOrders = [];
+        List<(int sourceOrder, int targetOrder)> crossingsEdges = [];
+        int[] targetOrders;
+        int[] mergeBuffer;
+        int[] bestOrders;
+        Comparison<LayoutNode> sortByMedian;
 
         public Runner(LayoutGraph graph)
         {
@@ -196,7 +194,7 @@ internal static class Ordering
 
             var bestCrossings = CountCrossings();
 
-            for (var i = 0; i < MaxIterations && bestCrossings > 0; i++)
+            for (var i = 0; i < maxIterations && bestCrossings > 0; i++)
             {
                 if (i % 2 == 0)
                 {

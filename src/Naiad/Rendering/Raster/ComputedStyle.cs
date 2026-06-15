@@ -1,5 +1,3 @@
-namespace Naiad.Rendering;
-
 /// <summary>
 /// The resolved presentation properties for one element. Inherited properties (fill, stroke, font, …)
 /// flow down via <see cref="CloneForChild"/>; <c>opacity</c> is reset per element since it does not

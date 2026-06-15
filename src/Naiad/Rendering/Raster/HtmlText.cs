@@ -1,5 +1,3 @@
-namespace Naiad.Rendering;
-
 /// <summary>
 /// Pulls the visible text out of the little XHTML fragments Naiad emits inside
 /// <c>&lt;foreignObject&gt;</c> labels (<c>&lt;div&gt;&lt;span&gt;&lt;p&gt;…&lt;/p&gt;&lt;/span&gt;&lt;/div&gt;</c>).

@@ -1,7 +1,3 @@
-using System.Numerics;
-
-namespace Naiad.Rendering;
-
 /// <summary>
 /// A resolved fill. The walker turns <c>fill="..."</c> (solid colour or <c>url(#id)</c> gradient
 /// reference) into one of these, with gradient geometry already resolved to absolute user-space

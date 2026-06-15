@@ -1,4 +1,4 @@
-namespace Naiad.Rendering;
+namespace Naiad;
 
 /// <summary>
 /// CSS styles embedded in rendered diagrams.

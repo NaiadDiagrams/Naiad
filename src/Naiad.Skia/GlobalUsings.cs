@@ -1,3 +1,3 @@
 ﻿global using System.Numerics;
-global using Naiad.Rendering;
+global using Naiad;
 global using SkiaSharp;

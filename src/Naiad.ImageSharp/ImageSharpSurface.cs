@@ -1,7 +1,4 @@
 using Color = SixLabors.ImageSharp.Color;
-using IsPaint = Naiad.Rendering.Paint;
-
-namespace Naiad.ImageSharp;
 
 /// <summary>
 /// ImageSharp-backed <see cref="IRenderSurface"/>: the shared SVG walker's fills, strokes and text paint
@@ -17,7 +14,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
 
     Image<Rgba32> image = new(width, height, ToPixel(background));
 
-    public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, IsPaint paint, FillRule rule, float opacity)
+    public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
     {
         var path = ToPath(subpaths);
         var brush = ToBrush(paint, opacity);
@@ -118,7 +115,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
         return builder.Build();
     }
 
-    static Brush ToBrush(IsPaint paint, float opacity)
+    static Brush ToBrush(Paint paint, float opacity)
     {
         switch (paint)
         {

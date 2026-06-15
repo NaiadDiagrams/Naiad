@@ -1,5 +1,3 @@
-namespace Naiad.Layout;
-
 class LayoutGraph
 {
     public Dictionary<string, LayoutNode> Nodes { get; } = [];

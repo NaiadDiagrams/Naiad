@@ -1,15 +1,15 @@
-namespace Naiad.Rendering;
+namespace Naiad;
 
 public static class ShapePathGenerator
 {
-    static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+    static readonly CultureInfo culture = CultureInfo.InvariantCulture;
 
     static string Rectangle(double x, double y, double width, double height, double rx = 0)
     {
         if (rx > 0)
         {
             return string.Create(
-                Inv,
+                culture,
                 $"""
                  M{x + rx:0.##},{y:0.##}
                  H{x + width - rx:0.##}
@@ -23,12 +23,14 @@ public static class ShapePathGenerator
                  """);
         }
 
-        return string.Create(Inv, $"M{x:0.##},{y:0.##} H{x + width:0.##} V{y + height:0.##} H{x:0.##} Z");
+        return string.Create(
+            culture,
+            $"M{x:0.##},{y:0.##} H{x + width:0.##} V{y + height:0.##} H{x:0.##} Z");
     }
 
     static string Circle(double cx, double cy, double r) =>
         string.Create(
-            Inv,
+            culture,
             $"""
              M{cx:0.##},{cy - r:0.##}
              A{r:0.##},{r:0.##} 0 1 1 {cx:0.##},{cy + r:0.##}
@@ -40,7 +42,7 @@ public static class ShapePathGenerator
         var w2 = width / 2;
         var h2 = height / 2;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{cx:0.##},{cy - h2:0.##}
              L{cx + w2:0.##},{cy:0.##}
@@ -55,7 +57,7 @@ public static class ShapePathGenerator
         var w2 = width / 2;
         var h2 = height / 2;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{cx - w4:0.##},{cy - h2:0.##}
              L{cx + w4:0.##},{cy - h2:0.##}
@@ -70,7 +72,7 @@ public static class ShapePathGenerator
     {
         var r = height / 2;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x + r:0.##},{y:0.##}
              H{x + width - r:0.##}
@@ -86,7 +88,7 @@ public static class ShapePathGenerator
         var bodyHeight = height - ry * 2;
         var rx = width / 2;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x:0.##},{y + ry:0.##}
              A{rx:0.##},{ry:0.##} 0 0 1 {x + width:0.##},{y + ry:0.##}
@@ -101,7 +103,7 @@ public static class ShapePathGenerator
     {
         var offset = width * skew;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x + offset:0.##},{y:0.##}
              L{x + width:0.##},{y:0.##}
@@ -114,7 +116,7 @@ public static class ShapePathGenerator
     {
         var offset = width * skew;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x:0.##},{y:0.##}
              L{x + width - offset:0.##},{y:0.##}
@@ -127,7 +129,7 @@ public static class ShapePathGenerator
     {
         var offset = width * skew;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x + offset:0.##},{y:0.##}
              L{x + width - offset:0.##},{y:0.##}
@@ -140,7 +142,7 @@ public static class ShapePathGenerator
     {
         var offset = width * skew;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x:0.##},{y:0.##}
              L{x + width:0.##},{y:0.##}
@@ -152,7 +154,7 @@ public static class ShapePathGenerator
     {
         var notch = width * 0.15;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x + notch:0.##},{y:0.##}
              L{x + width:0.##},{y:0.##}
@@ -166,7 +168,7 @@ public static class ShapePathGenerator
     {
         var inset = width * 0.1;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x:0.##},{y:0.##}
              H{x + width:0.##}
@@ -191,7 +193,7 @@ public static class ShapePathGenerator
         var bodyHeight = height - waveHeight;
         var xWidth = x + width;
         return string.Create(
-            Inv,
+            culture,
             $"""
              M{x:0.##},{y:0.##}
              H{xWidth:0.##}

@@ -1,7 +1,3 @@
-using System.Numerics;
-
-namespace Naiad.Rendering;
-
 /// <summary>
 /// Parses an SVG <c>transform</c> attribute (<c>translate</c>, <c>scale</c>, <c>rotate</c>,
 /// <c>matrix</c>, <c>skewX</c>, <c>skewY</c>, in any combination) into a single

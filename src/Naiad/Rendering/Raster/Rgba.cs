@@ -1,5 +1,3 @@
-namespace Naiad.Rendering;
-
 /// <summary>
 /// A straight-alpha 8-bit-per-channel colour. This is the colour currency shared between the SVG
 /// walker and the render surfaces (<see cref="IRenderSurface"/>); each backend converts it to its
