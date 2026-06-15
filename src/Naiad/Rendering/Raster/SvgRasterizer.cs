@@ -360,12 +360,16 @@ static class SvgRasterizer
             }
 
             var matched = stylesheet.Match(chain);
+            SortByCascade(matched);
             var inline = InlineDeclarations(inlineStyle);
 
             // 2. normal stylesheet declarations, ascending specificity then source order.
-            foreach (var declaration in Ordered(matched, important: false))
+            foreach (var declaration in matched)
             {
-                style.Apply(declaration.Property, declaration.Value);
+                if (!declaration.Important)
+                {
+                    style.Apply(declaration.Property, declaration.Value);
+                }
             }
 
             // 3. normal inline declarations.
@@ -378,9 +382,12 @@ static class SvgRasterizer
             }
 
             // 4. important stylesheet declarations, then 5. important inline — these top the cascade.
-            foreach (var declaration in Ordered(matched, important: true))
+            foreach (var declaration in matched)
             {
-                style.Apply(declaration.Property, declaration.Value);
+                if (declaration.Important)
+                {
+                    style.Apply(declaration.Property, declaration.Value);
+                }
             }
 
             foreach (var (property, value, important) in inline)
@@ -392,11 +399,30 @@ static class SvgRasterizer
             }
         }
 
-        static IEnumerable<MatchedDeclaration> Ordered(List<MatchedDeclaration> matched, bool important) =>
-            matched
-                .Where(_ => _.Important == important)
-                .OrderBy(_ => _.Specificity)
-                .ThenBy(_ => _.Order);
+        // Stable insertion sort into ascending (specificity, source order). `matched` arrives in document
+        // order, so equal keys keep that order — the CSS tiebreaker — and the sort allocates nothing,
+        // unlike the LINQ Where/OrderBy/ThenBy this replaces (which ran twice per element).
+        static void SortByCascade(List<MatchedDeclaration> matched)
+        {
+            for (var i = 1; i < matched.Count; i++)
+            {
+                var current = matched[i];
+                var j = i - 1;
+                while (j >= 0 && Compare(matched[j], current) > 0)
+                {
+                    matched[j + 1] = matched[j];
+                    j--;
+                }
+
+                matched[j + 1] = current;
+            }
+
+            static int Compare(MatchedDeclaration a, MatchedDeclaration b)
+            {
+                var bySpecificity = a.Specificity.CompareTo(b.Specificity);
+                return bySpecificity != 0 ? bySpecificity : a.Order.CompareTo(b.Order);
+            }
+        }
 
         Paint? ResolveFill(string? raw, ComputedStyle style, IReadOnlyList<SubPath> subpaths)
         {
