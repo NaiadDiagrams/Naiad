@@ -118,7 +118,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
 <a id='snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg'></a>
 ```svg
 <svg
-  id="mermaid-svg"
+  id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 108.5 88"
@@ -127,10 +127,10 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <style>#mermaid-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-svg p{margin:0;}#mermaid-svg .marker{fill:#333333;stroke:#333333;}#mermaid-svg .marker.cross{stroke:#333333;}#mermaid-svg span{fill:#333;color:#333;}#mermaid-svg .flowchart-link{stroke:#333333;fill:none;}#mermaid-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}</style>
+  <style>#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}#naiad .marker{fill:#333333;stroke:#333333;}#naiad .marker.cross{stroke:#333333;}#naiad span{fill:#333;color:#333;}#naiad .flowchart-link{stroke:#333333;fill:none;}#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}</style>
   <defs>
     <marker
-      id="mermaid-svg_flowchart-v2-pointEnd"
+      id="naiad_flowchart-v2-pointEnd"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="5"
@@ -145,7 +145,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-pointStart"
+      id="naiad_flowchart-v2-pointStart"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="4.5"
@@ -160,7 +160,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-circleEnd"
+      id="naiad_flowchart-v2-circleEnd"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="11"
@@ -177,7 +177,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-circleStart"
+      id="naiad_flowchart-v2-circleStart"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="-1"
@@ -194,7 +194,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-crossEnd"
+      id="naiad_flowchart-v2-crossEnd"
       class="marker cross flowchart-v2"
       viewBox="0 0 11 11"
       refX="12"
@@ -209,7 +209,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 2; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-crossStart"
+      id="naiad_flowchart-v2-crossStart"
       class="marker cross flowchart-v2"
       viewBox="0 0 11 11"
       refX="-1"
@@ -258,17 +258,17 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
 <a id='snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg'></a>
 ```svg
 <svg
-  id="mermaid-svg"
+  id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 108.5 88"
   style="max-width: 108.5px;"
   role="graphics-document document"
   xmlns:xlink="http://www.w3.org/1999/xlink">
-  <style>#mermaid-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-svg p{margin:0;}#mermaid-svg .marker{fill:#333333;stroke:#333333;}#mermaid-svg .marker.cross{stroke:#333333;}#mermaid-svg span{fill:#333;color:#333;}#mermaid-svg .flowchart-link{stroke:#333333;fill:none;}#mermaid-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}</style>
+  <style>#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}#naiad .marker{fill:#333333;stroke:#333333;}#naiad .marker.cross{stroke:#333333;}#naiad span{fill:#333;color:#333;}#naiad .flowchart-link{stroke:#333333;fill:none;}#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}</style>
   <defs>
     <marker
-      id="mermaid-svg_flowchart-v2-pointEnd"
+      id="naiad_flowchart-v2-pointEnd"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="5"
@@ -283,7 +283,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-pointStart"
+      id="naiad_flowchart-v2-pointStart"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="4.5"
@@ -298,7 +298,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-circleEnd"
+      id="naiad_flowchart-v2-circleEnd"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="11"
@@ -315,7 +315,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-circleStart"
+      id="naiad_flowchart-v2-circleStart"
       class="marker flowchart-v2"
       viewBox="0 0 10 10"
       refX="-1"
@@ -332,7 +332,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-crossEnd"
+      id="naiad_flowchart-v2-crossEnd"
       class="marker cross flowchart-v2"
       viewBox="0 0 11 11"
       refX="12"
@@ -347,7 +347,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 2; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="mermaid-svg_flowchart-v2-crossStart"
+      id="naiad_flowchart-v2-crossStart"
       class="marker cross flowchart-v2"
       viewBox="0 0 11 11"
       refX="-1"

@@ -7,7 +7,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 {
     ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
 
-    // Mermaid.ink default colors
+    // Mermaid default colors
     const string nodeFill = "#ECECFF";
     const string nodeStroke = "#9370DB";
     const string edgeStroke = "#333333";
@@ -64,7 +64,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             .AddMermaidCircleMarker()
             .AddMermaidCrossMarker();
 
-        // Add mermaid.ink CSS styles
+        // Add Mermaid CSS styles
         builder.AddStyles(MermaidStyles.FlowchartStyles);
 
         // Render subgraph boxes first (behind everything), outermost first.
@@ -184,11 +184,11 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             _ => 2.0
         };
 
-        var markerEnd = edge.HasArrowHead ? "url(#mermaid-svg_flowchart-v2-pointEnd)" :
-                        edge.HasCircleEnd ? "url(#mermaid-svg_flowchart-v2-circleEnd)" :
-                        edge.HasCrossEnd ? "url(#mermaid-svg_flowchart-v2-crossEnd)" : null;
+        var markerEnd = edge.HasArrowHead ? "url(#naiad_flowchart-v2-pointEnd)" :
+                        edge.HasCircleEnd ? "url(#naiad_flowchart-v2-circleEnd)" :
+                        edge.HasCrossEnd ? "url(#naiad_flowchart-v2-crossEnd)" : null;
 
-        var markerStart = edge.HasArrowTail ? "url(#mermaid-svg_flowchart-v2-pointStart)" : null;
+        var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-v2-pointStart)" : null;
 
         builder.AddPath(
             pathData,

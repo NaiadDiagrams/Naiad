@@ -2,7 +2,7 @@ namespace Naiad.Diagrams.Pie;
 
 public class PieRenderer : IDiagramRenderer<PieModel>
 {
-    // Mermaid.ink default pie colors
+    // Mermaid default pie colors
     static readonly string[] DefaultColors =
     [
         "#ECECFF",                          // lavender
@@ -40,7 +40,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         var legendLabels = model.Sections.Select(_ =>
             model.ShowData ? $"{_.Label} [{(int)_.Value}]" : _.Label).ToList();
 
-        // Match mermaid.ink exact dimensions - width varies based on legend text
+        // Match Mermaid exact dimensions - width varies based on legend text
         var width = model.ShowData ? 613.140625 : 551.6875;
         const double height = 450.0;
         const double cx = 225.0;
@@ -51,7 +51,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             .DiagramType(null!, "pie")
             .AddStyles(MermaidStyles.PieStyles);
 
-        // Empty group (mermaid.ink artifact)
+        // Empty group (Mermaid artifact)
         builder.BeginGroup();
         builder.EndGroup();
 
@@ -75,7 +75,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             startAngle += sweepAngle;
         }
 
-        // Add percentage labels with mermaid.ink exact positions
+        // Add percentage labels with Mermaid exact positions
         startAngle = 0;
         foreach (var section in model.Sections)
         {

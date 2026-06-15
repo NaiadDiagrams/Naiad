@@ -18,7 +18,7 @@ public class SvgText : SvgElement
     {
         builder.Append("<text");
 
-        // For transformed text (OmitXY=true), mermaid.ink uses: transform, class, style order
+        // For transformed text (OmitXY=true), Mermaid uses: transform, class, style order
         if (OmitXY)
         {
             if (Transform is not null)

@@ -101,7 +101,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "mermaid-svg_flowchart-v2-pointEnd",
+                Id = "naiad_flowchart-v2-pointEnd",
                 Path = "M 0 0 L 10 5 L 0 10 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
@@ -114,7 +114,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "mermaid-svg_flowchart-v2-pointStart",
+                Id = "naiad_flowchart-v2-pointStart",
                 Path = "M 0 5 L 10 10 L 10 0 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
@@ -132,7 +132,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "mermaid-svg_flowchart-v2-circleEnd",
+                Id = "naiad_flowchart-v2-circleEnd",
                 Path = "",
                 UseCircle = true,
                 CircleCx = 5,
@@ -149,7 +149,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "mermaid-svg_flowchart-v2-circleStart",
+                Id = "naiad_flowchart-v2-circleStart",
                 Path = "",
                 UseCircle = true,
                 CircleCx = 5,
@@ -171,7 +171,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "mermaid-svg_flowchart-v2-crossEnd",
+                Id = "naiad_flowchart-v2-crossEnd",
                 Path = "M 1,1 l 9,9 M 10,1 l -9,9",
                 MarkerWidth = 11,
                 MarkerHeight = 11,
@@ -185,7 +185,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "mermaid-svg_flowchart-v2-crossStart",
+                Id = "naiad_flowchart-v2-crossStart",
                 Path = "M 1,1 l 9,9 M 10,1 l -9,9",
                 MarkerWidth = 11,
                 MarkerHeight = 11,

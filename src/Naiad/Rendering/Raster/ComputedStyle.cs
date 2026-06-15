@@ -10,7 +10,7 @@ namespace Naiad.Rendering;
 sealed class ComputedStyle
 {
     // SVG initial values. The Mermaid base stylesheet overrides several of these on the root via the
-    // `#mermaid-svg` rule, which the walker applies before descending.
+    // `#naiad` rule, which the walker applies before descending.
     public string Fill { get; set; } = "#000";
 
     public string Stroke { get; set; } = "none";

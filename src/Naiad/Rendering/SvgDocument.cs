@@ -10,8 +10,8 @@ public class SvgDocument
     public SvgDefs Defs { get; } = new();
     public string? CssStyles { get; set; }
 
-    // Mermaid.ink compatibility properties
-    public string Id { get; set; } = "mermaid-svg";
+    // Mermaid compatibility properties
+    public string Id { get; set; } = "naiad";
     public string? DiagramClass { get; set; }
     public string? AriaRoledescription { get; set; }
     public string? Role { get; set; } = "graphics-document document";
@@ -19,7 +19,7 @@ public class SvgDocument
 
     public void ToXml(StringBuilder builder)
     {
-        // Build mermaid-compatible SVG root element (attribute order matches mermaid.ink exactly)
+        // Build mermaid-compatible SVG root element (attribute order matches Mermaid exactly)
         builder.Append($"<svg id=\"{Id}\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"");
 
         if (!string.IsNullOrEmpty(DiagramClass))
