@@ -138,6 +138,33 @@ quadrantChart
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIFNraWxscyBBc3Nlc3NtZW50XG4gICAgeC1heGlzIEJlZ2lubmVyIC0tXHUwMDNFIEV4cGVydFxuICAgIHktYXhpcyBMb3cgUHJpb3JpdHkgLS1cdTAwM0UgSGlnaCBQcmlvcml0eVxuICAgIFB5dGhvbjogWzAuOCwgMC45XVxuICAgIEphdmFTY3JpcHQ6IFswLjcsIDAuN11cbiAgICBSdXN0OiBbMC4zLCAwLjVdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+## AxisLabelsWithSpaces
+
+**Input:**
+```
+quadrantChart
+    title Skills Matrix
+    x-axis Very Low Skill --> Very High Skill
+    y-axis Very Low Value --> Very High Value
+    Item A: [0.3, 0.6]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Quadrant/QuadrantTests.AxisLabelsWithSpaces.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+quadrantChart
+    title Skills Matrix
+    x-axis Very Low Skill --> Very High Skill
+    y-axis Very Low Value --> Very High Value
+    Item A: [0.3, 0.6]
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIFNraWxscyBNYXRyaXhcbiAgICB4LWF4aXMgVmVyeSBMb3cgU2tpbGwgLS1cdTAwM0UgVmVyeSBIaWdoIFNraWxsXG4gICAgeS1heGlzIFZlcnkgTG93IFZhbHVlIC0tXHUwMDNFIFZlcnkgSGlnaCBWYWx1ZVxuICAgIEl0ZW0gQTogWzAuMywgMC42XSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
 ## EdgePositions
 
 **Input:**
