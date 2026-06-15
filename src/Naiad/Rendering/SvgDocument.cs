@@ -20,27 +20,27 @@ public class SvgDocument
     public void ToXml(StringBuilder builder)
     {
         // Build mermaid-compatible SVG root element (attribute order matches Mermaid exactly)
-        builder.Append($"<svg id=\"{Id}\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"");
+        builder.Append($"<svg id='{Id}' width='100%' xmlns='http://www.w3.org/2000/svg'");
 
         if (!string.IsNullOrEmpty(DiagramClass))
         {
-            builder.Append($" class=\"{DiagramClass}\"");
+            builder.Append($" class='{DiagramClass}'");
         }
 
-        builder.Append($" viewBox=\"{ViewBox}\"");
-        builder.Append(CultureInfo.InvariantCulture, $" style=\"max-width: {Width:0.######}px;\"");
+        builder.Append($" viewBox='{ViewBox}'");
+        builder.Append(CultureInfo.InvariantCulture, $" style='max-width: {Width:0.######}px;'");
 
         if (!string.IsNullOrEmpty(Role))
         {
-            builder.Append($" role=\"{Role}\"");
+            builder.Append($" role='{Role}'");
         }
 
         if (!string.IsNullOrEmpty(AriaRoledescription))
         {
-            builder.Append($" aria-roledescription=\"{AriaRoledescription}\"");
+            builder.Append($" aria-roledescription='{AriaRoledescription}'");
         }
 
-        builder.Append(" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
+        builder.Append(" xmlns:xlink='http://www.w3.org/1999/xlink'>");
 
         // Font Awesome import
         if (!string.IsNullOrEmpty(FontAwesomeImport))

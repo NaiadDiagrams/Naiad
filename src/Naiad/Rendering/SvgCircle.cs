@@ -11,21 +11,21 @@ public class SvgCircle : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append(CultureInfo.InvariantCulture, $"<circle cx=\"{Cx:0.##}\" cy=\"{Cy:0.##}\" r=\"{R:0.##}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{Cx:0.##}' cy='{Cy:0.##}' r='{R:0.##}'");
 
         if (Fill is not null)
         {
-            builder.Append($" fill=\"{Fill}\"");
+            builder.Append($" fill='{Fill}'");
         }
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke=\"{Stroke}\"");
+            builder.Append($" stroke='{Stroke}'");
         }
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width='{StrokeWidth.Value:0.##}'");
         }
 
         CommonAttributes(builder);

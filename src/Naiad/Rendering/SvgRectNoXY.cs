@@ -7,7 +7,7 @@ public class SvgRectNoXY : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append(CultureInfo.InvariantCulture, $"<rect width=\"{Width:0.##}\" height=\"{Height:0.##}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<rect width='{Width:0.##}' height='{Height:0.##}'");
         CommonAttributes(builder);
         builder.Append("/>");
     }

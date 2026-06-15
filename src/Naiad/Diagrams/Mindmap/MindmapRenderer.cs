@@ -271,13 +271,13 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             var ty = y + (size - drawnHeight) / 2;
             builder.AddRawSvg(string.Create(
                 CultureInfo.InvariantCulture,
-                $"<g transform=\"translate({tx:0.##},{ty:0.##}) scale({scale:0.####})\" style=\"color:#333\">{packIcon.Body}</g>"));
+                $"<g transform='translate({tx:0.##},{ty:0.##}) scale({scale:0.####})' style='color:#333'>{packIcon.Body}</g>"));
             return;
         }
 
         // FontAwesome class string, e.g. "fa fa-book". With HTML disabled there is no web font
         // to draw the glyph, so the icon (which carries no text) is dropped.
-        builder.AddLabel(x, y, size, size, $"<i class=\"{icon}\"></i>", "");
+        builder.AddLabel(x, y, size, size, $"<i class='{icon}'></i>", "");
     }
 
     static void DrawHexagon(SvgBuilder builder, double cx, double cy, double width, double height,

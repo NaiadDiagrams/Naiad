@@ -13,41 +13,41 @@ public class SvgPath : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append($"<path d=\"{D}\"");
+        builder.Append($"<path d='{D}'");
 
         if (Fill is not null)
         {
-            builder.Append($" fill=\"{Fill}\"");
+            builder.Append($" fill='{Fill}'");
         }
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke=\"{Stroke}\"");
+            builder.Append($" stroke='{Stroke}'");
         }
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width='{StrokeWidth.Value:0.##}'");
         }
 
         if (StrokeDasharray is not null)
         {
-            builder.Append($" stroke-dasharray=\"{StrokeDasharray}\"");
+            builder.Append($" stroke-dasharray='{StrokeDasharray}'");
         }
 
         if (MarkerStart is not null)
         {
-            builder.Append($" marker-start=\"{MarkerStart}\"");
+            builder.Append($" marker-start='{MarkerStart}'");
         }
 
         if (MarkerEnd is not null)
         {
-            builder.Append($" marker-end=\"{MarkerEnd}\"");
+            builder.Append($" marker-end='{MarkerEnd}'");
         }
 
         if (Opacity.HasValue)
         {
-            builder.Append(CultureInfo.InvariantCulture, $" opacity=\"{Opacity.Value:0.##}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" opacity='{Opacity.Value:0.##}'");
         }
 
         CommonAttributes(builder);

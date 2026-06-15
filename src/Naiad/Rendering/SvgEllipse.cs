@@ -11,16 +11,16 @@ public class SvgEllipse : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append(CultureInfo.InvariantCulture, $"<ellipse cx=\"{Cx:0.##}\" cy=\"{Cy:0.##}\" rx=\"{Rx:0.##}\" ry=\"{Ry:0.##}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<ellipse cx='{Cx:0.##}' cy='{Cy:0.##}' rx='{Rx:0.##}' ry='{Ry:0.##}'");
 
         if (Fill is not null)
         {
-            builder.Append($" fill=\"{Fill}\"");
+            builder.Append($" fill='{Fill}'");
         }
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke=\"{Stroke}\"");
+            builder.Append($" stroke='{Stroke}'");
         }
 
         CommonAttributes(builder);

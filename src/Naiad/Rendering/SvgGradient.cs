@@ -9,11 +9,11 @@ public class SvgGradient
     public void ToXml(StringBuilder builder)
     {
         var tag = IsRadial ? "radialGradient" : "linearGradient";
-        builder.Append($"<{tag} id=\"{Id}\">");
+        builder.Append($"<{tag} id='{Id}'>");
 
         foreach (var stop in Stops)
         {
-            builder.Append(CultureInfo.InvariantCulture, $"<stop offset=\"{stop.Offset}%\" style=\"stop-color:{stop.Color}\" />");
+            builder.Append(CultureInfo.InvariantCulture, $"<stop offset='{stop.Offset}%' style='stop-color:{stop.Color}' />");
         }
 
         builder.Append($"</{tag}>");

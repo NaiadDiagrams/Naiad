@@ -294,7 +294,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         if (prefix is "fa" or "fab" or "fas" or "far" &&
             name.StartsWith("fa-", StringComparison.Ordinal))
         {
-            return $"<i class=\"{prefix} {name}\"></i>";
+            return $"<i class='{prefix} {name}'></i>";
         }
 
         // Registered iconify pack icon, rendered as inline SVG sized to the text.
@@ -302,7 +302,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         {
             return string.Create(
                 CultureInfo.InvariantCulture,
-                $"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 {icon.Width:0.##} {icon.Height:0.##}\" style=\"width:1em;height:1em;vertical-align:-0.125em\">{icon.Body}</svg>");
+                $"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {icon.Width:0.##} {icon.Height:0.##}' style='width:1em;height:1em;vertical-align:-0.125em'>{icon.Body}</svg>");
         }
 
         return null;

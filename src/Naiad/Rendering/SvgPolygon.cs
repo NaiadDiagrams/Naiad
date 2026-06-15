@@ -8,7 +8,7 @@ public class SvgPolygon : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append("<polygon points=\"");
+        builder.Append("<polygon points='");
         for (var i = 0; i < Points.Count; i++)
         {
             if (i > 0)
@@ -20,16 +20,16 @@ public class SvgPolygon : SvgElement
             builder.Append(CultureInfo.InvariantCulture, $"{point.X:0.##},{point.Y:0.##}");
         }
 
-        builder.Append('"');
+        builder.Append('\'');
 
         if (Fill is not null)
         {
-            builder.Append($" fill=\"{Fill}\"");
+            builder.Append($" fill='{Fill}'");
         }
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke=\"{Stroke}\"");
+            builder.Append($" stroke='{Stroke}'");
         }
 
         CommonAttributes(builder);

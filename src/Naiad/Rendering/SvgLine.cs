@@ -12,21 +12,21 @@ public class SvgLine : SvgElement
 
     public override void ToXml(StringBuilder builder)
     {
-        builder.Append(CultureInfo.InvariantCulture, $"<line x1=\"{X1:0.##}\" y1=\"{Y1:0.##}\" x2=\"{X2:0.##}\" y2=\"{Y2:0.##}\"");
+        builder.Append(CultureInfo.InvariantCulture, $"<line x1='{X1:0.##}' y1='{Y1:0.##}' x2='{X2:0.##}' y2='{Y2:0.##}'");
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke=\"{Stroke}\"");
+            builder.Append($" stroke='{Stroke}'");
         }
 
         if (StrokeWidth.HasValue)
         {
-            builder.Append(CultureInfo.InvariantCulture, $" stroke-width=\"{StrokeWidth.Value:0.##}\"");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width='{StrokeWidth.Value:0.##}'");
         }
 
         if (StrokeDasharray is not null)
         {
-            builder.Append($" stroke-dasharray=\"{StrokeDasharray}\"");
+            builder.Append($" stroke-dasharray='{StrokeDasharray}'");
         }
 
         CommonAttributes(builder);

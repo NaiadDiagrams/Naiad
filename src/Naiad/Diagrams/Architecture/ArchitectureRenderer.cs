@@ -368,7 +368,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             var ty = y + (box - drawnHeight) / 2;
             builder.AddRawSvg(string.Create(
                 CultureInfo.InvariantCulture,
-                $"<g transform=\"translate({tx:0.##},{ty:0.##}) scale({scale:0.####})\" style=\"color:{accent}\">{packIcon.Body}</g>"));
+                $"<g transform='translate({tx:0.##},{ty:0.##}) scale({scale:0.####})' style='color:{accent}'>{packIcon.Body}</g>"));
             return true;
         }
 

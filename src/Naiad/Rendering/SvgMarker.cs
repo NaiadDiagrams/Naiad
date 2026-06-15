@@ -21,34 +21,34 @@ public class SvgMarker
 
     public void ToXml(StringBuilder builder)
     {
-        builder.Append($"<marker id=\"{Id}\"");
+        builder.Append($"<marker id='{Id}'");
 
         if (ClassName is not null)
         {
-            builder.Append($" class=\"{ClassName}\"");
+            builder.Append($" class='{ClassName}'");
         }
 
         if (ViewBox is not null)
         {
-            builder.Append($" viewBox=\"{ViewBox}\"");
+            builder.Append($" viewBox='{ViewBox}'");
         }
 
-        builder.Append(CultureInfo.InvariantCulture, $" refX=\"{RefX:0.##}\" refY=\"{RefY:0.##}\"");
+        builder.Append(CultureInfo.InvariantCulture, $" refX='{RefX:0.##}' refY='{RefY:0.##}'");
         if (MarkerUnits is not null)
         {
-            builder.Append($" markerUnits=\"{MarkerUnits}\"");
+            builder.Append($" markerUnits='{MarkerUnits}'");
         }
 
-        builder.Append(CultureInfo.InvariantCulture, $" markerWidth=\"{MarkerWidth:0.##}\" markerHeight=\"{MarkerHeight:0.##}\"");
-        builder.Append($" orient=\"{Orient}\">");
+        builder.Append(CultureInfo.InvariantCulture, $" markerWidth='{MarkerWidth:0.##}' markerHeight='{MarkerHeight:0.##}'");
+        builder.Append($" orient='{Orient}'>");
 
         if (UseCircle)
         {
-            builder.Append(CultureInfo.InvariantCulture, $"<circle cx=\"{CircleCx:0.##}\" cy=\"{CircleCy:0.##}\" r=\"{CircleR:0.##}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+            builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{CircleCx:0.##}' cy='{CircleCy:0.##}' r='{CircleR:0.##}' class='arrowMarkerPath' style='stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;'/>");
         }
         else
         {
-            builder.Append($"<path d=\"{Path}\" class=\"arrowMarkerPath\" style=\"stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;\"/>");
+            builder.Append($"<path d='{Path}' class='arrowMarkerPath' style='stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;'/>");
         }
 
         builder.Append("</marker>");
