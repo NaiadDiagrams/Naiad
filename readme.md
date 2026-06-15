@@ -22,6 +22,8 @@ https://nuget.org/packages/Naiad/
 
 ## Usage
 
+<!-- snippet: Usage -->
+<a id='snippet-Usage'></a>
 ```cs
 var svg = Mermaid.Render(
     """
@@ -29,12 +31,16 @@ var svg = Mermaid.Render(
         A[Start] --> B[Process] --> C[End]
     """);
 ```
+<sup><a href='/src/Tests/Snippets.cs#L6-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-Usage' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 The diagram type is automatically detected from the input.
 
 
 ### Render Options
 
+<!-- snippet: RenderOptions -->
+<a id='snippet-RenderOptions'></a>
 ```cs
 var svg = Mermaid.Render(
     input,
@@ -45,6 +51,8 @@ var svg = Mermaid.Render(
         FontFamily = "Arial, sans-serif"
     });
 ```
+<sup><a href='/src/Tests/Snippets.cs#L18-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderOptions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 ## PNG output
@@ -56,22 +64,24 @@ The core `Naiad` package renders SVG only and has no third-party dependencies. T
 | [`Naiad.Skia`](https://nuget.org/packages/Naiad.Skia/) | [SkiaSharp](https://github.com/mono/SkiaSharp) | Native Skia rendering; bundled native binaries. |
 | [`Naiad.ImageSharp`](https://nuget.org/packages/Naiad.ImageSharp/) | [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp) | Fully managed, cross-platform; uses installed system fonts for text. Depends on ImageSharp under the [Six Labors Split License](https://github.com/SixLabors/ImageSharp/blob/main/LICENSE). |
 
+<!-- snippet: RenderToPng -->
+<a id='snippet-RenderToPng'></a>
 ```cs
 // Naiad.Skia
-using Naiad.Skia;
-
-byte[] png = SkiaRenderer.RenderPng(input);
+var skiaPng = SkiaRenderer.RenderPng(input);
 SkiaRenderer.RenderPng(input, "diagram.png");
 
 // Naiad.ImageSharp
-using Naiad.ImageSharp;
-
-byte[] png = ImageSharpRenderer.RenderPng(input);
+var imageSharpPng = ImageSharpRenderer.RenderPng(input);
 ImageSharpRenderer.RenderPng(input, "diagram.png");
 ```
+<sup><a href='/src/Tests/Snippets.cs#L33-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderToPng' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Both renderers accept the same `RenderOptions` as `Mermaid.Render`, plus a `Png` section controlling rasterization:
 
+<!-- snippet: PngOptions -->
+<a id='snippet-PngOptions'></a>
 ```cs
 SkiaRenderer.RenderPng(
     input,
@@ -85,6 +95,8 @@ SkiaRenderer.RenderPng(
         }
     });
 ```
+<sup><a href='/src/Tests/Snippets.cs#L46-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 `RenderPng` also has an overload that writes to a `Stream`.
 
@@ -93,6 +105,8 @@ SkiaRenderer.RenderPng(
 
 Naiad can render icons from [iconify](https://iconify.design) icon packs. Packs are not bundled — load the ones you need (in the iconify JSON format) from a file or a stream:
 
+<!-- snippet: LoadIconPack -->
+<a id='snippet-LoadIconPack'></a>
 ```cs
 IconPack.Load("logos.json");
 
@@ -100,11 +114,15 @@ IconPack.Load("logos.json");
 using var stream = File.OpenRead("logos.json");
 IconPack.Load(stream);
 ```
+<sup><a href='/src/Tests/Snippets.cs#L62-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Pack files are published as [`@iconify-json/*`](https://icon-sets.iconify.design/) packages (the `icons.json` file), e.g. `@iconify-json/logos`. `Load` registers the pack under its prefix and returns it. Register all packs once at startup — calling `IconPack.Load` after the first `Mermaid.Render` throws a `MermaidException`.
 
 Once loaded, reference icons as `prefix:name` wherever a diagram supports icons — architecture services and groups, flowchart node labels, and mindmap nodes:
 
+<!-- snippet: IconUsage -->
+<a id='snippet-IconUsage'></a>
 ```cs
 // Architecture
 Mermaid.Render(
@@ -130,6 +148,8 @@ Mermaid.Render(
         Storage ::icon(logos:aws-s3)
     """);
 ```
+<sup><a href='/src/Tests/Snippets.cs#L73-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.
 
