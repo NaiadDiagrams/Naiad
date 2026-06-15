@@ -184,11 +184,11 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             _ => 2.0
         };
 
-        var markerEnd = edge.HasArrowHead ? "url(#naiad_flowchart-v2-pointEnd)" :
-                        edge.HasCircleEnd ? "url(#naiad_flowchart-v2-circleEnd)" :
-                        edge.HasCrossEnd ? "url(#naiad_flowchart-v2-crossEnd)" : null;
+        var markerEnd = edge.HasArrowHead ? "url(#naiad_flowchart-pointEnd)" :
+                        edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
+                        edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
 
-        var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-v2-pointStart)" : null;
+        var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-pointStart)" : null;
 
         builder.AddPath(
             pathData,

@@ -44,7 +44,7 @@ The diagram type is automatically detected from the input.
 ```cs
 var svg = Mermaid.Render(
     input,
-    new RenderOptions
+    new()
     {
         Padding = 20,
         FontSize = 14,
@@ -86,16 +86,18 @@ Both renderers accept the same `RenderOptions` as `Mermaid.Render`, plus a `Png`
 SkiaRenderer.RenderPng(
     input,
     "diagram.png",
-    new RenderOptions
+    new()
     {
         Png =
         {
-            Scale = 2,            // 2x device-pixel scale for high-DPI output
-            Background = "white"  // any CSS colour, or "transparent"
+            // 2x device-pixel scale for high-DPI output
+            Scale = 2,
+            // any CSS colour, or "transparent"
+            Background = "white"
         }
     });
 ```
-<sup><a href='/src/Tests/Snippets.cs#L46-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L46-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `RenderPng` also has an overload that writes to a `Stream`.
@@ -139,8 +141,8 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
 </style>
   <defs>
     <marker
-      id="naiad_flowchart-v2-pointEnd"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-pointEnd"
+      class="marker"
       viewBox="0 0 10 10"
       refX="5"
       refY="5"
@@ -154,8 +156,8 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-pointStart"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-pointStart"
+      class="marker"
       viewBox="0 0 10 10"
       refX="4.5"
       refY="5"
@@ -169,8 +171,8 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-circleEnd"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-circleEnd"
+      class="marker"
       viewBox="0 0 10 10"
       refX="11"
       refY="5"
@@ -186,8 +188,8 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-circleStart"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-circleStart"
+      class="marker"
       viewBox="0 0 10 10"
       refX="-1"
       refY="5"
@@ -203,8 +205,8 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-crossEnd"
-      class="marker cross flowchart-v2"
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
       viewBox="0 0 11 11"
       refX="12"
       refY="5.2"
@@ -218,8 +220,8 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         style="stroke-width: 2; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-crossStart"
-      class="marker cross flowchart-v2"
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
       viewBox="0 0 11 11"
       refX="-1"
       refY="5.2"
@@ -286,8 +288,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
 </style>
   <defs>
     <marker
-      id="naiad_flowchart-v2-pointEnd"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-pointEnd"
+      class="marker"
       viewBox="0 0 10 10"
       refX="5"
       refY="5"
@@ -301,8 +303,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-pointStart"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-pointStart"
+      class="marker"
       viewBox="0 0 10 10"
       refX="4.5"
       refY="5"
@@ -316,8 +318,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-circleEnd"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-circleEnd"
+      class="marker"
       viewBox="0 0 10 10"
       refX="11"
       refY="5"
@@ -333,8 +335,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-circleStart"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-circleStart"
+      class="marker"
       viewBox="0 0 10 10"
       refX="-1"
       refY="5"
@@ -350,8 +352,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-crossEnd"
-      class="marker cross flowchart-v2"
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
       viewBox="0 0 11 11"
       refX="12"
       refY="5.2"
@@ -365,8 +367,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         style="stroke-width: 2; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-crossStart"
-      class="marker cross flowchart-v2"
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
       viewBox="0 0 11 11"
       refX="-1"
       refY="5.2"
@@ -415,7 +417,7 @@ IconPack.Load("logos.json");
 using var stream = File.OpenRead("logos.json");
 IconPack.Load(stream);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L62-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L64-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Pack files are published as [`@iconify-json/*`](https://icon-sets.iconify.design/) packages (the `icons.json` file), e.g. `@iconify-json/logos`. `Load` registers the pack under its prefix and returns it. Register all packs once at startup — calling `IconPack.Load` after the first `Mermaid.Render` throws a `MermaidException`.
@@ -449,7 +451,7 @@ Mermaid.Render(
         Storage ::icon(logos:aws-s3)
     """);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L73-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L75-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.

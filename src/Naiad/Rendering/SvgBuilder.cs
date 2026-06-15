@@ -101,7 +101,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "naiad_flowchart-v2-pointEnd",
+                Id = "naiad_flowchart-pointEnd",
                 Path = "M 0 0 L 10 5 L 0 10 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
@@ -109,12 +109,12 @@ public class SvgBuilder
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
-                ClassName = "marker flowchart-v2"
+                ClassName = "marker"
             });
         document.Defs.Markers.Add(
             new()
             {
-                Id = "naiad_flowchart-v2-pointStart",
+                Id = "naiad_flowchart-pointStart",
                 Path = "M 0 5 L 10 10 L 10 0 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
@@ -122,7 +122,7 @@ public class SvgBuilder
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
-                ClassName = "marker flowchart-v2"
+                ClassName = "marker"
             });
         return this;
     }
@@ -132,7 +132,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "naiad_flowchart-v2-circleEnd",
+                Id = "naiad_flowchart-circleEnd",
                 Path = "",
                 UseCircle = true,
                 CircleCx = 5,
@@ -144,12 +144,12 @@ public class SvgBuilder
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
-                ClassName = "marker flowchart-v2"
+                ClassName = "marker"
             });
         document.Defs.Markers.Add(
             new()
             {
-                Id = "naiad_flowchart-v2-circleStart",
+                Id = "naiad_flowchart-circleStart",
                 Path = "",
                 UseCircle = true,
                 CircleCx = 5,
@@ -161,7 +161,7 @@ public class SvgBuilder
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
-                ClassName = "marker flowchart-v2"
+                ClassName = "marker"
             });
         return this;
     }
@@ -171,7 +171,7 @@ public class SvgBuilder
         document.Defs.Markers.Add(
             new()
             {
-                Id = "naiad_flowchart-v2-crossEnd",
+                Id = "naiad_flowchart-crossEnd",
                 Path = "M 1,1 l 9,9 M 10,1 l -9,9",
                 MarkerWidth = 11,
                 MarkerHeight = 11,
@@ -179,13 +179,13 @@ public class SvgBuilder
                 RefY = 5.2,
                 ViewBox = "0 0 11 11",
                 MarkerUnits = "userSpaceOnUse",
-                ClassName = "marker cross flowchart-v2",
+                ClassName = "marker cross",
                 StrokeWidth = 2
             });
         document.Defs.Markers.Add(
             new()
             {
-                Id = "naiad_flowchart-v2-crossStart",
+                Id = "naiad_flowchart-crossStart",
                 Path = "M 1,1 l 9,9 M 10,1 l -9,9",
                 MarkerWidth = 11,
                 MarkerHeight = 11,
@@ -193,7 +193,7 @@ public class SvgBuilder
                 RefY = 5.2,
                 ViewBox = "0 0 11 11",
                 MarkerUnits = "userSpaceOnUse",
-                ClassName = "marker cross flowchart-v2",
+                ClassName = "marker cross",
                 StrokeWidth = 2
             });
         return this;

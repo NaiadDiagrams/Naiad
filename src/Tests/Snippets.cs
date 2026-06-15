@@ -18,7 +18,7 @@ static class Snippets
         // begin-snippet: RenderOptions
         var svg = Mermaid.Render(
             input,
-            new RenderOptions
+            new()
             {
                 Padding = 20,
                 FontSize = 14,
@@ -47,12 +47,14 @@ static class Snippets
         SkiaRenderer.RenderPng(
             input,
             "diagram.png",
-            new RenderOptions
+            new()
             {
                 Png =
                 {
-                    Scale = 2,            // 2x device-pixel scale for high-DPI output
-                    Background = "white"  // any CSS colour, or "transparent"
+                    // 2x device-pixel scale for high-DPI output
+                    Scale = 2,
+                    // any CSS colour, or "transparent"
+                    Background = "white"
                 }
             });
     // end-snippet

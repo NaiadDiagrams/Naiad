@@ -1,4 +1,4 @@
-﻿<svg
+<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
@@ -20,8 +20,8 @@
 </style>
   <defs>
     <marker
-      id="naiad_flowchart-v2-pointEnd"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-pointEnd"
+      class="marker"
       viewBox="0 0 10 10"
       refX="5"
       refY="5"
@@ -35,8 +35,8 @@
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-pointStart"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-pointStart"
+      class="marker"
       viewBox="0 0 10 10"
       refX="4.5"
       refY="5"
@@ -50,8 +50,8 @@
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-circleEnd"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-circleEnd"
+      class="marker"
       viewBox="0 0 10 10"
       refX="11"
       refY="5"
@@ -67,8 +67,8 @@
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-circleStart"
-      class="marker flowchart-v2"
+      id="naiad_flowchart-circleStart"
+      class="marker"
       viewBox="0 0 10 10"
       refX="-1"
       refY="5"
@@ -84,8 +84,8 @@
         style="stroke-width: 1; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-crossEnd"
-      class="marker cross flowchart-v2"
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
       viewBox="0 0 11 11"
       refX="12"
       refY="5.2"
@@ -99,8 +99,8 @@
         style="stroke-width: 2; stroke-dasharray: 1, 0;" />
     </marker>
     <marker
-      id="naiad_flowchart-v2-crossStart"
-      class="marker cross flowchart-v2"
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
       viewBox="0 0 11 11"
       refX="-1"
       refY="5.2"
@@ -159,35 +159,35 @@
       fill="none"
       stroke="#333333"
       stroke-width="2"
-      marker-end="url(#naiad_flowchart-v2-pointEnd)"
+      marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
       d="M69.65,211 L69.65,281"
       fill="none"
       stroke="#333333"
       stroke-width="2"
-      marker-end="url(#naiad_flowchart-v2-pointEnd)"
+      marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
       d="M69.65,512 L69.65,582"
       fill="none"
       stroke="#333333"
       stroke-width="2"
-      marker-end="url(#naiad_flowchart-v2-pointEnd)"
+      marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
       d="M69.65,211 L69.65,464"
       fill="none"
       stroke="#333333"
       stroke-width="2"
-      marker-end="url(#naiad_flowchart-v2-pointEnd)"
+      marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
       d="M69.65,329 L69.65,464"
       fill="none"
       stroke="#333333"
       stroke-width="2"
-      marker-end="url(#naiad_flowchart-v2-pointEnd)"
+      marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
       d="M35.4,0 H103.9 V48 H35.4 Z"
