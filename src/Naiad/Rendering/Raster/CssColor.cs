@@ -90,20 +90,20 @@ static class CssColor
     {
         color = default;
         var parts = Components(value);
-        if (parts is not {Length: 3 or 4} components)
+        if (parts is not {Length: 3 or 4})
         {
             return false;
         }
 
-        if (!Channel(components[0], out var r) ||
-            !Channel(components[1], out var g) ||
-            !Channel(components[2], out var b))
+        if (!Channel(parts[0], out var r) ||
+            !Channel(parts[1], out var g) ||
+            !Channel(parts[2], out var b))
         {
             return false;
         }
 
         var a = (byte)255;
-        if (components.Length == 4 && TryAlpha(components[3], out var alpha))
+        if (parts.Length == 4 && TryAlpha(parts[3], out var alpha))
         {
             a = alpha;
         }
@@ -116,20 +116,20 @@ static class CssColor
     {
         color = default;
         var parts = Components(value);
-        if (parts is not {Length: 3 or 4} components)
+        if (parts is not {Length: 3 or 4})
         {
             return false;
         }
 
-        if (!double.TryParse(components[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var h) ||
-            !Percent(components[1], out var s) ||
-            !Percent(components[2], out var l))
+        if (!double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var h) ||
+            !Percent(parts[1], out var s) ||
+            !Percent(parts[2], out var l))
         {
             return false;
         }
 
         var a = (byte)255;
-        if (components.Length == 4 && TryAlpha(components[3], out var alpha))
+        if (parts.Length == 4 && TryAlpha(parts[3], out var alpha))
         {
             a = alpha;
         }
