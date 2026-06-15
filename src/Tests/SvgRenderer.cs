@@ -11,10 +11,9 @@ using System.Globalization;
 /// </summary>
 public static class SvgRenderer
 {
-    static readonly XNamespace SvgNs = "http://www.w3.org/2000/svg";
+    static readonly XNamespace svgNs = "http://www.w3.org/2000/svg";
 
-    // Matches DeviceScaleFactor=2 used by the previous Playwright screenshots.
-    const float Scale = 2f;
+    const float scale = 2f;
 
     public static byte[] RenderToPng(string svg)
     {
@@ -28,7 +27,7 @@ public static class SvgRenderer
         }
 
         using var output = new MemoryStream();
-        skSvg.Save(output, SKColors.White, SKEncodedImageFormat.Png, 100, Scale, Scale);
+        skSvg.Save(output, SKColors.White, SKEncodedImageFormat.Png, 100, scale, scale);
         return output.ToArray();
     }
 
@@ -36,7 +35,7 @@ public static class SvgRenderer
     {
         var document = XDocument.Parse(svg);
 
-        foreach (var foreignObject in document.Descendants(SvgNs + "foreignObject").ToList())
+        foreach (var foreignObject in document.Descendants(svgNs + "foreignObject").ToList())
         {
             var text = foreignObject.Descendants()
                 .FirstOrDefault(_ => _.Name.LocalName == "p")
@@ -58,7 +57,7 @@ public static class SvgRenderer
 
             foreignObject.ReplaceWith(
                 new XElement(
-                    SvgNs + "text",
+                    svgNs + "text",
                     new XAttribute("x", Format(x + width / 2)),
                     new XAttribute("y", Format(y + height / 2)),
                     new XAttribute("text-anchor", "middle"),

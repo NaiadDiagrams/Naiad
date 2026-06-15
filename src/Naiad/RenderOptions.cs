@@ -11,4 +11,10 @@ public class RenderOptions
     // When false, labels are emitted as native SVG <text> instead of <foreignObject>
     // (and the Font Awesome @import is dropped), so the SVG renders without an HTML runtime.
     public bool AllowHtmlElements { get; set; } = true;
+
+    /// <summary>
+    /// PNG rasterization settings, honoured by the Naiad.Skia and Naiad.ImageSharp render backends.
+    /// Ignored by <see cref="Mermaid.Render(string, RenderOptions)"/>, which only produces SVG.
+    /// </summary>
+    public PngOptions Png { get; set; } = new();
 }

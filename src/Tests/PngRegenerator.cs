@@ -6,8 +6,9 @@
 /// </summary>
 public class PngRegenerator
 {
+    // Run manually to regenerate all verified PNG baselines from the verified SVGs.
     [Test]
-    [Explicit("Run manually to regenerate all verified PNG baselines from the verified SVGs")]
+    [Explicit]
     public void RegenerateAllVerifiedPngs()
     {
         var svgFiles = Directory.GetFiles(
@@ -31,7 +32,7 @@ public class PngRegenerator
             }
         }
 
-        TestContext.Out.WriteLine($"Regenerated {svgFiles.Length - failures.Count}/{svgFiles.Length} PNG baselines.");
+        Console.WriteLine($"Regenerated {svgFiles.Length - failures.Count}/{svgFiles.Length} PNG baselines.");
 
         if (failures.Count > 0)
         {

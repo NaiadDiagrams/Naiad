@@ -2,7 +2,7 @@
 {
     // Icon pack registration is frozen after the first render and is process-global,
     // so reset it before each test to keep tests isolated.
-    [SetUp]
+    [Before(Test)]
     public void ResetIconPacks() => IconPackRegistry.Reset();
 
     public Task VerifySvg(

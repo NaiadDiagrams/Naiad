@@ -45,7 +45,7 @@ public class AllowHtmlElementsTests : TestBase
 
     // The default (HTML allowed) path must be unchanged: foreignObject + the Font Awesome import remain.
     [Test]
-    public void DefaultKeepsForeignObject()
+    public async Task DefaultKeepsForeignObject()
     {
         var svg = Mermaid.Render(
             """
@@ -53,25 +53,26 @@ public class AllowHtmlElementsTests : TestBase
                 A[fa:fa-car Car] --> B[End]
             """);
 
-        Assert.That(svg, Does.Contain("<foreignObject"));
-        Assert.That(svg, Does.Contain("http://www.w3.org/1999/xhtml"));
+        await Assert.That(svg).Contains("<foreignObject");
+        await Assert.That(svg).Contains("http://www.w3.org/1999/xhtml");
     }
 
-    [TestCaseSource(nameof(Diagrams))]
-    public void EmitsNoHtmlMarkup(string input)
+    [Test]
+    [MethodDataSource(nameof(Diagrams))]
+    public async Task EmitsNoHtmlMarkup(string name, string input)
     {
         var svg = Mermaid.Render(input, NoHtml);
 
-        Assert.That(svg, Does.Contain("<svg"));
-        Assert.That(svg, Does.Not.Contain("<foreignObject"));
-        Assert.That(svg, Does.Not.Contain("<div"));
+        await Assert.That(svg).Contains("<svg").Because(name);
+        await Assert.That(svg).DoesNotContain("<foreignObject").Because(name);
+        await Assert.That(svg).DoesNotContain("<div").Because(name);
         // The Font Awesome @import is the one xhtml-namespaced node every diagram emits by default.
-        Assert.That(svg, Does.Not.Contain("http://www.w3.org/1999/xhtml"));
+        await Assert.That(svg).DoesNotContain("http://www.w3.org/1999/xhtml").Because(name);
     }
 
-    static IEnumerable<TestCaseData> Diagrams()
+    public static IEnumerable<(string Name, string Input)> Diagrams()
     {
-        TestCaseData Case(string name, string input) => new TestCaseData(input).SetName($"{{m}}({name})");
+        (string, string) Case(string name, string input) => (name, input);
 
         yield return Case("Pie",
             """

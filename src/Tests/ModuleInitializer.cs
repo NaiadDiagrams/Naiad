@@ -1,3 +1,7 @@
+// The suite shares process-global state (IconPackRegistry, reset per test) and was written for
+// sequential execution, so run the whole assembly serially rather than TUnit's default parallelism.
+[assembly: NotInParallel]
+
 public static partial class ModuleInitializer
 {
     [ModuleInitializer]

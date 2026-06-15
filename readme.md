@@ -5,6 +5,8 @@
 
 A .NET library for rendering [Mermaid](https://mermaid.js.org/) diagrams to SVG. No browser or JavaScript runtime required.
 
+PNG output is available via two optional companion packages — [`Naiad.Skia`](#png-output) (SkiaSharp) and [`Naiad.ImageSharp`](#png-output) (SixLabors.ImageSharp).
+
 
 ## Open Source Maintenance Fee
 
@@ -20,6 +22,8 @@ https://nuget.org/packages/Naiad/
 
 ## Usage
 
+<!-- snippet: Usage -->
+<a id='snippet-Usage'></a>
 ```cs
 var svg = Mermaid.Render(
     """
@@ -27,12 +31,16 @@ var svg = Mermaid.Render(
         A[Start] --> B[Process] --> C[End]
     """);
 ```
+<sup><a href='/src/Tests/Snippets.cs#L6-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-Usage' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 The diagram type is automatically detected from the input.
 
 
 ### Render Options
 
+<!-- snippet: RenderOptions -->
+<a id='snippet-RenderOptions'></a>
 ```cs
 var svg = Mermaid.Render(
     input,
@@ -40,10 +48,57 @@ var svg = Mermaid.Render(
     {
         Padding = 20,
         FontSize = 14,
-        FontFamily = "Arial, sans-serif",
-        AllowHtmlElements = true
+        FontFamily = "Arial, sans-serif"
     });
 ```
+<sup><a href='/src/Tests/Snippets.cs#L18-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderOptions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+## PNG output
+
+The core `Naiad` package renders SVG only and has no third-party dependencies. To rasterize a diagram to PNG, add one of the two backend packages. Both drive the exact same parse → layout → style pipeline that produces the SVG, and share all of the SVG-to-pixels code; they differ only in the rasterizer and font engine they use.
+
+| Package | Rasterizer | When to choose |
+| --- | --- | --- |
+| [`Naiad.Skia`](https://nuget.org/packages/Naiad.Skia/) | [SkiaSharp](https://github.com/mono/SkiaSharp) | Native Skia rendering; bundled native binaries. |
+| [`Naiad.ImageSharp`](https://nuget.org/packages/Naiad.ImageSharp/) | [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp) | Fully managed, cross-platform; uses installed system fonts for text. Depends on ImageSharp under the [Six Labors Split License](https://github.com/SixLabors/ImageSharp/blob/main/LICENSE). |
+
+<!-- snippet: RenderToPng -->
+<a id='snippet-RenderToPng'></a>
+```cs
+// Naiad.Skia
+var skiaPng = SkiaRenderer.RenderPng(input);
+SkiaRenderer.RenderPng(input, "diagram.png");
+
+// Naiad.ImageSharp
+var imageSharpPng = ImageSharpRenderer.RenderPng(input);
+ImageSharpRenderer.RenderPng(input, "diagram.png");
+```
+<sup><a href='/src/Tests/Snippets.cs#L33-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderToPng' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Both renderers accept the same `RenderOptions` as `Mermaid.Render`, plus a `Png` section controlling rasterization:
+
+<!-- snippet: PngOptions -->
+<a id='snippet-PngOptions'></a>
+```cs
+SkiaRenderer.RenderPng(
+    input,
+    "diagram.png",
+    new RenderOptions
+    {
+        Png =
+        {
+            Scale = 2,            // 2x device-pixel scale for high-DPI output
+            Background = "white"  // any CSS colour, or "transparent"
+        }
+    });
+```
+<sup><a href='/src/Tests/Snippets.cs#L46-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+`RenderPng` also has an overload that writes to a `Stream`.
 
 By default, node and edge labels are emitted as HTML inside `<foreignObject>` (matching Mermaid's own output). Set `AllowHtmlElements = false` to render labels as native SVG `<text>` instead, producing self-contained SVG for viewers and rasterizers that have no HTML/CSS engine. Icons that rely on the HTML path — FontAwesome glyphs and icons embedded in labels — are omitted in this mode; iconify pack icons drawn as inline SVG are unaffected.
 
@@ -333,6 +388,8 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
 
 Naiad can render icons from [iconify](https://iconify.design) icon packs. Packs are not bundled — load the ones you need (in the iconify JSON format) from a file or a stream:
 
+<!-- snippet: LoadIconPack -->
+<a id='snippet-LoadIconPack'></a>
 ```cs
 IconPack.Load("logos.json");
 
@@ -340,11 +397,15 @@ IconPack.Load("logos.json");
 using var stream = File.OpenRead("logos.json");
 IconPack.Load(stream);
 ```
+<sup><a href='/src/Tests/Snippets.cs#L62-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Pack files are published as [`@iconify-json/*`](https://icon-sets.iconify.design/) packages (the `icons.json` file), e.g. `@iconify-json/logos`. `Load` registers the pack under its prefix and returns it. Register all packs once at startup — calling `IconPack.Load` after the first `Mermaid.Render` throws a `MermaidException`.
 
 Once loaded, reference icons as `prefix:name` wherever a diagram supports icons — architecture services and groups, flowchart node labels, and mindmap nodes:
 
+<!-- snippet: IconUsage -->
+<a id='snippet-IconUsage'></a>
 ```cs
 // Architecture
 Mermaid.Render(
@@ -370,6 +431,8 @@ Mermaid.Render(
         Storage ::icon(logos:aws-s3)
     """);
 ```
+<sup><a href='/src/Tests/Snippets.cs#L73-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.
 
@@ -405,7 +468,6 @@ Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-c
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
 
 Auto-generated documentation from the test suite.
-
 - [C4](/src/test-renders/C4.md)
 - [Class](/src/test-renders/Class.md)
 - [EntityRelationship](/src/test-renders/EntityRelationship.md)
