@@ -1,13 +1,3 @@
-using System.Collections.Concurrent;
-using System.Numerics;
-using Naiad.Rendering;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using Color = SixLabors.ImageSharp.Color;
 using IsPaint = Naiad.Rendering.Paint;
 
@@ -20,14 +10,12 @@ namespace Naiad.ImageSharp;
 /// the diagram's transforms; stroke widths are scaled to match (ImageSharp strokes in device space),
 /// mirroring the Skia backend.
 /// </summary>
-sealed class ImageSharpSurface : IRenderSurface
+sealed class ImageSharpSurface(int width, int height, Rgba background) :
+    IRenderSurface
 {
-    static readonly ConcurrentDictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
+    static ConcurrentDictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
 
-    readonly Image<Rgba32> image;
-
-    public ImageSharpSurface(int width, int height, Rgba background) =>
-        image = new(width, height, ToPixel(background));
+    Image<Rgba32> image = new(width, height, ToPixel(background));
 
     public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, IsPaint paint, FillRule rule, float opacity)
     {

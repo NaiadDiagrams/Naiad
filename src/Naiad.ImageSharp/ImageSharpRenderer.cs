@@ -1,5 +1,3 @@
-using Naiad.Rendering;
-
 namespace Naiad.ImageSharp;
 
 /// <summary>

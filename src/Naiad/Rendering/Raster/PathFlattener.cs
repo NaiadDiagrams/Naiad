@@ -16,6 +16,10 @@ static class PathFlattener
     // vertex count modest.
     const double tolerance = 0.2;
 
+    // Maximum subdivision depth — a guard against pathological inputs. The iterative subdivision's work
+    // stack is depth-first, so it never holds more than this many pending halves at once.
+    const int maxSubdivision = 18;
+
     public static List<SubPath> Flatten(string? d)
     {
         var result = new List<SubPath>();
@@ -195,39 +199,73 @@ static class PathFlattener
     static Vector2 Resolve(Vector2 point, Vector2 current, bool relative) =>
         relative ? current + point : point;
 
-    static void Cubic(List<Vector2> output, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, int depth = 0)
+    // de Casteljau subdivision, iterative: subdivide until the control points sit within the flatness
+    // tolerance of the chord, then emit the endpoint. A stack-allocated, depth-first work stack replaces
+    // recursion; the right half is pushed before the left so the left is emitted first, giving the same
+    // point order (and output) as the recursive form. Sized to maxSubdivision + 2, the proven bound on
+    // how many pending halves the depth-first walk can hold at once.
+    static void Cubic(List<Vector2> output, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
     {
-        // Subdivide until the control points sit within the flatness tolerance of the chord, then emit
-        // the endpoint. The depth cap is a guard against pathological inputs.
-        if (depth >= 18 || Flat(p0, p1, p2, p3))
+        Span<CubicSegment> stack = stackalloc CubicSegment[maxSubdivision + 2];
+        var top = 0;
+        stack[top++] = new(p0, p1, p2, p3, 0);
+        while (top > 0)
         {
-            output.Add(p3);
-            return;
-        }
+            var s = stack[--top];
+            if (s.Depth >= maxSubdivision || Flat(s.P0, s.P1, s.P2, s.P3))
+            {
+                output.Add(s.P3);
+                continue;
+            }
 
-        var p01 = Mid(p0, p1);
-        var p12 = Mid(p1, p2);
-        var p23 = Mid(p2, p3);
-        var p012 = Mid(p01, p12);
-        var p123 = Mid(p12, p23);
-        var mid = Mid(p012, p123);
-        Cubic(output, p0, p01, p012, mid, depth + 1);
-        Cubic(output, mid, p123, p23, p3, depth + 1);
+            var p01 = Mid(s.P0, s.P1);
+            var p12 = Mid(s.P1, s.P2);
+            var p23 = Mid(s.P2, s.P3);
+            var p012 = Mid(p01, p12);
+            var p123 = Mid(p12, p23);
+            var mid = Mid(p012, p123);
+            stack[top++] = new(mid, p123, p23, s.P3, s.Depth + 1);
+            stack[top++] = new(s.P0, p01, p012, mid, s.Depth + 1);
+        }
     }
 
-    static void Quadratic(List<Vector2> output, Vector2 p0, Vector2 c, Vector2 p1, int depth = 0)
+    static void Quadratic(List<Vector2> output, Vector2 p0, Vector2 c, Vector2 p1)
     {
-        if (depth >= 18 || DistanceToLine(c, p0, p1) <= tolerance)
+        Span<QuadraticSegment> stack = stackalloc QuadraticSegment[maxSubdivision + 2];
+        var top = 0;
+        stack[top++] = new(p0, c, p1, 0);
+        while (top > 0)
         {
-            output.Add(p1);
-            return;
-        }
+            var s = stack[--top];
+            if (s.Depth >= maxSubdivision || DistanceToLine(s.Control, s.P0, s.P1) <= tolerance)
+            {
+                output.Add(s.P1);
+                continue;
+            }
 
-        var p0c = Mid(p0, c);
-        var cp1 = Mid(c, p1);
-        var mid = Mid(p0c, cp1);
-        Quadratic(output, p0, p0c, mid, depth + 1);
-        Quadratic(output, mid, cp1, p1, depth + 1);
+            var p0c = Mid(s.P0, s.Control);
+            var cp1 = Mid(s.Control, s.P1);
+            var mid = Mid(p0c, cp1);
+            stack[top++] = new(mid, cp1, s.P1, s.Depth + 1);
+            stack[top++] = new(s.P0, p0c, mid, s.Depth + 1);
+        }
+    }
+
+    readonly struct CubicSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, int depth)
+    {
+        public readonly Vector2 P0 = p0;
+        public readonly Vector2 P1 = p1;
+        public readonly Vector2 P2 = p2;
+        public readonly Vector2 P3 = p3;
+        public readonly int Depth = depth;
+    }
+
+    readonly struct QuadraticSegment(Vector2 p0, Vector2 control, Vector2 p1, int depth)
+    {
+        public readonly Vector2 P0 = p0;
+        public readonly Vector2 Control = control;
+        public readonly Vector2 P1 = p1;
+        public readonly int Depth = depth;
     }
 
     static bool Flat(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3) =>

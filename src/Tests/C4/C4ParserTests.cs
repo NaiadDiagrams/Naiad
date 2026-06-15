@@ -22,9 +22,9 @@ public class C4ParserTests
         var result = new C4Parser().Parse(input);
 
         await Assert.That(result.Success).IsTrue();
-        await Assert.That(result.Value.Relationships.Select(_ => _.Direction)).IsEquivalentTo(
-            new[]
-            {
+        await Assert.That(result.Value.Relationships.Select(_ => _.Direction))
+            .IsEquivalentTo(
+            [
                 C4RelationshipDirection.Default,
                 C4RelationshipDirection.Down,
                 C4RelationshipDirection.Up,
@@ -32,7 +32,7 @@ public class C4ParserTests
                 C4RelationshipDirection.Right,
                 C4RelationshipDirection.Back,
                 C4RelationshipDirection.Neighbor
-            });
+            ]);
     }
 
     [Test]

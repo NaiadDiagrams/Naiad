@@ -1,10 +1,3 @@
-using System.Collections.Concurrent;
-using System.Numerics;
-using Naiad.Rendering;
-using SkiaSharp;
-
-namespace Naiad.Skia;
-
 /// <summary>
 /// Skia-backed <see cref="IRenderSurface"/>: the shared SVG walker's fills, strokes and text paint into
 /// an <see cref="SKBitmap"/> via an <see cref="SKCanvas"/>, then <see cref="Encode"/> writes a PNG
@@ -13,10 +6,10 @@ namespace Naiad.Skia;
 /// </summary>
 sealed class SkiaSurface : IRenderSurface
 {
-    static readonly ConcurrentDictionary<(string, bool, bool), SKTypeface> typefaceCache = new();
+    static ConcurrentDictionary<(string, bool, bool), SKTypeface> typefaceCache = new();
 
-    readonly SKBitmap bitmap;
-    readonly SKCanvas canvas;
+    SKBitmap bitmap;
+    SKCanvas canvas;
 
     public SkiaSurface(int width, int height, Rgba background)
     {
