@@ -3,7 +3,7 @@ using Naiad.Models;
 public class FlowchartParserTests
 {
     [Test]
-    public void Simple_ReturnsNodes()
+    public async Task Simple_ReturnsNodes()
     {
         const string input =
             """
@@ -14,13 +14,13 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Nodes.Count, Is.EqualTo(2));
-        Assert.That(result.Value.Edges.Count, Is.EqualTo(1));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Nodes.Count).IsEqualTo(2);
+        await Assert.That(result.Value.Edges.Count).IsEqualTo(1);
     }
 
     [Test]
-    public void Direction_ParsesDirection()
+    public async Task Direction_ParsesDirection()
     {
         const string input =
             """
@@ -31,12 +31,12 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Direction, Is.EqualTo(Direction.TopToBottom));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Direction).IsEqualTo(Direction.TopToBottom);
     }
 
     [Test]
-    public void RoundedNodes_ParsesShape()
+    public async Task RoundedNodes_ParsesShape()
     {
         const string input =
             """
@@ -47,13 +47,13 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Nodes[0].Shape, Is.EqualTo(NodeShape.RoundedRectangle));
-        Assert.That(result.Value.Nodes[0].Label, Is.EqualTo("Rounded"));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Nodes[0].Shape).IsEqualTo(NodeShape.RoundedRectangle);
+        await Assert.That(result.Value.Nodes[0].Label).IsEqualTo("Rounded");
     }
 
     [Test]
-    public void Diamond_ParsesShape()
+    public async Task Diamond_ParsesShape()
     {
         const string input =
             """
@@ -64,12 +64,12 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Nodes[0].Shape, Is.EqualTo(NodeShape.Diamond));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Nodes[0].Shape).IsEqualTo(NodeShape.Diamond);
     }
 
     [Test]
-    public void Circle_ParsesShape()
+    public async Task Circle_ParsesShape()
     {
         const string input =
             """
@@ -80,12 +80,12 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Nodes[0].Shape, Is.EqualTo(NodeShape.Circle));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Nodes[0].Shape).IsEqualTo(NodeShape.Circle);
     }
 
     [Test]
-    public void ChainedNodes_CreatesMultipleEdges()
+    public async Task ChainedNodes_CreatesMultipleEdges()
     {
         const string input =
             """
@@ -96,13 +96,13 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Nodes.Count, Is.EqualTo(4));
-        Assert.That(result.Value.Edges.Count, Is.EqualTo(3));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Nodes.Count).IsEqualTo(4);
+        await Assert.That(result.Value.Edges.Count).IsEqualTo(3);
     }
 
     [Test]
-    public void DottedArrow_ParsesEdgeStyle()
+    public async Task DottedArrow_ParsesEdgeStyle()
     {
         const string input =
             """
@@ -113,12 +113,12 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Edges[0].LineStyle, Is.EqualTo(EdgeStyle.Dotted));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Edges[0].LineStyle).IsEqualTo(EdgeStyle.Dotted);
     }
 
     [Test]
-    public void ThickArrow_ParsesEdgeStyle()
+    public async Task ThickArrow_ParsesEdgeStyle()
     {
         const string input =
             """
@@ -129,7 +129,7 @@ public class FlowchartParserTests
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
 
-        Assert.That(result.Success, Is.True);
-        Assert.That(result.Value.Edges[0].LineStyle, Is.EqualTo(EdgeStyle.Thick));
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Edges[0].LineStyle).IsEqualTo(EdgeStyle.Thick);
     }
 }

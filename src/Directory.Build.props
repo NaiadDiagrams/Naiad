@@ -11,6 +11,9 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <PackageLicenseFile>OsmfEula.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <!-- Six Labors Community licence (Papyrine) for ImageSharp 4.x, consumed by its build-time
+         ValidateLicense task. Only projects that reference ImageSharp use it. -->
+    <SixLaborsLicenseKey>Id=ctm_01krfkytx8bzkq3gsjc92kfmyq;Kind=Community;ExpiryDateUtc=2026-08-11T02:51:50.6859907Z;Key=dThkxk4kvSECuuETfS2hoQMb2BsKsRSPAxKFRsvG2Gxi0smIdE8TlSezXCDmvg87+9Ry64otiBl98lhE4c6L8A==</SixLaborsLicenseKey>
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\OsmfEula.txt" Pack="true" PackagePath="" Visible="false" />

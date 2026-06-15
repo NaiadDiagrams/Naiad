@@ -2,7 +2,16 @@ namespace Naiad;
 
 public static class Mermaid
 {
-    public static string Render(string input, RenderOptions? options = null)
+    public static string Render(string input, RenderOptions? options = null) =>
+        ToXml(RenderToSvgDocument(input, options));
+
+    /// <summary>
+    /// Renders to the in-memory <see cref="SvgDocument"/> rather than serialised markup. This is the
+    /// seam the PNG render packages (Naiad.Skia, Naiad.ImageSharp) rasterize, so they share the exact
+    /// parse → layout → model pipeline that produces the SVG and differ only in how the document is
+    /// turned into pixels.
+    /// </summary>
+    internal static SvgDocument RenderToSvgDocument(string input, RenderOptions? options = null)
     {
         IconPackRegistry.MarkRendered();
         input = input.Trim();
@@ -147,7 +156,7 @@ public static class Mermaid
         return builder.ToString();
     }
 
-    static string RenderPie(string input, RenderOptions options)
+    static SvgDocument RenderPie(string input, RenderOptions options)
     {
         var parser = new PieParser();
         var result = parser.Parse(input);
@@ -159,10 +168,10 @@ public static class Mermaid
 
         var renderer = new PieRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderFlowchart(string input, RenderOptions options)
+    static SvgDocument RenderFlowchart(string input, RenderOptions options)
     {
         var parser = new FlowchartParser();
         var result = parser.Parse(input);
@@ -174,10 +183,10 @@ public static class Mermaid
 
         var renderer = new FlowchartRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderSequence(string input, RenderOptions options)
+    static SvgDocument RenderSequence(string input, RenderOptions options)
     {
         var parser = new SequenceParser();
         var result = parser.Parse(input);
@@ -189,10 +198,10 @@ public static class Mermaid
 
         var renderer = new SequenceRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderClass(string input, RenderOptions options)
+    static SvgDocument RenderClass(string input, RenderOptions options)
     {
         var parser = new ClassParser();
         var result = parser.Parse(input);
@@ -204,10 +213,10 @@ public static class Mermaid
 
         var renderer = new ClassRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderState(string input, RenderOptions options)
+    static SvgDocument RenderState(string input, RenderOptions options)
     {
         var parser = new StateParser();
         var result = parser.Parse(input);
@@ -219,10 +228,10 @@ public static class Mermaid
 
         var renderer = new StateRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderEntityRelationship(string input, RenderOptions options)
+    static SvgDocument RenderEntityRelationship(string input, RenderOptions options)
     {
         var parser = new ERParser();
         var result = parser.Parse(input);
@@ -234,10 +243,10 @@ public static class Mermaid
 
         var renderer = new ERRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderGitGraph(string input, RenderOptions options)
+    static SvgDocument RenderGitGraph(string input, RenderOptions options)
     {
         var parser = new GitGraphParser();
         var result = parser.Parse(input);
@@ -249,10 +258,10 @@ public static class Mermaid
 
         var renderer = new GitGraphRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderGantt(string input, RenderOptions options)
+    static SvgDocument RenderGantt(string input, RenderOptions options)
     {
         var parser = new GanttParser();
         var result = parser.Parse(input);
@@ -264,10 +273,10 @@ public static class Mermaid
 
         var renderer = new GanttRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderMindmap(string input, RenderOptions options)
+    static SvgDocument RenderMindmap(string input, RenderOptions options)
     {
         var parser = new MindmapParser();
         var result = parser.Parse(input);
@@ -279,10 +288,10 @@ public static class Mermaid
 
         var renderer = new MindmapRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderTimeline(string input, RenderOptions options)
+    static SvgDocument RenderTimeline(string input, RenderOptions options)
     {
         var parser = new TimelineParser();
         var result = parser.Parse(input);
@@ -294,10 +303,10 @@ public static class Mermaid
 
         var renderer = new TimelineRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderUserJourney(string input, RenderOptions options)
+    static SvgDocument RenderUserJourney(string input, RenderOptions options)
     {
         var parser = new UserJourneyParser();
         var result = parser.Parse(input);
@@ -309,10 +318,10 @@ public static class Mermaid
 
         var renderer = new UserJourneyRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderQuadrant(string input, RenderOptions options)
+    static SvgDocument RenderQuadrant(string input, RenderOptions options)
     {
         var parser = new QuadrantParser();
         var result = parser.Parse(input);
@@ -324,10 +333,10 @@ public static class Mermaid
 
         var renderer = new QuadrantRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderXYChart(string input, RenderOptions options)
+    static SvgDocument RenderXYChart(string input, RenderOptions options)
     {
         var parser = new XYChartParser();
         var result = parser.Parse(input);
@@ -339,10 +348,10 @@ public static class Mermaid
 
         var renderer = new XYChartRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderSankey(string input, RenderOptions options)
+    static SvgDocument RenderSankey(string input, RenderOptions options)
     {
         var parser = new SankeyParser();
         var result = parser.Parse(input);
@@ -354,10 +363,10 @@ public static class Mermaid
 
         var renderer = new SankeyRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderBlock(string input, RenderOptions options)
+    static SvgDocument RenderBlock(string input, RenderOptions options)
     {
         var parser = new BlockParser();
         var result = parser.Parse(input);
@@ -369,10 +378,10 @@ public static class Mermaid
 
         var renderer = new BlockRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderKanban(string input, RenderOptions options)
+    static SvgDocument RenderKanban(string input, RenderOptions options)
     {
         var parser = new KanbanParser();
         var result = parser.Parse(input);
@@ -384,10 +393,10 @@ public static class Mermaid
 
         var renderer = new KanbanRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderPacket(string input, RenderOptions options)
+    static SvgDocument RenderPacket(string input, RenderOptions options)
     {
         var parser = new PacketParser();
         var result = parser.Parse(input);
@@ -399,10 +408,10 @@ public static class Mermaid
 
         var renderer = new PacketRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderC4(string input, RenderOptions options)
+    static SvgDocument RenderC4(string input, RenderOptions options)
     {
         var parser = new C4Parser();
         var result = parser.Parse(input);
@@ -414,10 +423,10 @@ public static class Mermaid
 
         var renderer = new C4Renderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderRequirement(string input, RenderOptions options)
+    static SvgDocument RenderRequirement(string input, RenderOptions options)
     {
         var parser = new RequirementParser();
         var result = parser.Parse(input);
@@ -429,10 +438,10 @@ public static class Mermaid
 
         var renderer = new RequirementRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderArchitecture(string input, RenderOptions options)
+    static SvgDocument RenderArchitecture(string input, RenderOptions options)
     {
         var parser = new ArchitectureParser();
         var result = parser.Parse(input);
@@ -444,10 +453,10 @@ public static class Mermaid
 
         var renderer = new ArchitectureRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderRadar(string input, RenderOptions options)
+    static SvgDocument RenderRadar(string input, RenderOptions options)
     {
         var parser = new RadarParser();
         var result = parser.Parse(input);
@@ -459,10 +468,10 @@ public static class Mermaid
 
         var renderer = new RadarRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 
-    static string RenderTreemap(string input, RenderOptions options)
+    static SvgDocument RenderTreemap(string input, RenderOptions options)
     {
         var parser = new TreemapParser();
         var result = parser.Parse(input);
@@ -474,6 +483,6 @@ public static class Mermaid
 
         var renderer = new TreemapRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return svg;
     }
 }

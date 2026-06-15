@@ -4,10 +4,11 @@
 /// </summary>
 public class VerifiedFileRegenerator
 {
-    static readonly HttpClient HttpClient = new();
+    static readonly HttpClient httpClient = new();
 
+    // Run manually to regenerate all verified files from mermaid.ink.
     [Test]
-    [Explicit("Run manually to regenerate all verified files from mermaid.ink")]
+    [Explicit]
     public async Task RegenerateAllVerifiedFilesFromMermaidInk()
     {
         var testFiles = Directory.GetFiles(ProjectFiles.ProjectDirectory, "*Tests.cs", SearchOption.AllDirectories)
@@ -122,7 +123,7 @@ public class VerifiedFileRegenerator
         return result;
     }
 
-    static string? ExtractRawStringLiteral(string text)
+    static string ExtractRawStringLiteral(string text)
     {
         // Handle """ ... """ raw string literals
         var match = Regex.Match(text, """"^"""\s*\n?(.*?)\s*"""$"""", RegexOptions.Singleline);
@@ -130,10 +131,11 @@ public class VerifiedFileRegenerator
         {
             return match.Groups[1].Value;
         }
+
         return text.Trim('"');
     }
 
-    static string? ExtractInterpolatedString(InterpolatedStringExpressionSyntax interpolated) =>
+    static string ExtractInterpolatedString(InterpolatedStringExpressionSyntax interpolated) =>
         // For simple interpolated strings without expressions
         string.Concat(interpolated.Contents
             .OfType<InterpolatedStringTextSyntax>()
@@ -153,7 +155,7 @@ public class VerifiedFileRegenerator
 
         var url = $"https://mermaid.ink/svg/{urlSafeBase64}";
 
-        var response = await HttpClient.GetAsync(url);
+        var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync();

@@ -97,7 +97,7 @@ public class FlowchartTests : TestBase
     }
 
     [Test]
-    public void LeadingAndTrailingWhitespace()
+    public async Task LeadingAndTrailingWhitespace()
     {
         const string input =
             """
@@ -108,7 +108,7 @@ public class FlowchartTests : TestBase
         var expected = Mermaid.Render(input);
         var actual = Mermaid.Render("\r\n\r\n" + input + "\r\n\r\n");
 
-        Assert.That(actual, Is.EqualTo(expected));
+        await Assert.That(actual).IsEqualTo(expected);
     }
 
     [Test]
