@@ -1,0 +1,232 @@
+using System.Numerics;
+using Naiad.Rendering;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using Color = SixLabors.ImageSharp.Color;
+using IsPaint = Naiad.Rendering.Paint;
+
+namespace Naiad.ImageSharp;
+
+/// <summary>
+/// ImageSharp-backed <see cref="IRenderSurface"/>: the shared SVG walker's fills, strokes and text paint
+/// into an <see cref="Image{Rgba32}"/>, then <see cref="Encode"/> writes a PNG. Each primitive's current
+/// transform is applied through <see cref="DrawingOptions.Transform"/> so geometry and text scale with
+/// the diagram's transforms; stroke widths are scaled to match (ImageSharp strokes in device space),
+/// mirroring the Skia backend.
+/// </summary>
+sealed class ImageSharpSurface : IRenderSurface
+{
+    static readonly Dictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
+
+    readonly Image<Rgba32> image;
+
+    public ImageSharpSurface(int width, int height, Rgba background) =>
+        image = new(width, height, ToPixel(background));
+
+    public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, IsPaint paint, FillRule rule, float opacity)
+    {
+        var path = ToPath(subpaths);
+        var brush = ToBrush(paint, opacity);
+        var options = Options(transform, rule);
+        image.Mutate(context => context.Paint(options, inner => inner.Fill(brush, path)));
+    }
+
+    public void StrokePath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Rgba color, float width, IReadOnlyList<float>? dash, float opacity)
+    {
+        var path = ToPath(subpaths);
+        // ImageSharp strokes in device space, so scale the width by the transform to stay consistent
+        // with the diagram (and with the Skia backend, where the canvas matrix scales it automatically).
+        var pen = ToPen(ToColor(color.MultiplyAlpha(opacity)), width * Scale(transform), dash);
+        var options = Options(transform, FillRule.NonZero);
+        image.Mutate(context => context.Paint(options, inner => inner.Draw(pen, path)));
+    }
+
+    public void DrawText(string text, float x, float y, Matrix3x2 transform, TextStyle style)
+    {
+        var font = ResolveFont(style);
+        var metrics = font.FontMetrics;
+        var unitScale = font.Size / metrics.UnitsPerEm;
+        var ascent = metrics.HorizontalMetrics.Ascender * unitScale;
+        var descent = metrics.HorizontalMetrics.Descender * unitScale;
+
+        var advance = TextMeasurer.MeasureAdvance(text, new TextOptions(font));
+        var penX = style.Anchor switch
+        {
+            TextAnchorKind.Middle => x - advance.Width / 2,
+            TextAnchorKind.End => x - advance.Width,
+            _ => x,
+        };
+
+        // ImageSharp lays text out from the top of the line box; convert the requested baseline into
+        // that top. Descender is negative, so (ascent - descent) is the full line height.
+        var top = style.Baseline switch
+        {
+            TextBaselineKind.Middle => y - (ascent - descent) / 2,
+            TextBaselineKind.Hanging => y,
+            _ => y - ascent,
+        };
+
+        var textOptions = new RichTextOptions(font)
+        {
+            Origin = new(penX, top),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+        };
+        var brush = new SolidBrush(ToColor(style.Color.MultiplyAlpha(style.Opacity)));
+        var options = Options(transform, FillRule.NonZero);
+        image.Mutate(context => context.Paint(options, inner => inner.DrawText(textOptions, text, brush, null)));
+    }
+
+    public void Encode(Stream stream) =>
+        image.SaveAsPng(stream, new PngEncoder {CompressionLevel = PngCompressionLevel.BestCompression});
+
+    static DrawingOptions Options(Matrix3x2 transform, FillRule rule) =>
+        new()
+        {
+            Transform = new(transform),
+            GraphicsOptions = new() {Antialias = true},
+            ShapeOptions = new() {IntersectionRule = rule == FillRule.EvenOdd ? IntersectionRule.EvenOdd : IntersectionRule.NonZero},
+        };
+
+    // Uniform scale factor of the affine transform — used to keep stroke widths proportional.
+    static float Scale(Matrix3x2 m) =>
+        (float)Math.Sqrt(Math.Abs(m.M11 * m.M22 - m.M12 * m.M21));
+
+    static IPath ToPath(IReadOnlyList<SubPath> subpaths)
+    {
+        var builder = new PathBuilder();
+        foreach (var subpath in subpaths)
+        {
+            if (subpath.Points.Count == 0)
+            {
+                continue;
+            }
+
+            builder.StartFigure();
+            builder.AddLines(subpath.Points.Select(_ => new PointF(_.X, _.Y)).ToArray());
+            if (subpath.Closed)
+            {
+                builder.CloseFigure();
+            }
+        }
+
+        return builder.Build();
+    }
+
+    static Brush ToBrush(IsPaint paint, float opacity)
+    {
+        switch (paint)
+        {
+            case SolidPaint solid:
+                return new SolidBrush(ToColor(solid.Color.MultiplyAlpha(opacity)));
+            case LinearGradientPaint linear:
+                return new LinearGradientBrush(
+                    new(linear.Start.X, linear.Start.Y),
+                    new(linear.End.X, linear.End.Y),
+                    GradientRepetitionMode.None,
+                    Stops(linear.Stops, opacity));
+            case RadialGradientPaint radial:
+                return new RadialGradientBrush(
+                    new(radial.Center.X, radial.Center.Y),
+                    radial.Radius,
+                    GradientRepetitionMode.None,
+                    Stops(radial.Stops, opacity));
+            default:
+                return new SolidBrush(Color.Transparent);
+        }
+    }
+
+    static ColorStop[] Stops(IReadOnlyList<GradientStop> stops, float opacity)
+    {
+        var result = new ColorStop[stops.Count];
+        for (var i = 0; i < stops.Count; i++)
+        {
+            result[i] = new(stops[i].Offset, ToColor(stops[i].Color.MultiplyAlpha(opacity)));
+        }
+
+        return result;
+    }
+
+    static Pen ToPen(Color color, float width, IReadOnlyList<float>? dash)
+    {
+        if (dash is {Count: > 0})
+        {
+            // ImageSharp's stroke pattern is expressed in multiples of the pen width.
+            var pattern = new float[dash.Count];
+            for (var i = 0; i < dash.Count; i++)
+            {
+                pattern[i] = width > 0 ? dash[i] / width : dash[i];
+            }
+
+            return new PatternPen(color, width, pattern);
+        }
+
+        return new SolidPen(color, width);
+    }
+
+    static Font ResolveFont(TextStyle style)
+    {
+        var family = ResolveFamily(style.FontFamilies);
+        var fontStyle = (style.Bold, style.Italic) switch
+        {
+            (true, true) => FontStyle.BoldItalic,
+            (true, false) => FontStyle.Bold,
+            (false, true) => FontStyle.Italic,
+            _ => FontStyle.Regular,
+        };
+        return family.CreateFont(style.FontSize, fontStyle);
+    }
+
+    static FontFamily ResolveFamily(IReadOnlyList<string> families)
+    {
+        var key = families.Count > 0 ? families[0] : "sans-serif";
+        if (familyCache.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
+
+        FontFamily resolved = default;
+        var found = false;
+        foreach (var name in families)
+        {
+            if (SystemFonts.TryGet(name, out resolved))
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            foreach (var fallback in SystemFonts.Families)
+            {
+                resolved = fallback;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            throw new InvalidOperationException(
+                "No system fonts are installed for the ImageSharp render backend to draw text. Install a font, or use the Skia backend.");
+        }
+
+        familyCache[key] = resolved;
+        return resolved;
+    }
+
+    static Color ToColor(Rgba color) =>
+        Color.FromPixel(ToPixel(color));
+
+    static Rgba32 ToPixel(Rgba color) =>
+        new(color.R, color.G, color.B, color.A);
+
+    public void Dispose() =>
+        image.Dispose();
+}

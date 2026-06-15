@@ -1,0 +1,226 @@
+using System.Numerics;
+using Naiad.Rendering;
+using SkiaSharp;
+
+namespace Naiad.Skia;
+
+/// <summary>
+/// Skia-backed <see cref="IRenderSurface"/>: the shared SVG walker's fills, strokes and text paint into
+/// an <see cref="SKBitmap"/> via an <see cref="SKCanvas"/>, then <see cref="Encode"/> writes a PNG
+/// through Skia's encoder. The current transform handed to each primitive is applied as the canvas
+/// matrix, so stroke widths and font sizes scale correctly with the diagram's transforms.
+/// </summary>
+sealed class SkiaSurface : IRenderSurface
+{
+    static readonly Dictionary<(string, bool, bool), SKTypeface> typefaceCache = new();
+
+    readonly SKBitmap bitmap;
+    readonly SKCanvas canvas;
+
+    public SkiaSurface(int width, int height, Rgba background)
+    {
+        bitmap = new(width, height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
+        canvas = new(bitmap);
+        canvas.Clear(ToColor(background));
+    }
+
+    public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
+    {
+        using var path = ToPath(subpaths);
+        path.FillType = rule == FillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding;
+        using var skPaint = new SKPaint
+        {
+            IsAntialias = true,
+            Style = SKPaintStyle.Fill,
+        };
+        ApplyPaint(skPaint, paint, opacity);
+
+        canvas.Save();
+        canvas.SetMatrix(ToMatrix(transform));
+        canvas.DrawPath(path, skPaint);
+        canvas.Restore();
+    }
+
+    public void StrokePath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Rgba color, float width, IReadOnlyList<float>? dash, float opacity)
+    {
+        using var path = ToPath(subpaths);
+        using var skPaint = new SKPaint
+        {
+            IsAntialias = true,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = width,
+            StrokeCap = SKStrokeCap.Round,
+            StrokeJoin = SKStrokeJoin.Round,
+            Color = ToColor(color.MultiplyAlpha(opacity)),
+        };
+
+        if (dash is {Count: > 0})
+        {
+            skPaint.PathEffect = SKPathEffect.CreateDash([.. dash], 0);
+        }
+
+        canvas.Save();
+        canvas.SetMatrix(ToMatrix(transform));
+        canvas.DrawPath(path, skPaint);
+        canvas.Restore();
+        skPaint.PathEffect?.Dispose();
+    }
+
+    public void DrawText(string text, float x, float y, Matrix3x2 transform, TextStyle style)
+    {
+        var typeface = ResolveTypeface(style);
+        using var font = new SKFont(typeface, style.FontSize);
+        using var skPaint = new SKPaint
+        {
+            IsAntialias = true,
+            Color = ToColor(style.Color.MultiplyAlpha(style.Opacity)),
+        };
+
+        var width = font.MeasureText(text);
+        var penX = style.Anchor switch
+        {
+            TextAnchorKind.Middle => x - width / 2,
+            TextAnchorKind.End => x - width,
+            _ => x,
+        };
+
+        var metrics = font.Metrics;
+        var baseline = style.Baseline switch
+        {
+            TextBaselineKind.Middle => y - (metrics.Ascent + metrics.Descent) / 2,
+            TextBaselineKind.Hanging => y - metrics.Ascent,
+            _ => y,
+        };
+
+        canvas.Save();
+        canvas.SetMatrix(ToMatrix(transform));
+        canvas.DrawText(text, penX, baseline, font, skPaint);
+        canvas.Restore();
+    }
+
+    public void Encode(Stream stream)
+    {
+        using var image = SKImage.FromBitmap(bitmap);
+        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        data.SaveTo(stream);
+    }
+
+    static void ApplyPaint(SKPaint skPaint, Paint paint, float opacity)
+    {
+        switch (paint)
+        {
+            case SolidPaint solid:
+                skPaint.Color = ToColor(solid.Color.MultiplyAlpha(opacity));
+                break;
+            case LinearGradientPaint linear:
+                skPaint.Shader = SKShader.CreateLinearGradient(
+                    new(linear.Start.X, linear.Start.Y),
+                    new(linear.End.X, linear.End.Y),
+                    Colors(linear.Stops, opacity),
+                    Offsets(linear.Stops),
+                    SKShaderTileMode.Clamp);
+                break;
+            case RadialGradientPaint radial:
+                skPaint.Shader = SKShader.CreateRadialGradient(
+                    new(radial.Center.X, radial.Center.Y),
+                    radial.Radius,
+                    Colors(radial.Stops, opacity),
+                    Offsets(radial.Stops),
+                    SKShaderTileMode.Clamp);
+                break;
+        }
+    }
+
+    static SKColor[] Colors(IReadOnlyList<GradientStop> stops, float opacity)
+    {
+        var colors = new SKColor[stops.Count];
+        for (var i = 0; i < stops.Count; i++)
+        {
+            colors[i] = ToColor(stops[i].Color.MultiplyAlpha(opacity));
+        }
+
+        return colors;
+    }
+
+    static float[] Offsets(IReadOnlyList<GradientStop> stops)
+    {
+        var offsets = new float[stops.Count];
+        for (var i = 0; i < stops.Count; i++)
+        {
+            offsets[i] = stops[i].Offset;
+        }
+
+        return offsets;
+    }
+
+    static SKPath ToPath(IReadOnlyList<SubPath> subpaths)
+    {
+        var path = new SKPath();
+        foreach (var subpath in subpaths)
+        {
+            var points = subpath.Points;
+            if (points.Count == 0)
+            {
+                continue;
+            }
+
+            path.MoveTo(points[0].X, points[0].Y);
+            for (var i = 1; i < points.Count; i++)
+            {
+                path.LineTo(points[i].X, points[i].Y);
+            }
+
+            if (subpath.Closed)
+            {
+                path.Close();
+            }
+        }
+
+        return path;
+    }
+
+    static SKTypeface ResolveTypeface(TextStyle style)
+    {
+        var family = style.FontFamilies.Count > 0 ? style.FontFamilies[0] : "sans-serif";
+        var key = (family, style.Bold, style.Italic);
+        if (typefaceCache.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
+
+        var fontStyle = new SKFontStyle(
+            style.Bold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal,
+            SKFontStyleWidth.Normal,
+            style.Italic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+
+        // Try each requested family in order; take the first that resolves to a real match, otherwise
+        // let Skia fall back to its default for the first name so something always renders.
+        SKTypeface? resolved = null;
+        foreach (var name in style.FontFamilies)
+        {
+            var candidate = SKTypeface.FromFamilyName(name, fontStyle);
+            if (candidate != null &&
+                string.Equals(candidate.FamilyName, name, StringComparison.OrdinalIgnoreCase))
+            {
+                resolved = candidate;
+                break;
+            }
+        }
+
+        resolved ??= SKTypeface.FromFamilyName(family, fontStyle) ?? SKTypeface.Default;
+        typefaceCache[key] = resolved;
+        return resolved;
+    }
+
+    static SKMatrix ToMatrix(Matrix3x2 m) =>
+        new(m.M11, m.M21, m.M31, m.M12, m.M22, m.M32, 0, 0, 1);
+
+    static SKColor ToColor(Rgba color) =>
+        new(color.R, color.G, color.B, color.A);
+
+    public void Dispose()
+    {
+        canvas.Dispose();
+        bitmap.Dispose();
+    }
+}

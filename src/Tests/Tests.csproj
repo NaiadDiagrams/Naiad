@@ -23,6 +23,8 @@
     <PackageReference Include="Verify" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <ProjectReference Include="..\Naiad\Naiad.csproj" />
+    <ProjectReference Include="..\Naiad.Skia\Naiad.Skia.csproj" />
+    <ProjectReference Include="..\Naiad.ImageSharp\Naiad.ImageSharp.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
   </ItemGroup>
 

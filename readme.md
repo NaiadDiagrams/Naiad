@@ -5,6 +5,8 @@
 
 A .NET library for rendering [Mermaid](https://mermaid.js.org/) diagrams to SVG. No browser or JavaScript runtime required.
 
+PNG output is available via two optional companion packages — [`Naiad.Skia`](#png-output) (SkiaSharp) and [`Naiad.ImageSharp`](#png-output) (SixLabors.ImageSharp).
+
 
 ## Open Source Maintenance Fee
 
@@ -43,6 +45,48 @@ var svg = Mermaid.Render(
         FontFamily = "Arial, sans-serif"
     });
 ```
+
+
+## PNG output
+
+The core `Naiad` package renders SVG only and has no third-party dependencies. To rasterize a diagram to PNG, add one of the two backend packages. Both drive the exact same parse → layout → style pipeline that produces the SVG, and share all of the SVG-to-pixels code; they differ only in the rasterizer and font engine they use.
+
+| Package | Rasterizer | When to choose |
+| --- | --- | --- |
+| [`Naiad.Skia`](https://nuget.org/packages/Naiad.Skia/) | [SkiaSharp](https://github.com/mono/SkiaSharp) | Native Skia rendering; bundled native binaries. |
+| [`Naiad.ImageSharp`](https://nuget.org/packages/Naiad.ImageSharp/) | [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp) | Fully managed, cross-platform; uses installed system fonts for text. Depends on ImageSharp under the [Six Labors Split License](https://github.com/SixLabors/ImageSharp/blob/main/LICENSE). |
+
+```cs
+// Naiad.Skia
+using Naiad.Skia;
+
+byte[] png = SkiaRenderer.RenderPng(input);
+SkiaRenderer.RenderPng(input, "diagram.png");
+
+// Naiad.ImageSharp
+using Naiad.ImageSharp;
+
+byte[] png = ImageSharpRenderer.RenderPng(input);
+ImageSharpRenderer.RenderPng(input, "diagram.png");
+```
+
+Both renderers accept the same `RenderOptions` as `Mermaid.Render`, plus a `Png` section controlling rasterization:
+
+```cs
+SkiaRenderer.RenderPng(
+    input,
+    "diagram.png",
+    new RenderOptions
+    {
+        Png =
+        {
+            Scale = 2,            // 2x device-pixel scale for high-DPI output
+            Background = "white"  // any CSS colour, or "transparent"
+        }
+    });
+```
+
+`RenderPng` also has an overload that writes to a `Stream`.
 
 
 ### Icon packs

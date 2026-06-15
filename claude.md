@@ -30,7 +30,9 @@ dotnet test src --configuration Release --filter "FullyQualifiedName~PngRegenera
 - **Model** (`DiagramBase`): Domain objects. `GraphDiagramBase` extends this for node/edge diagrams (Flowchart, Class, ER, State, etc.) with `Node`, `Edge`, `Subgraph`.
 - **Renderer** (`IDiagramRenderer<TModel>`): Converts model to `SvgDocument` using `SvgBuilder` fluent API.
 
-**Entry point:** `Mermaid.Render(input, options?)` in `src/Naiad/Mermaid.cs` — auto-detects diagram type from first line, dispatches to the appropriate parser+renderer pair.
+**Entry point:** `Mermaid.Render(input, options?)` in `src/Naiad/Mermaid.cs` — auto-detects diagram type from first line, dispatches to the appropriate parser+renderer pair. `Mermaid.RenderToSvgDocument(...)` (internal) returns the `SvgDocument` model instead of serialised markup, and is the seam the PNG backends rasterize.
+
+**PNG rendering:** Two optional packages render to PNG: `Naiad.Skia` (SkiaSharp) and `Naiad.ImageSharp` (SixLabors.ImageSharp). Both share one pipeline in `src/Naiad/Rendering/Raster/`: `SvgRasterizer` walks an `SvgDocument` (resolving the CSS cascade via `Stylesheet`/`ComputedStyle`, composing transforms, flattening path/shape geometry to polyline `SubPath`s with `PathFlattener`, drawing markers, and laying out `<text>`/`<foreignObject>` labels) and paints into an internal `IRenderSurface`. Each backend is just a thin `IRenderSurface` over its rasterizer + a public `SkiaRenderer`/`ImageSharpRenderer` `RenderPng(...)` facade. The seam types are `internal`, exposed to the backends (and tests) via `InternalsVisibleTo`; all three assemblies sign with `src/key.snk`. There is intentionally no built-in (dependency-free) rasterizer. Rasterization is controlled by `RenderOptions.Png` (`Scale`, `Background`).
 
 **Layout engine:** `DagreLayoutEngine` in `src/Naiad/Layout/` implements Sugiyama-style graph layout (used by Flowchart and similar graph-based diagrams).
 

@@ -13,7 +13,6 @@ public static class SvgRenderer
 {
     static readonly XNamespace SvgNs = "http://www.w3.org/2000/svg";
 
-    // Matches DeviceScaleFactor=2 used by the previous Playwright screenshots.
     const float Scale = 2f;
 
     public static byte[] RenderToPng(string svg)
