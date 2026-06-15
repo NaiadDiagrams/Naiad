@@ -40,7 +40,7 @@ public class SvgDocument
             builder.Append($" aria-roledescription='{AriaRoledescription}'");
         }
 
-        builder.Append(" xmlns:xlink='http://www.w3.org/1999/xlink'>");
+        builder.Append('>');
 
         // Font Awesome import
         if (!string.IsNullOrEmpty(FontAwesomeImport))

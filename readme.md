@@ -125,8 +125,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 108.5 88"
   style="max-width: 108.5px;"
-  role="graphics-document document"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
+  role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <style>
@@ -260,7 +259,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L140' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Awesome `@import` is gone:
@@ -274,8 +273,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 108.5 88"
   style="max-width: 108.5px;"
-  role="graphics-document document"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
+  role="graphics-document document">
   <style>
 #naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
 #naiad .marker{fill:#333333;stroke:#333333;}
@@ -400,7 +398,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L131' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L130' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
