@@ -57,6 +57,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Build SVG
         var builder = new SvgBuilder()
+            .Options(options)
             .Size(layoutResult.Width, layoutResult.Height)
             .Padding(options.Padding)
             .AddMermaidArrowMarker()
@@ -141,12 +142,14 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Render label with icon support
         var label = node.Label ?? node.Id;
         var htmlLabel = ConvertIconsToHtml(label);
+        var (plainText, _) = AnalyzeLabel(label);
 
-        builder.AddForeignObject(
+        builder.AddLabel(
             x, y,
             node.Width,
             node.Height,
             htmlLabel,
+            plainText,
             className: "nodeLabel");
     }
 
@@ -212,11 +215,12 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 fill: labelBackground, stroke: "none",
                 cssClass: "edgeLabel");
 
-            builder.AddForeignObject(
+            builder.AddLabel(
                 labelX - labelWidth / 2,
                 labelY - labelHeight / 2,
                 labelWidth, labelHeight,
                 $"<p>{WebUtility.HtmlEncode(edge.Label)}</p>",
+                edge.Label,
                 className: "edgeLabel");
         }
     }

@@ -51,7 +51,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         width += options.Padding * 2;
         height += options.Padding * 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder().Options(options).Size(width, height);
 
         // Draw connections first (behind nodes)
         DrawConnections(builder, model.Root);
@@ -275,8 +275,9 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             return;
         }
 
-        // FontAwesome class string, e.g. "fa fa-book"
-        builder.AddForeignObject(x, y, size, size, $"<i class=\"{icon}\"></i>");
+        // FontAwesome class string, e.g. "fa fa-book". With HTML disabled there is no web font
+        // to draw the glyph, so the icon (which carries no text) is dropped.
+        builder.AddLabel(x, y, size, size, $"<i class=\"{icon}\"></i>", "");
     }
 
     static void DrawHexagon(SvgBuilder builder, double cx, double cy, double width, double height,

@@ -140,8 +140,15 @@ public static class Mermaid
         return result;
     }
 
-    static string ToXml(SvgDocument svg)
+    static string ToXml(SvgDocument svg, RenderOptions options)
     {
+        if (!options.AllowHtmlElements)
+        {
+            // The Font Awesome @import is the only HTML (xhtml-namespaced) markup not produced
+            // through the label seam, so drop it here when HTML output is disabled.
+            svg.FontAwesomeImport = null;
+        }
+
         var builder = new StringBuilder();
         svg.ToXml(builder);
         return builder.ToString();
@@ -159,7 +166,7 @@ public static class Mermaid
 
         var renderer = new PieRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderFlowchart(string input, RenderOptions options)
@@ -174,7 +181,7 @@ public static class Mermaid
 
         var renderer = new FlowchartRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderSequence(string input, RenderOptions options)
@@ -189,7 +196,7 @@ public static class Mermaid
 
         var renderer = new SequenceRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderClass(string input, RenderOptions options)
@@ -204,7 +211,7 @@ public static class Mermaid
 
         var renderer = new ClassRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderState(string input, RenderOptions options)
@@ -219,7 +226,7 @@ public static class Mermaid
 
         var renderer = new StateRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderEntityRelationship(string input, RenderOptions options)
@@ -234,7 +241,7 @@ public static class Mermaid
 
         var renderer = new ERRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderGitGraph(string input, RenderOptions options)
@@ -249,7 +256,7 @@ public static class Mermaid
 
         var renderer = new GitGraphRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderGantt(string input, RenderOptions options)
@@ -264,7 +271,7 @@ public static class Mermaid
 
         var renderer = new GanttRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderMindmap(string input, RenderOptions options)
@@ -279,7 +286,7 @@ public static class Mermaid
 
         var renderer = new MindmapRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderTimeline(string input, RenderOptions options)
@@ -294,7 +301,7 @@ public static class Mermaid
 
         var renderer = new TimelineRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderUserJourney(string input, RenderOptions options)
@@ -309,7 +316,7 @@ public static class Mermaid
 
         var renderer = new UserJourneyRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderQuadrant(string input, RenderOptions options)
@@ -324,7 +331,7 @@ public static class Mermaid
 
         var renderer = new QuadrantRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderXYChart(string input, RenderOptions options)
@@ -339,7 +346,7 @@ public static class Mermaid
 
         var renderer = new XYChartRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderSankey(string input, RenderOptions options)
@@ -354,7 +361,7 @@ public static class Mermaid
 
         var renderer = new SankeyRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderBlock(string input, RenderOptions options)
@@ -369,7 +376,7 @@ public static class Mermaid
 
         var renderer = new BlockRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderKanban(string input, RenderOptions options)
@@ -384,7 +391,7 @@ public static class Mermaid
 
         var renderer = new KanbanRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderPacket(string input, RenderOptions options)
@@ -399,7 +406,7 @@ public static class Mermaid
 
         var renderer = new PacketRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderC4(string input, RenderOptions options)
@@ -414,7 +421,7 @@ public static class Mermaid
 
         var renderer = new C4Renderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderRequirement(string input, RenderOptions options)
@@ -429,7 +436,7 @@ public static class Mermaid
 
         var renderer = new RequirementRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderArchitecture(string input, RenderOptions options)
@@ -444,7 +451,7 @@ public static class Mermaid
 
         var renderer = new ArchitectureRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderRadar(string input, RenderOptions options)
@@ -459,7 +466,7 @@ public static class Mermaid
 
         var renderer = new RadarRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 
     static string RenderTreemap(string input, RenderOptions options)
@@ -474,6 +481,6 @@ public static class Mermaid
 
         var renderer = new TreemapRenderer();
         var svg = renderer.Render(result.Value, options);
-        return ToXml(svg);
+        return ToXml(svg, options);
     }
 }
