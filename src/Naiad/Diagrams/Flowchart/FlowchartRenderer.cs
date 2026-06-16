@@ -290,23 +290,30 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var prefix = token[..colon];
         var name = token[(colon + 1)..];
 
-        // FontAwesome: fa/fab/fas/far + fa-name
+        // FontAwesome: fa/fab/fas/far + fa-name. Prefer registered geometry — inline SVG the PNG
+        // rasterizer can actually draw — and fall back to the webfont <i> (which only resolves in a
+        // browser with the Font Awesome CSS) when no matching pack is registered.
         if (prefix is "fa" or "fab" or "fas" or "far" &&
             name.StartsWith("fa-", StringComparison.Ordinal))
         {
-            return $"<i class='{prefix} {name}'></i>";
+            return IconPackRegistry.Resolve(token) is { } faIcon
+                ? InlineIconSvg(faIcon)
+                : $"<i class='{prefix} {name}'></i>";
         }
 
         // Registered iconify pack icon, rendered as inline SVG sized to the text.
         if (IconPackRegistry.Resolve(token) is { } icon)
         {
-            return string.Create(
-                CultureInfo.InvariantCulture,
-                $"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {icon.Width:0.##} {icon.Height:0.##}' style='width:1em;height:1em;vertical-align:-0.125em'>{icon.Body}</svg>");
+            return InlineIconSvg(icon);
         }
 
         return null;
     }
+
+    static string InlineIconSvg(IconPackRegistry.PackIcon icon) =>
+        string.Create(
+            CultureInfo.InvariantCulture,
+            $"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {icon.Width:0.##} {icon.Height:0.##}' style='width:1em;height:1em;vertical-align:-0.125em'>{icon.Body}</svg>");
 
     static Size MeasureText(CharSpan text, double fontSize)
     {

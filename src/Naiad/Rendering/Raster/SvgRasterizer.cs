@@ -168,7 +168,8 @@ static class SvgRasterizer
         void DrawForeignObject(SvgForeignObject foreignObject, Matrix3x2 ctm, ComputedStyle style, float opacity)
         {
             var lines = HtmlText.ExtractLines(foreignObject.HtmlContent);
-            if (lines.Count == 0)
+            var icons = ExtractIcons(foreignObject.HtmlContent);
+            if (lines.Count == 0 && icons.Count == 0)
             {
                 return;
             }
@@ -178,12 +179,92 @@ static class SvgRasterizer
 
             var centerX = ToF(foreignObject.X + foreignObject.Width / 2);
             var centerY = ToF(foreignObject.Y + foreignObject.Height / 2);
+
+            // Icon-bearing labels (e.g. flowchart "fa:fa-car Car") carry inline <svg> the plain-text path
+            // would discard. Lay them out as a single centred row: each icon followed by the text.
+            if (icons.Count > 0)
+            {
+                var text = string.Join(' ', lines);
+                var iconSize = textStyle.FontSize;
+                var gap = iconSize * 0.25f;
+                var textWidth = text.Length == 0 ? 0 : text.Length * textStyle.FontSize * 0.55f;
+                var totalWidth = icons.Count * (iconSize + gap) + textWidth;
+                var x = centerX - totalWidth / 2;
+
+                foreach (var icon in icons)
+                {
+                    DrawIcon(icon, x, centerY - iconSize / 2, iconSize, ctm, style, opacity);
+                    x += iconSize + gap;
+                }
+
+                if (text.Length > 0)
+                {
+                    surface.DrawText(text, x, centerY, ctm, textStyle with {Anchor = TextAnchorKind.Start});
+                }
+
+                return;
+            }
+
             var lineHeight = textStyle.FontSize * 1.2f;
             var top = centerY - (lines.Count - 1) * lineHeight / 2;
             for (var i = 0; i < lines.Count; i++)
             {
                 surface.DrawText(lines[i], centerX, top + i * lineHeight, ctm, textStyle);
             }
+        }
+
+        // Scales the icon's viewBox into a size×size box at (x, y) in user space, then renders its body
+        // through the shared inline-SVG walker (so currentColor resolves to the label colour).
+        void DrawIcon(XElement svg, float x, float y, float size, Matrix3x2 ctm, ComputedStyle style, float opacity)
+        {
+            var (width, height) = IconViewBox(svg);
+            if (width <= 0 || height <= 0)
+            {
+                return;
+            }
+
+            var iconTransform = Matrix3x2.CreateScale(size / (float)width, size / (float)height) *
+                                Matrix3x2.CreateTranslation(x, y) *
+                                ctm;
+            WalkXml(svg, style, iconTransform, opacity);
+        }
+
+        // Inline <svg> icons embedded in a foreignObject label (only present for icon tokens, so the
+        // parse is guarded by a cheap substring check to keep plain-text labels allocation-free).
+        static List<XElement> ExtractIcons(string html)
+        {
+            if (!html.Contains("<svg", StringComparison.Ordinal))
+            {
+                return [];
+            }
+
+            try
+            {
+                return XDocument.Parse(html)
+                    .Descendants()
+                    .Where(_ => _.Name.LocalName == "svg")
+                    .ToList();
+            }
+            catch (XmlException)
+            {
+                return [];
+            }
+        }
+
+        static (double Width, double Height) IconViewBox(XElement svg)
+        {
+            if ((string?)svg.Attribute("viewBox") is { } viewBox)
+            {
+                var parts = viewBox.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 4 &&
+                    double.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out var width) &&
+                    double.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out var height))
+                {
+                    return (width, height);
+                }
+            }
+
+            return (16, 16);
         }
 
         // Renders inline SVG markup (an iconify icon body wrapped in a styled <g>). There's no CSS to

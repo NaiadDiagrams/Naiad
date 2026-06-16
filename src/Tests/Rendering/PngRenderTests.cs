@@ -66,6 +66,31 @@ public class PngRenderTests
             commit
         """;
 
+    // Inline-SVG icons embedded in foreignObject labels — the rasterizer must pull them out of the
+    // label HTML and draw them next to the text rather than dropping them with the other tags.
+    const string flowchartIcons =
+        """
+        flowchart LR
+         A[sample:box Storage] --> B[sample:ring Cache]
+        """;
+
+    const string iconPack =
+        """
+        {
+          "prefix": "sample",
+          "width": 24,
+          "height": 24,
+          "icons": {
+            "box": {"body": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"3\" fill=\"currentColor\"/>"},
+            "ring": {"body": "<circle cx=\"12\" cy=\"12\" r=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>"}
+          }
+        }
+        """;
+
+    // Icon packs are process-global and frozen after the first render, so reset before each test.
+    [Before(Test)]
+    public void ResetIconPacks() => IconPackRegistry.Reset();
+
     [Test]
     public Task SkiaPie() => VerifyPng(SkiaRenderer.RenderPng(pie, HighDpi));
 
@@ -101,6 +126,26 @@ public class PngRenderTests
 
     [Test]
     public Task ImageSharpGitGraph() => VerifyPng(ImageSharpRenderer.RenderPng(gitGraph, HighDpi));
+
+    [Test]
+    public Task SkiaFlowchartIcons()
+    {
+        LoadIconPack();
+        return VerifyPng(SkiaRenderer.RenderPng(flowchartIcons, HighDpi));
+    }
+
+    [Test]
+    public Task ImageSharpFlowchartIcons()
+    {
+        LoadIconPack();
+        return VerifyPng(ImageSharpRenderer.RenderPng(flowchartIcons, HighDpi));
+    }
+
+    static void LoadIconPack()
+    {
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(iconPack));
+        IconPack.Load(stream);
+    }
 
     [Test]
     public async Task ScaleEnlargesOutput()

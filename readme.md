@@ -454,7 +454,32 @@ Mermaid.Render(
 
 Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.
 
-[FontAwesome](https://fontawesome.com) icons also work in flowcharts (`fa:fa-name`) and mindmaps (`::icon(fa fa-name)`) without loading a pack.
+Icons also rasterize to [PNG](#png-output). Iconify pack icons are inline SVG, so they render identically in SVG and PNG. [FontAwesome](https://fontawesome.com) icons (`fa:fa-name` in flowcharts, `::icon(fa fa-name)` in mindmaps) resolve through the FontAwesome webfont in SVG without a pack; PNG has no webfont, so a `fa:` icon is drawn there only when a pack registered under the `fa` prefix supplies its geometry (an icon keyed `fa-car`, `fa-bell`, …), and is otherwise omitted:
+
+<!-- snippet: IconsInPng -->
+<a id='snippet-IconsInPng'></a>
+```cs
+// Load packs up front, before the first render.
+IconPack.Load("logos.json");
+IconPack.Load("fontawesome.json");
+
+// Iconify pack icons are inline SVG, so they rasterize to PNG just like the rest of the diagram.
+var withIconifyIcon = SkiaRenderer.RenderPng(
+    """
+    flowchart LR
+        A[logos:redis Cache] --> B[logos:postgresql DB]
+    """);
+
+// FontAwesome glyphs have no geometry of their own, so a fa: icon only appears in PNG when a
+// pack registered under the "fa" prefix supplies it (icons keyed fa-bell, fa-car, ...).
+var withFontAwesomeIcon = SkiaRenderer.RenderPng(
+    """
+    flowchart LR
+        A[fa:fa-bell Alerts]
+    """);
+```
+<sup><a href='/src/Tests/Snippets.cs#L104-L123' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconsInPng' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 ## Supported Diagram Types
