@@ -98,4 +98,29 @@ static class Snippets
             """);
         // end-snippet
     }
+
+    public static void IconsInPng()
+    {
+        // begin-snippet: IconsInPng
+        // Load packs up front, before the first render.
+        IconPack.Load("logos.json");
+        IconPack.Load("fontawesome.json");
+
+        // Iconify pack icons are inline SVG, so they rasterize to PNG just like the rest of the diagram.
+        var withIconifyIcon = SkiaRenderer.RenderPng(
+            """
+            flowchart LR
+                A[logos:redis Cache] --> B[logos:postgresql DB]
+            """);
+
+        // FontAwesome glyphs have no geometry of their own, so a fa: icon only appears in PNG when a
+        // pack registered under the "fa" prefix supplies it (icons keyed fa-bell, fa-car, ...).
+        var withFontAwesomeIcon = SkiaRenderer.RenderPng(
+            """
+            flowchart LR
+                A[fa:fa-bell Alerts]
+            """);
+        // end-snippet
+        Console.WriteLine(withIconifyIcon.Length + withFontAwesomeIcon.Length);
+    }
 }

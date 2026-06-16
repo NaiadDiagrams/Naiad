@@ -57,6 +57,41 @@ public class FlowchartTests : TestBase
     }
 
     [Test]
+    public async Task FontAwesomeWebfontWithoutPack()
+    {
+        // With no pack registered a fa: token falls back to the FontAwesome webfont <i>, which only
+        // resolves in a browser with the Font Awesome CSS (and so is blank in PNG output).
+        var svg = Mermaid.Render(
+            """
+            flowchart LR
+                A[fa:fa-car Car]
+            """);
+
+        await Assert.That(svg).Contains("<i class='fa fa-car'>");
+    }
+
+    [Test]
+    public async Task FontAwesomeResolvesRegisteredPack()
+    {
+        // A pack registered under the "fa" prefix supplies real geometry, so the token becomes inline
+        // SVG (which the PNG rasterizer can draw) instead of the webfont <i>.
+        const string pack =
+            """
+            {"prefix":"fa","width":24,"height":24,"icons":{"fa-car":{"body":"<path d=\"M4 4h16v16H4z\" fill=\"currentColor\"/>"}}}
+            """;
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(pack));
+        IconPack.Load(stream);
+
+        var svg = Mermaid.Render(
+            """
+            flowchart LR
+                A[fa:fa-car Car]
+            """);
+
+        await Assert.That(svg).Contains("M4 4h16v16H4z");
+    }
+
+    [Test]
     public Task Shapes()
     {
         const string input =
