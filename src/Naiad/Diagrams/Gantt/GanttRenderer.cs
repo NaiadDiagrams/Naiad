@@ -272,7 +272,11 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
     static List<GanttTask> ComputeTaskDates(GanttModel model)
     {
         var allTasks = model.Sections.SelectMany(_ => _.Tasks).ToList();
-        var taskMap = allTasks.Where(_ => _.Id != null).ToDictionary(_ => _.Id!, _ => _);
+        // Task ids are not guaranteed unique (a user may reuse an id, or the parser may derive the
+        // same id from repeated tokens); group so duplicates resolve to the first task instead of throwing.
+        var taskMap = allTasks.Where(_ => _.Id != null)
+            .GroupBy(_ => _.Id!)
+            .ToDictionary(_ => _.Key, _ => _.First());
 
         // Default start date if none specified
         var defaultStart = DateTime.Today;

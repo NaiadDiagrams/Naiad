@@ -126,4 +126,40 @@ public class GanttTests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task DuplicateIds()
+    {
+        // Two tasks share the id "a1"; a third depends on it via "after a1".
+        // The duplicate must not crash, and the dependency resolves to the first task with that id.
+        const string input =
+            """
+            gantt
+                title Duplicate Ids
+                Task A :a1, 2024-01-01, 10d
+                Task B :a1, 2024-01-15, 10d
+                Task C :c1, after a1, 5d
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public async Task DuplicateIdsDoesNotThrow()
+    {
+        // Exact repro from issue #20: bare year tokens become duplicate ids ("2025").
+        // Output dates default to today (non-deterministic), so assert it renders rather than snapshot.
+        const string input =
+            """
+            gantt
+                dateFormat YYYY
+                section Test
+                Task A: 2025, 2025
+                Task B: 2025, 2026
+            """;
+
+        var svg = Mermaid.Render(input);
+
+        await Assert.That(svg).Contains("<svg");
+    }
 }
