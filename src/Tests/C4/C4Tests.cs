@@ -397,6 +397,26 @@ public class C4Tests : TestBase
         }
     }
 
+    [Test]
+    public Task DuplicateElementIds()
+    {
+        // Two containers reuse the id "web" inside a boundary. The duplicate must
+        // not crash the id lookup maps; the relationship resolves to the first.
+        const string input =
+            """
+            C4Container
+                title Duplicate Element Ids
+                Person(customer, "Customer", "A bank customer")
+                System_Boundary(banking, "Internet Banking") {
+                    Container(web, "Web App", "React", "Delivers content to the customer")
+                    Container(web, "Duplicate", "React", "Reuses the web id")
+                }
+                Rel(customer, web, "Uses", "HTTPS")
+            """;
+
+        return VerifySvg(input);
+    }
+
     static bool Intersects(SvgRect a, SvgRect b)
     {
         const double tolerance = 1.0;
