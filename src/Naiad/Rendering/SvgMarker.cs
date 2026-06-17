@@ -42,13 +42,16 @@ public class SvgMarker
         builder.Append(CultureInfo.InvariantCulture, $" markerWidth='{MarkerWidth:0.##}' markerHeight='{MarkerHeight:0.##}'");
         builder.Append($" orient='{Orient}'>");
 
+        // stroke-width 1 is the SVG default, and "stroke-dasharray: 1, 0" is a solid line (a no-op);
+        // emit a style only for the wider markers (e.g. the cross at width 2).
+        var style = StrokeWidth == 1 ? "" : $" style='stroke-width: {StrokeWidth};'";
         if (UseCircle)
         {
-            builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{CircleCx:0.##}' cy='{CircleCy:0.##}' r='{CircleR:0.##}' class='arrowMarkerPath' style='stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;'/>");
+            builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{CircleCx:0.##}' cy='{CircleCy:0.##}' r='{CircleR:0.##}' class='arrowMarkerPath'{style}/>");
         }
         else
         {
-            builder.Append($"<path d='{Path}' class='arrowMarkerPath' style='stroke-width: {StrokeWidth}; stroke-dasharray: 1, 0;'/>");
+            builder.Append($"<path d='{Path}' class='arrowMarkerPath'{style}/>");
         }
 
         builder.Append("</marker>");

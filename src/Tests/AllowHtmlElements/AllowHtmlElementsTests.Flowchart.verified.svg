@@ -28,8 +28,7 @@
       orient="auto">
       <path
         d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-pointStart"
@@ -43,8 +42,7 @@
       orient="auto">
       <path
         d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleEnd"
@@ -60,8 +58,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleStart"
@@ -77,8 +74,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-crossEnd"
@@ -93,7 +89,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
     <marker
       id="naiad_flowchart-crossStart"
@@ -108,7 +104,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
   </defs>
   <g
@@ -139,8 +135,7 @@
     <path
       d="M0,0 H73.1 V48 H0 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="36.55"
       y="24"
@@ -152,8 +147,7 @@
     <path
       d="M143.1,0 H196.2 V48 H143.1 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="169.65"
       y="24"

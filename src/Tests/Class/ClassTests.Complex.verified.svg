@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="arrowhead-open"
@@ -29,8 +28,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="inheritance"
@@ -41,8 +39,7 @@
       orient="auto">
       <path
         d="M0,0 L10,5 L0,10 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="composition"
@@ -53,8 +50,7 @@
       orient="auto">
       <path
         d="M0,5 L5,0 L10,5 L5,10 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="aggregation"
@@ -65,8 +61,7 @@
       orient="auto">
       <path
         d="M0,5 L5,0 L10,5 L5,10 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <g
@@ -77,8 +72,7 @@
       width="120.1"
       height="50"
       fill="#FFFFDE"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <text
       x="60.05"
       y="20"

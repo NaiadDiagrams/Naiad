@@ -28,8 +28,7 @@
     cy="100"
     r="8"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="100"
@@ -42,8 +41,7 @@
     cy="130"
     r="8"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="130"
@@ -56,8 +54,7 @@
     cy="160"
     r="8"
     fill="#96CEB4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="160"
@@ -70,8 +67,7 @@
     cy="190"
     r="8"
     fill="#FFEAA7"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="190"
@@ -84,8 +80,7 @@
     cy="220"
     r="8"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="220"
@@ -98,8 +93,7 @@
     cy="250"
     r="8"
     fill="#98D8C8"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="250"
@@ -171,43 +165,37 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="65"
     cy="142"
     r="5"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="80"
     cy="142"
     r="5"
     fill="#96CEB4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="95"
     cy="142"
     r="5"
     fill="#FFEAA7"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="110"
     cy="142"
     r="5"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="125"
     cy="142"
     r="5"
     fill="#98D8C8"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="150"
@@ -272,15 +260,13 @@
     cy="232"
     r="5"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="65"
     cy="232"
     r="5"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="180"
@@ -327,6 +313,5 @@
     cy="232"
     r="5"
     fill="#96CEB4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
 </svg>

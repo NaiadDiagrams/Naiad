@@ -14,36 +14,31 @@
       y1="30"
       x2="74.15"
       y2="130"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <circle
       cx="74.15"
       cy="45"
       r="4"
       fill="#fff"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <line
       x1="78.15"
       y1="53"
       x2="70.15"
       y2="53"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <circle
       cx="74.15"
       cy="115"
       r="4"
       fill="#fff"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <line
       x1="70.15"
       y1="107"
       x2="78.15"
       y2="107"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="55.95"
       y="70"
@@ -73,8 +68,7 @@
       width="120"
       height="30"
       fill="#9370DB"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="74.15"
       y="15"
@@ -98,8 +92,7 @@
       width="148.3"
       height="30"
       fill="#9370DB"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="74.15"
       y="145"

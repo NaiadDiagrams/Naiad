@@ -30,8 +30,7 @@
       orient="auto">
       <path
         d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-pointStart"
@@ -45,8 +44,7 @@
       orient="auto">
       <path
         d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleEnd"
@@ -62,8 +60,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleStart"
@@ -79,8 +76,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-crossEnd"
@@ -95,7 +91,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
     <marker
       id="naiad_flowchart-crossStart"
@@ -110,7 +106,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
   </defs>
   <g
@@ -139,8 +135,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 88px; height: 24px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Get money</p>
         </span>
       </div>
@@ -176,8 +171,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>One</p>
         </span>
       </div>
@@ -206,8 +200,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Two</p>
         </span>
       </div>
@@ -236,8 +229,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 56px; height: 24px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Three</p>
         </span>
       </div>
@@ -245,8 +237,7 @@
     <path
       d="M114.65,0 H213.95 V48 H114.65 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="114.65"
       y="0"
@@ -256,8 +247,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Christmas</p>
         </span>
       </div>
@@ -265,8 +255,7 @@
     <path
       d="M111.95,118 H216.65 Q221.65,118 221.65,123 V161 Q221.65,166 216.65,166 H111.95 Q106.95,166 106.95,161 V123 Q106.95,118 111.95,118 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="106.95"
       y="118"
@@ -276,8 +265,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 114.7px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Go shopping</p>
         </span>
       </div>
@@ -285,8 +273,7 @@
     <path
       d="M164.3,236 L249.98,269.6 L164.3,303.2 L78.62,269.6 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="78.62"
       y="236"
@@ -296,8 +283,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 171.36px; height: 67.2px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Let me think</p>
         </span>
       </div>
@@ -305,8 +291,7 @@
     <path
       d="M0,373.2 H76.2 V421.2 H0 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="0"
       y="373.2"
@@ -316,8 +301,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Laptop</p>
         </span>
       </div>
@@ -325,8 +309,7 @@
     <path
       d="M126.2,373.2 H202.4 V421.2 H126.2 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="126.2"
       y="373.2"
@@ -336,8 +319,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>iPhone</p>
         </span>
       </div>
@@ -345,8 +327,7 @@
     <path
       d="M252.4,373.2 H325.5 V421.2 H252.4 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="252.4"
       y="373.2"
@@ -356,8 +337,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 73.1px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>
             <i
               class="fa fa-car"></i> Car</p>

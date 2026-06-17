@@ -151,8 +151,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
       orient="auto">
       <path
         d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-pointStart"
@@ -166,8 +165,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
       orient="auto">
       <path
         d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleEnd"
@@ -183,8 +181,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleStart"
@@ -200,8 +197,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-crossEnd"
@@ -216,7 +212,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
     <marker
       id="naiad_flowchart-crossStart"
@@ -231,7 +227,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
   </defs>
   <g
@@ -239,8 +235,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
     <path
       d="M0,0 H68.5 V48 H0 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="0"
       y="0"
@@ -250,8 +245,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Hello</p>
         </span>
       </div>
@@ -259,7 +253,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L133' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Awesome `@import` is gone:
@@ -297,8 +291,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
       orient="auto">
       <path
         d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-pointStart"
@@ -312,8 +305,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
       orient="auto">
       <path
         d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleEnd"
@@ -329,8 +321,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleStart"
@@ -346,8 +337,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-crossEnd"
@@ -362,7 +352,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
     <marker
       id="naiad_flowchart-crossStart"
@@ -377,7 +367,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
   </defs>
   <g
@@ -385,8 +375,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
     <path
       d="M0,0 H68.5 V48 H0 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="34.25"
       y="24"
@@ -398,7 +387,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L130' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

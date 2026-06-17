@@ -61,8 +61,7 @@
     rx="3"
     ry="3"
     fill="#FFF9C4"
-    stroke="#FBC02D"
-    stroke-width="1" />
+    stroke="#FBC02D" />
   <text
     x="160"
     y="18"

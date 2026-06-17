@@ -56,8 +56,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Branch A</text>
+    font-family="Arial, sans-serif">Branch A</text>
   <rect
     x="120.8"
     y="70"
@@ -74,8 +73,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Branch B</text>
+    font-family="Arial, sans-serif">Branch B</text>
   <rect
     x="120.8"
     y="120"
@@ -92,6 +90,5 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Branch C</text>
+    font-family="Arial, sans-serif">Branch C</text>
 </svg>

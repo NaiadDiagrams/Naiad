@@ -28,8 +28,7 @@
     cy="100"
     r="8"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="645"
     y="100"
@@ -42,8 +41,7 @@
     cy="130"
     r="8"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="645"
     y="130"
@@ -56,8 +54,7 @@
     cy="160"
     r="8"
     fill="#96CEB4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="645"
     y="160"
@@ -70,8 +67,7 @@
     cy="190"
     r="8"
     fill="#FFEAA7"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="645"
     y="190"
@@ -84,8 +80,7 @@
     cy="220"
     r="8"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="645"
     y="220"
@@ -98,8 +93,7 @@
     cy="250"
     r="8"
     fill="#98D8C8"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="645"
     y="250"
@@ -171,8 +165,7 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="90"
@@ -219,8 +212,7 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="380"
     y="90"
@@ -267,8 +259,7 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="550"
     y="90"
@@ -315,8 +306,7 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="150"
@@ -381,8 +371,7 @@
     cy="232"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="180"
@@ -429,8 +418,7 @@
     cy="232"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="380"
     y="180"
@@ -477,15 +465,13 @@
     cy="232"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="405"
     cy="232"
     r="5"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="550"
     y="180"
@@ -532,8 +518,7 @@
     cy="232"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="240"
@@ -598,8 +583,7 @@
     cy="322"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="270"
@@ -646,8 +630,7 @@
     cy="322"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="380"
     y="270"
@@ -694,8 +677,7 @@
     cy="322"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="550"
     y="270"
@@ -742,15 +724,13 @@
     cy="322"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="575"
     cy="322"
     r="5"
     fill="#96CEB4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="330"
@@ -815,15 +795,13 @@
     cy="412"
     r="5"
     fill="#FFEAA7"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="65"
     cy="412"
     r="5"
     fill="#96CEB4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="360"
@@ -870,15 +848,13 @@
     cy="412"
     r="5"
     fill="#FFEAA7"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="235"
     cy="412"
     r="5"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="380"
     y="360"
@@ -925,15 +901,13 @@
     cy="412"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="405"
     cy="412"
     r="5"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="550"
     y="360"
@@ -980,15 +954,13 @@
     cy="412"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="575"
     cy="412"
     r="5"
     fill="#DDA0DD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="420"
@@ -1053,8 +1025,7 @@
     cy="502"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="450"
@@ -1101,15 +1072,13 @@
     cy="502"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="235"
     cy="502"
     r="5"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="380"
     y="450"
@@ -1156,15 +1125,13 @@
     cy="502"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="405"
     cy="502"
     r="5"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="550"
     y="450"
@@ -1211,13 +1178,11 @@
     cy="502"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <circle
     cx="575"
     cy="502"
     r="5"
     fill="#98D8C8"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
 </svg>

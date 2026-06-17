@@ -15,8 +15,7 @@
     rx="8"
     ry="8"
     fill="#E3F2FD"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <rect
     x="20"
     y="20"
@@ -50,8 +49,7 @@
     rx="8"
     ry="8"
     fill="#E8F5E9"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <rect
     x="215"
     y="20"
@@ -85,8 +83,7 @@
     rx="8"
     ry="8"
     fill="#FFF3E0"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <rect
     x="410"
     y="20"
@@ -120,8 +117,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <rect
     x="418"
     y="75"

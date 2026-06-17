@@ -71,8 +71,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">A</text>
+    font-family="Arial, sans-serif">A</text>
   <rect
     x="136.2"
     y="70"
@@ -89,8 +88,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">B</text>
+    font-family="Arial, sans-serif">B</text>
   <rect
     x="136.2"
     y="120"
@@ -107,8 +105,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">C</text>
+    font-family="Arial, sans-serif">C</text>
   <rect
     x="136.2"
     y="170"
@@ -125,8 +122,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">D</text>
+    font-family="Arial, sans-serif">D</text>
   <rect
     x="136.2"
     y="220"
@@ -143,8 +139,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">E</text>
+    font-family="Arial, sans-serif">E</text>
   <rect
     x="136.2"
     y="270"
@@ -161,6 +156,5 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">F</text>
+    font-family="Arial, sans-serif">F</text>
 </svg>

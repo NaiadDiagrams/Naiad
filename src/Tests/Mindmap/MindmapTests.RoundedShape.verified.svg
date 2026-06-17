@@ -51,8 +51,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Rounded Child</text>
+    font-family="Arial, sans-serif">Rounded Child</text>
   <rect
     x="182.4"
     y="70"
@@ -69,6 +68,5 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Normal Child</text>
+    font-family="Arial, sans-serif">Normal Child</text>
 </svg>

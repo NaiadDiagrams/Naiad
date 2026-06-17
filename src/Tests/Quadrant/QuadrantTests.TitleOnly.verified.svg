@@ -21,32 +21,28 @@
     width="200"
     height="200"
     fill="#E3F2FD"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <rect
     x="339.2"
     y="120"
     width="200"
     height="200"
     fill="#E8F5E9"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <rect
     x="139.2"
     y="320"
     width="200"
     height="200"
     fill="#FFF3E0"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <rect
     x="339.2"
     y="320"
     width="200"
     height="200"
     fill="#FCE4EC"
-    stroke="#ccc"
-    stroke-width="1" />
+    stroke="#ccc" />
   <line
     x1="139.2"
     y1="320"

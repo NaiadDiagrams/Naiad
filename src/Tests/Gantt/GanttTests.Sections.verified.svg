@@ -19,15 +19,13 @@
     y1="85"
     x2="1490"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <line
     x1="170"
     y1="80"
     x2="170"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="170"
     y="70"
@@ -41,8 +39,7 @@
     y1="80"
     x2="310"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="310"
     y="70"
@@ -56,8 +53,7 @@
     y1="80"
     x2="450"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="450"
     y="70"
@@ -71,8 +67,7 @@
     y1="80"
     x2="590"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="590"
     y="70"
@@ -86,8 +81,7 @@
     y1="80"
     x2="730"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="730"
     y="70"
@@ -101,8 +95,7 @@
     y1="80"
     x2="870"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="870"
     y="70"
@@ -116,8 +109,7 @@
     y1="80"
     x2="1010"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="1010"
     y="70"
@@ -131,8 +123,7 @@
     y1="80"
     x2="1150"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="1150"
     y="70"
@@ -146,8 +137,7 @@
     y1="80"
     x2="1290"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="1290"
     y="70"
@@ -161,8 +151,7 @@
     y1="80"
     x2="1430"
     y2="85"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="1430"
     y="70"
@@ -176,120 +165,103 @@
     y1="90"
     x2="170"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="310"
     y1="90"
     x2="310"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="450"
     y1="90"
     x2="450"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="590"
     y1="90"
     x2="590"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="730"
     y1="90"
     x2="730"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="870"
     y1="90"
     x2="870"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="1010"
     y1="90"
     x2="1010"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="1150"
     y1="90"
     x2="1150"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="1290"
     y1="90"
     x2="1290"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="1430"
     y1="90"
     x2="1430"
     y2="270"
-    stroke="#ddd"
-    stroke-width="1" />
+    stroke="#ddd" />
   <line
     x1="170"
     y1="90"
     x2="1490"
     y2="90"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <line
     x1="170"
     y1="120"
     x2="1490"
     y2="120"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <line
     x1="170"
     y1="150"
     x2="1490"
     y2="150"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <line
     x1="170"
     y1="180"
     x2="1490"
     y2="180"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <line
     x1="170"
     y1="210"
     x2="1490"
     y2="210"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <line
     x1="170"
     y1="240"
     x2="1490"
     y2="240"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <line
     x1="170"
     y1="270"
     x2="1490"
     y2="270"
-    stroke="#eee"
-    stroke-width="1" />
+    stroke="#eee" />
   <rect
     x="20"
     y="90"
@@ -320,8 +292,7 @@
     rx="3"
     ry="3"
     fill="#4CAF50"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="240"
     y="135"
@@ -345,8 +316,7 @@
     rx="3"
     ry="3"
     fill="#4CAF50"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="450"
     y="165"
@@ -385,8 +355,7 @@
     rx="3"
     ry="3"
     fill="#4CAF50"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="890"
     y="225"
@@ -410,8 +379,7 @@
     rx="3"
     ry="3"
     fill="#4CAF50"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="1330"
     y="255"

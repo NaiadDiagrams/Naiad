@@ -14,7 +14,7 @@ public class SvgForeignObject : SvgElement
         CommonAttributes(builder);
         builder.Append('>');
         builder.Append(CultureInfo.InvariantCulture, $"<div xmlns='http://www.w3.org/1999/xhtml' style='display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: {Width:0.##}px; height: {Height:0.##}px;'>");
-        builder.Append($"<span class='nodeLabel'>{HtmlContent}</span>");
+        builder.Append($"<span>{HtmlContent}</span>");
         builder.Append("</div>");
         builder.Append("</foreignObject>");
     }

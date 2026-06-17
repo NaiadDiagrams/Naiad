@@ -23,9 +23,10 @@ public class SvgCircle : SvgElement
             builder.Append($" stroke='{Stroke}'");
         }
 
-        if (StrokeWidth.HasValue)
+        // stroke-width 1 is the SVG default — omit it.
+        if (StrokeWidth is { } strokeWidth && strokeWidth != 1)
         {
-            builder.Append(CultureInfo.InvariantCulture, $" stroke-width='{StrokeWidth.Value:0.##}'");
+            builder.Append(CultureInfo.InvariantCulture, $" stroke-width='{strokeWidth:0.##}'");
         }
 
         CommonAttributes(builder);

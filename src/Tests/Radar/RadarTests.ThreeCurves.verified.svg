@@ -22,43 +22,37 @@
       cy="180"
       r="24"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="180"
       r="48"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="180"
       r="72"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="180"
       r="96"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="180"
       r="120"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <line
       x1="180"
       y1="180"
       x2="180"
       y2="60"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="180"
       y="40"
@@ -71,8 +65,7 @@
       y1="180"
       x2="300"
       y2="180"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="320"
       y="180"
@@ -85,8 +78,7 @@
       y1="180"
       x2="180"
       y2="300"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="180"
       y="320"
@@ -99,8 +91,7 @@
       y1="180"
       x2="60"
       y2="180"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="40"
       y="180"
@@ -118,29 +109,25 @@
       cy="60"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="225"
       cy="180"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="180"
       cy="240"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="105"
       cy="180"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <path
       d="M 180 105 L 300 180 L 180 225 L 120 180 Z"
       fill="rgba(255,127,14,0.3)"
@@ -151,29 +138,25 @@
       cy="105"
       r="4"
       fill="#ff7f0e"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="300"
       cy="180"
       r="4"
       fill="#ff7f0e"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="180"
       cy="225"
       r="4"
       fill="#ff7f0e"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="120"
       cy="180"
       r="4"
       fill="#ff7f0e"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <path
       d="M 180 90 L 270 180 L 180 300 L 75 180 Z"
       fill="rgba(44,160,44,0.3)"
@@ -184,29 +167,25 @@
       cy="90"
       r="4"
       fill="#2ca02c"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="270"
       cy="180"
       r="4"
       fill="#2ca02c"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="180"
       cy="300"
       r="4"
       fill="#2ca02c"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="75"
       cy="180"
       r="4"
       fill="#2ca02c"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <rect
       x="0"
       y="340"

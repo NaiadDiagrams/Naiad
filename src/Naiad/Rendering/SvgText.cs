@@ -59,7 +59,8 @@ public class SvgText : SvgElement
                 builder.Append($" font-family='{FontFamily}'");
             }
 
-            if (FontWeight is not null)
+            // "normal" is the default weight — omit it, keeping only meaningful weights (e.g. bold).
+            if (FontWeight is not null and not "normal")
             {
                 builder.Append($" font-weight='{FontWeight}'");
             }

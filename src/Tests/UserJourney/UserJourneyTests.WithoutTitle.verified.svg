@@ -20,8 +20,7 @@
     cy="60"
     r="8"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="60"
@@ -34,8 +33,7 @@
     cy="90"
     r="8"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="90"
@@ -107,8 +105,7 @@
     cy="102"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="50"
@@ -155,6 +152,5 @@
     cy="102"
     r="5"
     fill="#45B7D1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
 </svg>

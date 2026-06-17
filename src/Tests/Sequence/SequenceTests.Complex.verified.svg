@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="arrowhead-dotted"
@@ -29,8 +28,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="cross"
@@ -41,8 +39,7 @@
       orient="auto">
       <path
         d="M1,1 L7,7 M7,1 L1,7"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <text
@@ -57,36 +54,31 @@
     cy="65"
     r="15"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="70"
     y1="80"
     x2="70"
     y2="95"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="55"
     y1="85"
     x2="85"
     y2="85"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="70"
     y1="95"
     x2="60"
     y2="90"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="70"
     y1="95"
     x2="80"
     y2="90"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="105"
@@ -102,8 +94,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="70"
@@ -119,8 +110,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="370"
     y="70"
@@ -136,8 +126,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="520"
     y="70"
@@ -153,8 +142,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="670"
     y="70"
@@ -168,7 +156,6 @@
     x2="70"
     y2="740"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="220"
@@ -176,7 +163,6 @@
     x2="220"
     y2="740"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="370"
@@ -184,7 +170,6 @@
     x2="370"
     y2="740"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="520"
@@ -192,7 +177,6 @@
     x2="520"
     y2="740"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="670"
@@ -200,15 +184,13 @@
     x2="670"
     y2="740"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="70"
     y1="140"
     x2="220"
     y2="140"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="220,140 212,136 212,144"
     fill="#333" />
@@ -224,8 +206,7 @@
     y1="190"
     x2="370"
     y2="190"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="370,190 362,186 362,194"
     fill="#333" />
@@ -241,8 +222,7 @@
     y1="240"
     x2="520"
     y2="240"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="520,240 512,236 512,244"
     fill="#333" />
@@ -259,7 +239,6 @@
     x2="370"
     y2="290"
     stroke="#333"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <polygon
     points="370,290 378,286 378,294"
@@ -274,22 +253,19 @@
   <path
     d="M430,340 L542,340 L550,348 L550,380 L430,380 Z"
     fill="#FFFFCC"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="542"
     y1="340"
     x2="542"
     y2="348"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="542"
     y1="348"
     x2="550"
     y2="348"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <text
     x="490"
     y="360"
@@ -301,7 +277,6 @@
     d="M370,390 L410,390 L410,420 L370,420"
     fill="none"
     stroke="#333"
-    stroke-width="1"
     marker-end="url(#arrowhead)" />
   <text
     x="415"
@@ -313,22 +288,19 @@
   <path
     d="M430,440 L542,440 L550,448 L550,480 L430,480 Z"
     fill="#FFFFCC"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="542"
     y1="440"
     x2="542"
     y2="448"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="542"
     y1="448"
     x2="550"
     y2="448"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <text
     x="490"
     y="460"
@@ -342,7 +314,6 @@
     x2="220"
     y2="490"
     stroke="#333"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <polygon
     points="220,490 228,486 228,494"
@@ -359,8 +330,7 @@
     y1="540"
     x2="670"
     y2="540"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="670,540 662,536 662,544"
     fill="#333" />
@@ -377,7 +347,6 @@
     x2="220"
     y2="590"
     stroke="#333"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <polygon
     points="220,590 228,586 228,594"
@@ -395,7 +364,6 @@
     x2="70"
     y2="640"
     stroke="#333"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <polygon
     points="70,640 78,636 78,644"
@@ -410,22 +378,19 @@
   <path
     d="M235,690 L347,690 L355,698 L355,730 L235,730 Z"
     fill="#FFFFCC"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="347"
     y1="690"
     x2="347"
     y2="698"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="347"
     y1="698"
     x2="355"
     y2="698"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <text
     x="295"
     y="710"
@@ -439,67 +404,58 @@
     width="10"
     height="100"
     fill="#F4F4F4"
-    stroke="#666"
-    stroke-width="1" />
+    stroke="#666" />
   <rect
     x="215"
     y="140"
     width="10"
     height="350"
     fill="#F4F4F4"
-    stroke="#666"
-    stroke-width="1" />
+    stroke="#666" />
   <rect
     x="665"
     y="540"
     width="10"
     height="200"
     fill="#F4F4F4"
-    stroke="#666"
-    stroke-width="1" />
+    stroke="#666" />
   <rect
     x="515"
     y="240"
     width="10"
     height="500"
     fill="#F4F4F4"
-    stroke="#666"
-    stroke-width="1" />
+    stroke="#666" />
   <circle
     cx="70"
     cy="755"
     r="15"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="70"
     y1="770"
     x2="70"
     y2="785"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="55"
     y1="775"
     x2="85"
     y2="775"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="70"
     y1="785"
     x2="60"
     y2="780"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <line
     x1="70"
     y1="785"
     x2="80"
     y2="780"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="795"
@@ -515,8 +471,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="760"
@@ -532,8 +487,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="370"
     y="760"
@@ -549,8 +503,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="520"
     y="760"
@@ -566,8 +519,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="670"
     y="760"

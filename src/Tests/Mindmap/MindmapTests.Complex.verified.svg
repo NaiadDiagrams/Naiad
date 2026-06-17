@@ -101,8 +101,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Planning</text>
+    font-family="Arial, sans-serif">Planning</text>
   <rect
     x="275.5"
     y="20"
@@ -119,8 +118,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Requirements</text>
+    font-family="Arial, sans-serif">Requirements</text>
   <rect
     x="275.5"
     y="70"
@@ -137,8 +135,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Design</text>
+    font-family="Arial, sans-serif">Design</text>
   <rect
     x="143.9"
     y="170"
@@ -153,8 +150,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Development</text>
+    font-family="Arial, sans-serif">Development</text>
   <rect
     x="298.6"
     y="120"
@@ -171,8 +167,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Frontend</text>
+    font-family="Arial, sans-serif">Frontend</text>
   <rect
     x="298.6"
     y="170"
@@ -189,8 +184,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Backend</text>
+    font-family="Arial, sans-serif">Backend</text>
   <rect
     x="298.6"
     y="220"
@@ -207,8 +201,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Database</text>
+    font-family="Arial, sans-serif">Database</text>
   <rect
     x="143.9"
     y="295"
@@ -223,8 +216,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Testing</text>
+    font-family="Arial, sans-serif">Testing</text>
   <rect
     x="267.8"
     y="270"
@@ -241,8 +233,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Unit Tests</text>
+    font-family="Arial, sans-serif">Unit Tests</text>
   <rect
     x="267.8"
     y="320"
@@ -259,8 +250,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Integration</text>
+    font-family="Arial, sans-serif">Integration</text>
   <rect
     x="143.9"
     y="395"
@@ -275,8 +265,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Deployment</text>
+    font-family="Arial, sans-serif">Deployment</text>
   <rect
     x="290.9"
     y="370"
@@ -293,8 +282,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Staging</text>
+    font-family="Arial, sans-serif">Staging</text>
   <rect
     x="290.9"
     y="420"
@@ -311,6 +299,5 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Production</text>
+    font-family="Arial, sans-serif">Production</text>
 </svg>
