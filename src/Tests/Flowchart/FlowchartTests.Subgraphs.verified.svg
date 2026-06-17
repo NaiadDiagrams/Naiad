@@ -30,8 +30,7 @@
       orient="auto">
       <path
         d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-pointStart"
@@ -45,8 +44,7 @@
       orient="auto">
       <path
         d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleEnd"
@@ -62,8 +60,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleStart"
@@ -79,8 +76,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-crossEnd"
@@ -95,7 +91,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
     <marker
       id="naiad_flowchart-crossStart"
@@ -110,7 +106,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
   </defs>
   <g
@@ -123,8 +119,7 @@
       rx="6"
       ry="6"
       fill="#ffffff"
-      stroke="#bbbbbb"
-      stroke-width="1" />
+      stroke="#bbbbbb" />
     <text
       x="69.65"
       y="132"
@@ -142,8 +137,7 @@
       rx="6"
       ry="6"
       fill="#ffffff"
-      stroke="#bbbbbb"
-      stroke-width="1" />
+      stroke="#bbbbbb" />
     <text
       x="69.65"
       y="433"
@@ -191,8 +185,7 @@
     <path
       d="M35.4,0 H103.9 V48 H35.4 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="35.4"
       y="0"
@@ -202,8 +195,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Start</p>
         </span>
       </div>
@@ -211,8 +203,7 @@
     <path
       d="M31.55,163 H107.75 V211 H31.55 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="31.55"
       y="163"
@@ -222,8 +213,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Web UI</p>
         </span>
       </div>
@@ -231,8 +221,7 @@
     <path
       d="M20,281 H119.3 V329 H20 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="20"
       y="281"
@@ -242,8 +231,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Mobile UI</p>
         </span>
       </div>
@@ -251,8 +239,7 @@
     <path
       d="M43.1,464 H96.2 V512 H43.1 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="43.1"
       y="464"
@@ -262,8 +249,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 53.1px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>API</p>
         </span>
       </div>
@@ -271,8 +257,7 @@
     <path
       d="M23.85,586.8 A45.8,4.8 0 0 1 115.45,586.8 V625.2 A45.8,4.8 0 0 1 23.85,625.2 V586.8 Z M23.85,586.8 A45.8,4.8 0 0 0 115.45,586.8"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="23.85"
       y="582"
@@ -282,8 +267,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Database</p>
         </span>
       </div>

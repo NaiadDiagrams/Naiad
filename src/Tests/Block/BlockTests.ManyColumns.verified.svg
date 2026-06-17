@@ -15,8 +15,7 @@
     rx="4"
     ry="4"
     fill="#E3F2FD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="80"
     y="50"
@@ -33,8 +32,7 @@
     rx="4"
     ry="4"
     fill="#E8F5E9"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="200"
     y="50"
@@ -51,8 +49,7 @@
     rx="4"
     ry="4"
     fill="#FFF3E0"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="320"
     y="50"
@@ -69,8 +66,7 @@
     rx="4"
     ry="4"
     fill="#F3E5F5"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="440"
     y="50"
@@ -87,8 +83,7 @@
     rx="4"
     ry="4"
     fill="#FCE4EC"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="560"
     y="50"

@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <g
@@ -28,8 +27,7 @@
       y1="20"
       x2="270.6"
       y2="100"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="270.6,100 266.6,93.07 274.6,93.07"
       fill="#333" />
@@ -38,8 +36,7 @@
       y1="140"
       x2="263.6"
       y2="220"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="263.6,220 260.09,212.81 268.07,213.37"
       fill="#333" />
@@ -62,8 +59,7 @@
       y1="260"
       x2="262.2"
       y2="340"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="262.2,340 258.2,333.07 266.2,333.07"
       fill="#333" />
@@ -72,8 +68,7 @@
       y1="348"
       x2="174.16"
       y2="428"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="174.16,428 176.09,420.24 181.85,425.79"
       fill="#333" />
@@ -82,8 +77,7 @@
       y1="348"
       x2="350.24"
       y2="428"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="350.24,428 342.55,425.79 348.31,420.24"
       fill="#333" />
@@ -92,8 +86,7 @@
       y1="468"
       x2="251.3"
       y2="548"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="251.3,548 243.61,545.79 249.37,540.24"
       fill="#333" />
@@ -102,8 +95,7 @@
       y1="468"
       x2="273.1"
       y2="548"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="273.1,548 275.03,540.24 280.79,545.79"
       fill="#333" />
@@ -112,8 +104,7 @@
       y1="556"
       x2="283.85"
       y2="639.95"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="283.85,639.95 278.41,634.08 286.21,632.31"
       fill="#333" />
@@ -122,8 +113,7 @@
       y1="666.9"
       x2="204.3"
       y2="756"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="204.3,756 205.67,748.12 211.81,753.25"
       fill="#333" />
@@ -146,8 +136,7 @@
       y1="666.9"
       x2="371.3"
       y2="756"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="371.3,756 363.79,753.25 369.93,748.12"
       fill="#333" />
@@ -168,8 +157,7 @@
     <path
       d="M 232 776 C 312 776, 474 696, 474 616 L 474 280 C 474 200, 382.4 120, 302.4 120"
       fill="none"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="302.4,120 309.33,116 309.33,124"
       fill="#333" />
@@ -184,8 +172,7 @@
     <path
       d="M 424 776 C 474 776, 524 726, 524 676 L 524 205 C 524 155, 352.4 105, 302.4 105"
       fill="none"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="302.4,105 309.33,101 309.33,109"
       fill="#333" />
@@ -202,8 +189,7 @@
       y1="796"
       x2="187.6"
       y2="876"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="187.6,876 183.6,869.07 191.6,869.07"
       fill="#333" />
@@ -226,8 +212,7 @@
       cy="10"
       r="10"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="238.8"
       y="100"
@@ -236,8 +221,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="270.6"
       y="120"
@@ -253,8 +237,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="262.2"
       y="240"
@@ -279,8 +262,7 @@
     <path
       d="M287.8,636 L307.8,656 L287.8,676 L267.8,656 Z"
       fill="#fff"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="117.2"
       y="428"
@@ -289,8 +271,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="153.2"
       y="448"
@@ -306,8 +287,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="371.2"
       y="448"
@@ -323,8 +303,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="187.6"
       y="776"
@@ -340,8 +319,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="388"
       y="776"
@@ -361,27 +339,23 @@
       cy="886"
       r="5"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <path
       d="M20,285 L212,285 L220,293 L220,325 L20,325 Z"
       fill="#FFFFCC"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <line
       x1="212"
       y1="285"
       x2="212"
       y2="293"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <line
       x1="212"
       y1="293"
       x2="220"
       y2="293"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <text
       x="120"
       y="305"
@@ -393,27 +367,23 @@
       d="M 218.45 260 Q 218.45 272.5, 163.75 285"
       fill="none"
       stroke="#333"
-      stroke-width="1"
       stroke-dasharray="5,5" />
     <path
       d="M423.6,846 L536.4,846 L544.4,854 L544.4,886 L423.6,886 Z"
       fill="#FFFFCC"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <line
       x1="536.4"
       y1="846"
       x2="536.4"
       y2="854"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <line
       x1="536.4"
       y1="854"
       x2="544.4"
       y2="854"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <text
       x="484"
       y="866"
@@ -425,7 +395,6 @@
       d="M 409.33 796 Q 409.33 821, 462.67 846"
       fill="none"
       stroke="#333"
-      stroke-width="1"
       stroke-dasharray="5,5" />
   </g>
 </svg>

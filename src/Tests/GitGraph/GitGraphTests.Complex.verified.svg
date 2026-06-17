@@ -98,8 +98,7 @@
     rx="3"
     ry="3"
     fill="#FFF9C4"
-    stroke="#FBC02D"
-    stroke-width="1" />
+    stroke="#FBC02D" />
   <text
     x="100"
     y="18"
@@ -191,8 +190,7 @@
     rx="3"
     ry="3"
     fill="#FFF9C4"
-    stroke="#FBC02D"
-    stroke-width="1" />
+    stroke="#FBC02D" />
   <text
     x="400"
     y="18"

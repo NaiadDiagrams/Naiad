@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="arrowhead-dotted"
@@ -29,8 +28,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="cross"
@@ -41,8 +39,7 @@
       orient="auto">
       <path
         d="M1,1 L7,7 M7,1 L1,7"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <rect
@@ -53,8 +50,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="40"
@@ -70,8 +66,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="40"
@@ -85,7 +80,6 @@
     x2="70"
     y2="310"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="220"
@@ -93,15 +87,13 @@
     x2="220"
     y2="310"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="70"
     y1="110"
     x2="220"
     y2="110"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="220,110 212,106 212,114"
     fill="#333" />
@@ -115,22 +107,19 @@
   <path
     d="M280,160 L392,160 L400,168 L400,200 L280,200 Z"
     fill="#FFFFCC"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="392"
     y1="160"
     x2="392"
     y2="168"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="392"
     y1="168"
     x2="400"
     y2="168"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <text
     x="340"
     y="180"
@@ -144,7 +133,6 @@
     x2="70"
     y2="210"
     stroke="#333"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <polygon
     points="70,210 78,206 78,214"
@@ -159,22 +147,19 @@
   <path
     d="M85,260 L197,260 L205,268 L205,300 L85,300 Z"
     fill="#FFFFCC"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="197"
     y1="260"
     x2="197"
     y2="268"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <line
     x1="197"
     y1="268"
     x2="205"
     y2="268"
-    stroke="#AAAA33"
-    stroke-width="1" />
+    stroke="#AAAA33" />
   <text
     x="145"
     y="280"
@@ -190,8 +175,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="330"
@@ -207,8 +191,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="330"

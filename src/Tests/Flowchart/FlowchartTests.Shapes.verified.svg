@@ -30,8 +30,7 @@
       orient="auto">
       <path
         d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-pointStart"
@@ -45,8 +44,7 @@
       orient="auto">
       <path
         d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleEnd"
@@ -62,8 +60,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-circleStart"
@@ -79,8 +76,7 @@
         cx="5"
         cy="5"
         r="5"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="naiad_flowchart-crossEnd"
@@ -95,7 +91,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
     <marker
       id="naiad_flowchart-crossStart"
@@ -110,7 +106,7 @@
       <path
         d="M 1,1 l 9,9 M 10,1 l -9,9"
         class="arrowMarkerPath"
-        style="stroke-width: 2; stroke-dasharray: 1, 0;" />
+        style="stroke-width: 2;" />
     </marker>
   </defs>
   <g
@@ -118,8 +114,7 @@
     <path
       d="M0,14.1 H99.3 V62.1 H0 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="0"
       y="14.1"
@@ -129,8 +124,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Rectangle</p>
         </span>
       </div>
@@ -138,8 +132,7 @@
     <path
       d="M154.3,14.1 H228.2 Q233.2,14.1 233.2,19.1 V57.1 Q233.2,62.1 228.2,62.1 H154.3 Q149.3,62.1 149.3,57.1 V19.1 Q149.3,14.1 154.3,14.1 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="149.3"
       y="14.1"
@@ -149,8 +142,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Rounded</p>
         </span>
       </div>
@@ -158,8 +150,7 @@
     <path
       d="M341.93,4.5 L400.66,38.1 L341.93,71.7 L283.2,38.1 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="283.2"
       y="4.5"
@@ -169,8 +160,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 117.46px; height: 67.2px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Diamond</p>
         </span>
       </div>
@@ -178,8 +168,7 @@
     <path
       d="M488.76,0 A38.1,38.1 0 1 1 488.76,76.2 A38.1,38.1 0 1 1 488.76,0 Z"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <foreignObject
       x="450.66"
       y="0"
@@ -189,8 +178,7 @@
       <div
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 76.2px;">
-        <span
-          class="nodeLabel">
+        <span>
           <p>Circle</p>
         </span>
       </div>

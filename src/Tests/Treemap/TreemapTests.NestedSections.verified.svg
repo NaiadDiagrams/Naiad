@@ -13,8 +13,7 @@
     width="560"
     height="20"
     fill="#70A89F"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="25"
     y="30"
@@ -39,8 +38,7 @@
     width="560"
     height="20"
     fill="#CCCC8F"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="25"
     y="50"
@@ -65,8 +63,7 @@
     width="210"
     height="116"
     fill="#bebada"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="125"
     y="112.78"
@@ -89,8 +86,7 @@
     width="350"
     height="116"
     fill="#fb8072"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="405"
     y="112.78"
@@ -113,8 +109,7 @@
     width="560"
     height="20"
     fill="#668DA8"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="25"
     y="186"
@@ -139,8 +134,7 @@
     width="280"
     height="184"
     fill="#fdb462"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="160"
     y="279.72"
@@ -163,8 +157,7 @@
     width="93.33"
     height="184"
     fill="#b3de69"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="346.67"
     y="283.8"
@@ -187,8 +180,7 @@
     width="186.67"
     height="184"
     fill="#fccde5"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="486.67"
     y="279.72"

@@ -28,8 +28,7 @@
     cy="100"
     r="8"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="305"
     y="100"
@@ -101,8 +100,7 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="90"
@@ -149,8 +147,7 @@
     cy="142"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="150"
@@ -215,8 +212,7 @@
     cy="232"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="180"
@@ -263,8 +259,7 @@
     cy="232"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="20"
     y="240"
@@ -329,8 +324,7 @@
     cy="322"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <rect
     x="210"
     y="270"
@@ -377,6 +371,5 @@
     cy="322"
     r="5"
     fill="#4ECDC4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
 </svg>

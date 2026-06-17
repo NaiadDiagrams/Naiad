@@ -269,8 +269,7 @@
     width="320"
     height="40"
     fill="#E3F2FD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="180"
     y="60"
@@ -285,8 +284,7 @@
     width="320"
     height="40"
     fill="#E8F5E9"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="500"
     y="60"

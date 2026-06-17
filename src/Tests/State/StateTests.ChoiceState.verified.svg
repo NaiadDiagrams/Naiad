@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <g
@@ -28,8 +27,7 @@
       y1="20"
       x2="176.5"
       y2="100"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="176.5,100 172.5,93.07 180.5,93.07"
       fill="#333" />
@@ -38,8 +36,7 @@
       y1="140"
       x2="176.5"
       y2="220"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="176.5,220 172.5,213.07 180.5,213.07"
       fill="#333" />
@@ -48,8 +45,7 @@
       y1="249.68"
       x2="69.92"
       y2="340"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="69.92,340 72.23,332.34 77.71,338.18"
       fill="#333" />
@@ -72,8 +68,7 @@
       y1="249.68"
       x2="283.08"
       y2="340"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="283.08,340 275.29,338.18 280.77,332.34"
       fill="#333" />
@@ -94,15 +89,13 @@
     <path
       d="M176.5,220 L196.5,240 L176.5,260 L156.5,240 Z"
       fill="#fff"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <circle
       cx="176.5"
       cy="10"
       r="10"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="119.5"
       y="100"
@@ -111,8 +104,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="176.5"
       y="120"
@@ -128,8 +120,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="48.6"
       y="360"
@@ -145,8 +136,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="304.4"
       y="360"

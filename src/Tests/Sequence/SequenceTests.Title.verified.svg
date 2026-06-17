@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="arrowhead-dotted"
@@ -29,8 +28,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="cross"
@@ -41,8 +39,7 @@
       orient="auto">
       <path
         d="M1,1 L7,7 M7,1 L1,7"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <text
@@ -60,8 +57,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="70"
@@ -77,8 +73,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="70"
@@ -92,7 +87,6 @@
     x2="70"
     y2="240"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="220"
@@ -100,15 +94,13 @@
     x2="220"
     y2="240"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="70"
     y1="140"
     x2="220"
     y2="140"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="220,140 212,136 212,144"
     fill="#333" />
@@ -125,7 +117,6 @@
     x2="70"
     y2="190"
     stroke="#333"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <polygon
     points="70,190 78,186 78,194"
@@ -145,8 +136,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="260"
@@ -162,8 +152,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="260"

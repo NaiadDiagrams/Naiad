@@ -12,8 +12,7 @@
     y1="380"
     x2="580"
     y2="380"
-    stroke="#e0e0e0"
-    stroke-width="1" />
+    stroke="#e0e0e0" />
   <text
     x="70"
     y="380"
@@ -27,8 +26,7 @@
     y1="320"
     x2="580"
     y2="320"
-    stroke="#e0e0e0"
-    stroke-width="1" />
+    stroke="#e0e0e0" />
   <text
     x="70"
     y="320"
@@ -42,8 +40,7 @@
     y1="260"
     x2="580"
     y2="260"
-    stroke="#e0e0e0"
-    stroke-width="1" />
+    stroke="#e0e0e0" />
   <text
     x="70"
     y="260"
@@ -57,8 +54,7 @@
     y1="200"
     x2="580"
     y2="200"
-    stroke="#e0e0e0"
-    stroke-width="1" />
+    stroke="#e0e0e0" />
   <text
     x="70"
     y="200"
@@ -72,8 +68,7 @@
     y1="140"
     x2="580"
     y2="140"
-    stroke="#e0e0e0"
-    stroke-width="1" />
+    stroke="#e0e0e0" />
   <text
     x="70"
     y="140"
@@ -87,8 +82,7 @@
     y1="80"
     x2="580"
     y2="80"
-    stroke="#e0e0e0"
-    stroke-width="1" />
+    stroke="#e0e0e0" />
   <text
     x="70"
     y="80"

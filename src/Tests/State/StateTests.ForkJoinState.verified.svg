@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <g
@@ -28,8 +27,7 @@
       y1="20"
       x2="155.5"
       y2="100"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="155.5,100 151.5,93.07 159.5,93.07"
       fill="#333" />
@@ -38,8 +36,7 @@
       y1="108"
       x2="62.37"
       y2="188"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="62.37,188 64.52,180.29 70.12,186.01"
       fill="#333" />
@@ -48,8 +45,7 @@
       y1="108"
       x2="248.63"
       y2="188"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="248.63,188 240.88,186.01 246.48,180.29"
       fill="#333" />
@@ -65,8 +61,7 @@
       cy="10"
       r="10"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="0"
       y="188"
@@ -75,8 +70,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="40.2"
       y="208"
@@ -92,8 +86,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="270.8"
       y="208"

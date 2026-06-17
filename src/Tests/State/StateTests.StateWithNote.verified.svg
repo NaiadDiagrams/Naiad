@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <g
@@ -28,8 +27,7 @@
       y1="20"
       x2="40.2"
       y2="100"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="40.2,100 36.2,93.07 44.2,93.07"
       fill="#333" />
@@ -38,8 +36,7 @@
       y1="140"
       x2="40.2"
       y2="220"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="40.2,220 36.2,213.07 44.2,213.07"
       fill="#333" />
@@ -48,8 +45,7 @@
       cy="10"
       r="10"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="0"
       y="100"
@@ -58,8 +54,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="40.2"
       y="120"
@@ -79,27 +74,23 @@
       cy="230"
       r="5"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <path
       d="M80,190 L192.8,190 L200.8,198 L200.8,230 L80,230 Z"
       fill="#FFFFCC"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <line
       x1="192.8"
       y1="190"
       x2="192.8"
       y2="198"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <line
       x1="192.8"
       y1="198"
       x2="200.8"
       y2="198"
-      stroke="#AAAA33"
-      stroke-width="1" />
+      stroke="#AAAA33" />
     <text
       x="140.4"
       y="210"
@@ -111,7 +102,6 @@
       d="M 62.47 140 Q 62.47 165, 118.13 190"
       fill="none"
       stroke="#333"
-      stroke-width="1"
       stroke-dasharray="5,5" />
   </g>
 </svg>

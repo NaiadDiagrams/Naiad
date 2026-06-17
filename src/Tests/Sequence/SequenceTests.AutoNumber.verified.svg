@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="arrowhead-dotted"
@@ -29,8 +28,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
     <marker
       id="cross"
@@ -41,8 +39,7 @@
       orient="auto">
       <path
         d="M1,1 L7,7 M7,1 L1,7"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <rect
@@ -53,8 +50,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="40"
@@ -70,8 +66,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="40"
@@ -85,7 +80,6 @@
     x2="70"
     y2="260"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="220"
@@ -93,15 +87,13 @@
     x2="220"
     y2="260"
     stroke="#999"
-    stroke-width="1"
     stroke-dasharray="5,5" />
   <line
     x1="70"
     y1="110"
     x2="220"
     y2="110"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="220,110 212,106 212,114"
     fill="#333" />
@@ -117,8 +109,7 @@
     y1="160"
     x2="70"
     y2="160"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="70,160 78,156 78,164"
     fill="#333" />
@@ -134,8 +125,7 @@
     y1="210"
     x2="220"
     y2="210"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <polygon
     points="220,210 212,206 212,214"
     fill="#333" />
@@ -154,8 +144,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="70"
     y="280"
@@ -171,8 +160,7 @@
     rx="3"
     ry="3"
     fill="#ECECFF"
-    stroke="#9370DB"
-    stroke-width="1" />
+    stroke="#9370DB" />
   <text
     x="220"
     y="280"

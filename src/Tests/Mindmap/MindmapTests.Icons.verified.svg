@@ -62,8 +62,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Storage</text>
+    font-family="Arial, sans-serif">Storage</text>
   <rect
     x="143.9"
     y="70"
@@ -82,8 +81,7 @@
     <div
       xmlns="http://www.w3.org/1999/xhtml"
       style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 18px; height: 18px;">
-      <span
-        class="nodeLabel">
+      <span>
         <i
           class="fa fa-car"></i>
       </span>
@@ -95,6 +93,5 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="normal">Transport</text>
+    font-family="Arial, sans-serif">Transport</text>
 </svg>

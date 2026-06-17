@@ -17,8 +17,7 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath"
-        style="stroke-width: 1; stroke-dasharray: 1, 0;" />
+        class="arrowMarkerPath" />
     </marker>
   </defs>
   <g
@@ -28,24 +27,21 @@
       y1="20"
       x2="100.14"
       y2="100"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="100.14,100 96.14,93.07 104.14,93.07"
       fill="#333" />
     <path
       d="M 64.14 120 C 37.07 120, 10 147.07, 10 174.14 L 10 185.86 C 10 212.93, 32.93 240, 60 240"
       fill="none"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="60,240 53.07,244 53.07,236"
       fill="#333" />
     <path
       d="M 140.4 240 C 165.4 240, 190.4 215, 190.4 190 L 190.4 170 C 190.4 145, 161.14 120, 136.14 120"
       fill="none"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="136.14,120 143.07,116 143.07,124"
       fill="#333" />
@@ -54,8 +50,7 @@
       y1="260"
       x2="100.2"
       y2="340"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="100.2,340 96.2,333.07 104.2,333.07"
       fill="#333" />
@@ -64,8 +59,7 @@
       y1="380"
       x2="100.2"
       y2="460"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <polygon
       points="100.2,460 96.2,453.07 104.2,453.07"
       fill="#333" />
@@ -74,8 +68,7 @@
       cy="10"
       r="10"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
     <rect
       x="64.14"
       y="100"
@@ -84,8 +77,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="100.14"
       y="120"
@@ -101,8 +93,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="100.2"
       y="240"
@@ -118,8 +109,7 @@
       rx="5"
       ry="5"
       fill="#ECECFF"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="100.2"
       y="360"
@@ -139,7 +129,6 @@
       cy="470"
       r="5"
       fill="#333"
-      stroke="#333"
-      stroke-width="1" />
+      stroke="#333" />
   </g>
 </svg>

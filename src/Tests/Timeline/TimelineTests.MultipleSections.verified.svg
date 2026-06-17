@@ -49,8 +49,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#2196F3"
-    stroke-width="1" />
+    stroke="#2196F3" />
   <text
     x="80"
     y="140"
@@ -82,8 +81,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#9C27B0"
-    stroke-width="1" />
+    stroke="#9C27B0" />
   <text
     x="200"
     y="140"
@@ -133,8 +131,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#4CAF50"
-    stroke-width="1" />
+    stroke="#4CAF50" />
   <text
     x="340"
     y="140"
@@ -166,8 +163,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#FF9800"
-    stroke-width="1" />
+    stroke="#FF9800" />
   <text
     x="460"
     y="140"
@@ -217,8 +213,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#E91E63"
-    stroke-width="1" />
+    stroke="#E91E63" />
   <text
     x="600"
     y="140"
@@ -250,8 +245,7 @@
     rx="4"
     ry="4"
     fill="#fff"
-    stroke="#00BCD4"
-    stroke-width="1" />
+    stroke="#00BCD4" />
   <text
     x="720"
     y="140"

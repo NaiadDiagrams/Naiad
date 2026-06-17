@@ -37,8 +37,7 @@
     width="20"
     height="8000"
     fill="#4CAF50"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="15"
     y="4020"
@@ -53,8 +52,7 @@
     width="20"
     height="1997.5"
     fill="#2196F3"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="215"
     y="1018.75"
@@ -69,8 +67,7 @@
     width="20"
     height="5992.5"
     fill="#FF9800"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="215"
     y="5023.75"
@@ -85,8 +82,7 @@
     width="20"
     height="3985"
     fill="#E91E63"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="445"
     y="2012.5"
@@ -101,8 +97,7 @@
     width="20"
     height="2125.33"
     fill="#9C27B0"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="445"
     y="5077.67"
@@ -117,8 +112,7 @@
     width="20"
     height="1062.67"
     fill="#00BCD4"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="445"
     y="6681.67"
@@ -133,8 +127,7 @@
     width="20"
     height="797"
     fill="#FF5722"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="445"
     y="7621.5"

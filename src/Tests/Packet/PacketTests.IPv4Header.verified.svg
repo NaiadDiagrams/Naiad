@@ -269,8 +269,7 @@
     width="80"
     height="40"
     fill="#E3F2FD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="60"
     y="60"
@@ -285,8 +284,7 @@
     width="80"
     height="40"
     fill="#E8F5E9"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="140"
     y="60"
@@ -301,8 +299,7 @@
     width="120"
     height="40"
     fill="#FFF3E0"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="240"
     y="60"
@@ -317,8 +314,7 @@
     width="40"
     height="40"
     fill="#F3E5F5"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="320"
     y="60"
@@ -333,8 +329,7 @@
     width="320"
     height="40"
     fill="#FCE4EC"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="500"
     y="60"
@@ -349,8 +344,7 @@
     width="320"
     height="40"
     fill="#E0F7FA"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="180"
     y="100"
@@ -365,8 +359,7 @@
     width="60"
     height="40"
     fill="#FFF8E1"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="370"
     y="100"
@@ -381,8 +374,7 @@
     width="260"
     height="40"
     fill="#F1F8E9"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="530"
     y="100"
@@ -397,8 +389,7 @@
     width="160"
     height="40"
     fill="#E3F2FD"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="100"
     y="140"
@@ -413,8 +404,7 @@
     width="160"
     height="40"
     fill="#E8F5E9"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="260"
     y="140"
@@ -429,8 +419,7 @@
     width="320"
     height="40"
     fill="#FFF3E0"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="500"
     y="140"
@@ -445,8 +434,7 @@
     width="640"
     height="40"
     fill="#F3E5F5"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="340"
     y="180"
@@ -461,8 +449,7 @@
     width="640"
     height="40"
     fill="#FCE4EC"
-    stroke="#333"
-    stroke-width="1" />
+    stroke="#333" />
   <text
     x="340"
     y="220"

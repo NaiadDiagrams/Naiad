@@ -14,43 +14,37 @@
       cy="150"
       r="24"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="150"
       r="48"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="150"
       r="72"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="150"
       r="96"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <circle
       cx="180"
       cy="150"
       r="120"
       fill="none"
-      stroke="#E0E0E0"
-      stroke-width="1" />
+      stroke="#E0E0E0" />
     <line
       x1="180"
       y1="150"
       x2="180"
       y2="30"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="180"
       y="10"
@@ -63,8 +57,7 @@
       y1="150"
       x2="294.13"
       y2="112.92"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="313.15"
       y="106.74"
@@ -77,8 +70,7 @@
       y1="150"
       x2="250.53"
       y2="247.08"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="262.29"
       y="263.26"
@@ -91,8 +83,7 @@
       y1="150"
       x2="109.47"
       y2="247.08"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="97.71"
       y="263.26"
@@ -105,8 +96,7 @@
       y1="150"
       x2="65.87"
       y2="112.92"
-      stroke="#BDBDBD"
-      stroke-width="1" />
+      stroke="#BDBDBD" />
     <text
       x="46.85"
       y="106.74"
@@ -124,36 +114,31 @@
       cy="120"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="237.06"
       cy="131.46"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="232.9"
       cy="222.81"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="109.47"
       cy="247.08"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <circle
       cx="108.67"
       cy="126.82"
       r="4"
       fill="#1f77b4"
-      stroke="white"
-      stroke-width="1" />
+      stroke="white" />
     <rect
       x="0"
       y="310"

@@ -23,8 +23,7 @@
       width="122.4"
       height="30"
       fill="#9370DB"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="61.2"
       y="15"
@@ -39,8 +38,7 @@
       y1="30"
       x2="122.4"
       y2="30"
-      stroke="#9370DB"
-      stroke-width="1" />
+      stroke="#9370DB" />
     <text
       x="40"
       y="50"
