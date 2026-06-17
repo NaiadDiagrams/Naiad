@@ -260,8 +260,10 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         elementAbs.Clear();
         boundaryAbs.Clear();
         containerOriginAbs.Clear();
-        elementsById = model.Elements.ToDictionary(_ => _.Id);
-        boundariesById = model.Boundaries.ToDictionary(_ => _.Id);
+        // Ids are user-supplied and not guaranteed unique; group so a reused id
+        // resolves to the first element/boundary declared with it instead of throwing.
+        elementsById = model.Elements.GroupBy(_ => _.Id).ToDictionary(_ => _.Key, _ => _.First());
+        boundariesById = model.Boundaries.GroupBy(_ => _.Id).ToDictionary(_ => _.Key, _ => _.First());
         nodeSeparation = ComputeNodeSeparation(model, options);
 
         // Pass 1: lay out each container, children before parents.
