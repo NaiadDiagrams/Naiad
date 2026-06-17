@@ -249,7 +249,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Hello</p>

@@ -138,7 +138,7 @@
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
         <span
           class="nodeLabel">
           <p>Yes</p>
@@ -168,7 +168,7 @@
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
         <span
           class="nodeLabel">
           <p>No</p>
@@ -188,7 +188,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 37.7px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 37.7px; height: 48px;">
         <span
           class="nodeLabel">
           <p>A</p>
@@ -208,7 +208,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 37.7px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 37.7px; height: 48px;">
         <span
           class="nodeLabel">
           <p>B</p>
@@ -228,7 +228,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 37.7px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 37.7px; height: 48px;">
         <span
           class="nodeLabel">
           <p>C</p>

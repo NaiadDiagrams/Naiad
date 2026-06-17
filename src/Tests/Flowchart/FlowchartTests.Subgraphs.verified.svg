@@ -201,7 +201,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Start</p>
@@ -221,7 +221,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Web UI</p>
@@ -241,7 +241,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Mobile UI</p>
@@ -261,7 +261,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 53.1px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 53.1px; height: 48px;">
         <span
           class="nodeLabel">
           <p>API</p>
@@ -281,7 +281,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Database</p>

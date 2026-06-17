@@ -128,7 +128,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Rectangle</p>
@@ -148,7 +148,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
         <span
           class="nodeLabel">
           <p>Rounded</p>
@@ -168,7 +168,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 117.46px; height: 67.2px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 117.46px; height: 67.2px;">
         <span
           class="nodeLabel">
           <p>Diamond</p>
@@ -188,7 +188,7 @@
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center; vertical-align: middle; width: 76.2px; height: 76.2px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 76.2px;">
         <span
           class="nodeLabel">
           <p>Circle</p>
