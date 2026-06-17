@@ -500,7 +500,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
 
 Auto-generated documentation from the test suite.
-- [AllowHtmlElements](/src/test-renders/AllowHtmlElements.md)
+
 - [C4](/src/test-renders/C4.md)
 - [Class](/src/test-renders/Class.md)
 - [EntityRelationship](/src/test-renders/EntityRelationship.md)
