@@ -6,6 +6,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
     const double taskBarHeight = 20;
     const double sectionHeaderHeight = 25;
     const double axisHeight = 40;
+    const double titleHeight = 30;
     const double leftMargin = 150;
     const double dayWidth = 20;
     const double milestoneSize = 12;
@@ -54,8 +55,11 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             totalRows += section.Tasks.Count;
         }
 
+        var hasTitle = !string.IsNullOrEmpty(model.Title);
+
         var chartWidth = totalDays * dayWidth;
-        var chartHeight = totalRows * rowHeight + axisHeight;
+        // The title occupies its own band above the axis; include it so the bottom row is not clipped.
+        var chartHeight = totalRows * rowHeight + axisHeight + (hasTitle ? titleHeight : 0);
 
         var width = leftMargin + chartWidth + options.Padding * 2;
         var height = chartHeight + options.Padding * 2;
@@ -70,13 +74,13 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         {
             builder.AddText(
                 width / 2,
-                offsetY + 15,
+                offsetY + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize + 2,
                 fontFamily: options.FontFamily);
-            offsetY += 30;
+            offsetY += titleHeight;
         }
 
         // Draw axis
