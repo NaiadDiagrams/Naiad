@@ -1,4 +1,4 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
@@ -8,11 +8,11 @@
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 18.33 220 18.33 L 220 118.33 C 130 118.33 130 120 40 120 Z"
+    d="M 40 20 C 130 20 130 20 220 20 L 220 116.67 C 130 116.67 130 120 40 120 Z"
     fill="#4CAF50"
     stroke="none" />
   <path
-    d="M 40 120 C 130 120 130 123.33 220 123.33 L 220 323.33 C 130 323.33 130 320 40 320 Z"
+    d="M 40 120 C 130 120 130 126.67 220 126.67 L 220 320 C 130 320 130 320 40 320 Z"
     fill="#4CAF50"
     stroke="none" />
   <rect
