@@ -102,6 +102,9 @@ SkiaRenderer.RenderPng(
 
 `RenderPng` also has an overload that writes to a `Stream`.
 
+
+## AllowHtmlElements
+
 By default, node and edge labels are emitted as HTML inside `<foreignObject>` (matching Mermaid's own output). Set `AllowHtmlElements = false` to render labels as native SVG `<text>` instead, producing self-contained SVG for viewers and rasterizers that have no HTML/CSS engine. Icons that rely on the HTML path — FontAwesome glyphs and icons embedded in labels — are omitted in this mode; iconify pack icons drawn as inline SVG are unaffected.
 
 For example, this single-node graph:
