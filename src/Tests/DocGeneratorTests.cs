@@ -25,7 +25,15 @@ public class DocGeneratorTests
             }
 
             var relativePath = Path.GetRelativePath(testsDir, testFile);
-            var category = Path.GetDirectoryName(relativePath)?.Replace("\\", "/") ?? "Other";
+            var category = Path.GetDirectoryName(relativePath)?.Replace("\\", "/");
+
+            // Diagram-type tests live in a per-type subfolder; the folder name is the category.
+            // Root-level test files (e.g. AllowHtmlElementsTests) cover cross-cutting features
+            // rather than a diagram type, so they don't belong in the renders index.
+            if (string.IsNullOrEmpty(category))
+            {
+                continue;
+            }
 
             if (!testsByCategory.TryGetValue(category, out var value))
             {
