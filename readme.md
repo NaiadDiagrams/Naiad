@@ -256,7 +256,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L133' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L133' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Awesome `@import` is gone:
@@ -390,7 +390,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElements/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -503,7 +503,6 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
 
 Auto-generated documentation from the test suite.
-
 - [C4](/src/test-renders/C4.md)
 - [Class](/src/test-renders/Class.md)
 - [EntityRelationship](/src/test-renders/EntityRelationship.md)
