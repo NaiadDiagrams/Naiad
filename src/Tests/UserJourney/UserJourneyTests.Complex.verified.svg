@@ -1,1188 +1,1306 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 740 725"
-  style="max-width: 740px;"
+  viewBox="0 0 4140 443"
+  style="max-width: 4140px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="journey-arrow"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
   <text
-    x="370"
+    x="2070"
     y="40"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="18px"
+    font-size="20px"
     font-family="Arial, sans-serif"
-    font-weight="bold">Complete E-commerce Experience</text>
+    font-weight="bold"
+    fill="#333">Complete E-commerce Experience</text>
+  <circle
+    cx="24"
+    cy="79"
+    r="7"
+    fill="#6BB36B"
+    stroke="#333" />
   <text
-    x="620"
-    y="70"
+    x="40"
+    y="79"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
-    font-weight="bold">Actors:</text>
+    fill="#333">Customer</text>
   <circle
-    cx="630"
-    cy="100"
-    r="8"
-    fill="#4ECDC4"
+    cx="24"
+    cy="103"
+    r="7"
+    fill="#5B8FF9"
     stroke="#333" />
   <text
-    x="645"
-    y="100"
+    x="40"
+    y="103"
     text-anchor="start"
     dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Customer</text>
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Support</text>
   <circle
-    cx="630"
-    cy="130"
-    r="8"
-    fill="#45B7D1"
+    cx="24"
+    cy="127"
+    r="7"
+    fill="#F6BD16"
     stroke="#333" />
   <text
-    x="645"
-    y="130"
+    x="40"
+    y="127"
     text-anchor="start"
     dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Support</text>
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">System</text>
   <circle
-    cx="630"
-    cy="160"
-    r="8"
-    fill="#96CEB4"
+    cx="24"
+    cy="151"
+    r="7"
+    fill="#E8684A"
     stroke="#333" />
   <text
-    x="645"
-    y="160"
+    x="40"
+    y="151"
     text-anchor="start"
     dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">System</text>
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Warehouse</text>
   <circle
-    cx="630"
-    cy="190"
-    r="8"
-    fill="#FFEAA7"
+    cx="24"
+    cy="175"
+    r="7"
+    fill="#9270CA"
     stroke="#333" />
   <text
-    x="645"
-    y="190"
+    x="40"
+    y="175"
     text-anchor="start"
     dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Warehouse</text>
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Courier</text>
   <circle
-    cx="630"
-    cy="220"
-    r="8"
-    fill="#DDA0DD"
+    cx="24"
+    cy="199"
+    r="7"
+    fill="#37C0CD"
     stroke="#333" />
   <text
-    x="645"
-    y="220"
+    x="40"
+    y="199"
     text-anchor="start"
     dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Courier</text>
-  <circle
-    cx="630"
-    cy="250"
-    r="8"
-    fill="#98D8C8"
-    stroke="#333" />
-  <text
-    x="645"
-    y="250"
-    text-anchor="start"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Finance</text>
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Finance</text>
   <rect
-    x="20"
+    x="150"
     y="60"
-    width="580"
-    height="90"
+    width="750"
+    height="38"
     rx="5"
     ry="5"
-    fill="#E3F2FD"
+    fill="#E1E5F2"
     stroke="none" />
   <text
-    x="30"
-    y="75"
-    text-anchor="start"
+    x="525"
+    y="79"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Discovery</text>
   <rect
-    x="40"
-    y="90"
+    x="150"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="40"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="40"
-    y="94"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="115"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Search for product</text>
-  <text
-    x="115"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
-  <circle
-    cx="50"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="210"
-    y="90"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFE066"
-    stroke-width="2" />
-  <rect
-    x="210"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFE066"
-    stroke="none" />
-  <rect
-    x="210"
-    y="94"
-    width="150"
-    height="4"
-    fill="#FFE066"
-    stroke="none" />
-  <text
-    x="285"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Browse categories</text>
-  <text
-    x="285"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 3</text>
-  <circle
-    cx="220"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="380"
-    y="90"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="380"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="380"
-    y="94"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="455"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Read reviews</text>
-  <text
-    x="455"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
-  <circle
-    cx="390"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="550"
-    y="90"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="550"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="550"
-    y="94"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="625"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Compare prices</text>
-  <text
-    x="625"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
-  <circle
-    cx="560"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="20"
-    y="150"
-    width="580"
-    height="90"
+    height="55"
     rx="5"
     ry="5"
-    fill="#F3E5F5"
+    fill="#E1E5F2"
+    stroke="#8893C2"
+    stroke-width="1.5" />
+  <text
+    x="225"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Search for product</text>
+  <circle
+    cx="164"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="225"
+    y1="161"
+    x2="225"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="350"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#E1E5F2"
+    stroke="#8893C2"
+    stroke-width="1.5" />
+  <text
+    x="425"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Browse categories</text>
+  <circle
+    cx="364"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="425"
+    y1="161"
+    x2="425"
+    y2="317"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="550"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#E1E5F2"
+    stroke="#8893C2"
+    stroke-width="1.5" />
+  <text
+    x="625"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Read reviews</text>
+  <circle
+    cx="564"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="625"
+    y1="161"
+    x2="625"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="750"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#E1E5F2"
+    stroke="#8893C2"
+    stroke-width="1.5" />
+  <text
+    x="825"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Compare prices</text>
+  <circle
+    cx="764"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="825"
+    y1="161"
+    x2="825"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="950"
+    y="60"
+    width="750"
+    height="38"
+    rx="5"
+    ry="5"
+    fill="#FBF8CC"
     stroke="none" />
   <text
-    x="30"
-    y="165"
-    text-anchor="start"
+    x="1325"
+    y="79"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Shopping</text>
   <rect
-    x="40"
-    y="180"
+    x="950"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="40"
-    y="180"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="40"
-    y="184"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="115"
-    y="205"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Add to wishlist</text>
-  <text
-    x="115"
-    y="225"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
-  <circle
-    cx="50"
-    cy="232"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="210"
-    y="180"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="210"
-    y="180"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="210"
-    y="184"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="285"
-    y="205"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Add to cart</text>
-  <text
-    x="285"
-    y="225"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
-  <circle
-    cx="220"
-    cy="232"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="380"
-    y="180"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFA94D"
-    stroke-width="2" />
-  <rect
-    x="380"
-    y="180"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFA94D"
-    stroke="none" />
-  <rect
-    x="380"
-    y="184"
-    width="150"
-    height="4"
-    fill="#FFA94D"
-    stroke="none" />
-  <text
-    x="455"
-    y="205"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Apply coupon</text>
-  <text
-    x="455"
-    y="225"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 2</text>
-  <circle
-    cx="390"
-    cy="232"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <circle
-    cx="405"
-    cy="232"
-    r="5"
-    fill="#45B7D1"
-    stroke="#333" />
-  <rect
-    x="550"
-    y="180"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFE066"
-    stroke-width="2" />
-  <rect
-    x="550"
-    y="180"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFE066"
-    stroke="none" />
-  <rect
-    x="550"
-    y="184"
-    width="150"
-    height="4"
-    fill="#FFE066"
-    stroke="none" />
-  <text
-    x="625"
-    y="205"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Update quantity</text>
-  <text
-    x="625"
-    y="225"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 3</text>
-  <circle
-    cx="560"
-    cy="232"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="20"
-    y="240"
-    width="580"
-    height="90"
+    height="55"
     rx="5"
     ry="5"
-    fill="#E8F5E9"
+    fill="#FBF8CC"
+    stroke="#C7BE50"
+    stroke-width="1.5" />
+  <text
+    x="1025"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Add to wishlist</text>
+  <circle
+    cx="964"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="1025"
+    y1="161"
+    x2="1025"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="1150"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FBF8CC"
+    stroke="#C7BE50"
+    stroke-width="1.5" />
+  <text
+    x="1225"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Add to cart</text>
+  <circle
+    cx="1164"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="1225"
+    y1="161"
+    x2="1225"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="1350"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FBF8CC"
+    stroke="#C7BE50"
+    stroke-width="1.5" />
+  <text
+    x="1425"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Apply coupon</text>
+  <circle
+    cx="1364"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="1379"
+    cy="106"
+    r="6"
+    fill="#5B8FF9"
+    stroke="#333" />
+  <line
+    x1="1425"
+    y1="161"
+    x2="1425"
+    y2="355"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="1550"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FBF8CC"
+    stroke="#C7BE50"
+    stroke-width="1.5" />
+  <text
+    x="1625"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Update quantity</text>
+  <circle
+    cx="1564"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="1625"
+    y1="161"
+    x2="1625"
+    y2="317"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="1750"
+    y="60"
+    width="750"
+    height="38"
+    rx="5"
+    ry="5"
+    fill="#FCE1EC"
     stroke="none" />
   <text
-    x="30"
-    y="255"
-    text-anchor="start"
+    x="2125"
+    y="79"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Checkout</text>
   <rect
-    x="40"
-    y="270"
+    x="1750"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFE066"
-    stroke-width="2" />
-  <rect
-    x="40"
-    y="270"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFE066"
-    stroke="none" />
-  <rect
-    x="40"
-    y="274"
-    width="150"
-    height="4"
-    fill="#FFE066"
-    stroke="none" />
-  <text
-    x="115"
-    y="295"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Enter shipping</text>
-  <text
-    x="115"
-    y="315"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 3</text>
-  <circle
-    cx="50"
-    cy="322"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="210"
-    y="270"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="210"
-    y="270"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="210"
-    y="274"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="285"
-    y="295"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Select payment</text>
-  <text
-    x="285"
-    y="315"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
-  <circle
-    cx="220"
-    cy="322"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="380"
-    y="270"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="380"
-    y="270"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="380"
-    y="274"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="455"
-    y="295"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Confirm order</text>
-  <text
-    x="455"
-    y="315"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
-  <circle
-    cx="390"
-    cy="322"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="550"
-    y="270"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="550"
-    y="270"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="550"
-    y="274"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="625"
-    y="295"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Receive confirmation</text>
-  <text
-    x="625"
-    y="315"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
-  <circle
-    cx="560"
-    cy="322"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <circle
-    cx="575"
-    cy="322"
-    r="5"
-    fill="#96CEB4"
-    stroke="#333" />
-  <rect
-    x="20"
-    y="330"
-    width="580"
-    height="90"
+    height="55"
     rx="5"
     ry="5"
-    fill="#FFF3E0"
+    fill="#FCE1EC"
+    stroke="#D98AA8"
+    stroke-width="1.5" />
+  <text
+    x="1825"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Enter shipping</text>
+  <circle
+    cx="1764"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="1825"
+    y1="161"
+    x2="1825"
+    y2="317"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="1950"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE1EC"
+    stroke="#D98AA8"
+    stroke-width="1.5" />
+  <text
+    x="2025"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Select payment</text>
+  <circle
+    cx="1964"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="2025"
+    y1="161"
+    x2="2025"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="2150"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE1EC"
+    stroke="#D98AA8"
+    stroke-width="1.5" />
+  <text
+    x="2225"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Confirm order</text>
+  <circle
+    cx="2164"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <line
+    x1="2225"
+    y1="161"
+    x2="2225"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="2350"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE1EC"
+    stroke="#D98AA8"
+    stroke-width="1.5" />
+  <text
+    x="2425"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Receive confirmation</text>
+  <circle
+    cx="2364"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="2379"
+    cy="106"
+    r="6"
+    fill="#F6BD16"
+    stroke="#333" />
+  <line
+    x1="2425"
+    y1="161"
+    x2="2425"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="2550"
+    y="60"
+    width="750"
+    height="38"
+    rx="5"
+    ry="5"
+    fill="#E2F0D9"
     stroke="none" />
   <text
-    x="30"
-    y="345"
-    text-anchor="start"
+    x="2925"
+    y="79"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Fulfillment</text>
   <rect
-    x="40"
-    y="360"
+    x="2550"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="40"
-    y="360"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="40"
-    y="364"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="115"
-    y="385"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Order processing</text>
-  <text
-    x="115"
-    y="405"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
-  <circle
-    cx="50"
-    cy="412"
-    r="5"
-    fill="#FFEAA7"
-    stroke="#333" />
-  <circle
-    cx="65"
-    cy="412"
-    r="5"
-    fill="#96CEB4"
-    stroke="#333" />
-  <rect
-    x="210"
-    y="360"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="210"
-    y="360"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="210"
-    y="364"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="285"
-    y="385"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Package shipping</text>
-  <text
-    x="285"
-    y="405"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
-  <circle
-    cx="220"
-    cy="412"
-    r="5"
-    fill="#FFEAA7"
-    stroke="#333" />
-  <circle
-    cx="235"
-    cy="412"
-    r="5"
-    fill="#DDA0DD"
-    stroke="#333" />
-  <rect
-    x="380"
-    y="360"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="380"
-    y="360"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="380"
-    y="364"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="455"
-    y="385"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Track delivery</text>
-  <text
-    x="455"
-    y="405"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
-  <circle
-    cx="390"
-    cy="412"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <circle
-    cx="405"
-    cy="412"
-    r="5"
-    fill="#DDA0DD"
-    stroke="#333" />
-  <rect
-    x="550"
-    y="360"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="550"
-    y="360"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="550"
-    y="364"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="625"
-    y="385"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Receive package</text>
-  <text
-    x="625"
-    y="405"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
-  <circle
-    cx="560"
-    cy="412"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <circle
-    cx="575"
-    cy="412"
-    r="5"
-    fill="#DDA0DD"
-    stroke="#333" />
-  <rect
-    x="20"
-    y="420"
-    width="580"
-    height="90"
+    height="55"
     rx="5"
     ry="5"
-    fill="#FCE4EC"
+    fill="#E2F0D9"
+    stroke="#8FBF6F"
+    stroke-width="1.5" />
+  <text
+    x="2625"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Order processing</text>
+  <circle
+    cx="2564"
+    cy="106"
+    r="6"
+    fill="#E8684A"
+    stroke="#333" />
+  <circle
+    cx="2579"
+    cy="106"
+    r="6"
+    fill="#F6BD16"
+    stroke="#333" />
+  <line
+    x1="2625"
+    y1="161"
+    x2="2625"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="2750"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#E2F0D9"
+    stroke="#8FBF6F"
+    stroke-width="1.5" />
+  <text
+    x="2825"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Package shipping</text>
+  <circle
+    cx="2764"
+    cy="106"
+    r="6"
+    fill="#E8684A"
+    stroke="#333" />
+  <circle
+    cx="2779"
+    cy="106"
+    r="6"
+    fill="#9270CA"
+    stroke="#333" />
+  <line
+    x1="2825"
+    y1="161"
+    x2="2825"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="2950"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#E2F0D9"
+    stroke="#8FBF6F"
+    stroke-width="1.5" />
+  <text
+    x="3025"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Track delivery</text>
+  <circle
+    cx="2964"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="2979"
+    cy="106"
+    r="6"
+    fill="#9270CA"
+    stroke="#333" />
+  <line
+    x1="3025"
+    y1="161"
+    x2="3025"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="3150"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#E2F0D9"
+    stroke="#8FBF6F"
+    stroke-width="1.5" />
+  <text
+    x="3225"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Receive package</text>
+  <circle
+    cx="3164"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="3179"
+    cy="106"
+    r="6"
+    fill="#9270CA"
+    stroke="#333" />
+  <line
+    x1="3225"
+    y1="161"
+    x2="3225"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="3350"
+    y="60"
+    width="750"
+    height="38"
+    rx="5"
+    ry="5"
+    fill="#FCE5CD"
     stroke="none" />
   <text
-    x="30"
-    y="435"
-    text-anchor="start"
+    x="3725"
+    y="79"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Post-Purchase</text>
   <rect
-    x="40"
-    y="450"
+    x="3350"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="40"
-    y="450"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="40"
-    y="454"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE5CD"
+    stroke="#D9A66C"
+    stroke-width="1.5" />
   <text
-    x="115"
-    y="475"
+    x="3425"
+    y="133.5"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
-    font-family="Arial, sans-serif">Leave review</text>
-  <text
-    x="115"
-    y="495"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
+    fill="#333">Leave review</text>
   <circle
-    cx="50"
-    cy="502"
-    r="5"
-    fill="#4ECDC4"
+    cx="3364"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
     stroke="#333" />
+  <line
+    x1="3425"
+    y1="161"
+    x2="3425"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
   <rect
-    x="210"
-    y="450"
+    x="3550"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFA94D"
-    stroke-width="2" />
-  <rect
-    x="210"
-    y="450"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFA94D"
-    stroke="none" />
-  <rect
-    x="210"
-    y="454"
-    width="150"
-    height="4"
-    fill="#FFA94D"
-    stroke="none" />
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE5CD"
+    stroke="#D9A66C"
+    stroke-width="1.5" />
   <text
-    x="285"
-    y="475"
+    x="3625"
+    y="133.5"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
-    font-family="Arial, sans-serif">Contact support</text>
+    font-family="Arial, sans-serif"
+    fill="#333">Contact support</text>
+  <circle
+    cx="3564"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="3579"
+    cy="106"
+    r="6"
+    fill="#5B8FF9"
+    stroke="#333" />
+  <line
+    x1="3625"
+    y1="161"
+    x2="3625"
+    y2="355"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="3750"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE5CD"
+    stroke="#D9A66C"
+    stroke-width="1.5" />
   <text
-    x="285"
-    y="495"
+    x="3825"
+    y="133.5"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="12px"
+    font-size="13px"
     font-family="Arial, sans-serif"
-    fill="#666">Score: 2</text>
+    fill="#333">Request return</text>
+  <circle
+    cx="3764"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="3779"
+    cy="106"
+    r="6"
+    fill="#5B8FF9"
+    stroke="#333" />
+  <line
+    x1="3825"
+    y1="161"
+    x2="3825"
+    y2="393"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="3950"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FCE5CD"
+    stroke="#D9A66C"
+    stroke-width="1.5" />
+  <text
+    x="4025"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Receive refund</text>
+  <circle
+    cx="3964"
+    cy="106"
+    r="6"
+    fill="#6BB36B"
+    stroke="#333" />
+  <circle
+    cx="3979"
+    cy="106"
+    r="6"
+    fill="#37C0CD"
+    stroke="#333" />
+  <line
+    x1="4025"
+    y1="161"
+    x2="4025"
+    y2="317"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <path
+    d="M 150 196 L 4125 196"
+    fill="none"
+    stroke="#333"
+    stroke-width="3"
+    marker-end="url(#journey-arrow)" />
+  <circle
+    cx="225"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
   <circle
     cx="220"
-    cy="502"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
   <circle
-    cx="235"
-    cy="502"
-    r="5"
-    fill="#45B7D1"
-    stroke="#333" />
-  <rect
-    x="380"
-    y="450"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FF6B6B"
-    stroke-width="2" />
-  <rect
-    x="380"
-    y="450"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FF6B6B"
-    stroke="none" />
-  <rect
-    x="380"
-    y="454"
-    width="150"
-    height="4"
-    fill="#FF6B6B"
-    stroke="none" />
-  <text
-    x="455"
-    y="475"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Request return</text>
-  <text
-    x="455"
-    y="495"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 1</text>
+    cx="230"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 219 296 Q 225 302 231 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
   <circle
-    cx="390"
-    cy="502"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
+    cx="425"
+    cy="332"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
   <circle
-    cx="405"
-    cy="502"
-    r="5"
-    fill="#45B7D1"
-    stroke="#333" />
-  <rect
-    x="550"
-    y="450"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFE066"
-    stroke-width="2" />
-  <rect
-    x="550"
-    y="450"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFE066"
-    stroke="none" />
-  <rect
-    x="550"
-    y="454"
-    width="150"
-    height="4"
-    fill="#FFE066"
-    stroke="none" />
-  <text
-    x="625"
-    y="475"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Receive refund</text>
-  <text
-    x="625"
-    y="495"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 3</text>
+    cx="420"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
   <circle
-    cx="560"
-    cy="502"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
+    cx="430"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 419 336 L 431 336"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
   <circle
-    cx="575"
-    cy="502"
-    r="5"
-    fill="#98D8C8"
-    stroke="#333" />
+    cx="625"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="620"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="630"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 619 258 Q 625 264 631 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="825"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="820"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="830"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 819 296 Q 825 302 831 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="1025"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="1020"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="1030"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 1019 258 Q 1025 264 1031 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="1225"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="1220"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="1230"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 1219 296 Q 1225 302 1231 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="1425"
+    cy="370"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="1420"
+    cy="367"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="1430"
+    cy="367"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 1419 376 Q 1425 370 1431 376"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="1625"
+    cy="332"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="1620"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="1630"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 1619 336 L 1631 336"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="1825"
+    cy="332"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="1820"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="1830"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 1819 336 L 1831 336"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="2025"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="2020"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="2030"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 2019 296 Q 2025 302 2031 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="2225"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="2220"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="2230"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 2219 258 Q 2225 264 2231 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="2425"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="2420"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="2430"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 2419 258 Q 2425 264 2431 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="2625"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="2620"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="2630"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 2619 296 Q 2625 302 2631 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="2825"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="2820"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="2830"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 2819 296 Q 2825 302 2831 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="3025"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="3020"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="3030"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 3019 258 Q 3025 264 3031 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="3225"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="3220"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="3230"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 3219 258 Q 3225 264 3231 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="3425"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="3420"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="3430"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 3419 296 Q 3425 302 3431 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="3625"
+    cy="370"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="3620"
+    cy="367"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="3630"
+    cy="367"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 3619 376 Q 3625 370 3631 376"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="3825"
+    cy="408"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="3820"
+    cy="405"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="3830"
+    cy="405"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 3819 414 Q 3825 408 3831 414"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="4025"
+    cy="332"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="4020"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="4030"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 4019 336 L 4031 336"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
 </svg>
