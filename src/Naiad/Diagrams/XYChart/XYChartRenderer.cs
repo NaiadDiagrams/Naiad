@@ -95,22 +95,6 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 fill: "#666");
         }
 
-        // Draw axes
-        builder.AddLine(
-            chartLeft,
-            chartTop,
-            chartLeft,
-            chartBottom,
-            stroke: "#333",
-            strokeWidth: 2);
-        builder.AddLine(
-            chartLeft,
-            chartBottom,
-            chartRight,
-            chartBottom,
-            stroke: "#333",
-            strokeWidth: 2);
-
         // Draw X-axis categories
         for (var i = 0; i < categoryCount; i++)
         {
@@ -224,6 +208,22 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
                 lineSeriesIndex++;
             }
         }
+
+        // Draw axes last so the baseline sits on top of the series
+        builder.AddLine(
+            chartLeft,
+            chartTop,
+            chartLeft,
+            chartBottom,
+            stroke: "#333",
+            strokeWidth: 2);
+        builder.AddLine(
+            chartLeft,
+            chartBottom,
+            chartRight,
+            chartBottom,
+            stroke: "#333",
+            strokeWidth: 2);
 
         return builder.Build();
     }
