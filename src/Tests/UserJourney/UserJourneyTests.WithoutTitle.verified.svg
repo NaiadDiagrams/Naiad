@@ -24,7 +24,7 @@
     cx="24"
     cy="39"
     r="7"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <text
     x="40"
@@ -38,7 +38,7 @@
     cx="24"
     cy="63"
     r="7"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <text
     x="40"
@@ -55,7 +55,7 @@
     height="38"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
+    fill="#DCE3F5"
     stroke="none" />
   <text
     x="325"
@@ -73,9 +73,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="225"
     y="93.5"
@@ -88,7 +88,7 @@
     cx="164"
     cy="66"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="225"
@@ -104,9 +104,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="425"
     y="93.5"
@@ -119,7 +119,7 @@
     cx="364"
     cy="66"
     r="6"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <line
     x1="425"

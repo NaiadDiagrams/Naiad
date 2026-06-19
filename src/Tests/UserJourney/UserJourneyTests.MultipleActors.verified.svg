@@ -21,9 +21,9 @@
     </marker>
   </defs>
   <text
-    x="670"
+    x="150"
     y="40"
-    text-anchor="middle"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="20px"
     font-family="Arial, sans-serif"
@@ -33,7 +33,7 @@
     cx="24"
     cy="79"
     r="7"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <text
     x="40"
@@ -47,7 +47,7 @@
     cx="24"
     cy="103"
     r="7"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <text
     x="40"
@@ -61,7 +61,7 @@
     cx="24"
     cy="127"
     r="7"
-    fill="#F6BD16"
+    fill="#FFCA28"
     stroke="#333" />
   <text
     x="40"
@@ -75,7 +75,7 @@
     cx="24"
     cy="151"
     r="7"
-    fill="#E8684A"
+    fill="#EF5350"
     stroke="#333" />
   <text
     x="40"
@@ -89,7 +89,7 @@
     cx="24"
     cy="175"
     r="7"
-    fill="#9270CA"
+    fill="#AB47BC"
     stroke="#333" />
   <text
     x="40"
@@ -106,7 +106,7 @@
     height="38"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
+    fill="#DCE3F5"
     stroke="none" />
   <text
     x="325"
@@ -124,9 +124,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="225"
     y="133.5"
@@ -139,13 +139,13 @@
     cx="164"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <circle
     cx="179"
     cy="106"
     r="6"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <line
     x1="225"
@@ -161,9 +161,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="425"
     y="133.5"
@@ -176,13 +176,13 @@
     cx="364"
     cy="106"
     r="6"
-    fill="#F6BD16"
+    fill="#FFCA28"
     stroke="#333" />
   <circle
     cx="379"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="425"
@@ -198,7 +198,7 @@
     height="38"
     rx="5"
     ry="5"
-    fill="#FBF8CC"
+    fill="#FBF6C6"
     stroke="none" />
   <text
     x="725"
@@ -216,9 +216,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#FBF8CC"
-    stroke="#C7BE50"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#CFC65E"
+    stroke-width="2" />
   <text
     x="625"
     y="133.5"
@@ -231,7 +231,7 @@
     cx="564"
     cy="106"
     r="6"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <line
     x1="625"
@@ -247,9 +247,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#FBF8CC"
-    stroke="#C7BE50"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#CFC65E"
+    stroke-width="2" />
   <text
     x="825"
     y="133.5"
@@ -262,13 +262,13 @@
     cx="764"
     cy="106"
     r="6"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <circle
     cx="779"
     cy="106"
     r="6"
-    fill="#E8684A"
+    fill="#EF5350"
     stroke="#333" />
   <line
     x1="825"
@@ -284,7 +284,7 @@
     height="38"
     rx="5"
     ry="5"
-    fill="#FCE1EC"
+    fill="#FBE2EC"
     stroke="none" />
   <text
     x="1125"
@@ -302,9 +302,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#FCE1EC"
-    stroke="#D98AA8"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#DD9CBB"
+    stroke-width="2" />
   <text
     x="1025"
     y="133.5"
@@ -317,13 +317,13 @@
     cx="964"
     cy="106"
     r="6"
-    fill="#9270CA"
+    fill="#AB47BC"
     stroke="#333" />
   <circle
     cx="979"
     cy="106"
     r="6"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <line
     x1="1025"
@@ -339,9 +339,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#FCE1EC"
-    stroke="#D98AA8"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#DD9CBB"
+    stroke-width="2" />
   <text
     x="1225"
     y="133.5"
@@ -354,7 +354,7 @@
     cx="1164"
     cy="106"
     r="6"
-    fill="#5B8FF9"
+    fill="#42A5F5"
     stroke="#333" />
   <line
     x1="1225"

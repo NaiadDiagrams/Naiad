@@ -21,9 +21,9 @@
     </marker>
   </defs>
   <text
-    x="570"
+    x="150"
     y="40"
-    text-anchor="middle"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="20px"
     font-family="Arial, sans-serif"
@@ -33,7 +33,7 @@
     cx="24"
     cy="79"
     r="7"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <text
     x="40"
@@ -50,7 +50,7 @@
     height="38"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
+    fill="#DCE3F5"
     stroke="none" />
   <text
     x="625"
@@ -68,9 +68,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="225"
     y="133.5"
@@ -83,7 +83,7 @@
     cx="164"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="225"
@@ -99,9 +99,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="425"
     y="133.5"
@@ -114,7 +114,7 @@
     cx="364"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="425"
@@ -130,9 +130,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="625"
     y="133.5"
@@ -145,7 +145,7 @@
     cx="564"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="625"
@@ -161,9 +161,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="825"
     y="133.5"
@@ -176,7 +176,7 @@
     cx="764"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="825"
@@ -192,9 +192,9 @@
     height="55"
     rx="5"
     ry="5"
-    fill="#E1E5F2"
-    stroke="#8893C2"
-    stroke-width="1.5" />
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
     x="1025"
     y="133.5"
@@ -207,7 +207,7 @@
     cx="964"
     cy="106"
     r="6"
-    fill="#6BB36B"
+    fill="#66BB6A"
     stroke="#333" />
   <line
     x1="1025"

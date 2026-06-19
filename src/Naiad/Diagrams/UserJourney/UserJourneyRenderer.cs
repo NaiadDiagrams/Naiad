@@ -16,41 +16,43 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
     const double FaceRadius = 15;
     const double RightMargin = 40;
 
-    // Per-section pastel fills (header bar + task boxes) with a matching darker border.
+    // Per-section pastel fills for the header bars.
     static readonly string[] SectionFills =
     [
-        "#E1E5F2",
-        "#FBF8CC",
-        "#FCE1EC",
-        "#E2F0D9",
-        "#FCE5CD",
-        "#E5D9F2",
-        "#D7F0F0"
+        "#DCE3F5",
+        "#FBF6C6",
+        "#FBE2EC",
+        "#DDEFD2",
+        "#FCE5CB",
+        "#E7DCF4",
+        "#D3EFEF"
     ];
 
-    static readonly string[] SectionStrokes =
+    // Softer section-tinted borders for the white task cards.
+    static readonly string[] SectionBorders =
     [
-        "#8893C2",
-        "#C7BE50",
-        "#D98AA8",
-        "#8FBF6F",
-        "#D9A66C",
-        "#A98AC2",
-        "#6FBFBF"
+        "#9AA7D6",
+        "#CFC65E",
+        "#DD9CBB",
+        "#93C277",
+        "#E0AE73",
+        "#B097D2",
+        "#79C7C7"
     ];
 
     static readonly string[] ActorColors =
     [
-        "#6BB36B",
-        "#5B8FF9",
-        "#F6BD16",
-        "#E8684A",
-        "#9270CA",
-        "#37C0CD",
-        "#FF9D4D",
-        "#269A99"
+        "#66BB6A",
+        "#42A5F5",
+        "#FFCA28",
+        "#EF5350",
+        "#AB47BC",
+        "#26C6DA",
+        "#FFA726",
+        "#26A69A"
     ];
 
+    const string TaskFill = "#FFFFFF";
     const string FaceFill = "#F0EAD0";
     const string FaceStroke = "#8C8455";
     const string FaceFeature = "#3F3F3F";
@@ -101,10 +103,10 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
-                width / 2,
+                LeftMargin,
                 options.Padding + TitleHeight / 2,
                 model.Title,
-                anchor: "middle",
+                anchor: "start",
                 baseline: "middle",
                 fontSize: options.FontSize + 6,
                 fontFamily: options.FontFamily,
@@ -135,7 +137,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         {
             var section = sections[sectionIndex];
             var fill = SectionFills[sectionIndex % SectionFills.Length];
-            var stroke = SectionStrokes[sectionIndex % SectionStrokes.Length];
+            var border = SectionBorders[sectionIndex % SectionBorders.Length];
 
             var firstTaskX = TaskX(globalIndex);
             var sectionRight = TaskX(globalIndex + section.Tasks.Count - 1) + TaskWidth;
@@ -175,9 +177,9 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                     TaskWidth,
                     TaskHeight,
                     rx: CornerRadius,
-                    fill: fill,
-                    stroke: stroke,
-                    strokeWidth: 1.5);
+                    fill: TaskFill,
+                    stroke: border,
+                    strokeWidth: 2);
 
                 builder.AddText(
                     centerX,
