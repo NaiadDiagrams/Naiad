@@ -1,156 +1,179 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 400 205"
-  style="max-width: 400px;"
+  viewBox="0 0 540 289"
+  style="max-width: 540px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="journey-arrow"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <circle
+    cx="24"
+    cy="39"
+    r="7"
+    fill="#66BB6A"
+    stroke="#333" />
   <text
-    x="280"
-    y="30"
+    x="40"
+    y="39"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
-    font-weight="bold">Actors:</text>
+    fill="#333">Alice</text>
   <circle
-    cx="290"
-    cy="60"
-    r="8"
-    fill="#4ECDC4"
+    cx="24"
+    cy="63"
+    r="7"
+    fill="#42A5F5"
     stroke="#333" />
   <text
-    x="305"
-    y="60"
+    x="40"
+    y="63"
     text-anchor="start"
     dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Alice</text>
-  <circle
-    cx="290"
-    cy="90"
-    r="8"
-    fill="#45B7D1"
-    stroke="#333" />
-  <text
-    x="305"
-    y="90"
-    text-anchor="start"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Bob</text>
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Bob</text>
   <rect
-    x="20"
+    x="150"
     y="20"
-    width="240"
-    height="90"
+    width="350"
+    height="38"
     rx="5"
     ry="5"
-    fill="#E3F2FD"
+    fill="#DCE3F5"
     stroke="none" />
   <text
-    x="30"
-    y="35"
-    text-anchor="start"
+    x="325"
+    y="39"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Tasks</text>
   <rect
-    x="40"
-    y="50"
+    x="150"
+    y="66"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
     stroke-width="2" />
-  <rect
-    x="40"
-    y="50"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="40"
-    y="54"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
   <text
-    x="115"
-    y="75"
+    x="225"
+    y="93.5"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
-    font-family="Arial, sans-serif">First task</text>
-  <text
-    x="115"
-    y="95"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
+    fill="#333">First task</text>
   <circle
-    cx="50"
-    cy="102"
-    r="5"
-    fill="#4ECDC4"
+    cx="164"
+    cy="66"
+    r="6"
+    fill="#66BB6A"
     stroke="#333" />
+  <line
+    x1="225"
+    y1="121"
+    x2="225"
+    y2="239"
+    stroke="#999"
+    stroke-dasharray="3,3" />
   <rect
-    x="210"
-    y="50"
+    x="350"
+    y="66"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
     stroke-width="2" />
-  <rect
-    x="210"
-    y="50"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="210"
-    y="54"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
   <text
-    x="285"
-    y="75"
+    x="425"
+    y="93.5"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
-    font-family="Arial, sans-serif">Second task</text>
-  <text
-    x="285"
-    y="95"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
+    fill="#333">Second task</text>
+  <circle
+    cx="364"
+    cy="66"
+    r="6"
+    fill="#42A5F5"
+    stroke="#333" />
+  <line
+    x1="425"
+    y1="121"
+    x2="425"
+    y2="201"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <path
+    d="M 150 156 L 525 156"
+    fill="none"
+    stroke="#333"
+    stroke-width="3"
+    marker-end="url(#journey-arrow)" />
+  <circle
+    cx="225"
+    cy="254"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
   <circle
     cx="220"
-    cy="102"
-    r="5"
-    fill="#45B7D1"
-    stroke="#333" />
+    cy="251"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="230"
+    cy="251"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 219 256 Q 225 262 231 256"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="425"
+    cy="216"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="420"
+    cy="213"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="430"
+    cy="213"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 419 218 Q 425 224 431 218"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
 </svg>

@@ -2,35 +2,65 @@ namespace Naiad.Diagrams.UserJourney;
 
 public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 {
+    const double LeftMargin = 150;
     const double TaskWidth = 150;
-    const double TaskHeight = 60;
-    const double TaskMargin = 20;
-    const double SectionPadding = 15;
+    const double TaskGap = 50;
+    const double TaskHeight = 55;
+    const double CornerRadius = 5;
+    const double SectionBarHeight = 38;
+    const double SectionTaskGap = 8;
     const double TitleHeight = 40;
-    const double ActorRowHeight = 30;
+    const double AxisGap = 35;
+    const double FaceGap = 60;
+    const double FaceStep = 38;
+    const double FaceRadius = 15;
+    const double RightMargin = 40;
 
-    // Score colors from red (1) to green (5)
-    static readonly string[] ScoreColors =
+    // Per-section pastel fills for the header bars.
+    static readonly string[] SectionFills =
     [
-        "#FF6B6B", // 1 - red
-        "#FFA94D", // 2 - orange
-        "#FFE066", // 3 - yellow
-        "#8CE99A", // 4 - light green
-        "#51CF66"  // 5 - green
+        "#DCE3F5",
+        "#FBF6C6",
+        "#FBE2EC",
+        "#DDEFD2",
+        "#FCE5CB",
+        "#E7DCF4",
+        "#D3EFEF"
     ];
 
-    static readonly string[] SectionColors =
+    // Softer section-tinted borders for the white task cards.
+    static readonly string[] SectionBorders =
     [
-        "#E3F2FD",
-        "#F3E5F5",
-        "#E8F5E9",
-        "#FFF3E0",
-        "#FCE4EC"
+        "#9AA7D6",
+        "#CFC65E",
+        "#DD9CBB",
+        "#93C277",
+        "#E0AE73",
+        "#B097D2",
+        "#79C7C7"
     ];
+
+    static readonly string[] ActorColors =
+    [
+        "#66BB6A",
+        "#42A5F5",
+        "#FFCA28",
+        "#EF5350",
+        "#AB47BC",
+        "#26C6DA",
+        "#FFA726",
+        "#26A69A"
+    ];
+
+    const string TaskFill = "#FFFFFF";
+    const string FaceFill = "#F0EAD0";
+    const string FaceStroke = "#8C8455";
+    const string FaceFeature = "#3F3F3F";
 
     public SvgDocument Render(UserJourneyModel model, RenderOptions options)
     {
-        if (model.Sections.Count == 0 || model.Sections.All(_ => _.Tasks.Count == 0))
+        var sections = model.Sections.Where(_ => _.Tasks.Count > 0).ToList();
+        if (sections.Count == 0)
         {
             var emptyBuilder = new SvgBuilder().Size(200, 100);
             emptyBuilder.AddText(
@@ -44,94 +74,91 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
             return emptyBuilder.Build();
         }
 
-        // Collect all unique actors
-        var allActors = model.Sections
-            .SelectMany(_ => _.Tasks)
+        var tasks = sections.SelectMany(_ => _.Tasks).ToList();
+        var taskCount = tasks.Count;
+
+        var actors = tasks
             .SelectMany(_ => _.Actors)
             .Distinct()
             .ToList();
 
-        // Calculate layout
-        var maxTasks = model.Sections.Max(_ => _.Tasks.Count);
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var actorsHeight = allActors.Count * ActorRowHeight + SectionPadding;
 
-        var width = maxTasks * (TaskWidth + TaskMargin) + options.Padding * 2 + TaskMargin;
-        const double sectionHeight = TaskHeight + SectionPadding * 2;
-        var height = titleOffset + model.Sections.Count * sectionHeight + actorsHeight + options.Padding * 2;
+        var sectionBarY = options.Padding + titleOffset;
+        var taskY = sectionBarY + SectionBarHeight + SectionTaskGap;
+        var taskBottom = taskY + TaskHeight;
+        var axisY = taskBottom + AxisGap;
+
+        var lastTaskRight = TaskX(taskCount - 1) + TaskWidth;
+        var minScore = tasks.Min(_ => _.Score);
+        var lowestFaceY = FaceCenterY(axisY, minScore);
+
+        var width = lastTaskRight + RightMargin;
+        var height = lowestFaceY + FaceRadius + options.Padding;
 
         var builder = new SvgBuilder().Size(width, height);
+        builder.AddArrowMarker("journey-arrow", "#333");
 
-        // Draw title
+        // Title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
-                width / 2,
+                LeftMargin,
                 options.Padding + TitleHeight / 2,
                 model.Title,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize + 4,
-                fontFamily: options.FontFamily,
-                fontWeight: "bold");
-        }
-
-        // Draw actors legend on the right
-        var legendX = width - options.Padding - 100;
-        var legendY = titleOffset + options.Padding + 10;
-
-        builder.AddText(
-            legendX,
-            legendY,
-            "Actors:",
-            anchor: "start",
-            baseline: "middle",
-            fontSize: options.FontSize,
-            fontFamily: options.FontFamily,
-            fontWeight: "bold");
-
-        for (var i = 0; i < allActors.Count; i++)
-        {
-            var actorY = legendY + (i + 1) * ActorRowHeight;
-            var actorColor = GetActorColor(i);
-
-            builder.AddCircle(legendX + 10, actorY, 8, fill: actorColor, stroke: "#333", strokeWidth: 1);
-            builder.AddText(
-                legendX + 25,
-                actorY,
-                allActors[i],
                 anchor: "start",
                 baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
+                fontSize: options.FontSize + 6,
+                fontFamily: options.FontFamily,
+                fontWeight: "bold",
+                fill: "#333");
         }
 
-        // Draw sections
-        var currentY = titleOffset + options.Padding;
-        var sectionIndex = 0;
-
-        foreach (var section in model.Sections)
+        // Actor legend (left margin)
+        for (var actorIndex = 0; actorIndex < actors.Count; actorIndex++)
         {
-            var sectionColor = SectionColors[sectionIndex % SectionColors.Length];
+            var legendY = sectionBarY + SectionBarHeight / 2 + actorIndex * 24;
+            var actorColor = ActorColors[actorIndex % ActorColors.Length];
+            builder.AddCircle(24, legendY, 7, fill: actorColor, stroke: "#333", strokeWidth: 1);
+            builder.AddText(
+                40,
+                legendY,
+                actors[actorIndex],
+                anchor: "start",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
+                fill: "#333");
+        }
 
-            // Section background
+        // Sections: header bar spans its tasks, then the task boxes and drop-lines below.
+        var globalIndex = 0;
+        for (var sectionIndex = 0; sectionIndex < sections.Count; sectionIndex++)
+        {
+            var section = sections[sectionIndex];
+            var fill = SectionFills[sectionIndex % SectionFills.Length];
+            var border = SectionBorders[sectionIndex % SectionBorders.Length];
+
+            var firstTaskX = TaskX(globalIndex);
+            var sectionRight = TaskX(globalIndex + section.Tasks.Count - 1) + TaskWidth;
+            var sectionWidth = sectionRight - firstTaskX;
+
             builder.AddRect(
-                options.Padding,
-                currentY,
-                width - options.Padding * 2 - 120,
-                sectionHeight,
-                fill: sectionColor,
-                stroke: "none",
-                rx: 5);
+                firstTaskX,
+                sectionBarY,
+                sectionWidth,
+                SectionBarHeight,
+                rx: CornerRadius,
+                fill: fill,
+                stroke: "none");
 
-            // Section name
             if (!string.IsNullOrEmpty(section.Name))
             {
                 builder.AddText(
-                    options.Padding + 10,
-                    currentY + 15,
+                    firstTaskX + sectionWidth / 2,
+                    sectionBarY + SectionBarHeight / 2,
                     section.Name,
-                    anchor: "start",
+                    anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize,
                     fontFamily: options.FontFamily,
@@ -139,93 +166,104 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                     fill: "#333");
             }
 
-            // Draw tasks
-            var taskX = options.Padding + TaskMargin;
-            var taskY = currentY + SectionPadding + 15;
-
             foreach (var task in section.Tasks)
             {
-                var scoreColor = ScoreColors[Math.Clamp(task.Score - 1, 0, 4)];
+                var taskX = TaskX(globalIndex);
+                var centerX = taskX + TaskWidth / 2;
 
-                // Task card
                 builder.AddRect(
                     taskX,
                     taskY,
                     TaskWidth,
                     TaskHeight,
-                    fill: "#fff",
-                    stroke: scoreColor,
-                    strokeWidth: 2,
-                    rx: 8);
+                    rx: CornerRadius,
+                    fill: TaskFill,
+                    stroke: border,
+                    strokeWidth: 2);
 
-                // Score indicator bar at top
-                builder.AddRect(
-                    taskX,
-                    taskY,
-                    TaskWidth,
-                    8,
-                    fill: scoreColor,
-                    stroke: "none",
-                    rx: 8);
-                // Cover bottom corners of score bar
-                builder.AddRect(
-                    taskX,
-                    taskY + 4,
-                    TaskWidth,
-                    4,
-                    fill: scoreColor,
-                    stroke: "none");
-
-                // Task name
                 builder.AddText(
-                    taskX + TaskWidth / 2,
-                    taskY + 25,
+                    centerX,
+                    taskY + TaskHeight / 2,
                     task.Name,
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize - 1,
-                    fontFamily: options.FontFamily);
-
-                // Score badge
-                builder.AddText(
-                    taskX + TaskWidth / 2,
-                    taskY + 45,
-                    $"Score: {task.Score}",
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
                     fontFamily: options.FontFamily,
-                    fill: "#666");
+                    fill: "#333");
 
-                // Actor indicators
-                var actorX = taskX + 5;
-                foreach (var actor in task.Actors)
+                // Actor dots along the top edge, from the top-left corner.
+                for (var taskActorIndex = 0; taskActorIndex < task.Actors.Count; taskActorIndex++)
                 {
-                    var actorIndex = allActors.IndexOf(actor);
-                    var actorColor = GetActorColor(actorIndex);
+                    var actorColor = ActorColors[actors.IndexOf(task.Actors[taskActorIndex]) % ActorColors.Length];
                     builder.AddCircle(
-                        actorX + 5,
-                        taskY + TaskHeight - 8,
-                        5,
+                        taskX + 14 + taskActorIndex * 15,
+                        taskY,
+                        6,
                         fill: actorColor,
                         stroke: "#333",
                         strokeWidth: 1);
-                    actorX += 15;
                 }
 
-                taskX += TaskWidth + TaskMargin;
-            }
+                // Dashed drop-line from the task down past the axis to its score face.
+                var faceCenterY = FaceCenterY(axisY, task.Score);
+                builder.AddLine(
+                    centerX,
+                    taskBottom,
+                    centerX,
+                    faceCenterY - FaceRadius,
+                    stroke: "#999",
+                    strokeWidth: 1,
+                    strokeDasharray: "3,3");
 
-            currentY += sectionHeight;
-            sectionIndex++;
+                globalIndex++;
+            }
+        }
+
+        // Timeline axis, drawn over the drop-lines.
+        builder.AddPath(
+            string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {LeftMargin:0.##} {axisY:0.##} L {lastTaskRight + 25:0.##} {axisY:0.##}"),
+            fill: "none",
+            stroke: "#333",
+            strokeWidth: 3,
+            markerEnd: "url(#journey-arrow)");
+
+        // Score faces, drawn last so they sit above the axis and drop-lines.
+        for (var index = 0; index < tasks.Count; index++)
+        {
+            var centerX = TaskX(index) + TaskWidth / 2;
+            DrawFace(builder, centerX, FaceCenterY(axisY, tasks[index].Score), tasks[index].Score);
         }
 
         return builder.Build();
     }
 
-    static string GetActorColor(int index)
+    static double TaskX(int index) => LeftMargin + index * (TaskWidth + TaskGap);
+
+    static double FaceCenterY(double axisY, int score) => axisY + FaceGap + (5 - score) * FaceStep;
+
+    static void DrawFace(SvgBuilder builder, double cx, double cy, int score)
     {
-        string[] colors = ["#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD", "#98D8C8"];
-        return colors[index % colors.Length];
+        builder.AddCircle(cx, cy, FaceRadius, fill: FaceFill, stroke: FaceStroke, strokeWidth: 1);
+
+        builder.AddCircle(cx - 5, cy - 3, 1.6, fill: FaceFeature);
+        builder.AddCircle(cx + 5, cy - 3, 1.6, fill: FaceFeature);
+
+        // Mouth tracks the score: smile (>= 4), flat (3), frown (<= 2).
+        var mouth = score switch
+        {
+            >= 4 => string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {cx - 6:0.##} {cy + 2:0.##} Q {cx:0.##} {cy + 8:0.##} {cx + 6:0.##} {cy + 2:0.##}"),
+            <= 2 => string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {cx - 6:0.##} {cy + 6:0.##} Q {cx:0.##} {cy:0.##} {cx + 6:0.##} {cy + 6:0.##}"),
+            _ => string.Create(
+                CultureInfo.InvariantCulture,
+                $"M {cx - 6:0.##} {cy + 4:0.##} L {cx + 6:0.##} {cy + 4:0.##}")
+        };
+
+        builder.AddPath(mouth, fill: "none", stroke: FaceFeature, strokeWidth: 1.5);
     }
 }

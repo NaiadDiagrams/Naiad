@@ -1,292 +1,330 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 910 215"
-  style="max-width: 910px;"
+  viewBox="0 0 1140 443"
+  style="max-width: 1140px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="journey-arrow"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
   <text
-    x="455"
+    x="150"
     y="40"
-    text-anchor="middle"
+    text-anchor="start"
     dominant-baseline="middle"
-    font-size="18px"
+    font-size="20px"
     font-family="Arial, sans-serif"
-    font-weight="bold">Score Examples</text>
+    font-weight="bold"
+    fill="#333">Score Examples</text>
+  <circle
+    cx="24"
+    cy="79"
+    r="7"
+    fill="#66BB6A"
+    stroke="#333" />
   <text
-    x="790"
-    y="70"
+    x="40"
+    y="79"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
-    font-weight="bold">Actors:</text>
-  <circle
-    cx="800"
-    cy="100"
-    r="8"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <text
-    x="815"
-    y="100"
-    text-anchor="start"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">User</text>
+    fill="#333">User</text>
   <rect
-    x="20"
+    x="150"
     y="60"
-    width="750"
-    height="90"
+    width="950"
+    height="38"
     rx="5"
     ry="5"
-    fill="#E3F2FD"
+    fill="#DCE3F5"
     stroke="none" />
   <text
-    x="30"
-    y="75"
-    text-anchor="start"
+    x="625"
+    y="79"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">Experience</text>
   <rect
-    x="40"
-    y="90"
+    x="150"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FF6B6B"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
     stroke-width="2" />
-  <rect
-    x="40"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FF6B6B"
-    stroke="none" />
-  <rect
-    x="40"
-    y="94"
-    width="150"
-    height="4"
-    fill="#FF6B6B"
-    stroke="none" />
   <text
-    x="115"
-    y="115"
+    x="225"
+    y="133.5"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
-    font-family="Arial, sans-serif">Terrible</text>
-  <text
-    x="115"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#666">Score: 1</text>
+    fill="#333">Terrible</text>
   <circle
-    cx="50"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
+    cx="164"
+    cy="106"
+    r="6"
+    fill="#66BB6A"
     stroke="#333" />
+  <line
+    x1="225"
+    y1="161"
+    x2="225"
+    y2="393"
+    stroke="#999"
+    stroke-dasharray="3,3" />
   <rect
-    x="210"
-    y="90"
+    x="350"
+    y="106"
     width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFA94D"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
     stroke-width="2" />
-  <rect
-    x="210"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFA94D"
-    stroke="none" />
-  <rect
-    x="210"
-    y="94"
-    width="150"
-    height="4"
-    fill="#FFA94D"
-    stroke="none" />
   <text
-    x="285"
-    y="115"
+    x="425"
+    y="133.5"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="13px"
-    font-family="Arial, sans-serif">Bad</text>
+    font-family="Arial, sans-serif"
+    fill="#333">Bad</text>
+  <circle
+    cx="364"
+    cy="106"
+    r="6"
+    fill="#66BB6A"
+    stroke="#333" />
+  <line
+    x1="425"
+    y1="161"
+    x2="425"
+    y2="355"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="550"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
   <text
-    x="285"
-    y="135"
+    x="625"
+    y="133.5"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="12px"
+    font-size="13px"
     font-family="Arial, sans-serif"
-    fill="#666">Score: 2</text>
+    fill="#333">Okay</text>
+  <circle
+    cx="564"
+    cy="106"
+    r="6"
+    fill="#66BB6A"
+    stroke="#333" />
+  <line
+    x1="625"
+    y1="161"
+    x2="625"
+    y2="317"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="750"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
+  <text
+    x="825"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Good</text>
+  <circle
+    cx="764"
+    cy="106"
+    r="6"
+    fill="#66BB6A"
+    stroke="#333" />
+  <line
+    x1="825"
+    y1="161"
+    x2="825"
+    y2="279"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <rect
+    x="950"
+    y="106"
+    width="150"
+    height="55"
+    rx="5"
+    ry="5"
+    fill="#FFFFFF"
+    stroke="#9AA7D6"
+    stroke-width="2" />
+  <text
+    x="1025"
+    y="133.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Great</text>
+  <circle
+    cx="964"
+    cy="106"
+    r="6"
+    fill="#66BB6A"
+    stroke="#333" />
+  <line
+    x1="1025"
+    y1="161"
+    x2="1025"
+    y2="241"
+    stroke="#999"
+    stroke-dasharray="3,3" />
+  <path
+    d="M 150 196 L 1125 196"
+    fill="none"
+    stroke="#333"
+    stroke-width="3"
+    marker-end="url(#journey-arrow)" />
+  <circle
+    cx="225"
+    cy="408"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
   <circle
     cx="220"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="380"
-    y="90"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#FFE066"
-    stroke-width="2" />
-  <rect
-    x="380"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#FFE066"
-    stroke="none" />
-  <rect
-    x="380"
-    y="94"
-    width="150"
-    height="4"
-    fill="#FFE066"
-    stroke="none" />
-  <text
-    x="455"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Okay</text>
-  <text
-    x="455"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 3</text>
+    cy="405"
+    r="1.6"
+    fill="#3F3F3F" />
   <circle
-    cx="390"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="550"
-    y="90"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#8CE99A"
-    stroke-width="2" />
-  <rect
-    x="550"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#8CE99A"
-    stroke="none" />
-  <rect
-    x="550"
-    y="94"
-    width="150"
-    height="4"
-    fill="#8CE99A"
-    stroke="none" />
-  <text
-    x="625"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Good</text>
-  <text
-    x="625"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 4</text>
+    cx="230"
+    cy="405"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 219 414 Q 225 408 231 414"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
   <circle
-    cx="560"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
-  <rect
-    x="720"
-    y="90"
-    width="150"
-    height="60"
-    rx="8"
-    ry="8"
-    fill="#fff"
-    stroke="#51CF66"
-    stroke-width="2" />
-  <rect
-    x="720"
-    y="90"
-    width="150"
-    height="8"
-    rx="8"
-    ry="8"
-    fill="#51CF66"
-    stroke="none" />
-  <rect
-    x="720"
-    y="94"
-    width="150"
-    height="4"
-    fill="#51CF66"
-    stroke="none" />
-  <text
-    x="795"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif">Great</text>
-  <text
-    x="795"
-    y="135"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#666">Score: 5</text>
+    cx="425"
+    cy="370"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
   <circle
-    cx="730"
-    cy="142"
-    r="5"
-    fill="#4ECDC4"
-    stroke="#333" />
+    cx="420"
+    cy="367"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="430"
+    cy="367"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 419 376 Q 425 370 431 376"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="625"
+    cy="332"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="620"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="630"
+    cy="329"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 619 336 L 631 336"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="825"
+    cy="294"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="820"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="830"
+    cy="291"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 819 296 Q 825 302 831 296"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
+  <circle
+    cx="1025"
+    cy="256"
+    r="15"
+    fill="#F0EAD0"
+    stroke="#8C8455" />
+  <circle
+    cx="1020"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <circle
+    cx="1030"
+    cy="253"
+    r="1.6"
+    fill="#3F3F3F" />
+  <path
+    d="M 1019 258 Q 1025 264 1031 258"
+    fill="none"
+    stroke="#3F3F3F"
+    stroke-width="1.5" />
 </svg>
