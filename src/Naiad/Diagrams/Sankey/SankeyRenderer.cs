@@ -77,9 +77,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var sourceNode = nodes[link.Source];
             var targetNode = nodes[link.Target];
 
-            var linkHeight = link.Value / Math.Max(1, sourceNode.OutputValue) * sourceNode.Height;
-            var sourceBand = link.Value / sourceNode.OutputValue * sourceNode.Height;
-            var targetBand = link.Value / targetNode.InputValue * targetNode.Height;
+            var sourceBand = link.Value / Math.Max(1, sourceNode.OutputValue) * sourceNode.Height;
+            var targetBand = link.Value / Math.Max(1, targetNode.InputValue) * targetNode.Height;
 
             sourceOffsets.TryGetValue(link.Source, out var sOff);
             targetOffsets.TryGetValue(link.Target, out var tOff);
@@ -93,8 +92,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var sourceX = options.Padding + sourceNode.Column * ColumnSpacing + NodeWidth;
             var targetX = options.Padding + targetNode.Column * ColumnSpacing;
 
-            // Draw bezier curve for link
-            var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, linkHeight);
+            // Draw bezier curve for link (tapers from source band to target band so each end meets its node edge exactly)
+            var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, sourceBand, targetBand);
             var colorIndex = Array.IndexOf(nodes.Keys.ToArray(), link.Source) % NodeColors.Length;
             builder.AddPath(
                 pathData,
@@ -223,13 +222,14 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
     }
 
-    static string CreateLinkPath(double x1, double y1, double x2, double y2, double height)
+    static string CreateLinkPath(double x1, double y1, double x2, double y2, double sourceHeight, double targetHeight)
     {
-        var halfHeight = height / 2;
+        var sourceHalf = sourceHeight / 2;
+        var targetHalf = targetHeight / 2;
         var cx = (x1 + x2) / 2;
 
         return string.Create(
             CultureInfo.InvariantCulture,
-            $"M {x1:0.##} {y1 - halfHeight:0.##} C {cx:0.##} {y1 - halfHeight:0.##} {cx:0.##} {y2 - halfHeight:0.##} {x2:0.##} {y2 - halfHeight:0.##} L {x2:0.##} {y2 + halfHeight:0.##} C {cx:0.##} {y2 + halfHeight:0.##} {cx:0.##} {y1 + halfHeight:0.##} {x1:0.##} {y1 + halfHeight:0.##} Z");
+            $"M {x1:0.##} {y1 - sourceHalf:0.##} C {cx:0.##} {y1 - sourceHalf:0.##} {cx:0.##} {y2 - targetHalf:0.##} {x2:0.##} {y2 - targetHalf:0.##} L {x2:0.##} {y2 + targetHalf:0.##} C {cx:0.##} {y2 + targetHalf:0.##} {cx:0.##} {y1 + sourceHalf:0.##} {x1:0.##} {y1 + sourceHalf:0.##} Z");
     }
 }
