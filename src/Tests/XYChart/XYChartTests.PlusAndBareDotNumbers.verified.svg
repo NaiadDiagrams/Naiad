@@ -1,0 +1,195 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 620 490"
+  style="max-width: 620px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="310"
+    y="35"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="18px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Fractional Values</text>
+  <line
+    x1="80"
+    y1="410"
+    x2="580"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="410"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">0</text>
+  <line
+    x1="80"
+    y1="350"
+    x2="580"
+    y2="350"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="350"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">0.6</text>
+  <line
+    x1="80"
+    y1="290"
+    x2="580"
+    y2="290"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="290"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">1.2</text>
+  <line
+    x1="80"
+    y1="230"
+    x2="580"
+    y2="230"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="230"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">1.8</text>
+  <line
+    x1="80"
+    y1="170"
+    x2="580"
+    y2="170"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="170"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">2.4</text>
+  <line
+    x1="80"
+    y1="110"
+    x2="580"
+    y2="110"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="110"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">3</text>
+  <text
+    x="142.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">A</text>
+  <text
+    x="267.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">B</text>
+  <text
+    x="392.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">C</text>
+  <text
+    x="517.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">D</text>
+  <g
+    transform="rotate(-90, 35, 260)">
+    <text
+      x="35"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333">Value</text>
+  </g>
+  <rect
+    x="92.5"
+    y="360"
+    width="98"
+    height="50"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="217.5"
+    y="260"
+    width="98"
+    height="150"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="342.5"
+    y="210"
+    width="98"
+    height="200"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="467.5"
+    y="160"
+    width="98"
+    height="250"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <line
+    x1="80"
+    y1="110"
+    x2="80"
+    y2="410"
+    stroke="#333"
+    stroke-width="2" />
+  <line
+    x1="80"
+    y1="410"
+    x2="580"
+    y2="410"
+    stroke="#333"
+    stroke-width="2" />
+</svg>

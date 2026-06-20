@@ -50,14 +50,17 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
         from ____ in CommonParsers.LineEnd
         select (num, label.Trim());
 
-    // Number parser for coordinates
-    static Parser<char, double> numberParser =
-        from sign in Char('-').Optional()
-        from integer in Digit.AtLeastOnceString()
-        from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
-        select double.Parse(
-            (sign.HasValue ? "-" : "") + integer + (frac.HasValue ? "." + frac.Value : ""),
-            CultureInfo.InvariantCulture);
+    // Coordinate value. Mirrors Mermaid's lexer rule (1)|(0(\.\d+)?): either a bare 1, or a 0 with
+    // an optional fraction. Anything else (1.0, 1.5, 2, -3, ...) fails to parse, exactly as mermaid.js
+    // rejects it with a lexical error — so a parsed value is always within [0, 1].
+    static Parser<char, double> coordinateParser =
+        Char('1').ThenReturn(1d)
+            .Or(
+                from _ in Char('0')
+                from frac in Try(Char('.').Then(Digit.AtLeastOnceString())).Optional()
+                select frac.HasValue
+                    ? double.Parse("0." + frac.Value, CultureInfo.InvariantCulture)
+                    : 0d);
 
     // Point: Name: [0.5, 0.7]
     static Parser<char, QuadrantPoint> pointParser =
@@ -67,11 +70,11 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
         from ___ in CommonParsers.InlineWhitespace
         from ____ in Char('[')
         from _____ in CommonParsers.InlineWhitespace
-        from x in numberParser
+        from x in coordinateParser
         from ______ in CommonParsers.InlineWhitespace
         from _______ in Char(',')
         from ________ in CommonParsers.InlineWhitespace
-        from y in numberParser
+        from y in coordinateParser
         from _________ in CommonParsers.InlineWhitespace
         from __________ in Char(']')
         from ___________ in CommonParsers.InlineWhitespace
@@ -79,8 +82,8 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
         select new QuadrantPoint
         {
             Name = name.Trim(),
-            X = Math.Clamp(x, 0, 1),
-            Y = Math.Clamp(y, 0, 1)
+            X = x,
+            Y = y
         };
 
     // Skip line (comments, empty lines)

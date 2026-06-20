@@ -19,6 +19,25 @@ xychart-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyTW9udGhseSBTYWxlc1x1MDAyMlxuICAgIHgtYXhpcyBbSmFuLCBGZWIsIE1hciwgQXByLCBNYXldXG4gICAgeS1heGlzIFx1MDAyMlJldmVudWVcdTAwMjIgMCAtLVx1MDAzRSAxMDBcbiAgICBiYXIgWzUwLCA2MCwgNzUsIDgwLCA5MF0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## PlusAndBareDotNumbers
+
+**Input:**
+```
+xychart-beta
+    title "Fractional Values"
+    x-axis [A, B, C, D]
+    y-axis "Value" 0 --> 3
+    bar [.5, 1.5, +2, 2.5]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/XYChart/XYChartTests.PlusAndBareDotNumbers.verified.png" />
+</p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoieHljaGFydC1iZXRhXG4gICAgdGl0bGUgXHUwMDIyRnJhY3Rpb25hbCBWYWx1ZXNcdTAwMjJcbiAgICB4LWF4aXMgW0EsIEIsIEMsIERdXG4gICAgeS1heGlzIFx1MDAyMlZhbHVlXHUwMDIyIDAgLS1cdTAwM0UgM1xuICAgIGJhciBbLjUsIDEuNSwgXHUwMDJCMiwgMi41XSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
 ## BarAndLine
 
 **Input:**

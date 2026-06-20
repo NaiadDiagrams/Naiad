@@ -275,3 +275,32 @@ journey
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiam91cm5leVxuICAgIHRpdGxlIENvbXBsZXRlIEUtY29tbWVyY2UgRXhwZXJpZW5jZVxuICAgIFxuICAgIHNlY3Rpb24gRGlzY292ZXJ5XG4gICAgICAgIFNlYXJjaCBmb3IgcHJvZHVjdDogNDogQ3VzdG9tZXJcbiAgICAgICAgQnJvd3NlIGNhdGVnb3JpZXM6IDM6IEN1c3RvbWVyXG4gICAgICAgIFJlYWQgcmV2aWV3czogNTogQ3VzdG9tZXJcbiAgICAgICAgQ29tcGFyZSBwcmljZXM6IDQ6IEN1c3RvbWVyXG4gICAgXG4gICAgc2VjdGlvbiBTaG9wcGluZ1xuICAgICAgICBBZGQgdG8gd2lzaGxpc3Q6IDU6IEN1c3RvbWVyXG4gICAgICAgIEFkZCB0byBjYXJ0OiA0OiBDdXN0b21lclxuICAgICAgICBBcHBseSBjb3Vwb246IDI6IEN1c3RvbWVyLCBTdXBwb3J0XG4gICAgICAgIFVwZGF0ZSBxdWFudGl0eTogMzogQ3VzdG9tZXJcbiAgICBcbiAgICBzZWN0aW9uIENoZWNrb3V0XG4gICAgICAgIEVudGVyIHNoaXBwaW5nOiAzOiBDdXN0b21lclxuICAgICAgICBTZWxlY3QgcGF5bWVudDogNDogQ3VzdG9tZXJcbiAgICAgICAgQ29uZmlybSBvcmRlcjogNTogQ3VzdG9tZXJcbiAgICAgICAgUmVjZWl2ZSBjb25maXJtYXRpb246IDU6IEN1c3RvbWVyLCBTeXN0ZW1cbiAgICBcbiAgICBzZWN0aW9uIEZ1bGZpbGxtZW50XG4gICAgICAgIE9yZGVyIHByb2Nlc3Npbmc6IDQ6IFdhcmVob3VzZSwgU3lzdGVtXG4gICAgICAgIFBhY2thZ2Ugc2hpcHBpbmc6IDQ6IFdhcmVob3VzZSwgQ291cmllclxuICAgICAgICBUcmFjayBkZWxpdmVyeTogNTogQ3VzdG9tZXIsIENvdXJpZXJcbiAgICAgICAgUmVjZWl2ZSBwYWNrYWdlOiA1OiBDdXN0b21lciwgQ291cmllclxuICAgIFxuICAgIHNlY3Rpb24gUG9zdC1QdXJjaGFzZVxuICAgICAgICBMZWF2ZSByZXZpZXc6IDQ6IEN1c3RvbWVyXG4gICAgICAgIENvbnRhY3Qgc3VwcG9ydDogMjogQ3VzdG9tZXIsIFN1cHBvcnRcbiAgICAgICAgUmVxdWVzdCByZXR1cm46IDE6IEN1c3RvbWVyLCBTdXBwb3J0XG4gICAgICAgIFJlY2VpdmUgcmVmdW5kOiAzOiBDdXN0b21lciwgRmluYW5jZSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+## UnclampedScores
+
+**Input:**
+```
+journey
+    title Beyond The Scale
+    section Range
+        Ecstatic: 7: Me
+        Content: 4: Me
+        Miserable: 1: Me
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/UserJourney/UserJourneyTests.UnclampedScores.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+journey
+    title Beyond The Scale
+    section Range
+        Ecstatic: 7: Me
+        Content: 4: Me
+        Miserable: 1: Me
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiam91cm5leVxuICAgIHRpdGxlIEJleW9uZCBUaGUgU2NhbGVcbiAgICBzZWN0aW9uIFJhbmdlXG4gICAgICAgIEVjc3RhdGljOiA3OiBNZVxuICAgICAgICBDb250ZW50OiA0OiBNZVxuICAgICAgICBNaXNlcmFibGU6IDE6IE1lIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+

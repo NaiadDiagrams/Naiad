@@ -18,13 +18,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
         select title.Trim();
 
     // Number parser
-    static Parser<char, double> numberParser =
-        from sign in Char('-').Optional()
-        from integer in Digit.AtLeastOnceString()
-        from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
-        select double.Parse(
-            (sign.HasValue ? "-" : "") + integer + (frac.HasValue ? "." + frac.Value : ""),
-            CultureInfo.InvariantCulture);
+    static Parser<char, double> numberParser = CommonParsers.SignedDecimal;
 
     // Category item (unquoted or quoted)
     static Parser<char, string> categoryItem =

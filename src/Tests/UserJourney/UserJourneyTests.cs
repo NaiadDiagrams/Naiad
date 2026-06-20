@@ -147,4 +147,22 @@ public class UserJourneyTests: TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task UnclampedScores()
+    {
+        // Scores outside 1-5 are preserved rather than clamped (matching Mermaid): the score-7 face
+        // sits higher than a capped-at-5 face would.
+        const string input =
+            """
+            journey
+                title Beyond The Scale
+                section Range
+                    Ecstatic: 7: Me
+                    Content: 4: Me
+                    Miserable: 1: Me
+            """;
+
+        return VerifySvg(input);
+    }
 }

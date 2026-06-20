@@ -1,12 +1,6 @@
 class SankeyParser : IDiagramParser<SankeyModel>
 {
-    static Parser<char, double> numberParser =
-        from sign in Char('-').Optional()
-        from integer in Digit.AtLeastOnceString()
-        from frac in Char('.').Then(Digit.AtLeastOnceString()).Optional()
-        select double.Parse(
-            (sign.HasValue ? "-" : "") + integer + (frac.HasValue ? "." + frac.Value : ""),
-            CultureInfo.InvariantCulture);
+    static Parser<char, double> numberParser = CommonParsers.SignedDecimal;
 
     static Parser<char, string> quotedString =
         Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));

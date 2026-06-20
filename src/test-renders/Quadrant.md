@@ -173,10 +173,10 @@ quadrantChart
     title Edge Cases
     x-axis Left --> Right
     y-axis Bottom --> Top
-    Top Right: [1.0, 1.0]
-    Top Left: [0.0, 1.0]
-    Bottom Left: [0.0, 0.0]
-    Bottom Right: [1.0, 0.0]
+    Top Right: [1, 1]
+    Top Left: [0, 1]
+    Bottom Left: [0, 0]
+    Bottom Right: [1, 0]
     Center: [0.5, 0.5]
 ```
 **Rendered by Naiad:**
@@ -191,12 +191,12 @@ quadrantChart
     title Edge Cases
     x-axis Left --> Right
     y-axis Bottom --> Top
-    Top Right: [1.0, 1.0]
-    Top Left: [0.0, 1.0]
-    Bottom Left: [0.0, 0.0]
-    Bottom Right: [1.0, 0.0]
+    Top Right: [1, 1]
+    Top Left: [0, 1]
+    Bottom Left: [0, 0]
+    Bottom Right: [1, 0]
     Center: [0.5, 0.5]
 ```
 
-[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIEVkZ2UgQ2FzZXNcbiAgICB4LWF4aXMgTGVmdCAtLVx1MDAzRSBSaWdodFxuICAgIHktYXhpcyBCb3R0b20gLS1cdTAwM0UgVG9wXG4gICAgVG9wIFJpZ2h0OiBbMS4wLCAxLjBdXG4gICAgVG9wIExlZnQ6IFswLjAsIDEuMF1cbiAgICBCb3R0b20gTGVmdDogWzAuMCwgMC4wXVxuICAgIEJvdHRvbSBSaWdodDogWzEuMCwgMC4wXVxuICAgIENlbnRlcjogWzAuNSwgMC41XSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicXVhZHJhbnRDaGFydFxuICAgIHRpdGxlIEVkZ2UgQ2FzZXNcbiAgICB4LWF4aXMgTGVmdCAtLVx1MDAzRSBSaWdodFxuICAgIHktYXhpcyBCb3R0b20gLS1cdTAwM0UgVG9wXG4gICAgVG9wIFJpZ2h0OiBbMSwgMV1cbiAgICBUb3AgTGVmdDogWzAsIDFdXG4gICAgQm90dG9tIExlZnQ6IFswLCAwXVxuICAgIEJvdHRvbSBSaWdodDogWzEsIDBdXG4gICAgQ2VudGVyOiBbMC41LCAwLjVdIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 

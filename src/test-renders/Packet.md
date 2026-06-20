@@ -113,3 +113,39 @@ packet-beta
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtMzE6IFx1MDAyMkZpcnN0IFdvcmRcdTAwMjJcbjMyLTYzOiBcdTAwMjJTZWNvbmQgV29yZFx1MDAyMlxuNjQtOTU6IFx1MDAyMlRoaXJkIFdvcmRcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## SingleBit
+
+**Input:**
+```
+packet-beta
+0-7: "Header"
+8: "Flag"
+9-15: "Data"
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.SingleBit.verified.png" />
+</p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcbjAtNzogXHUwMDIySGVhZGVyXHUwMDIyXG44OiBcdTAwMjJGbGFnXHUwMDIyXG45LTE1OiBcdTAwMjJEYXRhXHUwMDIyIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
+## RelativeWidth
+
+**Input:**
+```
+packet-beta
++8: "Byte 1"
++8: "Byte 2"
++16: "Word"
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Packet/PacketTests.RelativeWidth.verified.png" />
+</p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicGFja2V0LWJldGFcblx1MDAyQjg6IFx1MDAyMkJ5dGUgMVx1MDAyMlxuXHUwMDJCODogXHUwMDIyQnl0ZSAyXHUwMDIyXG5cdTAwMkIxNjogXHUwMDIyV29yZFx1MDAyMiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
