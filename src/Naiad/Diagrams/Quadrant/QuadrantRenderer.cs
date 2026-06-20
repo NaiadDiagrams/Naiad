@@ -1,253 +1,138 @@
 namespace Naiad.Diagrams.Quadrant;
 
+// Renders a quadrant chart matching Mermaid's default theme: a fixed 500x500 grid of four lavender
+// quadrants (lightened diagonally so the top reads more saturated than the bottom), a thin border
+// with an internal cross, dark points labelled just below, axis labels centred under and beside
+// each half (y-axis rotated), and a centred title.
 public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 {
-    const double chartSize = 400;
-    const double minAxisMargin = 60;
-    const double titleHeight = 40;
-    const double pointRadius = 8;
-    const double labelPadding = 10;
+    // Mermaid's quadrantChart config. The layout is a fixed 500x500 canvas, so these sizes are
+    // absolute rather than scaled by RenderOptions.
+    const double chartSize = 500;
+    const double quadrantPadding = 5;
+    const double titleFontSize = 20;
+    const double titlePadding = 10;
+    const double axisLabelFontSize = 16;
+    const double axisLabelPadding = 5;
+    const double quadrantLabelFontSize = 16;
+    const double quadrantTextTopPadding = 5;
+    const double pointRadius = 5;
+    const double pointTextPadding = 5;
+    const double pointLabelFontSize = 12;
+    const double externalBorderWidth = 2;
 
-    static readonly string[] quadrantColors =
-    [
-        "#E8F5E9", // Q1 (top-right) - green
-        "#E3F2FD", // Q2 (top-left) - blue
-        "#FFF3E0", // Q3 (bottom-left) - orange
-        "#FCE4EC"  // Q4 (bottom-right) - pink
-    ];
-
-    static readonly string[] pointColors =
-    [
-        "#4CAF50",
-        "#2196F3",
-        "#FF9800",
-        "#E91E63",
-        "#9C27B0",
-        "#00BCD4"
-    ];
+    // Default-theme colours derived from Mermaid's primaryColor (#ECECFF).
+    const string quadrant1Fill = "#ECECFF"; // top-right (most saturated)
+    const string quadrant2Fill = "#F1F1FF"; // top-left
+    const string quadrant3Fill = "#F6F6FF"; // bottom-left
+    const string quadrant4Fill = "#FBFBFF"; // bottom-right (almost white)
+    const string borderColor = "#C7C7F1";   // primaryBorderColor
+    const string textColor = "#131300";     // primaryTextColor (invert of primaryColor)
+    const string pointFill = "#333";        // Mermaid points inherit the root text fill
 
     public SvgDocument Render(QuadrantModel model, RenderOptions options)
     {
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
+        var hasTitle = !string.IsNullOrEmpty(model.Title);
+        var hasXAxis = !string.IsNullOrEmpty(model.XAxisLeft) || !string.IsNullOrEmpty(model.XAxisRight);
+        var hasYAxis = !string.IsNullOrEmpty(model.YAxisBottom) || !string.IsNullOrEmpty(model.YAxisTop);
 
-        // Calculate left margin based on y-axis label lengths
-        var yLabelMaxLength = Math.Max(
-            model.YAxisTop?.Length ?? 0,
-            model.YAxisBottom?.Length ?? 0);
-        var leftAxisMargin = Math.Max(minAxisMargin, yLabelMaxLength * options.FontSize * 0.6 + labelPadding);
+        var titleSpace = hasTitle ? titleFontSize + titlePadding * 2 : 0;
+        var xAxisSpace = hasXAxis ? axisLabelFontSize + axisLabelPadding * 2 : 0;
+        var yAxisSpace = hasYAxis ? axisLabelFontSize + axisLabelPadding * 2 : 0;
 
-        var width = chartSize + leftAxisMargin + minAxisMargin + options.Padding * 2;
-        var height = chartSize + minAxisMargin * 2 + titleOffset + options.Padding * 2;
+        // The grid fills the canvas minus the title gutter (top), the x-axis labels (below) and the
+        // y-axis labels (left) — matching Mermaid's default top-title / bottom-x / left-y placement.
+        var plotLeft = quadrantPadding + yAxisSpace;
+        var plotTop = quadrantPadding + titleSpace;
+        var plotRight = chartSize - quadrantPadding;
+        var plotBottom = chartSize - quadrantPadding - xAxisSpace;
+        var plotWidth = plotRight - plotLeft;
+        var plotHeight = plotBottom - plotTop;
+        var centerX = plotLeft + plotWidth / 2;
+        var centerY = plotTop + plotHeight / 2;
+        var halfWidth = plotWidth / 2;
+        var halfHeight = plotHeight / 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder().Size(chartSize, chartSize);
 
-        var chartLeft = options.Padding + leftAxisMargin;
-        var chartTop = options.Padding + titleOffset + minAxisMargin;
-        var chartRight = chartLeft + chartSize;
-        var chartBottom = chartTop + chartSize;
-        var centerX = chartLeft + chartSize / 2;
-        var centerY = chartTop + chartSize / 2;
+        // Quadrant fills (no stroke; the grid lines come from the border pass below).
+        builder.AddRect(plotLeft, plotTop, halfWidth, halfHeight, fill: quadrant2Fill); // top-left
+        builder.AddRect(centerX, plotTop, halfWidth, halfHeight, fill: quadrant1Fill);  // top-right
+        builder.AddRect(plotLeft, centerY, halfWidth, halfHeight, fill: quadrant3Fill); // bottom-left
+        builder.AddRect(centerX, centerY, halfWidth, halfHeight, fill: quadrant4Fill);  // bottom-right
 
-        // Draw title
-        if (!string.IsNullOrEmpty(model.Title))
+        // Quadrant labels sit at the top of each quadrant.
+        var topLabelY = plotTop + quadrantTextTopPadding + quadrantLabelFontSize / 2;
+        var bottomLabelY = centerY + quadrantTextTopPadding + quadrantLabelFontSize / 2;
+        AddCenteredText(centerX + halfWidth / 2, topLabelY, model.Quadrant1Label, quadrantLabelFontSize);
+        AddCenteredText(plotLeft + halfWidth / 2, topLabelY, model.Quadrant2Label, quadrantLabelFontSize);
+        AddCenteredText(plotLeft + halfWidth / 2, bottomLabelY, model.Quadrant3Label, quadrantLabelFontSize);
+        AddCenteredText(centerX + halfWidth / 2, bottomLabelY, model.Quadrant4Label, quadrantLabelFontSize);
+
+        // Border: external rectangle plus the internal cross (drawn at the default 1px width).
+        builder.AddRect(plotLeft, plotTop, plotWidth, plotHeight, fill: "none", stroke: borderColor, strokeWidth: externalBorderWidth);
+        builder.AddLine(centerX, plotTop, centerX, plotBottom, stroke: borderColor);
+        builder.AddLine(plotLeft, centerY, plotRight, centerY, stroke: borderColor);
+
+        // Points, each labelled centred just below the dot.
+        foreach (var point in model.Points)
         {
-            builder.AddText(
-                width / 2,
-                options.Padding + titleHeight / 2,
-                model.Title,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize + 4,
-                fontFamily: options.FontFamily,
-                fontWeight: "bold");
+            var pointX = plotLeft + point.X * plotWidth;
+            var pointY = plotBottom - point.Y * plotHeight; // y grows upward
+            builder.AddCircle(pointX, pointY, pointRadius, fill: pointFill);
+            AddCenteredText(pointX, pointY + pointTextPadding + pointLabelFontSize / 2, point.Name, pointLabelFontSize);
         }
 
-        // Draw quadrant backgrounds
-        const double halfSize = chartSize / 2;
+        // X-axis labels centred under each half; y-axis labels rotated beside each half.
+        var xLabelY = plotBottom + xAxisSpace / 2;
+        AddCenteredText(plotLeft + halfWidth / 2, xLabelY, model.XAxisLeft, axisLabelFontSize);
+        AddCenteredText(centerX + halfWidth / 2, xLabelY, model.XAxisRight, axisLabelFontSize);
 
-        // Q2 (top-left)
-        builder.AddRect(
-            chartLeft,
-            chartTop,
-            halfSize,
-            halfSize,
-            fill: quadrantColors[1],
-            stroke: "#ccc",
-            strokeWidth: 1);
-        // Q1 (top-right)
-        builder.AddRect(
-            centerX,
-            chartTop,
-            halfSize,
-            halfSize,
-            fill: quadrantColors[0],
-            stroke: "#ccc",
-            strokeWidth: 1);
-        // Q3 (bottom-left)
-        builder.AddRect(
-            chartLeft,
-            centerY,
-            halfSize,
-            halfSize,
-            fill: quadrantColors[2],
-            stroke: "#ccc",
-            strokeWidth: 1);
-        // Q4 (bottom-right)
-        builder.AddRect(
-            centerX,
-            centerY,
-            halfSize,
-            halfSize,
-            fill: quadrantColors[3],
-            stroke: "#ccc",
-            strokeWidth: 1);
+        var yLabelX = quadrantPadding + axisLabelFontSize / 2;
+        AddRotatedText(yLabelX, plotTop + halfHeight / 2, model.YAxisTop, axisLabelFontSize);
+        AddRotatedText(yLabelX, centerY + halfHeight / 2, model.YAxisBottom, axisLabelFontSize);
 
-        // Draw quadrant labels
-        if (!string.IsNullOrEmpty(model.Quadrant1Label))
-        {
-            builder.AddText(
-                centerX + halfSize / 2,
-                chartTop + 20,
-                model.Quadrant1Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: "#666");
-        }
-        if (!string.IsNullOrEmpty(model.Quadrant2Label))
-        {
-            builder.AddText(
-                chartLeft + halfSize / 2,
-                chartTop + 20,
-                model.Quadrant2Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: "#666");
-        }
-        if (!string.IsNullOrEmpty(model.Quadrant3Label))
-        {
-            builder.AddText(
-                chartLeft + halfSize / 2,
-                centerY + 20,
-                model.Quadrant3Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: "#666");
-        }
-        if (!string.IsNullOrEmpty(model.Quadrant4Label))
-        {
-            builder.AddText(
-                centerX + halfSize / 2,
-                centerY + 20,
-                model.Quadrant4Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: "#666");
-        }
-
-        // Draw axes
-        builder.AddLine(
-            chartLeft,
-            centerY,
-            chartRight,
-            centerY,
-            stroke: "#333",
-            strokeWidth: 2);
-        builder.AddLine(
-            centerX,
-            chartTop,
-            centerX,
-            chartBottom,
-            stroke: "#333",
-            strokeWidth: 2);
-
-        // Draw axis labels
-        if (!string.IsNullOrEmpty(model.XAxisLeft))
-        {
-            builder.AddText(
-                chartLeft,
-                chartBottom + 30,
-                model.XAxisLeft,
-                anchor: "start",
-                baseline: "middle",
-                fontSize: options.FontSize,
-                fontFamily: options.FontFamily,
-                fill: "#333");
-        }
-        if (!string.IsNullOrEmpty(model.XAxisRight))
-        {
-            builder.AddText(
-                chartRight,
-                chartBottom + 30,
-                model.XAxisRight,
-                anchor: "end",
-                baseline: "middle",
-                fontSize: options.FontSize,
-                fontFamily: options.FontFamily,
-                fill: "#333");
-        }
-        if (!string.IsNullOrEmpty(model.YAxisBottom))
-        {
-            builder.AddText(
-                chartLeft - 10,
-                chartBottom,
-                model.YAxisBottom,
-                anchor: "end",
-                baseline: "middle",
-                fontSize: options.FontSize,
-                fontFamily: options.FontFamily,
-                fill: "#333");
-        }
-        if (!string.IsNullOrEmpty(model.YAxisTop))
-        {
-            builder.AddText(
-                chartLeft - 10,
-                chartTop,
-                model.YAxisTop,
-                anchor: "end",
-                baseline: "middle",
-                fontSize: options.FontSize,
-                fontFamily: options.FontFamily,
-                fill: "#333");
-        }
-
-        // Draw points
-        for (var i = 0; i < model.Points.Count; i++)
-        {
-            var point = model.Points[i];
-            var pointColor = pointColors[i % pointColors.Length];
-
-            var px = chartLeft + point.X * chartSize;
-            var py = chartBottom - point.Y * chartSize; // Y is inverted (0 at bottom)
-
-            // Point circle
-            builder.AddCircle(
-                px,
-                py,
-                pointRadius,
-                fill: pointColor,
-                stroke: "#333",
-                strokeWidth: 2);
-
-            // Point label
-            builder.AddText(
-                px + pointRadius + 5,
-                py,
-                point.Name,
-                anchor: "start",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: "#333");
-        }
+        // Title centred in the top gutter.
+        AddCenteredText(chartSize / 2, titlePadding + titleFontSize / 2, model.Title, titleFontSize);
 
         return builder.Build();
+
+        void AddCenteredText(double textX, double textY, string? text, double fontSize)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            builder.AddText(
+                textX,
+                textY,
+                text,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: fontSize,
+                fontFamily: options.FontFamily,
+                fill: textColor);
+        }
+
+        void AddRotatedText(double textX, double textY, string? text, double fontSize)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"rotate(-90, {textX:0.##}, {textY:0.##})"));
+            builder.AddText(
+                textX,
+                textY,
+                text,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: fontSize,
+                fontFamily: options.FontFamily,
+                fill: textColor);
+            builder.EndGroup();
+        }
     }
 }
