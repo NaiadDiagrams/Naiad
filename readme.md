@@ -5,6 +5,8 @@
 
 A .NET library for rendering [Mermaid](https://mermaid.js.org/) diagrams to SVG. No browser or JavaScript runtime required.
 
+**[Try it in a browser ↗](https://papyrine.github.io/Naiad/)** — a live Mermaid editor (in the spirit of [mermaid.live](https://mermaid.live/)) rendered entirely client-side by Naiad on Blazor WebAssembly.
+
 PNG output is available via two optional companion packages — [`Naiad.Skia`](#png-output) (SkiaSharp) and [`Naiad.ImageSharp`](#png-output) (SixLabors.ImageSharp).
 
 
