@@ -59,10 +59,16 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var builder = new SvgBuilder()
             .Options(options)
             .Size(layoutResult.Width, layoutResult.Height)
-            .Padding(options.Padding)
-            .AddMermaidArrowMarker()
-            .AddMermaidCircleMarker()
-            .AddMermaidCrossMarker();
+            .Padding(options.Padding);
+
+        // The arrow/circle/cross markers are only referenced by edges; skip the defs entirely when there are none.
+        if (model.Edges.Count > 0)
+        {
+            builder
+                .AddMermaidArrowMarker()
+                .AddMermaidCircleMarker()
+                .AddMermaidCrossMarker();
+        }
 
         // Add Mermaid CSS styles
         builder.AddStyles(MermaidStyles.FlowchartStyles);
