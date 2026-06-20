@@ -12,13 +12,15 @@ public partial class SamplePicker
     [Parameter]
     public EventCallback<DiagramSample> OnSampleSelected { get; set; }
 
-    async Task OnChanged(ChangeEventArgs args)
+    Task OnChanged(ChangeEventArgs args)
     {
         var sample = DiagramSamples.Find(args.Value?.ToString());
         selected = "";
         if (sample is not null)
         {
-            await OnSampleSelected.InvokeAsync(sample);
+            return OnSampleSelected.InvokeAsync(sample);
         }
+
+        return Task.CompletedTask;
     }
 }

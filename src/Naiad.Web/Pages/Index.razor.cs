@@ -14,7 +14,7 @@ public partial class Index : IDisposable
     string? issueUrl;
     string? userAgent;
     bool isExporting;
-    CancellationTokenSource? debounce;
+    CancelSource? debounce;
 
     // Render once synchronously so the first paint already shows the default sample's diagram.
     protected override void OnInitialized() =>
@@ -31,12 +31,12 @@ public partial class Index : IDisposable
         // last keystroke in a burst survives to call Render.
         debounce?.Cancel();
         debounce?.Dispose();
-        var cancellation = new CancellationTokenSource();
-        debounce = cancellation;
+        var cancelSource = new CancelSource();
+        debounce = cancelSource;
 
         try
         {
-            await Task.Delay(debounceMilliseconds, cancellation.Token);
+            await Task.Delay(debounceMilliseconds, cancelSource.Token);
         }
         catch (TaskCanceledException)
         {
@@ -62,12 +62,14 @@ public partial class Index : IDisposable
             : null;
     }
 
-    async Task DownloadSvg()
+    Task DownloadSvg()
     {
         if (result.Svg is { } svg)
         {
-            await FileDownloadService.DownloadTextAsync("diagram.svg", "image/svg+xml", svg);
+            return FileDownloadService.DownloadTextAsync("diagram.svg", "image/svg+xml", svg);
         }
+
+        return Task.CompletedTask;
     }
 
     async Task DownloadPng()
