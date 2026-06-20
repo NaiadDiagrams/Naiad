@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Naiad.Diagrams.Mindmap;
 
 public class MindmapRenderer : IDiagramRenderer<MindmapModel>
@@ -275,9 +277,11 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             return;
         }
 
-        // FontAwesome class string, e.g. "fa fa-book". With HTML disabled there is no web font
-        // to draw the glyph, so the icon (which carries no text) is dropped.
-        builder.AddLabel(x, y, size, size, $"<i class='{icon}'></i>", "");
+        // FontAwesome class string, e.g. "fa fa-book". Encode the class value (a no-op for the normal
+        // dotted/spaced class names) so a crafted icon token can't break out of the attribute and inject
+        // markup into the foreignObject. With HTML disabled there is no web font to draw the glyph, so the
+        // icon (which carries no text) is dropped.
+        builder.AddLabel(x, y, size, size, $"<i class='{WebUtility.HtmlEncode(icon)}'></i>", "");
     }
 
     static void DrawHexagon(SvgBuilder builder, double cx, double cy, double width, double height,
