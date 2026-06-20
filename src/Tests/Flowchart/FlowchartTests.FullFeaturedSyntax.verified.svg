@@ -1,0 +1,488 @@
+<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 431.05 943"
+  style="max-width: 431.05px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <defs>
+    <marker
+      id="naiad_flowchart-pointEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="5"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-pointStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="4.5"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 5 L 10 10 L 10 0 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="11"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="-1"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="12"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="-1"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="241.11"
+      y="373.2"
+      width="146.68"
+      height="411.8"
+      rx="6"
+      ry="6"
+      fill="#ffffff"
+      stroke="#bbbbbb" />
+    <text
+      x="314.45"
+      y="387.2"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333">Async Worker</text>
+    <path
+      d="M195.53,48 L195.53,118"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="163.53"
+      y="71"
+      width="64"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="163.53"
+      y="71"
+      width="64"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 64px; height: 24px;">
+        <span>
+          <p>submit</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M164.21,185.2 L98.97,255.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="115.59"
+      y="208.2"
+      width="32"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="115.59"
+      y="208.2"
+      width="32"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        <span>
+          <p>no</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M226.84,185.2 L292.08,255.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="239.46"
+      y="208.2"
+      width="40"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="239.46"
+      y="208.2"
+      width="40"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        <span>
+          <p>yes</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M314.42,303.2 L314.3,418.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="3.5"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="278.36"
+      y="348.7"
+      width="72"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="278.36"
+      y="348.7"
+      width="72"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 72px; height: 24px;">
+        <span>
+          <p>process</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M314.28,466.2 L314.44,855"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="282.36"
+      y="648.6"
+      width="64"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="282.36"
+      y="648.6"
+      width="64"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 64px; height: 24px;">
+        <span>
+          <p>lookup</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M314.31,466.2 L314.4,536.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M314.4,536.2 L314.31,466.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="294.35"
+      y="489.2"
+      width="40"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="294.35"
+      y="489.2"
+      width="40"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        <span>
+          <p>yes</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M314.45,603.4 L314.45,673.4"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <rect
+      x="298.45"
+      y="626.4"
+      width="32"
+      height="24"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="298.45"
+      y="626.4"
+      width="32"
+      height="24"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        <span>
+          <p>no</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M177.58,0 H213.48 A24,24 0 0 1 213.48,48 H177.58 A24,24 0 0 1 177.58,0 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="153.58"
+      y="0"
+      width="83.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        <span>
+          <p>Request</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M195.53,118 L291.99,151.6 L195.53,185.2 L99.07,151.6 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="99.07"
+      y="118"
+      width="192.92"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 192.92px; height: 67.2px;">
+        <span>
+          <p>Authenticated?</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,255.2 H153.2 V303.2 H0 Z M15.32,255.2 V303.2 M137.88,255.2 V303.2"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="0"
+      y="255.2"
+      width="153.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 48px;">
+        <span>
+          <p>401 Unauthorized</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M268.49,255.2 L391.05,255.2 L360.41,303.2 L237.85,303.2 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="237.85"
+      y="255.2"
+      width="153.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 48px;">
+        <span>
+          <p>Validate payload</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M277.32,418.2 H351.22 Q356.22,418.2 356.22,423.2 V461.2 Q356.22,466.2 351.22,466.2 H277.32 Q272.32,466.2 272.32,461.2 V423.2 Q272.32,418.2 277.32,418.2 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="272.32"
+      y="418.2"
+      width="83.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        <span>
+          <p>Handler</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M280.2,859.8 A34.25,4.8 0 0 1 348.7,859.8 V898.2 A34.25,4.8 0 0 1 280.2,898.2 V859.8 Z M280.2,859.8 A34.25,4.8 0 0 0 348.7,859.8"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="280.2"
+      y="855"
+      width="68.5"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
+        <span>
+          <p>Cache</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M314.45,536.2 L367.79,569.8 L314.45,603.4 L261.11,569.8 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="261.11"
+      y="536.2"
+      width="106.68"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 106.68px; height: 67.2px;">
+        <span>
+          <p>Retry?</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M314.45,673.4 A45.8,45.8 0 1 1 314.45,765 A45.8,45.8 0 1 1 314.45,673.4 Z M314.45,680.27 A38.93,38.93 0 1 1 314.45,758.13 A38.93,38.93 0 1 1 314.45,680.27 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="268.65"
+      y="673.4"
+      width="91.6"
+      height="91.6"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 91.6px;">
+        <span>
+          <p>Complete</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

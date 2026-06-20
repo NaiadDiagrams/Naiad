@@ -61,6 +61,23 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             .Before(Char(']'))
             .Select(text => (text, NodeShape.Asymmetric));
 
+    // Slash/backslash framed shapes. The text excludes / \ ] so the closing token is unambiguous; the
+    // opener (`[/` vs `[\`) and closer (`/]` vs `\]`) together pick parallelogram vs trapezoid.
+    static Parser<char, string> SlashShapeText =>
+        Token(_ => _ != '/' && _ != '\\' && _ != ']').ManyString();
+
+    static Parser<char, (string Label, NodeShape Shape)> parallelogramShape =
+        String("[/").Then(SlashShapeText).Before(String("/]")).Select(text => (text, NodeShape.Parallelogram));
+
+    static Parser<char, (string Label, NodeShape Shape)> trapezoidShape =
+        String("[/").Then(SlashShapeText).Before(String("\\]")).Select(text => (text, NodeShape.Trapezoid));
+
+    static Parser<char, (string Label, NodeShape Shape)> parallelogramAltShape =
+        String("[\\").Then(SlashShapeText).Before(String("\\]")).Select(text => (text, NodeShape.ParallelogramAlt));
+
+    static Parser<char, (string Label, NodeShape Shape)> trapezoidAltShape =
+        String("[\\").Then(SlashShapeText).Before(String("/]")).Select(text => (text, NodeShape.TrapezoidAlt));
+
     static Parser<char, (string Label, NodeShape Shape)> nodeShapeParser =
         OneOf(
             Try(doubleCircleShape),
@@ -72,13 +89,19 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             Try(diamondShape),
             Try(roundedShape),
             Try(asymmetricShape),
+            Try(parallelogramShape),
+            Try(trapezoidShape),
+            Try(parallelogramAltShape),
+            Try(trapezoidAltShape),
             rectangleShape
         );
 
-    // Node parser: identifier optionally followed by shape
+    // Node parser: identifier optionally followed by shape, then an optional `:::class` shorthand. Naiad
+    // doesn't render class styling yet, so the class name is consumed and discarded (keeping the node).
     static Parser<char, Node> nodeParser =
         from id in CommonParsers.Identifier
         from shape in nodeShapeParser.Optional()
+        from _class in Try(String(":::").Then(CommonParsers.Identifier)).Optional()
         select new Node
         {
             Id = id,
@@ -100,6 +123,42 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             Try(String("-->")).ThenReturn((EdgeType.Arrow, EdgeStyle.Solid)),
             String("---").ThenReturn((EdgeType.Open, EdgeStyle.Solid))
         );
+
+    // Inline edge label, e.g. `-- text -->`, `-. text .->`, `== text ==>`. The text runs up to the closing
+    // token (which also fixes the arrow head); ends are ordered so a longer token (`.->`) is matched before
+    // a token it contains (`.-`).
+    static Parser<char, (EdgeType Type, EdgeStyle Style, string? Label)> InlineLabeled(
+        string start,
+        EdgeStyle style,
+        (string End, EdgeType Type)[] ends) =>
+        String(start)
+            .Then(
+                OneOf(
+                    ends
+                        .Select(end =>
+                            Try(
+                                Token(_ => _ != '\r' && _ != '\n')
+                                    .Until(Lookahead(Try(String(end.End))))
+                                    .Before(String(end.End))
+                                    .Select(chars =>
+                                    {
+                                        var label = new string(chars.ToArray()).Trim();
+                                        return (end.Type, style, label.Length == 0 ? (string?) null : label);
+                                    })))
+                        .ToArray()));
+
+    static Parser<char, (EdgeType Type, EdgeStyle Style, string? Label)> inlineLabeledArrow =>
+        OneOf(
+            Try(InlineLabeled("--", EdgeStyle.Solid, [("-->", EdgeType.Arrow), ("--o", EdgeType.CircleEnd), ("--x", EdgeType.CrossEnd), ("---", EdgeType.Open)])),
+            Try(InlineLabeled("-.", EdgeStyle.Dotted, [(".->", EdgeType.DottedArrow), (".-", EdgeType.Dotted)])),
+            InlineLabeled("==", EdgeStyle.Thick, [("==>", EdgeType.ThickArrow), ("===", EdgeType.Thick)]));
+
+    // A connector is a contiguous arrow (no label) or an inline-labeled arrow. Contiguous is tried first so
+    // `-->`, `-.->`, `==>` etc. never fall through to the slower inline scan.
+    static Parser<char, (EdgeType Type, EdgeStyle Style, string? Label)> connectorParser =>
+        OneOf(
+            Try(arrowTypeParser.Select(arrow => (arrow.Type, arrow.Style, (string?) null))),
+            inlineLabeledArrow);
 
     // Edge label: |text|
     static Parser<char, string> edgeLabelParser =
@@ -123,12 +182,12 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from _1 in CommonParsers.InlineWhitespace
             from label1 in edgeLabelParser.Optional()
             from _2 in CommonParsers.InlineWhitespace
-            from arrow in arrowTypeParser
+            from conn in connectorParser
             from _3 in CommonParsers.InlineWhitespace
             from label2 in edgeLabelParser.Optional()
             from _4 in CommonParsers.InlineWhitespace
             from node in nodeParser
-            select (node, arrow.Type, arrow.Style, label1.HasValue ? label1.Value : label2.HasValue ? label2.Value : null)
+            select (node, conn.Type, conn.Style, label1.HasValue ? label1.Value : conn.Label ?? (label2.HasValue ? label2.Value : null))
         ).Many()
         select (
             new List<Node>([first, .. rest.Select(_ => _.node)]),
@@ -194,6 +253,25 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         from lineEnd in CommonParsers.LineEnd
         select (FlowStatement) new SubgraphEndStatement();
 
+    // Direction statement, e.g. `direction LR` (sets the enclosing subgraph's direction, or the chart's).
+    static Parser<char, FlowStatement> directionStatement =
+        from _ in CommonParsers.InlineWhitespace
+        from keyword in String("direction")
+        from __ in CommonParsers.RequiredWhitespace
+        from dir in flowchartDirection
+        from ___ in CommonParsers.InlineWhitespace
+        from lineEnd in CommonParsers.LineEnd
+        select (FlowStatement) new DirectionStatement(dir);
+
+    // Any non-empty line that matched no earlier rule. Consuming it (rather than failing) keeps one
+    // unsupported construct - e.g. a `linkStyle` line, or a node line using syntax we don't parse - from
+    // aborting the whole diagram or silently dropping every statement after it.
+    static Parser<char, Unit> unknownLine =
+        from _ in CommonParsers.InlineWhitespace
+        from content in Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()
+        from lineEnd in CommonParsers.LineEnd
+        select Unit.Value;
+
     // Skip empty lines, comments, and directives
     static Parser<char, Unit> skipLine =
         OneOf(
@@ -201,7 +279,8 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             Try(classDefDirective),
             Try(classDirective),
             Try(clickDirective),
-            CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
+            Try(CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))),
+            unknownLine
         );
 
     public static Parser<char, FlowchartModel> Parser =>
@@ -225,6 +304,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         var item = OneOf(
             Try(subgraphStart.Select(_ => (FlowStatement?) _)),
             Try(subgraphEnd.Select(_ => (FlowStatement?) _)),
+            Try(directionStatement.Select(_ => (FlowStatement?) _)),
             Try(nodeStatement),
             skipLine.Select(_ => (FlowStatement?) null));
 
@@ -269,6 +349,18 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     if (subgraphStack.Count > 0)
                     {
                         subgraphStack.Pop();
+                    }
+
+                    break;
+
+                case DirectionStatement dirStatement:
+                    if (subgraphStack.Count > 0)
+                    {
+                        subgraphStack.Peek().Direction = dirStatement.Direction;
+                    }
+                    else
+                    {
+                        model.Direction = dirStatement.Direction;
                     }
 
                     break;
@@ -333,4 +425,6 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
     sealed record SubgraphStartStatement(string Id, string? Label) : FlowStatement;
 
     sealed record SubgraphEndStatement : FlowStatement;
+
+    sealed record DirectionStatement(Direction Direction) : FlowStatement;
 }
