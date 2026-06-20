@@ -1,0 +1,9 @@
+<div class="sample-picker">
+    <select class="sample-select" value="@selected" @onchange="OnChanged" aria-label="Load a sample diagram">
+        <option value="">Load a sample…</option>
+        @foreach (var sample in Samples)
+        {
+            <option value="@sample.Name">@sample.Name</option>
+        }
+    </select>
+</div>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <!-- Preserve Web assembly for Blazor component discovery -->
+  <assembly fullname="Naiad.Web" preserve="all" />
+</linker>

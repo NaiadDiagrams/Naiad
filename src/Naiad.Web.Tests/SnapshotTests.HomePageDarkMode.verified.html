@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html><html lang="en" data-theme="dark" style="--blazor-load-percentage: 100%; --blazor-load-percentage-text: &quot;100%&quot;;"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <base href="/">
+    <!-- Diagrams that use the fa:fa-* icon shorthand carry their own Font Awesome @import inside the
+         rendered SVG, so no global stylesheet is needed here and the page stays self-contained. -->
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/app.css" as="style">
+    <link rel="preload" href="_framework/blazor.webassembly.js" as="script">
+    <link rel="preload" href="js/interop.js" as="script">
+    <link rel="stylesheet" href="css/app.css">
+<!--!--><!--!--><!--!--><title><!--!-->Naiad — Mermaid Diagram Renderer</title><!--!--><!--!--><!--!--></head>
+
+<body>
+    <div id="app"><!--!--><!--!--><!--!--><!--!--><div class="app-shell"><header><!--!--><div class="header-titles"><h1 tabindex="-1">Naiad</h1>
+            <p>Render Mermaid diagrams to SVG — entirely in your browser, no server round-trip</p></div>
+        <div class="header-actions"><!--!--><a class="header-link" href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">GitHub</a>
+            <!--!--><button class="theme-toggle-btn" aria-label="Toggle theme"><!--!--><span class="icon">☀️</span><!--!--><span class="text"> Light</span></button></div></header><!--!-->
+
+    <!--!--><!--!--><!--!--><!--!--><!--!-->
+
+<div class="editor-layout"><section class="editor-pane"><div class="pane-header"><!--!--><span class="pane-title">Mermaid</span>
+            <span class="pane-spacer"></span>
+            <!--!--><div class="sample-picker"><select class="sample-select" aria-label="Load a sample diagram"><option value=""><!--!-->Load a sample…</option><option value="Flowchart">Flowchart</option><option value="Sequence">Sequence</option><option value="Class">Class</option><option value="State">State</option><option value="Entity Relationship">Entity Relationship</option><option value="User Journey">User Journey</option><option value="Gantt">Gantt</option><option value="Pie">Pie</option><option value="Quadrant">Quadrant</option><option value="Requirement">Requirement</option><option value="Git Graph">Git Graph</option><option value="C4 Context">C4 Context</option><option value="Mindmap">Mindmap</option><option value="Timeline">Timeline</option><option value="Sankey">Sankey</option><option value="XY Chart">XY Chart</option><option value="Block">Block</option><option value="Packet">Packet</option><option value="Kanban">Kanban</option><option value="Architecture">Architecture</option><option value="Radar">Radar</option><option value="Treemap">Treemap</option></select></div></div><!--!-->
+        <textarea class="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" aria-label="Mermaid diagram source" style="caret-color: transparent !important;"></textarea></section><!--!-->
+
+    <section class="preview-pane"><div class="pane-header"><!--!--><span class="pane-title">Preview</span>
+            <span class="pane-spacer"></span>
+            <div class="toolbar"><button class="toolbar-btn" title="Download SVG">SVG</button><!--!-->
+                <button class="toolbar-btn" title="Download PNG">PNG</button></div></div><!--!-->
+        <div class="preview-surface"><div class="preview-content"><!--!--><svg id="naiad" width="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385.5 88" style="max-width: 385.5px;" role="graphics-document document"><style xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style><style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style><defs><marker id="naiad_flowchart-pointEnd" class="marker" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath"></path></marker><marker id="naiad_flowchart-pointStart" class="marker" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath"></path></marker><marker id="naiad_flowchart-circleEnd" class="marker" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath"></circle></marker><marker id="naiad_flowchart-circleStart" class="marker" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath"></circle></marker><marker id="naiad_flowchart-crossEnd" class="marker cross" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2;"></path></marker><marker id="naiad_flowchart-crossStart" class="marker cross" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2;"></path></marker></defs><g transform="translate(20,20)"><path d="M68.5,24 L133.5,24" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#naiad_flowchart-pointEnd)" class="flowchart-link"></path><path d="M222.4,24 L287.4,24" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#naiad_flowchart-pointEnd)" class="flowchart-link"></path><path d="M0,0 H68.5 V48 H0 Z" fill="#ECECFF" stroke="#9370DB"></path><foreignObject x="0" y="0" width="68.5" height="48" class="nodeLabel"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;"><span><p>Start</p></span></div></foreignObject><path d="M138.5,0 H222.4 V48 H138.5 Z" fill="#ECECFF" stroke="#9370DB"></path><foreignObject x="138.5" y="0" width="83.9" height="48" class="nodeLabel"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;"><span><p>Process</p></span></div></foreignObject><path d="M292.4,0 H345.5 V48 H292.4 Z" fill="#ECECFF" stroke="#9370DB"></path><foreignObject x="292.4" y="0" width="53.1" height="48" class="nodeLabel"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 53.1px; height: 48px;"><span><p>End</p></span></div></foreignObject></g></svg></div></div></section></div><!--!-->
+
+    <!--!--><footer>
+        Powered by <a href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">Naiad</a> — a browserless Mermaid renderer for .NET
+    </footer></div><!--!-->
+        <!--!--></div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">X</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="js/interop.js"></script>
+    <script>
+        window.themeManager.initializeTheme();
+    </script>
+
+
+
+</body></html>

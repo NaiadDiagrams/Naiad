@@ -1,0 +1,10 @@
+<button class="theme-toggle-btn" @onclick="ToggleTheme" aria-label="Toggle theme">
+    @if (CurrentTheme == ThemeType.Light)
+    {
+        <span class="icon">🌙</span><span class="text"> Dark</span>
+    }
+    else
+    {
+        <span class="icon">☀️</span><span class="text"> Light</span>
+    }
+</button>

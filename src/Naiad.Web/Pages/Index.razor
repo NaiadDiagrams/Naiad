@@ -1,0 +1,48 @@
+@page "/"
+@inject FileDownloadService FileDownloadService
+@inject IJSRuntime JsRuntime
+
+<PageTitle>Naiad — Mermaid Diagram Renderer</PageTitle>
+
+<div class="editor-layout">
+    <section class="editor-pane">
+        <div class="pane-header">
+            <span class="pane-title">Mermaid</span>
+            <span class="pane-spacer"></span>
+            <SamplePicker Samples="DiagramSamples.All" OnSampleSelected="LoadSample" />
+        </div>
+        <textarea class="code-editor"
+                  spellcheck="false"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  autocorrect="off"
+                  aria-label="Mermaid diagram source"
+                  value="@source"
+                  @oninput="OnInput"></textarea>
+    </section>
+
+    <section class="preview-pane">
+        <div class="pane-header">
+            <span class="pane-title">Preview</span>
+            <span class="pane-spacer"></span>
+            <div class="toolbar">
+                <button class="toolbar-btn" @onclick="DownloadSvg" disabled="@(!result.HasSvg)" title="Download SVG">SVG</button>
+                <button class="toolbar-btn" @onclick="DownloadPng" disabled="@(!result.HasSvg || isExporting)" title="Download PNG">PNG</button>
+            </div>
+        </div>
+        <div class="preview-surface">
+            @if (result.HasError)
+            {
+                <ErrorPanel Message="@(result.Error!)" IssueUrl="@issueUrl" />
+            }
+            else if (result.HasSvg)
+            {
+                <div class="preview-content">@((MarkupString) result.Svg!)</div>
+            }
+            else
+            {
+                <p class="preview-empty">Type Mermaid markup on the left, or load a sample, to see it rendered here.</p>
+            }
+        </div>
+    </section>
+</div>

@@ -1,0 +1,11 @@
+<div class="error" role="alert">
+    <p class="error-message">@Message</p>
+    @if (IssueUrl is not null)
+    {
+        <p class="error-report">
+            This looks like a bug.
+            <a href="@IssueUrl" target="_blank" rel="noopener">Open a GitHub issue</a>
+            — the details are pre-filled for you.
+        </p>
+    }
+</div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Naiad — Mermaid Diagram Renderer</title>
+    <base href="/" />
+    <!-- Diagrams that use the fa:fa-* icon shorthand carry their own Font Awesome @import inside the
+         rendered SVG, so no global stylesheet is needed here and the page stays self-contained. -->
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/app.css" as="style" />
+    <link rel="preload" href="_framework/blazor.webassembly.js" as="script" />
+    <link rel="preload" href="js/interop.js" as="script" />
+    <link rel="stylesheet" href="css/app.css" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading Naiad…</p>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">X</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="js/interop.js"></script>
+    <script>
+        window.themeManager.initializeTheme();
+    </script>
+</body>
+
+</html>

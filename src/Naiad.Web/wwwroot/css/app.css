@@ -1,0 +1,399 @@
+:root {
+    --primary-color: #117a8b;
+    --primary-hover: #0e6573;
+    --accent-color: #e8833a;
+    --background-color: #f4f6f8;
+    --surface-color: #ffffff;
+    --text-color: #2d3436;
+    --muted-color: #6c757d;
+    --border-color: #d9e1e7;
+    --editor-bg: #ffffff;
+    --code-color: #2d3436;
+}
+
+[data-theme="dark"] {
+    --primary-color: #2aa1b5;
+    --primary-hover: #38b6cb;
+    --accent-color: #f0a500;
+    --background-color: #181a1b;
+    --surface-color: #232728;
+    --text-color: #e6e9ea;
+    --muted-color: #9aa4a8;
+    --border-color: #3a4042;
+    --editor-bg: #1e2122;
+    --code-color: #e6e9ea;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: var(--primary-color);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+#blazor-error-ui {
+    background: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    text-align: center;
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+#blazor-error-ui.show,
+#blazor-error-ui[style*="display: block"] {
+    display: block;
+}
+
+#blazor-error-ui a {
+    color: #856404;
+    margin-left: 0.5rem;
+}
+
+/* App shell: a fixed header and footer with a flexible editor area between them. */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.header-titles {
+    flex: 1;
+    min-width: 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    outline: none;
+    letter-spacing: 0.01em;
+}
+
+header p {
+    margin: 0.15rem 0 0;
+    opacity: 0.9;
+    font-size: 0.85rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.header-link {
+    color: white;
+    opacity: 0.85;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.header-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.theme-toggle-btn {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Two-pane editor / preview layout filling the space between header and footer. */
+.editor-layout {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    gap: 1px;
+    background: var(--border-color);
+}
+
+.editor-pane,
+.preview-pane {
+    flex: 1 1 50%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-color);
+}
+
+.pane-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+    min-height: 3rem;
+}
+
+.pane-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.pane-spacer {
+    flex: 1;
+}
+
+/* Sample picker dropdown */
+.sample-picker {
+    display: flex;
+    align-items: center;
+}
+
+.sample-select {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--background-color);
+    color: var(--text-color);
+    font-size: 0.85rem;
+    max-width: 220px;
+}
+
+/* Source editor */
+.code-editor {
+    flex: 1;
+    width: 100%;
+    border: 0;
+    outline: none;
+    resize: none;
+    padding: 1rem;
+    background: var(--editor-bg);
+    color: var(--code-color);
+    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    tab-size: 2;
+    white-space: pre;
+    overflow: auto;
+}
+
+/* Preview toolbar */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar-btn {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: border-color 0.2s, background 0.2s;
+    white-space: nowrap;
+}
+
+.toolbar-btn:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.toolbar-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Preview surface — kept light in both themes because Naiad renders diagrams on a light background. */
+.preview-surface {
+    flex: 1;
+    overflow: auto;
+    padding: 1.25rem;
+    background: #ffffff;
+    background-image:
+        linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+}
+
+.preview-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100%;
+}
+
+.preview-content svg {
+    max-width: 100%;
+    height: auto;
+    background: #ffffff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+.preview-empty {
+    margin: auto;
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Error panel */
+.error {
+    margin: 1rem;
+    padding: 1rem;
+    background: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px;
+    align-self: center;
+}
+
+.error-message {
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.85rem;
+}
+
+.error-report {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+}
+
+.error-report a {
+    color: #842029;
+    font-weight: 600;
+}
+
+footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    color: var(--muted-color);
+    font-size: 0.8rem;
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    html, body {
+        overflow: auto;
+    }
+
+    .app-shell {
+        height: auto;
+        min-height: 100vh;
+    }
+
+    header {
+        padding: 0.75rem 1rem;
+    }
+
+    header h1 {
+        font-size: 1.2rem;
+    }
+
+    header p {
+        display: none;
+    }
+
+    .header-link {
+        display: none;
+    }
+
+    .editor-layout {
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .editor-pane,
+    .preview-pane {
+        flex: none;
+    }
+
+    .code-editor {
+        min-height: 40vh;
+    }
+
+    .preview-surface {
+        min-height: 40vh;
+    }
+
+    .theme-toggle-btn .text {
+        display: none;
+    }
+
+    .theme-toggle-btn .icon {
+        font-size: 1.1rem;
+    }
+
+    .sample-select {
+        max-width: 150px;
+    }
+}

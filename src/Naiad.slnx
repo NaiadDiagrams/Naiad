@@ -7,6 +7,8 @@
   <Project Path="Naiad/Naiad.csproj" />
   <Project Path="Naiad.Skia/Naiad.Skia.csproj" />
   <Project Path="Naiad.ImageSharp/Naiad.ImageSharp.csproj" />
+  <Project Path="Naiad.Web/Naiad.Web.csproj" />
+  <Project Path="Naiad.Web.Tests/Naiad.Web.Tests.csproj" />
   <Project Path="Tests/Tests.csproj" />
   <Project Path="Benchmarks/Benchmarks.csproj" />
 </Solution>

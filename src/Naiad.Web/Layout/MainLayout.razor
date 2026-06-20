@@ -1,0 +1,32 @@
+@inherits LayoutComponentBase
+@inject ThemePreferenceService ThemePreferenceService
+@inject IJSRuntime JSRuntime
+
+<div class="app-shell">
+    <header>
+        <div class="header-titles">
+            <h1>Naiad</h1>
+            <p>Render Mermaid diagrams to SVG — entirely in your browser, no server round-trip</p>
+        </div>
+        <div class="header-actions">
+            <a class="header-link" href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">GitHub</a>
+            <ThemeToggle CurrentTheme="currentTheme" OnThemeChanged="HandleThemeChanged" />
+        </div>
+    </header>
+
+    <ErrorBoundary>
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent Context="exception">
+            <div class="editor-layout">
+                <ErrorPanel Message="@($"Something went wrong: {exception.Message}")"
+                            IssueUrl="@IssueLauncher.ForException("Unhandled error", exception, AppInfo.Environment(userAgent))" />
+            </div>
+        </ErrorContent>
+    </ErrorBoundary>
+
+    <footer>
+        Powered by <a href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">Naiad</a> — a browserless Mermaid renderer for .NET
+    </footer>
+</div>
