@@ -99,13 +99,32 @@ public class QuadrantTests : TestBase
                 title Edge Cases
                 x-axis Left --> Right
                 y-axis Bottom --> Top
-                Top Right: [1.0, 1.0]
-                Top Left: [0.0, 1.0]
-                Bottom Left: [0.0, 0.0]
-                Bottom Right: [1.0, 0.0]
+                Top Right: [1, 1]
+                Top Left: [0, 1]
+                Bottom Left: [0, 0]
+                Bottom Right: [1, 0]
                 Center: [0.5, 0.5]
             """;
 
         return VerifySvg(input);
+    }
+
+    [Test]
+    public async Task RejectsOutOfGrammarCoordinates()
+    {
+        // Mermaid's lexer accepts only `1` or `0[.digits]` for a coordinate, so `1.0` — and anything
+        // outside [0, 1] — is a lexical error. Naiad matches that: parsing fails rather than clamping.
+        await Assert.That(() => RenderPoint("1.0, 1.0")).Throws<MermaidParseException>();
+        await Assert.That(() => RenderPoint("2, 0.5")).Throws<MermaidParseException>();
+        await Assert.That(() => RenderPoint("-0.5, 0.5")).Throws<MermaidParseException>();
+
+        static string RenderPoint(string coordinates) =>
+            Mermaid.Render(
+                $"""
+                quadrantChart
+                    x-axis Left --> Right
+                    y-axis Bottom --> Top
+                    Point: [{coordinates}]
+                """);
     }
 }

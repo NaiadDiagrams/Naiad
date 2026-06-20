@@ -3,11 +3,7 @@ class RadarParser : IDiagramParser<RadarModel>
     static Parser<char, string> identifier =
         Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    static Parser<char, double> number =
-        from neg in Char('-').Optional()
-        from digits in Digit.AtLeastOnceString()
-        from dec in Char('.').Then(Digit.AtLeastOnceString()).Optional()
-        select double.Parse((neg.HasValue ? "-" : "") + digits + (dec.HasValue ? "." + dec.Value : ""));
+    static Parser<char, double> number = CommonParsers.SignedDecimal;
 
     // Quoted label: ["label"]
     static Parser<char, string> quotedLabel =

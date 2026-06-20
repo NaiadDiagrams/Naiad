@@ -16,6 +16,22 @@ public class XYChartTests: TestBase
     }
 
     [Test]
+    public Task PlusAndBareDotNumbers()
+    {
+        // Exercises the widened number grammar end to end: a leading + and bare-dot decimals like .5.
+        const string input =
+            """
+            xychart-beta
+                title "Fractional Values"
+                x-axis [A, B, C, D]
+                y-axis "Value" 0 --> 3
+                bar [.5, 1.5, +2, 2.5]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task BarAndLine()
     {
         const string input =

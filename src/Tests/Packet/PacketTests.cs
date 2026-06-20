@@ -92,4 +92,32 @@ public class PacketTests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task SingleBit()
+    {
+        const string input =
+            """
+            packet-beta
+            0-7: "Header"
+            8: "Flag"
+            9-15: "Data"
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task RelativeWidth()
+    {
+        const string input =
+            """
+            packet-beta
+            +8: "Byte 1"
+            +8: "Byte 2"
+            +16: "Word"
+            """;
+
+        return VerifySvg(input);
+    }
 }

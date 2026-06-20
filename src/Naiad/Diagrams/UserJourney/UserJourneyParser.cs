@@ -42,7 +42,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
         select new JourneyTask
         {
             Name = name.Trim(),
-            Score = Math.Clamp(score, 1, 5),
+            Score = score,
             Actors = actors
         };
 
