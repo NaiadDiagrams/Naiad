@@ -22,6 +22,7 @@ class LayoutGraph
             edge.Source = source;
             source.OutEdges.Add(edge);
         }
+
         if (Nodes.TryGetValue(edge.TargetId, out var target))
         {
             edge.Target = target;

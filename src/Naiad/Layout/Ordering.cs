@@ -156,12 +156,17 @@ internal static class Ordering
         return ordered;
     }
 
-    sealed class Runner
+    sealed class Runner(LayoutGraph graph)
     {
         static Comparison<(int sourceOrder, int targetOrder)> sortBySourceThenTarget = (a, b) =>
         {
             var cmp = a.sourceOrder.CompareTo(b.sourceOrder);
-            return cmp != 0 ? cmp : a.targetOrder.CompareTo(b.targetOrder);
+            if (cmp != 0)
+            {
+                return cmp;
+            }
+
+            return a.targetOrder.CompareTo(b.targetOrder);
         };
 
         // Sort a rank by each node's median neighbour position (set in OrderByMedian), tie-broken by the
@@ -170,23 +175,19 @@ internal static class Ordering
         static Comparison<LayoutNode> sortByMedian = (a, b) =>
         {
             var cmp = a.MedianPosition.CompareTo(b.MedianPosition);
-            return cmp == 0 ? a.Order.CompareTo(b.Order) : cmp;
+            if (cmp == 0)
+            {
+                return a.Order.CompareTo(b.Order);
+            }
+
+            return cmp;
         };
 
-        LayoutGraph graph;
         List<double> neighborOrders = [];
         List<(int sourceOrder, int targetOrder)> crossingsEdges = [];
-        int[] targetOrders;
-        int[] mergeBuffer;
-        int[] bestOrders;
-
-        public Runner(LayoutGraph graph)
-        {
-            this.graph = graph;
-            targetOrders = new int[graph.Edges.Count];
-            mergeBuffer = new int[graph.Edges.Count];
-            bestOrders = new int[graph.Nodes.Count];
-        }
+        int[] targetOrders = new int[graph.Edges.Count];
+        int[] mergeBuffer = new int[graph.Edges.Count];
+        int[] bestOrders = new int[graph.Nodes.Count];
 
         public void Run()
         {

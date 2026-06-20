@@ -302,14 +302,26 @@ class DagreLayoutEngine : ILayoutEngine
             {
                 if (nodeById.TryGetValue(nodeId, out var node))
                 {
-                    graph.AddNode(new() { Id = node.Id, Width = node.Width, Height = node.Height });
+                    graph.AddNode(
+                        new()
+                        {
+                            Id = node.Id,
+                                Width = node.Width,
+                                Height = node.Height
+                        });
                 }
             }
 
             foreach (var child in childSubgraphs)
             {
                 var (w, h) = clusterSizes[child.Id];
-                graph.AddNode(new() { Id = child.Id, Width = w, Height = h });
+                graph.AddNode(
+                    new()
+                    {
+                        Id = child.Id,
+                            Width = w,
+                            Height = h
+                    });
             }
 
             foreach (var edge in diagram.Edges)
@@ -322,7 +334,12 @@ class DagreLayoutEngine : ILayoutEngine
                     graph.GetNode(from) is not null &&
                     graph.GetNode(to) is not null)
                 {
-                    graph.AddEdge(new() { SourceId = from, TargetId = to });
+                    graph.AddEdge(
+                        new()
+                        {
+                            SourceId = from,
+                            TargetId = to
+                        });
                 }
             }
 

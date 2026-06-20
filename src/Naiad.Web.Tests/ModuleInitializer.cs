@@ -9,7 +9,7 @@ static class ModuleInitializer
         // These tests only ever launch Chromium, so install just that. Initialize(installPlaywright: true)
         // would fetch Chromium, Firefox and WebKit (~300 MB of unused browsers) and trip the Firefox/WebKit
         // host-dependency validation warning on CI runners that lack their native libs.
-        var playwrightExit = Microsoft.Playwright.Program.Main(["install", "chromium"]);
+        var playwrightExit = Program.Main(["install", "chromium"]);
         if (playwrightExit != 0)
         {
             throw new InvalidOperationException($"Playwright Chromium install failed (exit code {playwrightExit}).");

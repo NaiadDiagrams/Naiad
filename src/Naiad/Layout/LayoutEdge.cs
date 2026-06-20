@@ -8,8 +8,11 @@
     public RankConstraint RankConstraint { get; set; }
     public double LabelWidth { get; set; }
     public double LabelHeight { get; set; }
+    public List<Position> Points { get; } = [];
 
     public bool IsSameRank =>
-        RankConstraint is RankConstraint.Same or RankConstraint.SameBefore or RankConstraint.SameAfter;
-    public List<Position> Points { get; } = [];
+        RankConstraint is
+            RankConstraint.Same or
+            RankConstraint.SameBefore or
+            RankConstraint.SameAfter;
 }
