@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 227 572"
-  style="max-width: 227px;"
+  viewBox="0 0 327 572"
+  style="max-width: 327px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -112,68 +112,72 @@
   <g
     transform="translate(20,20)">
     <rect
-      x="0"
+      x="100"
       y="118"
       width="187"
       height="414"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="93.5"
+      x="193.5"
       y="132"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Banking System</text>
+      fill="#333333"
+      class="cluster-label">Banking System</text>
     <rect
-      x="20"
+      x="120"
       y="163"
       width="147"
       height="231"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="93.5"
+      x="193.5"
       y="177"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">API Application</text>
+      fill="#333333"
+      class="cluster-label">API Application</text>
     <path
-      d="M93.5,48 L93.5,208"
+      d="M193.5,48 L193.5,203"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M93.5,256 L93.5,326"
+      d="M193.5,256 L193.5,321"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M93.5,374 L93.5,464"
+      d="M193.5,374 L193.5,459"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M63.1,0 H123.9 V48 H63.1 Z"
+      d="M163.1,0 H223.9 V48 H163.1 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="63.1"
+      x="163.1"
       y="0"
       width="60.8"
       height="48"
@@ -187,11 +191,11 @@
       </div>
     </foreignObject>
     <path
-      d="M40,208 H147 V256 H40 Z"
+      d="M140,208 H247 V256 H140 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="40"
+      x="140"
       y="208"
       width="107"
       height="48"
@@ -205,11 +209,11 @@
       </div>
     </foreignObject>
     <path
-      d="M51.55,326 H135.45 V374 H51.55 Z"
+      d="M151.55,326 H235.45 V374 H151.55 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="51.55"
+      x="151.55"
       y="326"
       width="83.9"
       height="48"
@@ -223,11 +227,11 @@
       </div>
     </foreignObject>
     <path
-      d="M47.7,468.8 A45.8,4.8 0 0 1 139.3,468.8 V507.2 A45.8,4.8 0 0 1 47.7,507.2 V468.8 Z M47.7,468.8 A45.8,4.8 0 0 0 139.3,468.8"
+      d="M147.7,468.8 A45.8,4.8 0 0 1 239.3,468.8 V507.2 A45.8,4.8 0 0 1 147.7,507.2 V468.8 Z M147.7,468.8 A45.8,4.8 0 0 0 239.3,468.8"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="47.7"
+      x="147.7"
       y="464"
       width="91.6"
       height="48"

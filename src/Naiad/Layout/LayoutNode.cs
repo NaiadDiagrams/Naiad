@@ -16,6 +16,11 @@
     public string? OriginalEdgeSource { get; set; }
     public string? OriginalEdgeTarget { get; set; }
 
+    // Cluster border walls (left/right) reserve a horizontal lane for a subgraph and keep its members
+    // compact; they take part in ordering/positioning but are ignored when computing subgraph bounds.
+    public bool IsClusterBorder { get; set; }
+    public bool IsLeftBorder { get; set; }
+
     public List<LayoutEdge> InEdges { get; } = [];
     public List<LayoutEdge> OutEdges { get; } = [];
 }

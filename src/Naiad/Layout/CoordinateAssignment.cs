@@ -1,6 +1,12 @@
 static class CoordinateAssignment
 {
-    public static void Run(LayoutGraph graph, double nodeSep, double rankSep, Direction direction)
+    public static void Run(
+        LayoutGraph graph,
+        double nodeSep,
+        double rankSep,
+        Direction direction,
+        double[]? rankTopInset = null,
+        double[]? rankBottomInset = null)
     {
         graph.BuildRanks();
         graph.UpdateOrderInRanks();
@@ -8,7 +14,7 @@ static class CoordinateAssignment
         var isHorizontal = direction is Direction.LeftToRight or Direction.RightToLeft;
 
         // Assign Y coordinates based on ranks
-        AssignRankCoordinates(graph, rankSep, isHorizontal);
+        AssignRankCoordinates(graph, rankSep, isHorizontal, rankTopInset, rankBottomInset);
 
         // Assign X coordinates using simplified Brandes-Köpf
         var (maxX, maxY) = AssignPositionCoordinates(graph, nodeSep, isHorizontal);
@@ -17,12 +23,25 @@ static class CoordinateAssignment
         AdjustForDirection(graph, direction, maxX, maxY);
     }
 
-    static void AssignRankCoordinates(LayoutGraph graph, double rankSep, bool isHorizontal)
+    static void AssignRankCoordinates(
+        LayoutGraph graph,
+        double rankSep,
+        bool isHorizontal,
+        double[]? topInset,
+        double[]? bottomInset)
     {
         double currentY = 0;
 
-        foreach (var rank in graph.Ranks)
+        for (var r = 0; r < graph.Ranks.Length; r++)
         {
+            var rank = graph.Ranks[r];
+
+            // Reserve space above this rank for the title bands of clusters that start here.
+            if (topInset is not null && r < topInset.Length)
+            {
+                currentY += topInset[r];
+            }
+
             var maxHeight = rank.Count > 0
                 ? rank.Max(_ => isHorizontal ? _.Width : _.Height)
                 : 0;
@@ -40,6 +59,12 @@ static class CoordinateAssignment
             }
 
             currentY += maxHeight + rankSep;
+
+            // Reserve space below this rank for the bottom padding of clusters that end here.
+            if (bottomInset is not null && r < bottomInset.Length)
+            {
+                currentY += bottomInset[r];
+            }
         }
     }
 

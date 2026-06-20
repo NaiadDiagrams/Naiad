@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 179.3 690"
-  style="max-width: 179.3px;"
+  viewBox="0 0 229.3 690"
+  style="max-width: 229.3px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -112,82 +112,86 @@
   <g
     transform="translate(20,20)">
     <rect
-      x="0"
+      x="50"
       y="118"
       width="139.3"
       height="231"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="69.65"
+      x="119.65"
       y="132"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Frontend</text>
+      fill="#333333"
+      class="cluster-label">Frontend</text>
     <rect
-      x="3.85"
+      x="50"
       y="419"
       width="131.6"
       height="231"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="69.65"
+      x="115.8"
       y="433"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Backend</text>
+      fill="#333333"
+      class="cluster-label">Backend</text>
     <path
-      d="M69.65,48 L69.65,163"
+      d="M108.1,48 L108.1,158"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,211 L69.65,281"
+      d="M108.1,211 L118.84,276.07"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,512 L69.65,582"
+      d="M115.8,512 L115.8,577"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,211 L69.65,464"
+      d="M108.1,211 L138.3,226.67 C168.5,242.33 228.9,273.67 230.8,315.27 C232.7,356.87 176.09,408.75 147.79,434.68 L119.49,460.62"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,329 L69.65,464"
+      d="M119.65,329 L115.94,459"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M35.4,0 H103.9 V48 H35.4 Z"
+      d="M73.85,0 H142.35 V48 H73.85 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="35.4"
+      x="73.85"
       y="0"
       width="68.5"
       height="48"
@@ -201,11 +205,11 @@
       </div>
     </foreignObject>
     <path
-      d="M31.55,163 H107.75 V211 H31.55 Z"
+      d="M70,163 H146.2 V211 H70 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="31.55"
+      x="70"
       y="163"
       width="76.2"
       height="48"
@@ -219,11 +223,11 @@
       </div>
     </foreignObject>
     <path
-      d="M20,281 H119.3 V329 H20 Z"
+      d="M70,281 H169.3 V329 H70 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="20"
+      x="70"
       y="281"
       width="99.3"
       height="48"
@@ -237,11 +241,11 @@
       </div>
     </foreignObject>
     <path
-      d="M43.1,464 H96.2 V512 H43.1 Z"
+      d="M89.25,464 H142.35 V512 H89.25 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="43.1"
+      x="89.25"
       y="464"
       width="53.1"
       height="48"
@@ -255,11 +259,11 @@
       </div>
     </foreignObject>
     <path
-      d="M23.85,586.8 A45.8,4.8 0 0 1 115.45,586.8 V625.2 A45.8,4.8 0 0 1 23.85,625.2 V586.8 Z M23.85,586.8 A45.8,4.8 0 0 0 115.45,586.8"
+      d="M70,586.8 A45.8,4.8 0 0 1 161.6,586.8 V625.2 A45.8,4.8 0 0 1 70,625.2 V586.8 Z M70,586.8 A45.8,4.8 0 0 0 161.6,586.8"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="23.85"
+      x="70"
       y="582"
       width="91.6"
       height="48"

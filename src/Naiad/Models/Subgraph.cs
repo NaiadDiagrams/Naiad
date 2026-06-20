@@ -8,6 +8,12 @@ public class Subgraph
     public List<string> NodeIds { get; } = [];
     public List<Subgraph> NestedSubgraphs { get; } = [];
 
+    /// <summary>Style classes assigned via a <c>class</c> directive.</summary>
+    public List<string> Classes { get; } = [];
+
+    /// <summary>Resolved visual overrides (from <c>classDef</c>/<c>class</c>/<c>style</c>), or null for theme defaults.</summary>
+    public NodeStyle? Style { get; set; }
+
     // Layout properties
     public Position Position { get; set; }
     public double Width { get; set; }

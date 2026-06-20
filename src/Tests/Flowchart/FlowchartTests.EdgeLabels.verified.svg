@@ -119,22 +119,22 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="50.65"
-      y="37.93"
-      width="40"
-      height="24"
+      x="51.1"
+      y="35.43"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="50.65"
-      y="37.93"
-      width="40"
-      height="24"
+      x="51.1"
+      y="35.43"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>Yes</p>
         </span>
@@ -148,22 +148,22 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="54.65"
-      y="84.07"
-      width="32"
-      height="24"
+      x="54.95"
+      y="81.57"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="54.65"
-      y="84.07"
-      width="32"
-      height="24"
+      x="54.95"
+      y="81.57"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>No</p>
         </span>

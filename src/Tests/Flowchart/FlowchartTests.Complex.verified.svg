@@ -119,22 +119,22 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="120.3"
-      y="68.5"
-      width="88"
-      height="24"
+      x="121.65"
+      y="66"
+      width="85.3"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="120.3"
-      y="68.5"
-      width="88"
-      height="24"
+      x="121.65"
+      y="66"
+      width="85.3"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 88px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 85.3px; height: 29px;">
         <span>
           <p>Get money</p>
         </span>
@@ -155,22 +155,22 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="83.39"
-      y="324.99"
-      width="40"
-      height="24"
+      x="83.84"
+      y="322.49"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="83.39"
-      y="324.99"
-      width="40"
-      height="24"
+      x="83.84"
+      y="322.49"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>One</p>
         </span>
@@ -184,22 +184,22 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="144.3"
-      y="323.7"
-      width="40"
-      height="24"
+      x="144.75"
+      y="321.2"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="144.3"
-      y="323.7"
-      width="40"
-      height="24"
+      x="144.75"
+      y="321.2"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>Two</p>
         </span>
@@ -213,22 +213,22 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="196.45"
-      y="324.98"
-      width="56"
-      height="24"
+      x="197.2"
+      y="322.48"
+      width="54.5"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="196.45"
-      y="324.98"
-      width="56"
-      height="24"
+      x="197.2"
+      y="322.48"
+      width="54.5"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 56px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 54.5px; height: 29px;">
         <span>
           <p>Three</p>
         </span>

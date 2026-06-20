@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 1479.515 3523"
-  style="max-width: 1479.515px;"
+  viewBox="0 0 1761.45 2998"
+  style="max-width: 1761.45px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -112,649 +112,653 @@
   <g
     transform="translate(20,20)">
     <rect
-      x="784.8"
+      x="77.25"
       y="354"
-      width="654.72"
+      width="998.3"
       height="642.6"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="1112.16"
+      x="576.4"
       y="368"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Gateway and Security</text>
+      fill="#333333"
+      class="cluster-label">Gateway and Security</text>
     <rect
-      x="463.55"
+      x="327.25"
       y="1066.6"
-      width="512.25"
-      height="1061.6"
+      width="524.64"
+      height="1170.8"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="719.68"
+      x="589.57"
       y="1080.6"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Application Services</text>
+      fill="#333333"
+      class="cluster-label">Application Services</text>
     <rect
-      x="483.55"
-      y="1504"
-      width="407.1"
-      height="486.2"
+      x="347.25"
+      y="1558.6"
+      width="409.9"
+      height="540.8"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="687.1"
-      y="1518"
+      x="552.2"
+      y="1572.6"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Resilience layer</text>
+      fill="#333333"
+      class="cluster-label">Resilience layer</text>
     <rect
-      x="536.88"
-      y="2198.2"
-      width="365.6"
-      height="368.2"
+      x="211.45"
+      y="1549"
+      width="1251.9"
+      height="836"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="719.68"
-      y="2212.2"
+      x="837.4"
+      y="1563"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Data and Cache</text>
+      fill="#333333"
+      class="cluster-label">Data and Cache</text>
     <rect
-      x="452.2"
-      y="2636.4"
-      width="534.96"
-      height="623.4"
+      x="277.25"
+      y="1986.4"
+      width="1059.3"
+      height="736"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="719.68"
-      y="2650.4"
+      x="806.9"
+      y="2000.4"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Background Processing</text>
+      fill="#333333"
+      class="cluster-label">Background Processing</text>
     <rect
-      x="881.71"
-      y="3349.9"
-      width="360.9"
+      x="77.25"
+      y="2845"
+      width="1644.2"
       height="113"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="1062.16"
-      y="3363.9"
+      x="899.35"
+      y="2859"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Observability</text>
+      fill="#333333"
+      class="cluster-label">Observability</text>
     <path
-      d="M602.08,48 L602.08,118"
+      d="M1205.05,48 L1205.05,113"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M602.08,166 L602.08,236"
+      d="M1205.05,166 L1205.05,231"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M597.52,284 L96.55,2924.1"
+      d="M1205.05,284 L1476.95,397.08"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="327.04"
-      y="1592.05"
-      width="40"
-      height="24"
+      x="1321.45"
+      y="326.04"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="327.04"
-      y="1592.05"
-      width="40"
-      height="24"
+      x="1321.45"
+      y="326.04"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>hit</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M655.58,280.97 L960.64,400.52"
+      d="M1205.05,284 L933.15,397.08"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="784.11"
-      y="328.75"
-      width="48"
-      height="24"
+      x="1045.7"
+      y="326.04"
+      width="46.8"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="784.11"
-      y="328.75"
-      width="48"
-      height="24"
+      x="1045.7"
+      y="326.04"
+      width="46.8"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 48px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 46.8px; height: 29px;">
         <span>
           <p>miss</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1017.99,447 L1017.99,517"
+      d="M928.53,447 L425.6,516.32"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M989.25,584.2 L921.17,663.8"
+      d="M420.64,584.2 L382.72,601.47 C344.8,618.73 268.95,653.27 231.02,693.4 C193.1,733.53 193.1,779.27 193.1,818.57 C193.1,857.87 193.1,890.73 193.1,907.17 L193.1,923.6"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="939.21"
-      y="612"
-      width="32"
-      height="24"
+      x="177.4"
+      y="741.9"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="939.21"
-      y="612"
-      width="32"
-      height="24"
+      x="177.4"
+      y="741.9"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1046.73,584.2 L1106.6,654.2"
+      d="M420.64,584.2 L643.41,652.73"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="1056.66"
-      y="607.2"
-      width="40"
-      height="24"
+      x="512.48"
+      y="603.96"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="1056.66"
-      y="607.2"
-      width="40"
-      height="24"
+      x="512.48"
+      y="603.96"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1079.75,721.4 L948.05,801"
+      d="M648.19,721.4 L705.24,738.67 C762.29,755.93 876.4,790.47 933.45,824.17 C990.5,857.87 990.5,890.73 990.5,907.17 L990.5,923.6"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="977.9"
-      y="749.2"
-      width="72"
-      height="24"
+      x="955.55"
+      y="810.5"
+      width="69.9"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="977.9"
-      y="749.2"
-      width="72"
-      height="24"
+      x="955.55"
+      y="810.5"
+      width="69.9"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 72px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 69.9px; height: 29px;">
         <span>
           <p>expired</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M948.05,801 L1079.75,721.4"
+      d="M990.5,976.6 L651.83,657.63"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M1126.68,721.4 L1106.18,801"
+      d="M648.19,721.4 L609.42,738.67 C570.64,755.93 493.1,790.47 454.32,824.17 C415.55,857.87 415.55,890.73 415.55,907.17 L415.55,923.6"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="1100.43"
-      y="749.2"
-      width="32"
-      height="24"
+      x="399.85"
+      y="810.5"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="1100.43"
-      y="749.2"
-      width="32"
-      height="24"
+      x="399.85"
+      y="810.5"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1181.31,721.4 L1277.08,791.4"
+      d="M648.19,721.4 L699.94,787.46"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="1209.2"
-      y="744.4"
-      width="40"
-      height="24"
+      x="654.51"
+      y="739.93"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="1209.2"
-      y="744.4"
-      width="40"
-      height="24"
+      x="654.51"
+      y="739.93"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1323.06,858.6 L1323.06,928.6"
+      d="M703.03,858.6 L611.24,925.65"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="1307.06"
-      y="881.6"
-      width="32"
-      height="24"
+      x="641.43"
+      y="877.63"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="1307.06"
-      y="881.6"
-      width="32"
-      height="24"
+      x="641.43"
+      y="877.63"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1264.32,858.6 L1141.95,928.6"
+      d="M703.03,858.6 L794.81,925.65"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="1183.13"
-      y="881.6"
-      width="40"
-      height="24"
+      x="729.37"
+      y="877.63"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="1183.13"
-      y="881.6"
-      width="40"
-      height="24"
+      x="729.37"
+      y="877.63"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1059.9,976.6 L834.36,1111.6"
+      d="M798.85,976.6 L737.55,1107.07"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M753.08,1178.8 L693.51,1258.4"
+      d="M735.43,1178.8 L766.2,1196.07 C796.97,1213.33 858.51,1247.87 889.28,1286.4 C920.05,1324.93 920.05,1367.47 920.05,1425 C920.05,1482.53 920.05,1555.07 923.75,1614.2 C927.45,1673.33 934.85,1719.07 951.4,1763.2 C967.95,1807.33 993.65,1849.87 969.73,1898.3 C945.82,1946.73 872.28,2001.07 822.13,2046.56 C771.98,2092.05 745.22,2128.71 731.83,2147.04 L718.45,2165.36"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="707.3"
-      y="1206.6"
-      width="32"
-      height="24"
+      x="915.45"
+      y="1681.7"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="707.3"
-      y="1206.6"
-      width="32"
-      height="24"
+      x="915.45"
+      y="1681.7"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M803.37,1178.8 L855.76,1248.8"
+      d="M735.43,1178.8 L555.48,1247.03"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="809.57"
-      y="1201.8"
-      width="40"
-      height="24"
+      x="625.9"
+      y="1198.41"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="809.57"
-      y="1201.8"
-      width="40"
-      height="24"
+      x="625.9"
+      y="1198.41"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M880.43,1316 L869.99,2060.2"
+      d="M550.8,1316 L601.39,1331.67 C651.98,1347.33 753.17,1378.67 803.76,1430.6 C854.35,1482.53 854.35,1555.07 857.41,1614.2 C860.47,1673.33 866.58,1719.07 885.75,1763.2 C904.92,1807.33 937.13,1849.87 916.48,1898.3 C895.82,1946.73 822.28,2001.07 747.5,2046.87 C672.71,2092.67 596.68,2129.93 558.66,2148.57 L520.64,2167.2"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="855.21"
-      y="1676.1"
-      width="40"
-      height="24"
+      x="853.15"
+      y="1750.3"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="855.21"
-      y="1676.1"
-      width="40"
-      height="24"
+      x="853.15"
+      y="1750.3"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M829.87,1316 L723.55,1386"
+      d="M550.8,1316 L550.8,1381"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="760.71"
-      y="1339"
-      width="32"
-      height="24"
+      x="535.1"
+      y="1334"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="760.71"
-      y="1339"
-      width="32"
-      height="24"
+      x="535.1"
+      y="1334"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M666.25,1434 L566.35,1549"
+      d="M550.8,1434 L412.4,1599.76"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M685.97,1434 L680.54,1549"
+      d="M550.8,1434 L689.2,1599.76"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M706.82,1434 L801.29,1549"
+      d="M550.8,1434 L550.8,1598.6"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M565.01,1597 L621.91,1667"
+      d="M409.2,1651.6 L626.59,1729.51"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M673.73,1597 L657.17,1667"
+      d="M692.4,1651.6 L634.34,1727.23"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M788.69,1597 L694.46,1667"
+      d="M550.8,1651.6 L627.74,1727.68"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M632.05,1734.2 L596.27,1804.2"
+      d="M631.3,1798.4 L654.99,1863.7"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="590.16"
-      y="1757.2"
-      width="48"
-      height="24"
+      x="619.75"
+      y="1816.55"
+      width="46.8"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="590.16"
-      y="1757.2"
-      width="48"
-      height="24"
+      x="619.75"
+      y="1816.55"
+      width="46.8"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 48px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 46.8px; height: 29px;">
         <span>
           <p>open</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M649.23,1734.2 L649.23,1922.2"
+      d="M631.3,1798.4 L662.46,1814.07 C693.62,1829.73 755.93,1861.07 747.95,1899.48 C739.97,1937.9 661.7,1983.39 622.56,2006.14 L583.42,2028.89"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="617.23"
-      y="1816.2"
-      width="64"
-      height="24"
+      x="787.15"
+      y="1877.9"
+      width="62.2"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="617.23"
-      y="1816.2"
-      width="64"
-      height="24"
+      x="787.15"
+      y="1877.9"
+      width="62.2"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 64px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 62.2px; height: 29px;">
         <span>
           <p>closed</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M597.27,1852.2 L635.96,1922.2"
+      d="M656.7,1916.4 L581.9,2027.26"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M687.56,1970.2 L831.32,2060.2"
+      d="M579.1,2079.4 L519.02,2165.3"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M546.95,1597 L601.23,2498.4"
-      fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-start="url(#naiad_flowchart-pointStart)"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
-    <path
-      d="M815.48,1597 L608.2,2498.4"
+      d="M409.2,1651.6 L389.24,1670.47 C369.28,1689.33 329.37,1727.07 317.21,1767.2 C305.05,1807.33 320.65,1849.87 320.65,1898.3 C320.65,1946.73 305.05,2001.07 286.88,2051.23 C268.72,2101.4 247.98,2147.4 245.64,2190.23 C243.29,2233.05 259.33,2272.71 267.35,2292.54 L275.37,2312.36"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -762,7 +766,7 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M676.39,1597 L594.14,2252.8"
+      d="M550.8,1651.6 L515.58,1670.47 C480.35,1689.33 409.9,1727.07 382.48,1767.2 C355.05,1807.33 370.65,1849.87 370.65,1898.3 C370.65,1946.73 355.05,2001.07 336.88,2051.23 C318.72,2101.4 297.98,2147.4 287.62,2190.17 C277.25,2232.93 277.25,2272.47 277.25,2292.23 L277.25,2312"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -770,7 +774,15 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M871.11,1316 L598.12,2252.8"
+      d="M692.4,1651.6 L837.56,1670.47 C982.72,1689.33 1273.03,1727.07 1418.19,1767.2 C1563.35,1807.33 1563.35,1849.87 1563.35,1898.3 C1563.35,1946.73 1563.35,2001.07 1563.35,2051.23 C1563.35,2101.4 1563.35,2147.4 1374.14,2190.91 C1184.92,2234.42 806.5,2275.44 617.28,2295.95 L428.07,2316.46"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-start="url(#naiad_flowchart-pointStart)"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M550.8,1316 L480.21,1331.67 C409.62,1347.33 268.43,1378.67 197.84,1430.6 C127.25,1482.53 127.25,1555.07 132.43,1614.2 C137.62,1673.33 147.98,1719.07 166.15,1763.2 C184.32,1807.33 210.28,1849.87 205.1,1898.3 C199.92,1946.73 163.58,2001.07 145.42,2051.23 C127.25,2101.4 127.25,2147.4 175.79,2190.68 C224.33,2233.96 321.41,2274.52 369.95,2294.79 L418.49,2315.07"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -778,29 +790,29 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="702.62"
-      y="1772.4"
-      width="64"
-      height="24"
+      x="166.2"
+      y="1814.1"
+      width="62.2"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="702.62"
-      y="1772.4"
-      width="64"
-      height="24"
+      x="166.2"
+      y="1814.1"
+      width="62.2"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 64px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 62.2px; height: 29px;">
         <span>
           <p>lookup</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M834.95,2108.2 L625.38,2253.12"
+      d="M516.15,2217.4 L426.51,2313.35"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -808,108 +820,108 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="670.16"
-      y="2168.66"
-      width="120"
-      height="24"
+      x="413.28"
+      y="2250.87"
+      width="116.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="670.16"
-      y="2168.66"
-      width="120"
-      height="24"
+      x="413.28"
+      y="2250.87"
+      width="116.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 120px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 116.1px; height: 29px;">
         <span>
           <p>write-through</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M688.7,1434 L742.65,2243.2"
+      d="M550.8,1434 L1190.41,1592.8"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M732.17,2310.4 L705.66,2380.4"
+      d="M1195.26,1661.2 L1211.63,1735.92"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="698.92"
-      y="2333.4"
-      width="40"
-      height="24"
+      x="1183.89"
+      y="1684.06"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="698.92"
-      y="2333.4"
-      width="40"
-      height="24"
+      x="1183.89"
+      y="1684.06"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M677.48,2428.4 L621.78,2498.4"
+      d="M1212.7,1788.8 L1212.14,1806.07 C1211.58,1823.33 1210.47,1857.87 1173.14,1902.3 C1135.82,1946.73 1062.28,2001.07 1075.83,2051.23 C1089.38,2101.4 1190.02,2147.4 1072.26,2190.9 C954.5,2234.4 618.36,2275.4 450.29,2295.9 L282.21,2316.39"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M715.68,2428.4 L771.38,2498.4"
+      d="M1212.7,1788.8 L1347.01,1865.91"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M735.17,2243.2 L656.17,1970.2"
+      d="M1195.26,1661.2 L1242.53,1678.47 C1289.79,1695.73 1384.32,1730.27 1454,1768.8 C1523.68,1807.33 1568.52,1849.87 1419.38,1894.19 C1270.25,1938.51 927.15,1984.62 755.6,2007.68 L584.06,2030.73"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="679.67"
-      y="2094.7"
-      width="32"
-      height="24"
+      x="1530.4"
+      y="1814.1"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="679.67"
-      y="2094.7"
-      width="32"
-      height="24"
+      x="1530.4"
+      y="1814.1"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M800.57,2546.4 L857.36,2681.4"
+      d="M1351.35,1916.4 L1251,2027.69"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -917,201 +929,201 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M867.46,2729.4 L867.46,2799.4"
+      d="M1247.65,2079.4 L1047.88,2167.38"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M867.46,2847.4 L867.46,2917.4"
+      d="M1043.3,2217.4 L908.04,2304.69"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M799.56,2984.6 L658.11,3054.6"
+      d="M903.84,2374.6 L667.45,2462.85"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="684.84"
-      y="3007.6"
-      width="88"
-      height="24"
+      x="743"
+      y="2404.23"
+      width="85.3"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="684.84"
-      y="3007.6"
-      width="88"
-      height="24"
+      x="743"
+      y="2404.23"
+      width="85.3"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 88px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 85.3px; height: 29px;">
         <span>
           <p>retryable</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M590.54,3121.8 L591.2,3191.8"
+      d="M662.77,2531.8 L654.8,2649.41"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="570.87"
-      y="3144.8"
-      width="40"
-      height="24"
+      x="639.23"
+      y="2576.11"
+      width="39.1"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="570.87"
-      y="3144.8"
-      width="40"
-      height="24"
+      x="639.23"
+      y="2576.11"
+      width="39.1"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 40px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
         <span>
           <p>yes</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M608.31,3191.8 L850.57,2847.4"
+      d="M654.46,2702.4 L1040.35,2173.44"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M651.65,3121.8 L779.61,3191.8"
+      d="M662.77,2531.8 L382.29,2652.42"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="699.63"
-      y="3144.8"
-      width="32"
-      height="24"
+      x="506.83"
+      y="2577.61"
+      width="31.4"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="699.63"
-      y="3144.8"
-      width="32"
-      height="24"
+      x="506.83"
+      y="2577.61"
+      width="31.4"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 32px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
         <span>
           <p>no</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M861.88,2984.6 L827.47,3191.8"
+      d="M903.84,2374.6 L831.12,2395.2 C758.39,2415.8 612.95,2457 525.67,2502.91 C438.4,2548.82 409.29,2599.44 394.74,2624.75 L380.19,2650.07"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="816.68"
-      y="3076.2"
-      width="56"
-      height="24"
+      x="440.25"
+      y="2483.7"
+      width="54.5"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="816.68"
-      y="3076.2"
-      width="56"
-      height="24"
+      x="440.25"
+      y="2483.7"
+      width="54.5"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 56px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 54.5px; height: 29px;">
         <span>
           <p>fatal</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M867.46,2984.6 L867.46,3064.2"
+      d="M903.84,2374.6 L929.2,2469.37"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="831.46"
-      y="3012.4"
-      width="72"
-      height="24"
+      x="881.57"
+      y="2407.48"
+      width="69.9"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="831.46"
-      y="3012.4"
-      width="72"
-      height="24"
+      x="881.57"
+      y="2407.48"
+      width="69.9"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 72px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 69.9px; height: 29px;">
         <span>
           <p>success</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M855.61,2108.2 L378.14,2924.1"
+      d="M516.15,2217.4 L611.92,2313.46"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M364.1,2972.1 L364.1,3329.8"
+      d="M615.45,2365 L542.42,2387.2 C469.38,2409.4 323.32,2453.8 375,2493.15 C426.68,2532.51 676.11,2566.81 800.82,2583.97 L925.54,2601.12"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M106.25,2972.1 L318.62,3329.8"
+      d="M1481.57,447 L1481.57,464.27 C1481.57,481.53 1481.57,516.07 1481.57,556.2 C1481.57,596.33 1481.57,642.07 1481.57,687.8 C1481.57,733.53 1481.57,779.27 1481.57,823.4 C1481.57,867.53 1481.57,910.07 1481.57,963.43 C1481.57,1016.8 1481.57,1081 1481.57,1135.97 C1481.57,1190.93 1481.57,1236.67 1481.57,1280.8 C1481.57,1324.93 1481.57,1367.47 1481.57,1425 C1481.57,1482.53 1481.57,1555.07 1520.2,1614.2 C1558.83,1673.33 1636.09,1719.07 1674.72,1763.2 C1713.35,1807.33 1713.35,1849.87 1713.35,1898.3 C1713.35,1946.73 1713.35,2001.07 1713.35,2051.23 C1713.35,2101.4 1713.35,2147.4 1713.35,2195 C1713.35,2242.6 1713.35,2291.8 1713.35,2342.6 C1713.35,2393.4 1713.35,2445.8 1583.7,2489.16 C1454.05,2532.51 1194.75,2566.83 1065.1,2583.99 L935.45,2601.14"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M829.49,3112.2 L440.7,3357.98"
+      d="M930.49,2522.2 L930.49,2596.8"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M1019.32,447 L1183.17,3394.9"
+      d="M928.53,447 L1051,464.27 C1173.47,481.53 1418.41,516.07 1540.88,556.2 C1663.35,596.33 1663.35,642.07 1663.35,687.8 C1663.35,733.53 1663.35,779.27 1663.35,823.4 C1663.35,867.53 1663.35,910.07 1663.35,963.43 C1663.35,1016.8 1663.35,1081 1663.35,1135.97 C1663.35,1190.93 1663.35,1236.67 1663.35,1280.8 C1663.35,1324.93 1663.35,1367.47 1663.35,1425 C1663.35,1482.53 1663.35,1555.07 1663.35,1614.2 C1663.35,1673.33 1663.35,1719.07 1663.35,1763.2 C1663.35,1807.33 1663.35,1849.87 1663.35,1898.3 C1663.35,1946.73 1663.35,2001.07 1663.35,2051.23 C1663.35,2101.4 1663.35,2147.4 1663.35,2195 C1663.35,2242.6 1663.35,2291.8 1663.35,2342.6 C1663.35,2393.4 1663.35,2445.8 1663.35,2502.03 C1663.35,2558.27 1663.35,2618.33 1663.35,2682.8 C1663.35,2747.27 1663.35,2816.13 1663.35,2850.57 L1663.35,2885"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -1119,29 +1131,29 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="1077.25"
-      y="1908.95"
-      width="48"
-      height="24"
+      x="1639.95"
+      y="1613.1"
+      width="46.8"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="1077.25"
-      y="1908.95"
-      width="48"
-      height="24"
+      x="1639.95"
+      y="1613.1"
+      width="46.8"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 48px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 46.8px; height: 29px;">
         <span>
           <p>span</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M691.49,1434 L1050.07,3394.9"
+      d="M550.8,1434 L488.54,1466.27 C426.28,1498.53 301.77,1563.07 249.88,1618.2 C197.98,1673.33 218.72,1719.07 236.88,1763.2 C255.05,1807.33 270.65,1849.87 265.47,1898.3 C260.28,1946.73 234.32,2001.07 216.15,2051.23 C197.98,2101.4 187.62,2147.4 174.1,2195 C160.58,2242.6 143.92,2291.8 135.58,2342.6 C127.25,2393.4 127.25,2445.8 127.25,2502.03 C127.25,2558.27 127.25,2618.33 147.7,2682.92 C168.14,2747.5 209.04,2816.6 229.48,2851.15 L249.93,2885.7"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -1149,29 +1161,29 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="838.78"
-      y="2402.45"
-      width="64"
-      height="24"
+      x="161.7"
+      y="2109.9"
+      width="62.2"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="838.78"
-      y="2402.45"
-      width="64"
-      height="24"
+      x="161.7"
+      y="2109.9"
+      width="62.2"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 64px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 62.2px; height: 29px;">
         <span>
           <p>timing</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M870.06,2847.4 L929.5,3394.9"
+      d="M1043.3,2217.4 L1043.3,2238 C1043.3,2258.6 1043.3,2299.8 915.04,2346.6 C786.78,2393.4 530.27,2445.8 385.93,2502.03 C241.58,2558.27 209.42,2618.33 185.26,2682.82 C161.1,2747.31 144.94,2816.22 136.87,2850.68 L128.79,2885.13"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -1179,29 +1191,29 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="851.78"
-      y="3109.15"
-      width="96"
-      height="24"
+      x="227.25"
+      y="2483.7"
+      width="93"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="851.78"
-      y="3109.15"
-      width="96"
-      height="24"
+      x="227.25"
+      y="2483.7"
+      width="93"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 96px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 93px; height: 29px;">
         <span>
           <p>structured</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1098.44,849 L933.66,3394.9"
+      d="M415.55,976.6 L359.17,1004.7 C302.78,1032.8 190.02,1089 133.63,1139.97 C77.25,1190.93 77.25,1236.67 77.25,1280.8 C77.25,1324.93 77.25,1367.47 77.25,1425 C77.25,1482.53 77.25,1555.07 77.25,1614.2 C77.25,1673.33 77.25,1719.07 90.88,1763.2 C104.5,1807.33 131.75,1849.87 131.75,1898.3 C131.75,1946.73 104.5,2001.07 90.88,2051.23 C77.25,2101.4 77.25,2147.4 77.25,2195 C77.25,2242.6 77.25,2291.8 77.25,2342.6 C77.25,2393.4 77.25,2445.8 77.25,2502.03 C77.25,2558.27 77.25,2618.33 85.46,2682.82 C93.66,2747.31 110.08,2816.22 118.28,2850.68 L126.49,2885.14"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -1209,29 +1221,29 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="988.05"
-      y="2109.95"
-      width="56"
-      height="24"
+      x="131.75"
+      y="1877.9"
+      width="54.5"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="988.05"
-      y="2109.95"
-      width="56"
-      height="24"
+      x="131.75"
+      y="1877.9"
+      width="54.5"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 56px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 54.5px; height: 29px;">
         <span>
           <p>audit</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M900.92,711.8 L931.83,3394.9"
+      d="M193.1,976.6 L165.46,1004.7 C137.82,1032.8 82.53,1089 54.89,1139.97 C27.25,1190.93 27.25,1236.67 27.25,1280.8 C27.25,1324.93 27.25,1367.47 27.25,1425 C27.25,1482.53 27.25,1555.07 27.25,1614.2 C27.25,1673.33 27.25,1719.07 27.25,1763.2 C27.25,1807.33 27.25,1849.87 27.25,1898.3 C27.25,1946.73 27.25,2001.07 27.25,2051.23 C27.25,2101.4 27.25,2147.4 27.25,2195 C27.25,2242.6 27.25,2291.8 27.25,2342.6 C27.25,2393.4 27.25,2445.8 27.25,2502.03 C27.25,2558.27 27.25,2618.33 43.63,2682.88 C60,2747.43 92.75,2816.46 109.13,2850.97 L125.51,2885.48"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -1239,29 +1251,29 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="888.38"
-      y="2041.35"
-      width="56"
-      height="24"
+      x="0"
+      y="1877.9"
+      width="54.5"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="888.38"
-      y="2041.35"
-      width="56"
-      height="24"
+      x="0"
+      y="1877.9"
+      width="54.5"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 56px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 54.5px; height: 29px;">
         <span>
           <p>audit</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M850.78,3239.8 L1027.16,3394.9"
+      d="M377.7,2702.4 L255.25,2885.84"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -1269,33 +1281,33 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="910.97"
-      y="3305.35"
-      width="56"
-      height="24"
+      x="289.23"
+      y="2779.62"
+      width="54.5"
+      height="29"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="910.97"
-      y="3305.35"
-      width="56"
-      height="24"
+      x="289.23"
+      y="2779.62"
+      width="54.5"
+      height="29"
       class="edgeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 56px; height: 24px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 54.5px; height: 29px;">
         <span>
           <p>alert</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M541.78,0 H662.38 A24,24 0 0 1 662.38,48 H541.78 A24,24 0 0 1 541.78,0 Z"
+      d="M1144.75,0 H1265.35 A24,24 0 0 1 1265.35,48 H1144.75 A24,24 0 0 1 1144.75,0 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="517.78"
+      x="1120.75"
       y="0"
       width="168.6"
       height="48"
@@ -1309,11 +1321,11 @@
       </div>
     </foreignObject>
     <path
-      d="M559.24,118 L663.28,118 L663.28,166 L559.24,166 L540.88,142 Z"
+      d="M1162.21,118 L1266.25,118 L1266.25,166 L1162.21,166 L1143.85,142 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="540.88"
+      x="1143.85"
       y="118"
       width="122.4"
       height="48"
@@ -1327,11 +1339,11 @@
       </div>
     </foreignObject>
     <path
-      d="M575.33,236 L628.83,236 L655.58,260 L628.83,284 L575.33,284 L548.58,260 Z"
+      d="M1178.3,236 L1231.8,236 L1258.55,260 L1231.8,284 L1178.3,284 L1151.55,260 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="548.58"
+      x="1151.55"
       y="236"
       width="107"
       height="48"
@@ -1345,12 +1357,12 @@
       </div>
     </foreignObject>
     <path
-      d="M24,2924.1 H160 A24,24 0 0 1 160,2972.1 H24 A24,24 0 0 1 24,2924.1 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M1413.57,399 H1549.57 A24,24 0 0 1 1549.57,447 H1413.57 A24,24 0 0 1 1413.57,399 Z"
+      fill="#ede9fe"
+      stroke="#7c3aed" />
     <foreignObject
-      x="0"
-      y="2924.1"
+      x="1389.57"
+      y="399"
       width="184"
       height="48"
       class="nodeLabel">
@@ -1358,16 +1370,17 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 184px; height: 48px;">
         <span>
-          <p>Cached edge response</p>
+          <p
+            style="color:#4c1d95">Cached edge response</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M989.32,399 L1046.67,399 L1075.34,423 L1046.67,447 L989.32,447 L960.64,423 Z"
+      d="M899.86,399 L957.21,399 L985.88,423 L957.21,447 L899.86,447 L871.18,423 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="960.64"
+      x="871.18"
       y="399"
       width="114.7"
       height="48"
@@ -1381,11 +1394,11 @@
       </div>
     </foreignObject>
     <path
-      d="M1017.99,517 L1114.45,550.6 L1017.99,584.2 L921.53,550.6 Z"
+      d="M420.64,517 L517.1,550.6 L420.64,584.2 L324.18,550.6 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="921.53"
+      x="324.18"
       y="517"
       width="192.92"
       height="67.2"
@@ -1399,12 +1412,12 @@
       </div>
     </foreignObject>
     <path
-      d="M804.8,663.8 H996.5 V711.8 H804.8 Z M823.97,663.8 V711.8 M977.33,663.8 V711.8"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M97.25,928.6 H288.95 V976.6 H97.25 Z M116.42,928.6 V976.6 M269.78,928.6 V976.6"
+      fill="#fee2e2"
+      stroke="#dc2626" />
     <foreignObject
-      x="804.8"
-      y="663.8"
+      x="97.25"
+      y="928.6"
       width="191.7"
       height="48"
       class="nodeLabel">
@@ -1412,16 +1425,17 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 191.7px; height: 48px;">
         <span>
-          <p>429 Too Many Requests</p>
+          <p
+            style="color:#991b1b">429 Too Many Requests</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1135.34,654.2 L1221.02,687.8 L1135.34,721.4 L1049.66,687.8 Z"
+      d="M648.19,654.2 L733.87,687.8 L648.19,721.4 L562.51,687.8 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="1049.66"
+      x="562.51"
       y="654.2"
       width="171.36"
       height="67.2"
@@ -1435,12 +1449,12 @@
       </div>
     </foreignObject>
     <path
-      d="M848.3,801 H968.4 Q973.4,801 973.4,806 V844 Q973.4,849 968.4,849 H848.3 Q843.3,849 843.3,844 V806 Q843.3,801 848.3,801 Z"
+      d="M930.45,928.6 H1050.55 Q1055.55,928.6 1055.55,933.6 V971.6 Q1055.55,976.6 1050.55,976.6 H930.45 Q925.45,976.6 925.45,971.6 V933.6 Q925.45,928.6 930.45,928.6 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="843.3"
-      y="801"
+      x="925.45"
+      y="928.6"
       width="130.1"
       height="48"
       class="nodeLabel">
@@ -1453,12 +1467,12 @@
       </div>
     </foreignObject>
     <path
-      d="M1023.4,801 H1176.6 V849 H1023.4 Z M1038.72,801 V849 M1161.28,801 V849"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M338.95,928.6 H492.15 V976.6 H338.95 Z M354.27,928.6 V976.6 M476.83,928.6 V976.6"
+      fill="#fee2e2"
+      stroke="#dc2626" />
     <foreignObject
-      x="1023.4"
-      y="801"
+      x="338.95"
+      y="928.6"
       width="153.2"
       height="48"
       class="nodeLabel">
@@ -1466,16 +1480,17 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 48px;">
         <span>
-          <p>401 Unauthorized</p>
+          <p
+            style="color:#991b1b">401 Unauthorized</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1323.06,791.4 L1419.52,825 L1323.06,858.6 L1226.6,825 Z"
+      d="M703.03,791.4 L799.49,825 L703.03,858.6 L606.57,825 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="1226.6"
+      x="606.57"
       y="791.4"
       width="192.92"
       height="67.2"
@@ -1489,11 +1504,11 @@
       </div>
     </foreignObject>
     <path
-      d="M1258.01,928.6 H1388.11 V976.6 H1258.01 Z M1271.02,928.6 V976.6 M1375.1,928.6 V976.6"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M542.15,928.6 H672.25 V976.6 H542.15 Z M555.16,928.6 V976.6 M659.24,928.6 V976.6"
+      fill="#fee2e2"
+      stroke="#dc2626" />
     <foreignObject
-      x="1258.01"
+      x="542.15"
       y="928.6"
       width="130.1"
       height="48"
@@ -1502,16 +1517,17 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 130.1px; height: 48px;">
         <span>
-          <p>403 Forbidden</p>
+          <p
+            style="color:#991b1b">403 Forbidden</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1023.4,928.6 H1176.6 V976.6 H1023.4 Z"
+      d="M722.25,928.6 H875.45 V976.6 H722.25 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="1023.4"
+      x="722.25"
       y="928.6"
       width="153.2"
       height="48"
@@ -1525,11 +1541,11 @@
       </div>
     </foreignObject>
     <path
-      d="M778.23,1111.6 L874.69,1145.2 L778.23,1178.8 L681.77,1145.2 Z"
+      d="M735.43,1111.6 L831.89,1145.2 L735.43,1178.8 L638.97,1145.2 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="681.77"
+      x="638.97"
       y="1111.6"
       width="192.92"
       height="67.2"
@@ -1543,12 +1559,12 @@
       </div>
     </foreignObject>
     <path
-      d="M595.1,1258.4 H756 V1306.4 H595.1 Z M611.19,1258.4 V1306.4 M739.91,1258.4 V1306.4"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M635.05,2169.4 H795.95 V2217.4 H635.05 Z M651.14,2169.4 V2217.4 M779.86,2169.4 V2217.4"
+      fill="#fee2e2"
+      stroke="#dc2626" />
     <foreignObject
-      x="595.1"
-      y="1258.4"
+      x="635.05"
+      y="2169.4"
       width="160.9"
       height="48"
       class="nodeLabel">
@@ -1556,16 +1572,17 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 160.9px; height: 48px;">
         <span>
-          <p>422 Unprocessable</p>
+          <p
+            style="color:#991b1b">422 Unprocessable</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M880.9,1248.8 L955.8,1282.4 L880.9,1316 L806,1282.4 Z"
+      d="M550.8,1248.8 L625.7,1282.4 L550.8,1316 L475.9,1282.4 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="806"
+      x="475.9"
       y="1248.8"
       width="149.8"
       height="67.2"
@@ -1579,12 +1596,12 @@
       </div>
     </foreignObject>
     <path
-      d="M805.75,2060.2 H933.55 Q938.55,2060.2 938.55,2065.2 V2103.2 Q938.55,2108.2 933.55,2108.2 H805.75 Q800.75,2108.2 800.75,2103.2 V2065.2 Q800.75,2060.2 805.75,2060.2 Z"
+      d="M452.25,2169.4 H580.05 Q585.05,2169.4 585.05,2174.4 V2212.4 Q585.05,2217.4 580.05,2217.4 H452.25 Q447.25,2217.4 447.25,2212.4 V2174.4 Q447.25,2169.4 452.25,2169.4 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="800.75"
-      y="2060.2"
+      x="447.25"
+      y="2169.4"
       width="137.8"
       height="48"
       class="nodeLabel">
@@ -1597,11 +1614,11 @@
       </div>
     </foreignObject>
     <path
-      d="M595.1,1386 H779.1 V1434 H595.1 Z M613.5,1386 V1434 M760.7,1386 V1434"
+      d="M458.8,1386 H642.8 V1434 H458.8 Z M477.2,1386 V1434 M624.4,1386 V1434"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="595.1"
+      x="458.8"
       y="1386"
       width="184"
       height="48"
@@ -1615,12 +1632,12 @@
       </div>
     </foreignObject>
     <path
-      d="M508.55,1549 H582.45 Q587.45,1549 587.45,1554 V1592 Q587.45,1597 582.45,1597 H508.55 Q503.55,1597 503.55,1592 V1554 Q503.55,1549 508.55,1549 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M372.25,1603.6 H446.15 Q451.15,1603.6 451.15,1608.6 V1646.6 Q451.15,1651.6 446.15,1651.6 H372.25 Q367.25,1651.6 367.25,1646.6 V1608.6 Q367.25,1603.6 372.25,1603.6 Z"
+      fill="#dcfce7"
+      stroke="#16a34a" />
     <foreignObject
-      x="503.55"
-      y="1549"
+      x="367.25"
+      y="1603.6"
       width="83.9"
       height="48"
       class="nodeLabel">
@@ -1628,17 +1645,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
         <span>
-          <p>Catalog</p>
+          <p
+            style="color:#14532d">Catalog</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M642.45,1549 H716.35 Q721.35,1549 721.35,1554 V1592 Q721.35,1597 716.35,1597 H642.45 Q637.45,1597 637.45,1592 V1554 Q637.45,1549 642.45,1549 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M655.45,1603.6 H729.35 Q734.35,1603.6 734.35,1608.6 V1646.6 Q734.35,1651.6 729.35,1651.6 H655.45 Q650.45,1651.6 650.45,1646.6 V1608.6 Q650.45,1603.6 655.45,1603.6 Z"
+      fill="#dcfce7"
+      stroke="#16a34a" />
     <foreignObject
-      x="637.45"
-      y="1549"
+      x="650.45"
+      y="1603.6"
       width="83.9"
       height="48"
       class="nodeLabel">
@@ -1646,17 +1664,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
         <span>
-          <p>Pricing</p>
+          <p
+            style="color:#14532d">Pricing</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M776.35,1549 H865.65 Q870.65,1549 870.65,1554 V1592 Q870.65,1597 865.65,1597 H776.35 Q771.35,1597 771.35,1592 V1554 Q771.35,1549 776.35,1549 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M506.15,1603.6 H595.45 Q600.45,1603.6 600.45,1608.6 V1646.6 Q600.45,1651.6 595.45,1651.6 H506.15 Q501.15,1651.6 501.15,1646.6 V1608.6 Q501.15,1603.6 506.15,1603.6 Z"
+      fill="#dcfce7"
+      stroke="#16a34a" />
     <foreignObject
-      x="771.35"
-      y="1549"
+      x="501.15"
+      y="1603.6"
       width="99.3"
       height="48"
       class="nodeLabel">
@@ -1664,17 +1683,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
         <span>
-          <p>Inventory</p>
+          <p
+            style="color:#14532d">Inventory</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M649.23,1667 L751.08,1700.6 L649.23,1734.2 L547.38,1700.6 Z"
+      d="M631.3,1731.2 L733.15,1764.8 L631.3,1798.4 L529.45,1764.8 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="547.38"
-      y="1667"
+      x="529.45"
+      y="1731.2"
       width="203.7"
       height="67.2"
       class="nodeLabel">
@@ -1687,12 +1707,12 @@
       </div>
     </foreignObject>
     <path
-      d="M508.55,1804.2 H659.45 Q664.45,1804.2 664.45,1809.2 V1847.2 Q664.45,1852.2 659.45,1852.2 H508.55 Q503.55,1852.2 503.55,1847.2 V1809.2 Q503.55,1804.2 508.55,1804.2 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M581.25,1868.4 H732.15 Q737.15,1868.4 737.15,1873.4 V1911.4 Q737.15,1916.4 732.15,1916.4 H581.25 Q576.25,1916.4 576.25,1911.4 V1873.4 Q576.25,1868.4 581.25,1868.4 Z"
+      fill="#dcfce7"
+      stroke="#16a34a" />
     <foreignObject
-      x="503.55"
-      y="1804.2"
+      x="576.25"
+      y="1868.4"
       width="160.9"
       height="48"
       class="nodeLabel">
@@ -1700,17 +1720,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 160.9px; height: 48px;">
         <span>
-          <p>Stale or fallback</p>
+          <p
+            style="color:#14532d">Stale or fallback</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M599.58,1922.2 H698.88 V1970.2 H599.58 Z"
+      d="M529.45,2031.4 H628.75 V2079.4 H529.45 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="599.58"
-      y="1922.2"
+      x="529.45"
+      y="2031.4"
       width="99.3"
       height="48"
       class="nodeLabel">
@@ -1723,12 +1744,12 @@
       </div>
     </foreignObject>
     <path
-      d="M556.88,2503.2 A45.8,4.8 0 0 1 648.48,2503.2 V2541.6 A45.8,4.8 0 0 1 556.88,2541.6 V2503.2 Z M556.88,2503.2 A45.8,4.8 0 0 0 648.48,2503.2"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M231.45,2321.8 A45.8,4.8 0 0 1 323.05,2321.8 V2360.2 A45.8,4.8 0 0 1 231.45,2360.2 V2321.8 Z M231.45,2321.8 A45.8,4.8 0 0 0 323.05,2321.8"
+      fill="#dbeafe"
+      stroke="#2563eb" />
     <foreignObject
-      x="556.88"
-      y="2498.4"
+      x="231.45"
+      y="2317"
       width="91.6"
       height="48"
       class="nodeLabel">
@@ -1736,17 +1757,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
         <span>
-          <p>Postgres</p>
+          <p
+            style="color:#1e3a8a">Postgres</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M556.88,2257.6 A34.25,4.8 0 0 1 625.38,2257.6 V2296 A34.25,4.8 0 0 1 556.88,2296 V2257.6 Z M556.88,2257.6 A34.25,4.8 0 0 0 625.38,2257.6"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M388.85,2321.8 A34.25,4.8 0 0 1 457.35,2321.8 V2360.2 A34.25,4.8 0 0 1 388.85,2360.2 V2321.8 Z M388.85,2321.8 A34.25,4.8 0 0 0 457.35,2321.8"
+      fill="#dbeafe"
+      stroke="#2563eb" />
     <foreignObject
-      x="556.88"
-      y="2252.8"
+      x="388.85"
+      y="2317"
       width="68.5"
       height="48"
       class="nodeLabel">
@@ -1754,17 +1776,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
         <span>
-          <p>Redis</p>
+          <p
+            style="color:#1e3a8a">Redis</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M744.89,2243.2 L814.4,2276.8 L744.89,2310.4 L675.38,2276.8 Z"
+      d="M1195.26,1594 L1264.77,1627.6 L1195.26,1661.2 L1125.75,1627.6 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="675.38"
-      y="2243.2"
+      x="1125.75"
+      y="1594"
       width="139.02"
       height="67.2"
       class="nodeLabel">
@@ -1777,12 +1800,12 @@
       </div>
     </foreignObject>
     <path
-      d="M616.13,2380.4 H777.03 V2428.4 H616.13 Z"
+      d="M1132.25,1740.8 H1293.15 V1788.8 H1132.25 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="616.13"
-      y="2380.4"
+      x="1132.25"
+      y="1740.8"
       width="160.9"
       height="48"
       class="nodeLabel">
@@ -1795,12 +1818,12 @@
       </div>
     </foreignObject>
     <path
-      d="M698.48,2503.2 A92,4.8 0 0 1 882.48,2503.2 V2541.6 A92,4.8 0 0 1 698.48,2541.6 V2503.2 Z M698.48,2503.2 A92,4.8 0 0 0 882.48,2503.2"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M1259.35,1873.2 A92,4.8 0 0 1 1443.35,1873.2 V1911.6 A92,4.8 0 0 1 1259.35,1911.6 V1873.2 Z M1259.35,1873.2 A92,4.8 0 0 0 1443.35,1873.2"
+      fill="#dbeafe"
+      stroke="#2563eb" />
     <foreignObject
-      x="698.48"
-      y="2498.4"
+      x="1259.35"
+      y="1868.4"
       width="184"
       height="48"
       class="nodeLabel">
@@ -1808,17 +1831,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 184px; height: 48px;">
         <span>
-          <p>Transactional outbox</p>
+          <p
+            style="color:#1e3a8a">Transactional outbox</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M833.01,2681.4 L901.91,2681.4 L936.36,2705.4 L901.91,2729.4 L833.01,2729.4 L798.56,2705.4 Z"
+      d="M1213.2,2031.4 L1282.1,2031.4 L1316.55,2055.4 L1282.1,2079.4 L1213.2,2079.4 L1178.75,2055.4 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="798.56"
-      y="2681.4"
+      x="1178.75"
+      y="2031.4"
       width="137.8"
       height="48"
       class="nodeLabel">
@@ -1831,12 +1855,12 @@
       </div>
     </foreignObject>
     <path
-      d="M810.11,2799.4 H924.81 V2847.4 H810.11 Z M821.58,2799.4 V2847.4 M913.34,2799.4 V2847.4"
+      d="M985.95,2169.4 H1100.65 V2217.4 H985.95 Z M997.42,2169.4 V2217.4 M1089.18,2169.4 V2217.4"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="810.11"
-      y="2799.4"
+      x="985.95"
+      y="2169.4"
       width="114.7"
       height="48"
       class="nodeLabel">
@@ -1849,12 +1873,12 @@
       </div>
     </foreignObject>
     <path
-      d="M867.46,2917.4 L947.75,2951 L867.46,2984.6 L787.17,2951 Z"
+      d="M903.84,2307.4 L984.13,2341 L903.84,2374.6 L823.55,2341 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="787.17"
-      y="2917.4"
+      x="823.55"
+      y="2307.4"
       width="160.58"
       height="67.2"
       class="nodeLabel">
@@ -1867,12 +1891,12 @@
       </div>
     </foreignObject>
     <path
-      d="M590.22,3054.6 L708.24,3088.2 L590.22,3121.8 L472.2,3088.2 Z"
+      d="M662.77,2464.6 L780.79,2498.2 L662.77,2531.8 L544.75,2498.2 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="472.2"
-      y="3054.6"
+      x="544.75"
+      y="2464.6"
       width="236.04"
       height="67.2"
       class="nodeLabel">
@@ -1885,12 +1909,12 @@
       </div>
     </foreignObject>
     <path
-      d="M508.27,3191.8 H674.57 Q679.57,3191.8 679.57,3196.8 V3234.8 Q679.57,3239.8 674.57,3239.8 H508.27 Q503.27,3239.8 503.27,3234.8 V3196.8 Q503.27,3191.8 508.27,3191.8 Z"
+      d="M571.31,2654.4 H737.61 Q742.61,2654.4 742.61,2659.4 V2697.4 Q742.61,2702.4 737.61,2702.4 H571.31 Q566.31,2702.4 566.31,2697.4 V2659.4 Q566.31,2654.4 571.31,2654.4 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="503.27"
-      y="3191.8"
+      x="566.31"
+      y="2654.4"
       width="176.3"
       height="48"
       class="nodeLabel">
@@ -1903,12 +1927,12 @@
       </div>
     </foreignObject>
     <path
-      d="M743.04,3196.6 A80.45,4.8 0 0 1 903.94,3196.6 V3235 A80.45,4.8 0 0 1 743.04,3235 V3196.6 Z M743.04,3196.6 A80.45,4.8 0 0 0 903.94,3196.6"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M297.25,2659.2 A80.45,4.8 0 0 1 458.15,2659.2 V2697.6 A80.45,4.8 0 0 1 297.25,2697.6 V2659.2 Z M297.25,2659.2 A80.45,4.8 0 0 0 458.15,2659.2"
+      fill="#fee2e2"
+      stroke="#dc2626" />
     <foreignObject
-      x="743.04"
-      y="3191.8"
+      x="297.25"
+      y="2654.4"
       width="160.9"
       height="48"
       class="nodeLabel">
@@ -1916,17 +1940,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 160.9px; height: 48px;">
         <span>
-          <p>Dead-letter queue</p>
+          <p
+            style="color:#991b1b">Dead-letter queue</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M772.76,3064.2 H962.16 Q967.16,3064.2 967.16,3069.2 V3107.2 Q967.16,3112.2 962.16,3112.2 H772.76 Q767.76,3112.2 767.76,3107.2 V3069.2 Q767.76,3064.2 772.76,3064.2 Z"
+      d="M835.79,2474.2 H1025.19 Q1030.19,2474.2 1030.19,2479.2 V2517.2 Q1030.19,2522.2 1025.19,2522.2 H835.79 Q830.79,2522.2 830.79,2517.2 V2479.2 Q830.79,2474.2 835.79,2474.2 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="767.76"
-      y="3064.2"
+      x="830.79"
+      y="2474.2"
       width="199.4"
       height="48"
       class="nodeLabel">
@@ -1939,12 +1964,12 @@
       </div>
     </foreignObject>
     <path
-      d="M350,2924.1 H378.2 A24,24 0 0 1 378.2,2972.1 H350 A24,24 0 0 1 350,2924.1 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M601.35,2317 H629.55 A24,24 0 0 1 629.55,2365 H601.35 A24,24 0 0 1 601.35,2317 Z"
+      fill="#ede9fe"
+      stroke="#7c3aed" />
     <foreignObject
-      x="326"
-      y="2924.1"
+      x="577.35"
+      y="2317"
       width="76.2"
       height="48"
       class="nodeLabel">
@@ -1952,17 +1977,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
         <span>
-          <p>200 OK</p>
+          <p
+            style="color:#4c1d95">200 OK</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M364.1,3329.8 A76.6,76.6 0 1 1 364.1,3483 A76.6,76.6 0 1 1 364.1,3329.8 Z M364.1,3341.29 A65.11,65.11 0 1 1 364.1,3471.51 A65.11,65.11 0 1 1 364.1,3341.29 Z"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M930.49,2601.8 A76.6,76.6 0 1 1 930.49,2755 A76.6,76.6 0 1 1 930.49,2601.8 Z M930.49,2613.29 A65.11,65.11 0 1 1 930.49,2743.51 A65.11,65.11 0 1 1 930.49,2613.29 Z"
+      fill="#ede9fe"
+      stroke="#7c3aed" />
     <foreignObject
-      x="287.5"
-      y="3329.8"
+      x="853.89"
+      y="2601.8"
       width="153.2"
       height="153.2"
       class="nodeLabel">
@@ -1970,17 +1996,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 153.2px;">
         <span>
-          <p>Request complete</p>
+          <p
+            style="color:#4c1d95">Request complete</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M901.71,3399.7 A30.4,4.8 0 0 1 962.51,3399.7 V3438.1 A30.4,4.8 0 0 1 901.71,3438.1 V3399.7 Z M901.71,3399.7 A30.4,4.8 0 0 0 962.51,3399.7"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M97.25,2894.8 A30.4,4.8 0 0 1 158.05,2894.8 V2933.2 A30.4,4.8 0 0 1 97.25,2933.2 V2894.8 Z M97.25,2894.8 A30.4,4.8 0 0 0 158.05,2894.8"
+      fill="#dbeafe"
+      stroke="#2563eb" />
     <foreignObject
-      x="901.71"
-      y="3394.9"
+      x="97.25"
+      y="2890"
       width="60.8"
       height="48"
       class="nodeLabel">
@@ -1988,17 +2015,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 60.8px; height: 48px;">
         <span>
-          <p>Logs</p>
+          <p
+            style="color:#1e3a8a">Logs</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1012.51,3399.7 A41.95,4.8 0 0 1 1096.41,3399.7 V3438.1 A41.95,4.8 0 0 1 1012.51,3438.1 V3399.7 Z M1012.51,3399.7 A41.95,4.8 0 0 0 1096.41,3399.7"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M210.53,2894.8 A41.95,4.8 0 0 1 294.43,2894.8 V2933.2 A41.95,4.8 0 0 1 210.53,2933.2 V2894.8 Z M210.53,2894.8 A41.95,4.8 0 0 0 294.43,2894.8"
+      fill="#dbeafe"
+      stroke="#2563eb" />
     <foreignObject
-      x="1012.51"
-      y="3394.9"
+      x="210.53"
+      y="2890"
       width="83.9"
       height="48"
       class="nodeLabel">
@@ -2006,17 +2034,18 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
         <span>
-          <p>Metrics</p>
+          <p
+            style="color:#1e3a8a">Metrics</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M1146.41,3399.7 A38.1,4.8 0 0 1 1222.61,3399.7 V3438.1 A38.1,4.8 0 0 1 1146.41,3438.1 V3399.7 Z M1146.41,3399.7 A38.1,4.8 0 0 0 1222.61,3399.7"
-      fill="#ECECFF"
-      stroke="#9370DB" />
+      d="M1625.25,2894.8 A38.1,4.8 0 0 1 1701.45,2894.8 V2933.2 A38.1,4.8 0 0 1 1625.25,2933.2 V2894.8 Z M1625.25,2894.8 A38.1,4.8 0 0 0 1701.45,2894.8"
+      fill="#dbeafe"
+      stroke="#2563eb" />
     <foreignObject
-      x="1146.41"
-      y="3394.9"
+      x="1625.25"
+      y="2890"
       width="76.2"
       height="48"
       class="nodeLabel">
@@ -2024,7 +2053,8 @@
         xmlns="http://www.w3.org/1999/xhtml"
         style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 76.2px; height: 48px;">
         <span>
-          <p>Traces</p>
+          <p
+            style="color:#1e3a8a">Traces</p>
         </span>
       </div>
     </foreignObject>

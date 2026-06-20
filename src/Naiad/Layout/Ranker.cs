@@ -2,6 +2,14 @@ static class Ranker
 {
     public static void Run(LayoutGraph graph, RankerType rankerType)
     {
+        AssignRanks(graph, rankerType);
+        InsertDummyNodes(graph);
+    }
+
+    /// <summary>Assigns and normalizes ranks without splitting long edges, so callers can adjust ranks
+    /// (e.g. cluster confinement) before <see cref="InsertDummyNodes"/> runs.</summary>
+    public static void AssignRanks(LayoutGraph graph, RankerType rankerType)
+    {
         if (graph.Edges.Any(_ => _.IsSameRank))
         {
             // Same-rank constraints need group-aware ranking; the plain rankers
@@ -25,7 +33,6 @@ static class Ranker
         }
 
         NormalizeRanks(graph);
-        InsertDummyNodes(graph);
     }
 
     /// <summary>
@@ -238,7 +245,7 @@ static class Ranker
         }
     }
 
-    static void InsertDummyNodes(LayoutGraph graph)
+    public static void InsertDummyNodes(LayoutGraph graph)
     {
         var edgesToProcess = graph.Edges.ToList();
         var dummyCount = 0;

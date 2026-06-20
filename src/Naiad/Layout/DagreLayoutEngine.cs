@@ -11,12 +11,12 @@ class DagreLayoutEngine : ILayoutEngine
             };
         }
 
-        // Diagrams with subgraphs are laid out cluster-by-cluster: each
-        // subgraph's contents are laid out in isolation and the subgraph is
-        // treated as a single composite node in its parent container.
+        // Diagrams with subgraphs are laid out in one global pass over all leaf nodes (so parallel
+        // branches spread and cross-subgraph edges route through dummy waypoints), then each subgraph's
+        // bounds are derived from the union of its members.
         if (diagram.Subgraphs.Count > 0)
         {
-            return LayoutClustered(diagram, options);
+            return LayoutGlobal(diagram, options);
         }
 
         // Build internal graph
@@ -213,215 +213,54 @@ class DagreLayoutEngine : ILayoutEngine
     const double clusterLabelHeight = 25;
 
     /// <summary>
-    /// Lays out a diagram that contains subgraphs. Each container (the root, or
-    /// one subgraph) is laid out in isolation with the flat engine, treating
-    /// child subgraphs as composite nodes; positions are then expanded back to
-    /// absolute coordinates and each subgraph's bounds are filled in.
+    /// Lays out a diagram that contains subgraphs in one global pass: all leaf nodes and real edges go
+    /// through the flat pipeline (so branches spread horizontally and cross-subgraph edges are
+    /// dummy-routed), then each subgraph's box is sized to the union of its members and the whole
+    /// diagram is shifted so the outermost cluster padding sits at non-negative coordinates.
     /// </summary>
-    LayoutResult LayoutClustered(GraphDiagramBase diagram, LayoutOptions options)
+    static LayoutResult LayoutGlobal(GraphDiagramBase diagram, LayoutOptions options)
     {
+        var graph = BuildLayoutGraph(diagram);
+
+        Acyclic.Run(graph);
+        // Longest-path ranks every node as early as possible, keeping a cluster's members tight to their
+        // backbone. TightTree would instead pull a member down toward a far-away cross-cluster successor
+        // (e.g. an error node toward the observability sink it feeds), tearing the cluster apart.
+        Ranker.AssignRanks(graph, RankerType.LongestPath);
+        ClusterRankConfinement.Run(graph, diagram);
+        Ranker.InsertDummyNodes(graph);
+        Ordering.Run(graph);
+        Ordering.EnforceSameRankOrder(graph);
+        ClusterOrdering.Run(graph, diagram, clusterPadding);
+
+        // Reserve vertical room for each cluster's title band / bottom padding so external nodes above or
+        // below a cluster clear its box. Only meaningful for top-to-bottom, where the title sits at the top.
+        double[]? topInset = null;
+        double[]? bottomInset = null;
+        if (options.Direction == Direction.TopToBottom)
+        {
+            (topInset, bottomInset) = ComputeRankInsets(graph, diagram);
+        }
+
+        CoordinateAssignment.Run(graph, options.NodeSeparation, options.RankSeparation, options.Direction, topInset, bottomInset);
+        CoordinateAssignment.RouteEdges(graph, options.Direction);
+        Acyclic.Undo(graph);
+        ApplyLayout(graph, diagram, options);
+
         var nodeById = new Dictionary<string, Node>();
         foreach (var node in diagram.Nodes)
         {
             nodeById[node.Id] = node;
         }
 
-        // Index the subgraph tree: each node's direct subgraph, each subgraph's
-        // parent, and a lookup by id.
-        var directSubgraph = new Dictionary<string, Subgraph>();
-        var subgraphParent = new Dictionary<string, Subgraph?>();
-        var subgraphById = new Dictionary<string, Subgraph>();
-
-        void Index(Subgraph subgraph, Subgraph? parent)
-        {
-            subgraphById[subgraph.Id] = subgraph;
-            subgraphParent[subgraph.Id] = parent;
-            foreach (var nodeId in subgraph.NodeIds)
-            {
-                directSubgraph[nodeId] = subgraph;
-            }
-
-            foreach (var child in subgraph.NestedSubgraphs)
-            {
-                Index(child, subgraph);
-            }
-        }
-
         foreach (var subgraph in diagram.Subgraphs)
         {
-            Index(subgraph, null);
+            ComputeSubgraphBounds(subgraph, nodeById);
         }
 
-        // The id of the direct child of the container (a node id, or a child
-        // subgraph id) that contains the given node, or null if it is elsewhere.
-        string? DirectRepresentative(string nodeId, Subgraph? container)
-        {
-            var direct = directSubgraph.GetValueOrDefault(nodeId);
-            if (direct == container)
-            {
-                return nodeId;
-            }
-
-            var current = direct;
-            while (current is not null)
-            {
-                var parent = subgraphParent[current.Id];
-                if (parent == container)
-                {
-                    return current.Id;
-                }
-
-                current = parent;
-            }
-
-            return null;
-        }
-
-        var clusterSizes = new Dictionary<string, (double w, double h)>();
-        var clusterLayouts = new Dictionary<string, ClusterContent>();
-
-        ClusterContent LayoutContainer(Subgraph? container)
-        {
-            var directNodeIds = container is null
-                ? diagram.Nodes.Where(_ => !directSubgraph.ContainsKey(_.Id)).Select(_ => _.Id).ToList()
-                : container.NodeIds;
-            var childSubgraphs = container is null ? diagram.Subgraphs : container.NestedSubgraphs;
-
-            // Lay out child subgraphs first so their composite sizes are known.
-            foreach (var child in childSubgraphs)
-            {
-                var childContent = LayoutContainer(child);
-                clusterLayouts[child.Id] = childContent;
-                clusterSizes[child.Id] = (
-                    childContent.Width + clusterPadding * 2,
-                    childContent.Height + clusterPadding * 2 + clusterLabelHeight);
-            }
-
-            var graph = new ClusterGraph();
-            foreach (var nodeId in directNodeIds)
-            {
-                if (nodeById.TryGetValue(nodeId, out var node))
-                {
-                    graph.AddNode(
-                        new()
-                        {
-                            Id = node.Id,
-                                Width = node.Width,
-                                Height = node.Height
-                        });
-                }
-            }
-
-            foreach (var child in childSubgraphs)
-            {
-                var (w, h) = clusterSizes[child.Id];
-                graph.AddNode(
-                    new()
-                    {
-                        Id = child.Id,
-                            Width = w,
-                            Height = h
-                    });
-            }
-
-            foreach (var edge in diagram.Edges)
-            {
-                var from = DirectRepresentative(edge.SourceId, container);
-                var to = DirectRepresentative(edge.TargetId, container);
-                if (from is not null &&
-                    to is not null &&
-                    from != to &&
-                    graph.GetNode(from) is not null &&
-                    graph.GetNode(to) is not null)
-                {
-                    graph.AddEdge(
-                        new()
-                        {
-                            SourceId = from,
-                            TargetId = to
-                        });
-                }
-            }
-
-            var content = new ClusterContent();
-            if (graph.Nodes.Count == 0)
-            {
-                content.Width = clusterLabelHeight;
-                content.Height = clusterLabelHeight;
-                return content;
-            }
-
-            // Recurse into the flat engine (the temp graph has no subgraphs).
-            Layout(graph, options);
-
-            var minX = double.MaxValue;
-            var minY = double.MaxValue;
-            var maxX = double.MinValue;
-            var maxY = double.MinValue;
-            foreach (var node in graph.Nodes)
-            {
-                minX = Math.Min(minX, node.Position.X - node.Width / 2);
-                minY = Math.Min(minY, node.Position.Y - node.Height / 2);
-                maxX = Math.Max(maxX, node.Position.X + node.Width / 2);
-                maxY = Math.Max(maxY, node.Position.Y + node.Height / 2);
-            }
-
-            foreach (var node in graph.Nodes)
-            {
-                content.MemberCenters[node.Id] = (node.Position.X - minX, node.Position.Y - minY);
-            }
-
-            content.Width = maxX - minX;
-            content.Height = maxY - minY;
-            return content;
-        }
-
-        void PlaceContainer(Subgraph? container, double originX, double originY)
-        {
-            if (!clusterLayouts.TryGetValue(container?.Id ?? "", out var content))
-            {
-                return;
-            }
-
-            foreach (var (memberId, center) in content.MemberCenters)
-            {
-                var centerX = originX + center.X;
-                var centerY = originY + center.Y;
-
-                if (subgraphById.TryGetValue(memberId, out var childSubgraph))
-                {
-                    var (w, h) = clusterSizes[memberId];
-                    childSubgraph.Position = new(centerX, centerY);
-                    childSubgraph.Width = w;
-                    childSubgraph.Height = h;
-                    PlaceContainer(
-                        childSubgraph,
-                        centerX - w / 2 + clusterPadding,
-                        centerY - h / 2 + clusterLabelHeight + clusterPadding);
-                }
-                else if (nodeById.TryGetValue(memberId, out var node))
-                {
-                    node.Position = new(centerX, centerY);
-                }
-            }
-        }
-
-        clusterLayouts[""] = LayoutContainer(null);
-        PlaceContainer(null, 0, 0);
-
-        // Straight edges trimmed to the node borders.
-        foreach (var edge in diagram.Edges)
-        {
-            edge.Points.Clear();
-            if (!nodeById.TryGetValue(edge.SourceId, out var source) ||
-                !nodeById.TryGetValue(edge.TargetId, out var target))
-            {
-                continue;
-            }
-
-            edge.Points.Add(BorderPoint(source, target.Position));
-            edge.Points.Add(BorderPoint(target, source.Position));
-        }
+        // Cluster boxes extend above/left of their topmost/leftmost member (padding + the title band), so
+        // shift everything to keep all geometry at non-negative coordinates.
+        ShiftToPositive(diagram);
 
         var width = 0.0;
         var height = 0.0;
@@ -431,7 +270,7 @@ class DagreLayoutEngine : ILayoutEngine
             height = Math.Max(height, node.Position.Y + node.Height / 2);
         }
 
-        foreach (var subgraph in subgraphById.Values)
+        foreach (var subgraph in Flatten(diagram.Subgraphs))
         {
             var bounds = subgraph.Bounds;
             width = Math.Max(width, bounds.X + bounds.Width);
@@ -445,28 +284,189 @@ class DagreLayoutEngine : ILayoutEngine
         };
     }
 
-    /// <summary>Point on a node's rectangular border in the direction of a target point.</summary>
-    static Position BorderPoint(Node node, Position toward)
+    /// <summary>
+    /// Per-rank vertical insets that reserve room for cluster title bands (above the rank where a cluster
+    /// starts) and bottom padding (below the rank where it ends), so nodes outside a cluster don't collide
+    /// with its box. Nested clusters stack, since each contributes its own band.
+    /// </summary>
+    static (double[] Top, double[] Bottom) ComputeRankInsets(LayoutGraph graph, GraphDiagramBase diagram)
     {
-        var dx = toward.X - node.Position.X;
-        var dy = toward.Y - node.Position.Y;
-        if (dx == 0 && dy == 0)
+        var maxRank = 0;
+        var rankOf = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach (var node in graph.Nodes.Values)
         {
-            return node.Position;
+            maxRank = Math.Max(maxRank, node.Rank);
+            if (!node.IsDummy && !node.IsClusterBorder)
+            {
+                rankOf[node.Id] = node.Rank;
+            }
         }
 
-        var tx = dx == 0 ? double.PositiveInfinity : node.Width / 2 / Math.Abs(dx);
-        var ty = dy == 0 ? double.PositiveInfinity : node.Height / 2 / Math.Abs(dy);
-        var t = Math.Min(tx, ty);
-        return new(node.Position.X + dx * t, node.Position.Y + dy * t);
+        var top = new double[maxRank + 1];
+        var bottom = new double[maxRank + 1];
+
+        foreach (var subgraph in Flatten(diagram.Subgraphs))
+        {
+            var minRank = int.MaxValue;
+            var maxMemberRank = int.MinValue;
+            foreach (var memberId in AllMemberIds(subgraph))
+            {
+                if (rankOf.TryGetValue(memberId, out var rank))
+                {
+                    minRank = Math.Min(minRank, rank);
+                    maxMemberRank = Math.Max(maxMemberRank, rank);
+                }
+            }
+
+            if (minRank == int.MaxValue)
+            {
+                continue;
+            }
+
+            top[minRank] += clusterPadding + clusterLabelHeight;
+            bottom[maxMemberRank] += clusterPadding;
+        }
+
+        return (top, bottom);
     }
 
-    sealed class ClusterGraph : GraphDiagramBase;
-
-    sealed class ClusterContent
+    static IEnumerable<string> AllMemberIds(Subgraph subgraph)
     {
-        public double Width { get; set; }
-        public double Height { get; set; }
-        public Dictionary<string, (double X, double Y)> MemberCenters { get; } = new();
+        foreach (var nodeId in subgraph.NodeIds)
+        {
+            yield return nodeId;
+        }
+
+        foreach (var nested in subgraph.NestedSubgraphs)
+        {
+            foreach (var nodeId in AllMemberIds(nested))
+            {
+                yield return nodeId;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sizes a subgraph (and, recursively, its nested subgraphs) to enclose the union of its member node
+    /// boxes and nested-subgraph boxes, padded on all sides with an extra band at the top for the title.
+    /// </summary>
+    static void ComputeSubgraphBounds(Subgraph subgraph, Dictionary<string, Node> nodeById)
+    {
+        var minX = double.PositiveInfinity;
+        var minY = double.PositiveInfinity;
+        var maxX = double.NegativeInfinity;
+        var maxY = double.NegativeInfinity;
+
+        foreach (var nested in subgraph.NestedSubgraphs)
+        {
+            ComputeSubgraphBounds(nested, nodeById);
+            var bounds = nested.Bounds;
+            minX = Math.Min(minX, bounds.X);
+            minY = Math.Min(minY, bounds.Y);
+            maxX = Math.Max(maxX, bounds.X + bounds.Width);
+            maxY = Math.Max(maxY, bounds.Y + bounds.Height);
+        }
+
+        foreach (var nodeId in subgraph.NodeIds)
+        {
+            if (!nodeById.TryGetValue(nodeId, out var node))
+            {
+                continue;
+            }
+
+            minX = Math.Min(minX, node.Position.X - node.Width / 2);
+            minY = Math.Min(minY, node.Position.Y - node.Height / 2);
+            maxX = Math.Max(maxX, node.Position.X + node.Width / 2);
+            maxY = Math.Max(maxY, node.Position.Y + node.Height / 2);
+        }
+
+        // An empty subgraph has no members to bound; give it a small placeholder box.
+        if (double.IsInfinity(minX))
+        {
+            minX = 0;
+            minY = 0;
+            maxX = clusterLabelHeight;
+            maxY = clusterLabelHeight;
+        }
+
+        minX -= clusterPadding;
+        maxX += clusterPadding;
+        maxY += clusterPadding;
+        minY -= clusterPadding + clusterLabelHeight;
+
+        subgraph.Width = maxX - minX;
+        subgraph.Height = maxY - minY;
+        subgraph.Position = new((minX + maxX) / 2, (minY + maxY) / 2);
+    }
+
+    /// <summary>Translates every node, edge point and subgraph so all geometry has non-negative coordinates.</summary>
+    static void ShiftToPositive(GraphDiagramBase diagram)
+    {
+        var minX = double.PositiveInfinity;
+        var minY = double.PositiveInfinity;
+
+        foreach (var node in diagram.Nodes)
+        {
+            minX = Math.Min(minX, node.Position.X - node.Width / 2);
+            minY = Math.Min(minY, node.Position.Y - node.Height / 2);
+        }
+
+        foreach (var subgraph in Flatten(diagram.Subgraphs))
+        {
+            var bounds = subgraph.Bounds;
+            minX = Math.Min(minX, bounds.X);
+            minY = Math.Min(minY, bounds.Y);
+        }
+
+        foreach (var edge in diagram.Edges)
+        {
+            foreach (var point in edge.Points)
+            {
+                minX = Math.Min(minX, point.X);
+                minY = Math.Min(minY, point.Y);
+            }
+        }
+
+        if (double.IsInfinity(minX))
+        {
+            return;
+        }
+
+        var dx = minX < 0 ? -minX : 0;
+        var dy = minY < 0 ? -minY : 0;
+        if (dx == 0 && dy == 0)
+        {
+            return;
+        }
+
+        foreach (var node in diagram.Nodes)
+        {
+            node.Position = new(node.Position.X + dx, node.Position.Y + dy);
+        }
+
+        foreach (var subgraph in Flatten(diagram.Subgraphs))
+        {
+            subgraph.Position = new(subgraph.Position.X + dx, subgraph.Position.Y + dy);
+        }
+
+        foreach (var edge in diagram.Edges)
+        {
+            for (var i = 0; i < edge.Points.Count; i++)
+            {
+                edge.Points[i] = new(edge.Points[i].X + dx, edge.Points[i].Y + dy);
+            }
+        }
+    }
+
+    static IEnumerable<Subgraph> Flatten(IEnumerable<Subgraph> subgraphs)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            yield return subgraph;
+            foreach (var nested in Flatten(subgraph.NestedSubgraphs))
+            {
+                yield return nested;
+            }
+        }
     }
 }
