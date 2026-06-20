@@ -1,32 +1,9 @@
-using BenchmarkDotNet.Attributes;
-using Naiad.Diagrams.Architecture;
-using Naiad.Diagrams.Block;
-using Naiad.Diagrams.C4;
-using Naiad.Diagrams.Class;
-using Naiad.Diagrams.EntityRelationship;
-using Naiad.Diagrams.Flowchart;
-using Naiad.Diagrams.Gantt;
-using Naiad.Diagrams.GitGraph;
-using Naiad.Diagrams.Kanban;
-using Naiad.Diagrams.Mindmap;
-using Naiad.Diagrams.Packet;
-using Naiad.Diagrams.Pie;
-using Naiad.Diagrams.Quadrant;
-using Naiad.Diagrams.Radar;
-using Naiad.Diagrams.Requirement;
-using Naiad.Diagrams.Sankey;
-using Naiad.Diagrams.Sequence;
-using Naiad.Diagrams.State;
-using Naiad.Diagrams.Timeline;
-using Naiad.Diagrams.UserJourney;
-using Naiad.Diagrams.XYChart;
-
 namespace Benchmarks;
 
 [MemoryDiagnoser]
 public class ParseBenchmarks
 {
-    const string Pie = """
+    const string pie = """
         pie
             "Dogs" : 40
             "Cats" : 30
@@ -34,12 +11,12 @@ public class ParseBenchmarks
             "Fish" : 10
         """;
 
-    const string Flowchart = """
+    const string flowchart = """
         flowchart LR
             A[Start] --> B[Process] --> C[End]
         """;
 
-    const string FlowchartComplex = """
+    const string flowchartComplex = """
         flowchart TD
             A[Start] --> B{Decision}
             B -->|Yes| C[Process 1]
@@ -55,43 +32,43 @@ public class ParseBenchmarks
             I --> J
         """;
 
-    const string Sequence = """
+    const string sequence = """
         sequenceDiagram
             Alice->>Bob: Hello Bob
             Bob-->>Alice: Hi Alice
         """;
 
-    const string Class = """
+    const string @class = """
         classDiagram
             class Animal
         """;
 
-    const string State = """
+    const string state = """
         stateDiagram-v2
             [*] --> Still
             Still --> [*]
         """;
 
-    const string ER = """
+    const string er = """
         erDiagram
             CUSTOMER ||--o{ ORDER : places
         """;
 
-    const string GitGraph = """
+    const string gitGraph = """
         gitGraph
             commit
             commit
             commit
         """;
 
-    const string Gantt = """
+    const string gantt = """
         gantt
             title Simple Gantt
             Task A :a1, 2024-01-01, 30d
             Task B :b1, 2024-01-15, 20d
         """;
 
-    const string Mindmap = """
+    const string mindmap = """
         mindmap
           Root
             Branch A
@@ -99,14 +76,14 @@ public class ParseBenchmarks
             Branch C
         """;
 
-    const string Timeline = """
+    const string timeline = """
         timeline
             2020 : Event One
             2021 : Event Two
             2022 : Event Three
         """;
 
-    const string UserJourney = """
+    const string userJourney = """
         journey
             title My Working Day
             section Morning
@@ -114,7 +91,7 @@ public class ParseBenchmarks
                 Check emails: 3: Me
         """;
 
-    const string Quadrant = """
+    const string quadrant = """
         quadrantChart
             title Campaign Analysis
             x-axis Low Reach --> High Reach
@@ -123,7 +100,7 @@ public class ParseBenchmarks
             Campaign B: [0.7, 0.8]
         """;
 
-    const string XYChart = """
+    const string xyChart = """
         xychart-beta
             title "Monthly Sales"
             x-axis [Jan, Feb, Mar, Apr, May]
@@ -131,19 +108,19 @@ public class ParseBenchmarks
             bar [50, 60, 75, 80, 90]
         """;
 
-    const string Sankey = """
+    const string sankey = """
         sankey-beta
         A,B,10
         A,C,20
         """;
 
-    const string Block = """
+    const string block = """
         block-beta
             columns 3
             a["Block A"] b["Block B"] c["Block C"]
         """;
 
-    const string Kanban = """
+    const string kanban = """
         kanban
         todo[Todo]
             task1[First Task]
@@ -152,13 +129,13 @@ public class ParseBenchmarks
             task3[Completed Task]
         """;
 
-    const string Packet = """
+    const string packet = """
         packet-beta
         0-15: "Source Port"
         16-31: "Destination Port"
         """;
 
-    const string C4Context = """
+    const string c4Context = """
         C4Context
             title System Context diagram
             Person(user, "User", "A user of the system")
@@ -166,7 +143,7 @@ public class ParseBenchmarks
             Rel(user, system, "Uses")
         """;
 
-    const string Requirement = """
+    const string requirement = """
         requirementDiagram
 
         requirement test_req {
@@ -177,39 +154,39 @@ public class ParseBenchmarks
         }
         """;
 
-    const string Architecture = """
+    const string architecture = """
         architecture-beta
         service db(database)[Database]
         """;
 
-    const string Radar = """
+    const string radar = """
         radar-beta
         axis A, B, C, D, E
         curve data1["Series1"]{20, 40, 60, 80, 50}
         """;
 
-    [Benchmark] public PieModel Pie_Parse() => new PieParser().Parse(Pie).Value;
-    [Benchmark] public FlowchartModel Flowchart_Simple_Parse() => new FlowchartParser().Parse(Flowchart).Value;
-    [Benchmark] public FlowchartModel Flowchart_Complex_Parse() => new FlowchartParser().Parse(FlowchartComplex).Value;
-    [Benchmark] public SequenceModel Sequence_Parse() => new SequenceParser().Parse(Sequence).Value;
-    [Benchmark] public ClassModel Class_Parse() => new ClassParser().Parse(Class).Value;
-    [Benchmark] public StateModel State_Parse() => new StateParser().Parse(State).Value;
-    [Benchmark] public ERModel ER_Parse() => new ERParser().Parse(ER).Value;
-    [Benchmark] public GitGraphModel GitGraph_Parse() => new GitGraphParser().Parse(GitGraph).Value;
-    [Benchmark] public GanttModel Gantt_Parse() => new GanttParser().Parse(Gantt).Value;
-    [Benchmark] public MindmapModel Mindmap_Parse() => new MindmapParser().Parse(Mindmap).Value;
-    [Benchmark] public TimelineModel Timeline_Parse() => new TimelineParser().Parse(Timeline).Value;
-    [Benchmark] public UserJourneyModel UserJourney_Parse() => new UserJourneyParser().Parse(UserJourney).Value;
-    [Benchmark] public QuadrantModel Quadrant_Parse() => new QuadrantParser().Parse(Quadrant).Value;
-    [Benchmark] public XYChartModel XYChart_Parse() => new XYChartParser().Parse(XYChart).Value;
-    [Benchmark] public SankeyModel Sankey_Parse() => new SankeyParser().Parse(Sankey).Value;
-    [Benchmark] public BlockModel Block_Parse() => new BlockParser().Parse(Block).Value;
-    [Benchmark] public KanbanModel Kanban_Parse() => new KanbanParser().Parse(Kanban).Value;
-    [Benchmark] public PacketModel Packet_Parse() => new PacketParser().Parse(Packet).Value;
-    [Benchmark] public C4Model C4Context_Parse() => new C4Parser().Parse(C4Context).Value;
-    [Benchmark] public RequirementModel Requirement_Parse() => new RequirementParser().Parse(Requirement).Value;
-    [Benchmark] public ArchitectureModel Architecture_Parse() => new ArchitectureParser().Parse(Architecture).Value;
-    [Benchmark] public RadarModel Radar_Parse() => new RadarParser().Parse(Radar).Value;
+    [Benchmark] public PieModel Pie_Parse() => new PieParser().Parse(pie).Value;
+    [Benchmark] public FlowchartModel Flowchart_Simple_Parse() => new FlowchartParser().Parse(flowchart).Value;
+    [Benchmark] public FlowchartModel Flowchart_Complex_Parse() => new FlowchartParser().Parse(flowchartComplex).Value;
+    [Benchmark] public SequenceModel Sequence_Parse() => new SequenceParser().Parse(sequence).Value;
+    [Benchmark] public ClassModel Class_Parse() => new ClassParser().Parse(@class).Value;
+    [Benchmark] public StateModel State_Parse() => new StateParser().Parse(state).Value;
+    [Benchmark] public ERModel ER_Parse() => new ERParser().Parse(er).Value;
+    [Benchmark] public GitGraphModel GitGraph_Parse() => new GitGraphParser().Parse(gitGraph).Value;
+    [Benchmark] public GanttModel Gantt_Parse() => new GanttParser().Parse(gantt).Value;
+    [Benchmark] public MindmapModel Mindmap_Parse() => new MindmapParser().Parse(mindmap).Value;
+    [Benchmark] public TimelineModel Timeline_Parse() => new TimelineParser().Parse(timeline).Value;
+    [Benchmark] public UserJourneyModel UserJourney_Parse() => new UserJourneyParser().Parse(userJourney).Value;
+    [Benchmark] public QuadrantModel Quadrant_Parse() => new QuadrantParser().Parse(quadrant).Value;
+    [Benchmark] public XYChartModel XYChart_Parse() => new XYChartParser().Parse(xyChart).Value;
+    [Benchmark] public SankeyModel Sankey_Parse() => new SankeyParser().Parse(sankey).Value;
+    [Benchmark] public BlockModel Block_Parse() => new BlockParser().Parse(block).Value;
+    [Benchmark] public KanbanModel Kanban_Parse() => new KanbanParser().Parse(kanban).Value;
+    [Benchmark] public PacketModel Packet_Parse() => new PacketParser().Parse(packet).Value;
+    [Benchmark] public C4Model C4Context_Parse() => new C4Parser().Parse(c4Context).Value;
+    [Benchmark] public RequirementModel Requirement_Parse() => new RequirementParser().Parse(requirement).Value;
+    [Benchmark] public ArchitectureModel Architecture_Parse() => new ArchitectureParser().Parse(architecture).Value;
+    [Benchmark] public RadarModel Radar_Parse() => new RadarParser().Parse(radar).Value;
 
     [Benchmark] public FlowchartModel Flowchart_Large_Parse() => new FlowchartParser().Parse(LargeFixtures.Flowchart).Value;
     [Benchmark] public SequenceModel Sequence_Large_Parse() => new SequenceParser().Parse(LargeFixtures.Sequence).Value;

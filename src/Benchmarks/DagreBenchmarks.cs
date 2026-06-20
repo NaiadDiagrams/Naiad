@@ -1,6 +1,4 @@
-using BenchmarkDotNet.Attributes;
 using Naiad;
-using Naiad.Diagrams.Flowchart;
 using Naiad.Models;
 
 namespace Benchmarks;

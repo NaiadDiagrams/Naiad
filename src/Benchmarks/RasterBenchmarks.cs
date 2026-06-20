@@ -1,5 +1,4 @@
 using System.Numerics;
-using BenchmarkDotNet.Attributes;
 using Naiad;
 
 namespace Benchmarks;

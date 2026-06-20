@@ -2,13 +2,13 @@ namespace Naiad.Diagrams.Quadrant;
 
 public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 {
-    const double ChartSize = 400;
-    const double MinAxisMargin = 60;
-    const double TitleHeight = 40;
-    const double PointRadius = 8;
-    const double LabelPadding = 10;
+    const double chartSize = 400;
+    const double minAxisMargin = 60;
+    const double titleHeight = 40;
+    const double pointRadius = 8;
+    const double labelPadding = 10;
 
-    static readonly string[] QuadrantColors =
+    static readonly string[] quadrantColors =
     [
         "#E8F5E9", // Q1 (top-right) - green
         "#E3F2FD", // Q2 (top-left) - blue
@@ -16,7 +16,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         "#FCE4EC"  // Q4 (bottom-right) - pink
     ];
 
-    static readonly string[] PointColors =
+    static readonly string[] pointColors =
     [
         "#4CAF50",
         "#2196F3",
@@ -28,32 +28,32 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 
     public SvgDocument Render(QuadrantModel model, RenderOptions options)
     {
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
         // Calculate left margin based on y-axis label lengths
         var yLabelMaxLength = Math.Max(
             model.YAxisTop?.Length ?? 0,
             model.YAxisBottom?.Length ?? 0);
-        var leftAxisMargin = Math.Max(MinAxisMargin, yLabelMaxLength * options.FontSize * 0.6 + LabelPadding);
+        var leftAxisMargin = Math.Max(minAxisMargin, yLabelMaxLength * options.FontSize * 0.6 + labelPadding);
 
-        var width = ChartSize + leftAxisMargin + MinAxisMargin + options.Padding * 2;
-        var height = ChartSize + MinAxisMargin * 2 + titleOffset + options.Padding * 2;
+        var width = chartSize + leftAxisMargin + minAxisMargin + options.Padding * 2;
+        var height = chartSize + minAxisMargin * 2 + titleOffset + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);
 
         var chartLeft = options.Padding + leftAxisMargin;
-        var chartTop = options.Padding + titleOffset + MinAxisMargin;
-        var chartRight = chartLeft + ChartSize;
-        var chartBottom = chartTop + ChartSize;
-        var centerX = chartLeft + ChartSize / 2;
-        var centerY = chartTop + ChartSize / 2;
+        var chartTop = options.Padding + titleOffset + minAxisMargin;
+        var chartRight = chartLeft + chartSize;
+        var chartBottom = chartTop + chartSize;
+        var centerX = chartLeft + chartSize / 2;
+        var centerY = chartTop + chartSize / 2;
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -63,7 +63,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         }
 
         // Draw quadrant backgrounds
-        const double halfSize = ChartSize / 2;
+        const double halfSize = chartSize / 2;
 
         // Q2 (top-left)
         builder.AddRect(
@@ -71,7 +71,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             chartTop,
             halfSize,
             halfSize,
-            fill: QuadrantColors[1],
+            fill: quadrantColors[1],
             stroke: "#ccc",
             strokeWidth: 1);
         // Q1 (top-right)
@@ -80,7 +80,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             chartTop,
             halfSize,
             halfSize,
-            fill: QuadrantColors[0],
+            fill: quadrantColors[0],
             stroke: "#ccc",
             strokeWidth: 1);
         // Q3 (bottom-left)
@@ -89,7 +89,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             centerY,
             halfSize,
             halfSize,
-            fill: QuadrantColors[2],
+            fill: quadrantColors[2],
             stroke: "#ccc",
             strokeWidth: 1);
         // Q4 (bottom-right)
@@ -98,7 +98,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             centerY,
             halfSize,
             halfSize,
-            fill: QuadrantColors[3],
+            fill: quadrantColors[3],
             stroke: "#ccc",
             strokeWidth: 1);
 
@@ -222,23 +222,23 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         for (var i = 0; i < model.Points.Count; i++)
         {
             var point = model.Points[i];
-            var pointColor = PointColors[i % PointColors.Length];
+            var pointColor = pointColors[i % pointColors.Length];
 
-            var px = chartLeft + point.X * ChartSize;
-            var py = chartBottom - point.Y * ChartSize; // Y is inverted (0 at bottom)
+            var px = chartLeft + point.X * chartSize;
+            var py = chartBottom - point.Y * chartSize; // Y is inverted (0 at bottom)
 
             // Point circle
             builder.AddCircle(
                 px,
                 py,
-                PointRadius,
+                pointRadius,
                 fill: pointColor,
                 stroke: "#333",
                 strokeWidth: 2);
 
             // Point label
             builder.AddText(
-                px + PointRadius + 5,
+                px + pointRadius + 5,
                 py,
                 point.Name,
                 anchor: "start",

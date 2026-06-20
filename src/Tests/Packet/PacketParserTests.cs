@@ -1,5 +1,3 @@
-using Naiad.Diagrams.Packet;
-
 public class PacketParserTests
 {
     [Test]

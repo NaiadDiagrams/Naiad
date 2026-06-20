@@ -33,7 +33,10 @@ class PacketParser : IDiagramParser<PacketModel>
         from ___ in CommonParsers.InlineWhitespace
         from label in labelParser
         from ____ in CommonParsers.LineEnd
-        select spec with { Label = label };
+        select spec with
+        {
+            Label = label
+        };
 
     // Skip line (comments, empty lines)
     static Parser<char, Unit> skipLine =
@@ -96,12 +99,13 @@ class PacketParser : IDiagramParser<PacketModel>
                 }
             }
 
-            model.Fields.Add(new PacketField
-            {
-                StartBit = start,
-                EndBit = end,
-                Label = field.Label
-            });
+            model.Fields.Add(
+                new()
+                {
+                    StartBit = start,
+                    EndBit = end,
+                    Label = field.Label
+                });
 
             nextBit = end + 1;
         }

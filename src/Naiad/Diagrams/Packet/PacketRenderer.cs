@@ -2,12 +2,12 @@ namespace Naiad.Diagrams.Packet;
 
 public class PacketRenderer : IDiagramRenderer<PacketModel>
 {
-    const double BitWidth = 20;
-    const double RowHeight = 40;
-    const double BitNumberHeight = 20;
-    const double TitleHeight = 40;
+    const double bitWidth = 20;
+    const double rowHeight = 40;
+    const double bitNumberHeight = 20;
+    const double titleHeight = 40;
 
-    static readonly string[] FieldColors =
+    static readonly string[] fieldColors =
     [
         "#E3F2FD", "#E8F5E9", "#FFF3E0", "#F3E5F5",
         "#FCE4EC", "#E0F7FA", "#FFF8E1", "#F1F8E9"
@@ -30,14 +30,14 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         }
 
         var bitsPerRow = model.BitsPerRow;
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
         // Calculate total rows needed
         var maxBit = model.Fields.Max(f => f.EndBit);
         var totalRows = maxBit / bitsPerRow + 1;
 
-        var width = bitsPerRow * BitWidth + options.Padding * 2;
-        var height = totalRows * RowHeight + BitNumberHeight + options.Padding * 2 + titleOffset;
+        var width = bitsPerRow * bitWidth + options.Padding * 2;
+        var height = totalRows * rowHeight + bitNumberHeight + options.Padding * 2 + titleOffset;
 
         var builder = new SvgBuilder().Size(width, height);
 
@@ -46,7 +46,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -60,10 +60,10 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         // Draw bit numbers
         for (var i = 0; i < bitsPerRow; i++)
         {
-            var x = options.Padding + i * BitWidth + BitWidth / 2;
+            var x = options.Padding + i * bitWidth + bitWidth / 2;
             builder.AddText(
                 x,
-                baseY + BitNumberHeight / 2,
+                baseY + bitNumberHeight / 2,
                 i.ToString(),
                 anchor: "middle",
                 baseline: "middle",
@@ -78,7 +78,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         {
             var startRow = field.StartBit / bitsPerRow;
             var endRow = field.EndBit / bitsPerRow;
-            var color = FieldColors[colorIndex % FieldColors.Length];
+            var color = fieldColors[colorIndex % fieldColors.Length];
 
             if (startRow == endRow)
             {
@@ -86,21 +86,21 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                 var startCol = field.StartBit % bitsPerRow;
                 var fieldWidth = field.Width;
 
-                var x = options.Padding + startCol * BitWidth;
-                var y = baseY + BitNumberHeight + startRow * RowHeight;
+                var x = options.Padding + startCol * bitWidth;
+                var y = baseY + bitNumberHeight + startRow * rowHeight;
 
                 builder.AddRect(
                     x,
                     y,
-                    fieldWidth * BitWidth,
-                    RowHeight,
+                    fieldWidth * bitWidth,
+                    rowHeight,
                     fill: color,
                     stroke: "#333",
                     strokeWidth: 1);
 
                 builder.AddText(
-                    x + fieldWidth * BitWidth / 2,
-                    y + RowHeight / 2,
+                    x + fieldWidth * bitWidth / 2,
+                    y + rowHeight / 2,
                     field.Label,
                     anchor: "middle",
                     baseline: "middle",
@@ -132,14 +132,14 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     }
 
                     var fieldWidth = colEnd - colStart + 1;
-                    var x = options.Padding + colStart * BitWidth;
-                    var y = baseY + BitNumberHeight + row * RowHeight;
+                    var x = options.Padding + colStart * bitWidth;
+                    var y = baseY + bitNumberHeight + row * rowHeight;
 
                     builder.AddRect(
                         x,
                         y,
-                        fieldWidth * BitWidth,
-                        RowHeight,
+                        fieldWidth * bitWidth,
+                        rowHeight,
                         fill: color,
                         stroke: "#333",
                         strokeWidth: 1);
@@ -148,8 +148,8 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     if (row == startRow)
                     {
                         builder.AddText(
-                            x + fieldWidth * BitWidth / 2,
-                            y + RowHeight / 2,
+                            x + fieldWidth * bitWidth / 2,
+                            y + rowHeight / 2,
                             field.Label,
                             anchor: "middle",
                             baseline: "middle",

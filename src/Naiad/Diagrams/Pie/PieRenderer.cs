@@ -3,7 +3,7 @@ namespace Naiad.Diagrams.Pie;
 public class PieRenderer : IDiagramRenderer<PieModel>
 {
     // Mermaid default pie colors
-    static readonly string[] DefaultColors =
+    static readonly string[] defaultColors =
     [
         "#ECECFF",                          // lavender
         "#ffffde",                          // light yellow
@@ -16,7 +16,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
     ];
 
     // RGB equivalents for legend (mermaid converts HSL to RGB for style attribute)
-    static readonly string[] DefaultColorRgb =
+    static readonly string[] defaultColorRgb =
     [
         "rgb(236, 236, 255)",               // #ECECFF
         "rgb(255, 255, 222)",               // #ffffde
@@ -28,8 +28,8 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         "rgb(215, 134, 255)"                // hsl(280, 100%, 76.27%)
     ];
 
-    const double Radius = 185.0;
-    const double OuterRadius = 186.0;
+    const double radius = 185.0;
+    const double outerRadius = 186.0;
 
     public SvgDocument Render(PieModel model, RenderOptions options)
     {
@@ -59,7 +59,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({cx:0.##},{cy:0.##})"));
 
         // Outer circle
-        builder.AddCircle(0, 0, OuterRadius, cssClass: "pieOuterCircle");
+        builder.AddCircle(0, 0, outerRadius, cssClass: "pieOuterCircle");
 
         // Draw pie slices
         double startAngle = 0;
@@ -67,7 +67,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         {
             var section = model.Sections[i];
             var sweepAngle = section.Value / total * 360;
-            var color = section.Color ?? DefaultColors[i % DefaultColors.Length];
+            var color = section.Color ?? defaultColors[i % defaultColors.Length];
 
             var path = CreateMermaidArcPath(startAngle, sweepAngle);
             builder.AddPath(path, fill: color, cssClass: "pieCircle");
@@ -84,7 +84,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
             // Mermaid uses a label radius factor of 0.75 (138.75 / 185)
             var midAngle = startAngle + sweepAngle / 2;
-            const double labelDist = Radius * 0.75; // Exact mermaid factor
+            const double labelDist = radius * 0.75; // Exact mermaid factor
             var labelX = labelDist * Math.Sin(ToRadians(midAngle));
             var labelY = -labelDist * Math.Cos(ToRadians(midAngle));
 
@@ -130,10 +130,10 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         var endRad = ToRadians(startAngle + sweepAngle);
         var largeArc = sweepAngle > 180 ? 1 : 0;
 
-        var x1 = Radius * Math.Sin(startRad);
-        var y1 = -Radius * Math.Cos(startRad);
-        var x2 = Radius * Math.Sin(endRad);
-        var y2 = -Radius * Math.Cos(endRad);
+        var x1 = radius * Math.Sin(startRad);
+        var y1 = -radius * Math.Cos(startRad);
+        var x2 = radius * Math.Sin(endRad);
+        var y2 = -radius * Math.Cos(endRad);
 
         // Fix -0 to 0 (happens at 360 degree angles due to floating point)
         if (Math.Abs(x2) < 1e-10) x2 = 0;
@@ -142,7 +142,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         // Match mermaid's precision (2-3 decimal places)
         return string.Create(
             CultureInfo.InvariantCulture,
-            $"M{Math.Round(x1, 3):0.###},{Math.Round(y1, 3):0.###}A{Radius},{Radius},0,{largeArc},1,{Math.Round(x2, 3):0.###},{Math.Round(y2, 3):0.###}L0,0Z");
+            $"M{Math.Round(x1, 3):0.###},{Math.Round(y1, 3):0.###}A{radius},{radius},0,{largeArc},1,{Math.Round(x2, 3):0.###},{Math.Round(y2, 3):0.###}L0,0Z");
     }
 
     static string GetRgbColor(string? color, int index)
@@ -151,7 +151,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         {
             return color.StartsWith("rgb") ? color : ConvertToRgb(color);
         }
-        return DefaultColorRgb[index % DefaultColorRgb.Length];
+        return defaultColorRgb[index % defaultColorRgb.Length];
     }
 
     static string ConvertToRgb(string color)

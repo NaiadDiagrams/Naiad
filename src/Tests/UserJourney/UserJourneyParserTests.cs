@@ -1,5 +1,3 @@
-using Naiad.Diagrams.UserJourney;
-
 public class UserJourneyParserTests
 {
     [Test]

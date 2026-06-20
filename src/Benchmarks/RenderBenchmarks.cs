@@ -1,4 +1,3 @@
-using BenchmarkDotNet.Attributes;
 using Naiad;
 
 namespace Benchmarks;
