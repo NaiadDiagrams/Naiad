@@ -97,7 +97,7 @@ public class SnapshotTests
 
         await SettleAsync(page);
 
-        await Verify(page);
+        await VerifyViewportAsync(page);
     }
 
     [Test]
@@ -129,7 +129,7 @@ public class SnapshotTests
 
         await SettleAsync(page);
 
-        await Verify(page);
+        await VerifyViewportAsync(page);
     }
 
     // End-to-end on the real runtime: editing the source re-renders the preview. Typing a pie chart swaps
@@ -207,6 +207,17 @@ public class SnapshotTests
             });
 
         await Assert.That(download.SuggestedFilename).EndsWith(".png");
+    }
+
+    // Verifies a fixed-size viewport screenshot rather than Verify(page)'s full-page capture. Mobile pages
+    // scroll, so a full-page screenshot's height is content- (hence font-) driven and differs across OSes
+    // (local Windows vs the Linux CI runner) — which fails Verify on a dimension mismatch before the SSIM
+    // tolerance can absorb font-rendering differences. The viewport is a stable size on every platform.
+    // (Desktop pages are viewport-locked, so they keep the richer Verify(page) png + html capture.)
+    static async Task VerifyViewportAsync(IPage page)
+    {
+        var screenshot = await page.ScreenshotAsync(new() { FullPage = false });
+        await Verify(screenshot, "png");
     }
 
     // Waits for the app to settle before a snapshot: the editor present, the default diagram rendered,
