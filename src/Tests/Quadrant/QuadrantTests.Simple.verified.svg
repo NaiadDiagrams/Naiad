@@ -1,122 +1,126 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 636 600"
-  style="max-width: 636px;"
+  viewBox="0 0 500 500"
+  style="max-width: 500px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="31"
+    y="45"
+    width="232"
+    height="212"
+    fill="#F1F1FF" />
+  <rect
+    x="263"
+    y="45"
+    width="232"
+    height="212"
+    fill="#ECECFF" />
+  <rect
+    x="31"
+    y="257"
+    width="232"
+    height="212"
+    fill="#F6F6FF" />
+  <rect
+    x="263"
+    y="257"
+    width="232"
+    height="212"
+    fill="#FBFBFF" />
+  <rect
+    x="31"
+    y="45"
+    width="464"
+    height="424"
+    fill="none"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <line
+    x1="263"
+    y1="45"
+    x2="263"
+    y2="469"
+    stroke="#C7C7F1" />
+  <line
+    x1="31"
+    y1="257"
+    x2="495"
+    y2="257"
+    stroke="#C7C7F1" />
+  <circle
+    cx="170.2"
+    cy="214.6"
+    r="5"
+    fill="#333" />
   <text
-    x="318"
-    y="40"
+    x="170.2"
+    y="225.6"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="18px"
+    font-size="12px"
     font-family="Arial, sans-serif"
-    font-weight="bold">Campaign Analysis</text>
-  <rect
-    x="156"
-    y="120"
-    width="200"
-    height="200"
-    fill="#E3F2FD"
-    stroke="#ccc" />
-  <rect
-    x="356"
-    y="120"
-    width="200"
-    height="200"
-    fill="#E8F5E9"
-    stroke="#ccc" />
-  <rect
-    x="156"
-    y="320"
-    width="200"
-    height="200"
-    fill="#FFF3E0"
-    stroke="#ccc" />
-  <rect
-    x="356"
-    y="320"
-    width="200"
-    height="200"
-    fill="#FCE4EC"
-    stroke="#ccc" />
-  <line
-    x1="156"
-    y1="320"
-    x2="556"
-    y2="320"
-    stroke="#333"
-    stroke-width="2" />
-  <line
-    x1="356"
-    y1="120"
-    x2="356"
-    y2="520"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="156"
-    y="550"
-    text-anchor="start"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    fill="#333">Low Reach</text>
-  <text
-    x="556"
-    y="550"
-    text-anchor="end"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    fill="#333">High Reach</text>
-  <text
-    x="146"
-    y="520"
-    text-anchor="end"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    fill="#333">Low Engagement</text>
-  <text
-    x="146"
-    y="120"
-    text-anchor="end"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    fill="#333">High Engagement</text>
+    fill="#131300">Campaign A</text>
   <circle
-    cx="276"
-    cy="280"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
+    cx="355.8"
+    cy="129.8"
+    r="5"
+    fill="#333" />
   <text
-    x="289"
-    y="280"
-    text-anchor="start"
+    x="355.8"
+    y="140.8"
+    text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#333">Campaign A</text>
-  <circle
-    cx="436"
-    cy="200"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
+    fill="#131300">Campaign B</text>
   <text
-    x="449"
-    y="200"
-    text-anchor="start"
+    x="147"
+    y="482"
+    text-anchor="middle"
     dominant-baseline="middle"
-    font-size="12px"
+    font-size="16px"
     font-family="Arial, sans-serif"
-    fill="#333">Campaign B</text>
+    fill="#131300">Low Reach</text>
+  <text
+    x="379"
+    y="482"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">High Reach</text>
+  <g
+    transform="rotate(-90, 13, 151)">
+    <text
+      x="13"
+      y="151"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      fill="#131300">High Engagement</text>
+  </g>
+  <g
+    transform="rotate(-90, 13, 363)">
+    <text
+      x="13"
+      y="363"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      fill="#131300">Low Engagement</text>
+  </g>
+  <text
+    x="250"
+    y="20"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Campaign Analysis</text>
 </svg>
