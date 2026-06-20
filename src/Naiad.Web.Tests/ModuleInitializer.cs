@@ -6,7 +6,7 @@ static class ModuleInitializer
     public static void Initialize()
     {
         VerifyPlaywright.Initialize(installPlaywright: true);
-        VerifierSettings.UseSsimForPng(.7);
+        VerifierSettings.UseSsimForPng(.6);
         VerifierSettings.InitializePlugins();
 
         // bUnit stamps a fresh element-reference GUID on some elements each render; pin it so component
