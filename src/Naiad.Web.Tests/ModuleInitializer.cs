@@ -26,5 +26,38 @@ static class ModuleInitializer
                 "blazor:elementreference=\"[^\"]*\"",
                 "blazor:elementreference=\"scrubbed\"",
                 RegexOptions.IgnoreCase));
+
+        // The page-HTML snapshots are compared with Verify.Bunit's AngleSharp markup comparer, which throws
+        // NullReferenceException whenever an element's `style` attribute can't be read back as
+        // IHtmlElement.Style. A Playwright page capture contains two such cases, so normalise both before the
+        // comparison runs:
+        //
+        //   * The rendered diagram is inline SVG. SVG nodes are ISvgElement (their IHtmlElement.Style is null),
+        //     so a styled node like `<svg style="max-width: ...">` trips the NRE on every run once a baseline
+        //     exists. The diagram's geometry is already snapshotted exhaustively by the core renderer tests and
+        //     captured visually by the page PNG, so collapse it to a placeholder — that drops the styled SVG
+        //     nodes and keeps this structure snapshot stable when the diagram's layout numbers change.
+        //
+        //   * Playwright hides the text caret while it screenshots the page by toggling
+        //     `caret-color: transparent !important` on the editable <textarea>. The concurrent page.content()
+        //     capture therefore races between `style="caret-color: ..."`, an emptied `style=""`, and no
+        //     attribute — and the emptied form trips the same NRE. It's a screenshot artifact, not app state,
+        //     so strip the textarea's style attribute outright.
+        VerifierSettings.AddScrubber(
+            "html",
+            builder =>
+            {
+                var html = Regex.Replace(
+                    builder.ToString(),
+                    "<svg\\b[^>]*\\bid=\"naiad\"[^>]*>.*?</svg>",
+                    "<svg id=\"naiad\"><!-- diagram scrubbed --></svg>",
+                    RegexOptions.Singleline);
+                html = Regex.Replace(
+                    html,
+                    "(<textarea\\b[^>]*?) style=\"[^\"]*\"",
+                    "$1");
+                builder.Clear();
+                builder.Append(html);
+            });
     }
 }
