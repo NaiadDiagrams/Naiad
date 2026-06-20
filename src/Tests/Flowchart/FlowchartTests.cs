@@ -29,6 +29,133 @@ public class FlowchartTests : TestBase
     }
 
     [Test]
+    public Task ComplexPipeline()
+    {
+        // A large request-lifecycle flowchart that stresses the layout: every supported node shape,
+        // all edge styles (solid, dotted, thick-less here but bidirectional and dotted), pipe edge
+        // labels, nested subgraphs, edges that cross subgraph boundaries, and retry cycles
+        // (AUTH<->REF and WK->JOB->RT->BO->WK) that Acyclic must break and restore.
+        const string input =
+            """
+            flowchart TD
+                U([Client application]) --> REQ>HTTP request]
+                REQ --> CDN{{Edge / CDN}}
+                CDN -->|hit| CRES([Cached edge response])
+                CDN -->|miss| GW{{API Gateway}}
+
+                subgraph gateway [Gateway and Security]
+                    GW --> RL{Rate limit OK?}
+                    RL -->|no| E429[[429 Too Many Requests]]
+                    RL -->|yes| AUTH{Token valid?}
+                    AUTH -->|expired| REF(Refresh token)
+                    REF --> AUTH
+                    AUTH -->|no| E401[[401 Unauthorized]]
+                    AUTH -->|yes| RBAC{Scope allowed?}
+                    RBAC -->|no| E403[[403 Forbidden]]
+                    RBAC -->|yes| ROUTE[Route to service]
+                end
+
+                subgraph app [Application Services]
+                    ROUTE --> VAL{Payload valid?}
+                    VAL -->|no| E422[[422 Unprocessable]]
+                    VAL -->|yes| CHK{Cache hit?}
+                    CHK -->|yes| SHAPE(Shape response)
+                    CHK -->|no| ORCH[[Request orchestrator]]
+
+                    subgraph resil [Resilience layer]
+                        ORCH --> SVCA(Catalog)
+                        ORCH --> SVCB(Pricing)
+                        ORCH --> SVCC(Inventory)
+                        SVCA --> CB{Circuit closed?}
+                        SVCB --> CB
+                        SVCC --> CB
+                        CB -->|open| FALL(Stale or fallback)
+                        CB -->|closed| AGG[Aggregate]
+                        FALL --> AGG
+                    end
+
+                    AGG --> SHAPE
+                end
+
+                subgraph data [Data and Cache]
+                    SVCA <--> PG[(Postgres)]
+                    SVCC <--> PG
+                    SVCB <--> RD[(Redis)]
+                    CHK -.->|lookup| RD
+                    SHAPE -.->|write-through| RD
+                    ORCH --> WQ{Mutation?}
+                    WQ -->|yes| TX[Begin transaction]
+                    TX --> PG
+                    TX --> OBX[(Transactional outbox)]
+                    WQ -->|no| AGG
+                end
+
+                subgraph bg [Background Processing]
+                    OBX -.-> MB{{Message broker}}
+                    MB --> WK[[Worker pool]]
+                    WK --> JOB{Job result?}
+                    JOB -->|retryable| RT{Under retry limit?}
+                    RT -->|yes| BO(Exponential backoff)
+                    BO --> WK
+                    RT -->|no| DLQ[(Dead-letter queue)]
+                    JOB -->|fatal| DLQ
+                    JOB -->|success| NOTE(Dispatch notifications)
+                end
+
+                SHAPE --> R200([200 OK])
+                R200 --> END(((Request complete)))
+                CRES --> END
+                NOTE --> END
+
+                subgraph obs [Observability]
+                    LOG[(Logs)]
+                    MET[(Metrics)]
+                    TRC[(Traces)]
+                end
+
+                GW -.->|span| TRC
+                ORCH -.->|timing| MET
+                WK -.->|structured| LOG
+                E401 -.->|audit| LOG
+                E429 -.->|audit| LOG
+                DLQ -.->|alert| MET
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // The same diagram written with idiomatic Mermaid, now that the parser supports it: inline
+    // `-- text -->` / `-. text .->` / `== text ==>` edge labels, `:::class` shorthand, `classDef`/`class`
+    // (skipped), `direction` inside a subgraph, a `[/parallelogram/]` node, and a `linkStyle` line (skipped).
+    [Test]
+    public Task FullFeaturedSyntax()
+    {
+        const string input =
+            """
+            flowchart TD
+                A([Request]):::entry -- submit --> B{Authenticated?}
+                B -- no --> C[[401 Unauthorized]]:::error
+                B -- yes --> D[/Validate payload/]
+                D == process ==> E(Handler)
+                E -. lookup .-> F[(Cache)]
+
+                subgraph worker [Async Worker]
+                    direction LR
+                    E --> G{Retry?}
+                    G -- yes --> E
+                    G -- no --> H(((Complete)))
+                end
+
+                classDef entry fill:#dbeafe,stroke:#2563eb,stroke-width:2px;
+                classDef error fill:#fee2e2,stroke:#dc2626,stroke-width:2px;
+                class B,G decision;
+                linkStyle default stroke:#94a3b8,stroke-width:1.5px;
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task IconPackIcon()
     {
         const string input =
