@@ -199,6 +199,12 @@ public class SvgBuilder
         return this;
     }
 
+    /// <summary>Adds a <c>&lt;foreignObject&gt;</c> carrying raw label markup.</summary>
+    /// <remarks>
+    /// <paramref name="htmlContent"/> is pre-built XHTML, emitted verbatim (see
+    /// <see cref="SvgForeignObject.HtmlContent"/>). Any user-supplied text within it must already be
+    /// HTML-encoded by the caller.
+    /// </remarks>
     public SvgBuilder AddForeignObject(
         double x,
         double y,
@@ -220,9 +226,16 @@ public class SvgBuilder
         return this;
     }
 
-    // Adds a box-centered label. With HTML allowed this is a <foreignObject> carrying the
-    // rich html; otherwise it is a native <text> built from the already-structured plainText
-    // (icons dropped, since they need a web font we do not embed). Empty labels emit nothing.
+    /// <summary>
+    /// Adds a box-centered label. With HTML allowed this is a <c>&lt;foreignObject&gt;</c> carrying the
+    /// rich html; otherwise it is a native <c>&lt;text&gt;</c> built from the already-structured plainText
+    /// (icons dropped, since they need a web font we do not embed). Empty labels emit nothing.
+    /// </summary>
+    /// <remarks>
+    /// <paramref name="html"/> is pre-built XHTML used on the foreignObject path, emitted verbatim (see
+    /// <see cref="SvgForeignObject.HtmlContent"/>). Any user-supplied text within it must already be
+    /// HTML-encoded by the caller; the native-text fallback escapes <paramref name="plainText"/> itself.
+    /// </remarks>
     public SvgBuilder AddLabel(
         double x,
         double y,
