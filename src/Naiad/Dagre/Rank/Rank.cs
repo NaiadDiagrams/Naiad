@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>rank/index.ts</c>.</summary>
 static class Rank
 {
     /*

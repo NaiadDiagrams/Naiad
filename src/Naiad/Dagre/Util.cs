@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>util.ts</c> helpers.</summary>
 static class Util
 {
     public const string GraphNode = "\x00";
@@ -20,10 +19,10 @@ static class Util
     }
 
     public static string AddBorderNode(Graph graph, string prefix) =>
-        AddDummyNode(graph, "border", new NodeLabel { Width = 0, Height = 0 }, prefix);
+        AddDummyNode(graph, "border", new() { Width = 0, Height = 0 }, prefix);
 
     public static string AddBorderNode(Graph graph, string prefix, int rank, int order) =>
-        AddDummyNode(graph, "border", new NodeLabel { Width = 0, Height = 0, Rank = rank, Order = order }, prefix);
+        AddDummyNode(graph, "border", new() { Width = 0, Height = 0, Rank = rank, Order = order }, prefix);
 
     /// <summary>Returns a new graph with only simple edges; aggregates multi-edge weight/minlen.</summary>
     public static Graph Simplify(Graph graph)
@@ -36,9 +35,9 @@ static class Util
 
         foreach (var e in graph.Edges())
         {
-            var simpleLabel = simplified.HasEdge(e.V, e.W) ? simplified.Edge_(e.V, e.W) : new EdgeLabel { Weight = 0, Minlen = 1 };
+            var simpleLabel = simplified.HasEdge(e.V, e.W) ? simplified.Edge_(e.V, e.W) : new() { Weight = 0, Minlen = 1 };
             var label = graph.Edge_(e);
-            simplified.SetEdge(e.V, e.W, new EdgeLabel
+            simplified.SetEdge(e.V, e.W, new()
             {
                 // JS treats a missing weight/minlen as undefined; matching dagre's behavior in the
                 // network-simplex tests (which override an edge label with only {minlen}), we fall back
@@ -151,7 +150,7 @@ static class Util
             sy = w * dy / dx;
         }
 
-        return new Point(x + sx, y + sy);
+        return new(x + sx, y + sy);
     }
 
     /// <summary>Builds a matrix of node ids indexed by [rank][order].</summary>

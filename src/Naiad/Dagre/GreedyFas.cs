@@ -1,7 +1,7 @@
 namespace Naiad.Dagre;
 
 /// <summary>
-/// An entry threaded into the greedy-FAS bucket lists. A faithful port of the TS <c>FASEntry</c>
+/// An entry threaded into the greedy-FAS bucket lists.
 /// object (<c>{v, in, out}</c>); <see cref="W"/> is used when entries are emitted as edges from
 /// <see cref="GreedyFas.RemoveNode"/>.
 /// </summary>
@@ -17,8 +17,7 @@ sealed class FasEntry : ListNode
 /// A greedy heuristic for finding a feedback arc set for a graph. A feedback arc set is a set of
 /// edges that can be removed to make a graph acyclic. The algorithm comes from: P. Eades, X. Lin,
 /// and W. F. Smyth, "A fast and effective heuristic for the feedback arc set problem." This
-/// implementation adjusts that from the paper to allow for weighted edges. Faithful port of
-/// <c>greedy-fas.ts</c>.
+/// implementation adjusts that from the paper to allow for weighted edges.
 /// </summary>
 static class GreedyFas
 {

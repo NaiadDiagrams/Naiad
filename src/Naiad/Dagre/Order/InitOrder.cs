@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>order/init-order.ts</c>.</summary>
 static class InitOrder
 {
     public static List<List<string>> Run(Graph graph)

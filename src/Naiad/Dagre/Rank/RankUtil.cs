@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>rank/util.ts</c> (longestPath + slack).</summary>
 static class RankUtil
 {
     /*
@@ -49,7 +48,7 @@ static class RankUtil
 
                     return Dfs(e.W) - graph.Edge_(e).Minlen!.Value;
                 }).ToList()
-                : new List<double>();
+                : new();
 
             var rank = Util.ApplyMin(outEdgesMinLens);
 

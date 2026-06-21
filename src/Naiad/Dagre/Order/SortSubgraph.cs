@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>order/sort-subgraph.ts</c>. (SubgraphResult shares the <see cref="SortResult"/> shape.)</summary>
 static class SortSubgraph
 {
     public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false)

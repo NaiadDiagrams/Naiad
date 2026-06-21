@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>rank/network-simplex.ts</c>.</summary>
 static class NetworkSimplex
 {
     /*
@@ -110,7 +109,7 @@ static class NetworkSimplex
         InitLowLimValues(tree, tree.Nodes()[0]);
 
     public static void InitLowLimValues(Graph tree, string root) =>
-        DfsAssignLowLim(tree, new Dictionary<string, bool>(StringComparer.Ordinal), 1, root, null);
+        DfsAssignLowLim(tree, new(StringComparer.Ordinal), 1, root, null);
 
     public static int DfsAssignLowLim(Graph tree, Dictionary<string, bool> visited, int nextLim, string v, string? parent)
     {
@@ -201,7 +200,7 @@ static class NetworkSimplex
         var v = e.V;
         var w = e.W;
         t.RemoveEdge(v, w);
-        t.SetEdge(f.V, f.W, new EdgeLabel());
+        t.SetEdge(f.V, f.W, new());
         InitLowLimValues(t);
         InitCutValues(t, g);
         UpdateRanks(t, g);

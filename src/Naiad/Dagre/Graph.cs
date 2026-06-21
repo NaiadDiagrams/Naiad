@@ -558,7 +558,7 @@ sealed class Graph
             (v, w) = (w, v);
         }
 
-        return new Edge(v, w, string.IsNullOrEmpty(name) ? null : name);
+        return new(v, w, string.IsNullOrEmpty(name) ? null : name);
     }
 
     static string EdgeObjToId(bool isDirected, Edge edgeObj) =>

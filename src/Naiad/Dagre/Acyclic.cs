@@ -2,7 +2,6 @@ namespace Naiad.Dagre;
 
 /// <summary>
 /// Makes a graph acyclic by reversing edges that participate in cycles, then restores them later.
-/// Faithful port of <c>acyclic.ts</c>.
 /// </summary>
 static class Acyclic
 {

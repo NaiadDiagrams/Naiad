@@ -1,7 +1,7 @@
 namespace Naiad.Dagre;
 
 /// <summary>
-/// Options passed to <see cref="Layout.Run"/>. A faithful port of the TS
+/// Options passed to <see cref="Layout.Run"/>.
 /// <c>LayoutOptions = GraphLabel &amp; NodeConfig &amp; EdgeConfig &amp; LayoutConfig</c>. Layout itself only reads
 /// <see cref="DebugTiming"/>; the remaining (LayoutConfig) fields are forwarded to <see cref="Order.Run"/>.
 /// </summary>
@@ -15,15 +15,15 @@ sealed class LayoutOptions
     public List<OrderConstraint>? Constraints;
 }
 
-/// <summary>An ordering constraint: <c>left</c> must come before <c>right</c>. Faithful port of TS <c>OrderConstraint</c>.</summary>
+/// <summary>An ordering constraint: <c>left</c> must come before <c>right</c>.</summary>
 sealed record OrderConstraint(string Left, string Right);
 
-/// <summary>Faithful port of dagre's <c>layout.ts</c> — the top-level layout driver.</summary>
+/// <summary>Top-level layout driver.</summary>
 static class Layout
 {
     public static Graph Run(Graph g, LayoutOptions? opts = null)
     {
-        opts ??= new LayoutOptions();
+        opts ??= new();
         // time = opts.debugTiming ? util.time : util.notime; (both just call fn here)
         var layoutGraph = BuildLayoutGraph(g);
         RunLayout(layoutGraph, opts);
@@ -47,7 +47,7 @@ static class Layout
         Normalize.Run(g);
         ParentDummyChains.Run(g);
         AddBorderSegments.Run(g);
-        Order.Run(g, new OrderOptions
+        Order.Run(g, new()
         {
             CustomOrder = opts.CustomOrder,
             DisableOptimalOrderHeuristic = opts.DisableOptimalOrderHeuristic,
@@ -376,8 +376,8 @@ static class Layout
             if (edge.Points == null)
             {
                 edge.Points = [];
-                p1 = new Point(nodeW.X!.Value, nodeW.Y!.Value);
-                p2 = new Point(nodeV.X!.Value, nodeV.Y!.Value);
+                p1 = new(nodeW.X!.Value, nodeW.Y!.Value);
+                p2 = new(nodeV.X!.Value, nodeV.Y!.Value);
             }
             else
             {
@@ -463,7 +463,7 @@ static class Layout
             {
                 var node = g.Node(e.V);
                 node.SelfEdges ??= [];
-                node.SelfEdges.Add(new SelfEdge { E = e, Label = g.Edge_(e) });
+                node.SelfEdges.Add(new() { E = e, Label = g.Edge_(e) });
                 g.RemoveEdge(e);
             }
         }
@@ -482,7 +482,7 @@ static class Layout
                 node.Order = i + orderShift;
                 foreach (var selfEdge in node.SelfEdges ?? [])
                 {
-                    Util.AddDummyNode(g, "selfedge", new NodeLabel
+                    Util.AddDummyNode(g, "selfedge", new()
                     {
                         Width = selfEdge.Label.Width!.Value,
                         Height = selfEdge.Label.Height!.Value,
@@ -515,11 +515,11 @@ static class Layout
                 g.RemoveNode(v);
                 label.Points =
                 [
-                    new Point(x + 2 * dx / 3, y - dy),
-                    new Point(x + 5 * dx / 6, y - dy),
-                    new Point(x + dx, y),
-                    new Point(x + 5 * dx / 6, y + dy),
-                    new Point(x + 2 * dx / 3, y + dy)
+                    new(x + 2 * dx / 3, y - dy),
+                    new(x + 5 * dx / 6, y - dy),
+                    new(x + dx, y),
+                    new(x + 5 * dx / 6, y + dy),
+                    new(x + 2 * dx / 3, y + dy)
                 ];
                 label.X = node.X;
                 label.Y = node.Y;

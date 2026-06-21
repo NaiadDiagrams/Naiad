@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>rank/feasible-tree.ts</c>.</summary>
 static class FeasibleTree
 {
     /*
@@ -41,7 +40,7 @@ static class FeasibleTree
 
         var start = nodes[0];
         var size = graph.NodeCount();
-        tree.SetNode(start, new NodeLabel());
+        tree.SetNode(start, new());
 
         while (TightTree(tree, graph) < size)
         {
@@ -75,8 +74,8 @@ static class FeasibleTree
                     var w = v == edgeV ? e.W : edgeV;
                     if (!tree.HasNode(w) && RankUtil.Slack(graph, e) == 0)
                     {
-                        tree.SetNode(w, new NodeLabel());
-                        tree.SetEdge(v, w, new EdgeLabel());
+                        tree.SetNode(w, new());
+                        tree.SetEdge(v, w, new());
                         Dfs(w);
                     }
                 }

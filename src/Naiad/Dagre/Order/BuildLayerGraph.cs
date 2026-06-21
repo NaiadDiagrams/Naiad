@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>order/build-layer-graph.ts</c>.</summary>
 static class BuildLayerGraph
 {
     public static Graph Run(Graph graph, int rank, string relationship, List<string>? nodesWithRank = null)
@@ -9,7 +8,7 @@ static class BuildLayerGraph
 
         var root = CreateRootNode(graph);
         var result = new Graph(compound: true)
-            .SetGraph(new GraphLabel { Root = root })
+            .SetGraph(new() { Root = root })
             .SetDefaultNodeLabel(v => graph.Node(v));
 
         foreach (var v in nodesWithRank)
@@ -31,13 +30,13 @@ static class BuildLayerGraph
                         var u = e.V == v ? e.W : e.V;
                         var edge = result.Edge_(u, v);
                         var weight = edge != null ? edge.Weight!.Value : 0;
-                        result.SetEdge(u, v, new EdgeLabel { Weight = graph.Edge_(e).Weight!.Value + weight });
+                        result.SetEdge(u, v, new() { Weight = graph.Edge_(e).Weight!.Value + weight });
                     }
                 }
 
                 if (node.MinRank != null)
                 {
-                    result.SetNode(v, new NodeLabel
+                    result.SetNode(v, new()
                     {
                         BorderLeftId = node.BorderLeft![rank],
                         BorderRightId = node.BorderRight![rank]

@@ -1,6 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>order/cross-count.ts</c>.</summary>
 static class CrossCount
 {
     public static int Run(Graph graph, List<List<string>> layering)

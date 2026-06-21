@@ -198,14 +198,12 @@ static class BK
     {
         if (string.CompareOrdinal(v, w) > 0)
         {
-            var tmp = v;
-            v = w;
-            w = tmp;
+            (v, w) = (w, v);
         }
 
         if (!conflicts.TryGetValue(v, out var conflictsV))
         {
-            conflicts[v] = conflictsV = new Dictionary<string, bool>(StringComparer.Ordinal);
+            conflicts[v] = conflictsV = new(StringComparer.Ordinal);
         }
 
         conflictsV[w] = true;
@@ -292,7 +290,7 @@ static class BK
             }
         }
 
-        return new AlignmentResult { Root = root, Align = align };
+        return new() { Root = root, Align = align };
     }
 
     internal static Dictionary<string, double> HorizontalCompaction(
@@ -439,7 +437,7 @@ static class BK
                         {
                             var prevMax = blockGraph.Edge_(uRoot, vRoot);
                             var prevMaxVal = prevMax?.Weight ?? 0;
-                            blockGraph.SetEdge(uRoot, vRoot, new EdgeLabel { Weight = Math.Max(sepFn(graph, v, u), prevMaxVal) });
+                            blockGraph.SetEdge(uRoot, vRoot, new() { Weight = Math.Max(sepFn(graph, v, u), prevMaxVal) });
                         }
                     }
 
@@ -528,7 +526,7 @@ static class BK
         var ulMap = xss.GetValueOrDefault("ul");
         if (ulMap == null)
         {
-            return new Dictionary<string, double>(StringComparer.Ordinal);
+            return new(StringComparer.Ordinal);
         }
 
         return Util.MapValues(ulMap, (num, v) =>

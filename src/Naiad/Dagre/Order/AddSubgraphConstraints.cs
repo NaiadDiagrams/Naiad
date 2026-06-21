@@ -1,6 +1,5 @@
-namespace Naiad.Dagre;
+using Naiad.Dagre;
 
-/// <summary>Faithful port of dagre's <c>order/add-subgraph-constraints.ts</c>.</summary>
 static class AddSubgraphConstraints
 {
     public static void Run(Graph graph, Graph constraintGraph, List<string> vs)
@@ -11,11 +10,10 @@ static class AddSubgraphConstraints
         foreach (var v in vs)
         {
             var child = graph.Parent(v);
-            string? parent;
-            string? prevChild;
             while (child != null)
             {
-                parent = graph.Parent(child);
+                var parent = graph.Parent(child);
+                string? prevChild;
                 if (parent != null)
                 {
                     prevChild = prev.GetValueOrDefault(parent);

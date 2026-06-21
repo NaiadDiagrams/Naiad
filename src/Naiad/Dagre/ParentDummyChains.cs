@@ -122,7 +122,7 @@ static class ParentDummyChains
                 Dfs(child);
             }
 
-            result[v] = new PostorderNum { Low = low, Lim = lim++ };
+            result[v] = new() { Low = low, Lim = lim++ };
         }
 
         foreach (var v in graph.Children(Util.GraphNode))

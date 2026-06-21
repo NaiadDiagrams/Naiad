@@ -71,7 +71,7 @@ static class Normalize
                 attrs.Labelpos = edgeLabel.Labelpos;
             }
 
-            graph.SetEdge(v, dummy, new EdgeLabel { Weight = edgeLabel.Weight }, name);
+            graph.SetEdge(v, dummy, new() { Weight = edgeLabel.Weight }, name);
             if (i == 0)
             {
                 graph.Graph_().DummyChains!.Add(dummy);
@@ -80,7 +80,7 @@ static class Normalize
             v = dummy;
         }
 
-        graph.SetEdge(v, w, new EdgeLabel { Weight = edgeLabel.Weight }, name);
+        graph.SetEdge(v, w, new() { Weight = edgeLabel.Weight }, name);
     }
 
     public static void Undo(Graph graph)
@@ -99,7 +99,7 @@ static class Normalize
                 // unpositioned dummy yields {x: undefined, y: undefined}. The C# Point struct is
                 // non-nullable, so coerce missing coordinates to 0 (matching JS's numeric coercion and
                 // never observed by callers, which assign coordinates before calling undo).
-                origLabel.Points!.Add(new Point(node.X ?? 0, node.Y ?? 0));
+                origLabel.Points!.Add(new(node.X ?? 0, node.Y ?? 0));
                 if (node.Dummy == "edge-label")
                 {
                     origLabel.X = node.X;

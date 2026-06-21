@@ -1,14 +1,5 @@
 namespace Naiad.Dagre;
 
-/// <summary>Result of <see cref="Sort"/>: {vs, barycenter?, weight?}.</summary>
-sealed class SortResult
-{
-    public List<string> Vs = [];
-    public double? Barycenter;
-    public double? Weight;
-}
-
-/// <summary>Faithful port of dagre's <c>order/sort.ts</c>.</summary>
 static class Sort
 {
     public static SortResult Run(List<ResolvedEntry> entries, bool biasRight = false)

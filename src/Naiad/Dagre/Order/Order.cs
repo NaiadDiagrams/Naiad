@@ -1,20 +1,10 @@
 namespace Naiad.Dagre;
 
-/// <summary>Options for <see cref="Order.Run"/>. Faithful to the TS <c>OrderOptions</c> interface.
-/// (<c>OrderConstraint</c> is defined alongside <see cref="LayoutOptions"/> in Layout.cs.)</summary>
-sealed class OrderOptions
-{
-    public Action<Graph, Action<Graph, OrderOptions>>? CustomOrder;
-    public bool? DisableOptimalOrderHeuristic;
-    public List<OrderConstraint>? Constraints;
-}
-
-/// <summary>Faithful port of dagre's <c>order/index.ts</c>.</summary>
 static class Order
 {
     public static void Run(Graph graph, OrderOptions? opts = null)
     {
-        opts ??= new OrderOptions();
+        opts ??= new();
 
         if (opts.CustomOrder != null)
         {
@@ -48,7 +38,7 @@ static class Order
             {
                 lastBest = 0;
                 // Object.assign({}, layering): shallow copy (inner layer references shared).
-                best = new List<List<string>>(layering);
+                best = new(layering);
                 bestCC = cc;
             }
             else if (cc == bestCC)

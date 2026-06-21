@@ -57,7 +57,7 @@ static class AddBorderSegments
         graph.SetParent(curr, sg);
         if (prev != null)
         {
-            graph.SetEdge(prev, curr, new EdgeLabel { Weight = 1 });
+            graph.SetEdge(prev, curr, new() { Weight = 1 });
         }
     }
 }

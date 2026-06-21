@@ -1,7 +1,5 @@
 using DagreGraph = Naiad.Dagre.Graph;
-using DagreNodeLabel = Naiad.Dagre.NodeLabel;
 using DagreEdgeLabel = Naiad.Dagre.EdgeLabel;
-using DagreGraphLabel = Naiad.Dagre.GraphLabel;
 
 /// <summary>
 /// Lays out a node/edge diagram with the faithful C# port of dagre (<c>Naiad.Dagre</c>) — the same
@@ -20,7 +18,7 @@ class DagreEngine : ILayoutEngine
         }
 
         var graph = new DagreGraph(directed: true, multigraph: true, compound: true);
-        graph.SetGraph(new DagreGraphLabel
+        graph.SetGraph(new()
         {
             Rankdir = options.Direction switch
             {
@@ -36,7 +34,7 @@ class DagreEngine : ILayoutEngine
 
         foreach (var node in diagram.Nodes)
         {
-            graph.SetNode(node.Id, new DagreNodeLabel { Width = node.Width, Height = node.Height });
+            graph.SetNode(node.Id, new() { Width = node.Width, Height = node.Height });
         }
 
         foreach (var subgraph in diagram.Subgraphs)
@@ -102,7 +100,7 @@ class DagreEngine : ILayoutEngine
 
     static void AddSubgraph(DagreGraph graph, Subgraph subgraph)
     {
-        graph.SetNode(subgraph.Id, new DagreNodeLabel());
+        graph.SetNode(subgraph.Id, new());
         foreach (var nodeId in subgraph.NodeIds)
         {
             graph.SetParent(nodeId, subgraph.Id);

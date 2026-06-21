@@ -1,14 +1,7 @@
 namespace Naiad.Dagre;
 
-/// <summary>Base for entries threaded into a <see cref="DoublyLinkedList"/> (port of list.ts's ListNode).</summary>
-class ListNode
-{
-    public ListNode? Next;
-    public ListNode? Prev;
-}
-
 /// <summary>
-/// Simple doubly linked list (Cormen et al.), a faithful port of dagre's <c>data/list.ts</c>. Used by the
+/// Simple doubly linked list (Cormen et al.). Used by the
 /// greedy feedback-arc-set heuristic. Enqueue adds at the front; dequeue removes from the back.
 /// </summary>
 sealed class DoublyLinkedList

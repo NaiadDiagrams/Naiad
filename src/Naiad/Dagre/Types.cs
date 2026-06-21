@@ -22,7 +22,7 @@ sealed class PartitionResult<T>
 }
 
 /// <summary>
-/// Node label carrying every property dagre may set during layout (a faithful port of the TS
+/// Node label carrying every property dagre may set during layout
 /// <c>NodeLabel</c> interface plus the dynamic properties the algorithms attach).
 /// </summary>
 sealed class NodeLabel
@@ -73,7 +73,7 @@ sealed class SelfEdge
 }
 
 /// <summary>
-/// Edge label carrying every property dagre may set during layout (a faithful port of the TS
+/// Edge label carrying every property dagre may set during layout
 /// <c>EdgeLabel</c> interface plus the dynamic properties the algorithms attach).
 /// </summary>
 sealed class EdgeLabel
@@ -101,7 +101,7 @@ sealed class EdgeLabel
     public Edge? EdgeObj;
 }
 
-/// <summary>Graph label with layout configuration (a faithful port of the TS <c>GraphLabel</c> interface).</summary>
+/// <summary>Graph label with layout configuration.</summary>
 sealed class GraphLabel
 {
     public double? Width;
