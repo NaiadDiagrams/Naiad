@@ -71,8 +71,8 @@ public class RankTests
 
     static async Task CanRankASingleNodeGraph(string ranker)
     {
-        // Faithful to TS: the graph label is `{}` (no ranker, so the default ranker
-        // runs); `ranker` is only written onto the node and ignored by the algorithm.
+        // (no ranker, so the default ranker runs);
+        // `ranker` is only written onto the node and ignored by the algorithm.
         // Rank is int? in C#, so the string assignment from the TS test is a no-op
         // (the algorithm overwrites the node's rank regardless).
         _ = ranker;

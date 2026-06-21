@@ -233,7 +233,7 @@ static class BK
         Graph graph,
         List<List<string>> layering,
         Dictionary<string, Dictionary<string, bool>> conflicts,
-        Func<string, List<string>> neighborFn)
+        Func<string, OrderedMap<int>.KeyEnumerable> neighborFn)
     {
         var root = new Dictionary<string, string>(StringComparer.Ordinal);
         var align = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -253,18 +253,38 @@ static class BK
             }
         }
 
+        // Reused across nodes: each node fully processes its neighbours before the next clears it.
+        var ws = new List<string>();
         foreach (var layer in layering)
         {
             var prevIdx = -1;
             foreach (var v in layer)
             {
-                var wsRaw = neighborFn(v);
-                if (wsRaw != null && wsRaw.Count != 0)
+                ws.Clear();
+                foreach (var w in neighborFn(v))
                 {
-                    // ws = wsRaw.sort((a, b) => pos[a] - pos[b]); JS sort is stable.
-                    var ws = wsRaw
-                        .OrderBy(a => pos.GetValueOrDefault(a, 0))
-                        .ToList();
+                    ws.Add(w);
+                }
+
+                if (ws.Count != 0)
+                {
+                    // ws = wsRaw.sort((a, b) => pos[a] - pos[b]); JS sort is stable. Neighbour lists are
+                    // tiny, so a stable insertion sort matches that ordering without the OrderBy/ToList
+                    // allocation on this 4×-per-layout path.
+                    for (var si = 1; si < ws.Count; ++si)
+                    {
+                        var key = ws[si];
+                        var keyPos = pos.GetValueOrDefault(key, 0);
+                        var sj = si - 1;
+                        while (sj >= 0 && pos.GetValueOrDefault(ws[sj], 0) > keyPos)
+                        {
+                            ws[sj + 1] = ws[sj];
+                            --sj;
+                        }
+
+                        ws[sj + 1] = key;
+                    }
+
                     var mp = (ws.Count - 1) / 2.0;
                     for (int i = (int) Math.Floor(mp), il = (int) Math.Ceiling(mp); i <= il; ++i)
                     {
@@ -309,7 +329,7 @@ static class BK
         var blockG = BuildBlockGraph(graph, layering, root, reverseSep);
         var borderType = reverseSep ? "borderLeft" : "borderRight";
 
-        void Iterate(Action<string> setXsFunc, Func<string, List<string>> nextNodesFunc)
+        void Iterate(Action<string> setXsFunc, Func<string, OrderedMap<int>.KeyEnumerable> nextNodesFunc)
         {
             var stack = blockG.Nodes(); // Create a copy of the node list.
             var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
@@ -337,42 +357,31 @@ static class BK
             }
         }
 
-        // First pass, assign smallest coordinates
+        // First pass, assign smallest coordinates. An absent block has no in-edges, so the loop leaves
+        // acc at 0 — the same result the explicit null branch produced.
         void Pass1(string elem)
         {
-            var inEdges = blockG.InEdges(elem);
-            if (inEdges != null)
+            double acc = 0;
+            foreach (var e in blockG.InEdgesOf(elem))
             {
-                double acc = 0;
-                foreach (var e in inEdges)
-                {
-                    var xsV = xs.GetValueOrDefault(e.V, 0);
-                    var edgeWeight = blockG.Edge_(e);
-                    acc = Math.Max(acc, xsV + (edgeWeight?.Weight is { } ew ? ew : 0));
-                }
+                var xsV = xs.GetValueOrDefault(e.V, 0);
+                var edgeWeight = blockG.Edge_(e);
+                acc = Math.Max(acc, xsV + (edgeWeight?.Weight is { } ew ? ew : 0));
+            }
 
-                xs[elem] = acc;
-            }
-            else
-            {
-                xs[elem] = 0;
-            }
+            xs[elem] = acc;
         }
 
-        // Second pass, assign greatest coordinates
+        // Second pass, assign greatest coordinates. An absent block has no out-edges, so min stays
+        // +Infinity and the assignment below is skipped — matching the original null branch.
         void Pass2(string elem)
         {
-            var outEdges = blockG.OutEdges(elem);
             var min = double.PositiveInfinity;
-            if (outEdges != null)
+            foreach (var e in blockG.OutEdgesOf(elem))
             {
-                min = double.PositiveInfinity;
-                foreach (var e in outEdges)
-                {
-                    var xsW = xs.TryGetValue(e.W, out var xw) ? (double?) xw : null;
-                    var edgeWeight = blockG.Edge_(e);
-                    min = Math.Min(min, (xsW ?? 0) - (edgeWeight?.Weight is { } ew ? ew : 0));
-                }
+                var xsW = xs.TryGetValue(e.W, out var xw) ? (double?) xw : null;
+                var edgeWeight = blockG.Edge_(e);
+                min = Math.Min(min, (xsW ?? 0) - (edgeWeight?.Weight is { } ew ? ew : 0));
             }
 
             var node = graph.Node(elem);
@@ -382,15 +391,15 @@ static class BK
             }
         }
 
-        List<string> PredecessorsWrapper(string elem) => blockG.Predecessors(elem) ?? [];
+        OrderedMap<int>.KeyEnumerable PredecessorsWrapper(string elem) => blockG.PredecessorsOf(elem);
 
-        List<string> SuccessorsWrapper(string elem) => blockG.Successors(elem) ?? [];
+        OrderedMap<int>.KeyEnumerable SuccessorsWrapper(string elem) => blockG.SuccessorsOf(elem);
 
         Iterate(Pass1, PredecessorsWrapper);
         Iterate(Pass2, SuccessorsWrapper);
 
         // Assign x coordinates to all nodes
-        foreach (var v in align.Keys.ToList())
+        foreach (var v in align.Keys)
         {
             if (root.TryGetValue(v, out var rootV))
             {
@@ -574,11 +583,8 @@ static class BK
                     adjustedLayering = adjustedLayering.Select(inner => Enumerable.Reverse(inner).ToList()).ToList();
                 }
 
-                List<string> NeighborFn(string v)
-                {
-                    var result = vert == "u" ? graph.Predecessors(v) : graph.Successors(v);
-                    return result ?? [];
-                }
+                OrderedMap<int>.KeyEnumerable NeighborFn(string v) =>
+                    vert == "u" ? graph.PredecessorsOf(v) : graph.SuccessorsOf(v);
 
                 var align = VerticalAlignment(graph, adjustedLayering, conflicts, NeighborFn);
                 var xs = HorizontalCompaction(graph, adjustedLayering, align.Root, align.Align, horiz == "r");

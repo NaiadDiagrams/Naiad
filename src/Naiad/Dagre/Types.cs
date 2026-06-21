@@ -1,6 +1,6 @@
 namespace Naiad.Dagre;
 
-/// <summary>An edge descriptor: {v, w, name}. Faithful to graphlib's edge object.</summary>
+/// <summary>An edge descriptor: {v, w, name}.</summary>
 sealed record Edge(string V, string W, string? Name = null);
 
 struct Point

@@ -255,11 +255,33 @@ sealed class Graph
         return [];
     }
 
+    // Child count without materialising the key-snapshot list that Children(v).Count would allocate.
+    public int ChildCount(string v = GraphNode)
+    {
+        if (isCompound)
+        {
+            return childrenMap!.TryGetValue(v, out var children) ? children.Count : 0;
+        }
+
+        return v == GraphNode ? nodeCountValue : 0;
+    }
+
     public List<string>? Predecessors(string v) =>
         predsMap.TryGetValue(v, out var predsV) ? predsV.Keys() : null;
 
     public List<string>? Successors(string v) =>
         sucsMap.TryGetValue(v, out var sucsV) ? sucsV.Keys() : null;
+
+    // Allocation-free neighbour/edge views for the hot order/position passes. The node must exist
+    // (those passes only ever pass real nodes), so unlike Successors/InEdges these never return null
+    // and must not be used while the graph is being mutated.
+    public OrderedMap<int>.KeyEnumerable SuccessorsOf(string v) => sucsMap[v].EnumerateKeys();
+
+    public OrderedMap<int>.KeyEnumerable PredecessorsOf(string v) => predsMap[v].EnumerateKeys();
+
+    public OrderedMap<Edge>.ValueEnumerable InEdgesOf(string v) => inMap[v].EnumerateValues();
+
+    public OrderedMap<Edge>.ValueEnumerable OutEdgesOf(string v) => outMap[v].EnumerateValues();
 
     public List<string>? Neighbors(string v)
     {

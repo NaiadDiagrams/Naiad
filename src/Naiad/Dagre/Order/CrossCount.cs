@@ -13,7 +13,7 @@ static class CrossCount
         return cc;
     }
 
-    sealed class SouthEntry
+    struct SouthEntry
     {
         public int Pos;
         public double Weight;
@@ -26,21 +26,21 @@ static class CrossCount
         // their head in the south layer.
         var southPos = Util.ZipObject(southLayer, Util.Range(southLayer.Count));
         var southEntries = new List<SouthEntry>();
+        var nodeEntries = new List<SouthEntry>();
         foreach (var v in northLayer)
         {
-            var edges = graph.OutEdges(v);
-            if (edges == null)
+            nodeEntries.Clear();
+            foreach (var e in graph.OutEdgesOf(v))
             {
-                continue;
+                nodeEntries.Add(new()
+                {
+                    Pos = southPos[e.W],
+                    Weight = graph.Edge_(e).Weight!.Value
+                });
             }
 
-            var mapped = edges.Select(e => new SouthEntry
-            {
-                Pos = southPos[e.W],
-                Weight = graph.Edge_(e).Weight!.Value
-            }).ToList();
-            mapped.Sort((a, b) => a.Pos - b.Pos);
-            southEntries.AddRange(mapped);
+            nodeEntries.Sort((a, b) => a.Pos - b.Pos);
+            southEntries.AddRange(nodeEntries);
         }
 
         // Build the accumulator tree

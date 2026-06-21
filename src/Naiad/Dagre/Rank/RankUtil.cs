@@ -37,20 +37,15 @@ static class RankUtil
 
             visited[v] = true;
 
-            var outEdges = graph.OutEdges(v);
-            var outEdgesMinLens = outEdges != null
-                ? outEdges.Select(e =>
+            var rank = double.PositiveInfinity;
+            foreach (var e in graph.OutEdgesOf(v))
+            {
+                var candidate = Dfs(e.W) - graph.Edge_(e).Minlen!.Value;
+                if (candidate < rank)
                 {
-                    if (e == null)
-                    {
-                        return double.PositiveInfinity;
-                    }
-
-                    return Dfs(e.W) - graph.Edge_(e).Minlen!.Value;
-                }).ToList()
-                : new();
-
-            var rank = Util.ApplyMin(outEdgesMinLens);
+                    rank = candidate;
+                }
+            }
 
             if (double.IsPositiveInfinity(rank))
             {

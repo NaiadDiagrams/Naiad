@@ -44,8 +44,6 @@ static class Normalize
 
         graph.RemoveEdge(e);
 
-        string dummy;
-        // Faithful to the TS for-loop: `for (i = 0, ++vRank; vRank < wRank; ++i, ++vRank)`.
         // The first ++vRank lives in the initializer (runs once); the increment in the
         // update clause runs after each body. Expressed as a while loop to avoid a
         // duplicate increment in the condition.
@@ -62,7 +60,7 @@ static class Normalize
                 EdgeObj = e,
                 Rank = vRank
             };
-            dummy = Util.AddDummyNode(graph, "edge", attrs, "_d");
+            var dummy = Util.AddDummyNode(graph, "edge", attrs, "_d");
             if (vRank == labelRank)
             {
                 attrs.Width = edgeLabel.Width ?? 0;

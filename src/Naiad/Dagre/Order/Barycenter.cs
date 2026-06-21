@@ -4,30 +4,26 @@ static class Barycenter
 {
     public static List<BarycenterEntry> Run(Graph graph, List<string> movable)
     {
-        return movable.Select(v =>
+        var result = new List<BarycenterEntry>(movable.Count);
+        foreach (var v in movable)
         {
-            var inV = graph.InEdges(v);
-            if (inV == null || inV.Count == 0)
-            {
-                return new() { V = v };
-            }
-
             var sum = 0d;
             var weight = 0d;
-            foreach (var e in inV)
+            var hasInEdges = false;
+            foreach (var e in graph.InEdgesOf(v))
             {
+                hasInEdges = true;
                 var edge = graph.Edge_(e);
                 var nodeU = graph.Node(e.V);
                 sum += edge.Weight!.Value * nodeU.Order!.Value;
                 weight += edge.Weight!.Value;
             }
 
-            return new BarycenterEntry
-            {
-                V = v,
-                Barycenter = sum / weight,
-                Weight = weight
-            };
-        }).ToList();
+            result.Add(hasInEdges
+                ? new() { V = v, Barycenter = sum / weight, Weight = weight }
+                : new() { V = v });
+        }
+
+        return result;
     }
 }

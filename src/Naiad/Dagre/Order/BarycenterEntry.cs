@@ -2,8 +2,7 @@
 
 /// <summary>
 /// Barycenter entry: {v, barycenter?, weight?}. Carries an optional <see cref="Vs"/> list because the same
-/// shape is reused (and mutated) by sort-subgraph's <c>mergeBarycenters</c> path. Faithful to the TS
-/// <c>BarycenterEntry</c> interface.
+/// shape is reused (and mutated) by sort-subgraph's <c>mergeBarycenters</c> path.
 /// </summary>
 sealed class BarycenterEntry
 {

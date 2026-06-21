@@ -77,7 +77,56 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
         return values;
     }
 
-    public IEnumerator<KeyValuePair<string, TValue>> GetEnumerator() => order.GetEnumerator();
+    /// <summary>Keys in insertion order, enumerated without allocating a snapshot list. Unlike
+    /// <see cref="Keys"/> the map must not be mutated while the result is iterated.</summary>
+    public KeyEnumerable EnumerateKeys() => new(order);
 
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    /// <summary>Values in insertion order, enumerated without allocating a snapshot list. Unlike
+    /// <see cref="Values"/> the map must not be mutated while the result is iterated.</summary>
+    public ValueEnumerable EnumerateValues() => new(order);
+
+    // A struct GetEnumerator so `foreach (var kv in map)` in the hot layout passes does not box the
+    // LinkedList enumerator. The explicit interface implementations remain for IEnumerable/LINQ callers.
+    public Enumerator GetEnumerator() => new(order.GetEnumerator());
+
+    IEnumerator<KeyValuePair<string, TValue>> IEnumerable<KeyValuePair<string, TValue>>.GetEnumerator() => order.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => order.GetEnumerator();
+
+    public struct Enumerator(LinkedList<KeyValuePair<string, TValue>>.Enumerator inner)
+    {
+        LinkedList<KeyValuePair<string, TValue>>.Enumerator inner = inner;
+
+        public readonly KeyValuePair<string, TValue> Current => inner.Current;
+
+        public bool MoveNext() => inner.MoveNext();
+    }
+
+    public readonly struct KeyEnumerable(LinkedList<KeyValuePair<string, TValue>> order)
+    {
+        public KeyEnumerator GetEnumerator() => new(order.GetEnumerator());
+    }
+
+    public struct KeyEnumerator(LinkedList<KeyValuePair<string, TValue>>.Enumerator inner)
+    {
+        LinkedList<KeyValuePair<string, TValue>>.Enumerator inner = inner;
+
+        public readonly string Current => inner.Current.Key;
+
+        public bool MoveNext() => inner.MoveNext();
+    }
+
+    public readonly struct ValueEnumerable(LinkedList<KeyValuePair<string, TValue>> order)
+    {
+        public ValueEnumerator GetEnumerator() => new(order.GetEnumerator());
+    }
+
+    public struct ValueEnumerator(LinkedList<KeyValuePair<string, TValue>>.Enumerator inner)
+    {
+        LinkedList<KeyValuePair<string, TValue>>.Enumerator inner = inner;
+
+        public readonly TValue Current => inner.Current.Value;
+
+        public bool MoveNext() => inner.MoveNext();
+    }
 }
