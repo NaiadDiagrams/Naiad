@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <base href="/">
+    <link rel="icon" type="image/png" href="icon.png">
     <!-- Diagrams that use the fa:fa-* icon shorthand carry their own Font Awesome @import inside the
          rendered SVG, so no global stylesheet is needed here and the page stays self-contained. -->
     <!-- Preload critical resources -->
@@ -13,7 +14,8 @@
 <!--!--><!--!--><!--!--><title><!--!-->Naiad — Mermaid Diagram Renderer</title><!--!--><!--!--><!--!--></head>
 
 <body>
-    <div id="app"><!--!--><!--!--><!--!--><!--!--><div class="app-shell"><header><!--!--><div class="header-titles"><h1 tabindex="-1">Naiad</h1>
+    <div id="app"><!--!--><!--!--><!--!--><!--!--><div class="app-shell"><header><!--!--><img class="header-logo" src="icon.png" alt="Naiad logo">
+        <!--!--><div class="header-titles"><h1 tabindex="-1">Naiad</h1>
             <p>Render Mermaid diagrams to SVG — entirely in your browser, no server round-trip</p></div>
         <div class="header-actions"><!--!--><a class="header-link" href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">GitHub</a>
             <!--!--><button class="theme-toggle-btn" aria-label="Toggle theme"><!--!--><span class="icon">☀️</span><!--!--><span class="text"> Light</span></button></div></header><!--!-->
