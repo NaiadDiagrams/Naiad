@@ -4,16 +4,16 @@ public class SmokeTest
 {
     static Graph NewGraph() =>
         new Graph(directed: true, multigraph: true, compound: true)
-            .SetGraph(new GraphLabel())
+            .SetGraph(new())
             .SetDefaultEdgeLabel(new EdgeLabel());
 
     [Test]
     public async Task LaysOutASimpleChainTopToBottom()
     {
         var g = NewGraph();
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 50 });
-        g.SetNode("b", new NodeLabel { Width = 50, Height = 50 });
-        g.SetNode("c", new NodeLabel { Width = 50, Height = 50 });
+        g.SetNode("a", new() { Width = 50, Height = 50 });
+        g.SetNode("b", new() { Width = 50, Height = 50 });
+        g.SetNode("c", new() { Width = 50, Height = 50 });
         g.SetEdge("a", "b");
         g.SetEdge("b", "c");
 
@@ -39,7 +39,7 @@ public class SmokeTest
         var g = NewGraph();
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
-            g.SetNode(v, new NodeLabel { Width = 40, Height = 40 });
+            g.SetNode(v, new() { Width = 40, Height = 40 });
         }
 
         g.SetEdge("a", "b");

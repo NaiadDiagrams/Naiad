@@ -9,7 +9,7 @@ public class ListTests
     DoublyLinkedList list = null!;
 
     [Before(Test)]
-    public void Setup() => list = new DoublyLinkedList();
+    public void Setup() => list = new();
 
     sealed class Entry : ListNode
     {

@@ -1,31 +1,41 @@
-using System.Text;
-
-namespace Naiad.Dagre.Tests;
-
 // Regression guard: dagre's output must be independent of the global dummy-node id counter (as real dagre
 // is), so a layout is reproducible no matter how many layouts ran before it in the same process.
+
 public class LayoutDeterminismTests
 {
     static readonly string[] RealNodes = ["a", "b", "c", "d", "e", "f", "g", "h", "sg1", "sg2"];
 
     static Graph BuildGraph()
     {
-        var g = new Graph(directed: true, multigraph: true, compound: true);
-        g.SetGraph(new GraphLabel { Rankdir = "TB", Nodesep = 50, Ranksep = 50, Edgesep = 20 });
-        g.SetDefaultEdgeLabel(new EdgeLabel());
+        var graph = new Graph(directed: true, multigraph: true, compound: true);
+        graph.SetGraph(
+            new()
+            {
+                Rankdir = "TB",
+                Nodesep = 50,
+                Ranksep = 50,
+                Edgesep = 20
+            });
+        graph.SetDefaultEdgeLabel(new EdgeLabel());
         foreach (var v in new[] { "a", "b", "c", "d", "e", "f", "g", "h" })
         {
-            g.SetNode(v, new NodeLabel { Width = 40, Height = 40 });
+            graph.SetNode(
+                v,
+                new()
+                {
+                    Width = 40,
+                    Height = 40
+                });
         }
 
-        g.SetNode("sg1", new NodeLabel());
-        g.SetNode("sg2", new NodeLabel());
-        g.SetParent("c", "sg1");
-        g.SetParent("d", "sg1");
-        g.SetParent("f", "sg2");
-        g.SetParent("g", "sg2");
+        graph.SetNode("sg1", new());
+        graph.SetNode("sg2", new());
+        graph.SetParent("c", "sg1");
+        graph.SetParent("d", "sg1");
+        graph.SetParent("f", "sg2");
+        graph.SetParent("g", "sg2");
 
-        void E(string a, string b) => g.SetEdge(a, b, new EdgeLabel { Minlen = 1, Weight = 1 });
+        void E(string a, string b) => graph.SetEdge(a, b, new() { Minlen = 1, Weight = 1 });
         E("a", "b");
         E("b", "c");
         E("b", "d");
@@ -41,19 +51,19 @@ public class LayoutDeterminismTests
         E("h", "b");   // another back-edge
         E("e", "e");   // self-edge, like a self-transition
         E("h", "h");   // self-edge
-        return g;
+        return graph;
     }
 
     static string Positions(Graph g)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
         foreach (var v in RealNodes)
         {
             var n = g.Node(v);
-            sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"{v}:{n.X:0.##},{n.Y:0.##};");
+            builder.Append(CultureInfo.InvariantCulture, $"{v}:{n.X:0.##},{n.Y:0.##};");
         }
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
     [Test]

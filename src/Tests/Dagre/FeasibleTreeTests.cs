@@ -7,9 +7,9 @@ public class FeasibleTreeTests
     public async Task CreatesATreeForATrivialInputGraph()
     {
         var g = new Graph()
-            .SetNode("a", new NodeLabel { Rank = 0 })
-            .SetNode("b", new NodeLabel { Rank = 1 });
-        g.SetEdge("a", "b", new EdgeLabel { Minlen = 1 });
+            .SetNode("a", new() { Rank = 0 })
+            .SetNode("b", new() { Rank = 1 });
+        g.SetEdge("a", "b", new() { Minlen = 1 });
 
         var tree = FeasibleTree.Run(g);
         await Assert.That(g.Node("b").Rank).IsEqualTo(g.Node("a").Rank!.Value + 1);
@@ -20,12 +20,12 @@ public class FeasibleTreeTests
     public async Task CorrectlyShortensSlackByPullingANodeUp()
     {
         var g = new Graph()
-            .SetNode("a", new NodeLabel { Rank = 0 })
-            .SetNode("b", new NodeLabel { Rank = 1 })
-            .SetNode("c", new NodeLabel { Rank = 2 })
-            .SetNode("d", new NodeLabel { Rank = 2 });
-        g.SetPath(["a", "b", "c"], new EdgeLabel { Minlen = 1 });
-        g.SetEdge("a", "d", new EdgeLabel { Minlen = 1 });
+            .SetNode("a", new() { Rank = 0 })
+            .SetNode("b", new() { Rank = 1 })
+            .SetNode("c", new() { Rank = 2 })
+            .SetNode("d", new() { Rank = 2 });
+        g.SetPath(["a", "b", "c"], new() { Minlen = 1 });
+        g.SetEdge("a", "d", new() { Minlen = 1 });
 
         var tree = FeasibleTree.Run(g);
         await Assert.That(g.Node("b").Rank).IsEqualTo(g.Node("a").Rank!.Value + 1);
@@ -41,11 +41,11 @@ public class FeasibleTreeTests
     public async Task CorrectlyShortensSlackByPullingANodeDown()
     {
         var g = new Graph()
-            .SetNode("a", new NodeLabel { Rank = 2 })
-            .SetNode("b", new NodeLabel { Rank = 0 })
-            .SetNode("c", new NodeLabel { Rank = 2 });
-        g.SetEdge("b", "a", new EdgeLabel { Minlen = 1 });
-        g.SetEdge("b", "c", new EdgeLabel { Minlen = 1 });
+            .SetNode("a", new() { Rank = 2 })
+            .SetNode("b", new() { Rank = 0 })
+            .SetNode("c", new() { Rank = 2 });
+        g.SetEdge("b", "a", new() { Minlen = 1 });
+        g.SetEdge("b", "c", new() { Minlen = 1 });
 
         var tree = FeasibleTree.Run(g);
         await Assert.That(g.Node("a").Rank).IsEqualTo(g.Node("b").Rank!.Value + 1);

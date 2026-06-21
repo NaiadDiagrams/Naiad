@@ -6,14 +6,14 @@ public class ParentDummyChainsTests
 
     [Before(Test)]
     public void Setup() =>
-        g = new Graph(compound: true).SetGraph(new GraphLabel());
+        g = new Graph(compound: true).SetGraph(new());
 
     [Test]
     public async Task DoesNotSetAParentIfBothTheTailAndHeadHaveNoParent()
     {
         g.SetNode("a");
         g.SetNode("b");
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b") });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b") });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "b"]);
 
@@ -25,8 +25,8 @@ public class ParentDummyChainsTests
     public async Task UsesTheTailsParentForTheFirstNodeIfItIsNotTheRoot()
     {
         g.SetParent("a", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 0, MaxRank = 2 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 2 });
+        g.SetNode("sg1", new() { MinRank = 0, MaxRank = 2 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "b"]);
 
@@ -38,8 +38,8 @@ public class ParentDummyChainsTests
     public async Task UsesTheHeadsParentForTheFirstNodeIfTailsIsRoot()
     {
         g.SetParent("b", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 1, MaxRank = 3 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 1 });
+        g.SetNode("sg1", new() { MinRank = 1, MaxRank = 3 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 1 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "b"]);
 
@@ -51,10 +51,10 @@ public class ParentDummyChainsTests
     public async Task HandlesALongChainStartingInASubgraph()
     {
         g.SetParent("a", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 0, MaxRank = 2 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 2 });
-        g.SetNode("d2", new NodeLabel { Rank = 3 });
-        g.SetNode("d3", new NodeLabel { Rank = 4 });
+        g.SetNode("sg1", new() { MinRank = 0, MaxRank = 2 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        g.SetNode("d2", new() { Rank = 3 });
+        g.SetNode("d3", new() { Rank = 4 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "b"]);
 
@@ -68,10 +68,10 @@ public class ParentDummyChainsTests
     public async Task HandlesALongChainEndingInASubgraph()
     {
         g.SetParent("b", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 3, MaxRank = 5 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 1 });
-        g.SetNode("d2", new NodeLabel { Rank = 2 });
-        g.SetNode("d3", new NodeLabel { Rank = 3 });
+        g.SetNode("sg1", new() { MinRank = 3, MaxRank = 5 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 1 });
+        g.SetNode("d2", new() { Rank = 2 });
+        g.SetNode("d3", new() { Rank = 3 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "b"]);
 
@@ -86,18 +86,18 @@ public class ParentDummyChainsTests
     {
         g.SetParent("a", "sg2");
         g.SetParent("sg2", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 0, MaxRank = 4 });
-        g.SetNode("sg2", new NodeLabel { MinRank = 1, MaxRank = 3 });
+        g.SetNode("sg1", new() { MinRank = 0, MaxRank = 4 });
+        g.SetNode("sg2", new() { MinRank = 1, MaxRank = 3 });
         g.SetParent("b", "sg4");
         g.SetParent("sg4", "sg3");
-        g.SetNode("sg3", new NodeLabel { MinRank = 6, MaxRank = 10 });
-        g.SetNode("sg4", new NodeLabel { MinRank = 7, MaxRank = 9 });
+        g.SetNode("sg3", new() { MinRank = 6, MaxRank = 10 });
+        g.SetNode("sg4", new() { MinRank = 7, MaxRank = 9 });
         for (var i = 0; i < 5; ++i)
         {
-            g.SetNode("d" + (i + 1), new NodeLabel { Rank = i + 3 });
+            g.SetNode("d" + (i + 1), new() { Rank = i + 3 });
         }
 
-        g.Node("d1").EdgeObj = new Edge("a", "b");
+        g.Node("d1").EdgeObj = new("a", "b");
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "d4", "d5", "b"]);
 
@@ -113,12 +113,12 @@ public class ParentDummyChainsTests
     public async Task HandlesOverlappingRankRanges()
     {
         g.SetParent("a", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 0, MaxRank = 3 });
+        g.SetNode("sg1", new() { MinRank = 0, MaxRank = 3 });
         g.SetParent("b", "sg2");
-        g.SetNode("sg2", new NodeLabel { MinRank = 2, MaxRank = 6 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 2 });
-        g.SetNode("d2", new NodeLabel { Rank = 3 });
-        g.SetNode("d3", new NodeLabel { Rank = 4 });
+        g.SetNode("sg2", new() { MinRank = 2, MaxRank = 6 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        g.SetNode("d2", new() { Rank = 3 });
+        g.SetNode("d3", new() { Rank = 4 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "b"]);
 
@@ -133,11 +133,11 @@ public class ParentDummyChainsTests
     {
         g.SetParent("a", "sg1");
         g.SetParent("sg2", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 0, MaxRank = 6 });
+        g.SetNode("sg1", new() { MinRank = 0, MaxRank = 6 });
         g.SetParent("b", "sg2");
-        g.SetNode("sg2", new NodeLabel { MinRank = 3, MaxRank = 5 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 2 });
-        g.SetNode("d2", new NodeLabel { Rank = 3 });
+        g.SetNode("sg2", new() { MinRank = 3, MaxRank = 5 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        g.SetNode("d2", new() { Rank = 3 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "b"]);
 
@@ -151,11 +151,11 @@ public class ParentDummyChainsTests
     {
         g.SetParent("a", "sg2");
         g.SetParent("sg2", "sg1");
-        g.SetNode("sg1", new NodeLabel { MinRank = 0, MaxRank = 6 });
+        g.SetNode("sg1", new() { MinRank = 0, MaxRank = 6 });
         g.SetParent("b", "sg1");
-        g.SetNode("sg2", new NodeLabel { MinRank = 1, MaxRank = 3 });
-        g.SetNode("d1", new NodeLabel { EdgeObj = new Edge("a", "b"), Rank = 3 });
-        g.SetNode("d2", new NodeLabel { Rank = 4 });
+        g.SetNode("sg2", new() { MinRank = 1, MaxRank = 3 });
+        g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 3 });
+        g.SetNode("d2", new() { Rank = 4 });
         g.Graph_().DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "b"]);
 

@@ -7,7 +7,7 @@ public class InitOrderTests
     [Before(Test)]
     public void Setup() =>
         g = new Graph(compound: true)
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
 
     static List<string> Sorted(List<string> vs) =>
         vs.OrderBy(v => v, StringComparer.Ordinal).ToList();
@@ -19,7 +19,7 @@ public class InitOrderTests
     {
         foreach (var (v, rank) in new[] { ("a", 0), ("b", 1), ("c", 2), ("d", 2), ("e", 1) })
         {
-            g.SetNode(v, new NodeLabel { Rank = rank });
+            g.SetNode(v, new() { Rank = rank });
         }
 
         g.SetPath(["a", "b", "c"]);
@@ -37,7 +37,7 @@ public class InitOrderTests
     {
         foreach (var (v, rank) in new[] { ("a", 0), ("b", 1), ("c", 1), ("d", 2) })
         {
-            g.SetNode(v, new NodeLabel { Rank = rank });
+            g.SetNode(v, new() { Rank = rank });
         }
 
         g.SetPath(["a", "b", "d"]);
@@ -52,8 +52,8 @@ public class InitOrderTests
     [Test]
     public async Task DoesNotAssignAnOrderToSubgraphNodes()
     {
-        g.SetNode("a", new NodeLabel { Rank = 0 });
-        g.SetNode("sg1", new NodeLabel());
+        g.SetNode("a", new() { Rank = 0 });
+        g.SetNode("sg1", new());
         g.SetParent("a", "sg1");
 
         var layering = InitOrder.Run(g);

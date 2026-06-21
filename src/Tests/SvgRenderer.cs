@@ -1,5 +1,3 @@
-using System.Globalization;
-
 /// <summary>
 /// Rasterizes Naiad's SVG output to PNG in-process using Svg.Skia (no browser).
 ///

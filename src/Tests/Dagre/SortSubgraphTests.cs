@@ -11,22 +11,22 @@ public class SortSubgraphTests
     public void Setup()
     {
         g = new Graph(compound: true)
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
         var ids = new[] { "0", "1", "2", "3", "4" };
         for (var i = 0; i < ids.Length; i++)
         {
-            g.SetNode(ids[i], new NodeLabel { Order = i });
+            g.SetNode(ids[i], new() { Order = i });
         }
 
-        constraintGraph = new Graph();
+        constraintGraph = new();
     }
 
     [Test]
     public async Task SortsAFlatSubgraphBasedOnBarycenter()
     {
         g.SetEdge("3", "x");
-        g.SetEdge("1", "y", new EdgeLabel { Weight = 2 });
+        g.SetEdge("1", "y", new() { Weight = 2 });
         g.SetEdge("4", "y");
         foreach (var v in new[] { "x", "y" })
         {
@@ -42,7 +42,7 @@ public class SortSubgraphTests
     {
         g.SetEdge("3", "x");
         g.SetNode("y");
-        g.SetEdge("1", "z", new EdgeLabel { Weight = 2 });
+        g.SetEdge("1", "z", new() { Weight = 2 });
         g.SetEdge("4", "z");
         foreach (var v in new[] { "x", "y", "z" })
         {
@@ -85,7 +85,7 @@ public class SortSubgraphTests
     public async Task AggregatesStatsAboutTheSubgraph()
     {
         g.SetEdge("3", "x");
-        g.SetEdge("1", "y", new EdgeLabel { Weight = 2 });
+        g.SetEdge("1", "y", new() { Weight = 2 });
         g.SetEdge("4", "y");
         foreach (var v in new[] { "x", "y" })
         {
@@ -123,7 +123,7 @@ public class SortSubgraphTests
         g.SetParent("a", "y");
         g.SetParent("b", "y");
         g.SetParent("c", "y");
-        g.SetEdge("0", "a", new EdgeLabel { Weight = 3 });
+        g.SetEdge("0", "a", new() { Weight = 3 });
         g.SetEdge("0", "x");
         g.SetEdge("1", "z");
         g.SetEdge("2", "y");
@@ -162,7 +162,7 @@ public class SortSubgraphTests
         g.SetEdge("0", "x");
         g.SetEdge("1", "y");
         g.SetEdge("2", "z");
-        g.SetNode("sg1", new NodeLabel { BorderLeftId = "bl", BorderRightId = "br" });
+        g.SetNode("sg1", new() { BorderLeftId = "bl", BorderRightId = "br" });
         foreach (var v in new[] { "x", "y", "z", "bl", "br" })
         {
             g.SetParent(v, "sg1");
@@ -175,8 +175,8 @@ public class SortSubgraphTests
     [Test]
     public async Task AssignsABarycenterToASubgraphBasedOnPreviousBorderNodes()
     {
-        g.SetNode("bl1", new NodeLabel { Order = 0 });
-        g.SetNode("br1", new NodeLabel { Order = 1 });
+        g.SetNode("bl1", new() { Order = 0 });
+        g.SetNode("br1", new() { Order = 1 });
         g.SetEdge("bl1", "bl2");
         g.SetEdge("br1", "br2");
         foreach (var v in new[] { "bl2", "br2" })
@@ -184,7 +184,7 @@ public class SortSubgraphTests
             g.SetParent(v, "sg");
         }
 
-        g.SetNode("sg", new NodeLabel { BorderLeftId = "bl2", BorderRightId = "br2" });
+        g.SetNode("sg", new() { BorderLeftId = "bl2", BorderRightId = "br2" });
 
         var result = SortSubgraph.Run(g, "sg", constraintGraph);
         await Assert.That(result.Barycenter).IsEqualTo(0.5);

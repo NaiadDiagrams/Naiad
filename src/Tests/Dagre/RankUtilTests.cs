@@ -8,8 +8,8 @@ public class RankUtilTests
     [Before(Test)]
     public void Setup() =>
         g = new Graph()
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Minlen = 1 });
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1 });
 
     [Test]
     public async Task CanAssignARankToASingleNodeGraph()
@@ -59,7 +59,7 @@ public class RankUtilTests
     {
         g.SetPath(["a", "b", "d"]);
         g.SetEdge("a", "c");
-        g.SetEdge("c", "d", new EdgeLabel { Minlen = 2 });
+        g.SetEdge("c", "d", new() { Minlen = 2 });
         RankUtil.LongestPath(g);
         Util.NormalizeRanks(g);
         await Assert.That(g.Node("a").Rank).IsEqualTo(0);

@@ -8,14 +8,14 @@ public class BarycenterTests
     public void Setup()
     {
         g = new Graph()
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
     }
 
     [Test]
     public async Task AssignsAnUndefinedBarycenterForANodeWithNoPredecessors()
     {
-        g.SetNode("x", new NodeLabel());
+        g.SetNode("x", new());
 
         var results = Barycenter.Run(g, ["x"]);
         await Assert.That(results.Count).IsEqualTo(1);
@@ -27,7 +27,7 @@ public class BarycenterTests
     [Test]
     public async Task AssignsThePositionOfTheSolePredecessors()
     {
-        g.SetNode("a", new NodeLabel { Order = 2 });
+        g.SetNode("a", new() { Order = 2 });
         g.SetEdge("a", "x");
 
         var results = Barycenter.Run(g, ["x"]);
@@ -40,8 +40,8 @@ public class BarycenterTests
     [Test]
     public async Task AssignsTheAverageOfMultiplePredecessors()
     {
-        g.SetNode("a", new NodeLabel { Order = 2 });
-        g.SetNode("b", new NodeLabel { Order = 4 });
+        g.SetNode("a", new() { Order = 2 });
+        g.SetNode("b", new() { Order = 4 });
         g.SetEdge("a", "x");
         g.SetEdge("b", "x");
 
@@ -55,9 +55,9 @@ public class BarycenterTests
     [Test]
     public async Task TakesIntoAccountTheWeightOfEdges()
     {
-        g.SetNode("a", new NodeLabel { Order = 2 });
-        g.SetNode("b", new NodeLabel { Order = 4 });
-        g.SetEdge("a", "x", new EdgeLabel { Weight = 3 });
+        g.SetNode("a", new() { Order = 2 });
+        g.SetNode("b", new() { Order = 4 });
+        g.SetEdge("a", "x", new() { Weight = 3 });
         g.SetEdge("b", "x");
 
         var results = Barycenter.Run(g, ["x"]);
@@ -70,13 +70,13 @@ public class BarycenterTests
     [Test]
     public async Task CalculatesBarycentersForAllNodesInTheMovableLayer()
     {
-        g.SetNode("a", new NodeLabel { Order = 1 });
-        g.SetNode("b", new NodeLabel { Order = 2 });
-        g.SetNode("c", new NodeLabel { Order = 4 });
+        g.SetNode("a", new() { Order = 1 });
+        g.SetNode("b", new() { Order = 2 });
+        g.SetNode("c", new() { Order = 4 });
         g.SetEdge("a", "x");
         g.SetEdge("b", "x");
         g.SetNode("y");
-        g.SetEdge("a", "z", new EdgeLabel { Weight = 2 });
+        g.SetEdge("a", "z", new() { Weight = 2 });
         g.SetEdge("c", "z");
 
         var results = Barycenter.Run(g, ["x", "y", "z"]);

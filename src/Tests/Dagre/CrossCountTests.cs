@@ -7,7 +7,7 @@ public class CrossCountTests
     [Before(Test)]
     public void Setup() =>
         g = new Graph()
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
 
     [Test]
     public async Task Returns0ForAnEmptyLayering()
@@ -34,8 +34,8 @@ public class CrossCountTests
     [Test]
     public async Task ReturnsAWeightedCrossingCountForALayeringWith1Crossing()
     {
-        g.SetEdge("a1", "b1", new EdgeLabel { Weight = 2 });
-        g.SetEdge("a2", "b2", new EdgeLabel { Weight = 3 });
+        g.SetEdge("a1", "b1", new() { Weight = 2 });
+        g.SetEdge("a2", "b2", new() { Weight = 3 });
         await Assert.That(CrossCount.Run(g, [["a1", "a2"], ["b2", "b1"]])).IsEqualTo(6);
     }
 

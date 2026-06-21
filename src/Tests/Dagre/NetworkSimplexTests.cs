@@ -12,24 +12,24 @@ public class NetworkSimplexTests
     public void Setup()
     {
         g = new Graph(multigraph: true)
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Minlen = 1, Weight = 1 });
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
 
         t = new Graph(directed: false)
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel());
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new());
 
         gansnerGraph = new Graph()
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Minlen = 1, Weight = 1 });
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
         gansnerGraph
             .SetPath(["a", "b", "c", "d", "h"])
             .SetPath(["a", "e", "g", "h"])
             .SetPath(["a", "f", "g"]);
 
         gansnerTree = new Graph(directed: false)
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel());
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new());
         gansnerTree
             .SetPath(["a", "b", "c", "d", "h", "g", "e"])
             .SetEdge("g", "f");
@@ -69,7 +69,7 @@ public class NetworkSimplexTests
     {
         g.SetPath(["a", "b", "d"]);
         g.SetEdge("a", "c");
-        g.SetEdge("c", "d", new EdgeLabel { Minlen = 2 });
+        g.SetEdge("c", "d", new() { Minlen = 2 });
         Ns(g);
         await Assert.That(g.Node("a").Rank).IsEqualTo(0);
         // longest path biases towards the lowest rank it can assign. Since the
@@ -99,9 +99,9 @@ public class NetworkSimplexTests
     public async Task CanHandleMultiEdges()
     {
         g.SetPath(["a", "b", "c", "d"]);
-        g.SetEdge("a", "e", new EdgeLabel { Weight = 2, Minlen = 1 });
+        g.SetEdge("a", "e", new() { Weight = 2, Minlen = 1 });
         g.SetEdge("e", "d");
-        g.SetEdge("b", "c", new EdgeLabel { Weight = 1, Minlen = 2 }, "multi");
+        g.SetEdge("b", "c", new() { Weight = 1, Minlen = 2 }, "multi");
         Ns(g);
         await Assert.That(g.Node("a").Rank).IsEqualTo(0);
         await Assert.That(g.Node("b").Rank).IsEqualTo(1);
@@ -116,8 +116,8 @@ public class NetworkSimplexTests
     public async Task LeaveEdge_ReturnsUndefinedIfThereIsNoEdgeWithANegativeCutvalue()
     {
         var tree = new Graph(directed: false);
-        tree.SetEdge("a", "b", new EdgeLabel { Cutvalue = 1 });
-        tree.SetEdge("b", "c", new EdgeLabel { Cutvalue = 1 });
+        tree.SetEdge("a", "b", new() { Cutvalue = 1 });
+        tree.SetEdge("b", "c", new() { Cutvalue = 1 });
         await Assert.That(NetworkSimplex.LeaveEdge(tree)).IsNull();
     }
 
@@ -125,8 +125,8 @@ public class NetworkSimplexTests
     public async Task LeaveEdge_ReturnsAnEdgeIfOneIsFoundWithANegativeCutvalue()
     {
         var tree = new Graph(directed: false);
-        tree.SetEdge("a", "b", new EdgeLabel { Cutvalue = 1 });
-        tree.SetEdge("b", "c", new EdgeLabel { Cutvalue = -1 });
+        tree.SetEdge("a", "b", new() { Cutvalue = 1 });
+        tree.SetEdge("b", "c", new() { Cutvalue = -1 });
         var e = NetworkSimplex.LeaveEdge(tree);
         await Assert.That(e).IsNotNull();
         await Assert.That(e!.V).IsEqualTo("b");
@@ -138,50 +138,50 @@ public class NetworkSimplexTests
     public async Task EnterEdge_FindsAnEdgeFromTheHeadToTailComponent()
     {
         g
-            .SetNode("a", new NodeLabel { Rank = 0 })
-            .SetNode("b", new NodeLabel { Rank = 2 })
-            .SetNode("c", new NodeLabel { Rank = 3 })
+            .SetNode("a", new() { Rank = 0 })
+            .SetNode("b", new() { Rank = 2 })
+            .SetNode("c", new() { Rank = 3 })
             .SetPath(["a", "b", "c"])
             .SetEdge("a", "c");
         t.SetPath(["b", "c", "a"]);
         NetworkSimplex.InitLowLimValues(t, "c");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("b", "c"));
-        await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new Edge("a", "b")));
+        var f = NetworkSimplex.EnterEdge(t, g, new("b", "c"));
+        await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new("a", "b")));
     }
 
     [Test]
     public async Task EnterEdge_WorksWhenTheRootOfTheTreeIsInTheTailComponent()
     {
         g
-            .SetNode("a", new NodeLabel { Rank = 0 })
-            .SetNode("b", new NodeLabel { Rank = 2 })
-            .SetNode("c", new NodeLabel { Rank = 3 })
+            .SetNode("a", new() { Rank = 0 })
+            .SetNode("b", new() { Rank = 2 })
+            .SetNode("c", new() { Rank = 3 })
             .SetPath(["a", "b", "c"])
             .SetEdge("a", "c");
         t.SetPath(["b", "c", "a"]);
         NetworkSimplex.InitLowLimValues(t, "b");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("b", "c"));
-        await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new Edge("a", "b")));
+        var f = NetworkSimplex.EnterEdge(t, g, new("b", "c"));
+        await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new("a", "b")));
     }
 
     [Test]
     public async Task EnterEdge_FindsTheEdgeWithTheLeastSlack()
     {
         g
-            .SetNode("a", new NodeLabel { Rank = 0 })
-            .SetNode("b", new NodeLabel { Rank = 1 })
-            .SetNode("c", new NodeLabel { Rank = 3 })
-            .SetNode("d", new NodeLabel { Rank = 4 })
+            .SetNode("a", new() { Rank = 0 })
+            .SetNode("b", new() { Rank = 1 })
+            .SetNode("c", new() { Rank = 3 })
+            .SetNode("d", new() { Rank = 4 })
             .SetEdge("a", "d")
             .SetPath(["a", "c", "d"])
             .SetEdge("b", "c");
         t.SetPath(["c", "d", "a", "b"]);
         NetworkSimplex.InitLowLimValues(t, "a");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("c", "d"));
-        await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new Edge("b", "c")));
+        var f = NetworkSimplex.EnterEdge(t, g, new("c", "d"));
+        await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new("b", "c")));
     }
 
     [Test]
@@ -192,7 +192,7 @@ public class NetworkSimplexTests
         RankUtil.LongestPath(g);
         NetworkSimplex.InitLowLimValues(t, "a");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("g", "h"));
+        var f = NetworkSimplex.EnterEdge(t, g, new("g", "h"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -205,7 +205,7 @@ public class NetworkSimplexTests
         RankUtil.LongestPath(g);
         NetworkSimplex.InitLowLimValues(t, "e");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("g", "h"));
+        var f = NetworkSimplex.EnterEdge(t, g, new("g", "h"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -218,7 +218,7 @@ public class NetworkSimplexTests
         RankUtil.LongestPath(g);
         NetworkSimplex.InitLowLimValues(t, "a");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("h", "g"));
+        var f = NetworkSimplex.EnterEdge(t, g, new("h", "g"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -231,7 +231,7 @@ public class NetworkSimplexTests
         RankUtil.LongestPath(g);
         NetworkSimplex.InitLowLimValues(t, "e");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new Edge("h", "g"));
+        var f = NetworkSimplex.EnterEdge(t, g, new("h", "g"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -241,7 +241,7 @@ public class NetworkSimplexTests
     public async Task InitLowLimValues_AssignsLowLimAndParentForEachNodeInATree()
     {
         var graph = new Graph()
-            .SetDefaultNodeLabel(_ => new NodeLabel());
+            .SetDefaultNodeLabel(_ => new());
         graph
             .SetNodes(["a", "b", "c", "d", "e"])
             .SetPath(["a", "b", "a", "c", "d", "c", "e"]);
@@ -287,7 +287,7 @@ public class NetworkSimplexTests
         RankUtil.LongestPath(g);
         NetworkSimplex.InitLowLimValues(t);
 
-        NetworkSimplex.ExchangeEdges(t, g, new Edge("g", "h"), new Edge("a", "e"));
+        NetworkSimplex.ExchangeEdges(t, g, new("g", "h"), new("a", "e"));
 
         // check new cut values
         await Assert.That(t.Edge_("a", "b").Cutvalue).IsEqualTo(2);
@@ -312,7 +312,7 @@ public class NetworkSimplexTests
         RankUtil.LongestPath(g);
         NetworkSimplex.InitLowLimValues(t);
 
-        NetworkSimplex.ExchangeEdges(t, g, new Edge("g", "h"), new Edge("a", "e"));
+        NetworkSimplex.ExchangeEdges(t, g, new("g", "h"), new("a", "e"));
         Util.NormalizeRanks(g);
 
         // check new ranks
@@ -354,7 +354,7 @@ public class NetworkSimplexTests
     {
         g.SetPath(["gc", "c", "p"]);
         t
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -368,7 +368,7 @@ public class NetworkSimplexTests
             .SetEdge("p", "c")
             .SetEdge("gc", "c");
         t
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -382,7 +382,7 @@ public class NetworkSimplexTests
             .SetEdge("c", "p")
             .SetEdge("c", "gc");
         t
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -394,7 +394,7 @@ public class NetworkSimplexTests
     {
         g.SetPath(["p", "c", "gc"]);
         t
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -405,10 +405,10 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCToPToO_WithOToC()
     {
         g
-            .SetEdge("o", "c", new EdgeLabel { Weight = 7 })
+            .SetEdge("o", "c", new() { Weight = 7 })
             .SetPath(["gc", "c", "p", "o"]);
         t
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetPath(["c", "p", "o"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -419,10 +419,10 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCToPToO_WithOFromC()
     {
         g
-            .SetEdge("c", "o", new EdgeLabel { Weight = 7 })
+            .SetEdge("c", "o", new() { Weight = 7 })
             .SetPath(["gc", "c", "p", "o"]);
         t
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetPath(["c", "p", "o"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -433,11 +433,11 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCToP_WithOToC()
     {
         g
-            .SetEdge("o", "c", new EdgeLabel { Weight = 7 })
+            .SetEdge("o", "c", new() { Weight = 7 })
             .SetPath(["o", "gc", "c", "p"]);
         t
             .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -448,11 +448,11 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCToP_WithOFromC()
     {
         g
-            .SetEdge("c", "o", new EdgeLabel { Weight = 7 })
+            .SetEdge("c", "o", new() { Weight = 7 })
             .SetPath(["o", "gc", "c", "p"]);
         t
             .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -466,10 +466,10 @@ public class NetworkSimplexTests
             .SetEdge("gc", "c")
             .SetEdge("p", "c")
             .SetEdge("p", "o")
-            .SetEdge("o", "c", new EdgeLabel { Weight = 7 });
+            .SetEdge("o", "c", new() { Weight = 7 });
         t
             .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -483,10 +483,10 @@ public class NetworkSimplexTests
             .SetEdge("gc", "c")
             .SetEdge("p", "c")
             .SetEdge("p", "o")
-            .SetEdge("c", "o", new EdgeLabel { Weight = 7 });
+            .SetEdge("c", "o", new() { Weight = 7 });
         t
             .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -497,12 +497,12 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCFromP_WithOToC()
     {
         g
-            .SetEdge("o", "c", new EdgeLabel { Weight = 7 })
+            .SetEdge("o", "c", new() { Weight = 7 })
             .SetPath(["o", "gc", "c"])
             .SetEdge("p", "c");
         t
             .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -513,12 +513,12 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCFromP_WithOFromC()
     {
         g
-            .SetEdge("c", "o", new EdgeLabel { Weight = 7 })
+            .SetEdge("c", "o", new() { Weight = 7 })
             .SetPath(["o", "gc", "c"])
             .SetEdge("p", "c");
         t
             .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new EdgeLabel { Cutvalue = 3 })
+            .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
@@ -563,5 +563,5 @@ public class NetworkSimplexTests
     }
 
     static Edge UndirectedEdge(Edge e) =>
-        string.CompareOrdinal(e.V, e.W) < 0 ? new Edge(e.V, e.W) : new Edge(e.W, e.V);
+        string.CompareOrdinal(e.V, e.W) < 0 ? new(e.V, e.W) : new Edge(e.W, e.V);
 }

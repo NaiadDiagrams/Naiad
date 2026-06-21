@@ -7,7 +7,7 @@ public class NormalizeTests
 
     [Before(Test)]
     public void Setup() =>
-        g = new Graph(multigraph: true, compound: true).SetGraph(new GraphLabel());
+        g = new Graph(multigraph: true, compound: true).SetGraph(new());
 
     static (string V, string W) IncidentNodes(Edge edge) => (edge.V, edge.W);
 
@@ -16,9 +16,9 @@ public class NormalizeTests
         [Test]
         public async Task DoesNotChangeAShortEdge()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 1 });
-            g.SetEdge("a", "b", new EdgeLabel());
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 1 });
+            g.SetEdge("a", "b", new());
 
             Normalize.Run(g);
 
@@ -31,9 +31,9 @@ public class NormalizeTests
         [Test]
         public async Task SplitsATwoLayerEdgeIntoTwoSegments()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel());
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new());
 
             Normalize.Run(g);
 
@@ -52,9 +52,9 @@ public class NormalizeTests
         [Test]
         public async Task AssignsWidth0Height0ToDummyNodesByDefault()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 10 });
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new() { Width = 10, Height = 10 });
 
             Normalize.Run(g);
 
@@ -67,9 +67,9 @@ public class NormalizeTests
         [Test]
         public async Task AssignsWidthAndHeightFromTheEdgeForTheNodeOnLabelRank()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 4 });
-            g.SetEdge("a", "b", new EdgeLabel { Width = 20, Height = 10, LabelRank = 2 });
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 4 });
+            g.SetEdge("a", "b", new() { Width = 20, Height = 10, LabelRank = 2 });
 
             Normalize.Run(g);
 
@@ -82,9 +82,9 @@ public class NormalizeTests
         [Test]
         public async Task PreservesTheWeightForTheEdge()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new() { Weight = 2 });
 
             Normalize.Run(g);
 
@@ -98,9 +98,9 @@ public class NormalizeTests
         [Test]
         public async Task ReversesTheRunOperation()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel());
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new());
 
             Normalize.Run(g);
             Normalize.Undo(g);
@@ -114,11 +114,11 @@ public class NormalizeTests
         [Test]
         public async Task RestoresPreviousEdgeLabels()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
             // The TS sets an arbitrary {foo: "bar"} property; the closest faithful equivalent
             // here is the ForwardName label field, asserting it survives run/undo.
-            g.SetEdge("a", "b", new EdgeLabel { ForwardName = "bar" });
+            g.SetEdge("a", "b", new() { ForwardName = "bar" });
 
             Normalize.Run(g);
             Normalize.Undo(g);
@@ -129,9 +129,9 @@ public class NormalizeTests
         [Test]
         public async Task CollectsAssignedCoordinatesIntoThePointsAttribute()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel());
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new());
 
             Normalize.Run(g);
 
@@ -150,9 +150,9 @@ public class NormalizeTests
         [Test]
         public async Task MergesAssignedCoordinatesIntoThePointsAttribute()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 4 });
-            g.SetEdge("a", "b", new EdgeLabel());
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 4 });
+            g.SetEdge("a", "b", new());
 
             Normalize.Run(g);
 
@@ -183,9 +183,9 @@ public class NormalizeTests
         [Test]
         public async Task SetsCoordsAndDimsForTheLabelIfTheEdgeHasOne()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 20, LabelRank = 1 });
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new() { Width = 10, Height = 20, LabelRank = 1 });
 
             Normalize.Run(g);
 
@@ -207,9 +207,9 @@ public class NormalizeTests
         [Test]
         public async Task SetsCoordsAndDimsForTheLabelIfTheLongEdgeHasOne()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 4 });
-            g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 20, LabelRank = 2 });
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 4 });
+            g.SetEdge("a", "b", new() { Width = 10, Height = 20, LabelRank = 2 });
 
             Normalize.Run(g);
 
@@ -231,10 +231,10 @@ public class NormalizeTests
         [Test]
         public async Task RestoresMultiEdges()
         {
-            g.SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 2 });
-            g.SetEdge("a", "b", new EdgeLabel(), "bar");
-            g.SetEdge("a", "b", new EdgeLabel(), "foo");
+            g.SetNode("a", new() { Rank = 0 });
+            g.SetNode("b", new() { Rank = 2 });
+            g.SetEdge("a", "b", new(), "bar");
+            g.SetEdge("a", "b", new(), "foo");
 
             Normalize.Run(g);
 

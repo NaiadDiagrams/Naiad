@@ -8,8 +8,8 @@ public class AddSubgraphConstraintsTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph(compound: true);
-        constraintGraph = new Graph();
+        graph = new(compound: true);
+        constraintGraph = new();
     }
 
     [Test]

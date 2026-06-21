@@ -8,12 +8,12 @@ public class UtilTests
         Graph g = null!;
 
         [Before(Test)]
-        public void Setup() => g = new Graph(multigraph: true);
+        public void Setup() => g = new(multigraph: true);
 
         [Test]
         public async Task CopiesWithoutChangeAGraphWithNoMultiEdges()
         {
-            g.SetEdge("a", "b", new EdgeLabel { Weight = 1, Minlen = 1 });
+            g.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
             var g2 = Util.Simplify(g);
             var e = g2.Edge_("a", "b");
             await Assert.That(e.Weight).IsEqualTo(1);
@@ -24,8 +24,8 @@ public class UtilTests
         [Test]
         public async Task CollapsesMultiEdges()
         {
-            g.SetEdge("a", "b", new EdgeLabel { Weight = 1, Minlen = 1 });
-            g.SetEdge("a", "b", new EdgeLabel { Weight = 2, Minlen = 2 }, "multi");
+            g.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
+            g.SetEdge("a", "b", new() { Weight = 2, Minlen = 2 }, "multi");
             var g2 = Util.Simplify(g);
             await Assert.That(g2.IsMultigraph()).IsFalse();
             var e = g2.Edge_("a", "b");
@@ -49,7 +49,7 @@ public class UtilTests
         Graph g = null!;
 
         [Before(Test)]
-        public void Setup() => g = new Graph(multigraph: true, compound: true);
+        public void Setup() => g = new(multigraph: true, compound: true);
 
         [Test]
         public async Task CopiesAllNodes()
@@ -100,10 +100,10 @@ public class UtilTests
         public async Task MapsANodeToItsSuccessorsWithAssociatedWeights()
         {
             var g = new Graph(multigraph: true);
-            g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
-            g.SetEdge("b", "c", new EdgeLabel { Weight = 1 });
-            g.SetEdge("b", "c", new EdgeLabel { Weight = 2 }, "multi");
-            g.SetEdge("b", "d", new EdgeLabel { Weight = 1 }, "multi");
+            g.SetEdge("a", "b", new() { Weight = 2 });
+            g.SetEdge("b", "c", new() { Weight = 1 });
+            g.SetEdge("b", "c", new() { Weight = 2 }, "multi");
+            g.SetEdge("b", "d", new() { Weight = 1 }, "multi");
 
             var sw = Util.SuccessorWeights(g);
             await Assert.That(sw["a"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 2 });
@@ -119,10 +119,10 @@ public class UtilTests
         public async Task MapsANodeToItsPredecessorsWithAssociatedWeights()
         {
             var g = new Graph(multigraph: true);
-            g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
-            g.SetEdge("b", "c", new EdgeLabel { Weight = 1 });
-            g.SetEdge("b", "c", new EdgeLabel { Weight = 2 }, "multi");
-            g.SetEdge("b", "d", new EdgeLabel { Weight = 1 }, "multi");
+            g.SetEdge("a", "b", new() { Weight = 2 });
+            g.SetEdge("b", "c", new() { Weight = 1 });
+            g.SetEdge("b", "c", new() { Weight = 2 }, "multi");
+            g.SetEdge("b", "d", new() { Weight = 1 }, "multi");
 
             var pw = Util.PredecessorWeights(g);
             await Assert.That(pw["a"].Count).IsEqualTo(0);
@@ -161,31 +161,31 @@ public class UtilTests
         public async Task CreatesASlopeThatWillIntersectTheRectanglesCenter()
         {
             var rect = Rect(0, 0, 1, 1);
-            await ExpectIntersects(rect, new Point(2, 6));
-            await ExpectIntersects(rect, new Point(2, -6));
-            await ExpectIntersects(rect, new Point(6, 2));
-            await ExpectIntersects(rect, new Point(-6, 2));
-            await ExpectIntersects(rect, new Point(5, 0));
-            await ExpectIntersects(rect, new Point(0, 5));
+            await ExpectIntersects(rect, new(2, 6));
+            await ExpectIntersects(rect, new(2, -6));
+            await ExpectIntersects(rect, new(6, 2));
+            await ExpectIntersects(rect, new(-6, 2));
+            await ExpectIntersects(rect, new(5, 0));
+            await ExpectIntersects(rect, new(0, 5));
         }
 
         [Test]
         public async Task TouchesTheBorderOfTheRectangle()
         {
             var rect = Rect(0, 0, 1, 1);
-            await ExpectTouchesBorder(rect, new Point(2, 6));
-            await ExpectTouchesBorder(rect, new Point(2, -6));
-            await ExpectTouchesBorder(rect, new Point(6, 2));
-            await ExpectTouchesBorder(rect, new Point(-6, 2));
-            await ExpectTouchesBorder(rect, new Point(5, 0));
-            await ExpectTouchesBorder(rect, new Point(0, 5));
+            await ExpectTouchesBorder(rect, new(2, 6));
+            await ExpectTouchesBorder(rect, new(2, -6));
+            await ExpectTouchesBorder(rect, new(6, 2));
+            await ExpectTouchesBorder(rect, new(-6, 2));
+            await ExpectTouchesBorder(rect, new(5, 0));
+            await ExpectTouchesBorder(rect, new(0, 5));
         }
 
         [Test]
         public async Task ThrowsAnErrorIfThePointIsAtTheCenterOfTheRectangle()
         {
             var rect = Rect(0, 0, 1, 1);
-            await Assert.That(() => Util.IntersectRect(rect, new Point(0, 0))).Throws<Exception>();
+            await Assert.That(() => Util.IntersectRect(rect, new(0, 0))).Throws<Exception>();
         }
     }
 
@@ -195,11 +195,11 @@ public class UtilTests
         public async Task CreatesAMatrixBasedOnRankAndOrderOfNodesInTheGraph()
         {
             var g = new Graph();
-            g.SetNode("a", new NodeLabel { Rank = 0, Order = 0 });
-            g.SetNode("b", new NodeLabel { Rank = 0, Order = 1 });
-            g.SetNode("c", new NodeLabel { Rank = 1, Order = 0 });
-            g.SetNode("d", new NodeLabel { Rank = 1, Order = 1 });
-            g.SetNode("e", new NodeLabel { Rank = 2, Order = 0 });
+            g.SetNode("a", new() { Rank = 0, Order = 0 });
+            g.SetNode("b", new() { Rank = 0, Order = 1 });
+            g.SetNode("c", new() { Rank = 1, Order = 0 });
+            g.SetNode("d", new() { Rank = 1, Order = 1 });
+            g.SetNode("e", new() { Rank = 2, Order = 0 });
 
             var expected = new List<List<string>>
             {
@@ -230,9 +230,9 @@ public class UtilTests
         public async Task AdjustRanksSuchThatAllAreGteZeroAndAtLeastOneIsZero()
         {
             var g = new Graph()
-                .SetNode("a", new NodeLabel { Rank = 3 })
-                .SetNode("b", new NodeLabel { Rank = 2 })
-                .SetNode("c", new NodeLabel { Rank = 4 });
+                .SetNode("a", new() { Rank = 3 })
+                .SetNode("b", new() { Rank = 2 })
+                .SetNode("c", new() { Rank = 4 });
 
             Util.NormalizeRanks(g);
 
@@ -245,8 +245,8 @@ public class UtilTests
         public async Task WorksForNegativeRanks()
         {
             var g = new Graph()
-                .SetNode("a", new NodeLabel { Rank = -3 })
-                .SetNode("b", new NodeLabel { Rank = -2 });
+                .SetNode("a", new() { Rank = -3 })
+                .SetNode("b", new() { Rank = -2 });
 
             Util.NormalizeRanks(g);
 
@@ -258,8 +258,8 @@ public class UtilTests
         public async Task DoesNotAssignARankToSubgraphs()
         {
             var g = new Graph(compound: true)
-                .SetNode("a", new NodeLabel { Rank = 0 });
-            g.SetNode("sg", new NodeLabel());
+                .SetNode("a", new() { Rank = 0 });
+            g.SetNode("sg", new());
             g.SetParent("a", "sg");
 
             Util.NormalizeRanks(g);
@@ -275,9 +275,9 @@ public class UtilTests
         public async Task RemovesBorderRanksWithoutAnyNodes()
         {
             var g = new Graph()
-                .SetGraph(new GraphLabel { NodeRankFactor = 4 })
-                .SetNode("a", new NodeLabel { Rank = 0 })
-                .SetNode("b", new NodeLabel { Rank = 4 });
+                .SetGraph(new() { NodeRankFactor = 4 })
+                .SetNode("a", new() { Rank = 0 })
+                .SetNode("b", new() { Rank = 4 });
             Util.RemoveEmptyRanks(g);
             await Assert.That(g.Node("a").Rank).IsEqualTo(0);
             await Assert.That(g.Node("b").Rank).IsEqualTo(1);
@@ -287,9 +287,9 @@ public class UtilTests
         public async Task DoesNotRemoveNonBorderRanks()
         {
             var g = new Graph()
-                .SetGraph(new GraphLabel { NodeRankFactor = 4 })
-                .SetNode("a", new NodeLabel { Rank = 0 })
-                .SetNode("b", new NodeLabel { Rank = 8 });
+                .SetGraph(new() { NodeRankFactor = 4 })
+                .SetNode("a", new() { Rank = 0 })
+                .SetNode("b", new() { Rank = 8 });
             Util.RemoveEmptyRanks(g);
             await Assert.That(g.Node("a").Rank).IsEqualTo(0);
             await Assert.That(g.Node("b").Rank).IsEqualTo(2);
@@ -299,10 +299,10 @@ public class UtilTests
         public async Task HandlesParentsWithUndefinedRanks()
         {
             var g = new Graph(compound: true)
-                .SetGraph(new GraphLabel { NodeRankFactor = 3 })
-                .SetNode("a", new NodeLabel { Rank = 0 })
-                .SetNode("b", new NodeLabel { Rank = 6 });
-            g.SetNode("sg", new NodeLabel());
+                .SetGraph(new() { NodeRankFactor = 3 })
+                .SetNode("a", new() { Rank = 0 })
+                .SetNode("b", new() { Rank = 6 });
+            g.SetNode("sg", new());
             g.SetParent("a", "sg");
             Util.RemoveEmptyRanks(g);
             await Assert.That(g.Node("a").Rank).IsEqualTo(0);

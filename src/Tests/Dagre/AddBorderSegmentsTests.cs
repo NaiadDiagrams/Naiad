@@ -5,13 +5,13 @@ public class AddBorderSegmentsTests
     Graph g = null!;
 
     [Before(Test)]
-    public void Setup() => g = new Graph(compound: true);
+    public void Setup() => g = new(compound: true);
 
     [Test]
     public async Task DoesNotAddBorderNodesForANonCompoundGraph()
     {
         var graph = new Graph();
-        graph.SetNode("a", new NodeLabel { Rank = 0 });
+        graph.SetNode("a", new() { Rank = 0 });
         AddBorderSegments.Run(graph);
         await Assert.That(graph.NodeCount()).IsEqualTo(1);
 
@@ -25,7 +25,7 @@ public class AddBorderSegmentsTests
     [Test]
     public async Task DoesNotAddBorderNodesForAGraphWithNoClusters()
     {
-        g.SetNode("a", new NodeLabel { Rank = 0 });
+        g.SetNode("a", new() { Rank = 0 });
         AddBorderSegments.Run(g);
         await Assert.That(g.NodeCount()).IsEqualTo(1);
 
@@ -39,7 +39,7 @@ public class AddBorderSegmentsTests
     [Test]
     public async Task AddsABorderForASingleRankSubgraph()
     {
-        g.SetNode("sg", new NodeLabel { MinRank = 1, MaxRank = 1 });
+        g.SetNode("sg", new() { MinRank = 1, MaxRank = 1 });
         AddBorderSegments.Run(g);
 
         var bl = g.Node("sg").BorderLeft![1];
@@ -65,7 +65,7 @@ public class AddBorderSegmentsTests
     [Test]
     public async Task AddsABorderForAMultiRankSubgraph()
     {
-        g.SetNode("sg", new NodeLabel { MinRank = 1, MaxRank = 2 });
+        g.SetNode("sg", new() { MinRank = 1, MaxRank = 2 });
         AddBorderSegments.Run(g);
 
         var sgNode = g.Node("sg");
@@ -114,8 +114,8 @@ public class AddBorderSegmentsTests
     [Test]
     public async Task AddsBordersForNestedSubgraphs()
     {
-        g.SetNode("sg1", new NodeLabel { MinRank = 1, MaxRank = 1 });
-        g.SetNode("sg2", new NodeLabel { MinRank = 1, MaxRank = 1 });
+        g.SetNode("sg1", new() { MinRank = 1, MaxRank = 1 });
+        g.SetNode("sg2", new() { MinRank = 1, MaxRank = 1 });
         g.SetParent("sg2", "sg1");
         AddBorderSegments.Run(g);
 

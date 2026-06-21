@@ -7,15 +7,15 @@ public class BuildLayerGraphTests
     Graph g = null!;
 
     [Before(Test)]
-    public void Setup() => g = new Graph(compound: true, multigraph: true);
+    public void Setup() => g = new(compound: true, multigraph: true);
 
     [Test]
     public async Task PlacesMovableNodesWithNoParentsUnderTheRootNode()
     {
-        g.SetNode("a", new NodeLabel { Rank = 1 });
-        g.SetNode("b", new NodeLabel { Rank = 1 });
-        g.SetNode("c", new NodeLabel { Rank = 2 });
-        g.SetNode("d", new NodeLabel { Rank = 3 });
+        g.SetNode("a", new() { Rank = 1 });
+        g.SetNode("b", new() { Rank = 1 });
+        g.SetNode("c", new() { Rank = 2 });
+        g.SetNode("d", new() { Rank = 3 });
 
         var lg = BuildLayerGraph.Run(g, 1, "inEdges");
         await Assert.That(lg.HasNode(lg.Graph_().Root!)).IsTrue();
@@ -26,10 +26,10 @@ public class BuildLayerGraphTests
     [Test]
     public async Task CopiesFlatNodesFromTheLayerToTheGraph()
     {
-        g.SetNode("a", new NodeLabel { Rank = 1 });
-        g.SetNode("b", new NodeLabel { Rank = 1 });
-        g.SetNode("c", new NodeLabel { Rank = 2 });
-        g.SetNode("d", new NodeLabel { Rank = 3 });
+        g.SetNode("a", new() { Rank = 1 });
+        g.SetNode("b", new() { Rank = 1 });
+        g.SetNode("c", new() { Rank = 2 });
+        g.SetNode("d", new() { Rank = 3 });
 
         await Assert.That(BuildLayerGraph.Run(g, 1, "inEdges").Nodes()).Contains("a");
         await Assert.That(BuildLayerGraph.Run(g, 1, "inEdges").Nodes()).Contains("b");
@@ -44,9 +44,9 @@ public class BuildLayerGraphTests
         // be available automatically in the layer graph.
         // The TS test uses a dynamic `foo` field; here we verify the same
         // reference-sharing semantics through the strongly-typed `Order` field.
-        g.SetNode("a", new NodeLabel { Order = 1, Rank = 1 });
-        g.SetNode("b", new NodeLabel { Order = 2, Rank = 2 });
-        g.SetEdge("a", "b", new EdgeLabel { Weight = 1 });
+        g.SetNode("a", new() { Order = 1, Rank = 1 });
+        g.SetNode("b", new() { Order = 2, Rank = 2 });
+        g.SetEdge("a", "b", new() { Weight = 1 });
 
         var lg = BuildLayerGraph.Run(g, 2, "inEdges");
 
@@ -62,13 +62,13 @@ public class BuildLayerGraphTests
     [Test]
     public async Task CopiesEdgesIncidentOnRankNodesToTheGraphInEdges()
     {
-        g.SetNode("a", new NodeLabel { Rank = 1 });
-        g.SetNode("b", new NodeLabel { Rank = 1 });
-        g.SetNode("c", new NodeLabel { Rank = 2 });
-        g.SetNode("d", new NodeLabel { Rank = 3 });
-        g.SetEdge("a", "c", new EdgeLabel { Weight = 2 });
-        g.SetEdge("b", "c", new EdgeLabel { Weight = 3 });
-        g.SetEdge("c", "d", new EdgeLabel { Weight = 4 });
+        g.SetNode("a", new() { Rank = 1 });
+        g.SetNode("b", new() { Rank = 1 });
+        g.SetNode("c", new() { Rank = 2 });
+        g.SetNode("d", new() { Rank = 3 });
+        g.SetEdge("a", "c", new() { Weight = 2 });
+        g.SetEdge("b", "c", new() { Weight = 3 });
+        g.SetEdge("c", "d", new() { Weight = 4 });
 
         await Assert.That(BuildLayerGraph.Run(g, 1, "inEdges").EdgeCount()).IsEqualTo(0);
         await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").EdgeCount()).IsEqualTo(2);
@@ -81,13 +81,13 @@ public class BuildLayerGraphTests
     [Test]
     public async Task CopiesEdgesIncidentOnRankNodesToTheGraphOutEdges()
     {
-        g.SetNode("a", new NodeLabel { Rank = 1 });
-        g.SetNode("b", new NodeLabel { Rank = 1 });
-        g.SetNode("c", new NodeLabel { Rank = 2 });
-        g.SetNode("d", new NodeLabel { Rank = 3 });
-        g.SetEdge("a", "c", new EdgeLabel { Weight = 2 });
-        g.SetEdge("b", "c", new EdgeLabel { Weight = 3 });
-        g.SetEdge("c", "d", new EdgeLabel { Weight = 4 });
+        g.SetNode("a", new() { Rank = 1 });
+        g.SetNode("b", new() { Rank = 1 });
+        g.SetNode("c", new() { Rank = 2 });
+        g.SetNode("d", new() { Rank = 3 });
+        g.SetEdge("a", "c", new() { Weight = 2 });
+        g.SetEdge("b", "c", new() { Weight = 3 });
+        g.SetEdge("c", "d", new() { Weight = 4 });
 
         await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").EdgeCount()).IsEqualTo(2);
         await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").Edge_("c", "a").Weight).IsEqualTo(2);
@@ -100,10 +100,10 @@ public class BuildLayerGraphTests
     [Test]
     public async Task CollapsesMultiEdges()
     {
-        g.SetNode("a", new NodeLabel { Rank = 1 });
-        g.SetNode("b", new NodeLabel { Rank = 2 });
-        g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
-        g.SetEdge("a", "b", new EdgeLabel { Weight = 3 }, "multi");
+        g.SetNode("a", new() { Rank = 1 });
+        g.SetNode("b", new() { Rank = 2 });
+        g.SetEdge("a", "b", new() { Weight = 2 });
+        g.SetEdge("a", "b", new() { Weight = 3 }, "multi");
 
         await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").Edge_("a", "b").Weight).IsEqualTo(5);
     }
@@ -111,10 +111,10 @@ public class BuildLayerGraphTests
     [Test]
     public async Task PreservesHierarchyForTheMovableLayer()
     {
-        g.SetNode("a", new NodeLabel { Rank = 0 });
-        g.SetNode("b", new NodeLabel { Rank = 0 });
-        g.SetNode("c", new NodeLabel { Rank = 0 });
-        g.SetNode("sg", new NodeLabel
+        g.SetNode("a", new() { Rank = 0 });
+        g.SetNode("b", new() { Rank = 0 });
+        g.SetNode("c", new() { Rank = 0 });
+        g.SetNode("sg", new()
         {
             MinRank = 0,
             MaxRank = 0,

@@ -21,7 +21,7 @@ public class GreedyFasTests
     public async Task ReturnsAnEmptySetIfTheInputGraphIsAcyclic()
     {
         var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
         g.SetEdge("a", "b");
         g.SetEdge("b", "c");
         g.SetEdge("b", "d");
@@ -33,7 +33,7 @@ public class GreedyFasTests
     public Task ReturnsASingleEdgeWithASimpleCycle()
     {
         var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
         g.SetEdge("a", "b");
         g.SetEdge("b", "a");
         return CheckFas(g, GreedyFas.Run(g));
@@ -43,7 +43,7 @@ public class GreedyFasTests
     public Task ReturnsASingleEdgeInA4NodeCycle()
     {
         var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
         g.SetEdge("n1", "n2");
         g.SetPath(["n2", "n3", "n4", "n5", "n2"]);
         g.SetEdge("n3", "n5");
@@ -56,7 +56,7 @@ public class GreedyFasTests
     public Task ReturnsTwoEdgesForTwo4NodeCycles()
     {
         var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
+        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
         g.SetEdge("n1", "n2");
         g.SetPath(["n2", "n3", "n4", "n5", "n2"]);
         g.SetEdge("n3", "n5");
@@ -78,14 +78,14 @@ public class GreedyFasTests
         // our edges representing the number of edges from one node to the other.
 
         var g1 = new Graph();
-        g1.SetEdge("n1", "n2", new EdgeLabel { Weight = 2 });
-        g1.SetEdge("n2", "n1", new EdgeLabel { Weight = 1 });
+        g1.SetEdge("n1", "n2", new() { Weight = 2 });
+        g1.SetEdge("n2", "n1", new() { Weight = 1 });
         await Assert.That(GreedyFas.Run(g1, WeightFn(g1)))
             .IsEquivalentTo(new List<Edge> { new("n2", "n1") });
 
         var g2 = new Graph();
-        g2.SetEdge("n1", "n2", new EdgeLabel { Weight = 1 });
-        g2.SetEdge("n2", "n1", new EdgeLabel { Weight = 2 });
+        g2.SetEdge("n1", "n2", new() { Weight = 1 });
+        g2.SetEdge("n2", "n1", new() { Weight = 2 });
         await Assert.That(GreedyFas.Run(g2, WeightFn(g2)))
             .IsEquivalentTo(new List<Edge> { new("n1", "n2") });
     }
@@ -94,9 +94,9 @@ public class GreedyFasTests
     public async Task WorksForMultigraphs()
     {
         var g = new Graph(multigraph: true);
-        g.SetEdge("a", "b", new EdgeLabel { Weight = 5 }, "foo");
-        g.SetEdge("b", "a", new EdgeLabel { Weight = 2 }, "bar");
-        g.SetEdge("b", "a", new EdgeLabel { Weight = 2 }, "baz");
+        g.SetEdge("a", "b", new() { Weight = 5 }, "foo");
+        g.SetEdge("b", "a", new() { Weight = 2 }, "bar");
+        g.SetEdge("b", "a", new() { Weight = 2 }, "baz");
         var result = GreedyFas.Run(g, WeightFn(g));
         result.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
         var expected = new List<Edge>

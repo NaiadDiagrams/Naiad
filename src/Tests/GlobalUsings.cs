@@ -1,3 +1,4 @@
+global using System.Globalization;
 global using Naiad;
 global using System.Runtime.CompilerServices;
 global using System.Text;
@@ -7,5 +8,6 @@ global using System.Xml.Linq;
 global using Microsoft.CodeAnalysis;
 global using Microsoft.CodeAnalysis.CSharp;
 global using Microsoft.CodeAnalysis.CSharp.Syntax;
+global using Naiad.Dagre;
 global using SkiaSharp;
 global using Svg.Skia;

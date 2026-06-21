@@ -11,13 +11,13 @@ public class LayoutTests
     public void Setup() =>
         // new Graph({multigraph: true, compound: true}).setGraph({}).setDefaultEdgeLabel(() => ({}));
         g = new Graph(directed: true, multigraph: true, compound: true)
-            .SetGraph(new GraphLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel());
+            .SetGraph(new())
+            .SetDefaultEdgeLabel((_, _, _) => new());
 
     [Test]
     public async Task CanLayoutASingleNode()
     {
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
+        g.SetNode("a", new() { Width = 50, Height = 100 });
         Layout.Run(g);
 
         await AssertCoordinates(("a", 50.0 / 2, 100.0 / 2));
@@ -29,8 +29,8 @@ public class LayoutTests
     public Task CanLayoutTwoNodesOnTheSameRank()
     {
         g.Graph_().Nodesep = 200;
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
+        g.SetNode("a", new() { Width = 50, Height = 100 });
+        g.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(g);
 
         return AssertCoordinates(
@@ -42,8 +42,8 @@ public class LayoutTests
     public async Task CanLayoutTwoNodesConnectedByAnEdge()
     {
         g.Graph_().Ranksep = 300;
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
+        g.SetNode("a", new() { Width = 50, Height = 100 });
+        g.SetNode("b", new() { Width = 75, Height = 200 });
         g.SetEdge("a", "b");
         Layout.Run(g);
 
@@ -60,9 +60,9 @@ public class LayoutTests
     public async Task CanLayoutAnEdgeWithALabel()
     {
         g.Graph_().Ranksep = 300;
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
-        g.SetEdge("a", "b", new EdgeLabel { Width = 60, Height = 70, Labelpos = "c" });
+        g.SetNode("a", new() { Width = 50, Height = 100 });
+        g.SetNode("b", new() { Width = 75, Height = 200 });
+        g.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = "c" });
         Layout.Run(g);
 
         await AssertCoordinates(
@@ -83,11 +83,11 @@ public class LayoutTests
         g.Graph_().Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
-            g.SetNode(v, new NodeLabel { Width = 10, Height = 10 });
+            g.SetNode(v, new() { Width = 10, Height = 10 });
         }
 
-        g.SetEdge("a", "c", new EdgeLabel { Width = 2000, Height = 10, Labelpos = "c" });
-        g.SetEdge("b", "d", new EdgeLabel { Width = 1, Height = 1 });
+        g.SetEdge("a", "c", new() { Width = 2000, Height = 10, Labelpos = "c" });
+        g.SetEdge("b", "d", new() { Width = 1, Height = 1 });
         Layout.Run(g);
 
         double p1X, p2X;
@@ -116,11 +116,11 @@ public class LayoutTests
         g.Graph_().Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
-            g.SetNode(v, new NodeLabel { Width = 10, Height = 10 });
+            g.SetNode(v, new() { Width = 10, Height = 10 });
         }
 
-        g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 10, Labelpos = "l", Labeloffset = 1000 });
-        g.SetEdge("c", "d", new EdgeLabel { Width = 10, Height = 10, Labelpos = "r", Labeloffset = 1000 });
+        g.SetEdge("a", "b", new() { Width = 10, Height = 10, Labelpos = "l", Labeloffset = 1000 });
+        g.SetEdge("c", "d", new() { Width = 10, Height = 10, Labelpos = "r", Labeloffset = 1000 });
         Layout.Run(g);
 
         if (rankdir is "TB" or "BT")
@@ -139,9 +139,9 @@ public class LayoutTests
     public async Task CanLayoutALongEdgeWithALabel()
     {
         g.Graph_().Ranksep = 300;
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
-        g.SetEdge("a", "b", new EdgeLabel { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
+        g.SetNode("a", new() { Width = 50, Height = 100 });
+        g.SetNode("b", new() { Width = 75, Height = 200 });
+        g.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
         Layout.Run(g);
 
         await Assert.That(g.Edge_("a", "b").X!.Value).IsEqualTo(75.0 / 2);
@@ -153,9 +153,9 @@ public class LayoutTests
     public async Task CanLayoutOutAShortCycle()
     {
         g.Graph_().Ranksep = 200;
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 100, Height = 100 });
-        g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
+        g.SetNode("a", new() { Width = 100, Height = 100 });
+        g.SetNode("b", new() { Width = 100, Height = 100 });
+        g.SetEdge("a", "b", new() { Weight = 2 });
         g.SetEdge("b", "a");
         Layout.Run(g);
 
@@ -171,8 +171,8 @@ public class LayoutTests
     public async Task AddsRectangleIntersectsForEdges()
     {
         g.Graph_().Ranksep = 200;
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 100, Height = 100 });
+        g.SetNode("a", new() { Width = 100, Height = 100 });
+        g.SetNode("b", new() { Width = 100, Height = 100 });
         g.SetEdge("a", "b");
         Layout.Run(g);
 
@@ -188,9 +188,9 @@ public class LayoutTests
     public async Task AddsRectangleIntersectsForEdgesSpanningMultipleRanks()
     {
         g.Graph_().Ranksep = 200;
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 100, Height = 100 });
-        g.SetEdge("a", "b", new EdgeLabel { Minlen = 2 });
+        g.SetNode("a", new() { Width = 100, Height = 100 });
+        g.SetNode("b", new() { Width = 100, Height = 100 });
+        g.SetEdge("a", "b", new() { Minlen = 2 });
         Layout.Run(g);
 
         var points = g.Edge_("a", "b").Points!;
@@ -212,8 +212,8 @@ public class LayoutTests
     {
         g.Graph_().Edgesep = 75;
         g.Graph_().Rankdir = rankdir;
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 100 });
-        g.SetEdge("a", "a", new EdgeLabel { Width = 50, Height = 50 });
+        g.SetNode("a", new() { Width = 100, Height = 100 });
+        g.SetEdge("a", "a", new() { Width = 50, Height = 50 });
         Layout.Run(g);
 
         var nodeA = g.Node("a");
@@ -238,7 +238,7 @@ public class LayoutTests
     public async Task CanLayoutAGraphWithSubgraphs()
     {
         // To be expanded, this primarily ensures nothing blows up for the moment.
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 50 });
+        g.SetNode("a", new() { Width = 50, Height = 50 });
         g.SetParent("a", "sg1");
         Layout.Run(g);
         // No assertions in the original test; passing means no exception thrown.
@@ -250,12 +250,12 @@ public class LayoutTests
     {
         foreach (var v in new[] { "a", "b", "c", "d", "x", "y" })
         {
-            g.SetNode(v, new NodeLabel { Width = 50, Height = 50 });
+            g.SetNode(v, new() { Width = 50, Height = 50 });
         }
 
         g.SetPath(new List<string> { "a", "b", "c", "d" });
-        g.SetEdge("a", "x", new EdgeLabel { Weight = 100 });
-        g.SetEdge("y", "d", new EdgeLabel { Weight = 100 });
+        g.SetEdge("a", "x", new() { Weight = 100 });
+        g.SetEdge("y", "d", new() { Weight = 100 });
         g.SetParent("x", "sg");
         g.SetParent("y", "sg");
 
@@ -272,11 +272,11 @@ public class LayoutTests
     {
         foreach (var v in new[] { "a", "b", "c" })
         {
-            g.SetNode(v, new NodeLabel { Width = 50, Height = 50 });
+            g.SetNode(v, new() { Width = 50, Height = 50 });
         }
 
         g.SetPath(["a", "b", "c"]);
-        g.SetNode("sg", new NodeLabel());
+        g.SetNode("sg", new());
         g.SetParent("c", "sg");
         Layout.Run(g);
         await Assert.That(g.Node("b").Y!.Value - g.Node("a").Y!.Value).IsEqualTo(100);
@@ -285,8 +285,8 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutSubgraphsWithDifferentRankdirs()
     {
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 50 });
-        g.SetNode("sg", new NodeLabel());
+        g.SetNode("a", new() { Width = 50, Height = 50 });
+        g.SetNode("sg", new());
         g.SetParent("a", "sg");
 
         async Task Check()
@@ -308,7 +308,7 @@ public class LayoutTests
     [Test]
     public async Task AddsDimensionsToTheGraph()
     {
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 50 });
+        g.SetNode("a", new() { Width = 100, Height = 50 });
         Layout.Run(g);
         await Assert.That(g.Graph_().Width!.Value).IsEqualTo(100);
         await Assert.That(g.Graph_().Height!.Value).IsEqualTo(50);
@@ -323,7 +323,7 @@ public class LayoutTests
     public async Task BoundingBoxNode(string rankdir)
     {
         g.Graph_().Rankdir = rankdir;
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 200 });
+        g.SetNode("a", new() { Width = 100, Height = 200 });
         Layout.Run(g);
         await Assert.That(g.Node("a").X!.Value).IsEqualTo(100.0 / 2);
         await Assert.That(g.Node("a").Y!.Value).IsEqualTo(200.0 / 2);
@@ -338,9 +338,9 @@ public class LayoutTests
     public async Task BoundingBoxEdgeLabelposL(string rankdir)
     {
         g.Graph_().Rankdir = rankdir;
-        g.SetNode("a", new NodeLabel { Width = 100, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 100, Height = 100 });
-        g.SetEdge("a", "b", new EdgeLabel { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
+        g.SetNode("a", new() { Width = 100, Height = 100 });
+        g.SetNode("b", new() { Width = 100, Height = 100 });
+        g.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
         Layout.Run(g);
         if (rankdir is "TB" or "BT")
         {
@@ -360,8 +360,8 @@ public class LayoutTests
         // where the only spelling is `Nodesep`, so case-insensitivity is not expressible and the
         // canonical field is set directly.
         g.Graph_().Nodesep = 200;
-        g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
-        g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
+        g.SetNode("a", new() { Width = 50, Height = 100 });
+        g.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(g);
 
         return AssertCoordinates(

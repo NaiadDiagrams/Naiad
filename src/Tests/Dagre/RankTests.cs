@@ -12,9 +12,9 @@ public class RankTests
     public void Setup()
     {
         g = new Graph()
-            .SetGraph(new GraphLabel())
-            .SetDefaultNodeLabel(_ => new NodeLabel())
-            .SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Minlen = 1, Weight = 1 });
+            .SetGraph(new())
+            .SetDefaultNodeLabel(_ => new())
+            .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
         g
             .SetPath(["a", "b", "c", "d", "h"])
             .SetPath(["a", "e", "g", "h"])
@@ -76,8 +76,8 @@ public class RankTests
         // Rank is int? in C#, so the string assignment from the TS test is a no-op
         // (the algorithm overwrites the node's rank regardless).
         _ = ranker;
-        var g = new Graph().SetGraph(new GraphLabel());
-        g.SetNode("a", new NodeLabel());
+        var g = new Graph().SetGraph(new());
+        g.SetNode("a", new());
         Rank.Run(g);
         await Assert.That(g.Node("a").Rank).IsEqualTo(0);
     }

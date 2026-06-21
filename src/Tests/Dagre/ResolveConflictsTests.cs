@@ -5,7 +5,7 @@ public class ResolveConflictsTests
     Graph constraintGraph = null!;
 
     [Before(Test)]
-    public void Setup() => constraintGraph = new Graph();
+    public void Setup() => constraintGraph = new();
 
     static List<ResolvedEntry> SortByFirstV(List<ResolvedEntry> entries) =>
         entries.OrderBy(e => e.Vs[0], StringComparer.Ordinal).ToList();

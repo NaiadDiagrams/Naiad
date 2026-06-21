@@ -7,8 +7,8 @@ public class NestingGraphTests
     [Before(Test)]
     public void Setup() =>
         g = new Graph(compound: true)
-            .SetGraph(new GraphLabel())
-            .SetDefaultNodeLabel(_ => new NodeLabel());
+            .SetGraph(new())
+            .SetDefaultNodeLabel(_ => new());
 
     // ----- run -----
 
@@ -88,8 +88,8 @@ public class NestingGraphTests
         // the edge between the top (and bottom) border nodes and nodes in the
         // subgraph have weights exceeding anything in the graph.
         g.SetParent("x", "sg");
-        g.SetEdge("a", "x", new EdgeLabel { Weight = 100 });
-        g.SetEdge("x", "b", new EdgeLabel { Weight = 200 });
+        g.SetEdge("a", "x", new() { Weight = 100 });
+        g.SetEdge("x", "b", new() { Weight = 200 });
         NestingGraph.Run(g);
 
         var top = g.Node("sg").BorderTop;
@@ -180,7 +180,7 @@ public class NestingGraphTests
     [Test]
     public async Task ExpandsInterNodeEdgesToSeparateSgBorderAndNodes1()
     {
-        g.SetEdge("a", "b", new EdgeLabel { Minlen = 1 });
+        g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
         await Assert.That(g.Edge_("a", "b").Minlen).IsEqualTo(1);
     }
@@ -189,7 +189,7 @@ public class NestingGraphTests
     public async Task ExpandsInterNodeEdgesToSeparateSgBorderAndNodes2()
     {
         g.SetParent("a", "sg1");
-        g.SetEdge("a", "b", new EdgeLabel { Minlen = 1 });
+        g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
         await Assert.That(g.Edge_("a", "b").Minlen).IsEqualTo(3);
     }
@@ -199,7 +199,7 @@ public class NestingGraphTests
     {
         g.SetParent("sg2", "sg1");
         g.SetParent("a", "sg2");
-        g.SetEdge("a", "b", new EdgeLabel { Minlen = 1 });
+        g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
         await Assert.That(g.Edge_("a", "b").Minlen).IsEqualTo(5);
     }
@@ -244,7 +244,7 @@ public class NestingGraphTests
     public async Task RemovesNestingGraphEdges()
     {
         g.SetParent("a", "sg1");
-        g.SetEdge("a", "b", new EdgeLabel { Minlen = 1 });
+        g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
         NestingGraph.Cleanup(g);
         await Assert.That(g.Successors("a")).IsEquivalentTo(new List<string> { "b" });
