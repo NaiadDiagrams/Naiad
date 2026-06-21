@@ -1,0 +1,7 @@
+# The source under this folder is a faithful, line-by-line C# port of @dagrejs/dagre (+ the
+# @dagrejs/graphlib Graph it depends on). It deliberately mirrors the upstream JavaScript/TypeScript
+# instead of following this repo's idiomatic C# style, so code-style/analyzer enforcement and
+# warnings-as-errors are switched off for this folder only (it used to be a separate project with
+# those rules relaxed). Treating it as generated code makes the analyzers skip it entirely.
+[*.cs]
+dotnet_analyzer_diagnostic.severity = none
