@@ -18,7 +18,7 @@ public class UtilTests
             var e = g2.Edge_("a", "b");
             await Assert.That(e.Weight).IsEqualTo(1);
             await Assert.That(e.Minlen).IsEqualTo(1);
-            await Assert.That(g2.EdgeCount()).IsEqualTo(1);
+            await Assert.That(g2.EdgeCount).IsEqualTo(1);
         }
 
         [Test]
@@ -27,11 +27,11 @@ public class UtilTests
             g.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
             g.SetEdge("a", "b", new() { Weight = 2, Minlen = 2 }, "multi");
             var g2 = Util.Simplify(g);
-            await Assert.That(g2.IsMultigraph()).IsFalse();
+            await Assert.That(g2.IsMultigraph).IsFalse();
             var e = g2.Edge_("a", "b");
             await Assert.That(e.Weight).IsEqualTo(3);
             await Assert.That(e.Minlen).IsEqualTo(2);
-            await Assert.That(g2.EdgeCount()).IsEqualTo(1);
+            await Assert.That(g2.EdgeCount).IsEqualTo(1);
         }
 
         [Test]
@@ -81,7 +81,7 @@ public class UtilTests
             var g2 = Util.AsNonCompoundGraph(g);
             await Assert.That(g2.Parent("sg1")).IsNull();
             await Assert.That(g2.Parent("a")).IsNull();
-            await Assert.That(g2.IsCompound()).IsFalse();
+            await Assert.That(g2.IsCompound).IsFalse();
         }
 
         [Test]

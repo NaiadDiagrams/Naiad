@@ -39,7 +39,7 @@ static class FeasibleTree
         }
 
         var start = nodes[0];
-        var size = graph.NodeCount();
+        var size = graph.NodeCount;
         tree.SetNode(start, new());
 
         while (TightTree(tree, graph) < size)
@@ -87,7 +87,7 @@ static class FeasibleTree
             Dfs(v);
         }
 
-        return tree.NodeCount();
+        return tree.NodeCount;
     }
 
     /*

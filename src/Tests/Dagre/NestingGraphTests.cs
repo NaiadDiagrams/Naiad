@@ -256,6 +256,6 @@ public class NestingGraphTests
         g.SetParent("a", "sg1");
         NestingGraph.Run(g);
         NestingGraph.Cleanup(g);
-        await Assert.That(g.NodeCount()).IsEqualTo(4); // sg1 + sg1Top + sg1Bottom + "a"
+        await Assert.That(g.NodeCount).IsEqualTo(4); // sg1 + sg1Top + sg1Bottom + "a"
     }
 }

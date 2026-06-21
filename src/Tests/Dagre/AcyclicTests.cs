@@ -69,7 +69,7 @@ public class AcyclicTests
             await Assert.That(graph.OutEdges("b", "a")!.Count).IsEqualTo(2);
         }
 
-        await Assert.That(graph.EdgeCount()).IsEqualTo(2);
+        await Assert.That(graph.EdgeCount).IsEqualTo(2);
     }
 
     // === undo ===

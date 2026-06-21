@@ -109,8 +109,8 @@ public class GreedyFasTests
 
     static async Task CheckFas(Graph g, List<Edge> fas)
     {
-        var n = g.NodeCount();
-        var m = g.EdgeCount();
+        var n = g.NodeCount;
+        var m = g.EdgeCount;
         foreach (var edge in fas)
         {
             g.RemoveEdge(edge.V, edge.W);

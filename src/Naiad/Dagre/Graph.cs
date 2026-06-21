@@ -10,10 +10,6 @@ sealed class Graph
     internal const string GraphNode = "\x00";
     const string EdgeKeyDelim = "\x01";
 
-    readonly bool isDirected;
-    readonly bool isMultigraph;
-    readonly bool isCompound;
-
     GraphLabel? label;
     readonly OrderedMap<NodeLabel> nodesMap = new();
     readonly OrderedMap<OrderedMap<Edge>> inMap = new();      // v -> edgeId -> edgeObj
@@ -22,8 +18,6 @@ sealed class Graph
     readonly OrderedMap<OrderedMap<int>> sucsMap = new();     // v -> w -> count
     readonly OrderedMap<Edge> edgeObjsMap = new();            // edgeId -> edgeObj
     readonly OrderedMap<EdgeLabel> edgeLabelsMap = new();     // edgeId -> label
-    int nodeCountValue;
-    int edgeCountValue;
     int uniqueIdCounter;
     readonly OrderedMap<string>? parentMap;
     readonly OrderedMap<OrderedMap<bool>>? childrenMap;
@@ -33,11 +27,11 @@ sealed class Graph
 
     public Graph(bool directed = true, bool multigraph = false, bool compound = false)
     {
-        isDirected = directed;
-        isMultigraph = multigraph;
-        isCompound = compound;
+        IsDirected = directed;
+        IsMultigraph = multigraph;
+        IsCompound = compound;
 
-        if (isCompound)
+        if (IsCompound)
         {
             parentMap = new();
             childrenMap = new()
@@ -47,11 +41,11 @@ sealed class Graph
         }
     }
 
-    public bool IsDirected() => isDirected;
+    public bool IsDirected { get; }
 
-    public bool IsMultigraph() => isMultigraph;
+    public bool IsMultigraph { get; }
 
-    public bool IsCompound() => isCompound;
+    public bool IsCompound { get; }
 
     /// <summary>
     /// Returns an id with the given prefix that is unique within this graph, from a per-graph counter.
@@ -77,7 +71,7 @@ sealed class Graph
         return this;
     }
 
-    public int NodeCount() => nodeCountValue;
+    public int NodeCount { get; private set; }
 
     /* === Node functions ========== */
 
@@ -112,7 +106,7 @@ sealed class Graph
 
     void InitNode(string name)
     {
-        if (isCompound)
+        if (IsCompound)
         {
             parentMap![name] = GraphNode;
             childrenMap![name] = new();
@@ -123,7 +117,7 @@ sealed class Graph
         predsMap[name] = new();
         outMap[name] = new();
         sucsMap[name] = new();
-        ++nodeCountValue;
+        NodeCount++;
     }
 
     public NodeLabel Node(string name) => nodesMap.GetValueOrDefault(name)!;
@@ -135,7 +129,7 @@ sealed class Graph
         if (nodesMap.ContainsKey(name))
         {
             nodesMap.Remove(name);
-            if (isCompound)
+            if (IsCompound)
             {
                 RemoveFromParentsChildList(name);
                 parentMap!.Remove(name);
@@ -161,7 +155,7 @@ sealed class Graph
 
             outMap.Remove(name);
             sucsMap.Remove(name);
-            --nodeCountValue;
+            NodeCount--;
         }
 
         return this;
@@ -169,7 +163,7 @@ sealed class Graph
 
     public Graph SetParent(string v, string? parent = null)
     {
-        if (!isCompound)
+        if (!IsCompound)
         {
             throw new InvalidOperationException("Cannot set parent in a non-compound graph");
         }
@@ -200,7 +194,7 @@ sealed class Graph
 
     public string? Parent(string v)
     {
-        if (isCompound)
+        if (IsCompound)
         {
             var parent = parentMap!.GetValueOrDefault(v);
             if (parent != GraphNode)
@@ -214,7 +208,7 @@ sealed class Graph
 
     public List<string> Children(string v = GraphNode)
     {
-        if (isCompound)
+        if (IsCompound)
         {
             if (childrenMap!.TryGetValue(v, out var children))
             {
@@ -279,7 +273,7 @@ sealed class Graph
         return this;
     }
 
-    public int EdgeCount() => edgeCountValue;
+    public int EdgeCount { get; private set; }
 
     public List<Edge> Edges() => edgeObjsMap.Values();
 
@@ -295,7 +289,7 @@ sealed class Graph
 
     Graph SetEdgeCore(string v, string w, string? name, EdgeLabel? value, bool valueSpecified)
     {
-        var e = EdgeArgsToId(isDirected, v, w, name);
+        var e = EdgeArgsToId(IsDirected, v, w, name);
         if (edgeLabelsMap.ContainsKey(e))
         {
             if (valueSpecified)
@@ -306,7 +300,7 @@ sealed class Graph
             return this;
         }
 
-        if (name != null && !isMultigraph)
+        if (name != null && !IsMultigraph)
         {
             throw new InvalidOperationException("Cannot set a named edge when isMultigraph = false");
         }
@@ -316,7 +310,7 @@ sealed class Graph
 
         edgeLabelsMap[e] = valueSpecified ? value! : defaultEdgeLabelFn(v, w, name);
 
-        var edgeObj = EdgeArgsToObj(isDirected, v, w, name);
+        var edgeObj = EdgeArgsToObj(IsDirected, v, w, name);
         var vStr = edgeObj.V;
         var wStr = edgeObj.W;
 
@@ -325,25 +319,25 @@ sealed class Graph
         IncrementOrInitEntry(sucsMap[vStr], wStr);
         inMap[wStr][e] = edgeObj;
         outMap[vStr][e] = edgeObj;
-        edgeCountValue++;
+        EdgeCount++;
         return this;
     }
 
     public EdgeLabel Edge_(string v, string w, string? name = null) =>
-        edgeLabelsMap.GetValueOrDefault(EdgeArgsToId(isDirected, v, w, name))!;
+        edgeLabelsMap.GetValueOrDefault(EdgeArgsToId(IsDirected, v, w, name))!;
 
     public EdgeLabel Edge_(Edge edge) =>
-        edgeLabelsMap.GetValueOrDefault(EdgeObjToId(isDirected, edge))!;
+        edgeLabelsMap.GetValueOrDefault(EdgeObjToId(IsDirected, edge))!;
 
     public bool HasEdge(string v, string w, string? name = null) =>
-        edgeLabelsMap.ContainsKey(EdgeArgsToId(isDirected, v, w, name));
+        edgeLabelsMap.ContainsKey(EdgeArgsToId(IsDirected, v, w, name));
 
     public bool HasEdge(Edge edge) =>
-        edgeLabelsMap.ContainsKey(EdgeObjToId(isDirected, edge));
+        edgeLabelsMap.ContainsKey(EdgeObjToId(IsDirected, edge));
 
-    public Graph RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(isDirected, v, w, name));
+    public Graph RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(IsDirected, v, w, name));
 
-    public Graph RemoveEdge(Edge edge) => RemoveEdgeId(EdgeObjToId(isDirected, edge));
+    public Graph RemoveEdge(Edge edge) => RemoveEdgeId(EdgeObjToId(IsDirected, edge));
 
     Graph RemoveEdgeId(string e)
     {
@@ -357,7 +351,7 @@ sealed class Graph
             DecrementOrRemoveEntry(sucsMap[vStr], wStr);
             inMap[wStr].Remove(e);
             outMap[vStr].Remove(e);
-            edgeCountValue--;
+            EdgeCount--;
         }
 
         return this;
@@ -365,7 +359,7 @@ sealed class Graph
 
     public List<Edge>? InEdges(string v, string? w = null)
     {
-        if (isDirected)
+        if (IsDirected)
         {
             return inMap.TryGetValue(v, out var setV) ? FilterEdges(setV, v, w) : null;
         }
@@ -375,7 +369,7 @@ sealed class Graph
 
     public List<Edge>? OutEdges(string v, string? w = null)
     {
-        if (isDirected)
+        if (IsDirected)
         {
             return outMap.TryGetValue(v, out var setV) ? FilterEdges(setV, v, w) : null;
         }

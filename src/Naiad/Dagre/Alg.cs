@@ -6,7 +6,7 @@ static class Alg
     static T Reduce<T>(Graph g, IReadOnlyList<string> vs, bool postorder, Func<T, string, T> fn, T acc)
     {
         List<string> Navigation(string v) =>
-            (g.IsDirected() ? g.Successors(v) : g.Neighbors(v)) ?? [];
+            (g.IsDirected ? g.Successors(v) : g.Neighbors(v)) ?? [];
 
         var visited = new HashSet<string>(StringComparer.Ordinal);
         foreach (var v in vs)

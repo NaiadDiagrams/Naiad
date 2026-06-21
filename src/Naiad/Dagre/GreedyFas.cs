@@ -28,7 +28,7 @@ static class GreedyFas
 
     public static List<Edge> Run(Graph graph, Func<Edge, double>? weightFn = null)
     {
-        if (graph.NodeCount() <= 1)
+        if (graph.NodeCount <= 1)
         {
             return [];
         }
@@ -47,7 +47,7 @@ static class GreedyFas
         var sinks = buckets[0];
 
         FasEntry? entry;
-        while (g.NodeCount() != 0)
+        while (g.NodeCount != 0)
         {
             while ((entry = (FasEntry?)sinks.Dequeue()) != null)
             {
@@ -59,7 +59,7 @@ static class GreedyFas
                 RemoveNode(g, entries, buckets, zeroIdx, entry);
             }
 
-            if (g.NodeCount() != 0)
+            if (g.NodeCount != 0)
             {
                 for (var i = buckets.Count - 2; i > 0; --i)
                 {

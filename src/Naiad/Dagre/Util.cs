@@ -48,7 +48,7 @@ static class Util
 
     public static Graph AsNonCompoundGraph(Graph graph)
     {
-        var simplified = new Graph(multigraph: graph.IsMultigraph()).SetGraph(graph.Graph_());
+        var simplified = new Graph(multigraph: graph.IsMultigraph).SetGraph(graph.Graph_());
         foreach (var v in graph.Nodes())
         {
             if (graph.Children(v).Count == 0)

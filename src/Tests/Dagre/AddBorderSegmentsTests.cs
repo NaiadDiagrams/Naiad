@@ -13,7 +13,7 @@ public class AddBorderSegmentsTests
         var graph = new Graph();
         graph.SetNode("a", new() { Rank = 0 });
         AddBorderSegments.Run(graph);
-        await Assert.That(graph.NodeCount()).IsEqualTo(1);
+        await Assert.That(graph.NodeCount).IsEqualTo(1);
 
         var a = graph.Node("a");
         await Assert.That(a.Rank).IsEqualTo(0);
@@ -27,7 +27,7 @@ public class AddBorderSegmentsTests
     {
         g.SetNode("a", new() { Rank = 0 });
         AddBorderSegments.Run(g);
-        await Assert.That(g.NodeCount()).IsEqualTo(1);
+        await Assert.That(g.NodeCount).IsEqualTo(1);
 
         var a = g.Node("a");
         await Assert.That(a.Rank).IsEqualTo(0);
