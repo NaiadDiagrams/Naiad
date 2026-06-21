@@ -1,6 +1,6 @@
 ﻿namespace Naiad.Dagre;
 
-/// <summary>Base for entries threaded into a <see cref="DoublyLinkedList"/> (port of list.ts's ListNode).</summary>
+/// <summary>Base for entries threaded into a <see cref="DoublyLinkedList"/>.</summary>
 class ListNode
 {
     public ListNode? Next;

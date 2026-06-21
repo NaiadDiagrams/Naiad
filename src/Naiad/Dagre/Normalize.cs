@@ -93,10 +93,8 @@ static class Normalize
             {
                 var w = graph.Successors(v)![0];
                 graph.RemoveNode(v);
-                // The TS pushes {x: node.x!, y: node.y!} where the `!` is a no-op at runtime, so an
-                // unpositioned dummy yields {x: undefined, y: undefined}. The C# Point struct is
-                // non-nullable, so coerce missing coordinates to 0 (matching JS's numeric coercion and
-                // never observed by callers, which assign coordinates before calling undo).
+                // Point is a non-nullable struct, so coerce a not-yet-positioned dummy's coordinates to 0.
+                // Callers assign coordinates before calling Undo, so this fallback is never observed.
                 origLabel.Points!.Add(new(node.X ?? 0, node.Y ?? 0));
                 if (node.Dummy == "edge-label")
                 {

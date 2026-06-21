@@ -1,37 +1,17 @@
 namespace Naiad.Dagre;
 
-/// <summary>
-/// Options passed to <see cref="Layout.Run"/>.
-/// <c>LayoutOptions = GraphLabel &amp; NodeConfig &amp; EdgeConfig &amp; LayoutConfig</c>. Layout itself only reads
-/// <see cref="DebugTiming"/>; the remaining (LayoutConfig) fields are forwarded to <see cref="Order.Run"/>.
-/// </summary>
-sealed class LayoutOptions
-{
-    public bool? DebugTiming;
-
-    // LayoutConfig (consumed by Order):
-    public Action<Graph, Action<Graph, OrderOptions>>? CustomOrder;
-    public bool? DisableOptimalOrderHeuristic;
-    public List<OrderConstraint>? Constraints;
-}
-
-/// <summary>An ordering constraint: <c>left</c> must come before <c>right</c>.</summary>
-sealed record OrderConstraint(string Left, string Right);
-
 /// <summary>Top-level layout driver.</summary>
 static class Layout
 {
-    public static Graph Run(Graph g, LayoutOptions? opts = null)
+    public static Graph Run(Graph g)
     {
-        opts ??= new();
-        // time = opts.debugTiming ? util.time : util.notime; (both just call fn here)
         var layoutGraph = BuildLayoutGraph(g);
-        RunLayout(layoutGraph, opts);
+        RunLayout(layoutGraph);
         UpdateInputGraph(g, layoutGraph);
         return layoutGraph;
     }
 
-    static void RunLayout(Graph g, LayoutOptions opts)
+    static void RunLayout(Graph g)
     {
         MakeSpaceForEdgeLabels(g);
         RemoveSelfEdges(g);
@@ -47,12 +27,7 @@ static class Layout
         Normalize.Run(g);
         ParentDummyChains.Run(g);
         AddBorderSegments.Run(g);
-        Order.Run(g, new()
-        {
-            CustomOrder = opts.CustomOrder,
-            DisableOptimalOrderHeuristic = opts.DisableOptimalOrderHeuristic,
-            Constraints = opts.Constraints
-        });
+        Order.Run(g);
         InsertSelfEdges(g);
         CoordinateSystem.Adjust(g);
         Position.Run(g);
@@ -112,41 +87,29 @@ static class Layout
         inputGraph.Graph_().Height = layoutGraph.Graph_().Height;
     }
 
-    // Whitelists from layout.ts (the copy is performed field-by-field in BuildLayoutGraph since our labels are typed):
-    //   graphNumAttrs = ["nodesep", "edgesep", "ranksep", "marginx", "marginy"]
-    //   graphAttrs    = ["acyclicer", "ranker", "rankdir", "align", "rankalign"]
-    //   nodeNumAttrs  = ["width", "height", "rank"]
-    //   edgeNumAttrs  = ["minlen", "weight", "width", "height", "labeloffset"]
-    //   edgeAttrs     = ["labelpos"]
-
-    /*
-     * Constructs a new graph from the input graph, which can be used for layout.
-     * This process copies only whitelisted attributes from the input graph to the
-     * layout graph. Thus this function serves as a good place to determine what
-     * attributes can influence layout.
-     */
+    /// <summary>
+    /// Builds the graph used for layout: copies only the attributes that can influence layout from the
+    /// input graph onto a fresh graph, filling in defaults for anything the caller left unset.
+    /// </summary>
     static Graph BuildLayoutGraph(Graph inputGraph)
     {
         var g = new Graph(multigraph: true, compound: true);
         var graph = inputGraph.Graph_();
 
-        // setGraph(Object.assign({}, graphDefaults, selectNumberAttrs(graph, graphNumAttrs), util.pick(graph, graphAttrs)))
         var newGraph = new GraphLabel
         {
-            // graphDefaults: {ranksep: 50, edgesep: 20, nodesep: 50, rankdir: "TB", rankalign: "center"}
+            // defaults
             Ranksep = 50,
             Edgesep = 20,
             Nodesep = 50,
             Rankdir = "TB",
             Rankalign = "center"
         };
-        // selectNumberAttrs(graph, graphNumAttrs): nodesep, edgesep, ranksep, marginx, marginy
         if (graph?.Nodesep is { } gNodesep) newGraph.Nodesep = gNodesep;
         if (graph?.Edgesep is { } gEdgesep) newGraph.Edgesep = gEdgesep;
         if (graph?.Ranksep is { } gRanksep) newGraph.Ranksep = gRanksep;
         if (graph?.Marginx is { } gMarginx) newGraph.Marginx = gMarginx;
         if (graph?.Marginy is { } gMarginy) newGraph.Marginy = gMarginy;
-        // util.pick(graph, graphAttrs): acyclicer, ranker, rankdir, align, rankalign
         if (graph?.Acyclicer is { } gAcyclicer) newGraph.Acyclicer = gAcyclicer;
         if (graph?.Ranker is { } gRanker) newGraph.Ranker = gRanker;
         if (graph?.Rankdir is { } gRankdir) newGraph.Rankdir = gRankdir;
@@ -157,11 +120,7 @@ static class Layout
         foreach (var v in inputGraph.Nodes())
         {
             var node = inputGraph.Node(v);
-            // newNode = selectNumberAttrs(node, nodeNumAttrs): width, height, rank
-            // then apply nodeDefaults {width:0, height:0} where undefined.
-            // In the TS, canonicalize(inputGraph.node(v)) tolerates an undefined label (implicit
-            // nodes created via setParent have no label) and selectNumberAttrs yields {}, so the
-            // node defaults {width:0, height:0} apply. Mirror that here when the label is null.
+            // Implicit nodes created via SetParent have no label; default a null label to width/height 0.
             var newNode = node == null
                 ? new NodeLabel { Width = 0, Height = 0 }
                 : new NodeLabel
@@ -182,10 +141,9 @@ static class Layout
         foreach (var e in inputGraph.Edges())
         {
             var edge = inputGraph.Edge_(e);
-            // Object.assign({}, edgeDefaults, selectNumberAttrs(edge, edgeNumAttrs), util.pick(edge, edgeAttrs))
             var newEdge = new EdgeLabel
             {
-                // edgeDefaults: {minlen:1, weight:1, width:0, height:0, labeloffset:10, labelpos:"r"}
+                // defaults
                 Minlen = 1,
                 Weight = 1,
                 Width = 0,
@@ -193,13 +151,11 @@ static class Layout
                 Labeloffset = 10,
                 Labelpos = "r"
             };
-            // selectNumberAttrs(edge, edgeNumAttrs): minlen, weight, width, height, labeloffset
             if (edge.Minlen is { } eMinlen) newEdge.Minlen = eMinlen;
             if (edge.Weight is { } eWeight) newEdge.Weight = eWeight;
             if (edge.Width is { } eWidth) newEdge.Width = eWidth;
             if (edge.Height is { } eHeight) newEdge.Height = eHeight;
             if (edge.Labeloffset is { } eLabeloffset) newEdge.Labeloffset = eLabeloffset;
-            // util.pick(edge, edgeAttrs): labelpos
             if (edge.Labelpos is { } eLabelpos) newEdge.Labelpos = eLabelpos;
 
             g.SetEdge(e, newEdge);

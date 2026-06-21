@@ -6,12 +6,6 @@ static class Order
     {
         opts ??= new();
 
-        if (opts.CustomOrder != null)
-        {
-            opts.CustomOrder(graph, Run);
-            return;
-        }
-
         var maxRank = (int) Util.MaxRank(graph);
         var downLayerGraphs = BuildLayerGraphs(graph, Util.Range(1, maxRank + 1), "inEdges");
         var upLayerGraphs = BuildLayerGraphs(graph, Util.Range(maxRank - 1, -1, -1), "outEdges");
@@ -27,23 +21,22 @@ static class Order
         var bestCC = double.PositiveInfinity;
         List<List<string>>? best = null;
 
-        var constraints = opts.Constraints ?? [];
         for (int i = 0, lastBest = 0; lastBest < 4; ++i, ++lastBest)
         {
-            SweepLayerGraphs(i % 2 != 0 ? downLayerGraphs : upLayerGraphs, i % 4 >= 2, constraints);
+            SweepLayerGraphs(i % 2 != 0 ? downLayerGraphs : upLayerGraphs, i % 4 >= 2);
 
             layering = Util.BuildLayerMatrix(graph);
             var cc = CrossCount.Run(graph, layering);
             if (cc < bestCC)
             {
                 lastBest = 0;
-                // Object.assign({}, layering): shallow copy (inner layer references shared).
+                // shallow copy: inner layer lists are shared.
                 best = new(layering);
                 bestCC = cc;
             }
             else if (cc == bestCC)
             {
-                // structuredClone(layering): deep clone.
+                // deep clone of the layering.
                 best = layering.Select(layer => new List<string>(layer)).ToList();
             }
         }
@@ -98,16 +91,11 @@ static class Order
             BuildLayerGraph.Run(graph, rank, relationship, nodesByRank.GetValueOrDefault(rank) ?? [])).ToList();
     }
 
-    static void SweepLayerGraphs(List<Graph> layerGraphs, bool biasRight, List<OrderConstraint> constraints)
+    static void SweepLayerGraphs(List<Graph> layerGraphs, bool biasRight)
     {
         var cg = new Graph();
         foreach (var lg in layerGraphs)
         {
-            foreach (var con in constraints)
-            {
-                cg.SetEdge(con.Left, con.Right);
-            }
-
             var root = lg.Graph_().Root!;
             var sorted = SortSubgraph.Run(lg, root, cg, biasRight);
             for (var i = 0; i < sorted.Vs.Count; i++)

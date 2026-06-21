@@ -1,6 +1,6 @@
 namespace Naiad.Dagre;
 
-/// <summary>The subset of <c>@dagrejs/graphlib</c>'s <c>alg</c> module that dagre (and its tests) use.</summary>
+/// <summary>Graph algorithms (traversal, connected components, cycle detection) used by the layout passes.</summary>
 static class Alg
 {
     static T Reduce<T>(Graph g, IReadOnlyList<string> vs, bool postorder, Func<T, string, T> fn, T acc)

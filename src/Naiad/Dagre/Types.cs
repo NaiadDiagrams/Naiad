@@ -21,10 +21,7 @@ sealed class PartitionResult<T>
     public List<T> Rhs = [];
 }
 
-/// <summary>
-/// Node label carrying every property dagre may set during layout
-/// <c>NodeLabel</c> interface plus the dynamic properties the algorithms attach).
-/// </summary>
+/// <summary>Node label carrying every property the layout may read or write on a node.</summary>
 sealed class NodeLabel
 {
     public double Width;
@@ -33,7 +30,6 @@ sealed class NodeLabel
     public double? Y;
     public int? Rank;
     public int? Order;
-    public double? E;
     public string? Dummy;            // 'edge' | 'border' | 'edge-label' | 'edge-proxy' | 'selfedge' | 'root'
     public string? BorderType;       // 'borderLeft' | 'borderRight'
     public string? BorderTop;
@@ -46,13 +42,6 @@ sealed class NodeLabel
     public int? MaxRank;
     public string? Label;
     public string? Labelpos;         // 'l' | 'c' | 'r'
-    public string? Class;
-    public double? Padding;
-    public double? PaddingX;
-    public double? PaddingY;
-    public double? Rx;
-    public double? Ry;
-    public string? Shape;
     public EdgeLabel? EdgeLabel;
     public Edge? EdgeObj;
 
@@ -61,21 +50,18 @@ sealed class NodeLabel
     public int? Lim;
     public string? Parent;
 
-    // Collected self-edges, stashed on the node while layout removes/reinserts them (layout.ts).
+    // Collected self-edges, stashed on the node while layout removes/reinserts them.
     public List<SelfEdge>? SelfEdges;
 }
 
-/// <summary>A self-edge captured during layout: the original edge object plus its label (layout.ts <c>SelfEdge</c>).</summary>
+/// <summary>A self-edge captured during layout: the original edge object plus its label.</summary>
 sealed class SelfEdge
 {
     public required Edge E;
     public required EdgeLabel Label;
 }
 
-/// <summary>
-/// Edge label carrying every property dagre may set during layout
-/// <c>EdgeLabel</c> interface plus the dynamic properties the algorithms attach).
-/// </summary>
+/// <summary>Edge label carrying every property the layout may read or write on an edge.</summary>
 sealed class EdgeLabel
 {
     public List<Point>? Points;
@@ -91,13 +77,8 @@ sealed class EdgeLabel
     public double? E;
     public bool? Reversed;
     public string? ForwardName;
-    public bool? SelfEdge;
     public bool? NestingEdge;
     public double? Cutvalue;
-    public int? Lim;
-    public int? Low;
-    public string? Parent;
-    public EdgeLabel? EdgeLabelRef;
     public Edge? EdgeObj;
 }
 
@@ -106,7 +87,6 @@ sealed class GraphLabel
 {
     public double? Width;
     public double? Height;
-    public bool? Compound;
     public string? Rankdir;          // 'TB' | 'BT' | 'LR' | 'RL'
     public string? Align;            // 'UL' | 'UR' | 'DL' | 'DR'
     public double? Nodesep;
@@ -121,5 +101,5 @@ sealed class GraphLabel
     public int? NodeRankFactor;
     public List<string>? DummyChains;
     public string? Root;             // order/build-layer-graph: the synthetic root node id
-    public int? MaxRank;             // layout.ts assignRankMinMax: largest subgraph border rank
+    public int? MaxRank;             // largest subgraph border rank
 }

@@ -5,7 +5,7 @@ namespace Naiad.Dagre;
 /// array-based <see cref="OrderedDictionary{TKey,TValue}"/> (one object holding two internal arrays) rather
 /// than a <c>Dictionary</c> plus a <c>LinkedList</c> with a heap node per entry, because a layout builds many
 /// thousands of these small per-node maps and their construction dominates its allocation. Insertion order is
-/// the property dagre's deterministic output depends on.
+/// the property the layout's deterministic output depends on.
 /// </summary>
 sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
 {

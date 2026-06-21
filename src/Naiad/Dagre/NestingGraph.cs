@@ -36,8 +36,8 @@ static class NestingGraph
         graph.Graph_().NestingRoot = root;
 
         // Multiply minlen by nodeSep to align nodes on non-border ranks.
-        // The real pipeline guarantees every edge has a minlen before this runs; the unit
-        // tests can leave it unset, mirroring JS where `undefined *= nodeSep` is NaN-but-unused.
+        // The real pipeline guarantees every edge has a minlen before this runs; some unit
+        // tests leave it unset, so only scale it when present.
         foreach (var e in graph.Edges())
         {
             var edge = graph.Edge_(e);
@@ -149,9 +149,8 @@ static class NestingGraph
 
     static double SumWeights(Graph graph)
     {
-        // The real pipeline guarantees every edge has a weight; the unit tests can leave it
-        // unset, mirroring JS where `acc + undefined` is NaN (and the resulting weight is unused
-        // for those edges' assertions).
+        // The real pipeline guarantees every edge has a weight; some unit tests leave it unset,
+        // so a missing weight becomes NaN here (unused for those edges' assertions).
         var acc = 0d;
         foreach (var e in graph.Edges())
         {

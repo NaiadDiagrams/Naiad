@@ -25,15 +25,7 @@ static class Position
             double maxHeight = 0;
             foreach (var v in layer)
             {
-                var height = graph.Node(v).Height;
-                if (maxHeight > height)
-                {
-                    // keep maxHeight
-                }
-                else
-                {
-                    maxHeight = height;
-                }
+                maxHeight = Math.Max(maxHeight, graph.Node(v).Height);
             }
 
             foreach (var v in layer)

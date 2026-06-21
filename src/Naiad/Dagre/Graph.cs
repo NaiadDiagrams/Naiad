@@ -1,9 +1,8 @@
 namespace Naiad.Dagre;
 
 /// <summary>
-/// A faithful C# port of <c>@dagrejs/graphlib</c>'s <c>Graph</c> (a directed, optionally multigraph and/or
-/// compound graph), specialized to the dagre label types. Node/edge insertion order is preserved exactly as
-/// the JavaScript object implementation does, because dagre's output depends on iteration order.
+/// A directed, optionally multigraph and/or compound graph, specialized to the layout label types.
+/// Node/edge insertion order is preserved because the layout's output depends on iteration order.
 /// </summary>
 sealed class Graph
 {
@@ -56,8 +55,8 @@ sealed class Graph
 
     /// <summary>
     /// Returns an id with the given prefix that is unique within this graph, from a per-graph counter.
-    /// dagre uses a module-global counter; a per-graph one removes shared mutable state and makes every
-    /// layout reproducible by construction. Callers still guard against pre-existing nodes via HasNode.
+    /// A per-graph counter (rather than a shared static) keeps every layout reproducible by construction.
+    /// Callers still guard against pre-existing nodes via HasNode.
     /// </summary>
     public string UniqueId(string prefix) =>
         prefix + (++uniqueIdCounter).ToString(CultureInfo.InvariantCulture);
@@ -78,12 +77,6 @@ sealed class Graph
         return this;
     }
 
-    public Graph SetDefaultNodeLabel(NodeLabel value)
-    {
-        defaultNodeLabelFn = _ => value;
-        return this;
-    }
-
     public int NodeCount() => nodeCountValue;
 
     /* === Node functions ========== */
@@ -91,8 +84,6 @@ sealed class Graph
     public List<string> Nodes() => nodesMap.Keys();
 
     public List<string> Sources() => Nodes().Where(v => inMap[v].Count == 0).ToList();
-
-    public List<string> Sinks() => Nodes().Where(v => outMap[v].Count == 0).ToList();
 
     public Graph SetNodes(IEnumerable<string> names, NodeLabel? value = null)
     {
@@ -206,7 +197,7 @@ sealed class Graph
         }
         else
         {
-            for (string? ancestor = parent; ancestor != null; ancestor = Parent(ancestor))
+            for (var ancestor = (string?) parent; ancestor != null; ancestor = Parent(ancestor))
             {
                 if (ancestor == v)
                 {
@@ -255,17 +246,6 @@ sealed class Graph
         return [];
     }
 
-    // Child count without materialising the key-snapshot list that Children(v).Count would allocate.
-    public int ChildCount(string v = GraphNode)
-    {
-        if (isCompound)
-        {
-            return childrenMap!.TryGetValue(v, out var children) ? children.Count : 0;
-        }
-
-        return v == GraphNode ? nodeCountValue : 0;
-    }
-
     public List<string>? Predecessors(string v) =>
         predsMap.TryGetValue(v, out var predsV) ? predsV.Keys() : null;
 
@@ -302,63 +282,6 @@ sealed class Graph
         }
 
         return null;
-    }
-
-    public bool IsLeaf(string v)
-    {
-        var neighbors = isDirected ? Successors(v) : Neighbors(v);
-        return neighbors!.Count == 0;
-    }
-
-    public Graph FilterNodes(Func<string, bool> filter)
-    {
-        var copy = new Graph(isDirected, isMultigraph, isCompound);
-        copy.SetGraph(Graph_());
-
-        foreach (var v in nodesMap.Keys())
-        {
-            if (filter(v))
-            {
-                copy.SetNode(v, nodesMap[v]);
-            }
-        }
-
-        foreach (var e in edgeObjsMap.Values())
-        {
-            if (copy.HasNode(e.V) && copy.HasNode(e.W))
-            {
-                copy.SetEdge(e, Edge_(e));
-            }
-        }
-
-        var parents = new Dictionary<string, string?>(StringComparer.Ordinal);
-
-        string? FindParent(string v)
-        {
-            var parent = Parent(v);
-            if (parent == null || copy.HasNode(parent))
-            {
-                parents[v] = parent;
-                return parent;
-            }
-
-            if (parents.TryGetValue(parent, out var cached))
-            {
-                return cached;
-            }
-
-            return FindParent(parent);
-        }
-
-        if (isCompound)
-        {
-            foreach (var v in copy.Nodes())
-            {
-                copy.SetParent(v, FindParent(v));
-            }
-        }
-
-        return copy;
     }
 
     public Graph SetDefaultEdgeLabel(Func<string, string, string?, EdgeLabel> fn)
@@ -515,10 +438,7 @@ sealed class Graph
         return null;
     }
 
-    void RemoveFromParentsChildList(string v)
-    {
-        childrenMap![parentMap![v]].Remove(v);
-    }
+    void RemoveFromParentsChildList(string v) => childrenMap![parentMap![v]].Remove(v);
 
     static List<Edge> FilterEdges(OrderedMap<Edge> setV, string localEdge, string? remoteEdge)
     {

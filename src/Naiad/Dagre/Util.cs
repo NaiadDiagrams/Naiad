@@ -39,9 +39,8 @@ static class Util
             var label = graph.Edge_(e);
             simplified.SetEdge(e.V, e.W, new()
             {
-                // JS treats a missing weight/minlen as undefined; matching dagre's behavior in the
-                // network-simplex tests (which override an edge label with only {minlen}), we fall back
-                // to the same defaults used for a fresh simple edge (weight 0, minlen 1).
+                // A label may be missing weight/minlen (the network-simplex tests override an edge label
+                // with only minlen), so fall back to the defaults used for a fresh simple edge.
                 Weight = (simpleLabel.Weight ?? 0) + (label.Weight ?? 0),
                 Minlen = Math.Max(simpleLabel.Minlen ?? 1, label.Minlen ?? 1)
             });
@@ -209,9 +208,8 @@ static class Util
         var layers = new List<List<string>?>();
         foreach (var v in graph.Nodes())
         {
-            // In the TS, a node with an undefined rank (e.g. a compound subgraph parent) yields
-            // `undefined - offset === NaN`; `layers[NaN]` lands in a non-numeric property bucket that
-            // the later numeric-index iteration never visits. Mirror that by skipping such nodes.
+            // A node with no rank (e.g. a compound subgraph parent) has no place in the rank layers, so
+            // skip it.
             if (graph.Node(v).Rank is not { } rankValue)
             {
                 continue;
@@ -269,10 +267,6 @@ static class Util
         return result;
     }
 
-    public static T Time<T>(string name, Func<T> fn) => fn();
-
-    public static T Notime<T>(string name, Func<T> fn) => fn();
-
     public static List<int> Range(int limit) => Range(0, limit, 1);
 
     public static List<int> Range(int start, int limit, int step = 1)
@@ -318,7 +312,7 @@ static class Util
         return acc;
     }
 
-    // applyWithChunking(Math.max/Math.min, ...): empty reduces to ±Infinity as in JS.
+    // An empty sequence reduces to ±Infinity.
     public static double ApplyMax(IReadOnlyList<double> values) => values.Count == 0 ? double.NegativeInfinity : values.Max();
 
     public static double ApplyMin(IReadOnlyList<double> values) => values.Count == 0 ? double.PositiveInfinity : values.Min();

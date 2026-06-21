@@ -211,19 +211,6 @@ public class UtilTests
         }
     }
 
-    public class TimeTests
-    {
-        // The TS "logs timing information" test captures console.log output; the C# port's
-        // Util.Time simply calls the function with no logging, so that case cannot be ported
-        // faithfully and is skipped.
-
-        [Test]
-        public async Task ReturnsTheValueFromTheEvaluatedFunction()
-        {
-            await Assert.That(Util.Time("foo", () => "bar")).IsEqualTo("bar");
-        }
-    }
-
     public class NormalizeRanksTests
     {
         [Test]

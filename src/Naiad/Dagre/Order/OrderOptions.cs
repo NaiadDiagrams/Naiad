@@ -1,10 +1,7 @@
 ﻿namespace Naiad.Dagre;
 
-/// <summary>Options for <see cref="Order.Run"/>.
-/// (<c>OrderConstraint</c> is defined alongside <see cref="LayoutOptions"/> in Layout.cs.)</summary>
+/// <summary>Options for <see cref="Order.Run"/>.</summary>
 sealed class OrderOptions
 {
-    public Action<Graph, Action<Graph, OrderOptions>>? CustomOrder;
     public bool? DisableOptimalOrderHeuristic;
-    public List<OrderConstraint>? Constraints;
 }

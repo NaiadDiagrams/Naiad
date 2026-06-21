@@ -30,7 +30,7 @@ static class InitOrder
             }
         }
 
-        // JS sort is stable; preserve original order for nodes of equal rank.
+        // Stable sort: preserve original order for nodes of equal rank.
         var orderedVs = simpleNodes.OrderBy(v => graph.Node(v).Rank!.Value).ToList();
         foreach (var v in orderedVs)
         {

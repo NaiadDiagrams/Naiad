@@ -8,7 +8,7 @@ static class Sort
         var sortable = parts.Lhs;
         var unsortable = parts.Rhs;
 
-        // unsortable.sort((a, b) => b.i - a.i): descending by i (stable for ties).
+        // descending by i, stable for ties.
         unsortable = unsortable.OrderByDescending(entry => entry.I).ToList();
 
         var vs = new List<List<string>>();

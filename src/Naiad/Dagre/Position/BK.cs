@@ -6,11 +6,6 @@ namespace Naiad.Dagre;
  */
 static class BK
 {
-    // type Conflicts = { [key: string]: { [key: string]: boolean } };
-    // type PositionMap = { [key: string]: number };
-    // type AlignmentResult = { root: { [key: string]: string }, align: { [key: string]: string } };
-    // type XssMap = { [key: string]: PositionMap };
-
     internal sealed class AlignmentResult
     {
         public Dictionary<string, string> Root = new(StringComparer.Ordinal);
@@ -86,7 +81,6 @@ static class BK
 
         if (layering.Count != 0)
         {
-            // layering.reduce(visitLayer)
             var acc = layering[0];
             for (var i = 1; i < layering.Count; i++)
             {
@@ -118,11 +112,6 @@ static class BK
                     {
                         foreach (var u in preds)
                         {
-                            if (u == null)
-                            {
-                                continue;
-                            }
-
                             var uNode = graph.Node(u);
                             if (uNode.Dummy != null &&
                                 (uNode.Order!.Value < prevNorthBorder || uNode.Order!.Value > nextNorthBorder))
@@ -150,11 +139,6 @@ static class BK
                     if (predecessors != null && predecessors.Count != 0)
                     {
                         var firstPred = predecessors[0];
-                        if (firstPred == null)
-                        {
-                            continue;
-                        }
-
                         nextNorthPos = graph.Node(firstPred).Order!.Value;
                         Scan(south, southPos, southLookahead, prevNorthPos, nextNorthPos);
                         southPos = southLookahead;
@@ -268,9 +252,9 @@ static class BK
 
                 if (ws.Count != 0)
                 {
-                    // ws = wsRaw.sort((a, b) => pos[a] - pos[b]); JS sort is stable. Neighbour lists are
-                    // tiny, so a stable insertion sort matches that ordering without the OrderBy/ToList
-                    // allocation on this 4×-per-layout path.
+                    // Stable sort by pos. Neighbour lists are tiny, so an insertion sort preserves the
+                    // order of equal-pos neighbours without the OrderBy/ToList allocation on this
+                    // 4×-per-layout path.
                     for (var si = 1; si < ws.Count; ++si)
                     {
                         var key = ws[si];
@@ -357,8 +341,7 @@ static class BK
             }
         }
 
-        // First pass, assign smallest coordinates. An absent block has no in-edges, so the loop leaves
-        // acc at 0 — the same result the explicit null branch produced.
+        // First pass: smallest coordinate = max over in-edges (no in-edges leaves it 0).
         void Pass1(string elem)
         {
             double acc = 0;
@@ -366,22 +349,22 @@ static class BK
             {
                 var xsV = xs.GetValueOrDefault(e.V, 0);
                 var edgeWeight = blockG.Edge_(e);
-                acc = Math.Max(acc, xsV + (edgeWeight?.Weight is { } ew ? ew : 0));
+                acc = Math.Max(acc, xsV + (edgeWeight?.Weight ?? 0));
             }
 
             xs[elem] = acc;
         }
 
-        // Second pass, assign greatest coordinates. An absent block has no out-edges, so min stays
-        // +Infinity and the assignment below is skipped — matching the original null branch.
+        // Second pass: greatest coordinate = min over out-edges (no out-edges leaves min at +Infinity,
+        // so the assignment below is skipped).
         void Pass2(string elem)
         {
             var min = double.PositiveInfinity;
             foreach (var e in blockG.OutEdgesOf(elem))
             {
-                var xsW = xs.TryGetValue(e.W, out var xw) ? (double?) xw : null;
+                var xsW = xs.GetValueOrDefault(e.W, 0);
                 var edgeWeight = blockG.Edge_(e);
-                min = Math.Min(min, (xsW ?? 0) - (edgeWeight?.Weight is { } ew ? ew : 0));
+                min = Math.Min(min, xsW - (edgeWeight?.Weight ?? 0));
             }
 
             var node = graph.Node(elem);
@@ -562,7 +545,6 @@ static class BK
     {
         var layering = Util.BuildLayerMatrix(graph);
 
-        // Object.assign(findType1Conflicts(...), findType2Conflicts(...))
         var conflicts = FindType1Conflicts(graph, layering);
         var type2 = FindType2Conflicts(graph, layering);
         foreach (var (k, v) in type2)
@@ -571,10 +553,9 @@ static class BK
         }
 
         var xss = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
-        List<List<string>> adjustedLayering = layering;
+        var adjustedLayering = layering;
         foreach (var vert in new[] { "u", "d" })
         {
-            // vert === "u" ? layering : Object.values(layering).reverse()
             adjustedLayering = vert == "u" ? layering : Enumerable.Reverse(layering).ToList();
             foreach (var horiz in new[] { "l", "r" })
             {
@@ -602,9 +583,8 @@ static class BK
         return Balance(xss, graph.Graph_().Align);
     }
 
-    internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep)
-    {
-        return (g, v, w) =>
+    internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep) =>
+        (g, v, w) =>
         {
             var vLabel = g.Node(v);
             var wLabel = g.Node(w);
@@ -656,7 +636,6 @@ static class BK
 
             return sum;
         };
-    }
 
     internal static double Width(Graph graph, string v) => graph.Node(v).Width;
 }
