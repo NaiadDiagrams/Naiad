@@ -21,9 +21,6 @@ static class Util
     public static string AddBorderNode(Graph graph, string prefix) =>
         AddDummyNode(graph, "border", new() { Width = 0, Height = 0 }, prefix);
 
-    public static string AddBorderNode(Graph graph, string prefix, int rank, int order) =>
-        AddDummyNode(graph, "border", new() { Width = 0, Height = 0, Rank = rank, Order = order }, prefix);
-
     /// <summary>Returns a new graph with only simple edges; aggregates multi-edge weight/minlen.</summary>
     public static Graph Simplify(Graph graph)
     {
@@ -66,48 +63,6 @@ static class Util
         }
 
         return simplified;
-    }
-
-    public static Dictionary<string, Dictionary<string, double>> SuccessorWeights(Graph graph)
-    {
-        var result = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
-        foreach (var v in graph.Nodes())
-        {
-            var sucs = new Dictionary<string, double>(StringComparer.Ordinal);
-            var outEdges = graph.OutEdges(v);
-            if (outEdges != null)
-            {
-                foreach (var e in outEdges)
-                {
-                    sucs[e.W] = sucs.GetValueOrDefault(e.W) + graph.Edge_(e).Weight!.Value;
-                }
-            }
-
-            result[v] = sucs;
-        }
-
-        return result;
-    }
-
-    public static Dictionary<string, Dictionary<string, double>> PredecessorWeights(Graph graph)
-    {
-        var result = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
-        foreach (var v in graph.Nodes())
-        {
-            var preds = new Dictionary<string, double>(StringComparer.Ordinal);
-            var inEdges = graph.InEdges(v);
-            if (inEdges != null)
-            {
-                foreach (var e in inEdges)
-                {
-                    preds[e.V] = preds.GetValueOrDefault(e.V) + graph.Edge_(e).Weight!.Value;
-                }
-            }
-
-            result[v] = preds;
-        }
-
-        return result;
     }
 
     /// <summary>Where a line from <paramref name="point"/> toward the rect's center crosses the rect border.</summary>

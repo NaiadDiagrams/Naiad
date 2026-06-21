@@ -214,7 +214,6 @@ static class BK
      * blocks would be split in that scenario.
      */
     internal static AlignmentResult VerticalAlignment(
-        Graph graph,
         List<List<string>> layering,
         Dictionary<string, Dictionary<string, bool>> conflicts,
         Func<string, OrderedMap<int>.KeyEnumerable> neighborFn)
@@ -374,12 +373,8 @@ static class BK
             }
         }
 
-        OrderedMap<int>.KeyEnumerable PredecessorsWrapper(string elem) => blockG.PredecessorsOf(elem);
-
-        OrderedMap<int>.KeyEnumerable SuccessorsWrapper(string elem) => blockG.SuccessorsOf(elem);
-
-        Iterate(Pass1, PredecessorsWrapper);
-        Iterate(Pass2, SuccessorsWrapper);
+        Iterate(Pass1, blockG.PredecessorsOf);
+        Iterate(Pass2, blockG.SuccessorsOf);
 
         // Assign x coordinates to all nodes
         foreach (var v in align.Keys)
@@ -567,7 +562,7 @@ static class BK
                 OrderedMap<int>.KeyEnumerable NeighborFn(string v) =>
                     vert == "u" ? graph.PredecessorsOf(v) : graph.SuccessorsOf(v);
 
-                var align = VerticalAlignment(graph, adjustedLayering, conflicts, NeighborFn);
+                var align = VerticalAlignment(adjustedLayering, conflicts, NeighborFn);
                 var xs = HorizontalCompaction(graph, adjustedLayering, align.Root, align.Align, horiz == "r");
                 if (horiz == "r")
                 {

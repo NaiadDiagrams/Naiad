@@ -94,44 +94,6 @@ public class UtilTests
         }
     }
 
-    public class SuccessorWeightsTests
-    {
-        [Test]
-        public async Task MapsANodeToItsSuccessorsWithAssociatedWeights()
-        {
-            var g = new Graph(multigraph: true);
-            g.SetEdge("a", "b", new() { Weight = 2 });
-            g.SetEdge("b", "c", new() { Weight = 1 });
-            g.SetEdge("b", "c", new() { Weight = 2 }, "multi");
-            g.SetEdge("b", "d", new() { Weight = 1 }, "multi");
-
-            var sw = Util.SuccessorWeights(g);
-            await Assert.That(sw["a"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 2 });
-            await Assert.That(sw["b"]).IsEquivalentTo(new Dictionary<string, double> { ["c"] = 3, ["d"] = 1 });
-            await Assert.That(sw["c"].Count).IsEqualTo(0);
-            await Assert.That(sw["d"].Count).IsEqualTo(0);
-        }
-    }
-
-    public class PredecessorWeightsTests
-    {
-        [Test]
-        public async Task MapsANodeToItsPredecessorsWithAssociatedWeights()
-        {
-            var g = new Graph(multigraph: true);
-            g.SetEdge("a", "b", new() { Weight = 2 });
-            g.SetEdge("b", "c", new() { Weight = 1 });
-            g.SetEdge("b", "c", new() { Weight = 2 }, "multi");
-            g.SetEdge("b", "d", new() { Weight = 1 }, "multi");
-
-            var pw = Util.PredecessorWeights(g);
-            await Assert.That(pw["a"].Count).IsEqualTo(0);
-            await Assert.That(pw["b"]).IsEquivalentTo(new Dictionary<string, double> { ["a"] = 2 });
-            await Assert.That(pw["c"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 3 });
-            await Assert.That(pw["d"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 1 });
-        }
-    }
-
     public class IntersectRectTests
     {
         static NodeLabel Rect(double x, double y, double width, double height) =>

@@ -58,11 +58,7 @@ static class Alg
 
     public static List<string> Preorder(Graph g, IReadOnlyList<string> vs) => Dfs(g, vs, false);
 
-    public static List<string> Preorder(Graph g, string v) => Dfs(g, [v], false);
-
     public static List<string> Postorder(Graph g, IReadOnlyList<string> vs) => Dfs(g, vs, true);
-
-    public static List<string> Postorder(Graph g, string v) => Dfs(g, [v], true);
 
     public static List<List<string>> Components(Graph graph)
     {

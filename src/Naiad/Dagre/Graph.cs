@@ -85,23 +85,6 @@ sealed class Graph
 
     public List<string> Sources() => Nodes().Where(v => inMap[v].Count == 0).ToList();
 
-    public Graph SetNodes(IEnumerable<string> names, NodeLabel? value = null)
-    {
-        foreach (var v in names)
-        {
-            if (value != null)
-            {
-                SetNode(v, value);
-            }
-            else
-            {
-                SetNode(v);
-            }
-        }
-
-        return this;
-    }
-
     public Graph SetNode(string name)
     {
         if (nodesMap.ContainsKey(name))
@@ -299,23 +282,6 @@ sealed class Graph
     public int EdgeCount() => edgeCountValue;
 
     public List<Edge> Edges() => edgeObjsMap.Values();
-
-    public Graph SetPath(IReadOnlyList<string> nodes, EdgeLabel? value = null)
-    {
-        for (var i = 0; i + 1 < nodes.Count; i++)
-        {
-            if (value != null)
-            {
-                SetEdge(nodes[i], nodes[i + 1], value);
-            }
-            else
-            {
-                SetEdge(nodes[i], nodes[i + 1]);
-            }
-        }
-
-        return this;
-    }
 
     public Graph SetEdge(string v, string w) => SetEdgeCore(v, w, null, null, false);
 

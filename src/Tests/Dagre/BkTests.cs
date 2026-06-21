@@ -268,7 +268,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "b")));
             await AssertStrMapEqual(result.Align, StrMap(("a", "a"), ("b", "b")));
         }
@@ -283,7 +283,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "a")));
             await AssertStrMapEqual(result.Align, StrMap(("a", "b"), ("b", "a")));
         }
@@ -300,7 +300,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "b"), ("c", "a")));
             await AssertStrMapEqual(result.Align, StrMap(("a", "c"), ("b", "b"), ("c", "a")));
         }
@@ -319,7 +319,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("z", "z"), ("b", "b"), ("c", "z")));
             await AssertStrMapEqual(result.Align, StrMap(("z", "c"), ("b", "b"), ("c", "z")));
         }
@@ -338,7 +338,7 @@ public class BkTests
 
             BK.AddConflict(conflicts, "a", "c");
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "b"), ("c", "b")));
             await AssertStrMapEqual(result.Align, StrMap(("a", "a"), ("b", "c"), ("c", "b")));
         }
@@ -357,7 +357,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             // c will align with b, so d will not be able to align with a, because
             // (a,d) and (c,b) cross.
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "b"), ("c", "b"), ("d", "d")));
@@ -378,7 +378,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "b"), ("c", "c"), ("d", "b")));
             await AssertStrMapEqual(result.Align, StrMap(("a", "a"), ("b", "d"), ("c", "c"), ("d", "b")));
         }
@@ -396,7 +396,7 @@ public class BkTests
             var layering = Util.BuildLayerMatrix(g);
             var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-            var result = BK.VerticalAlignment(g, layering, conflicts, v => g.PredecessorsOf(v));
+            var result = BK.VerticalAlignment(layering, conflicts, v => g.PredecessorsOf(v));
             await AssertStrMapEqual(result.Root, StrMap(("a", "a"), ("b", "a"), ("c", "c"), ("d", "a")));
             await AssertStrMapEqual(result.Align, StrMap(("a", "b"), ("b", "d"), ("c", "c"), ("d", "a")));
         }
