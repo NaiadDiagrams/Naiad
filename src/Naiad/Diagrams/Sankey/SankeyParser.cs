@@ -44,7 +44,7 @@ class SankeyParser : IDiagramParser<SankeyModel>
             skipLine.ThenReturn<SankeyLink?>(null)
         );
 
-    public static Parser<char, SankeyModel> Parser =>
+    public static Parser<char, SankeyModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("sankey-beta"), CIString("sankey"))
         from ___ in CommonParsers.InlineWhitespace

@@ -101,7 +101,7 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
             skipLine.ThenReturn<IQuadrantContent?>(null)
         );
 
-    public static Parser<char, QuadrantModel> Parser =>
+    public static Parser<char, QuadrantModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("quadrantChart")
         from ___ in CommonParsers.InlineWhitespace

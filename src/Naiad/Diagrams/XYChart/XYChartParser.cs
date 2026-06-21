@@ -112,7 +112,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
             skipLine.ThenReturn<IXYContent?>(null)
         );
 
-    static Parser<char, XYChartModel> Parser =>
+    static Parser<char, XYChartModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("xychart-beta"), CIString("xychart"))
         from ___ in CommonParsers.InlineWhitespace

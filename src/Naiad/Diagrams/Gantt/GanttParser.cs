@@ -176,7 +176,7 @@ class GanttParser : IDiagramParser<GanttModel>
             skipLine.ThenReturn<IGanttContent?>(null)
         );
 
-    public static Parser<char, GanttModel> Parser =>
+    public static Parser<char, GanttModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("gantt")
         from ___ in CommonParsers.InlineWhitespace

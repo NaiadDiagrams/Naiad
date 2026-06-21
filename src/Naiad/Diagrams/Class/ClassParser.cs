@@ -254,7 +254,7 @@ class ClassParser : IDiagramParser<ClassModel>
         CommonParsers.InlineWhitespace
             .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-    public static Parser<char, ClassModel> Parser =>
+    public static Parser<char, ClassModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("classDiagram")
         from __ in CommonParsers.InlineWhitespace

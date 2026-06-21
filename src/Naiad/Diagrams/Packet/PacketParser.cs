@@ -49,7 +49,7 @@ class PacketParser : IDiagramParser<PacketModel>
             skipLine.ThenReturn<RawField?>(null)
         );
 
-    public static Parser<char, PacketModel> Parser =>
+    public static Parser<char, PacketModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("packet-beta"), CIString("packet"))
         from ___ in CommonParsers.InlineWhitespace

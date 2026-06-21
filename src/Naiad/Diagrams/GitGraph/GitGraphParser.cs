@@ -216,7 +216,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
         ).Optional()
         select options.HasValue ? options.Value : (null, null);
 
-    public static Parser<char, GitGraphModel> Parser =>
+    public static Parser<char, GitGraphModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in CIString("gitGraph")
         from options in optionsParser

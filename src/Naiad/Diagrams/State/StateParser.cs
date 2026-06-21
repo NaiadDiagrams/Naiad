@@ -158,7 +158,7 @@ class StateParser : IDiagramParser<StateModel>
             .Then(CommonParsers.LineEnd)
             .ThenReturn(Unit.Value);
 
-    public static Parser<char, StateModel> Parser =>
+    public static Parser<char, StateModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("stateDiagram-v2")).Or(String("stateDiagram"))
         from __ in CommonParsers.InlineWhitespace

@@ -40,7 +40,7 @@ class KanbanParser : IDiagramParser<KanbanModel>
             skipLine.ThenReturn<IKanbanContent?>(null)
         );
 
-    public static Parser<char, KanbanModel> Parser =>
+    public static Parser<char, KanbanModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("kanban")
         from ___ in CommonParsers.InlineWhitespace

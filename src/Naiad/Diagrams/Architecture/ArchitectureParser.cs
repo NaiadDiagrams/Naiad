@@ -140,7 +140,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
             skipLine.ThenReturn<IArchitectureContent?>(null)
         );
 
-    public static Parser<char, ArchitectureModel> Parser =>
+    public static Parser<char, ArchitectureModel> Parser =
         from inlineWhitespace in CommonParsers.InlineWhitespace
         from architecture in CIString("architecture-beta")
         from innerInlineWhitespace in CommonParsers.InlineWhitespace

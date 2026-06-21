@@ -73,7 +73,7 @@ class RadarParser : IDiagramParser<RadarModel>
             skipLine.ThenReturn<IRadarContent?>(null)
         );
 
-    static Parser<char, RadarModel> Parser =>
+    static Parser<char, RadarModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("radar-beta")
         from ___ in CommonParsers.InlineWhitespace

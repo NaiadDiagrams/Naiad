@@ -43,7 +43,7 @@ class TreemapParser : IDiagramParser<TreemapModel>
         Try(nodeLineParser.Select<NodeLine?>(_ => _))
             .Or(skipLine.ThenReturn<NodeLine?>(null));
 
-    public static Parser<char, TreemapModel> Parser =>
+    public static Parser<char, TreemapModel> Parser =
         from whitespance in CommonParsers.InlineWhitespace
         from ciString in CIString("treemap-beta")
         from innerWhitespace in CommonParsers.InlineWhitespace

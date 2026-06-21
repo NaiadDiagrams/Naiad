@@ -304,7 +304,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             unknownLine
         );
 
-    public static Parser<char, FlowchartModel> Parser =>
+    public static Parser<char, FlowchartModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in Try(String("flowchart")).Or(String("graph"))
         from __ in CommonParsers.InlineWhitespace

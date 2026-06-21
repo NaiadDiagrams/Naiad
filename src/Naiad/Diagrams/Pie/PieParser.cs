@@ -33,7 +33,7 @@ class PieParser : IDiagramParser<PieModel>
         from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
         select title;
 
-    public static Parser<char, PieModel> Parser =>
+    public static Parser<char, PieModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("pie")
         from __ in CommonParsers.InlineWhitespace

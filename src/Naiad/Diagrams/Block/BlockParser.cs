@@ -113,7 +113,7 @@ class BlockParser : IDiagramParser<BlockModel>
             skipLine.ThenReturn<IBlockContent?>(null)
         );
 
-    public static Parser<char, BlockModel> Parser =>
+    public static Parser<char, BlockModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("block-beta"), CIString("block"))
         from ___ in CommonParsers.InlineWhitespace

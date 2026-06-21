@@ -146,7 +146,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
             skipLine.ThenReturn<IRequirementContent?>(null)
         );
 
-    public static Parser<char, RequirementModel> Parser =>
+    public static Parser<char, RequirementModel> Parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("requirementDiagram")
         from ___ in CommonParsers.InlineWhitespace
