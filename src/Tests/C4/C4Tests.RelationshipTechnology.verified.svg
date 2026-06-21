@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 336 524"
+  viewBox="0 0 336 588"
   style="max-width: 336px;"
   role="graphics-document document">
   <style
@@ -20,23 +20,23 @@
     <g
       transform="translate(68,50)">
       <path
-        d="M 80 94 L 80 179"
+        d="M 80 94 L 80 155 L 80 216"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 179 L 76 172.07 L 84 172.07 Z"
+        d="M 80 216 L 76 209.07 L 84 209.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 264 L 80 349"
+        d="M 80 296 L 80 357 L 80 418"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 349 L 76 342.07 L 84 342.07 Z"
+        d="M 80 418 L 76 411.07 L 84 411.07 Z"
         fill="#666"
         stroke="none" />
       <rect
@@ -73,7 +73,7 @@
         fill="#FFFFFF">A user of the system</text>
       <rect
         x="0"
-        y="184"
+        y="216"
         width="160"
         height="80"
         rx="5"
@@ -82,7 +82,7 @@
         stroke="none" />
       <text
         x="80"
-        y="215"
+        y="247"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -91,7 +91,7 @@
         fill="#FFFFFF">System</text>
       <text
         x="80"
-        y="233"
+        y="265"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -99,7 +99,7 @@
         fill="#FFFFFF">The main system</text>
       <rect
         x="0"
-        y="354"
+        y="418"
         width="160"
         height="80"
         rx="5"
@@ -108,7 +108,7 @@
         stroke="none" />
       <text
         x="80"
-        y="385"
+        y="449"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -117,7 +117,7 @@
         fill="#FFFFFF">Email System</text>
       <text
         x="80"
-        y="403"
+        y="467"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -125,7 +125,7 @@
         fill="#FFFFFF">Delivers email</text>
       <rect
         x="55"
-        y="120.5"
+        y="139"
         width="50"
         height="32"
         rx="3"
@@ -134,7 +134,7 @@
         stroke="none" />
       <text
         x="80"
-        y="130"
+        y="148.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -142,7 +142,7 @@
         fill="#666">Uses</text>
       <text
         x="80"
-        y="144"
+        y="162.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -150,7 +150,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="13.3"
-        y="290.5"
+        y="341"
         width="133.4"
         height="32"
         rx="3"
@@ -159,7 +159,7 @@
         stroke="none" />
       <text
         x="80"
-        y="300"
+        y="350.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -167,7 +167,7 @@
         fill="#666">Sends notifications</text>
       <text
         x="80"
-        y="314"
+        y="364.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

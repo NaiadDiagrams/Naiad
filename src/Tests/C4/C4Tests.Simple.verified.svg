@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 324 354"
+  viewBox="0 0 324 371"
   style="max-width: 324px;"
   role="graphics-document document">
   <style
@@ -20,13 +20,13 @@
     <g
       transform="translate(62,50)">
       <path
-        d="M 80 94 L 80 179"
+        d="M 80 94 L 80 147.5 L 80 201"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 179 L 76 172.07 L 84 172.07 Z"
+        d="M 80 201 L 76 194.07 L 84 194.07 Z"
         fill="#666"
         stroke="none" />
       <rect
@@ -63,7 +63,7 @@
         fill="#FFFFFF">A user of the system</text>
       <rect
         x="0"
-        y="184"
+        y="201"
         width="160"
         height="80"
         rx="5"
@@ -72,7 +72,7 @@
         stroke="none" />
       <text
         x="80"
-        y="215"
+        y="232"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -81,7 +81,7 @@
         fill="#FFFFFF">System</text>
       <text
         x="80"
-        y="233"
+        y="250"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -89,7 +89,7 @@
         fill="#FFFFFF">The main system</text>
       <rect
         x="62.8"
-        y="128"
+        y="139"
         width="34.4"
         height="17"
         rx="3"
@@ -98,7 +98,7 @@
         stroke="none" />
       <text
         x="80"
-        y="136.5"
+        y="147.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

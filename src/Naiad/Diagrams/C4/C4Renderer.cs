@@ -3,7 +3,7 @@ namespace Naiad.Diagrams.C4;
 public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<C4Model>
 {
-    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
     const double elementWidth = 160;
     const double elementHeight = 100;

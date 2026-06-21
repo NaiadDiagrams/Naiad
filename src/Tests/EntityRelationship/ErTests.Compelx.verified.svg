@@ -2,64 +2,64 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 796 820"
-  style="max-width: 796px;"
+  viewBox="0 0 800.375 820"
+  style="max-width: 800.375px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <line
-      x1="234.45"
+      x1="595.23"
       y1="180"
-      x2="172.85"
+      x2="518.45"
       y2="280"
       stroke="#333" />
     <line
-      x1="229.99"
-      y1="194.87"
-      x2="223.18"
-      y2="190.67"
+      x1="589.26"
+      y1="194.33"
+      x2="582.92"
+      y2="189.46"
       stroke="#333" />
     <line
-      x1="227.37"
-      y1="199.13"
-      x2="220.55"
-      y2="194.93"
+      x1="586.22"
+      y1="198.3"
+      x2="579.87"
+      y2="193.43"
       stroke="#333" />
     <circle
-      cx="180.72"
-      cy="267.23"
+      cx="527.58"
+      cy="268.1"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="184.91"
-      y1="260.42"
-      x2="189.11"
-      y2="253.61"
+      x1="532.46"
+      y1="261.76"
+      x2="537.33"
+      y2="255.41"
       stroke="#333" />
     <line
-      x1="184.91"
-      y1="260.42"
-      x2="192.51"
-      y2="255.7"
+      x1="532.46"
+      y1="261.76"
+      x2="540.5"
+      y2="257.85"
       stroke="#333" />
     <line
-      x1="184.91"
-      y1="260.42"
-      x2="185.7"
-      y2="251.51"
+      x1="532.46"
+      y1="261.76"
+      x2="534.16"
+      y2="252.98"
       stroke="#333" />
     <rect
-      x="178.85"
+      x="532.04"
       y="220"
       width="49.6"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="203.65"
+      x="556.84"
       y="230"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -67,56 +67,56 @@
       font-family="Arial, sans-serif"
       fill="#333">places</text>
     <line
-      x1="234.45"
+      x1="595.23"
       y1="180"
-      x2="172.85"
+      x2="585.23"
       y2="580"
       stroke="#333" />
     <line
-      x1="236.12"
-      y1="195.43"
-      x2="228.21"
-      y2="194.22"
+      x1="598.85"
+      y1="195.1"
+      x2="590.85"
+      y2="194.9"
       stroke="#333" />
     <line
-      x1="235.36"
-      y1="200.38"
-      x2="227.45"
-      y2="199.16"
+      x1="598.72"
+      y1="200.09"
+      x2="590.73"
+      y2="199.89"
       stroke="#333" />
     <circle
-      cx="175.13"
-      cy="565.17"
+      cx="585.6"
+      cy="565"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="176.35"
-      y1="557.27"
-      x2="177.57"
-      y2="549.36"
+      x1="585.8"
+      y1="557.01"
+      x2="586"
+      y2="549.01"
       stroke="#333" />
     <line
-      x1="176.35"
-      y1="557.27"
-      x2="181.52"
-      y2="549.97"
+      x1="585.8"
+      y1="557.01"
+      x2="590"
+      y2="549.11"
       stroke="#333" />
     <line
-      x1="176.35"
-      y1="557.27"
-      x2="173.61"
-      y2="548.75"
+      x1="585.8"
+      y1="557.01"
+      x2="582"
+      y2="548.91"
       stroke="#333" />
     <rect
-      x="188.75"
+      x="575.33"
       y="370"
       width="29.8"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="203.65"
+      x="590.23"
       y="380"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -124,56 +124,56 @@
       font-family="Arial, sans-serif"
       fill="#333">has</text>
     <line
-      x1="276.4"
+      x1="414.9"
       y1="380"
-      x2="495"
+      x2="232.5"
       y2="680"
       stroke="#333" />
     <line
-      x1="288.47"
-      y1="389.77"
-      x2="282"
-      y2="394.48"
+      x1="410.53"
+      y1="394.89"
+      x2="403.69"
+      y2="390.74"
       stroke="#333" />
     <line
-      x1="291.41"
-      y1="393.81"
-      x2="284.95"
-      y2="398.52"
+      x1="407.93"
+      y1="399.17"
+      x2="401.09"
+      y2="395.01"
       stroke="#333" />
     <line
-      x1="482.93"
-      y1="670.23"
-      x2="489.4"
-      y2="665.52"
+      x1="236.87"
+      y1="665.11"
+      x2="243.71"
+      y2="669.26"
       stroke="#333" />
     <line
-      x1="483.22"
-      y1="663.84"
-      x2="478.51"
-      y2="657.37"
+      x1="242.89"
+      y1="662.91"
+      x2="247.05"
+      y2="656.08"
       stroke="#333" />
     <line
-      x1="483.22"
-      y1="663.84"
-      x2="481.74"
-      y2="655.01"
+      x1="242.89"
+      y1="662.91"
+      x2="250.46"
+      y2="658.15"
       stroke="#333" />
     <line
-      x1="483.22"
-      y1="663.84"
-      x2="475.28"
-      y2="659.73"
+      x1="242.89"
+      y1="662.91"
+      x2="243.63"
+      y2="654"
       stroke="#333" />
     <rect
-      x="354.3"
+      x="292.3"
       y="520"
       width="62.8"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="385.7"
+      x="323.7"
       y="530"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -181,56 +181,56 @@
       font-family="Arial, sans-serif"
       fill="#333">contains</text>
     <line
-      x1="172.85"
+      x1="518.45"
       y1="480"
-      x2="172.85"
+      x2="585.23"
       y2="580"
       stroke="#333" />
     <circle
-      cx="172.85"
-      cy="495"
+      cx="526.78"
+      cy="492.47"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="172.85"
-      y1="503"
-      x2="172.85"
-      y2="511"
+      x1="531.22"
+      y1="499.13"
+      x2="535.67"
+      y2="505.78"
       stroke="#333" />
     <line
-      x1="172.85"
-      y1="503"
-      x2="168.85"
-      y2="511"
+      x1="531.22"
+      y1="499.13"
+      x2="532.34"
+      y2="508"
       stroke="#333" />
     <line
-      x1="172.85"
-      y1="503"
-      x2="176.85"
-      y2="511"
+      x1="531.22"
+      y1="499.13"
+      x2="538.99"
+      y2="503.56"
       stroke="#333" />
     <line
-      x1="168.85"
-      y1="565"
-      x2="176.85"
-      y2="565"
+      x1="573.57"
+      y1="569.75"
+      x2="580.22"
+      y2="565.3"
       stroke="#333" />
     <line
-      x1="168.85"
-      y1="560"
-      x2="176.85"
-      y2="560"
+      x1="570.79"
+      y1="565.59"
+      x2="577.45"
+      y2="561.15"
       stroke="#333" />
     <rect
-      x="134.85"
+      x="513.84"
       y="520"
       width="76"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="172.85"
+      x="551.84"
       y="530"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -238,56 +238,56 @@
       font-family="Arial, sans-serif"
       fill="#333">"ships to"</text>
     <line
-      x1="172.85"
+      x1="518.45"
       y1="480"
-      x2="172.85"
+      x2="585.23"
       y2="580"
       stroke="#333" />
     <circle
-      cx="172.85"
-      cy="495"
+      cx="526.78"
+      cy="492.47"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="172.85"
-      y1="503"
-      x2="172.85"
-      y2="511"
+      x1="531.22"
+      y1="499.13"
+      x2="535.67"
+      y2="505.78"
       stroke="#333" />
     <line
-      x1="172.85"
-      y1="503"
-      x2="168.85"
-      y2="511"
+      x1="531.22"
+      y1="499.13"
+      x2="532.34"
+      y2="508"
       stroke="#333" />
     <line
-      x1="172.85"
-      y1="503"
-      x2="176.85"
-      y2="511"
+      x1="531.22"
+      y1="499.13"
+      x2="538.99"
+      y2="503.56"
       stroke="#333" />
     <line
-      x1="168.85"
-      y1="565"
-      x2="176.85"
-      y2="565"
+      x1="573.57"
+      y1="569.75"
+      x2="580.22"
+      y2="565.3"
       stroke="#333" />
     <line
-      x1="168.85"
-      y1="560"
-      x2="176.85"
-      y2="560"
+      x1="570.79"
+      y1="565.59"
+      x2="577.45"
+      y2="561.15"
       stroke="#333" />
     <rect
-      x="134.85"
+      x="513.84"
       y="520"
       width="76"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="172.85"
+      x="551.84"
       y="530"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -295,56 +295,56 @@
       font-family="Arial, sans-serif"
       fill="#333">"bills to"</text>
     <line
-      x1="579.3"
+      x1="138.2"
       y1="470"
-      x2="579.3"
+      x2="148.2"
       y2="600"
       stroke="#333" />
     <line
-      x1="583.3"
-      y1="485"
-      x2="575.3"
-      y2="485"
+      x1="143.34"
+      y1="484.65"
+      x2="135.36"
+      y2="485.26"
       stroke="#333" />
     <line
-      x1="583.3"
-      y1="490"
-      x2="575.3"
-      y2="490"
+      x1="143.72"
+      y1="489.63"
+      x2="135.75"
+      y2="490.25"
       stroke="#333" />
     <circle
-      cx="579.3"
-      cy="585"
+      cx="147.05"
+      cy="585.04"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="579.3"
-      y1="577"
-      x2="579.3"
-      y2="569"
+      x1="146.44"
+      y1="577.07"
+      x2="145.82"
+      y2="569.09"
       stroke="#333" />
     <line
-      x1="579.3"
-      y1="577"
-      x2="583.3"
-      y2="569"
+      x1="146.44"
+      y1="577.07"
+      x2="149.81"
+      y2="568.78"
       stroke="#333" />
     <line
-      x1="579.3"
-      y1="577"
-      x2="575.3"
-      y2="569"
+      x1="146.44"
+      y1="577.07"
+      x2="141.83"
+      y2="569.4"
       stroke="#333" />
     <rect
-      x="531.4"
+      x="95.3"
       y="525"
       width="95.8"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="579.3"
+      x="143.2"
       y="535"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -352,56 +352,56 @@
       font-family="Arial, sans-serif"
       fill="#333">"included in"</text>
     <line
-      x1="617.8"
+      x1="138.2"
       y1="150"
-      x2="579.3"
+      x2="138.2"
       y2="290"
       stroke="#333" />
     <line
-      x1="617.68"
-      y1="165.52"
-      x2="609.97"
-      y2="163.4"
+      x1="142.2"
+      y1="165"
+      x2="134.2"
+      y2="165"
       stroke="#333" />
     <line
-      x1="616.35"
-      y1="170.34"
-      x2="608.64"
-      y2="168.22"
+      x1="142.2"
+      y1="170"
+      x2="134.2"
+      y2="170"
       stroke="#333" />
     <circle
-      cx="583.28"
-      cy="275.54"
+      cx="138.2"
+      cy="275"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="585.4"
-      y1="267.82"
-      x2="587.52"
-      y2="260.11"
+      x1="138.2"
+      y1="267"
+      x2="138.2"
+      y2="259"
       stroke="#333" />
     <line
-      x1="585.4"
-      y1="267.82"
-      x2="591.38"
-      y2="261.17"
+      x1="138.2"
+      y1="267"
+      x2="142.2"
+      y2="259"
       stroke="#333" />
     <line
-      x1="585.4"
-      y1="267.82"
-      x2="583.66"
-      y2="259.05"
+      x1="138.2"
+      y1="267"
+      x2="134.2"
+      y2="259"
       stroke="#333" />
     <rect
-      x="557.25"
+      x="96.9"
       y="210"
       width="82.6"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="598.55"
+      x="138.2"
       y="220"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -409,44 +409,44 @@
       font-family="Arial, sans-serif"
       fill="#333">categorizes</text>
     <line
-      x1="617.8"
+      x1="138.2"
       y1="30"
-      x2="617.8"
+      x2="138.2"
       y2="30"
       stroke="#333" />
     <circle
-      cx="632.8"
+      cx="153.2"
       cy="30"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="640.8"
+      x1="161.2"
       y1="26"
-      x2="640.8"
+      x2="161.2"
       y2="34"
       stroke="#333" />
     <circle
-      cx="632.8"
+      cx="153.2"
       cy="30"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="640.8"
+      x1="161.2"
       y1="26"
-      x2="640.8"
+      x2="161.2"
       y2="34"
       stroke="#333" />
     <rect
-      x="576.5"
+      x="96.9"
       y="20"
       width="82.6"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="617.8"
+      x="138.2"
       y="30"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -454,7 +454,7 @@
       font-family="Arial, sans-serif"
       fill="#333">"parent of"</text>
     <rect
-      x="69.3"
+      x="430.08"
       y="0"
       width="330.3"
       height="180"
@@ -462,14 +462,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="69.3"
+      x="430.08"
       y="0"
       width="330.3"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="234.45"
+      x="595.23"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -478,13 +478,13 @@
       font-weight="bold"
       fill="#fff">CUSTOMER</text>
     <line
-      x1="69.3"
+      x1="430.08"
       y1="30"
-      x2="399.6"
+      x2="760.38"
       y2="30"
       stroke="#9370DB" />
     <text
-      x="79.3"
+      x="440.08"
       y="50"
       text-anchor="start"
       dominant-baseline="middle"
@@ -492,28 +492,28 @@
       font-family="Arial, sans-serif"
       fill="#666">PK</text>
     <text
-      x="109.3"
+      x="470.08"
       y="50"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int customer_id "Primary key"</text>
     <text
-      x="109.3"
+      x="470.08"
       y="70"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string first_name "Customer first name"</text>
     <text
-      x="109.3"
+      x="470.08"
       y="90"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string last_name "Customer last name"</text>
     <text
-      x="79.3"
+      x="440.08"
       y="110"
       text-anchor="start"
       dominant-baseline="middle"
@@ -521,35 +521,35 @@
       font-family="Arial, sans-serif"
       fill="#666">UK</text>
     <text
-      x="109.3"
+      x="470.08"
       y="110"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string email "Unique email address"</text>
     <text
-      x="109.3"
+      x="470.08"
       y="130"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">date date_of_birth</text>
     <text
-      x="109.3"
+      x="470.08"
       y="150"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string phone</text>
     <text
-      x="109.3"
+      x="470.08"
       y="170"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">boolean is_active</text>
     <rect
-      x="0"
+      x="412.38"
       y="580"
       width="345.7"
       height="200"
@@ -557,14 +557,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="0"
+      x="412.38"
       y="580"
       width="345.7"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="172.85"
+      x="585.23"
       y="595"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -573,13 +573,13 @@
       font-weight="bold"
       fill="#fff">ADDRESS</text>
     <line
-      x1="0"
+      x1="412.38"
       y1="610"
-      x2="345.7"
+      x2="758.08"
       y2="610"
       stroke="#9370DB" />
     <text
-      x="10"
+      x="422.38"
       y="630"
       text-anchor="start"
       dominant-baseline="middle"
@@ -587,14 +587,14 @@
       font-family="Arial, sans-serif"
       fill="#666">PK</text>
     <text
-      x="40"
+      x="452.38"
       y="630"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int address_id</text>
     <text
-      x="10"
+      x="422.38"
       y="650"
       text-anchor="start"
       dominant-baseline="middle"
@@ -602,56 +602,56 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="40"
+      x="452.38"
       y="650"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int customer_id</text>
     <text
-      x="40"
+      x="452.38"
       y="670"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string street</text>
     <text
-      x="40"
+      x="452.38"
       y="690"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string city</text>
     <text
-      x="40"
+      x="452.38"
       y="710"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string state</text>
     <text
-      x="40"
+      x="452.38"
       y="730"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string postal_code</text>
     <text
-      x="40"
+      x="452.38"
       y="750"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string country</text>
     <text
-      x="40"
+      x="452.38"
       y="770"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string address_type "billing or shipping"</text>
     <rect
-      x="69.3"
+      x="414.9"
       y="280"
       width="207.1"
       height="200"
@@ -659,14 +659,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="69.3"
+      x="414.9"
       y="280"
       width="207.1"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="172.85"
+      x="518.45"
       y="295"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -675,13 +675,13 @@
       font-weight="bold"
       fill="#fff">ORDER</text>
     <line
-      x1="69.3"
+      x1="414.9"
       y1="310"
-      x2="276.4"
+      x2="622"
       y2="310"
       stroke="#9370DB" />
     <text
-      x="79.3"
+      x="424.9"
       y="330"
       text-anchor="start"
       dominant-baseline="middle"
@@ -689,14 +689,14 @@
       font-family="Arial, sans-serif"
       fill="#666">PK</text>
     <text
-      x="109.3"
+      x="454.9"
       y="330"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int order_id</text>
     <text
-      x="79.3"
+      x="424.9"
       y="350"
       text-anchor="start"
       dominant-baseline="middle"
@@ -704,14 +704,14 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="109.3"
+      x="454.9"
       y="350"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int customer_id</text>
     <text
-      x="79.3"
+      x="424.9"
       y="370"
       text-anchor="start"
       dominant-baseline="middle"
@@ -719,14 +719,14 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="109.3"
+      x="454.9"
       y="370"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int shipping_address_id</text>
     <text
-      x="79.3"
+      x="424.9"
       y="390"
       text-anchor="start"
       dominant-baseline="middle"
@@ -734,42 +734,42 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="109.3"
+      x="454.9"
       y="390"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int billing_address_id</text>
     <text
-      x="109.3"
+      x="454.9"
       y="410"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">datetime order_date</text>
     <text
-      x="109.3"
+      x="454.9"
       y="430"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">datetime shipped_date</text>
     <text
-      x="109.3"
+      x="454.9"
       y="450"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string status</text>
     <text
-      x="109.3"
+      x="454.9"
       y="470"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">decimal total_amount</text>
     <rect
-      x="495"
+      x="63.9"
       y="600"
       width="168.6"
       height="160"
@@ -777,14 +777,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="495"
+      x="63.9"
       y="600"
       width="168.6"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="579.3"
+      x="148.2"
       y="615"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -793,13 +793,13 @@
       font-weight="bold"
       fill="#fff">ORDER_ITEM</text>
     <line
-      x1="495"
+      x1="63.9"
       y1="630"
-      x2="663.6"
+      x2="232.5"
       y2="630"
       stroke="#9370DB" />
     <text
-      x="505"
+      x="73.9"
       y="650"
       text-anchor="start"
       dominant-baseline="middle"
@@ -807,14 +807,14 @@
       font-family="Arial, sans-serif"
       fill="#666">PK</text>
     <text
-      x="535"
+      x="103.9"
       y="650"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int item_id</text>
     <text
-      x="505"
+      x="73.9"
       y="670"
       text-anchor="start"
       dominant-baseline="middle"
@@ -822,14 +822,14 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="535"
+      x="103.9"
       y="670"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int order_id</text>
     <text
-      x="505"
+      x="73.9"
       y="690"
       text-anchor="start"
       dominant-baseline="middle"
@@ -837,35 +837,35 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="535"
+      x="103.9"
       y="690"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int product_id</text>
     <text
-      x="535"
+      x="103.9"
       y="710"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int quantity</text>
     <text
-      x="535"
+      x="103.9"
       y="730"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">decimal unit_price</text>
     <text
-      x="535"
+      x="103.9"
       y="750"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">decimal discount</text>
     <rect
-      x="495"
+      x="53.9"
       y="290"
       width="168.6"
       height="180"
@@ -873,14 +873,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="495"
+      x="53.9"
       y="290"
       width="168.6"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="579.3"
+      x="138.2"
       y="305"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -889,13 +889,13 @@
       font-weight="bold"
       fill="#fff">PRODUCT</text>
     <line
-      x1="495"
+      x1="53.9"
       y1="320"
-      x2="663.6"
+      x2="222.5"
       y2="320"
       stroke="#9370DB" />
     <text
-      x="505"
+      x="63.9"
       y="340"
       text-anchor="start"
       dominant-baseline="middle"
@@ -903,14 +903,14 @@
       font-family="Arial, sans-serif"
       fill="#666">PK</text>
     <text
-      x="535"
+      x="93.9"
       y="340"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int product_id</text>
     <text
-      x="505"
+      x="63.9"
       y="360"
       text-anchor="start"
       dominant-baseline="middle"
@@ -918,42 +918,42 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="535"
+      x="93.9"
       y="360"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int category_id</text>
     <text
-      x="535"
+      x="93.9"
       y="380"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string name</text>
     <text
-      x="535"
+      x="93.9"
       y="400"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string description</text>
     <text
-      x="535"
+      x="93.9"
       y="420"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">decimal price</text>
     <text
-      x="535"
+      x="93.9"
       y="440"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int stock_quantity</text>
     <text
-      x="505"
+      x="63.9"
       y="460"
       text-anchor="start"
       dominant-baseline="middle"
@@ -961,14 +961,14 @@
       font-family="Arial, sans-serif"
       fill="#666">UK</text>
     <text
-      x="535"
+      x="93.9"
       y="460"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string sku</text>
     <rect
-      x="479.6"
+      x="0"
       y="30"
       width="276.4"
       height="120"
@@ -976,14 +976,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="479.6"
+      x="0"
       y="30"
       width="276.4"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="617.8"
+      x="138.2"
       y="45"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -992,13 +992,13 @@
       font-weight="bold"
       fill="#fff">CATEGORY</text>
     <line
-      x1="479.6"
+      x1="0"
       y1="60"
-      x2="756"
+      x2="276.4"
       y2="60"
       stroke="#9370DB" />
     <text
-      x="489.6"
+      x="10"
       y="80"
       text-anchor="start"
       dominant-baseline="middle"
@@ -1006,14 +1006,14 @@
       font-family="Arial, sans-serif"
       fill="#666">PK</text>
     <text
-      x="519.6"
+      x="40"
       y="80"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int category_id</text>
     <text
-      x="489.6"
+      x="10"
       y="100"
       text-anchor="start"
       dominant-baseline="middle"
@@ -1021,21 +1021,21 @@
       font-family="Arial, sans-serif"
       fill="#666">FK</text>
     <text
-      x="519.6"
+      x="40"
       y="100"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">int parent_id "Self-referencing"</text>
     <text
-      x="519.6"
+      x="40"
       y="120"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">string name</text>
     <text
-      x="519.6"
+      x="40"
       y="140"
       text-anchor="start"
       dominant-baseline="middle"

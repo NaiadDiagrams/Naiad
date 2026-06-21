@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 393 420"
-  style="max-width: 393px;"
+  viewBox="0 0 354.4 420"
+  style="max-width: 354.4px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -23,81 +23,81 @@
   <g
     transform="translate(20,20)">
     <line
-      x1="176.5"
+      x1="157.2"
       y1="20"
-      x2="176.5"
+      x2="157.2"
       y2="100"
       stroke="#333" />
     <polygon
-      points="176.5,100 172.5,93.07 180.5,93.07"
+      points="157.2,100 153.2,93.07 161.2,93.07"
       fill="#333" />
     <line
-      x1="176.5"
+      x1="157.2"
       y1="140"
-      x2="176.5"
+      x2="157.2"
       y2="220"
       stroke="#333" />
     <polygon
-      points="176.5,220 172.5,213.07 180.5,213.07"
+      points="157.2,220 153.2,213.07 161.2,213.07"
       fill="#333" />
     <line
-      x1="166.18"
-      y1="249.68"
-      x2="69.92"
+      x1="166.7"
+      y1="250.5"
+      x2="247.7"
       y2="340"
       stroke="#333" />
     <polygon
-      points="69.92,340 72.23,332.34 77.71,338.18"
+      points="247.7,340 240.09,337.55 246.02,332.18"
       fill="#333" />
     <rect
-      x="85.25"
-      y="296.84"
+      x="174.4"
+      y="297.25"
       width="65.6"
       height="16"
       fill="#fff"
       stroke="none" />
     <text
-      x="118.05"
-      y="304.84"
+      x="207.2"
+      y="305.25"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">if n &gt; 0</text>
     <line
-      x1="186.82"
-      y1="249.68"
-      x2="283.08"
+      x1="147.7"
+      y1="250.5"
+      x2="66.7"
       y2="340"
       stroke="#333" />
     <polygon
-      points="283.08,340 275.29,338.18 280.77,332.34"
+      points="66.7,340 68.38,332.18 74.31,337.55"
       fill="#333" />
     <rect
-      x="202.15"
-      y="296.84"
+      x="74.4"
+      y="297.25"
       width="65.6"
       height="16"
       fill="#fff"
       stroke="none" />
     <text
-      x="234.95"
-      y="304.84"
+      x="107.2"
+      y="305.25"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">if n &lt; 0</text>
     <path
-      d="M176.5,220 L196.5,240 L176.5,260 L156.5,240 Z"
+      d="M157.2,220 L177.2,240 L157.2,260 L137.2,240 Z"
       fill="#fff"
       stroke="#333" />
     <circle
-      cx="176.5"
+      cx="157.2"
       cy="10"
       r="10"
       fill="#333"
       stroke="#333" />
     <rect
-      x="119.5"
+      x="100.2"
       y="100"
       width="114"
       height="40"
@@ -106,12 +106,28 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="176.5"
+      x="157.2"
       y="120"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">IsPositive</text>
+    <rect
+      x="217.2"
+      y="340"
+      width="97.2"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="265.8"
+      y="360"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Positive</text>
     <rect
       x="0"
       y="340"
@@ -123,22 +139,6 @@
       stroke="#9370DB" />
     <text
       x="48.6"
-      y="360"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif">Positive</text>
-    <rect
-      x="255.8"
-      y="340"
-      width="97.2"
-      height="40"
-      rx="5"
-      ry="5"
-      fill="#ECECFF"
-      stroke="#9370DB" />
-    <text
-      x="304.4"
       y="360"
       text-anchor="middle"
       dominant-baseline="middle"

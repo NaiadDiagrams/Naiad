@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 420 376"
+  viewBox="0 0 420 393"
   style="max-width: 420px;"
   role="graphics-document document">
   <style
@@ -20,59 +20,25 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 80 98 L 186.13 184.83"
+        d="M 300 98 L 300 151.5 L 242.59 205"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 186.13 184.83 L 178.24 183.54 L 183.3 177.35 Z"
+        d="M 242.59 205 L 244.93 197.35 L 250.38 203.2 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 300 98 L 193.87 184.83"
+        d="M 80 98 L 80 151.5 L 137.41 205"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 193.87 184.83 L 196.7 177.35 L 201.76 183.54 Z"
+        d="M 137.41 205 L 129.62 203.2 L 135.07 197.35 Z"
         fill="#666"
         stroke="none" />
-      <rect
-        x="0"
-        y="0"
-        width="160"
-        height="98"
-        rx="5"
-        ry="5"
-        fill="#85BBF0"
-        stroke="none" />
-      <text
-        x="80"
-        y="31"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="13px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#FFFFFF">Auth Controller</text>
-      <text
-        x="80"
-        y="49"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">[Express]</text>
-      <text
-        x="80"
-        y="67"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Handles authentication</text>
       <rect
         x="220"
         y="0"
@@ -90,7 +56,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">User Controller</text>
+        fill="#FFFFFF">Auth Controller</text>
       <text
         x="300"
         y="49"
@@ -106,10 +72,44 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">Handles authentication</text>
+      <rect
+        x="0"
+        y="0"
+        width="160"
+        height="98"
+        rx="5"
+        ry="5"
+        fill="#85BBF0"
+        stroke="none" />
+      <text
+        x="80"
+        y="31"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">User Controller</text>
+      <text
+        x="80"
+        y="49"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Express]</text>
+      <text
+        x="80"
+        y="67"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">Manages users</text>
       <rect
         x="110"
-        y="188"
+        y="205"
         width="160"
         height="98"
         rx="5"
@@ -118,7 +118,7 @@
         stroke="none" />
       <text
         x="190"
-        y="219"
+        y="236"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -127,7 +127,7 @@
         fill="#FFFFFF">User Service</text>
       <text
         x="190"
-        y="237"
+        y="254"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -135,15 +135,15 @@
         fill="#FFFFFF">[TypeScript]</text>
       <text
         x="190"
-        y="255"
+        y="272"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Business logic</text>
       <rect
-        x="115.87"
-        y="132.92"
+        x="282.8"
+        y="143"
         width="34.4"
         height="17"
         rx="3"
@@ -151,16 +151,16 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="133.07"
-        y="141.42"
+        x="300"
+        y="151.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Uses</text>
       <rect
-        x="229.73"
-        y="132.92"
+        x="62.8"
+        y="143"
         width="34.4"
         height="17"
         rx="3"
@@ -168,8 +168,8 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="246.93"
-        y="141.42"
+        x="80"
+        y="151.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

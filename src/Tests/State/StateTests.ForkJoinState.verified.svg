@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 351 268"
-  style="max-width: 351px;"
+  viewBox="0 0 320.8 268"
+  style="max-width: 320.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -23,45 +23,61 @@
   <g
     transform="translate(20,20)">
     <line
-      x1="155.5"
+      x1="140.4"
       y1="20"
-      x2="155.5"
+      x2="140.4"
       y2="100"
       stroke="#333" />
     <polygon
-      points="155.5,100 151.5,93.07 159.5,93.07"
+      points="140.4,100 136.4,93.07 144.4,93.07"
       fill="#333" />
     <line
-      x1="143.97"
+      x1="150.42"
       y1="108"
-      x2="62.37"
+      x2="221.33"
       y2="188"
       stroke="#333" />
     <polygon
-      points="62.37,188 64.52,180.29 70.12,186.01"
+      points="221.33,188 213.74,185.47 219.73,180.16"
       fill="#333" />
     <line
-      x1="167.03"
+      x1="130.38"
       y1="108"
-      x2="248.63"
+      x2="59.47"
       y2="188"
       stroke="#333" />
     <polygon
-      points="248.63,188 240.88,186.01 246.48,180.29"
+      points="59.47,188 61.07,180.16 67.06,185.47"
       fill="#333" />
     <rect
-      x="105.5"
+      x="90.4"
       y="100"
       width="100"
       height="8"
       fill="#333"
       stroke="#333" />
     <circle
-      cx="155.5"
+      cx="140.4"
       cy="10"
       r="10"
       fill="#333"
       stroke="#333" />
+    <rect
+      x="200.4"
+      y="188"
+      width="80.4"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="240.6"
+      y="208"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">State2</text>
     <rect
       x="0"
       y="188"
@@ -73,22 +89,6 @@
       stroke="#9370DB" />
     <text
       x="40.2"
-      y="208"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif">State2</text>
-    <rect
-      x="230.6"
-      y="188"
-      width="80.4"
-      height="40"
-      rx="5"
-      ry="5"
-      fill="#ECECFF"
-      stroke="#9370DB" />
-    <text
-      x="270.8"
       y="208"
       text-anchor="middle"
       dominant-baseline="middle"

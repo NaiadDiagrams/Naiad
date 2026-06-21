@@ -86,13 +86,13 @@
         fill="#666"
         stroke="none" />
       <path
-        d="M 190 343 L 275 343"
+        d="M 190 343 L 235 343 L 280 343"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 275 343 L 268.07 347 L 268.07 339 Z"
+        d="M 280 343 L 273.07 347 L 273.07 339 Z"
         fill="#666"
         stroke="none" />
       <path
@@ -277,7 +277,7 @@
         font-family="Arial, sans-serif"
         fill="#888">[HTTPS]</text>
       <rect
-        x="215.3"
+        x="217.8"
         y="326.5"
         width="34.4"
         height="17"
@@ -286,7 +286,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="232.5"
+        x="235"
         y="335"
         text-anchor="middle"
         dominant-baseline="middle"

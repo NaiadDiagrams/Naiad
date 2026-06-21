@@ -3,7 +3,7 @@ namespace Naiad.Diagrams.Class;
 public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ClassModel>
 {
-    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreEngine();
 
     const double ClassPadding = 10;
     const double LineHeight = 20;

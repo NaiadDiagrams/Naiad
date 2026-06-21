@@ -29,19 +29,19 @@ public class DagreBenchmarks
 
     [Benchmark]
     public LayoutResult Layout_Linear_5() =>
-        new DagreLayoutEngine().Layout(small, Options);
+        new DagreEngine().Layout(small, Options);
 
     [Benchmark]
     public LayoutResult Layout_Diamond_20() =>
-        new DagreLayoutEngine().Layout(medium, Options);
+        new DagreEngine().Layout(medium, Options);
 
     [Benchmark]
     public LayoutResult Layout_Diamond_100() =>
-        new DagreLayoutEngine().Layout(large, Options);
+        new DagreEngine().Layout(large, Options);
 
     [Benchmark]
     public LayoutResult Layout_Layered_8x6() =>
-        new DagreLayoutEngine().Layout(wide, Options);
+        new DagreEngine().Layout(wide, Options);
 
     static FlowchartModel BuildLinearChain(int count)
     {

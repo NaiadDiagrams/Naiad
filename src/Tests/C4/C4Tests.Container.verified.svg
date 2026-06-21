@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 492 748"
+  viewBox="0 0 492 844"
   style="max-width: 492px;"
   role="graphics-document document">
   <style
@@ -20,33 +20,33 @@
     <g
       transform="translate(146,50)">
       <path
-        d="M 80 94 L 80 179"
+        d="M 80 94 L 80 155 L 80 216"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 179 L 76 172.07 L 84 172.07 Z"
+        d="M 80 216 L 76 209.07 L 84 209.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 282 L 80 367"
+        d="M 80 314 L 80 375 L 80 436"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 367 L 76 360.07 L 84 360.07 Z"
+        d="M 80 436 L 76 429.07 L 84 429.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 470 L 80 555"
+        d="M 80 534 L 80 595 L 80 656"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 555 L 76 548.07 L 84 548.07 Z"
+        d="M 80 656 L 76 649.07 L 84 649.07 Z"
         fill="#666"
         stroke="none" />
       <rect
@@ -83,7 +83,7 @@
         fill="#FFFFFF">Bank customer</text>
       <rect
         x="0"
-        y="184"
+        y="216"
         width="160"
         height="98"
         rx="5"
@@ -92,7 +92,7 @@
         stroke="none" />
       <text
         x="80"
-        y="215"
+        y="247"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -101,7 +101,7 @@
         fill="#FFFFFF">Web Application</text>
       <text
         x="80"
-        y="233"
+        y="265"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -109,7 +109,7 @@
         fill="#FFFFFF">[React]</text>
       <text
         x="80"
-        y="251"
+        y="283"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -117,7 +117,7 @@
         fill="#FFFFFF">Provides banking UI</text>
       <rect
         x="0"
-        y="372"
+        y="436"
         width="160"
         height="98"
         rx="5"
@@ -126,7 +126,7 @@
         stroke="none" />
       <text
         x="80"
-        y="403"
+        y="467"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -135,7 +135,7 @@
         fill="#FFFFFF">API Server</text>
       <text
         x="80"
-        y="421"
+        y="485"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -143,7 +143,7 @@
         fill="#FFFFFF">[Node.js]</text>
       <text
         x="80"
-        y="439"
+        y="503"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -151,28 +151,28 @@
         fill="#FFFFFF">Handles requests</text>
       <ellipse
         cx="80"
-        cy="575"
+        cy="671"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <rect
         x="5"
-        y="575"
+        y="671"
         width="150"
         height="68"
         fill="#438DD5"
         stroke="none" />
       <ellipse
         cx="80"
-        cy="643"
+        cy="739"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <text
         x="80"
-        y="591"
+        y="687"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -181,7 +181,7 @@
         fill="#FFFFFF">Database</text>
       <text
         x="80"
-        y="609"
+        y="705"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -189,7 +189,7 @@
         fill="#FFFFFF">[PostgreSQL]</text>
       <text
         x="80"
-        y="627"
+        y="723"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -197,7 +197,7 @@
         fill="#FFFFFF">Stores user data</text>
       <rect
         x="55"
-        y="120.5"
+        y="139"
         width="50"
         height="32"
         rx="3"
@@ -206,7 +206,7 @@
         stroke="none" />
       <text
         x="80"
-        y="130"
+        y="148.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -214,7 +214,7 @@
         fill="#666">Uses</text>
       <text
         x="80"
-        y="144"
+        y="162.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -222,7 +222,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="40"
-        y="308.5"
+        y="359"
         width="80"
         height="32"
         rx="3"
@@ -231,7 +231,7 @@
         stroke="none" />
       <text
         x="80"
-        y="318"
+        y="368.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -239,7 +239,7 @@
         fill="#666">Calls</text>
       <text
         x="80"
-        y="332"
+        y="382.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -247,7 +247,7 @@
         fill="#888">[JSON/HTTPS]</text>
       <rect
         x="36.4"
-        y="496.5"
+        y="579"
         width="87.2"
         height="32"
         rx="3"
@@ -256,7 +256,7 @@
         stroke="none" />
       <text
         x="80"
-        y="506"
+        y="588.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -264,7 +264,7 @@
         fill="#666">Reads/Writes</text>
       <text
         x="80"
-        y="520"
+        y="602.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

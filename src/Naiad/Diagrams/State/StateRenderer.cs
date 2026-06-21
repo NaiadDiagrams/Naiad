@@ -5,7 +5,7 @@ namespace Naiad.Diagrams.State;
 public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<StateModel>
 {
-    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
     // Track placed label bounds to avoid label-to-label overlaps
     record LabelBounds(double Left, double Top, double Width, double Height);

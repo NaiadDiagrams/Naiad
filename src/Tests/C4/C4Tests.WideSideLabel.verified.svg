@@ -2,15 +2,15 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 479.2 524"
-  style="max-width: 479.2px;"
+  viewBox="0 0 459.2 588"
+  style="max-width: 459.2px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <text
-      x="219.6"
+      x="209.6"
       y="25"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -20,37 +20,37 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 204.8 94 L 84.06 181.08"
+        d="M 274.36 94 L 339.2 155 L 339.2 216"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 84.06 181.08 L 87.34 173.78 L 92.01 180.27 Z"
+        d="M 339.2 216 L 335.2 209.07 L 343.2 209.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 264 L 200.74 351.08"
+        d="M 339.2 296 L 339.2 357 L 269.87 418"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 200.74 351.08 L 192.79 350.27 L 197.46 343.78 Z"
+        d="M 269.87 418 L 272.42 410.42 L 277.71 416.43 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 204.8 94 L 329.6 224 L 208.26 350.39"
+        d="M 174.44 94 L 109.6 155 L 109.6 256 L 109.6 357 L 178.93 418"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 208.26 350.39 L 210.18 342.63 L 215.95 348.17 Z"
+        d="M 178.93 418 L 171.09 416.43 L 176.38 410.42 Z"
         fill="#666"
         stroke="none" />
       <rect
-        x="124.8"
+        x="144.4"
         y="28"
         width="160"
         height="66"
@@ -59,13 +59,13 @@
         fill="#08427B"
         stroke="none" />
       <circle
-        cx="204.8"
+        cx="224.4"
         cy="20"
         r="20"
         fill="#08427B"
         stroke="none" />
       <text
-        x="204.8"
+        x="224.4"
         y="58"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -74,7 +74,7 @@
         font-weight="bold"
         fill="#FFFFFF">User</text>
       <text
-        x="204.8"
+        x="224.4"
         y="76"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -82,8 +82,8 @@
         font-family="Arial, sans-serif"
         fill="#FFFFFF">A user</text>
       <rect
-        x="0"
-        y="184"
+        x="259.2"
+        y="216"
         width="160"
         height="80"
         rx="5"
@@ -91,8 +91,8 @@
         fill="#1168BD"
         stroke="none" />
       <text
-        x="80"
-        y="215"
+        x="339.2"
+        y="247"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -100,16 +100,16 @@
         font-weight="bold"
         fill="#FFFFFF">Web App</text>
       <text
-        x="80"
-        y="233"
+        x="339.2"
+        y="265"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Frontend</text>
       <rect
-        x="124.8"
-        y="354"
+        x="144.4"
+        y="418"
         width="160"
         height="80"
         rx="5"
@@ -117,8 +117,8 @@
         fill="#1168BD"
         stroke="none" />
       <text
-        x="204.8"
-        y="385"
+        x="224.4"
+        y="449"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -126,16 +126,16 @@
         font-weight="bold"
         fill="#FFFFFF">API</text>
       <text
-        x="204.8"
-        y="403"
+        x="224.4"
+        y="467"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Backend</text>
       <rect
-        x="119.43"
-        y="121.54"
+        x="314.2"
+        y="139"
         width="50"
         height="32"
         rx="3"
@@ -143,24 +143,24 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="144.43"
-        y="131.04"
+        x="339.2"
+        y="148.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Uses</text>
       <text
-        x="144.43"
-        y="145.04"
+        x="339.2"
+        y="162.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
         font-family="Arial, sans-serif"
         fill="#888">[HTTPS]</text>
       <rect
-        x="118.37"
-        y="291.54"
+        x="317.2"
+        y="341"
         width="44"
         height="32"
         rx="3"
@@ -168,24 +168,24 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="140.37"
-        y="301.04"
+        x="339.2"
+        y="350.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Calls</text>
       <text
-        x="140.37"
-        y="315.04"
+        x="339.2"
+        y="364.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
         font-family="Arial, sans-serif"
         fill="#888">[REST]</text>
       <rect
-        x="220"
-        y="208"
+        x="0"
+        y="240"
         width="219.2"
         height="32"
         rx="3"
@@ -193,16 +193,16 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="329.6"
-        y="217.5"
+        x="109.6"
+        y="249.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Receives push notifications from</text>
       <text
-        x="329.6"
-        y="231.5"
+        x="109.6"
+        y="263.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
