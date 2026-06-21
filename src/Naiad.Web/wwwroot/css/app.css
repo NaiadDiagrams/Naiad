@@ -199,6 +199,18 @@ header p {
     color: var(--text-color);
 }
 
+/* Deep-link to the Mermaid syntax reference for the diagram type currently in the editor. */
+.doc-link {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.doc-link:hover {
+    text-decoration: underline;
+}
+
 .pane-spacer {
     flex: 1;
 }

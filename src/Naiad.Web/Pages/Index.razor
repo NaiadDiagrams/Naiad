@@ -8,6 +8,11 @@
     <section class="editor-pane">
         <div class="pane-header">
             <span class="pane-title">Mermaid</span>
+            @if (docsLink is not null)
+            {
+                <a class="doc-link" href="@docsLink.Url" target="_blank" rel="noopener"
+                   title="@($"Open the Mermaid {docsLink.Name} syntax reference")">@docsLink.Name docs ↗</a>
+            }
             <span class="pane-spacer"></span>
             <SamplePicker Samples="DiagramSamples.All" OnSampleSelected="LoadSample" />
         </div>

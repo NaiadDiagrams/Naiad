@@ -25,6 +25,17 @@ public class IndexTests : BunitTestContext
     }
 
     [Test]
+    public async Task InitialRender_LinksToDetectedTypeDocs()
+    {
+        var cut = Render<Naiad.Web.Pages.Index>();
+
+        // The default sample is a flowchart, so the editor deep-links to the flowchart syntax reference.
+        var link = cut.Find(".doc-link");
+        await Assert.That(link.GetAttribute("href")).IsEqualTo("https://mermaid.js.org/syntax/flowchart.html");
+        await Assert.That(link.TextContent).Contains("Flowchart");
+    }
+
+    [Test]
     public async Task InitialRender_HasTwoEnabledDownloadButtons()
     {
         var cut = Render<Naiad.Web.Pages.Index>();

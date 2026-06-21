@@ -53,6 +53,23 @@ public static class Mermaid
         };
     }
 
+    /// <summary>
+    /// Detects the <see cref="DiagramType"/> from the opening keyword of Mermaid <paramref name="input"/>,
+    /// skipping any leading <c>%%{init:...}%%</c> configuration blocks. Unlike rendering this never throws:
+    /// it returns <see langword="false"/> for empty input or markup whose first line names no known diagram,
+    /// so callers such as the live editor can label whatever is currently being typed.
+    /// </summary>
+    public static bool TryDetectType(string? input, out DiagramType type)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            type = default;
+            return false;
+        }
+
+        return TryMatchType(StripInitBlock(input.Trim()), out type);
+    }
+
     static DiagramType DetectDiagramType(string input)
     {
         var firstLine = input.TrimStart();
@@ -75,62 +92,125 @@ public static class Mermaid
             }
         }
 
-        if (firstLine.StartsWith("pie", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Pie;
-        if (firstLine.StartsWith("flowchart", StringComparison.OrdinalIgnoreCase) ||
-            firstLine.StartsWith("graph", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Flowchart;
-        if (firstLine.StartsWith("sequenceDiagram", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Sequence;
-        if (firstLine.StartsWith("classDiagram", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Class;
-        if (firstLine.StartsWith("stateDiagram", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.State;
-        if (firstLine.StartsWith("erDiagram", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.EntityRelationship;
-        if (firstLine.StartsWith("gantt", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Gantt;
-        if (firstLine.StartsWith("gitGraph", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.GitGraph;
-        if (firstLine.StartsWith("mindmap", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Mindmap;
-        if (firstLine.StartsWith("timeline", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Timeline;
-        if (firstLine.StartsWith("journey", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.UserJourney;
-        if (firstLine.StartsWith("quadrantChart", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Quadrant;
-        if (firstLine.StartsWith("xychart", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.XYChart;
-        if (firstLine.StartsWith("sankey", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Sankey;
-        if (firstLine.StartsWith("block", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Block;
-        if (firstLine.StartsWith("packet", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Packet;
-        if (firstLine.StartsWith("kanban", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Kanban;
-        if (firstLine.StartsWith("architecture-beta", StringComparison.OrdinalIgnoreCase) ||
-            firstLine.StartsWith("architecture", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Architecture;
-        if (firstLine.StartsWith("C4Context", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.C4Context;
-        if (firstLine.StartsWith("C4Container", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.C4Container;
-        if (firstLine.StartsWith("C4Component", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.C4Component;
-        if (firstLine.StartsWith("C4Deployment", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.C4Deployment;
-        if (firstLine.StartsWith("requirementDiagram", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Requirement;
-        if (firstLine.StartsWith("radar-beta", StringComparison.OrdinalIgnoreCase) ||
-            firstLine.StartsWith("radar", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Radar;
-        if (firstLine.StartsWith("treemap-beta", StringComparison.OrdinalIgnoreCase) ||
-            firstLine.StartsWith("treemap", StringComparison.OrdinalIgnoreCase))
-            return DiagramType.Treemap;
+        if (TryMatchType(firstLine, out var type))
+            return type;
 
         throw new MermaidException($"Unknown diagram type in: {firstLine.Split('\n')[0]}");
+    }
+
+    static bool TryMatchType(string firstLine, out DiagramType type)
+    {
+        if (firstLine.StartsWith("pie", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Pie;
+        }
+        else if (firstLine.StartsWith("flowchart", StringComparison.OrdinalIgnoreCase) ||
+                 firstLine.StartsWith("graph", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Flowchart;
+        }
+        else if (firstLine.StartsWith("sequenceDiagram", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Sequence;
+        }
+        else if (firstLine.StartsWith("classDiagram", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Class;
+        }
+        else if (firstLine.StartsWith("stateDiagram", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.State;
+        }
+        else if (firstLine.StartsWith("erDiagram", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.EntityRelationship;
+        }
+        else if (firstLine.StartsWith("gantt", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Gantt;
+        }
+        else if (firstLine.StartsWith("gitGraph", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.GitGraph;
+        }
+        else if (firstLine.StartsWith("mindmap", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Mindmap;
+        }
+        else if (firstLine.StartsWith("timeline", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Timeline;
+        }
+        else if (firstLine.StartsWith("journey", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.UserJourney;
+        }
+        else if (firstLine.StartsWith("quadrantChart", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Quadrant;
+        }
+        else if (firstLine.StartsWith("xychart", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.XYChart;
+        }
+        else if (firstLine.StartsWith("sankey", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Sankey;
+        }
+        else if (firstLine.StartsWith("block", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Block;
+        }
+        else if (firstLine.StartsWith("packet", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Packet;
+        }
+        else if (firstLine.StartsWith("kanban", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Kanban;
+        }
+        else if (firstLine.StartsWith("architecture-beta", StringComparison.OrdinalIgnoreCase) ||
+                 firstLine.StartsWith("architecture", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Architecture;
+        }
+        else if (firstLine.StartsWith("C4Context", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.C4Context;
+        }
+        else if (firstLine.StartsWith("C4Container", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.C4Container;
+        }
+        else if (firstLine.StartsWith("C4Component", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.C4Component;
+        }
+        else if (firstLine.StartsWith("C4Deployment", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.C4Deployment;
+        }
+        else if (firstLine.StartsWith("requirementDiagram", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Requirement;
+        }
+        else if (firstLine.StartsWith("radar-beta", StringComparison.OrdinalIgnoreCase) ||
+                 firstLine.StartsWith("radar", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Radar;
+        }
+        else if (firstLine.StartsWith("treemap-beta", StringComparison.OrdinalIgnoreCase) ||
+                 firstLine.StartsWith("treemap", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Treemap;
+        }
+        else
+        {
+            type = default;
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>

@@ -11,6 +11,7 @@ public partial class Index : IDisposable
 
     string source = DiagramSamples.Default.Source;
     DiagramRenderResult result = DiagramRenderResult.Empty;
+    DiagramDocsLink? docsLink;
     string? issueUrl;
     string? userAgent;
     bool isExporting;
@@ -57,6 +58,10 @@ public partial class Index : IDisposable
     void Render()
     {
         result = DiagramRenderer.Render(source);
+
+        // Detect from the raw source rather than the render outcome: the opening keyword identifies the type
+        // even while the body is mid-edit and not yet parseable, so the docs link stays useful through errors.
+        docsLink = DiagramDocs.For(source);
         issueUrl = result.Unexpected is { } exception
             ? IssueLauncher.ForException("Render diagram", exception, AppInfo.Environment(userAgent), source)
             : null;
