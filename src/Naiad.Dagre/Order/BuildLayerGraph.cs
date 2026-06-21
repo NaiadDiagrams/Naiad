@@ -52,7 +52,7 @@ static class BuildLayerGraph
     static string CreateRootNode(Graph graph)
     {
         string v;
-        while (graph.HasNode(v = Util.UniqueId("_root")))
+        while (graph.HasNode(v = graph.UniqueId("_root")))
         {
         }
 

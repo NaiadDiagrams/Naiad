@@ -5,17 +5,13 @@ static class Util
 {
     public const string GraphNode = "\x00";
 
-    static int idCounter;
-
-    public static string UniqueId(string prefix) => prefix + (++idCounter).ToString(System.Globalization.CultureInfo.InvariantCulture);
-
     /// <summary>Adds a dummy node to the graph and returns its id.</summary>
     public static string AddDummyNode(Graph graph, string type, NodeLabel attrs, string name)
     {
         var v = name;
         while (graph.HasNode(v))
         {
-            v = UniqueId(name);
+            v = graph.UniqueId(name);
         }
 
         attrs.Dummy = type;

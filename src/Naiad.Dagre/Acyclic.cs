@@ -18,7 +18,7 @@ static class Acyclic
             graph.RemoveEdge(e);
             label.ForwardName = e.Name;
             label.Reversed = true;
-            graph.SetEdge(e.W, e.V, label, Util.UniqueId("rev"));
+            graph.SetEdge(e.W, e.V, label, graph.UniqueId("rev"));
         }
 
         return;

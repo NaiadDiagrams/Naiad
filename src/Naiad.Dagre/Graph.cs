@@ -25,6 +25,7 @@ sealed class Graph
     readonly OrderedMap<EdgeLabel> edgeLabelsMap = new();     // edgeId -> label
     int nodeCountValue;
     int edgeCountValue;
+    int uniqueIdCounter;
     readonly OrderedMap<string>? parentMap;
     readonly OrderedMap<OrderedMap<bool>>? childrenMap;
 
@@ -50,6 +51,14 @@ sealed class Graph
     public bool IsMultigraph() => isMultigraph;
 
     public bool IsCompound() => isCompound;
+
+    /// <summary>
+    /// Returns an id with the given prefix that is unique within this graph, from a per-graph counter.
+    /// dagre uses a module-global counter; a per-graph one removes shared mutable state and makes every
+    /// layout reproducible by construction. Callers still guard against pre-existing nodes via HasNode.
+    /// </summary>
+    public string UniqueId(string prefix) =>
+        prefix + (++uniqueIdCounter).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
     /* === Graph functions ========= */
 
