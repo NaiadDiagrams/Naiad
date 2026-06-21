@@ -46,9 +46,9 @@ static class GreedyFas
         var sources = buckets[^1];
         var sinks = buckets[0];
 
-        FasEntry? entry;
         while (g.NodeCount != 0)
         {
+            FasEntry? entry;
             while ((entry = (FasEntry?)sinks.Dequeue()) != null)
             {
                 RemoveNode(g, entries, buckets, zeroIdx, entry);

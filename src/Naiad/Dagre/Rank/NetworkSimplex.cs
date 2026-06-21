@@ -67,8 +67,6 @@ static class NetworkSimplex
         var childIsTail = true;
         // The graph's view of the tree edge we're inspecting
         var graphEdge = graph.Edge_(child, parent);
-        // The accumulated cut value for the edge between this node and its parent
-        double cutValue;
 
         if (graphEdge == null)
         {
@@ -76,7 +74,8 @@ static class NetworkSimplex
             graphEdge = graph.Edge_(parent, child);
         }
 
-        cutValue = graphEdge.Weight!.Value;
+        // The accumulated cut value for the edge between this node and its parent
+        var cutValue = graphEdge.Weight!.Value;
 
         var nodeEdges = graph.NodeEdges(child);
         if (nodeEdges != null)
