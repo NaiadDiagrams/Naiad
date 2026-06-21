@@ -1,0 +1,375 @@
+namespace Naiad.Dagre.Tests;
+
+// Port of dagre's test/util-test.ts.
+public class UtilTests
+{
+    public class SimplifyTests
+    {
+        Graph g = null!;
+
+        [Before(Test)]
+        public void Setup() => g = new Graph(multigraph: true);
+
+        [Test]
+        public async Task CopiesWithoutChangeAGraphWithNoMultiEdges()
+        {
+            g.SetEdge("a", "b", new EdgeLabel { Weight = 1, Minlen = 1 });
+            var g2 = Util.Simplify(g);
+            var e = g2.Edge_("a", "b");
+            await Assert.That(e.Weight).IsEqualTo(1);
+            await Assert.That(e.Minlen).IsEqualTo(1);
+            await Assert.That(g2.EdgeCount()).IsEqualTo(1);
+        }
+
+        [Test]
+        public async Task CollapsesMultiEdges()
+        {
+            g.SetEdge("a", "b", new EdgeLabel { Weight = 1, Minlen = 1 });
+            g.SetEdge("a", "b", new EdgeLabel { Weight = 2, Minlen = 2 }, "multi");
+            var g2 = Util.Simplify(g);
+            await Assert.That(g2.IsMultigraph()).IsFalse();
+            var e = g2.Edge_("a", "b");
+            await Assert.That(e.Weight).IsEqualTo(3);
+            await Assert.That(e.Minlen).IsEqualTo(2);
+            await Assert.That(g2.EdgeCount()).IsEqualTo(1);
+        }
+
+        [Test]
+        public async Task CopiesTheGraphObject()
+        {
+            var label = new GraphLabel { NestingRoot = "bar" };
+            g.SetGraph(label);
+            var g2 = Util.Simplify(g);
+            await Assert.That(g2.Graph_()).IsSameReferenceAs(label);
+        }
+    }
+
+    public class AsNonCompoundGraphTests
+    {
+        Graph g = null!;
+
+        [Before(Test)]
+        public void Setup() => g = new Graph(multigraph: true, compound: true);
+
+        [Test]
+        public async Task CopiesAllNodes()
+        {
+            var aLabel = new NodeLabel { Label = "bar" };
+            g.SetNode("a", aLabel);
+            g.SetNode("b");
+            var g2 = Util.AsNonCompoundGraph(g);
+            await Assert.That(g2.Node("a")).IsSameReferenceAs(aLabel);
+            await Assert.That(g2.HasNode("b")).IsTrue();
+        }
+
+        [Test]
+        public async Task CopiesAllEdges()
+        {
+            var l1 = new EdgeLabel { Labelpos = "bar" };
+            var l2 = new EdgeLabel { Labelpos = "baz" };
+            g.SetEdge("a", "b", l1);
+            g.SetEdge("a", "b", l2, "multi");
+            var g2 = Util.AsNonCompoundGraph(g);
+            await Assert.That(g2.Edge_("a", "b").Labelpos).IsEqualTo("bar");
+            await Assert.That(g2.Edge_("a", "b", "multi").Labelpos).IsEqualTo("baz");
+        }
+
+        [Test]
+        public async Task DoesNotCopyCompoundNodes()
+        {
+            g.SetParent("a", "sg1");
+            var g2 = Util.AsNonCompoundGraph(g);
+            await Assert.That(g2.Parent("sg1")).IsNull();
+            await Assert.That(g2.Parent("a")).IsNull();
+            await Assert.That(g2.IsCompound()).IsFalse();
+        }
+
+        [Test]
+        public async Task CopiesTheGraphObject()
+        {
+            var label = new GraphLabel { NestingRoot = "bar" };
+            g.SetGraph(label);
+            var g2 = Util.AsNonCompoundGraph(g);
+            await Assert.That(g2.Graph_()).IsSameReferenceAs(label);
+        }
+    }
+
+    public class SuccessorWeightsTests
+    {
+        [Test]
+        public async Task MapsANodeToItsSuccessorsWithAssociatedWeights()
+        {
+            var g = new Graph(multigraph: true);
+            g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
+            g.SetEdge("b", "c", new EdgeLabel { Weight = 1 });
+            g.SetEdge("b", "c", new EdgeLabel { Weight = 2 }, "multi");
+            g.SetEdge("b", "d", new EdgeLabel { Weight = 1 }, "multi");
+
+            var sw = Util.SuccessorWeights(g);
+            await Assert.That(sw["a"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 2 });
+            await Assert.That(sw["b"]).IsEquivalentTo(new Dictionary<string, double> { ["c"] = 3, ["d"] = 1 });
+            await Assert.That(sw["c"].Count).IsEqualTo(0);
+            await Assert.That(sw["d"].Count).IsEqualTo(0);
+        }
+    }
+
+    public class PredecessorWeightsTests
+    {
+        [Test]
+        public async Task MapsANodeToItsPredecessorsWithAssociatedWeights()
+        {
+            var g = new Graph(multigraph: true);
+            g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
+            g.SetEdge("b", "c", new EdgeLabel { Weight = 1 });
+            g.SetEdge("b", "c", new EdgeLabel { Weight = 2 }, "multi");
+            g.SetEdge("b", "d", new EdgeLabel { Weight = 1 }, "multi");
+
+            var pw = Util.PredecessorWeights(g);
+            await Assert.That(pw["a"].Count).IsEqualTo(0);
+            await Assert.That(pw["b"]).IsEquivalentTo(new Dictionary<string, double> { ["a"] = 2 });
+            await Assert.That(pw["c"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 3 });
+            await Assert.That(pw["d"]).IsEquivalentTo(new Dictionary<string, double> { ["b"] = 1 });
+        }
+    }
+
+    public class IntersectRectTests
+    {
+        static NodeLabel Rect(double x, double y, double width, double height) =>
+            new() { X = x, Y = y, Width = width, Height = height };
+
+        static async Task ExpectIntersects(NodeLabel rect, Point point)
+        {
+            var cross = Util.IntersectRect(rect, point);
+            if (cross.X != point.X)
+            {
+                var m = (cross.Y - point.Y) / (cross.X - point.X);
+                // toBeCloseTo default precision is 2 digits (|diff| < 0.005).
+                await Assert.That(cross.Y - rect.Y!.Value).IsEqualTo(m * (cross.X - rect.X!.Value)).Within(0.005);
+            }
+        }
+
+        static async Task ExpectTouchesBorder(NodeLabel rect, Point point)
+        {
+            var cross = Util.IntersectRect(rect, point);
+            if (Math.Abs(rect.X!.Value - cross.X) != rect.Width / 2)
+            {
+                await Assert.That(Math.Abs(rect.Y!.Value - cross.Y)).IsEqualTo(rect.Height / 2);
+            }
+        }
+
+        [Test]
+        public async Task CreatesASlopeThatWillIntersectTheRectanglesCenter()
+        {
+            var rect = Rect(0, 0, 1, 1);
+            await ExpectIntersects(rect, new Point(2, 6));
+            await ExpectIntersects(rect, new Point(2, -6));
+            await ExpectIntersects(rect, new Point(6, 2));
+            await ExpectIntersects(rect, new Point(-6, 2));
+            await ExpectIntersects(rect, new Point(5, 0));
+            await ExpectIntersects(rect, new Point(0, 5));
+        }
+
+        [Test]
+        public async Task TouchesTheBorderOfTheRectangle()
+        {
+            var rect = Rect(0, 0, 1, 1);
+            await ExpectTouchesBorder(rect, new Point(2, 6));
+            await ExpectTouchesBorder(rect, new Point(2, -6));
+            await ExpectTouchesBorder(rect, new Point(6, 2));
+            await ExpectTouchesBorder(rect, new Point(-6, 2));
+            await ExpectTouchesBorder(rect, new Point(5, 0));
+            await ExpectTouchesBorder(rect, new Point(0, 5));
+        }
+
+        [Test]
+        public async Task ThrowsAnErrorIfThePointIsAtTheCenterOfTheRectangle()
+        {
+            var rect = Rect(0, 0, 1, 1);
+            await Assert.That(() => Util.IntersectRect(rect, new Point(0, 0))).Throws<Exception>();
+        }
+    }
+
+    public class BuildLayerMatrixTests
+    {
+        [Test]
+        public async Task CreatesAMatrixBasedOnRankAndOrderOfNodesInTheGraph()
+        {
+            var g = new Graph();
+            g.SetNode("a", new NodeLabel { Rank = 0, Order = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 0, Order = 1 });
+            g.SetNode("c", new NodeLabel { Rank = 1, Order = 0 });
+            g.SetNode("d", new NodeLabel { Rank = 1, Order = 1 });
+            g.SetNode("e", new NodeLabel { Rank = 2, Order = 0 });
+
+            var expected = new List<List<string>>
+            {
+                new() { "a", "b" },
+                new() { "c", "d" },
+                new() { "e" }
+            };
+            await Assert.That(Util.BuildLayerMatrix(g)).IsEquivalentTo(expected);
+        }
+    }
+
+    public class TimeTests
+    {
+        // The TS "logs timing information" test captures console.log output; the C# port's
+        // Util.Time simply calls the function with no logging, so that case cannot be ported
+        // faithfully and is skipped.
+
+        [Test]
+        public async Task ReturnsTheValueFromTheEvaluatedFunction()
+        {
+            await Assert.That(Util.Time("foo", () => "bar")).IsEqualTo("bar");
+        }
+    }
+
+    public class NormalizeRanksTests
+    {
+        [Test]
+        public async Task AdjustRanksSuchThatAllAreGteZeroAndAtLeastOneIsZero()
+        {
+            var g = new Graph()
+                .SetNode("a", new NodeLabel { Rank = 3 })
+                .SetNode("b", new NodeLabel { Rank = 2 })
+                .SetNode("c", new NodeLabel { Rank = 4 });
+
+            Util.NormalizeRanks(g);
+
+            await Assert.That(g.Node("a").Rank).IsEqualTo(1);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("c").Rank).IsEqualTo(2);
+        }
+
+        [Test]
+        public async Task WorksForNegativeRanks()
+        {
+            var g = new Graph()
+                .SetNode("a", new NodeLabel { Rank = -3 })
+                .SetNode("b", new NodeLabel { Rank = -2 });
+
+            Util.NormalizeRanks(g);
+
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+        }
+
+        [Test]
+        public async Task DoesNotAssignARankToSubgraphs()
+        {
+            var g = new Graph(compound: true)
+                .SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("sg", new NodeLabel());
+            g.SetParent("a", "sg");
+
+            Util.NormalizeRanks(g);
+
+            await Assert.That(g.Node("sg").Rank).IsNull();
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+        }
+    }
+
+    public class RemoveEmptyRanksTests
+    {
+        [Test]
+        public async Task RemovesBorderRanksWithoutAnyNodes()
+        {
+            var g = new Graph()
+                .SetGraph(new GraphLabel { NodeRankFactor = 4 })
+                .SetNode("a", new NodeLabel { Rank = 0 })
+                .SetNode("b", new NodeLabel { Rank = 4 });
+            Util.RemoveEmptyRanks(g);
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+        }
+
+        [Test]
+        public async Task DoesNotRemoveNonBorderRanks()
+        {
+            var g = new Graph()
+                .SetGraph(new GraphLabel { NodeRankFactor = 4 })
+                .SetNode("a", new NodeLabel { Rank = 0 })
+                .SetNode("b", new NodeLabel { Rank = 8 });
+            Util.RemoveEmptyRanks(g);
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+        }
+
+        [Test]
+        public async Task HandlesParentsWithUndefinedRanks()
+        {
+            var g = new Graph(compound: true)
+                .SetGraph(new GraphLabel { NodeRankFactor = 3 })
+                .SetNode("a", new NodeLabel { Rank = 0 })
+                .SetNode("b", new NodeLabel { Rank = 6 });
+            g.SetNode("sg", new NodeLabel());
+            g.SetParent("a", "sg");
+            Util.RemoveEmptyRanks(g);
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+            await Assert.That(g.Node("sg").Rank).IsNull();
+        }
+    }
+
+    public class RangeTests
+    {
+        [Test]
+        public async Task BuildsAnArrayToTheLimit()
+        {
+            var range = Util.Range(4);
+            await Assert.That(range.Count).IsEqualTo(4);
+            await Assert.That(range.Aggregate((acc, v) => acc + v)).IsEqualTo(6);
+        }
+
+        [Test]
+        public async Task BuildsAnArrayWithAStart()
+        {
+            var range = Util.Range(2, 4);
+            await Assert.That(range.Count).IsEqualTo(2);
+            await Assert.That(range.Aggregate((acc, v) => acc + v)).IsEqualTo(5);
+        }
+
+        [Test]
+        public async Task BuildsAnArrayWithANegativeStep()
+        {
+            var range = Util.Range(5, -1, -1);
+            await Assert.That(range[0]).IsEqualTo(5);
+            await Assert.That(range[5]).IsEqualTo(0);
+        }
+    }
+
+    public class MapValuesTests
+    {
+        sealed record User(string Name, int Age);
+
+        [Test]
+        public async Task CreatesAnObjectWithTheSameKeys()
+        {
+            var users = new Dictionary<string, User>(StringComparer.Ordinal)
+            {
+                ["fred"] = new("fred", 40),
+                ["pebbles"] = new("pebbles", 1)
+            };
+
+            var ages = Util.MapValues(users, (user, _) => user.Age);
+            await Assert.That(ages["fred"]).IsEqualTo(40);
+            await Assert.That(ages["pebbles"]).IsEqualTo(1);
+        }
+
+        [Test]
+        public async Task CanTakeAPropertyName()
+        {
+            // The TS second overload accepts a property-name string; the C# port has only the
+            // function form, so the equivalent is a lambda projecting that property.
+            var users = new Dictionary<string, User>(StringComparer.Ordinal)
+            {
+                ["fred"] = new("fred", 40),
+                ["pebbles"] = new("pebbles", 1)
+            };
+
+            var ages = Util.MapValues(users, (user, _) => user.Age);
+            await Assert.That(ages["fred"]).IsEqualTo(40);
+            await Assert.That(ages["pebbles"]).IsEqualTo(1);
+        }
+    }
+}

@@ -5,7 +5,7 @@ namespace Naiad.Diagrams.Flowchart;
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<FlowchartModel>
 {
-    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
     // Mermaid default colors
     const string nodeFill = "#ECECFF";

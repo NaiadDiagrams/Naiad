@@ -95,6 +95,22 @@ static class CoordinateAssignment
             }
         }
 
+        // Cluster cohesion: a clustered node's members for the centroid fallback (borders excluded).
+        var clusterMembers = new Dictionary<string, List<LayoutNode>>(StringComparer.Ordinal);
+        foreach (var node in graph.Nodes.Values)
+        {
+            if (node.ClusterId is { } clusterId && !node.IsClusterBorder)
+            {
+                if (!clusterMembers.TryGetValue(clusterId, out var list))
+                {
+                    list = [];
+                    clusterMembers[clusterId] = list;
+                }
+
+                list.Add(node);
+            }
+        }
+
         // Pass 2: Center alignment based on connected nodes
         var positions = new List<double>();
         for (var iteration = 0; iteration < 4; iteration++)
@@ -102,13 +118,13 @@ static class CoordinateAssignment
             // Down pass
             for (var index = 1; index < graph.Ranks.Length; index++)
             {
-                AlignToNeighbors(graph, index, true, nodeSep, isHorizontal, positions);
+                AlignToNeighbors(graph, index, true, nodeSep, isHorizontal, positions, clusterMembers);
             }
 
             // Up pass
             for (var r = graph.Ranks.Length - 2; r >= 0; r--)
             {
-                AlignToNeighbors(graph, r, false, nodeSep, isHorizontal, positions);
+                AlignToNeighbors(graph, r, false, nodeSep, isHorizontal, positions, clusterMembers);
             }
         }
 
@@ -117,7 +133,8 @@ static class CoordinateAssignment
     }
 
     static void AlignToNeighbors(LayoutGraph graph, int rank, bool useInEdges,
-        double nodeSep, bool isHorizontal, List<double> positions)
+        double nodeSep, bool isHorizontal, List<double> positions,
+        Dictionary<string, List<LayoutNode>> clusterMembers)
     {
         var nodesInRank = graph.Ranks[rank];
         nodesInRank.Sort((a, b) => a.Order.CompareTo(b.Order));
@@ -125,35 +142,45 @@ static class CoordinateAssignment
         foreach (var node in nodesInRank)
         {
             positions.Clear();
-            if (useInEdges)
+
+            // A clustered node aligns only to same-cluster neighbours, so cross-cluster edges don't shear
+            // the cluster wide. Free nodes (no cluster) align to all neighbours as usual.
+            var cluster = node.ClusterId;
+            var edges = useInEdges ? node.InEdges : node.OutEdges;
+            foreach (var edge in edges)
             {
-                foreach (var edge in node.InEdges)
+                var neighbor = useInEdges ? edge.Source : edge.Target;
+                if (neighbor is null)
                 {
-                    if (edge.Source is { } source)
-                    {
-                        positions.Add(isHorizontal ? source.Y : source.X);
-                    }
+                    continue;
+                }
+
+                if (cluster is null || neighbor.ClusterId == cluster)
+                {
+                    positions.Add(isHorizontal ? neighbor.Y : neighbor.X);
+                }
+            }
+
+            double targetPos;
+            if (positions.Count == 0)
+            {
+                // A clustered node with no same-cluster neighbour this direction is pulled to its cluster's
+                // centroid so detached members (e.g. a cache only wired to other clusters) stay with it.
+                if (cluster is not null && clusterMembers.TryGetValue(cluster, out var members) && members.Count > 0)
+                {
+                    targetPos = ClusterCentroid(members, isHorizontal);
+                }
+                else
+                {
+                    continue;
                 }
             }
             else
             {
-                foreach (var edge in node.OutEdges)
-                {
-                    if (edge.Target is { } target)
-                    {
-                        positions.Add(isHorizontal ? target.Y : target.X);
-                    }
-                }
+                positions.Sort();
+                targetPos = Median(positions);
             }
 
-            if (positions.Count == 0)
-            {
-                continue;
-            }
-
-            positions.Sort();
-
-            var targetPos = Median(positions);
             var currentPos = isHorizontal ? node.Y : node.X;
 
             // Only move if it improves alignment and doesn't cause overlap
@@ -229,6 +256,19 @@ static class CoordinateAssignment
         }
 
         return values[mid];
+    }
+
+    // Median cross-axis position of a cluster's members, used to anchor members with no same-cluster edge.
+    static double ClusterCentroid(List<LayoutNode> members, bool isHorizontal)
+    {
+        var values = new List<double>(members.Count);
+        foreach (var member in members)
+        {
+            values.Add(isHorizontal ? member.Y : member.X);
+        }
+
+        values.Sort();
+        return Median(values);
     }
 
     static (double maxX, double maxY) NormalizePositions(LayoutGraph graph)

@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 236.2 88"
-  style="max-width: 236.2px;"
+  viewBox="0 0 275.3 88"
+  style="max-width: 275.3px;"
   role="graphics-document document">
   <style>
 #naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
@@ -110,14 +110,14 @@
   <g
     transform="translate(20,20)">
     <path
-      d="M73.1,24 L138.1,24"
+      d="M73.1,24 L82.19,24 C91.28,24 109.47,24 127.65,24 C145.83,24 164.02,24 173.11,24 L182.2,24"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="86.05"
+      x="108.1"
       y="9.5"
       width="39.1"
       height="29"
@@ -125,7 +125,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="105.6"
+      x="127.65"
       y="24"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -145,11 +145,11 @@
       font-family="Arial, sans-serif"
       class="nodeLabel">Car</text>
     <path
-      d="M143.1,0 H196.2 V48 H143.1 Z"
+      d="M182.2,0 H235.3 V48 H182.2 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="169.65"
+      x="208.75"
       y="24"
       text-anchor="middle"
       dominant-baseline="middle"

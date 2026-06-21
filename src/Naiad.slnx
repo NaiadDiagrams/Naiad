@@ -5,6 +5,8 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Project Path="Naiad/Naiad.csproj" />
+  <Project Path="Naiad.Dagre/Naiad.Dagre.csproj" />
+  <Project Path="Naiad.Dagre.Tests/Naiad.Dagre.Tests.csproj" />
   <Project Path="Naiad.Skia/Naiad.Skia.csproj" />
   <Project Path="Naiad.ImageSharp/Naiad.ImageSharp.csproj" />
   <Project Path="Naiad.Web/Naiad.Web.csproj" />

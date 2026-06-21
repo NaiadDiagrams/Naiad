@@ -30,11 +30,25 @@ static class ClusterOrdering
 
         AddBorders(graph, diagram, chains, borderWidth);
 
+        // Tag every node with its top-level cluster so coordinate assignment can keep clusters cohesive.
+        foreach (var node in graph.Nodes.Values)
+        {
+            if (chains.TryGetValue(node.Id, out var chain) && chain.Count > 0)
+            {
+                node.ClusterId = chain[0];
+            }
+        }
+
         graph.BuildRanks();
+
+        // A consistent left-to-right key per cluster (its members' average normalized order) so the cluster
+        // keeps the same lane on every rank, instead of flipping sides and shearing wide.
+        var laneKey = ComputeLaneKeys(graph, chains);
+
         foreach (var rank in graph.Ranks)
         {
             rank.Sort((a, b) => a.Order.CompareTo(b.Order));
-            var arranged = Arrange(rank, chains, 0);
+            var arranged = Arrange(rank, chains, 0, laneKey);
             for (var i = 0; i < arranged.Count; i++)
             {
                 arranged[i].Order = i;
@@ -42,6 +56,44 @@ static class ClusterOrdering
         }
 
         graph.UpdateOrderInRanks();
+    }
+
+    // Average normalized order (0..1) of each node and, for each cluster, of its real members. Used as a
+    // rank-independent horizontal key so clusters occupy stable lanes across ranks.
+    static Dictionary<string, double> ComputeLaneKeys(LayoutGraph graph, Dictionary<string, List<string>> chains)
+    {
+        var keys = new Dictionary<string, double>(StringComparer.Ordinal);
+        foreach (var rank in graph.Ranks)
+        {
+            var n = rank.Count;
+            foreach (var node in rank)
+            {
+                keys[node.Id] = n <= 1 ? 0.5 : node.Order / (double) (n - 1);
+            }
+        }
+
+        var sum = new Dictionary<string, double>(StringComparer.Ordinal);
+        var count = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach (var node in graph.Nodes.Values)
+        {
+            if (node.IsDummy || node.IsClusterBorder || !chains.TryGetValue(node.Id, out var chain))
+            {
+                continue;
+            }
+
+            foreach (var clusterId in chain)
+            {
+                sum[clusterId] = sum.GetValueOrDefault(clusterId) + keys.GetValueOrDefault(node.Id);
+                count[clusterId] = count.GetValueOrDefault(clusterId) + 1;
+            }
+        }
+
+        foreach (var (clusterId, total) in sum)
+        {
+            keys[clusterId] = total / count[clusterId];
+        }
+
+        return keys;
     }
 
     static void AddBorders(
@@ -131,8 +183,13 @@ static class ClusterOrdering
         };
 
     // Recursively groups a rank's nodes by cluster at the given depth; a cluster's own walls are pulled to
-    // its left and right edges, and nested clusters/members keep their crossing-minimized order in between.
-    static List<LayoutNode> Arrange(List<LayoutNode> nodes, Dictionary<string, List<string>> chains, int depth)
+    // its left and right edges, and clusters/free nodes between them are ordered by their stable lane key so
+    // a cluster keeps the same side on every rank.
+    static List<LayoutNode> Arrange(
+        List<LayoutNode> nodes,
+        Dictionary<string, List<string>> chains,
+        int depth,
+        Dictionary<string, double> laneKey)
     {
         var leftBorders = new List<LayoutNode>();
         var rightBorders = new List<LayoutNode>();
@@ -168,9 +225,21 @@ static class ClusterOrdering
             members.Add(node);
         }
 
+        double KeyOf(object item) =>
+            item is LayoutNode node
+                ? laneKey.GetValueOrDefault(node.Id, 0.5)
+                : laneKey.GetValueOrDefault((string) item, 0.5);
+
+        // Stable sort by lane key keeps clusters in a consistent left-to-right order across ranks.
+        var ordered = sequence
+            .Select((item, index) => (item, index))
+            .OrderBy(_ => KeyOf(_.item))
+            .ThenBy(_ => _.index)
+            .Select(_ => _.item);
+
         var result = new List<LayoutNode>(nodes.Count);
         result.AddRange(leftBorders);
-        foreach (var item in sequence)
+        foreach (var item in ordered)
         {
             if (item is LayoutNode node)
             {
@@ -178,7 +247,7 @@ static class ClusterOrdering
             }
             else
             {
-                result.AddRange(Arrange(clusters[(string) item], chains, depth + 1));
+                result.AddRange(Arrange(clusters[(string) item], chains, depth + 1, laneKey));
             }
         }
 

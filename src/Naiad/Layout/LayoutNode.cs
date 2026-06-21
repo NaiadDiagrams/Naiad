@@ -21,6 +21,10 @@
     public bool IsClusterBorder { get; set; }
     public bool IsLeftBorder { get; set; }
 
+    // Top-level subgraph this node belongs to (null if outside any subgraph). Drives cluster-cohesion in
+    // coordinate assignment so a cluster's nodes pull toward each other rather than cross-cluster neighbours.
+    public string? ClusterId { get; set; }
+
     public List<LayoutEdge> InEdges { get; } = [];
     public List<LayoutEdge> OutEdges { get; } = [];
 }

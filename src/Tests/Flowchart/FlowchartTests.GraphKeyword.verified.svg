@@ -112,14 +112,14 @@
   <g
     transform="translate(20,20)">
     <path
-      d="M18.85,48 L18.85,113"
+      d="M18.85,48 L18.85,53.83 C18.85,59.67 18.85,71.33 18.85,83 C18.85,94.67 18.85,106.33 18.85,112.17 L18.85,118"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M18.85,166 L18.85,231"
+      d="M18.85,166 L18.85,171.83 C18.85,177.67 18.85,189.33 18.85,201 C18.85,212.67 18.85,224.33 18.85,230.17 L18.85,236"
       fill="none"
       stroke="#333333"
       stroke-width="2"

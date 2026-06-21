@@ -253,6 +253,11 @@ class DagreLayoutEngine : ILayoutEngine
             nodeById[node.Id] = node;
         }
 
+        // Replace each top-level cluster's (possibly sheared) global layout with a compact isolated layout
+        // dropped at the cluster's centroid, then push overlapping boxes apart — guaranteeing the cluster
+        // boxes don't overlap while keeping the overall arrangement the global pass chose.
+        CompactClusters(diagram, options, nodeById);
+
         foreach (var subgraph in diagram.Subgraphs)
         {
             ComputeSubgraphBounds(subgraph, nodeById);
@@ -469,4 +474,265 @@ class DagreLayoutEngine : ILayoutEngine
             }
         }
     }
+
+    /// <summary>
+    /// Replaces each top-level cluster's global (often sheared) layout with a compact isolated layout
+    /// dropped at the cluster's centroid, pushes overlapping cluster boxes apart, and re-routes
+    /// cross-cluster edges border-to-border. Intra-cluster edges keep their isolated-layout routing.
+    /// </summary>
+    static void CompactClusters(GraphDiagramBase diagram, LayoutOptions options, Dictionary<string, Node> nodeById)
+    {
+        var topCluster = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var subgraph in diagram.Subgraphs)
+        {
+            foreach (var memberId in AllMemberIds(subgraph))
+            {
+                topCluster[memberId] = subgraph.Id;
+            }
+        }
+
+        var offset = new Dictionary<string, (double Dx, double Dy)>(StringComparer.Ordinal);
+
+        foreach (var subgraph in diagram.Subgraphs)
+        {
+            var memberIds = new HashSet<string>(AllMemberIds(subgraph));
+            var members = new List<Node>();
+            foreach (var id in memberIds)
+            {
+                if (nodeById.TryGetValue(id, out var node))
+                {
+                    members.Add(node);
+                }
+            }
+
+            if (members.Count == 0)
+            {
+                continue;
+            }
+
+            var centerX = members.Average(_ => _.Position.X);
+            var centerY = members.Average(_ => _.Position.Y);
+
+            // Lay the cluster out on its own; with no external edges to pull it, it stays compact.
+            var iso = new ClusterGraph { Direction = options.Direction };
+            foreach (var node in members)
+            {
+                iso.Nodes.Add(node);
+            }
+
+            foreach (var edge in diagram.Edges)
+            {
+                if (memberIds.Contains(edge.SourceId) && memberIds.Contains(edge.TargetId))
+                {
+                    iso.Edges.Add(edge);
+                }
+            }
+
+            foreach (var nested in subgraph.NestedSubgraphs)
+            {
+                iso.Subgraphs.Add(nested);
+            }
+
+            new DagreLayoutEngine().Layout(iso, options);
+
+            var dx = centerX - members.Average(_ => _.Position.X);
+            var dy = centerY - members.Average(_ => _.Position.Y);
+            foreach (var node in members)
+            {
+                node.Position = new(node.Position.X + dx, node.Position.Y + dy);
+            }
+
+            offset[subgraph.Id] = (dx, dy);
+        }
+
+        SeparateClusterBoxes(diagram, nodeById, topCluster, offset, options.NodeSeparation);
+
+        // Each top-level cluster's rendered box (plus a routing margin) is an obstacle for cross-cluster edges.
+        const double routeMargin = 12;
+        var clusterBox = new Dictionary<string, BoxRouter.Box>(StringComparer.Ordinal);
+        var grouped = new Dictionary<string, List<Node>>(StringComparer.Ordinal);
+        foreach (var (nodeId, clusterId) in topCluster)
+        {
+            if (nodeById.TryGetValue(nodeId, out var node))
+            {
+                if (!grouped.TryGetValue(clusterId, out var list))
+                {
+                    list = [];
+                    grouped[clusterId] = list;
+                }
+
+                list.Add(node);
+            }
+        }
+
+        foreach (var (clusterId, list) in grouped)
+        {
+            var minX = double.PositiveInfinity;
+            var maxX = double.NegativeInfinity;
+            var minY = double.PositiveInfinity;
+            var maxY = double.NegativeInfinity;
+            foreach (var node in list)
+            {
+                minX = Math.Min(minX, node.Position.X - node.Width / 2);
+                maxX = Math.Max(maxX, node.Position.X + node.Width / 2);
+                minY = Math.Min(minY, node.Position.Y - node.Height / 2);
+                maxY = Math.Max(maxY, node.Position.Y + node.Height / 2);
+            }
+
+            clusterBox[clusterId] = new(
+                minX - clusterPadding - routeMargin,
+                minY - clusterPadding - clusterLabelHeight - routeMargin,
+                maxX + clusterPadding + routeMargin,
+                maxY + clusterPadding + routeMargin);
+        }
+
+        var obstacles = new List<BoxRouter.Box>(clusterBox.Count);
+        foreach (var edge in diagram.Edges)
+        {
+            var source = topCluster.GetValueOrDefault(edge.SourceId);
+            var target = topCluster.GetValueOrDefault(edge.TargetId);
+
+            // Intra-cluster edges keep their isolated routing; apply the cluster's total shift to its points.
+            if (source is not null && source == target)
+            {
+                var (dx, dy) = offset.GetValueOrDefault(source);
+                for (var i = 0; i < edge.Points.Count; i++)
+                {
+                    edge.Points[i] = new(edge.Points[i].X + dx, edge.Points[i].Y + dy);
+                }
+
+                continue;
+            }
+
+            if (!nodeById.TryGetValue(edge.SourceId, out var s) ||
+                !nodeById.TryGetValue(edge.TargetId, out var t))
+            {
+                continue;
+            }
+
+            // Route around every cluster box except the two the edge connects.
+            obstacles.Clear();
+            foreach (var (clusterId, box) in clusterBox)
+            {
+                if (clusterId != source && clusterId != target)
+                {
+                    obstacles.Add(box);
+                }
+            }
+
+            var path = BoxRouter.Route(s.Position, t.Position, obstacles);
+            path[0] = BorderPoint(s, path[1]);
+            path[^1] = BorderPoint(t, path[^2]);
+
+            edge.Points.Clear();
+            edge.Points.AddRange(path);
+        }
+    }
+
+    /// <summary>Pushes overlapping top-level cluster boxes apart horizontally (accumulating the shift into
+    /// each cluster's offset), guaranteeing the rendered boxes don't overlap.</summary>
+    static void SeparateClusterBoxes(
+        GraphDiagramBase diagram,
+        Dictionary<string, Node> nodeById,
+        Dictionary<string, string> topCluster,
+        Dictionary<string, (double Dx, double Dy)> offset,
+        double gap)
+    {
+        var members = new Dictionary<string, List<Node>>(StringComparer.Ordinal);
+        foreach (var (nodeId, clusterId) in topCluster)
+        {
+            if (nodeById.TryGetValue(nodeId, out var node))
+            {
+                if (!members.TryGetValue(clusterId, out var list))
+                {
+                    list = [];
+                    members[clusterId] = list;
+                }
+
+                list.Add(node);
+            }
+        }
+
+        var ids = members.Keys.ToList();
+
+        for (var iteration = 0; iteration < 16; iteration++)
+        {
+            var box = new Dictionary<string, (double MinX, double MaxX, double MinY, double MaxY)>(StringComparer.Ordinal);
+            foreach (var (clusterId, list) in members)
+            {
+                var minX = double.PositiveInfinity;
+                var maxX = double.NegativeInfinity;
+                var minY = double.PositiveInfinity;
+                var maxY = double.NegativeInfinity;
+                foreach (var node in list)
+                {
+                    minX = Math.Min(minX, node.Position.X - node.Width / 2);
+                    maxX = Math.Max(maxX, node.Position.X + node.Width / 2);
+                    minY = Math.Min(minY, node.Position.Y - node.Height / 2);
+                    maxY = Math.Max(maxY, node.Position.Y + node.Height / 2);
+                }
+
+                box[clusterId] = (
+                    minX - clusterPadding,
+                    maxX + clusterPadding,
+                    minY - clusterPadding - clusterLabelHeight,
+                    maxY + clusterPadding);
+            }
+
+            ids.Sort((a, b) => box[a].MinX.CompareTo(box[b].MinX));
+
+            var changed = false;
+            for (var i = 0; i < ids.Count; i++)
+            {
+                for (var j = i + 1; j < ids.Count; j++)
+                {
+                    var a = box[ids[i]];
+                    var b = box[ids[j]];
+                    if (a.MaxY <= b.MinY || b.MaxY <= a.MinY)
+                    {
+                        continue;
+                    }
+
+                    var shift = a.MaxX + gap - b.MinX;
+                    if (shift <= 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var node in members[ids[j]])
+                    {
+                        node.Position = new(node.Position.X + shift, node.Position.Y);
+                    }
+
+                    var current = offset.GetValueOrDefault(ids[j]);
+                    offset[ids[j]] = (current.Dx + shift, current.Dy);
+                    box[ids[j]] = b with { MinX = b.MinX + shift, MaxX = b.MaxX + shift };
+                    changed = true;
+                }
+            }
+
+            if (!changed)
+            {
+                break;
+            }
+        }
+    }
+
+    /// <summary>Point on a node's rectangular border in the direction of a target point.</summary>
+    static Position BorderPoint(Node node, Position toward)
+    {
+        var dx = toward.X - node.Position.X;
+        var dy = toward.Y - node.Position.Y;
+        if (dx == 0 && dy == 0)
+        {
+            return node.Position;
+        }
+
+        var tx = dx == 0 ? double.PositiveInfinity : node.Width / 2 / Math.Abs(dx);
+        var ty = dy == 0 ? double.PositiveInfinity : node.Height / 2 / Math.Abs(dy);
+        var t = Math.Min(tx, ty);
+        return new(node.Position.X + dx * t, node.Position.Y + dy * t);
+    }
+
+    sealed class ClusterGraph : GraphDiagramBase;
 }

@@ -1,0 +1,269 @@
+namespace Naiad.Dagre.Tests;
+
+// Port of dagre's test/normalize-test.ts.
+public class NormalizeTests
+{
+    Graph g = null!;
+
+    [Before(Test)]
+    public void Setup() =>
+        g = new Graph(multigraph: true, compound: true).SetGraph(new GraphLabel());
+
+    static (string V, string W) IncidentNodes(Edge edge) => (edge.V, edge.W);
+
+    public class RunTests : NormalizeTests
+    {
+        [Test]
+        public async Task DoesNotChangeAShortEdge()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 1 });
+            g.SetEdge("a", "b", new EdgeLabel());
+
+            Normalize.Run(g);
+
+            var incident = g.Edges().Select(IncidentNodes).ToList();
+            await Assert.That(incident).IsEquivalentTo(new List<(string, string)> { ("a", "b") });
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+        }
+
+        [Test]
+        public async Task SplitsATwoLayerEdgeIntoTwoSegments()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel());
+
+            Normalize.Run(g);
+
+            await Assert.That(g.Successors("a")!.Count).IsEqualTo(1);
+            var successor = g.Successors("a")![0];
+            await Assert.That(g.Node(successor).Dummy).IsEqualTo("edge");
+            await Assert.That(g.Node(successor).Rank).IsEqualTo(1);
+            await Assert.That(g.Successors(successor)).IsEquivalentTo(new List<string> { "b" });
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+
+            await Assert.That(g.Graph_().DummyChains!.Count).IsEqualTo(1);
+            await Assert.That(g.Graph_().DummyChains![0]).IsEqualTo(successor);
+        }
+
+        [Test]
+        public async Task AssignsWidth0Height0ToDummyNodesByDefault()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 10 });
+
+            Normalize.Run(g);
+
+            await Assert.That(g.Successors("a")!.Count).IsEqualTo(1);
+            var successor = g.Successors("a")![0];
+            await Assert.That(g.Node(successor).Width).IsEqualTo(0);
+            await Assert.That(g.Node(successor).Height).IsEqualTo(0);
+        }
+
+        [Test]
+        public async Task AssignsWidthAndHeightFromTheEdgeForTheNodeOnLabelRank()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 4 });
+            g.SetEdge("a", "b", new EdgeLabel { Width = 20, Height = 10, LabelRank = 2 });
+
+            Normalize.Run(g);
+
+            var labelV = g.Successors(g.Successors("a")![0])![0];
+            var labelNode = g.Node(labelV);
+            await Assert.That(labelNode.Width).IsEqualTo(20);
+            await Assert.That(labelNode.Height).IsEqualTo(10);
+        }
+
+        [Test]
+        public async Task PreservesTheWeightForTheEdge()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel { Weight = 2 });
+
+            Normalize.Run(g);
+
+            await Assert.That(g.Successors("a")!.Count).IsEqualTo(1);
+            await Assert.That(g.Edge_("a", g.Successors("a")![0]).Weight).IsEqualTo(2);
+        }
+    }
+
+    public class UndoTests : NormalizeTests
+    {
+        [Test]
+        public async Task ReversesTheRunOperation()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel());
+
+            Normalize.Run(g);
+            Normalize.Undo(g);
+
+            var incident = g.Edges().Select(IncidentNodes).ToList();
+            await Assert.That(incident).IsEquivalentTo(new List<(string, string)> { ("a", "b") });
+            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+        }
+
+        [Test]
+        public async Task RestoresPreviousEdgeLabels()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            // The TS sets an arbitrary {foo: "bar"} property; the closest faithful equivalent
+            // here is the ForwardName label field, asserting it survives run/undo.
+            g.SetEdge("a", "b", new EdgeLabel { ForwardName = "bar" });
+
+            Normalize.Run(g);
+            Normalize.Undo(g);
+
+            await Assert.That(g.Edge_("a", "b").ForwardName).IsEqualTo("bar");
+        }
+
+        [Test]
+        public async Task CollectsAssignedCoordinatesIntoThePointsAttribute()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel());
+
+            Normalize.Run(g);
+
+            var dummyLabel = g.Node(g.Neighbors("a")![0]);
+            dummyLabel.X = 5;
+            dummyLabel.Y = 10;
+
+            Normalize.Undo(g);
+
+            var points = g.Edge_("a", "b").Points!;
+            await Assert.That(points.Count).IsEqualTo(1);
+            await Assert.That(points[0].X).IsEqualTo(5);
+            await Assert.That(points[0].Y).IsEqualTo(10);
+        }
+
+        [Test]
+        public async Task MergesAssignedCoordinatesIntoThePointsAttribute()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 4 });
+            g.SetEdge("a", "b", new EdgeLabel());
+
+            Normalize.Run(g);
+
+            var aSucLabel = g.Node(g.Neighbors("a")![0]);
+            aSucLabel.X = 5;
+            aSucLabel.Y = 10;
+
+            var midLabel = g.Node(g.Successors(g.Successors("a")![0])![0]);
+            midLabel.X = 20;
+            midLabel.Y = 25;
+
+            var bPredLabel = g.Node(g.Neighbors("b")![0]);
+            bPredLabel.X = 100;
+            bPredLabel.Y = 200;
+
+            Normalize.Undo(g);
+
+            var points = g.Edge_("a", "b").Points!;
+            await Assert.That(points.Count).IsEqualTo(3);
+            await Assert.That(points[0].X).IsEqualTo(5);
+            await Assert.That(points[0].Y).IsEqualTo(10);
+            await Assert.That(points[1].X).IsEqualTo(20);
+            await Assert.That(points[1].Y).IsEqualTo(25);
+            await Assert.That(points[2].X).IsEqualTo(100);
+            await Assert.That(points[2].Y).IsEqualTo(200);
+        }
+
+        [Test]
+        public async Task SetsCoordsAndDimsForTheLabelIfTheEdgeHasOne()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 20, LabelRank = 1 });
+
+            Normalize.Run(g);
+
+            var labelNode = g.Node(g.Successors("a")![0]);
+            labelNode.X = 50;
+            labelNode.Y = 60;
+            labelNode.Width = 20;
+            labelNode.Height = 10;
+
+            Normalize.Undo(g);
+
+            var label = g.Edge_("a", "b");
+            await Assert.That(label.X).IsEqualTo(50);
+            await Assert.That(label.Y).IsEqualTo(60);
+            await Assert.That(label.Width).IsEqualTo(20);
+            await Assert.That(label.Height).IsEqualTo(10);
+        }
+
+        [Test]
+        public async Task SetsCoordsAndDimsForTheLabelIfTheLongEdgeHasOne()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 4 });
+            g.SetEdge("a", "b", new EdgeLabel { Width = 10, Height = 20, LabelRank = 2 });
+
+            Normalize.Run(g);
+
+            var labelNode = g.Node(g.Successors(g.Successors("a")![0])![0]);
+            labelNode.X = 50;
+            labelNode.Y = 60;
+            labelNode.Width = 20;
+            labelNode.Height = 10;
+
+            Normalize.Undo(g);
+
+            var label = g.Edge_("a", "b");
+            await Assert.That(label.X).IsEqualTo(50);
+            await Assert.That(label.Y).IsEqualTo(60);
+            await Assert.That(label.Width).IsEqualTo(20);
+            await Assert.That(label.Height).IsEqualTo(10);
+        }
+
+        [Test]
+        public async Task RestoresMultiEdges()
+        {
+            g.SetNode("a", new NodeLabel { Rank = 0 });
+            g.SetNode("b", new NodeLabel { Rank = 2 });
+            g.SetEdge("a", "b", new EdgeLabel(), "bar");
+            g.SetEdge("a", "b", new EdgeLabel(), "foo");
+
+            Normalize.Run(g);
+
+            var outEdges = g.OutEdges("a")!
+                .OrderBy(e => e.Name, StringComparer.Ordinal)
+                .ToList();
+            await Assert.That(outEdges.Count).IsEqualTo(2);
+
+            var barDummy = g.Node(outEdges[0].W);
+            barDummy.X = 5;
+            barDummy.Y = 10;
+
+            var fooDummy = g.Node(outEdges[1].W);
+            fooDummy.X = 15;
+            fooDummy.Y = 20;
+
+            Normalize.Undo(g);
+
+            await Assert.That(g.HasEdge("a", "b")).IsFalse();
+
+            var barPoints = g.Edge_("a", "b", "bar").Points!;
+            await Assert.That(barPoints.Count).IsEqualTo(1);
+            await Assert.That(barPoints[0].X).IsEqualTo(5);
+            await Assert.That(barPoints[0].Y).IsEqualTo(10);
+
+            var fooPoints = g.Edge_("a", "b", "foo").Points!;
+            await Assert.That(fooPoints.Count).IsEqualTo(1);
+            await Assert.That(fooPoints[0].X).IsEqualTo(15);
+            await Assert.That(fooPoints[0].Y).IsEqualTo(20);
+        }
+    }
+}
