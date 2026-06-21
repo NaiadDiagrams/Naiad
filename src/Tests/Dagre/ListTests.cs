@@ -17,10 +17,8 @@ public class ListTests
     }
 
     [Test]
-    public async Task ReturnsUndefinedWithAnEmptyList()
-    {
+    public async Task ReturnsUndefinedWithAnEmptyList() =>
         await Assert.That(list.Dequeue()).IsNull();
-    }
 
     [Test]
     public async Task UnlinksAndReturnsTheFirstEntry()

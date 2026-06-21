@@ -68,7 +68,7 @@ static class Alg
     {
         var visited = new HashSet<string>(StringComparer.Ordinal);
         var cmpts = new List<List<string>>();
-        List<string> cmpt = [];
+        List<string> cmpt;
 
         void Dfs(string v)
         {

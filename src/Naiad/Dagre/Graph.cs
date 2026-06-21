@@ -41,8 +41,10 @@ sealed class Graph
         if (isCompound)
         {
             parentMap = new();
-            childrenMap = new();
-            childrenMap[GraphNode] = new();
+            childrenMap = new()
+            {
+                [GraphNode] = new()
+            };
         }
     }
 
@@ -58,7 +60,7 @@ sealed class Graph
     /// layout reproducible by construction. Callers still guard against pre-existing nodes via HasNode.
     /// </summary>
     public string UniqueId(string prefix) =>
-        prefix + (++uniqueIdCounter).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        prefix + (++uniqueIdCounter).ToString(CultureInfo.InvariantCulture);
 
     /* === Graph functions ========= */
 

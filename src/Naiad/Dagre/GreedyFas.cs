@@ -156,7 +156,13 @@ static class GreedyFas
             AssignBucket(buckets, zeroIdx, entries[v]);
         }
 
-        return new() { Graph = fasGraph, Entries = entries, Buckets = buckets, ZeroIdx = zeroIdx };
+        return new()
+        {
+            Graph = fasGraph,
+            Entries = entries,
+            Buckets = buckets,
+            ZeroIdx = zeroIdx
+        };
     }
 
     static void AssignBucket(List<DoublyLinkedList> buckets, int zeroIdx, FasEntry entry)

@@ -20,9 +20,9 @@ public static partial class ModuleInitializer
         var content = builder.ToString();
         var normalized = FloatRegex().Replace(content, match =>
         {
-            var value = double.Parse(match.Value, System.Globalization.CultureInfo.InvariantCulture);
+            var value = double.Parse(match.Value, CultureInfo.InvariantCulture);
             var rounded = Math.Round(value, 4);
-            return rounded.ToString("0.####", System.Globalization.CultureInfo.InvariantCulture);
+            return rounded.ToString("0.####", CultureInfo.InvariantCulture);
         });
         builder.Clear();
         builder.Append(normalized);

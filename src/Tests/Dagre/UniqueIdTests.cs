@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace Naiad.Dagre.Tests;
 
 // Port of dagre's test/unique-id-test.ts. dagre's uniqueId is a module-global; here it is a per-graph
