@@ -408,46 +408,44 @@
       font-size="12px"
       font-family="Arial, sans-serif"
       fill="#333">categorizes</text>
-    <line
-      x1="138.2"
-      y1="30"
-      x2="138.2"
-      y2="30"
+    <path
+      d="M276.4,76 L306.4,76 L306.4,104 L276.4,104"
+      fill="none"
       stroke="#333" />
     <circle
-      cx="153.2"
-      cy="30"
+      cx="291.4"
+      cy="76"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="161.2"
-      y1="26"
-      x2="161.2"
-      y2="34"
+      x1="299.4"
+      y1="72"
+      x2="299.4"
+      y2="80"
       stroke="#333" />
     <circle
-      cx="153.2"
-      cy="30"
+      cx="291.4"
+      cy="104"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="161.2"
-      y1="26"
-      x2="161.2"
-      y2="34"
+      x1="299.4"
+      y1="100"
+      x2="299.4"
+      y2="108"
       stroke="#333" />
     <rect
-      x="96.9"
-      y="20"
+      x="310.4"
+      y="80"
       width="82.6"
       height="20"
       fill="#fff"
       stroke="none" />
     <text
-      x="138.2"
-      y="30"
+      x="351.7"
+      y="90"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"

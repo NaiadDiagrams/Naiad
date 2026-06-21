@@ -212,6 +212,15 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             return;
         }
 
+        // A self-referencing relationship can't use a straight line between two distinct borders; draw a
+        // loop off the entity's right side instead (otherwise the line degenerates to a point and the
+        // label is clipped against the entity's top edge).
+        if (fromEntity == toEntity)
+        {
+            RenderSelfRelationship(builder, rel, fromEntity, options);
+            return;
+        }
+
         var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
         var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
 
@@ -250,6 +259,45 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddText(
                 labelX,
                 labelY,
+                rel.Label,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily,
+                fill: "#333");
+        }
+    }
+
+    static void RenderSelfRelationship(SvgBuilder builder, Relationship rel, Entity entity, RenderOptions options)
+    {
+        var right = entity.Position.X + entity.Width / 2;
+        var centerY = entity.Position.Y;
+        const double verticalOffset = 14;
+        const double extent = 30;
+        var topY = centerY - verticalOffset;
+        var bottomY = centerY + verticalOffset;
+        var outX = right + extent;
+        var dashArray = rel.Identifying ? null : "5,5";
+
+        // Loop out from the top of the right edge, around, and back to the bottom of the right edge.
+        builder.AddPath(
+            FormattableString.Invariant($"M{right},{topY} L{outX},{topY} L{outX},{bottomY} L{right},{bottomY}"),
+            fill: "none",
+            stroke: "#333",
+            strokeWidth: 1,
+            strokeDasharray: dashArray);
+
+        DrawCardinalityMarker(builder, right, topY, outX, topY, rel.FromCardinality);
+        DrawCardinalityMarker(builder, right, bottomY, outX, bottomY, rel.ToCardinality);
+
+        if (!string.IsNullOrEmpty(rel.Label))
+        {
+            var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
+            var labelX = outX + labelWidth / 2 + 4;
+            builder.AddRect(labelX - labelWidth / 2, centerY - 10, labelWidth, 20, fill: "#fff", stroke: "none");
+            builder.AddText(
+                labelX,
+                centerY,
                 rel.Label,
                 anchor: "middle",
                 baseline: "middle",
