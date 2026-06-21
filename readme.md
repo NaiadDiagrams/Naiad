@@ -143,98 +143,6 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
 #naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
 #naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
 </style>
-  <defs>
-    <marker
-      id="naiad_flowchart-pointEnd"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="5"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="8"
-      markerHeight="8"
-      orient="auto">
-      <path
-        d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-pointStart"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="4.5"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="8"
-      markerHeight="8"
-      orient="auto">
-      <path
-        d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-circleEnd"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="11"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <circle
-        cx="5"
-        cy="5"
-        r="5"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-circleStart"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="-1"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <circle
-        cx="5"
-        cy="5"
-        r="5"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-crossEnd"
-      class="marker cross"
-      viewBox="0 0 11 11"
-      refX="12"
-      refY="5.2"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <path
-        d="M 1,1 l 9,9 M 10,1 l -9,9"
-        class="arrowMarkerPath"
-        style="stroke-width: 2;" />
-    </marker>
-    <marker
-      id="naiad_flowchart-crossStart"
-      class="marker cross"
-      viewBox="0 0 11 11"
-      refX="-1"
-      refY="5.2"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <path
-        d="M 1,1 l 9,9 M 10,1 l -9,9"
-        class="arrowMarkerPath"
-        style="stroke-width: 2;" />
-    </marker>
-  </defs>
   <g
     transform="translate(20,20)">
     <path
@@ -258,7 +166,7 @@ By default the label is a `<foreignObject>`, and a Font Awesome `@import` is inc
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L133' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElementsTests.SingleNodeHtml.verified.svg#L1-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Awesome `@import` is gone:
@@ -283,98 +191,6 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
 #naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
 #naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
 </style>
-  <defs>
-    <marker
-      id="naiad_flowchart-pointEnd"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="5"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="8"
-      markerHeight="8"
-      orient="auto">
-      <path
-        d="M 0 0 L 10 5 L 0 10 z"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-pointStart"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="4.5"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="8"
-      markerHeight="8"
-      orient="auto">
-      <path
-        d="M 0 5 L 10 10 L 10 0 z"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-circleEnd"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="11"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <circle
-        cx="5"
-        cy="5"
-        r="5"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-circleStart"
-      class="marker"
-      viewBox="0 0 10 10"
-      refX="-1"
-      refY="5"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <circle
-        cx="5"
-        cy="5"
-        r="5"
-        class="arrowMarkerPath" />
-    </marker>
-    <marker
-      id="naiad_flowchart-crossEnd"
-      class="marker cross"
-      viewBox="0 0 11 11"
-      refX="12"
-      refY="5.2"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <path
-        d="M 1,1 l 9,9 M 10,1 l -9,9"
-        class="arrowMarkerPath"
-        style="stroke-width: 2;" />
-    </marker>
-    <marker
-      id="naiad_flowchart-crossStart"
-      class="marker cross"
-      viewBox="0 0 11 11"
-      refX="-1"
-      refY="5.2"
-      markerUnits="userSpaceOnUse"
-      markerWidth="11"
-      markerHeight="11"
-      orient="auto">
-      <path
-        d="M 1,1 l 9,9 M 10,1 l -9,9"
-        class="arrowMarkerPath"
-        style="stroke-width: 2;" />
-    </marker>
-  </defs>
   <g
     transform="translate(20,20)">
     <path
@@ -392,7 +208,7 @@ With `AllowHtmlElements = false`, the label is a native `<text>` and the Font Aw
   </g>
 </svg>
 ```
-<sup><a href='/src/Tests/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg#L1-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowHtmlElementsTests.SingleNodeNoHtml.verified.svg' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

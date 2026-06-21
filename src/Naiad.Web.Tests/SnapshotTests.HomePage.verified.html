@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <base href="/">
+    <link rel="icon" type="image/png" href="icon.png">
     <!-- Diagrams that use the fa:fa-* icon shorthand carry their own Font Awesome @import inside the
          rendered SVG, so no global stylesheet is needed here and the page stays self-contained. -->
     <!-- Preload critical resources -->
@@ -13,15 +14,15 @@
 <!--!--><!--!--><!--!--><title><!--!-->Naiad — Mermaid Diagram Renderer</title><!--!--><!--!--><!--!--></head>
 
 <body>
-    <div id="app"><!--!--><!--!--><!--!--><!--!--><div class="app-shell"><header><!--!--><div class="header-titles"><h1 tabindex="-1">Naiad</h1>
+    <div id="app"><!--!--><!--!--><!--!--><!--!--><div class="app-shell"><header><!--!--><img class="header-logo" src="icon.png" alt="Naiad logo">
+        <!--!--><div class="header-titles"><h1 tabindex="-1">Naiad</h1>
             <p>Render Mermaid diagrams to SVG — entirely in your browser, no server round-trip</p></div>
         <div class="header-actions"><!--!--><a class="header-link" href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">GitHub</a>
             <!--!--><button class="theme-toggle-btn" aria-label="Toggle theme"><!--!--><span class="icon">🌙</span><!--!--><span class="text"> Dark</span></button></div></header><!--!-->
 
     <!--!--><!--!--><!--!--><!--!--><!--!-->
 
-<div class="editor-layout"><section class="editor-pane"><div class="pane-header"><!--!--><span class="pane-title">Mermaid</span>
-            <span class="pane-spacer"></span>
+<div class="editor-layout"><section class="editor-pane"><div class="pane-header"><!--!--><span class="pane-title">Mermaid</span><a class="doc-link" href="https://mermaid.js.org/syntax/flowchart.html" target="_blank" rel="noopener" title="Open the Mermaid Flowchart syntax reference">Flowchart<!--!--> docs ↗</a><!--!--><span class="pane-spacer"></span>
             <!--!--><div class="sample-picker"><select class="sample-select" aria-label="Load a sample diagram"><option value=""><!--!-->Load a sample…</option><option value="Flowchart">Flowchart</option><option value="Sequence">Sequence</option><option value="Class">Class</option><option value="State">State</option><option value="Entity Relationship">Entity Relationship</option><option value="User Journey">User Journey</option><option value="Gantt">Gantt</option><option value="Pie">Pie</option><option value="Quadrant">Quadrant</option><option value="Requirement">Requirement</option><option value="Git Graph">Git Graph</option><option value="C4 Context">C4 Context</option><option value="Mindmap">Mindmap</option><option value="Timeline">Timeline</option><option value="Sankey">Sankey</option><option value="XY Chart">XY Chart</option><option value="Block">Block</option><option value="Packet">Packet</option><option value="Kanban">Kanban</option><option value="Architecture">Architecture</option><option value="Radar">Radar</option><option value="Treemap">Treemap</option></select></div></div><!--!-->
         <textarea class="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" aria-label="Mermaid diagram source"></textarea></section><!--!-->
 

@@ -100,6 +100,17 @@ header {
     flex-shrink: 0;
 }
 
+.header-logo {
+    height: 2.5rem;
+    width: 2.5rem;
+    flex-shrink: 0;
+    /* The icon ships as a black emblem on a white field, so present it as a rounded white badge. */
+    background: #fff;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
 .header-titles {
     flex: 1;
     min-width: 0;
@@ -186,6 +197,18 @@ header p {
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--text-color);
+}
+
+/* Deep-link to the Mermaid syntax reference for the diagram type currently in the editor. */
+.doc-link {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.doc-link:hover {
+    text-decoration: underline;
 }
 
 .pane-spacer {
@@ -357,6 +380,11 @@ footer a:hover {
 
     header h1 {
         font-size: 1.2rem;
+    }
+
+    .header-logo {
+        height: 2rem;
+        width: 2rem;
     }
 
     header p {
