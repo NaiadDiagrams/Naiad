@@ -26,14 +26,14 @@ public class LayoutTests
     }
 
     [Test]
-    public async Task CanLayoutTwoNodesOnTheSameRank()
+    public Task CanLayoutTwoNodesOnTheSameRank()
     {
         g.Graph_().Nodesep = 200;
         g.SetNode("a", new NodeLabel { Width = 50, Height = 100 });
         g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
         Layout.Run(g);
 
-        await AssertCoordinates(
+        return AssertCoordinates(
             ("a", 50.0 / 2, 200.0 / 2),
             ("b", 50 + 200 + 75.0 / 2, 200.0 / 2));
     }
@@ -275,7 +275,7 @@ public class LayoutTests
             g.SetNode(v, new NodeLabel { Width = 50, Height = 50 });
         }
 
-        g.SetPath(new[] { "a", "b", "c" });
+        g.SetPath(["a", "b", "c"]);
         g.SetNode("sg", new NodeLabel());
         g.SetParent("c", "sg");
         Layout.Run(g);
@@ -353,7 +353,7 @@ public class LayoutTests
     }
 
     [Test]
-    public async Task TreatsAttributesWithCaseInsensitivity()
+    public Task TreatsAttributesWithCaseInsensitivity()
     {
         // The original test sets `g.graph().nodeSep = 200` (capital S) and relies on dagre's
         // `canonicalize` step lowercasing keys. The C# port uses a strongly-typed GraphLabel
@@ -364,7 +364,7 @@ public class LayoutTests
         g.SetNode("b", new NodeLabel { Width = 75, Height = 200 });
         Layout.Run(g);
 
-        await AssertCoordinates(
+        return AssertCoordinates(
             ("a", 50.0 / 2, 200.0 / 2),
             ("b", 50 + 200 + 75.0 / 2, 200.0 / 2));
     }

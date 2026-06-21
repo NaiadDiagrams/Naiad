@@ -265,7 +265,7 @@ static class BK
                 {
                     // ws = wsRaw.sort((a, b) => pos[a] - pos[b]); JS sort is stable.
                     var ws = wsRaw
-                        .OrderBy(a => pos.TryGetValue(a, out var posA) ? posA : 0)
+                        .OrderBy(a => pos.GetValueOrDefault(a, 0))
                         .ToList();
                     var mp = (ws.Count - 1) / 2.0;
                     for (int i = (int) Math.Floor(mp), il = (int) Math.Ceiling(mp); i <= il; ++i)
@@ -348,7 +348,7 @@ static class BK
                 double acc = 0;
                 foreach (var e in inEdges)
                 {
-                    var xsV = xs.TryGetValue(e.V, out var xv) ? xv : 0;
+                    var xsV = xs.GetValueOrDefault(e.V, 0);
                     var edgeWeight = blockG.Edge_(e);
                     acc = Math.Max(acc, xsV + (edgeWeight?.Weight is { } ew ? ew : 0));
                 }
@@ -373,14 +373,14 @@ static class BK
                 {
                     var xsW = xs.TryGetValue(e.W, out var xw) ? (double?) xw : null;
                     var edgeWeight = blockG.Edge_(e);
-                    min = Math.Min(min, (xsW != null ? xsW.Value : 0) - (edgeWeight?.Weight is { } ew ? ew : 0));
+                    min = Math.Min(min, (xsW ?? 0) - (edgeWeight?.Weight is { } ew ? ew : 0));
                 }
             }
 
             var node = graph.Node(elem);
             if (!double.IsPositiveInfinity(min) && node.BorderType != borderType)
             {
-                xs[elem] = Math.Max(xs.TryGetValue(elem, out var xe) ? xe : 0, min);
+                xs[elem] = Math.Max(xs.GetValueOrDefault(elem, 0), min);
             }
         }
 
@@ -396,7 +396,7 @@ static class BK
         {
             if (root.TryGetValue(v, out var rootV))
             {
-                xs[v] = xs.TryGetValue(rootV, out var xr) ? xr : 0;
+                xs[v] = xs.GetValueOrDefault(rootV, 0);
             }
         }
 
@@ -410,7 +410,7 @@ static class BK
             return null;
         }
 
-        var last = stack[stack.Count - 1];
+        var last = stack[^1];
         stack.RemoveAt(stack.Count - 1);
         return last;
     }
@@ -517,7 +517,7 @@ static class BK
 
                 if (delta != 0)
                 {
-                    xss[alignment] = Util.MapValues<double, double>(xs, (x, _) => x + delta);
+                    xss[alignment] = Util.MapValues(xs, (x, _) => x + delta);
                 }
             }
         }
@@ -531,7 +531,7 @@ static class BK
             return new Dictionary<string, double>(StringComparer.Ordinal);
         }
 
-        return Util.MapValues<double, double>(ulMap, (num, v) =>
+        return Util.MapValues(ulMap, (num, v) =>
         {
             if (align != null)
             {
@@ -544,7 +544,7 @@ static class BK
             }
 
             var xs = xss.Values
-                .Select(x => x.TryGetValue(v, out var val) ? val : 0)
+                .Select(x => x.GetValueOrDefault(v, 0))
                 .OrderBy(a => a)
                 .ToList();
             return ((xs.Count > 1 ? xs[1] : 0) + (xs.Count > 2 ? xs[2] : 0)) / 2;
@@ -586,7 +586,7 @@ static class BK
                 var xs = HorizontalCompaction(graph, adjustedLayering, align.Root, align.Align, horiz == "r");
                 if (horiz == "r")
                 {
-                    xs = Util.MapValues<double, double>(xs, (x, _) => -x);
+                    xs = Util.MapValues(xs, (x, _) => -x);
                 }
 
                 xss[vert + horiz] = xs;

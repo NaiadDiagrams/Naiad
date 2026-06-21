@@ -24,7 +24,7 @@ static class Acyclic
         return;
 
         static Func<Edge, double> WeightFn(Graph g) =>
-            e => g.Edge_(e)!.Weight!.Value;
+            e => g.Edge_(e).Weight!.Value;
     }
 
     static List<Edge> DfsFas(Graph graph)
@@ -35,12 +35,11 @@ static class Acyclic
 
         void Dfs(string v)
         {
-            if (visited.ContainsKey(v))
+            if (!visited.TryAdd(v, true))
             {
                 return;
             }
 
-            visited[v] = true;
             stack[v] = true;
             foreach (var e in graph.OutEdges(v)!)
             {
@@ -69,7 +68,7 @@ static class Acyclic
     {
         foreach (var e in graph.Edges())
         {
-            var label = graph.Edge_(e)!;
+            var label = graph.Edge_(e);
             if (label.Reversed == true)
             {
                 graph.RemoveEdge(e);

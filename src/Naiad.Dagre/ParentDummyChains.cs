@@ -64,7 +64,7 @@ static class ParentDummyChains
                     graph.SetParent(v, pathV);
                 }
 
-                v = graph.Successors(v)![0]!;
+                v = graph.Successors(v)![0];
             }
         }
     }
@@ -79,18 +79,17 @@ static class ParentDummyChains
     {
         var vPath = new List<string?>();
         var wPath = new List<string?>();
-        var low = Math.Min(postorderNums[v]!.Low, postorderNums[w]!.Low);
-        var lim = Math.Max(postorderNums[v]!.Lim, postorderNums[w]!.Lim);
-        string? parent;
+        var low = Math.Min(postorderNums[v].Low, postorderNums[w].Low);
+        var lim = Math.Max(postorderNums[v].Lim, postorderNums[w].Lim);
 
         // Traverse up from v to find the LCA
-        parent = v;
+        var parent = v;
         do
         {
-            parent = graph.Parent(parent!);
+            parent = graph.Parent(parent);
             vPath.Add(parent);
         } while (parent != null &&
-            (postorderNums[parent]!.Low > low || lim > postorderNums[parent]!.Lim));
+            (postorderNums[parent].Low > low || lim > postorderNums[parent].Lim));
         var lca = parent;
 
         // Traverse from w to LCA

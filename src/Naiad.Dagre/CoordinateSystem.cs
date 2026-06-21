@@ -1,11 +1,11 @@
-namespace Naiad.Dagre;
+using Naiad.Dagre;
 
 static class CoordinateSystem
 {
     public static void Adjust(Graph graph)
     {
         var rankDir = graph.Graph_().Rankdir?.ToLowerInvariant();
-        if (rankDir == "lr" || rankDir == "rl")
+        if (rankDir is "lr" or "rl")
         {
             SwapWidthHeight(graph);
         }
@@ -14,12 +14,12 @@ static class CoordinateSystem
     public static void Undo(Graph graph)
     {
         var rankDir = graph.Graph_().Rankdir?.ToLowerInvariant();
-        if (rankDir == "bt" || rankDir == "rl")
+        if (rankDir is "bt" or "rl")
         {
             ReverseY(graph);
         }
 
-        if (rankDir == "lr" || rankDir == "rl")
+        if (rankDir is "lr" or "rl")
         {
             SwapXY(graph);
             SwapWidthHeight(graph);

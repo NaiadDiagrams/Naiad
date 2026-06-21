@@ -194,7 +194,7 @@ public class NetworkSimplexTests
 
         var f = NetworkSimplex.EnterEdge(t, g, new Edge("g", "h"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
-        await Assert.That(new[] { "e", "f" }).Contains(UndirectedEdge(f).W);
+        await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
 
     [Test]
@@ -207,7 +207,7 @@ public class NetworkSimplexTests
 
         var f = NetworkSimplex.EnterEdge(t, g, new Edge("g", "h"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
-        await Assert.That(new[] { "e", "f" }).Contains(UndirectedEdge(f).W);
+        await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
 
     [Test]
@@ -220,7 +220,7 @@ public class NetworkSimplexTests
 
         var f = NetworkSimplex.EnterEdge(t, g, new Edge("h", "g"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
-        await Assert.That(new[] { "e", "f" }).Contains(UndirectedEdge(f).W);
+        await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
 
     [Test]
@@ -233,7 +233,7 @@ public class NetworkSimplexTests
 
         var f = NetworkSimplex.EnterEdge(t, g, new Edge("h", "g"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
-        await Assert.That(new[] { "e", "f" }).Contains(UndirectedEdge(f).W);
+        await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
 
     // describe("initLowLimValues")

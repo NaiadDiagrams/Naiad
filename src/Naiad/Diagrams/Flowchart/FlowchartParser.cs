@@ -154,7 +154,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                                     .Select(chars =>
                                     {
                                         var label = new string(chars.ToArray()).Trim();
-                                        return (end.Type, style, label.Length == 0 ? (string?) null : label);
+                                        return (end.Type, style, label.Length == 0 ? null : label);
                                     })))
                         .ToArray()));
 

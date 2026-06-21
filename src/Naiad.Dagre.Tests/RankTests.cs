@@ -23,39 +23,39 @@ public class RankTests
 
     // ---- longest-path ----
     [Test]
-    public async Task LongestPath_RespectsTheMinlenAttribute() =>
-        await RespectsTheMinlenAttribute("longest-path");
+    public Task LongestPath_RespectsTheMinlenAttribute() =>
+        RespectsTheMinlenAttribute("longest-path");
 
     [Test]
-    public async Task LongestPath_CanRankASingleNodeGraph() =>
-        await CanRankASingleNodeGraph("longest-path");
+    public Task LongestPath_CanRankASingleNodeGraph() =>
+        CanRankASingleNodeGraph("longest-path");
 
     // ---- tight-tree ----
     [Test]
-    public async Task TightTree_RespectsTheMinlenAttribute() =>
-        await RespectsTheMinlenAttribute("tight-tree");
+    public Task TightTree_RespectsTheMinlenAttribute() =>
+        RespectsTheMinlenAttribute("tight-tree");
 
     [Test]
-    public async Task TightTree_CanRankASingleNodeGraph() =>
-        await CanRankASingleNodeGraph("tight-tree");
+    public Task TightTree_CanRankASingleNodeGraph() =>
+        CanRankASingleNodeGraph("tight-tree");
 
     // ---- network-simplex ----
     [Test]
-    public async Task NetworkSimplex_RespectsTheMinlenAttribute() =>
-        await RespectsTheMinlenAttribute("network-simplex");
+    public Task NetworkSimplex_RespectsTheMinlenAttribute() =>
+        RespectsTheMinlenAttribute("network-simplex");
 
     [Test]
-    public async Task NetworkSimplex_CanRankASingleNodeGraph() =>
-        await CanRankASingleNodeGraph("network-simplex");
+    public Task NetworkSimplex_CanRankASingleNodeGraph() =>
+        CanRankASingleNodeGraph("network-simplex");
 
     // ---- unknown-should-still-work ----
     [Test]
-    public async Task Unknown_RespectsTheMinlenAttribute() =>
-        await RespectsTheMinlenAttribute("unknown-should-still-work");
+    public Task Unknown_RespectsTheMinlenAttribute() =>
+        RespectsTheMinlenAttribute("unknown-should-still-work");
 
     [Test]
-    public async Task Unknown_CanRankASingleNodeGraph() =>
-        await CanRankASingleNodeGraph("unknown-should-still-work");
+    public Task Unknown_CanRankASingleNodeGraph() =>
+        CanRankASingleNodeGraph("unknown-should-still-work");
 
     async Task RespectsTheMinlenAttribute(string ranker)
     {

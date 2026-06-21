@@ -76,7 +76,7 @@ static class ResolveConflicts
     {
         var entries = new List<MappedEntry>();
 
-        Action<MappedEntry> HandleIn(MappedEntry vEntry) =>
+        static Action<MappedEntry> HandleIn(MappedEntry vEntry) =>
             uEntry =>
             {
                 if (uEntry.Merged)

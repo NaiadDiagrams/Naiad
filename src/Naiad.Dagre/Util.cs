@@ -190,7 +190,7 @@ static class Util
 
     public static void NormalizeRanks(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank is { } r ? (double) r : double.MaxValue).ToList();
+        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank is { } r ? r : double.MaxValue).ToList();
         var min = ApplyMin(nodeRanks);
         foreach (var v in graph.Nodes())
         {
@@ -248,7 +248,7 @@ static class Util
 
     public static double MaxRank(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank is { } r ? (double) r : double.Epsilon).ToList();
+        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank is { } r ? r : double.Epsilon).ToList();
         return ApplyMax(nodeRanks);
     }
 

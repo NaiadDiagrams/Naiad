@@ -30,17 +30,17 @@ public class GreedyFasTests
     }
 
     [Test]
-    public async Task ReturnsASingleEdgeWithASimpleCycle()
+    public Task ReturnsASingleEdgeWithASimpleCycle()
     {
         var g = new Graph();
         g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
         g.SetEdge("a", "b");
         g.SetEdge("b", "a");
-        await CheckFas(g, GreedyFas.Run(g));
+        return CheckFas(g, GreedyFas.Run(g));
     }
 
     [Test]
-    public async Task ReturnsASingleEdgeInA4NodeCycle()
+    public Task ReturnsASingleEdgeInA4NodeCycle()
     {
         var g = new Graph();
         g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
@@ -49,11 +49,11 @@ public class GreedyFasTests
         g.SetEdge("n3", "n5");
         g.SetEdge("n4", "n2");
         g.SetEdge("n4", "n6");
-        await CheckFas(g, GreedyFas.Run(g));
+        return CheckFas(g, GreedyFas.Run(g));
     }
 
     [Test]
-    public async Task ReturnsTwoEdgesForTwo4NodeCycles()
+    public Task ReturnsTwoEdgesForTwo4NodeCycles()
     {
         var g = new Graph();
         g.SetDefaultEdgeLabel((_, _, _) => new EdgeLabel { Weight = 1 });
@@ -66,7 +66,7 @@ public class GreedyFasTests
         g.SetEdge("n7", "n9");
         g.SetEdge("n8", "n6");
         g.SetEdge("n8", "n10");
-        await CheckFas(g, GreedyFas.Run(g));
+        return CheckFas(g, GreedyFas.Run(g));
     }
 
     [Test]

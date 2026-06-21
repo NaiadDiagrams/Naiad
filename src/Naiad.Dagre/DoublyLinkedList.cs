@@ -35,7 +35,7 @@ sealed class DoublyLinkedList
 
     public void Enqueue(ListNode entry)
     {
-        if (entry.Prev != null && entry.Next != null)
+        if (entry is {Prev: not null, Next: not null})
         {
             Unlink(entry);
         }

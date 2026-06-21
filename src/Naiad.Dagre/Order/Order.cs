@@ -91,7 +91,7 @@ static class Order
 
             // If there is a range of ranks, add it to each, but skip the `node.rank` which
             // has already had the node added.
-            if (node.MinRank != null && node.MaxRank != null)
+            if (node is {MinRank: not null, MaxRank: not null})
             {
                 for (var r = node.MinRank.Value; r <= node.MaxRank.Value; r++)
                 {

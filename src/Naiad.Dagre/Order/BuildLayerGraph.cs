@@ -17,7 +17,7 @@ static class BuildLayerGraph
             var node = graph.Node(v);
             var parent = graph.Parent(v);
 
-            if (node.Rank == rank || (node.MinRank != null && node.MaxRank != null && node.MinRank <= rank && rank <= node.MaxRank))
+            if (node.Rank == rank || (node is {MinRank: not null, MaxRank: not null} && node.MinRank <= rank && rank <= node.MaxRank))
             {
                 result.SetNode(v);
                 result.SetParent(v, parent ?? root);

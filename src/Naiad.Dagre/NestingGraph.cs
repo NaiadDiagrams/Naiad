@@ -95,10 +95,10 @@ static class NestingGraph
             Dfs(graph, root, nodeSep, weight, height, depths, child);
 
             var childNode = graph.Node(child);
-            var childTop = childNode.BorderTop != null ? childNode.BorderTop : child;
-            var childBottom = childNode.BorderBottom != null ? childNode.BorderBottom : child;
+            var childTop = childNode.BorderTop ?? child;
+            var childBottom = childNode.BorderBottom ?? child;
             var thisWeight = childNode.BorderTop != null ? weight : 2 * weight;
-            var minlen = childTop != childBottom ? 1 : height - (depths.TryGetValue(v, out var d) ? d : 0) + 1;
+            var minlen = childTop != childBottom ? 1 : height - (depths.GetValueOrDefault(v, 0)) + 1;
 
             graph.SetEdge(top, childTop, new EdgeLabel
             {
@@ -117,7 +117,7 @@ static class NestingGraph
 
         if (graph.Parent(v) == null)
         {
-            graph.SetEdge(root, top, new EdgeLabel { Weight = 0, Minlen = (int) (height + (depths.TryGetValue(v, out var d) ? d : 0)) });
+            graph.SetEdge(root, top, new EdgeLabel { Weight = 0, Minlen = (int) (height + (depths.GetValueOrDefault(v, 0))) });
         }
     }
 
