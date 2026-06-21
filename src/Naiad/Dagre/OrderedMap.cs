@@ -79,5 +79,5 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
 
     public IEnumerator<KeyValuePair<string, TValue>> GetEnumerator() => order.GetEnumerator();
 
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
