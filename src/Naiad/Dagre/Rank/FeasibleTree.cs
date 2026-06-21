@@ -61,7 +61,7 @@ static class FeasibleTree
      * Finds a maximal tree of tight edges and returns the number of nodes in the
      * tree.
      */
-    public static int TightTree(Graph tree, Graph graph)
+    static int TightTree(Graph tree, Graph graph)
     {
         void Dfs(string v)
         {
@@ -94,7 +94,7 @@ static class FeasibleTree
      * Finds the edge with the smallest slack that is incident on tree and returns
      * it.
      */
-    public static Edge? FindMinSlackEdge(Graph tree, Graph graph)
+    static Edge? FindMinSlackEdge(Graph tree, Graph graph)
     {
         var edges = graph.Edges();
 
@@ -118,7 +118,7 @@ static class FeasibleTree
         return accEdge;
     }
 
-    public static void ShiftRanks(Graph tree, Graph graph, int delta)
+    static void ShiftRanks(Graph tree, Graph graph, int delta)
     {
         foreach (var v in tree.Nodes())
         {

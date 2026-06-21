@@ -26,27 +26,27 @@ static class CoordinateSystem
         }
     }
 
-    internal static void SwapWidthHeight(Graph graph)
+    static void SwapWidthHeight(Graph graph)
     {
         graph.Nodes().ForEach(node => SwapWidthHeightOne(graph.Node(node)));
         graph.Edges().ForEach(edge => SwapWidthHeightOne(graph.Edge_(edge)));
     }
 
-    internal static void SwapWidthHeightOne(NodeLabel attrs)
+    static void SwapWidthHeightOne(NodeLabel attrs)
     {
         var w = attrs.Width;
         attrs.Width = attrs.Height;
         attrs.Height = w;
     }
 
-    internal static void SwapWidthHeightOne(EdgeLabel attrs)
+    static void SwapWidthHeightOne(EdgeLabel attrs)
     {
         var w = attrs.Width;
         attrs.Width = attrs.Height;
         attrs.Height = w;
     }
 
-    internal static void ReverseY(Graph graph)
+    static void ReverseY(Graph graph)
     {
         graph.Nodes().ForEach(node => ReverseYOne(graph.Node(node)));
 
@@ -68,17 +68,17 @@ static class CoordinateSystem
         });
     }
 
-    internal static void ReverseYOne(NodeLabel attrs) => attrs.Y = -attrs.Y!.Value;
+    static void ReverseYOne(NodeLabel attrs) => attrs.Y = -attrs.Y!.Value;
 
-    internal static void ReverseYOne(EdgeLabel attrs) => attrs.Y = -attrs.Y!.Value;
+    static void ReverseYOne(EdgeLabel attrs) => attrs.Y = -attrs.Y!.Value;
 
-    internal static Point ReverseYOne(Point attrs)
+    static Point ReverseYOne(Point attrs)
     {
         attrs.Y = -attrs.Y;
         return attrs;
     }
 
-    internal static void SwapXY(Graph graph)
+    static void SwapXY(Graph graph)
     {
         graph.Nodes().ForEach(node => SwapXYOne(graph.Node(node)));
 
@@ -100,21 +100,21 @@ static class CoordinateSystem
         });
     }
 
-    internal static void SwapXYOne(NodeLabel attrs)
+    static void SwapXYOne(NodeLabel attrs)
     {
         var x = attrs.X;
         attrs.X = attrs.Y;
         attrs.Y = x;
     }
 
-    internal static void SwapXYOne(EdgeLabel attrs)
+    static void SwapXYOne(EdgeLabel attrs)
     {
         var x = attrs.X;
         attrs.X = attrs.Y;
         attrs.Y = x;
     }
 
-    internal static Point SwapXYOne(Point attrs)
+    static Point SwapXYOne(Point attrs)
     {
         var x = attrs.X;
         attrs.X = attrs.Y;

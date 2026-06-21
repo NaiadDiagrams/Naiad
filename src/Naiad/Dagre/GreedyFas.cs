@@ -1,14 +1,9 @@
 namespace Naiad.Dagre;
 
-/// <summary>
-/// An entry threaded into the greedy-FAS bucket lists.
-/// object (<c>{v, in, out}</c>); <see cref="W"/> is used when entries are emitted as edges from
-/// <see cref="GreedyFas.RemoveNode"/>.
-/// </summary>
+/// <summary>An entry threaded into the greedy-FAS bucket lists (<c>{v, in, out}</c>).</summary>
 sealed class FasEntry : ListNode
 {
     public string V = "";
-    public string? W;
     public double In;
     public double Out;
 }
