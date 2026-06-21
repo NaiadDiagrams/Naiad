@@ -20,7 +20,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
     record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
-    record NodeBounds(double X, double Y, double Width, double Height, string Label);
+    record NodeBounds(double X, double Y, double Width, double Height, string Label, bool IsNote = false);
 #endif
 
     const double stateMinWidth = 40;
@@ -174,8 +174,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     void TrackLine(double x1, double y1, double x2, double y2, string label) =>
         lineBounds.Add(new(x1, y1, x2, y2, label));
 
-    void TrackNode(double x, double y, double width, double height, string label) =>
-        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
+    void TrackNode(double x, double y, double width, double height, string label, bool isNote = false) =>
+        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label, isNote));
 
     void CheckForLinesUnderNodes()
     {
@@ -183,6 +183,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             foreach (var node in nodeBounds)
             {
+                // Notes are opaque annotation boxes drawn on top of the transitions, so a line routing
+                // behind one is hidden by it, not obscured by it. Only real state nodes must stay clear.
+                if (node.IsNote)
+                {
+                    continue;
+                }
+
                 // Skip if line is connected to this node (endpoint is near/inside the node)
                 var nodeRight = node.X + node.Width;
                 var nodeBottom = node.Y + node.Height;
@@ -1818,7 +1825,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
 #if DEBUG
             // Track note as a node for line-under-node detection
-            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}");
+            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}", isNote: true);
 #endif
 
             // Fold corner

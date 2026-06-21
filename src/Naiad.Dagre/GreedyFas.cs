@@ -49,7 +49,7 @@ static class GreedyFas
     static List<Edge> DoGreedyFas(Graph g, Dictionary<string, FasEntry> entries, List<DoublyLinkedList> buckets, int zeroIdx)
     {
         var results = new List<Edge>();
-        var sources = buckets[buckets.Count - 1];
+        var sources = buckets[^1];
         var sinks = buckets[0];
 
         FasEntry? entry;
@@ -168,7 +168,7 @@ static class GreedyFas
         }
         else if (entry.In == 0)
         {
-            buckets[buckets.Count - 1].Enqueue(entry);
+            buckets[^1].Enqueue(entry);
         }
         else
         {

@@ -249,10 +249,6 @@ sealed class Graph
         {
             return Nodes();
         }
-        else if (HasNode(v))
-        {
-            return [];
-        }
 
         return [];
     }

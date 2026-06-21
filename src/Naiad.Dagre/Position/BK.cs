@@ -48,7 +48,7 @@ static class BK
             // segment.
             var scanPos = 0;
             var prevLayerLength = prevLayer.Count;
-            var lastNode = layer[layer.Count - 1];
+            var lastNode = layer[^1];
 
             for (var i = 0; i < layer.Count; i++)
             {

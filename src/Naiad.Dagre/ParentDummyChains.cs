@@ -103,7 +103,11 @@ static class ParentDummyChains
         wPath.Reverse();
         var path = new List<string?>(vPath);
         path.AddRange(wPath);
-        return new PathData { Path = path, Lca = lca };
+        return new()
+        {
+            Path = path,
+            Lca = lca
+        };
     }
 
     static Dictionary<string, PostorderNum> Postorder(Graph graph)

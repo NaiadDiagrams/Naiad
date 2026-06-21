@@ -14,7 +14,7 @@ static class Acyclic
 
         foreach (var e in fas)
         {
-            var label = graph.Edge_(e)!;
+            var label = graph.Edge_(e);
             graph.RemoveEdge(e);
             label.ForwardName = e.Name;
             label.Reversed = true;
