@@ -32,19 +32,11 @@ static class CoordinateSystem
         graph.Edges().ForEach(edge => SwapWidthHeightOne(graph.FindEdgeLabel(edge)));
     }
 
-    static void SwapWidthHeightOne(NodeLabel attrs)
-    {
-        var w = attrs.Width;
-        attrs.Width = attrs.Height;
-        attrs.Height = w;
-    }
+    static void SwapWidthHeightOne(NodeLabel attrs) =>
+        (attrs.Width, attrs.Height) = (attrs.Height, attrs.Width);
 
-    static void SwapWidthHeightOne(EdgeLabel attrs)
-    {
-        var w = attrs.Width;
-        attrs.Width = attrs.Height;
-        attrs.Height = w;
-    }
+    static void SwapWidthHeightOne(EdgeLabel attrs) =>
+        (attrs.Width, attrs.Height) = (attrs.Height, attrs.Width);
 
     static void ReverseY(Graph graph)
     {
@@ -100,25 +92,15 @@ static class CoordinateSystem
         });
     }
 
-    static void SwapXYOne(NodeLabel attrs)
-    {
-        var x = attrs.X;
-        attrs.X = attrs.Y;
-        attrs.Y = x;
-    }
+    static void SwapXYOne(NodeLabel attrs) =>
+        (attrs.X, attrs.Y) = (attrs.Y, attrs.X);
 
-    static void SwapXYOne(EdgeLabel attrs)
-    {
-        var x = attrs.X;
-        attrs.X = attrs.Y;
-        attrs.Y = x;
-    }
+    static void SwapXYOne(EdgeLabel attrs) =>
+        (attrs.X, attrs.Y) = (attrs.Y, attrs.X);
 
     static Point SwapXYOne(Point attrs)
     {
-        var x = attrs.X;
-        attrs.X = attrs.Y;
-        attrs.Y = x;
+        (attrs.X, attrs.Y) = (attrs.Y, attrs.X);
         return attrs;
     }
 }

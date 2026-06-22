@@ -205,9 +205,7 @@ static class BK
     {
         if (string.CompareOrdinal(v, w) > 0)
         {
-            var tmp = v;
-            v = w;
-            w = tmp;
+            (v, w) = (w, v);
         }
 
         return conflicts.TryGetValue(v, out var conflictsV) && conflictsV.ContainsKey(w);
@@ -529,15 +527,16 @@ static class BK
             {
                 var alignmentKey = align.ToLowerInvariant();
                 var alignment = xss.GetValueOrDefault(alignmentKey);
-                if (alignment != null && alignment.TryGetValue(v, out var av))
+                if (alignment != null &&
+                    alignment.TryGetValue(v, out var av))
                 {
                     return av;
                 }
             }
 
             var xs = xss.Values
-                .Select(x => x.GetValueOrDefault(v, 0))
-                .OrderBy(a => a)
+                .Select(_ => _.GetValueOrDefault(v, 0))
+                .OrderBy(_ => _)
                 .ToList();
             return ((xs.Count > 1 ? xs[1] : 0) + (xs.Count > 2 ? xs[2] : 0)) / 2;
         });
