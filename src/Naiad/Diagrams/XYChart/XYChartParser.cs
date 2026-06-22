@@ -112,7 +112,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
             skipLine.ThenReturn<IXYContent?>(null)
         );
 
-    static Parser<char, XYChartModel> Parser =
+    static Parser<char, XYChartModel> parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in OneOf(CIString("xychart-beta"), CIString("xychart"))
         from ___ in CommonParsers.InlineWhitespace
@@ -152,9 +152,9 @@ class XYChartParser : IDiagramParser<XYChartModel>
         return model;
     }
 
-    public Result<char, XYChartModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, XYChartModel> Parse(string input) => parser.Parse(input);
 
-    internal interface IXYContent;
+    interface IXYContent;
     readonly record struct TitleItem(string Value) : IXYContent;
     readonly record struct XAxisItem(string Label, List<string> Categories) : IXYContent;
     readonly record struct YAxisItem(string Label, double Min, double Max) : IXYContent;

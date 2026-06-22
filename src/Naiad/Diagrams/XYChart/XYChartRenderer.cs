@@ -2,16 +2,16 @@ namespace Naiad.Diagrams.XYChart;
 
 public class XYChartRenderer : IDiagramRenderer<XYChartModel>
 {
-    const double ChartWidth = 500;
-    const double ChartHeight = 300;
-    const double LeftMargin = 60;
-    const double RightMargin = 20;
-    const double TopMargin = 60;
-    const double BottomMargin = 60;
-    const double TitleHeight = 30;
+    const double chartWidth = 500;
+    const double chartHeight = 300;
+    const double leftMargin = 60;
+    const double rightMargin = 20;
+    const double topMargin = 60;
+    const double bottomMargin = 60;
+    const double titleHeight = 30;
 
-    static readonly string[] BarColors = ["#4CAF50", "#2196F3", "#FF9800", "#E91E63"];
-    static readonly string[] LineColors = ["#9C27B0", "#00BCD4", "#FF5722", "#607D8B"];
+    static string[] barColors = ["#4CAF50", "#2196F3", "#FF9800", "#E91E63"];
+    static string[] lineColors = ["#9C27B0", "#00BCD4", "#FF5722", "#607D8B"];
 
     public SvgDocument Render(XYChartModel model, RenderOptions options)
     {
@@ -29,23 +29,23 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             return emptyBuilder.Build();
         }
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var width = ChartWidth + LeftMargin + RightMargin + options.Padding * 2;
-        var height = ChartHeight + TopMargin + BottomMargin + titleOffset + options.Padding * 2;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
+        var width = chartWidth + leftMargin + rightMargin + options.Padding * 2;
+        var height = chartHeight + topMargin + bottomMargin + titleOffset + options.Padding * 2;
 
         var builder = new SvgBuilder().Size(width, height);
 
-        var chartLeft = options.Padding + LeftMargin;
-        var chartTop = options.Padding + titleOffset + TopMargin;
-        var chartRight = chartLeft + ChartWidth;
-        var chartBottom = chartTop + ChartHeight;
+        var chartLeft = options.Padding + leftMargin;
+        var chartTop = options.Padding + titleOffset + topMargin;
+        var chartRight = chartLeft + chartWidth;
+        var chartBottom = chartTop + chartHeight;
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -65,13 +65,13 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         var categoryCount = model.XAxisCategories.Count > 0
             ? model.XAxisCategories.Count
             : model.Series.Count > 0 ? model.Series.Max(_ => _.Data.Count) : 1;
-        var categoryWidth = ChartWidth / categoryCount;
+        var categoryWidth = chartWidth / categoryCount;
 
         // Draw grid lines
         const int gridLines = 5;
         for (var i = 0; i <= gridLines; i++)
         {
-            var y = chartBottom - ChartHeight * i / gridLines;
+            var y = chartBottom - chartHeight * i / gridLines;
             var value = dataMin + dataRange * i / gridLines;
 
             // Grid line
@@ -116,7 +116,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         if (!string.IsNullOrEmpty(model.YAxisLabel))
         {
             var labelX = options.Padding + 15;
-            var labelY = chartTop + ChartHeight / 2;
+            var labelY = chartTop + chartHeight / 2;
             builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"rotate(-90, {labelX:0.##}, {labelY:0.##})"));
             builder.AddText(
                 labelX,
@@ -133,7 +133,7 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         if (!string.IsNullOrEmpty(model.XAxisLabel))
         {
             builder.AddText(
-                chartLeft + ChartWidth / 2,
+                chartLeft + chartWidth / 2,
                 chartBottom + 45,
                 model.XAxisLabel,
                 anchor: "middle",
@@ -153,13 +153,13 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         {
             if (series.Type == ChartSeriesType.Bar)
             {
-                var color = BarColors[barSeriesIndex % BarColors.Length];
+                var color = barColors[barSeriesIndex % barColors.Length];
                 var barOffset = (barSeriesIndex - barSeries.Count / 2.0 + 0.5) * barWidth;
 
                 for (var i = 0; i < series.Data.Count && i < categoryCount; i++)
                 {
                     var value = series.Data[i];
-                    var barHeight = (value - dataMin) / dataRange * ChartHeight;
+                    var barHeight = (value - dataMin) / dataRange * chartHeight;
                     var x = chartLeft + (i + 0.5) * categoryWidth + barOffset - barWidth / 2;
                     var y = chartBottom - barHeight;
 
@@ -176,14 +176,14 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             }
             else if (series.Type == ChartSeriesType.Line)
             {
-                var color = LineColors[lineSeriesIndex % LineColors.Length];
+                var color = lineColors[lineSeriesIndex % lineColors.Length];
                 var points = new List<(double x, double y)>();
 
                 for (var i = 0; i < series.Data.Count && i < categoryCount; i++)
                 {
                     var value = series.Data[i];
                     var x = chartLeft + (i + 0.5) * categoryWidth;
-                    var y = chartBottom - (value - dataMin) / dataRange * ChartHeight;
+                    var y = chartBottom - (value - dataMin) / dataRange * chartHeight;
                     points.Add((x, y));
                 }
 
