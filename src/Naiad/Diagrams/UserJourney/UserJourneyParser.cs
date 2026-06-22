@@ -60,7 +60,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
             skipLine.ThenReturn<IUserJourneyContent?>(null)
         );
 
-    static Parser<char, UserJourneyModel> Parser =
+    static Parser<char, UserJourneyModel> parser =
         from whitespace in CommonParsers.InlineWhitespace
         from journey in CIString("journey")
         from inerWhitespace in CommonParsers.InlineWhitespace
@@ -100,7 +100,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
         return model;
     }
 
-    public Result<char, UserJourneyModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, UserJourneyModel> Parse(string input) => parser.Parse(input);
 
     internal interface IUserJourneyContent;
     readonly record struct TitleItem(string Value) : IUserJourneyContent;
