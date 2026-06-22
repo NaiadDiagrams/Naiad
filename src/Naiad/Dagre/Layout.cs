@@ -30,7 +30,7 @@ static class Layout
         Order.Run(graph);
         InsertSelfEdges(graph);
         CoordinateSystem.Adjust(graph);
-        Position.Run(graph);
+        Positioning.Run(graph);
         PositionSelfEdges(graph);
         RemoveBorderNodes(graph);
         Normalize.Undo(graph);

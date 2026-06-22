@@ -1,6 +1,6 @@
 namespace Naiad.Dagre;
 
-static class Position
+static class Positioning
 {
     internal static void Run(Graph graph)
     {
