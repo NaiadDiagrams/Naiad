@@ -157,4 +157,23 @@ public class ArchitectureTests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task GroupEdge()
+    {
+        // The {group} flag on an edge endpoint anchors it to the boundary of the group the
+        // service belongs to, rather than to the service itself.
+        var input =
+            """
+            architecture-beta
+            group api(cloud)[API]
+            service db(database)[Database] in api
+            service server(server)[Server] in api
+            service gateway(internet)[Gateway]
+            db:L -- R:server
+            server{group}:B -- T>:gateway
+            """;
+
+        return VerifySvg(input);
+    }
 }

@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace Naiad.Diagrams.Flowchart;
 
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :

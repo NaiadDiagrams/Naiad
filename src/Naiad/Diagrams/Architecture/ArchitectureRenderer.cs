@@ -102,7 +102,9 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             junctionPositions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
         }
 
-        // Draw groups first (as background)
+        // Draw groups first (as background), keeping each group's bounds so an edge flagged with
+        // {group} can anchor to the group boundary instead of the service.
+        var groupBounds = new Dictionary<string, (double x, double y, double width, double height)>();
         var colorIndex = 0;
         foreach (var group in model.Groups)
         {
@@ -112,6 +114,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
                 continue;
             }
 
+            groupBounds[group.Id] = bounds.Value;
             var color = GroupColors[colorIndex % GroupColors.Length];
             DrawGroup(builder, group, bounds.Value, color, options);
             colorIndex++;
@@ -132,12 +135,15 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         }
 
         // Draw edges
+        var servicesById = model.Services.ToDictionary(s => s.Id);
         foreach (var edge in model.Edges)
         {
             if (positions.TryGetValue(edge.SourceId, out var from) &&
                 positions.TryGetValue(edge.TargetId, out var to))
             {
-                DrawEdge(builder, from, to, edge);
+                var fromGroup = ResolveGroupBounds(edge.SourceId, edge.SourceGroup, servicesById, groupBounds);
+                var toGroup = ResolveGroupBounds(edge.TargetId, edge.TargetGroup, servicesById, groupBounds);
+                DrawEdge(builder, from, to, edge, fromGroup, toGroup);
             }
         }
 
@@ -393,16 +399,14 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         SvgBuilder builder,
         (double x, double y) from,
         (double x, double y) to,
-        ArchitectureEdge edge)
+        ArchitectureEdge edge,
+        (double x, double y, double width, double height)? fromGroup,
+        (double x, double y, double width, double height)? toGroup)
     {
-        // Calculate edge start/end based on direction
-        var fromOffset = GetDirectionOffset(edge.SourceSide);
-        var toOffset = GetDirectionOffset(edge.TargetSide);
-
-        var fromX = from.x + fromOffset.x * ServiceWidth / 2;
-        var fromY = from.y + fromOffset.y * ServiceHeight / 2;
-        var toX = to.x + toOffset.x * ServiceWidth / 2;
-        var toY = to.y + toOffset.y * ServiceHeight / 2;
+        // Anchor each end to the service edge, or to the containing group's boundary when the
+        // endpoint was flagged with {group}.
+        var (fromX, fromY) = ResolveEndpoint(from, edge.SourceSide, fromGroup);
+        var (toX, toY) = ResolveEndpoint(to, edge.TargetSide, toGroup);
 
         // Draw line
         builder.AddLine(fromX, fromY, toX, toY, stroke: "#666", strokeWidth: 1.5);
@@ -419,6 +423,49 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             var angle = Math.Atan2(fromY - toY, fromX - toX);
             DrawArrow(builder, fromX, fromY, angle);
         }
+    }
+
+    // When an endpoint carries the {group} flag, the edge meets the boundary of the group the service
+    // belongs to: the axis perpendicular to the side comes from the group rect, the parallel axis from
+    // the service centre (so the edge still lines up with the service). Otherwise it meets the service edge.
+    static (double x, double y) ResolveEndpoint(
+        (double x, double y) center,
+        EdgeDirection side,
+        (double x, double y, double width, double height)? groupBounds)
+    {
+        if (groupBounds is { } g)
+        {
+            return side switch
+            {
+                EdgeDirection.Left => (g.x, center.y),
+                EdgeDirection.Right => (g.x + g.width, center.y),
+                EdgeDirection.Top => (center.x, g.y),
+                EdgeDirection.Bottom => (center.x, g.y + g.height),
+                _ => center
+            };
+        }
+
+        var offset = GetDirectionOffset(side);
+        return (center.x + offset.x * ServiceWidth / 2, center.y + offset.y * ServiceHeight / 2);
+    }
+
+    // Resolves the group an edge endpoint should anchor to, or null when it has no {group} flag, isn't a
+    // service, or its service isn't inside a group with bounds.
+    static (double x, double y, double width, double height)? ResolveGroupBounds(
+        string serviceId,
+        string? groupFlag,
+        Dictionary<string, ArchitectureService> servicesById,
+        Dictionary<string, (double x, double y, double width, double height)> groupBounds)
+    {
+        if (groupFlag == null ||
+            !servicesById.TryGetValue(serviceId, out var service) ||
+            string.IsNullOrEmpty(service.Parent) ||
+            !groupBounds.TryGetValue(service.Parent, out var bounds))
+        {
+            return null;
+        }
+
+        return bounds;
     }
 
     static (double x, double y) GetDirectionOffset(EdgeDirection dir) => dir switch

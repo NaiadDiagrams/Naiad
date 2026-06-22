@@ -57,7 +57,7 @@ class TimelineParser : IDiagramParser<TimelineModel>
             skipLine.ThenReturn<ITimelineContent?>(null)
         );
 
-    static Parser<char, TimelineModel> Parser =
+    static Parser<char, TimelineModel> parser =
         from _ in CommonParsers.InlineWhitespace
         from __ in CIString("timeline")
         from ___ in CommonParsers.InlineWhitespace
@@ -114,9 +114,9 @@ class TimelineParser : IDiagramParser<TimelineModel>
         return model;
     }
 
-    public Result<char, TimelineModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, TimelineModel> Parse(string input) => parser.Parse(input);
 
-    internal interface ITimelineContent;
+    interface ITimelineContent;
     readonly record struct TitleItem(string Value) : ITimelineContent;
     readonly record struct SectionItem(string Name) : ITimelineContent;
     readonly record struct PeriodItem(string Period, string EventText) : ITimelineContent;

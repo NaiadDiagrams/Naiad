@@ -3,12 +3,12 @@ namespace Naiad.Diagrams.Class;
 public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ClassModel>
 {
-    readonly ILayoutEngine _layoutEngine = layoutEngine ?? new DagreEngine();
+    ILayoutEngine _layoutEngine = layoutEngine ?? new DagreEngine();
 
-    const double ClassPadding = 10;
-    const double LineHeight = 20;
-    const double MinWidth = 100;
-    const double SeparatorHeight = 1;
+    const double classPadding = 10;
+    const double lineHeight = 20;
+    const double minWidth = 100;
+    const double separatorHeight = 1;
 
     public SvgDocument Render(ClassModel model, RenderOptions options)
     {
@@ -122,30 +122,30 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             maxTextWidth = Math.Max(maxTextWidth, MeasureText(text, options.FontSize));
         }
 
-        var width = Math.Max(MinWidth, maxTextWidth + ClassPadding * 2);
+        var width = Math.Max(minWidth, maxTextWidth + classPadding * 2);
 
         // Calculate height
-        var height = ClassPadding; // Top padding
+        var height = classPadding; // Top padding
         if (classDef.Annotation.HasValue)
         {
-            height += LineHeight;
+            height += lineHeight;
         }
-        height += LineHeight; // Class name
-        height += ClassPadding; // After name
+        height += lineHeight; // Class name
+        height += classPadding; // After name
 
         if (classDef.Members.Count > 0)
         {
-            height += SeparatorHeight;
-            height += classDef.Members.Count * LineHeight;
+            height += separatorHeight;
+            height += classDef.Members.Count * lineHeight;
         }
 
         if (classDef.Methods.Count > 0)
         {
-            height += SeparatorHeight;
-            height += classDef.Methods.Count * LineHeight;
+            height += separatorHeight;
+            height += classDef.Methods.Count * lineHeight;
         }
 
-        height += ClassPadding; // Bottom padding
+        height += classPadding; // Bottom padding
 
         return (width, height);
     }
@@ -176,7 +176,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "#333",
             strokeWidth: 1);
 
-        var currentY = y + ClassPadding;
+        var currentY = y + classPadding;
         var centerX = node.Position.X;
 
         // Annotation
@@ -185,7 +185,7 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             var annotationText = $"<<{classDef.Annotation.Value.ToString().ToLower()}>>";
             builder.AddText(
                 centerX,
-                currentY + LineHeight / 2,
+                currentY + lineHeight / 2,
                 annotationText,
                 anchor: "middle",
                 baseline: "middle",
@@ -193,20 +193,20 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
                 fontFamily: options.FontFamily,
                 fontWeight: "normal",
                 fill: "#666");
-            currentY += LineHeight;
+            currentY += lineHeight;
         }
 
         // Class name
         builder.AddText(
             centerX,
-            currentY + LineHeight / 2,
+            currentY + lineHeight / 2,
             classDef.Name,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
-        currentY += LineHeight + ClassPadding;
+        currentY += lineHeight + classPadding;
 
         // Members separator and list
         if (classDef.Members.Count > 0)
@@ -218,20 +218,20 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
                 currentY,
                 stroke: "#333",
                 strokeWidth: 1);
-            currentY += SeparatorHeight;
+            currentY += separatorHeight;
 
             foreach (var member in classDef.Members)
             {
                 var memberText = FormatMember(member);
                 builder.AddText(
-                    x + ClassPadding,
-                    currentY + LineHeight / 2,
+                    x + classPadding,
+                    currentY + lineHeight / 2,
                     memberText,
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
-                currentY += LineHeight;
+                currentY += lineHeight;
             }
         }
 
@@ -245,20 +245,20 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
                 currentY,
                 stroke: "#333",
                 strokeWidth: 1);
-            currentY += SeparatorHeight;
+            currentY += separatorHeight;
 
             foreach (var method in classDef.Methods)
             {
                 var methodText = FormatMethod(method);
                 builder.AddText(
-                    x + ClassPadding,
-                    currentY + LineHeight / 2,
+                    x + classPadding,
+                    currentY + lineHeight / 2,
                     methodText,
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
-                currentY += LineHeight;
+                currentY += lineHeight;
             }
         }
     }

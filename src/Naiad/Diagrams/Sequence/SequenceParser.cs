@@ -155,7 +155,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
             CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
         );
 
-    public static Parser<char, SequenceModel> Parser =
+    static Parser<char, SequenceModel> parser =
         from _ in CommonParsers.InlineWhitespace
         from keyword in String("sequenceDiagram")
         from __ in CommonParsers.InlineWhitespace
@@ -163,7 +163,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
         from content in ParseContent()
         select BuildModel(content);
 
-    public static Parser<char, IEnumerable<ISequenceContent?>> ParseContent()
+    static Parser<char, IEnumerable<ISequenceContent?>> ParseContent()
     {
         var element = OneOf(
             Try(participantParser.Select<ISequenceContent?>(_ => new ParticipantItem(_))),
@@ -238,9 +238,9 @@ class SequenceParser : IDiagramParser<SequenceModel>
         return model;
     }
 
-    public Result<char, SequenceModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, SequenceModel> Parse(string input) => parser.Parse(input);
 
-    internal interface ISequenceContent;
+    interface ISequenceContent;
     readonly record struct ParticipantItem(Participant Value) : ISequenceContent;
     readonly record struct MessageItem(Message Value) : ISequenceContent;
     readonly record struct NoteItem(Note Value) : ISequenceContent;

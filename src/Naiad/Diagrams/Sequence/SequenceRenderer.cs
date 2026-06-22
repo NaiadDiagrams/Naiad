@@ -2,14 +2,14 @@ namespace Naiad.Diagrams.Sequence;
 
 public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 {
-    const double ParticipantWidth = 100;
-    const double ParticipantHeight = 40;
-    const double ParticipantSpacing = 150;
-    const double MessageSpacing = 50;
-    const double ActivationWidth = 10;
-    const double NoteWidth = 120;
-    const double NoteHeight = 40;
-    const double ActorHeadRadius = 15;
+    const double participantWidth = 100;
+    const double participantHeight = 40;
+    const double participantSpacing = 150;
+    const double messageSpacing = 50;
+    const double activationWidth = 10;
+    const double noteWidth = 120;
+    const double noteHeight = 40;
+    const double actorHeadRadius = 15;
 
     public SvgDocument Render(SequenceModel model, RenderOptions options)
     {
@@ -44,8 +44,8 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         DrawParticipants(builder, model, participantPositions, startY, options);
 
         // Draw lifelines
-        var lifelineStartY = startY + ParticipantHeight;
-        var lifelineEndY = height - options.Padding - ParticipantHeight;
+        var lifelineStartY = startY + participantHeight;
+        var lifelineEndY = height - options.Padding - participantHeight;
         DrawLifelines(builder, model, participantPositions, lifelineStartY, lifelineEndY);
 
         // Draw elements (messages, notes, activations)
@@ -64,12 +64,12 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     static Dictionary<string, double> CalculateParticipantPositions(SequenceModel model, RenderOptions options)
     {
         var positions = new Dictionary<string, double>();
-        var x = options.Padding + ParticipantWidth / 2;
+        var x = options.Padding + participantWidth / 2;
 
         foreach (var participant in model.Participants)
         {
             positions[participant.Id] = x;
-            x += ParticipantSpacing;
+            x += participantSpacing;
         }
 
         return positions;
@@ -79,7 +79,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         SequenceModel model, RenderOptions options)
     {
         var elementYPositions = new Dictionary<int, double>();
-        var y = options.Padding + ParticipantHeight + MessageSpacing;
+        var y = options.Padding + participantHeight + messageSpacing;
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
 
         for (var i = 0; i < model.Elements.Count; i++)
@@ -88,23 +88,23 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             y += GetElementHeight(model.Elements[i]);
         }
 
-        var totalHeight = y + ParticipantHeight + options.Padding + titleOffset;
+        var totalHeight = y + participantHeight + options.Padding + titleOffset;
         return (totalHeight, elementYPositions);
     }
 
     static double GetElementHeight(SequenceElement element) =>
         element switch
         {
-            Message => MessageSpacing,
-            Note => NoteHeight + 10,
+            Message => messageSpacing,
+            Note => noteHeight + 10,
             Activation => 0, // Activations don't add height
-            _ => MessageSpacing
+            _ => messageSpacing
         };
 
     static double CalculateWidth(SequenceModel model, RenderOptions options)
     {
         var participantCount = Math.Max(1, model.Participants.Count);
-        return options.Padding * 2 + ParticipantWidth + (participantCount - 1) * ParticipantSpacing;
+        return options.Padding * 2 + participantWidth + (participantCount - 1) * participantSpacing;
     }
 
     static void DrawParticipants(SvgBuilder builder, SequenceModel model,
@@ -129,10 +129,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         string text, RenderOptions options)
     {
         builder.AddRect(
-            cx - ParticipantWidth / 2,
+            cx - participantWidth / 2,
             y,
-            ParticipantWidth,
-            ParticipantHeight,
+            participantWidth,
+            participantHeight,
             rx: 3,
             fill: "#ECECFF",
             stroke: "#9370DB",
@@ -140,7 +140,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         builder.AddText(
             cx,
-            y + ParticipantHeight / 2,
+            y + participantHeight / 2,
             text,
             anchor: "middle",
             baseline: "middle",
@@ -152,17 +152,17 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         string text, RenderOptions options)
     {
         // Stick figure
-        var headY = y + ActorHeadRadius;
-        var bodyTop = headY + ActorHeadRadius;
+        var headY = y + actorHeadRadius;
+        var bodyTop = headY + actorHeadRadius;
         var bodyBottom = bodyTop + 15;
         var armY = bodyTop + 5;
-        var legBottom = y + ParticipantHeight;
+        var legBottom = y + participantHeight;
 
         // Head
         builder.AddCircle(
             cx,
             headY,
-            ActorHeadRadius,
+            actorHeadRadius,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
@@ -204,7 +204,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         // Label below
         builder.AddText(
             cx,
-            y + ParticipantHeight + 15,
+            y + participantHeight + 15,
             text,
             anchor: "middle",
             baseline: "top",
@@ -294,7 +294,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         // Close any remaining activations
         // ReSharper disable once UseIndexFromEndExpression
-        var lastY = yPositions.Count > 0 ? yPositions[yPositions.Count - 1] + MessageSpacing : 0;
+        var lastY = yPositions.Count > 0 ? yPositions[yPositions.Count - 1] + messageSpacing : 0;
         foreach (var (participantId, startY) in activeLifelines)
         {
             if (!activations.TryGetValue(participantId, out var value))
@@ -464,21 +464,21 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         switch (note.Position)
         {
             case NotePosition.RightOf:
-                noteX = participantX + ParticipantWidth / 2 + 10;
+                noteX = participantX + participantWidth / 2 + 10;
                 break;
             case NotePosition.LeftOf:
-                noteX = participantX - ParticipantWidth / 2 - NoteWidth - 10;
+                noteX = participantX - participantWidth / 2 - noteWidth - 10;
                 break;
             case NotePosition.Over:
             default:
                 if (!string.IsNullOrEmpty(note.OverParticipantId2) &&
                     positions.TryGetValue(note.OverParticipantId2, out var participant2X))
                 {
-                    noteX = (participantX + participant2X) / 2 - NoteWidth / 2;
+                    noteX = (participantX + participant2X) / 2 - noteWidth / 2;
                 }
                 else
                 {
-                    noteX = participantX - NoteWidth / 2;
+                    noteX = participantX - noteWidth / 2;
                 }
 
                 break;
@@ -488,30 +488,30 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         const int foldSize = 8;
         var path = string.Create(
             CultureInfo.InvariantCulture,
-            $"M{noteX:0.##},{y:0.##} L{noteX + NoteWidth - foldSize:0.##},{y:0.##} L{noteX + NoteWidth:0.##},{y + foldSize:0.##} L{noteX + NoteWidth:0.##},{y + NoteHeight:0.##} L{noteX:0.##},{y + NoteHeight:0.##} Z");
+            $"M{noteX:0.##},{y:0.##} L{noteX + noteWidth - foldSize:0.##},{y:0.##} L{noteX + noteWidth:0.##},{y + foldSize:0.##} L{noteX + noteWidth:0.##},{y + noteHeight:0.##} L{noteX:0.##},{y + noteHeight:0.##} Z");
 
         builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
         // Fold line
         builder.AddLine(
-            noteX + NoteWidth - foldSize,
+            noteX + noteWidth - foldSize,
             y,
-            noteX + NoteWidth - foldSize,
+            noteX + noteWidth - foldSize,
             y + foldSize,
             stroke: "#AAAA33",
             strokeWidth: 1);
         builder.AddLine(
-            noteX + NoteWidth - foldSize,
+            noteX + noteWidth - foldSize,
             y + foldSize,
-            noteX + NoteWidth,
+            noteX + noteWidth,
             y + foldSize,
             stroke: "#AAAA33",
             strokeWidth: 1);
 
         // Note text
         builder.AddText(
-            noteX + NoteWidth / 2,
-            y + NoteHeight / 2,
+            noteX + noteWidth / 2,
+            y + noteHeight / 2,
             note.Text,
             anchor: "middle",
             baseline: "middle",
@@ -530,9 +530,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             foreach (var (startY, endY) in ranges)
             {
                 builder.AddRect(
-                    x - ActivationWidth / 2,
+                    x - activationWidth / 2,
                     startY,
-                    ActivationWidth,
+                    activationWidth,
                     endY - startY,
                     fill: "#F4F4F4",
                     stroke: "#666",
