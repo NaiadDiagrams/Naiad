@@ -73,7 +73,6 @@ sealed class EdgeLabel
     public string? ForwardName;
     public bool? NestingEdge;
     public double? Cutvalue;
-    public Edge? EdgeObj;
 }
 
 /// <summary>Graph label with layout configuration.</summary>
@@ -95,5 +94,4 @@ sealed class GraphLabel
     public int? NodeRankFactor;
     public List<string>? DummyChains;
     public string? Root;             // order/build-layer-graph: the synthetic root node id
-    public int? MaxRank;             // largest subgraph border rank
 }

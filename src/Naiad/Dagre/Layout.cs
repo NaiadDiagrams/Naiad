@@ -283,18 +283,14 @@ static class Layout
 
     static void AssignRankMinMax(Graph graph)
     {
-        var maxRank = 0;
         foreach (var node in graph.NodeLabels())
         {
             if (node.BorderTop != null)
             {
                 node.MinRank = graph.NodeLabel(node.BorderTop).Rank;
                 node.MaxRank = graph.NodeLabel(node.BorderBottom!).Rank;
-                maxRank = Math.Max(maxRank, node.MaxRank!.Value);
             }
         }
-
-        graph.Label.MaxRank = maxRank;
     }
 
     static void RemoveEdgeLabelProxies(Graph graph)
