@@ -31,7 +31,20 @@ public static class ImageSharpRenderer
     public static void RenderPng(string mermaid, Stream stream, RenderOptions? options = null)
     {
         options ??= RenderOptions.Default;
-        var document = Mermaid.RenderToSvgDocument(mermaid, options);
+        RenderDocument(Mermaid.RenderToSvgDocument(mermaid, options), stream, options);
+    }
+
+    // Renders an already parsed/laid-out document. This is the seam BackendRenderBenchmarks uses to measure
+    // the ImageSharp rasterize + encode path on its own, without the parse/layout cost dominating the number.
+    internal static byte[] RenderPng(SvgDocument document, RenderOptions options)
+    {
+        using var stream = new MemoryStream();
+        RenderDocument(document, stream, options);
+        return stream.ToArray();
+    }
+
+    static void RenderDocument(SvgDocument document, Stream stream, RenderOptions options)
+    {
         var background = CssColor.TryParse(options.Png.Background, out var color) ? color : Rgba.White;
         using var surface = SvgRasterizer.Paint(document, options.Png.Scale, (width, height) => new ImageSharpSurface(width, height, background));
         surface.Encode(stream);
