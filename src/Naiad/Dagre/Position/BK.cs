@@ -51,29 +51,33 @@ static class BK
                 var w = FindOtherInnerSegmentNode(graph, v);
                 var k1 = w != null ? graph.NodeLabel(w).Order!.Value : prevLayerLength;
 
-                if (w != null || v == lastNode)
+                if (w == null && v != lastNode)
                 {
-                    foreach (var scanNode in layer.GetRange(scanPos, i + 1 - scanPos))
+                    continue;
+                }
+
+                foreach (var scanNode in layer.GetRange(scanPos, i + 1 - scanPos))
+                {
+                    var preds = graph.Predecessors(scanNode);
+                    if (preds == null)
                     {
-                        var preds = graph.Predecessors(scanNode);
-                        if (preds != null)
-                        {
-                            foreach (var u in preds)
-                            {
-                                var uLabel = graph.NodeLabel(u);
-                                var uPos = uLabel.Order!.Value;
-                                if ((uPos < k0 || k1 < uPos) &&
-                                    !(uLabel.Dummy != null && graph.NodeLabel(scanNode).Dummy != null))
-                                {
-                                    AddConflict(conflicts, u, scanNode);
-                                }
-                            }
-                        }
+                        continue;
                     }
 
-                    scanPos = i + 1;
-                    k0 = k1;
+                    foreach (var u in preds)
+                    {
+                        var uLabel = graph.NodeLabel(u);
+                        var uPos = uLabel.Order!.Value;
+                        if ((uPos < k0 || k1 < uPos) &&
+                            !(uLabel.Dummy != null && graph.NodeLabel(scanNode).Dummy != null))
+                        {
+                            AddConflict(conflicts, u, scanNode);
+                        }
+                    }
                 }
+
+                scanPos = i + 1;
+                k0 = k1;
             }
 
             return layer;
@@ -105,20 +109,24 @@ static class BK
                     continue;
                 }
 
-                if (graph.NodeLabel(v).Dummy != null)
+                if (graph.NodeLabel(v).Dummy == null)
                 {
-                    var preds = graph.Predecessors(v);
-                    if (preds != null)
+                    continue;
+                }
+
+                var preds = graph.Predecessors(v);
+                if (preds == null)
+                {
+                    continue;
+                }
+
+                foreach (var u in preds)
+                {
+                    var uNode = graph.NodeLabel(u);
+                    if (uNode.Dummy != null &&
+                        (uNode.Order!.Value < prevNorthBorder || uNode.Order!.Value > nextNorthBorder))
                     {
-                        foreach (var u in preds)
-                        {
-                            var uNode = graph.NodeLabel(u);
-                            if (uNode.Dummy != null &&
-                                (uNode.Order!.Value < prevNorthBorder || uNode.Order!.Value > nextNorthBorder))
-                            {
-                                AddConflict(conflicts, u, v);
-                            }
-                        }
+                        AddConflict(conflicts, u, v);
                     }
                 }
             }
@@ -164,14 +172,14 @@ static class BK
         return conflicts;
     }
 
-    internal static string? FindOtherInnerSegmentNode(Graph graph, string v)
+    internal static string? FindOtherInnerSegmentNode(Graph graph, string name)
     {
-        if (graph.NodeLabel(v).Dummy != null)
+        if (graph.NodeLabel(name).Dummy != null)
         {
-            var preds = graph.Predecessors(v);
+            var preds = graph.Predecessors(name);
             if (preds != null)
             {
-                return preds.FirstOrDefault(u => graph.NodeLabel(u).Dummy != null);
+                return preds.FirstOrDefault(_ => graph.NodeLabel(_).Dummy != null);
             }
         }
 

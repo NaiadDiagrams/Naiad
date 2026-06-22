@@ -36,7 +36,7 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
     }
 
     public TValue? GetValueOrDefault(string key) =>
-        map.TryGetValue(key, out var value) ? value : default;
+        map.GetValueOrDefault(key);
 
     public void Remove(string key) => map.Remove(key);
 

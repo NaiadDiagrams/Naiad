@@ -66,4 +66,66 @@ public class GraphTests
             await Assert.That(graph.TryGetEdgeLabel(new Edge("b", "c"), out _)).IsFalse();
         }
     }
+
+    public class NodeLabelTests
+    {
+        [Test]
+        public async Task ThrowsWhenTheNodeDoesNotExist()
+        {
+            var graph = new Graph();
+
+            await Assert.That(() => graph.NodeLabel("a")).Throws<KeyNotFoundException>();
+        }
+
+        [Test]
+        public async Task ThrowsWhenTheNodeExistsButHasNoLabel()
+        {
+            var graph = new Graph();
+            graph.SetNode("a"); // no label → the default node-label fn yields null
+
+            await Assert.That(graph.HasNode("a")).IsTrue();
+            await Assert.That(() => graph.NodeLabel("a")).Throws<KeyNotFoundException>();
+        }
+
+        [Test]
+        public async Task ReturnsTheLabelWhenTheNodeHasOne()
+        {
+            var graph = new Graph();
+            var label = new NodeLabel { Width = 2 };
+            graph.SetNode("a", label);
+
+            await Assert.That(graph.NodeLabel("a")).IsSameReferenceAs(label);
+        }
+    }
+
+    public class TryGetNodeLabelTests
+    {
+        [Test]
+        public async Task ReturnsFalseWhenTheNodeDoesNotExist()
+        {
+            var graph = new Graph();
+
+            await Assert.That(graph.TryGetNodeLabel("a", out _)).IsFalse();
+        }
+
+        [Test]
+        public async Task ReturnsFalseWhenTheNodeExistsButHasNoLabel()
+        {
+            var graph = new Graph();
+            graph.SetNode("a");
+
+            await Assert.That(graph.TryGetNodeLabel("a", out _)).IsFalse();
+        }
+
+        [Test]
+        public async Task ReturnsTrueWithTheLabelWhenTheNodeHasOne()
+        {
+            var graph = new Graph();
+            var label = new NodeLabel { Width = 2 };
+            graph.SetNode("a", label);
+
+            await Assert.That(graph.TryGetNodeLabel("a", out var found)).IsTrue();
+            await Assert.That(found).IsSameReferenceAs(label);
+        }
+    }
 }

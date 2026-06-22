@@ -52,11 +52,10 @@ static class Layout
     {
         foreach (var v in inputGraph.Nodes())
         {
-            var inputLabel = inputGraph.NodeLabel(v);
-            var layoutLabel = layoutGraph.NodeLabel(v);
-
-            if (inputLabel != null)
+            if (inputGraph.TryGetNodeLabel(v, out var inputLabel))
             {
+                var layoutLabel = layoutGraph.NodeLabel(v);
+
                 inputLabel.X = layoutLabel.X;
                 inputLabel.Y = layoutLabel.Y;
                 inputLabel.Order = layoutLabel.Order;
@@ -119,16 +118,15 @@ static class Layout
 
         foreach (var v in inputGraph.Nodes())
         {
-            var node = inputGraph.NodeLabel(v);
             // Implicit nodes created via SetParent have no label; default a null label to width/height 0.
-            var newNode = node == null
-                ? new NodeLabel { Width = 0, Height = 0 }
-                : new NodeLabel
+            var newNode = inputGraph.TryGetNodeLabel(v, out var node)
+                ? new NodeLabel
                 {
                     Width = node.Width,
                     Height = node.Height,
                     Rank = node.Rank
-                };
+                }
+                : new NodeLabel { Width = 0, Height = 0 };
 
             graph.SetNode(v, newNode);
             var parent = inputGraph.Parent(v);

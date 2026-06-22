@@ -27,7 +27,9 @@ static class Util
         var simplified = new Graph().SetGraph(graph.GraphLabel);
         foreach (var v in graph.Nodes())
         {
-            simplified.SetNode(v, graph.NodeLabel(v));
+            // Copy the label through verbatim — a node may legitimately have none (null).
+            graph.TryGetNodeLabel(v, out var node);
+            simplified.SetNode(v, node);
         }
 
         foreach (var e in graph.Edges())
@@ -53,7 +55,9 @@ static class Util
         {
             if (graph.Children(v).Count == 0)
             {
-                simplified.SetNode(v, graph.NodeLabel(v));
+                // Copy the label through verbatim — a node may legitimately have none (null).
+                graph.TryGetNodeLabel(v, out var node);
+                simplified.SetNode(v, node);
             }
         }
 

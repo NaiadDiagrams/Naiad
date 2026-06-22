@@ -120,7 +120,15 @@ sealed class Graph
         NodeCount++;
     }
 
-    public NodeLabel NodeLabel(string name) => nodesMap.GetValueOrDefault(name)!;
+    public NodeLabel NodeLabel(string name) =>
+        nodesMap.GetValueOrDefault(name) ?? throw new KeyNotFoundException($"Graph has no node label for '{name}'");
+
+    public bool TryGetNodeLabel(string name, out NodeLabel label)
+    {
+        var found = nodesMap.GetValueOrDefault(name);
+        label = found!;
+        return found != null;
+    }
 
     public bool HasNode(string name) => nodesMap.ContainsKey(name);
 

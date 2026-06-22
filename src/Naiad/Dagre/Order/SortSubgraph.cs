@@ -5,9 +5,13 @@ static class SortSubgraph
     public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false)
     {
         var movable = graph.Children(v);
-        var node = graph.NodeLabel(v);
-        var bl = node?.BorderLeftId;
-        var br = node?.BorderRightId;
+        string? bl = null;
+        string? br = null;
+        if (graph.TryGetNodeLabel(v, out var label))
+        {
+            bl = label.BorderLeftId;
+            br = label.BorderRightId;
+        }
         var subgraphs = new Dictionary<string, SortResult>(StringComparer.Ordinal);
 
         if (bl != null)
@@ -65,31 +69,35 @@ static class SortSubgraph
     {
         foreach (var entry in entries)
         {
-            entry.Vs = entry.Vs.SelectMany<string, string>(v =>
+            var expanded = new List<string>(entry.Vs.Count);
+            foreach (var v in entry.Vs)
             {
                 if (subgraphs.TryGetValue(v, out var subgraph))
                 {
-                    return subgraph.Vs;
+                    expanded.AddRange(subgraph.Vs);
                 }
+                else
+                {
+                    expanded.Add(v);
+                }
+            }
 
-                return [v];
-            }).ToList();
+            entry.Vs = expanded;
         }
     }
 
     static void MergeBarycenters(BarycenterEntry target, SortResult other)
     {
-        if (target.Barycenter != null)
-        {
-            target.Barycenter = (target.Barycenter.Value * target.Weight!.Value +
-                    other.Barycenter!.Value * other.Weight!.Value) /
-                (target.Weight!.Value + other.Weight!.Value);
-            target.Weight = target.Weight!.Value + other.Weight!.Value;
-        }
-        else
+        if (target.Barycenter == null)
         {
             target.Barycenter = other.Barycenter;
             target.Weight = other.Weight;
+            return;
         }
+
+        target.Barycenter = (target.Barycenter.Value * target.Weight!.Value +
+                             other.Barycenter!.Value * other.Weight!.Value) /
+                            (target.Weight!.Value + other.Weight!.Value);
+        target.Weight = target.Weight!.Value + other.Weight!.Value;
     }
 }

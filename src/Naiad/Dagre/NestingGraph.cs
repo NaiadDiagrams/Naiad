@@ -98,7 +98,7 @@ static class NestingGraph
             var childTop = childNode.BorderTop ?? child;
             var childBottom = childNode.BorderBottom ?? child;
             var thisWeight = childNode.BorderTop != null ? weight : 2 * weight;
-            var minlen = childTop != childBottom ? 1 : height - (depths.GetValueOrDefault(v, 0)) + 1;
+            var minlen = childTop != childBottom ? 1 : height - depths.GetValueOrDefault(v, 0) + 1;
 
             graph.SetEdge(top, childTop, new()
             {

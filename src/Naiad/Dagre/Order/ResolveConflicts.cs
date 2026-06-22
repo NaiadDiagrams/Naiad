@@ -140,7 +140,7 @@ static class ResolveConflicts
             weight += sw;
         }
 
-        target.Vs = source.Vs.Concat(target.Vs).ToList();
+        target.Vs = [.. source.Vs, .. target.Vs];
         target.Barycenter = sum / weight;
         target.Weight = weight;
         target.I = Math.Min(source.I, target.I);
