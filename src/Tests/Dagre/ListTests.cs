@@ -11,10 +11,7 @@ public class ListTests
     [Before(Test)]
     public void Setup() => list = new();
 
-    sealed class Entry : ListNode
-    {
-        public int Value;
-    }
+    sealed class Entry : ListNode;
 
     [Test]
     public async Task ReturnsUndefinedWithAnEmptyList() =>

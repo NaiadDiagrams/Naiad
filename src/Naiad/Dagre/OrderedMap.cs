@@ -41,10 +41,10 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
     public void Remove(string key) => map.Remove(key);
 
     /// <summary>Keys in insertion order (a snapshot, safe to mutate the map while iterating the result).</summary>
-    public List<string> Keys() => new(map.Keys);
+    public List<string> Keys() => [..map.Keys];
 
     /// <summary>Values in insertion order (a snapshot).</summary>
-    public List<TValue> Values() => new(map.Values);
+    public List<TValue> Values() => [..map.Values];
 
     /// <summary>Keys in insertion order, enumerated without allocating a snapshot list. Unlike
     /// <see cref="Keys"/> the map must not be mutated while the result is iterated.</summary>

@@ -63,7 +63,7 @@ sealed class Graph
         return this;
     }
 
-    public GraphLabel GraphLabel => label!;
+    public GraphLabel Label => label!;
 
     public Graph SetDefaultNodeLabel(Func<string, NodeLabel> fn)
     {
@@ -72,8 +72,6 @@ sealed class Graph
     }
 
     public int NodeCount { get; private set; }
-
-    /* === Node functions ========== */
 
     public List<string> Nodes() => nodesMap.Keys();
 

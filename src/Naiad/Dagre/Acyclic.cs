@@ -7,7 +7,7 @@ static class Acyclic
 {
     public static void Run(Graph graph)
     {
-        var fas = graph.GraphLabel.Acyclicer == "greedy"
+        var fas = graph.Label.Acyclicer == "greedy"
             ? GreedyFas.Run(graph, WeightFn(graph))
             : DfsFas(graph);
 

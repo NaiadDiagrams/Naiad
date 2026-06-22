@@ -26,7 +26,7 @@ public class LayoutTests
     [Test]
     public Task CanLayoutTwoNodesOnTheSameRank()
     {
-        graph.GraphLabel.Nodesep = 200;
+        graph.Label.Nodesep = 200;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(graph);
@@ -39,7 +39,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutTwoNodesConnectedByAnEdge()
     {
-        graph.GraphLabel.Ranksep = 300;
+        graph.Label.Ranksep = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         graph.SetEdge("a", "b");
@@ -57,7 +57,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutAnEdgeWithALabel()
     {
-        graph.GraphLabel.Ranksep = 300;
+        graph.Label.Ranksep = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = "c" });
@@ -77,8 +77,8 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanLayoutAnEdgeWithALongLabel(string rankdir)
     {
-        graph.GraphLabel.Nodesep = graph.GraphLabel.Edgesep = 10;
-        graph.GraphLabel.Rankdir = rankdir;
+        graph.Label.Nodesep = graph.Label.Edgesep = 10;
+        graph.Label.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
             graph.SetNode(v, new() { Width = 10, Height = 10 });
@@ -110,8 +110,8 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanApplyAnOffset(string rankdir)
     {
-        graph.GraphLabel.Nodesep = graph.GraphLabel.Edgesep = 10;
-        graph.GraphLabel.Rankdir = rankdir;
+        graph.Label.Nodesep = graph.Label.Edgesep = 10;
+        graph.Label.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
             graph.SetNode(v, new() { Width = 10, Height = 10 });
@@ -136,7 +136,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutALongEdgeWithALabel()
     {
-        graph.GraphLabel.Ranksep = 300;
+        graph.Label.Ranksep = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
@@ -150,7 +150,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutOutAShortCycle()
     {
-        graph.GraphLabel.Ranksep = 200;
+        graph.Label.Ranksep = 200;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b", new() { Weight = 2 });
@@ -168,7 +168,7 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdges()
     {
-        graph.GraphLabel.Ranksep = 200;
+        graph.Label.Ranksep = 200;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b");
@@ -185,7 +185,7 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdgesSpanningMultipleRanks()
     {
-        graph.GraphLabel.Ranksep = 200;
+        graph.Label.Ranksep = 200;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b", new() { Minlen = 2 });
@@ -208,8 +208,8 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanLayoutASelfLoop(string rankdir)
     {
-        graph.GraphLabel.Edgesep = 75;
-        graph.GraphLabel.Rankdir = rankdir;
+        graph.Label.Edgesep = 75;
+        graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "a", new() { Width = 50, Height = 50 });
         Layout.Run(graph);
@@ -297,7 +297,7 @@ public class LayoutTests
 
         foreach (var rankdir in new[] { "tb", "bt", "lr", "rl" })
         {
-            graph.GraphLabel.Rankdir = rankdir;
+            graph.Label.Rankdir = rankdir;
             Layout.Run(graph);
             await Check();
         }
@@ -308,8 +308,8 @@ public class LayoutTests
     {
         graph.SetNode("a", new() { Width = 100, Height = 50 });
         Layout.Run(graph);
-        await Assert.That(graph.GraphLabel.Width!.Value).IsEqualTo(100);
-        await Assert.That(graph.GraphLabel.Height!.Value).IsEqualTo(50);
+        await Assert.That(graph.Label.Width!.Value).IsEqualTo(100);
+        await Assert.That(graph.Label.Height!.Value).IsEqualTo(50);
     }
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> node
@@ -320,7 +320,7 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task BoundingBoxNode(string rankdir)
     {
-        graph.GraphLabel.Rankdir = rankdir;
+        graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 200 });
         Layout.Run(graph);
         await Assert.That(graph.NodeLabel("a").X!.Value).IsEqualTo(100.0 / 2);
@@ -335,7 +335,7 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task BoundingBoxEdgeLabelposL(string rankdir)
     {
-        graph.GraphLabel.Rankdir = rankdir;
+        graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
@@ -357,7 +357,7 @@ public class LayoutTests
         // `canonicalize` step lowercasing keys. The C# port uses a strongly-typed GraphLabel
         // where the only spelling is `Nodesep`, so case-insensitivity is not expressible and the
         // canonical field is set directly.
-        graph.GraphLabel.Nodesep = 200;
+        graph.Label.Nodesep = 200;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(graph);

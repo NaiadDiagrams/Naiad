@@ -23,7 +23,7 @@ static class Rank
      */
     public static void Run(Graph graph)
     {
-        var ranker = graph.GraphLabel.Ranker;
+        var ranker = graph.Label.Ranker;
         switch (ranker)
         {
             case "network-simplex":

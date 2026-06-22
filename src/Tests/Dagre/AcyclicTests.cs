@@ -24,7 +24,7 @@ public class AcyclicTests
     public async Task RunDoesNotChangeAnAlreadyAcyclicGraph(string acyclicer)
     {
         var graph = NewGraph();
-        graph.GraphLabel.Acyclicer = acyclicer;
+        graph.Label.Acyclicer = acyclicer;
         graph.SetPath(["a", "b", "d"]);
         graph.SetPath(["a", "c", "d"]);
         Acyclic.Run(graph);
@@ -45,7 +45,7 @@ public class AcyclicTests
     public async Task RunBreaksCyclesInTheInputGraph(string acyclicer)
     {
         var graph = NewGraph();
-        graph.GraphLabel.Acyclicer = acyclicer;
+        graph.Label.Acyclicer = acyclicer;
         graph.SetPath(["a", "b", "c", "d", "a"]);
         Acyclic.Run(graph);
         await Assert.That(Alg.FindCycles(graph)).IsEmpty();
@@ -56,7 +56,7 @@ public class AcyclicTests
     public async Task RunCreatesAMultiEdgeWhereNecessary(string acyclicer)
     {
         var graph = NewGraph();
-        graph.GraphLabel.Acyclicer = acyclicer;
+        graph.Label.Acyclicer = acyclicer;
         graph.SetPath(["a", "b", "a"]);
         Acyclic.Run(graph);
         await Assert.That(Alg.FindCycles(graph)).IsEmpty();
@@ -79,7 +79,7 @@ public class AcyclicTests
     public async Task UndoDoesNotChangeEdgesWhereTheOriginalGraphWasAcyclic(string acyclicer)
     {
         var graph = NewGraph();
-        graph.GraphLabel.Acyclicer = acyclicer;
+        graph.Label.Acyclicer = acyclicer;
         graph.SetEdge("a", "b", new() { Minlen = 2, Weight = 3 });
         Acyclic.Run(graph);
         Acyclic.Undo(graph);
@@ -94,7 +94,7 @@ public class AcyclicTests
     public async Task UndoCanRestorePreviouslyReversedEdges(string acyclicer)
     {
         var graph = NewGraph();
-        graph.GraphLabel.Acyclicer = acyclicer;
+        graph.Label.Acyclicer = acyclicer;
         graph.SetEdge("a", "b", new() { Minlen = 2, Weight = 3 });
         graph.SetEdge("b", "a", new() { Minlen = 3, Weight = 4 });
         Acyclic.Run(graph);
@@ -114,7 +114,7 @@ public class AcyclicTests
     public async Task GreedyPrefersToBreakCyclesAtLowWeightEdges()
     {
         var graph = NewGraph();
-        graph.GraphLabel.Acyclicer = "greedy";
+        graph.Label.Acyclicer = "greedy";
         graph.SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 2 });
         graph.SetPath(["a", "b", "c", "d", "a"]);
         graph.SetEdge("c", "d", new() { Weight = 1 });

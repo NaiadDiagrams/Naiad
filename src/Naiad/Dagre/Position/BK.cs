@@ -413,7 +413,7 @@ static class BK
         bool reverseSep)
     {
         var blockGraph = new Graph();
-        var graphLabel = graph.GraphLabel;
+        var graphLabel = graph.Label;
         var sepFn = Sep(graphLabel.Nodesep!.Value, graphLabel.Edgesep!.Value, reverseSep);
 
         foreach (var layer in layering)
@@ -582,7 +582,7 @@ static class BK
 
         var smallestWidth = FindSmallestWidthAlignment(graph, xss);
         AlignCoordinates(xss, smallestWidth);
-        return Balance(xss, graph.GraphLabel.Align);
+        return Balance(xss, graph.Label.Align);
     }
 
     internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep) =>

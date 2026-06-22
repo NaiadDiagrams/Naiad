@@ -20,7 +20,7 @@ public class PositionTests
     [Test]
     public async Task RespectsRanksep()
     {
-        graph.GraphLabel.Ranksep = 1000;
+        graph.Label.Ranksep = 1000;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 80, Rank = 1, Order = 0 });
         graph.SetEdge("a", "b");
@@ -31,7 +31,7 @@ public class PositionTests
     [Test]
     public async Task UseTheLargestHeightInEachRankWithRanksep()
     {
-        graph.GraphLabel.Ranksep = 1000;
+        graph.Label.Ranksep = 1000;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 80, Rank = 0, Order = 1 });
         graph.SetNode("c", new() { Width = 50, Height = 90, Rank = 1, Order = 0 });
@@ -45,7 +45,7 @@ public class PositionTests
     [Test]
     public async Task RespectsNodesep()
     {
-        graph.GraphLabel.Nodesep = 1000;
+        graph.Label.Nodesep = 1000;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 70, Height = 80, Rank = 0, Order = 1 });
         Position.Run(graph);
@@ -66,7 +66,7 @@ public class PositionTests
     [Test]
     public async Task AlignsNodesToTopOfRankWhenRankalignIsTop()
     {
-        graph.GraphLabel.Rankalign = "top";
+        graph.Label.Rankalign = "top";
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Position.Run(graph);
@@ -77,7 +77,7 @@ public class PositionTests
     [Test]
     public async Task AlignsNodesToBottomOfRankWhenRankalignIsBottom()
     {
-        graph.GraphLabel.Rankalign = "bottom";
+        graph.Label.Rankalign = "bottom";
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Position.Run(graph);
@@ -88,7 +88,7 @@ public class PositionTests
     [Test]
     public async Task AlignsNodesToCenterOfRankWhenRankalignIsCenter()
     {
-        graph.GraphLabel.Rankalign = "center";
+        graph.Label.Rankalign = "center";
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Position.Run(graph);

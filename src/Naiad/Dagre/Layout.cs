@@ -82,8 +82,8 @@ static class Layout
             }
         }
 
-        inputGraph.GraphLabel.Width = layoutGraph.GraphLabel.Width;
-        inputGraph.GraphLabel.Height = layoutGraph.GraphLabel.Height;
+        inputGraph.Label.Width = layoutGraph.Label.Width;
+        inputGraph.Label.Height = layoutGraph.Label.Height;
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ static class Layout
     static Graph BuildLayoutGraph(Graph inputGraph)
     {
         var graph = new Graph(multigraph: true, compound: true);
-        var graphLabel = inputGraph.GraphLabel!;
+        var graphLabel = inputGraph.Label;
 
         var newGraph = new GraphLabel
         {
@@ -235,7 +235,7 @@ static class Layout
      */
     static void MakeSpaceForEdgeLabels(Graph graph)
     {
-        var graphLabel = graph.GraphLabel;
+        var graphLabel = graph.Label;
         graphLabel.Ranksep /= 2;
         foreach (var e in graph.Edges())
         {
@@ -268,7 +268,10 @@ static class Layout
         foreach (var e in graph.Edges())
         {
             var edge = graph.FindEdgeLabel(e);
-            if (edge.Width is { } width && width != 0 && edge.Height is { } height && height != 0)
+            if (edge.Width is { } width &&
+                width != 0 &&
+                edge.Height is { } height &&
+                height != 0)
             {
                 var v = graph.NodeLabel(e.V);
                 var w = graph.NodeLabel(e.W);
@@ -297,7 +300,7 @@ static class Layout
             }
         }
 
-        graph.GraphLabel.MaxRank = maxRank;
+        graph.Label.MaxRank = maxRank;
     }
 
     static void RemoveEdgeLabelProxies(Graph graph)
@@ -319,7 +322,7 @@ static class Layout
         var maxX = 0.0;
         var minY = double.PositiveInfinity;
         var maxY = 0.0;
-        var graphLabel = graph.GraphLabel;
+        var graphLabel = graph.Label;
         var marginX = graphLabel.Marginx ?? 0;
         var marginY = graphLabel.Marginy ?? 0;
 

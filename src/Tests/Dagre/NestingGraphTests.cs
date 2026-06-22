@@ -104,7 +104,7 @@ public class NestingGraphTests
         graph.SetParent("a", "sg1");
         NestingGraph.Run(graph);
 
-        var root = graph.GraphLabel.NestingRoot;
+        var root = graph.Label.NestingRoot;
         var borderTop = graph.NodeLabel("sg1").BorderTop;
         await Assert.That(root).IsNotNull();
         await Assert.That(borderTop).IsNotNull();
@@ -120,7 +120,7 @@ public class NestingGraphTests
         graph.SetNode("a");
         NestingGraph.Run(graph);
 
-        var root = graph.GraphLabel.NestingRoot;
+        var root = graph.Label.NestingRoot;
         await Assert.That(root).IsNotNull();
 
         var rootToA = graph.OutEdges(root!, "a")!;
@@ -137,7 +137,7 @@ public class NestingGraphTests
         graph.SetParent("a", "sg1");
         NestingGraph.Run(graph);
 
-        var root = graph.GraphLabel.NestingRoot;
+        var root = graph.Label.NestingRoot;
         await Assert.That(root).IsNotNull();
 
         var rootToA = graph.OutEdges(root!, "a")!;
@@ -155,7 +155,7 @@ public class NestingGraphTests
         graph.SetParent("a", "sg2");
         NestingGraph.Run(graph);
 
-        var root = graph.GraphLabel.NestingRoot;
+        var root = graph.Label.NestingRoot;
         await Assert.That(root).IsNotNull();
 
         var rootToA = graph.OutEdges(root!, "a")!;
@@ -172,7 +172,7 @@ public class NestingGraphTests
         graph.SetNode("a");
         NestingGraph.Run(graph);
 
-        var root = graph.GraphLabel.NestingRoot;
+        var root = graph.Label.NestingRoot;
         var rootToRoot = graph.OutEdges(root!, root!)!;
         await Assert.That(rootToRoot.Count).IsEqualTo(0);
     }
@@ -223,7 +223,7 @@ public class NestingGraphTests
         // 6: close sg2
         // 7: close sg1
 
-        var root = graph.GraphLabel.NestingRoot!;
+        var root = graph.Label.NestingRoot!;
         var sg1Top = graph.NodeLabel("sg1").BorderTop!;
         var sg1Bot = graph.NodeLabel("sg1").BorderBottom!;
         var sg2Top = graph.NodeLabel("sg2").BorderTop!;

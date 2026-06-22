@@ -38,7 +38,7 @@ public class UtilTests
             var label = new GraphLabel { NestingRoot = "bar" };
             graph.SetGraph(label);
             var g2 = Util.Simplify(graph);
-            await Assert.That(g2.GraphLabel).IsSameReferenceAs(label);
+            await Assert.That(g2.Label).IsSameReferenceAs(label);
         }
     }
 
@@ -88,7 +88,7 @@ public class UtilTests
             var label = new GraphLabel { NestingRoot = "bar" };
             graph.SetGraph(label);
             var g2 = Util.AsNonCompoundGraph(graph);
-            await Assert.That(g2.GraphLabel).IsSameReferenceAs(label);
+            await Assert.That(g2.Label).IsSameReferenceAs(label);
         }
     }
 
@@ -287,20 +287,20 @@ public class UtilTests
 
     public class MapValuesTests
     {
-        sealed record User(string Name, int Age);
+        sealed record User(int Id);
 
         [Test]
         public async Task CreatesAnObjectWithTheSameKeys()
         {
             var users = new Dictionary<string, User>(StringComparer.Ordinal)
             {
-                ["fred"] = new("fred", 40),
-                ["pebbles"] = new("pebbles", 1)
+                ["fred"] = new(40),
+                ["pebbles"] = new(1)
             };
 
-            var ages = Util.MapValues(users, (user, _) => user.Age);
-            await Assert.That(ages["fred"]).IsEqualTo(40);
-            await Assert.That(ages["pebbles"]).IsEqualTo(1);
+            var ids = Util.MapValues(users, (user, _) => user.Id);
+            await Assert.That(ids["fred"]).IsEqualTo(40);
+            await Assert.That(ids["pebbles"]).IsEqualTo(1);
         }
 
         [Test]
@@ -310,13 +310,13 @@ public class UtilTests
             // function form, so the equivalent is a lambda projecting that property.
             var users = new Dictionary<string, User>(StringComparer.Ordinal)
             {
-                ["fred"] = new("fred", 40),
-                ["pebbles"] = new("pebbles", 1)
+                ["fred"] = new(40),
+                ["pebbles"] = new(1)
             };
 
-            var ages = Util.MapValues(users, (user, _) => user.Age);
-            await Assert.That(ages["fred"]).IsEqualTo(40);
-            await Assert.That(ages["pebbles"]).IsEqualTo(1);
+            var ids = Util.MapValues(users, (user, _) => user.Id);
+            await Assert.That(ids["fred"]).IsEqualTo(40);
+            await Assert.That(ids["pebbles"]).IsEqualTo(1);
         }
     }
 }

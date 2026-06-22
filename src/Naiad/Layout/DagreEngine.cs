@@ -49,7 +49,11 @@ class DagreEngine : ILayoutEngine
             var name = "e" + i.ToString(CultureInfo.InvariantCulture);
             edgeNames.Add(name);
 
-            var label = new DagreEdgeLabel { Minlen = 1, Weight = 1 };
+            var label = new DagreEdgeLabel
+            {
+                Minlen = 1,
+                Weight = 1
+            };
             if (!string.IsNullOrEmpty(edge.Label))
             {
                 label.Width = edge.LabelWidth;
@@ -90,7 +94,7 @@ class DagreEngine : ILayoutEngine
             }
         }
 
-        var graphLabel = graph.GraphLabel;
+        var graphLabel = graph.Label;
         return new()
         {
             Width = graphLabel.Width ?? 0,

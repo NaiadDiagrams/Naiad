@@ -18,7 +18,7 @@ static class ParentDummyChains
     {
         var postorderNums = Postorder(graph);
 
-        foreach (var v0 in graph.GraphLabel.DummyChains!)
+        foreach (var v0 in graph.Label.DummyChains!)
         {
             var v = v0;
             var node = graph.NodeLabel(v);
