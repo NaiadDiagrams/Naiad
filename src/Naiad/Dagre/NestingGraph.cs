@@ -75,7 +75,14 @@ static class NestingGraph
         {
             if (v != root)
             {
-                graph.SetEdge(root, v, new() { Weight = 0, Minlen = (int) nodeSep });
+                graph.SetEdge(
+                    root,
+                    v,
+                    new()
+                    {
+                        Weight = 0,
+                        Minlen = (int) nodeSep
+                    });
             }
 
             return;
@@ -97,27 +104,49 @@ static class NestingGraph
             var childNode = graph.NodeLabel(child);
             var childTop = childNode.BorderTop ?? child;
             var childBottom = childNode.BorderBottom ?? child;
-            var thisWeight = childNode.BorderTop != null ? weight : 2 * weight;
-            var minlen = childTop != childBottom ? 1 : height - depths.GetValueOrDefault(v, 0) + 1;
-
-            graph.SetEdge(top, childTop, new()
+            double thisWeight;
+            if (childNode.BorderTop == null)
             {
-                Weight = thisWeight,
-                Minlen = (int) minlen,
-                NestingEdge = true
-            });
-
-            graph.SetEdge(childBottom, bottom, new()
+                thisWeight = 2 * weight;
+            }
+            else
             {
-                Weight = thisWeight,
-                Minlen = (int) minlen,
-                NestingEdge = true
-            });
+                thisWeight = weight;
+            }
+
+            var minlen = childTop == childBottom ? height - depths.GetValueOrDefault(v, 0) + 1 : 1;
+
+            graph.SetEdge(
+                top,
+                childTop,
+                new()
+                {
+                    Weight = thisWeight,
+                    Minlen = (int)minlen,
+                    NestingEdge = true
+                });
+
+            graph.SetEdge(
+                childBottom,
+                bottom,
+                new()
+                {
+                    Weight = thisWeight,
+                    Minlen = (int)minlen,
+                    NestingEdge = true
+                });
         }
 
         if (graph.Parent(v) == null)
         {
-            graph.SetEdge(root, top, new() { Weight = 0, Minlen = (int) (height + (depths.GetValueOrDefault(v, 0))) });
+            graph.SetEdge(
+                root,
+                top,
+                new()
+                {
+                    Weight = 0,
+                    Minlen = (int) (height + depths.GetValueOrDefault(v, 0))
+                });
         }
     }
 
@@ -152,9 +181,9 @@ static class NestingGraph
         // The real pipeline guarantees every edge has a weight; some unit tests leave it unset,
         // so a missing weight becomes NaN here (unused for those edges' assertions).
         var acc = 0d;
-        foreach (var e in graph.Edges())
+        foreach (var label in graph.EdgeLabels())
         {
-            acc += graph.FindEdgeLabel(e).Weight ?? double.NaN;
+            acc += label.Weight ?? double.NaN;
         }
 
         return acc;

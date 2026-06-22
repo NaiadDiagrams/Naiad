@@ -285,6 +285,9 @@ sealed class Graph
 
     public List<Edge> Edges() => edgeObjsMap.Values();
 
+    /// <summary>The edge labels in insertion order — the labels of <see cref="Edges"/>, without the per-edge lookup.</summary>
+    public List<EdgeLabel> EdgeLabels() => edgeLabelsMap.Values();
+
     public Graph SetEdge(string v, string w) => SetEdgeCore(v, w, null, null, false);
 
     public Graph SetEdge(string v, string w, EdgeLabel? value) => SetEdgeCore(v, w, null, value, true);

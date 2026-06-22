@@ -13,7 +13,7 @@ static class Position
         }
     }
 
-    internal static void PositionY(Graph graph)
+    static void PositionY(Graph graph)
     {
         var layering = Util.BuildLayerMatrix(graph);
         var graphLabel = graph.GraphLabel;

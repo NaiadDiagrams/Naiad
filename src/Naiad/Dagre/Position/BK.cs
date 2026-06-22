@@ -556,20 +556,22 @@ static class BK
         var xss = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
         foreach (var vert in new[] { "u", "d" })
         {
-            var adjustedLayering = vert == "u" ? layering : Enumerable.Reverse(layering).ToList();
+            // "u" aligns against predecessors top-down; "d" against successors bottom-up.
+            Func<string, OrderedMap<int>.KeyEnumerable> neighborFn =
+                vert == "u" ? graph.PredecessorsOf : graph.SuccessorsOf;
+            var vertLayering = vert == "u" ? layering : Enumerable.Reverse(layering).ToList();
+
             foreach (var horiz in new[] { "l", "r" })
             {
-                if (horiz == "r")
-                {
-                    adjustedLayering = adjustedLayering.Select(inner => Enumerable.Reverse(inner).ToList()).ToList();
-                }
+                // "r" biases right: reverse each layer and negate the resulting coordinates.
+                var biasRight = horiz == "r";
+                var adjustedLayering = biasRight
+                    ? vertLayering.Select(inner => Enumerable.Reverse(inner).ToList()).ToList()
+                    : vertLayering;
 
-                OrderedMap<int>.KeyEnumerable NeighborFn(string v) =>
-                    vert == "u" ? graph.PredecessorsOf(v) : graph.SuccessorsOf(v);
-
-                var align = VerticalAlignment(adjustedLayering, conflicts, NeighborFn);
-                var xs = HorizontalCompaction(graph, adjustedLayering, align.Root, align.Align, horiz == "r");
-                if (horiz == "r")
+                var align = VerticalAlignment(adjustedLayering, conflicts, neighborFn);
+                var xs = HorizontalCompaction(graph, adjustedLayering, align.Root, align.Align, biasRight);
+                if (biasRight)
                 {
                     xs = Util.MapValues(xs, (x, _) => -x);
                 }

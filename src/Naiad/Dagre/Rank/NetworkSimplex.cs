@@ -26,8 +26,7 @@ static class NetworkSimplex
         InitLowLimValues(t);
         InitCutValues(t, graph);
 
-        Edge? e;
-        while ((e = LeaveEdge(t)) != null)
+        while (LeaveEdge(t) is { } e)
         {
             var f = EnterEdge(t, graph, e);
             ExchangeEdges(t, graph, e, f);
@@ -83,19 +82,23 @@ static class NetworkSimplex
                 var isOutEdge = edge.V == child;
                 var other = isOutEdge ? edge.W : edge.V;
 
-                if (other != parent)
+                if (other == parent)
                 {
-                    var pointsToHead = isOutEdge == childIsTail;
-                    var otherWeight = graph.FindEdgeLabel(edge).Weight!.Value;
-
-                    cutValue += pointsToHead ? otherWeight : -otherWeight;
-                    if (IsTreeEdge(tree, child, other))
-                    {
-                        var treeEdge = tree.FindEdgeLabel(child, other);
-                        var otherCutValue = treeEdge.Cutvalue!.Value;
-                        cutValue += pointsToHead ? -otherCutValue : otherCutValue;
-                    }
+                    continue;
                 }
+
+                var pointsToHead = isOutEdge == childIsTail;
+                var otherWeight = graph.FindEdgeLabel(edge).Weight!.Value;
+
+                cutValue += pointsToHead ? otherWeight : -otherWeight;
+                if (!IsTreeEdge(tree, child, other))
+                {
+                    continue;
+                }
+
+                var treeEdge = tree.FindEdgeLabel(child, other);
+                var otherCutValue = treeEdge.Cutvalue!.Value;
+                cutValue += pointsToHead ? -otherCutValue : otherCutValue;
             }
         }
 
@@ -128,14 +131,14 @@ static class NetworkSimplex
 
         label.Low = low;
         label.Lim = nextLim++;
-        if (parent != null)
-        {
-            label.Parent = parent;
-        }
-        else
+        if (parent == null)
         {
             // TODO should be able to remove this when we incrementally update low lim
             label.Parent = null;
+        }
+        else
+        {
+            label.Parent = parent;
         }
 
         return nextLim;

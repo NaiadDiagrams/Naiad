@@ -44,7 +44,13 @@ static class AddBorderSegments
         NodeLabel sgNode,
         int rank)
     {
-        var label = new NodeLabel { Width = 0, Height = 0, Rank = rank, BorderType = prop };
+        var label = new NodeLabel
+        {
+            Width = 0,
+            Height = 0,
+            Rank = rank,
+            BorderType = prop
+        };
         var list = prop == "borderLeft" ? sgNode.BorderLeft! : sgNode.BorderRight!;
         var prev = rank - 1 >= 0 && rank - 1 < list.Count ? list[rank - 1] : null;
         var curr = Util.AddDummyNode(graph, "border", label, prefix);
@@ -57,7 +63,13 @@ static class AddBorderSegments
         graph.SetParent(curr, sg);
         if (prev != null)
         {
-            graph.SetEdge(prev, curr, new() { Weight = 1 });
+            graph.SetEdge(
+                prev,
+                curr,
+                new()
+                {
+                    Weight = 1
+                });
         }
     }
 }
