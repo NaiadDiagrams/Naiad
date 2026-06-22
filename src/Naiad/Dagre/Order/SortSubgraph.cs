@@ -38,10 +38,7 @@ static class SortSubgraph
 
         if (bl != null && br != null)
         {
-            result.Vs = new List<string> { bl }
-                .Concat(result.Vs)
-                .Concat(new[] { br })
-                .ToList();
+            result.Vs = [bl, .. result.Vs, br];
             var blPredecessors = graph.Predecessors(bl);
             if (blPredecessors != null && blPredecessors.Count != 0)
             {
