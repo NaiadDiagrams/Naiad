@@ -1895,6 +1895,3 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.6;
 }
-
-// Internal graph model for layout
-internal class StateLayoutGraph : GraphDiagramBase;
