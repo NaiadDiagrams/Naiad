@@ -31,11 +31,11 @@ static class Positioning
             foreach (var v in layer)
             {
                 var node = graph.NodeLabel(v);
-                if (rankAlign == "top")
+                if (rankAlign == RankAlign.Top)
                 {
                     node.Y = prevY + node.Height / 2;
                 }
-                else if (rankAlign == "bottom")
+                else if (rankAlign == RankAlign.Bottom)
                 {
                     node.Y = prevY + maxHeight - node.Height / 2;
                 }

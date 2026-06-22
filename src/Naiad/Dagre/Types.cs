@@ -24,8 +24,8 @@ sealed class NodeLabel
     public double? Y;
     public int? Rank;
     public int? Order;
-    public string? Dummy;            // 'edge' | 'border' | 'edge-label' | 'edge-proxy' | 'selfedge' | 'root'
-    public string? BorderType;       // 'borderLeft' | 'borderRight'
+    public DummyKind? Dummy;
+    public BorderKind? BorderType;
     public string? BorderTop;
     public string? BorderBottom;
     public List<string>? BorderLeft;
@@ -35,7 +35,7 @@ sealed class NodeLabel
     public int? MinRank;
     public int? MaxRank;
     public string? Label;
-    public string? Labelpos;         // 'l' | 'c' | 'r'
+    public LabelPos? Labelpos;
     public EdgeLabel? EdgeLabel;
     public Edge? EdgeObj;
 
@@ -63,7 +63,7 @@ sealed class EdgeLabel
     public double? Height;
     public int? Minlen;
     public double? Weight;
-    public string? Labelpos;         // 'l' | 'c' | 'r'
+    public LabelPos? Labelpos;
     public double? Labeloffset;
     public int? LabelRank;
     public double? X;
@@ -87,7 +87,7 @@ sealed class GraphLabel
     public double? Marginx;
     public double? Marginy;
     public string? Acyclicer;        // 'greedy'
-    public string? Rankalign;        // 'top' | 'center' | 'bottom'
+    public RankAlign? Rankalign;
     public string? NestingRoot;
     public int? NodeRankFactor;
     public List<string>? DummyChains;

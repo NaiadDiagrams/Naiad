@@ -63,7 +63,7 @@ public class PositionTests
     [Test]
     public async Task AlignsNodesToTopOfRankWhenRankalignIsTop()
     {
-        graph.Label.Rankalign = "top";
+        graph.Label.Rankalign = RankAlign.Top;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Positioning.Run(graph);
@@ -74,7 +74,7 @@ public class PositionTests
     [Test]
     public async Task AlignsNodesToBottomOfRankWhenRankalignIsBottom()
     {
-        graph.Label.Rankalign = "bottom";
+        graph.Label.Rankalign = RankAlign.Bottom;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Positioning.Run(graph);
@@ -85,7 +85,7 @@ public class PositionTests
     [Test]
     public async Task AlignsNodesToCenterOfRankWhenRankalignIsCenter()
     {
-        graph.Label.Rankalign = "center";
+        graph.Label.Rankalign = RankAlign.Center;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Positioning.Run(graph);

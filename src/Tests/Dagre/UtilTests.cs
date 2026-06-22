@@ -62,13 +62,13 @@ public class UtilTests
         [Test]
         public async Task CopiesAllEdges()
         {
-            var l1 = new EdgeLabel { Labelpos = "bar" };
-            var l2 = new EdgeLabel { Labelpos = "baz" };
+            var l1 = new EdgeLabel { Labelpos = LabelPos.Left };
+            var l2 = new EdgeLabel { Labelpos = LabelPos.Right };
             graph.SetEdge("a", "b", l1);
             graph.SetEdge("a", "b", l2, "multi");
             var g2 = Util.AsNonCompoundGraph(graph);
-            await Assert.That(g2.FindEdgeLabel("a", "b").Labelpos).IsEqualTo("bar");
-            await Assert.That(g2.FindEdgeLabel("a", "b", "multi").Labelpos).IsEqualTo("baz");
+            await Assert.That(g2.FindEdgeLabel("a", "b").Labelpos).IsEqualTo(LabelPos.Left);
+            await Assert.That(g2.FindEdgeLabel("a", "b", "multi").Labelpos).IsEqualTo(LabelPos.Right);
         }
 
         [Test]

@@ -5,7 +5,7 @@ static class Util
     public const string GraphNode = "\x00";
 
     /// <summary>Adds a dummy node to the graph and returns its id.</summary>
-    public static string AddDummyNode(Graph graph, string type, NodeLabel attrs, string name)
+    public static string AddDummyNode(Graph graph, DummyKind type, NodeLabel attrs, string name)
     {
         var v = name;
         while (graph.HasNode(v))
@@ -19,7 +19,7 @@ static class Util
     }
 
     public static string AddBorderNode(Graph graph, string prefix) =>
-        AddDummyNode(graph, "border", new() { Width = 0, Height = 0 }, prefix);
+        AddDummyNode(graph, DummyKind.Border, new() { Width = 0, Height = 0 }, prefix);
 
     /// <summary>Returns a new graph with only simple edges; aggregates multi-edge weight/minlen.</summary>
     public static Graph Simplify(Graph graph)

@@ -24,8 +24,8 @@ static class AddBorderSegments
                     rank < maxRank;
                     ++rank)
                 {
-                    AddBorderNode(graph, "borderLeft", "_bl", v, node, rank);
-                    AddBorderNode(graph, "borderRight", "_br", v, node, rank);
+                    AddBorderNode(graph, BorderKind.Left, "_bl", v, node, rank);
+                    AddBorderNode(graph, BorderKind.Right, "_br", v, node, rank);
                 }
             }
         }
@@ -38,7 +38,7 @@ static class AddBorderSegments
 
     static void AddBorderNode(
         Graph graph,
-        string prop,
+        BorderKind prop,
         string prefix,
         string sg,
         NodeLabel sgNode,
@@ -51,9 +51,9 @@ static class AddBorderSegments
             Rank = rank,
             BorderType = prop
         };
-        var list = prop == "borderLeft" ? sgNode.BorderLeft! : sgNode.BorderRight!;
+        var list = prop == BorderKind.Left ? sgNode.BorderLeft! : sgNode.BorderRight!;
         var prev = rank - 1 >= 0 && rank - 1 < list.Count ? list[rank - 1] : null;
-        var curr = Util.AddDummyNode(graph, "border", label, prefix);
+        var curr = Util.AddDummyNode(graph, DummyKind.Border, label, prefix);
         while (list.Count <= rank)
         {
             list.Add(null!);

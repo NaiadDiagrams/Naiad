@@ -141,7 +141,7 @@ static class BK
             for (var southLookahead = 0; southLookahead < south.Count; southLookahead++)
             {
                 var v = south[southLookahead];
-                if (graph.NodeLabel(v).Dummy == "border")
+                if (graph.NodeLabel(v).Dummy == DummyKind.Border)
                 {
                     var predecessors = graph.Predecessors(v);
                     if (predecessors != null && predecessors.Count != 0)
@@ -316,7 +316,7 @@ static class BK
         // greatest coordinates without violating separation.
         var xs = new Dictionary<string, double>(StringComparer.Ordinal);
         var blockG = BuildBlockGraph(graph, layering, root, reverseSep);
-        var borderType = reverseSep ? "borderLeft" : "borderRight";
+        var borderType = reverseSep ? BorderKind.Left : BorderKind.Right;
 
         void Iterate(Action<string> setXsFunc, Func<string, OrderedMap<int>.KeyEnumerable> nextNodesFunc)
         {
@@ -585,12 +585,12 @@ static class BK
             sum += vLabel.Width / 2;
             if (vLabel.Labelpos != null)
             {
-                switch (vLabel.Labelpos.ToLowerInvariant())
+                switch (vLabel.Labelpos)
                 {
-                    case "l":
+                    case LabelPos.Left:
                         delta = -vLabel.Width / 2;
                         break;
-                    case "r":
+                    case LabelPos.Right:
                         delta = vLabel.Width / 2;
                         break;
                 }
@@ -609,12 +609,12 @@ static class BK
             sum += wLabel.Width / 2;
             if (wLabel.Labelpos != null)
             {
-                switch (wLabel.Labelpos.ToLowerInvariant())
+                switch (wLabel.Labelpos)
                 {
-                    case "l":
+                    case LabelPos.Left:
                         delta = wLabel.Width / 2;
                         break;
-                    case "r":
+                    case LabelPos.Right:
                         delta = -wLabel.Width / 2;
                         break;
                 }

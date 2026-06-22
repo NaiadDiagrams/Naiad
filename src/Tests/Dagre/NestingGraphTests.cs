@@ -46,12 +46,12 @@ public class NestingGraphTests
         var topNode = graph.NodeLabel(borderTop!);
         await Assert.That(topNode.Width).IsEqualTo(0);
         await Assert.That(topNode.Height).IsEqualTo(0);
-        await Assert.That(topNode.Dummy).IsEqualTo("border");
+        await Assert.That(topNode.Dummy).IsEqualTo(DummyKind.Border);
 
         var bottomNode = graph.NodeLabel(borderBottom!);
         await Assert.That(bottomNode.Width).IsEqualTo(0);
         await Assert.That(bottomNode.Height).IsEqualTo(0);
-        await Assert.That(bottomNode.Dummy).IsEqualTo("border");
+        await Assert.That(bottomNode.Dummy).IsEqualTo(DummyKind.Border);
     }
 
     [Test]

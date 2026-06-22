@@ -96,7 +96,7 @@ public class BkTests
         [Arguments("d")]
         public async Task DoesNotMarkType0ConflictsWhenOneIsDummy(string v)
         {
-            graph.NodeLabel(v).Dummy = "true";
+            graph.NodeLabel(v).Dummy = DummyKind.Edge;
 
             var conflicts = BK.FindType1Conflicts(graph, layering);
             await Assert.That(BK.HasConflict(conflicts, "a", "d")).IsFalse();
@@ -114,7 +114,7 @@ public class BkTests
             {
                 if (v != w)
                 {
-                    graph.NodeLabel(w).Dummy = "true";
+                    graph.NodeLabel(w).Dummy = DummyKind.Edge;
                 }
             }
 
@@ -136,7 +136,7 @@ public class BkTests
         {
             foreach (var v in new[] {"a", "b", "c", "d"})
             {
-                graph.NodeLabel(v).Dummy = "true";
+                graph.NodeLabel(v).Dummy = DummyKind.Edge;
             }
 
             var conflicts = BK.FindType1Conflicts(graph, layering);
@@ -175,12 +175,12 @@ public class BkTests
         {
             foreach (var v in new[] {"a", "d"})
             {
-                graph.NodeLabel(v).Dummy = "true";
+                graph.NodeLabel(v).Dummy = DummyKind.Edge;
             }
 
             foreach (var v in new[] {"b", "c"})
             {
-                graph.NodeLabel(v).Dummy = "border";
+                graph.NodeLabel(v).Dummy = DummyKind.Border;
             }
 
             var conflicts = BK.FindType2Conflicts(graph, layering);
@@ -194,12 +194,12 @@ public class BkTests
         {
             foreach (var v in new[] {"b", "c"})
             {
-                graph.NodeLabel(v).Dummy = "true";
+                graph.NodeLabel(v).Dummy = DummyKind.Edge;
             }
 
             foreach (var v in new[] {"a", "d"})
             {
-                graph.NodeLabel(v).Dummy = "border";
+                graph.NodeLabel(v).Dummy = DummyKind.Border;
             }
 
             var conflicts = BK.FindType2Conflicts(graph, layering);
@@ -430,8 +430,8 @@ public class BkTests
             var root = StrMap(("a", "a"), ("b", "b"));
             var align = StrMap(("a", "a"), ("b", "b"));
             graph.Label.Edgesep = 20;
-            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = "true"});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = "true"});
+            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
             await Assert.That(xs["a"]).IsEqualTo(0d);
@@ -552,9 +552,9 @@ public class BkTests
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             graph.Label.Edgesep = 50;
-            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = "edge"});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = "edge-label", Labelpos = "l"});
-            graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = "edge"});
+            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Left});
+            graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
             await Assert.That(xs["a"]).IsEqualTo(0d);
@@ -568,9 +568,9 @@ public class BkTests
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             graph.Label.Edgesep = 50;
-            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = "edge"});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = "edge-label", Labelpos = "c"});
-            graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = "edge"});
+            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Center});
+            graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
             await Assert.That(xs["a"]).IsEqualTo(0d);
@@ -584,9 +584,9 @@ public class BkTests
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             graph.Label.Edgesep = 50;
-            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = "edge"});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = "edge-label", Labelpos = "r"});
-            graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = "edge"});
+            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Right});
+            graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
             await Assert.That(xs["a"]).IsEqualTo(0d);
@@ -821,10 +821,10 @@ public class BkTests
         {
             graph.Label.Nodesep = 10;
             graph.Label.Edgesep = 10;
-            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50, Dummy = "true"});
+            graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 60});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 70});
-            graph.SetNode("d", new() {Rank = 1, Order = 1, Width = 80, Dummy = "true"});
+            graph.SetNode("d", new() {Rank = 1, Order = 1, Width = 80, Dummy = DummyKind.Edge});
             graph.SetEdge("b", "c");
             graph.SetEdge("a", "d");
 

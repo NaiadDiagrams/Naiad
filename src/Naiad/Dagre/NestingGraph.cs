@@ -27,7 +27,7 @@ static class NestingGraph
 {
     public static void Run(Graph graph)
     {
-        var root = Util.AddDummyNode(graph, "root", new(), "_root");
+        var root = Util.AddDummyNode(graph, DummyKind.Root, new(), "_root");
         var depths = TreeDepths(graph);
         var depthsArr = depths.Values.Select(d => (double) d).ToList();
         var height = Util.ApplyMax(depthsArr) - 1; // Note: depths is an Object not an array

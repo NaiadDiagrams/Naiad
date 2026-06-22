@@ -52,7 +52,7 @@ class DagreEngine : ILayoutEngine
             {
                 label.Width = edge.LabelWidth;
                 label.Height = edge.LabelHeight;
-                label.Labelpos = "c";
+                label.Labelpos = Naiad.Dagre.LabelPos.Center;
             }
 
             graph.SetEdge(edge.SourceId, edge.TargetId, label, name);

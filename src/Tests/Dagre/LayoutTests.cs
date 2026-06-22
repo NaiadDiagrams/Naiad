@@ -59,7 +59,7 @@ public class LayoutTests
         graph.Label.Ranksep = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
-        graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = "c" });
+        graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = LabelPos.Center });
         Layout.Run(graph);
 
         await AssertCoordinates(
@@ -83,7 +83,7 @@ public class LayoutTests
             graph.SetNode(v, new() { Width = 10, Height = 10 });
         }
 
-        graph.SetEdge("a", "c", new() { Width = 2000, Height = 10, Labelpos = "c" });
+        graph.SetEdge("a", "c", new() { Width = 2000, Height = 10, Labelpos = LabelPos.Center });
         graph.SetEdge("b", "d", new() { Width = 1, Height = 1 });
         Layout.Run(graph);
 
@@ -116,8 +116,8 @@ public class LayoutTests
             graph.SetNode(v, new() { Width = 10, Height = 10 });
         }
 
-        graph.SetEdge("a", "b", new() { Width = 10, Height = 10, Labelpos = "l", Labeloffset = 1000 });
-        graph.SetEdge("c", "d", new() { Width = 10, Height = 10, Labelpos = "r", Labeloffset = 1000 });
+        graph.SetEdge("a", "b", new() { Width = 10, Height = 10, Labelpos = LabelPos.Left, Labeloffset = 1000 });
+        graph.SetEdge("c", "d", new() { Width = 10, Height = 10, Labelpos = LabelPos.Right, Labeloffset = 1000 });
         Layout.Run(graph);
 
         if (rankdir is Direction.TopToBottom or Direction.BottomToTop)
@@ -138,7 +138,7 @@ public class LayoutTests
         graph.Label.Ranksep = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
-        graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
+        graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = LabelPos.Center });
         Layout.Run(graph);
 
         await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
@@ -337,7 +337,7 @@ public class LayoutTests
         graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
-        graph.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
+        graph.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = LabelPos.Left, Labeloffset = 0 });
         Layout.Run(graph);
         if (rankdir is Direction.TopToBottom or Direction.BottomToTop)
         {

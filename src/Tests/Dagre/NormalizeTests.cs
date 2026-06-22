@@ -36,7 +36,7 @@ public class NormalizeTests
 
             await Assert.That(graph.Successors("a")!.Count).IsEqualTo(1);
             var successor = graph.Successors("a")![0];
-            await Assert.That(graph.NodeLabel(successor).Dummy).IsEqualTo("edge");
+            await Assert.That(graph.NodeLabel(successor).Dummy).IsEqualTo(DummyKind.Edge);
             await Assert.That(graph.NodeLabel(successor).Rank).IsEqualTo(1);
             await Assert.That(graph.Successors(successor)).IsEquivalentTo(new List<string> { "b" });
             await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);

@@ -44,16 +44,16 @@ public class AddBorderSegmentsTests
         var br = graph.NodeLabel("sg").BorderRight![1];
 
         var blNode = graph.NodeLabel(bl);
-        await Assert.That(blNode.Dummy).IsEqualTo("border");
-        await Assert.That(blNode.BorderType).IsEqualTo("borderLeft");
+        await Assert.That(blNode.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(blNode.BorderType).IsEqualTo(BorderKind.Left);
         await Assert.That(blNode.Rank).IsEqualTo(1);
         await Assert.That(blNode.Width).IsEqualTo(0);
         await Assert.That(blNode.Height).IsEqualTo(0);
         await Assert.That(graph.Parent(bl)).IsEqualTo("sg");
 
         var brNode = graph.NodeLabel(br);
-        await Assert.That(brNode.Dummy).IsEqualTo("border");
-        await Assert.That(brNode.BorderType).IsEqualTo("borderRight");
+        await Assert.That(brNode.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(brNode.BorderType).IsEqualTo(BorderKind.Right);
         await Assert.That(brNode.Rank).IsEqualTo(1);
         await Assert.That(brNode.Width).IsEqualTo(0);
         await Assert.That(brNode.Height).IsEqualTo(0);
@@ -71,16 +71,16 @@ public class AddBorderSegmentsTests
         var br2 = sgNode.BorderRight![1];
 
         var bl2Node = graph.NodeLabel(bl2);
-        await Assert.That(bl2Node.Dummy).IsEqualTo("border");
-        await Assert.That(bl2Node.BorderType).IsEqualTo("borderLeft");
+        await Assert.That(bl2Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(bl2Node.BorderType).IsEqualTo(BorderKind.Left);
         await Assert.That(bl2Node.Rank).IsEqualTo(1);
         await Assert.That(bl2Node.Width).IsEqualTo(0);
         await Assert.That(bl2Node.Height).IsEqualTo(0);
         await Assert.That(graph.Parent(bl2)).IsEqualTo("sg");
 
         var br2Node = graph.NodeLabel(br2);
-        await Assert.That(br2Node.Dummy).IsEqualTo("border");
-        await Assert.That(br2Node.BorderType).IsEqualTo("borderRight");
+        await Assert.That(br2Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(br2Node.BorderType).IsEqualTo(BorderKind.Right);
         await Assert.That(br2Node.Rank).IsEqualTo(1);
         await Assert.That(br2Node.Width).IsEqualTo(0);
         await Assert.That(br2Node.Height).IsEqualTo(0);
@@ -90,16 +90,16 @@ public class AddBorderSegmentsTests
         var br1 = sgNode.BorderRight[2];
 
         var bl1Node = graph.NodeLabel(bl1);
-        await Assert.That(bl1Node.Dummy).IsEqualTo("border");
-        await Assert.That(bl1Node.BorderType).IsEqualTo("borderLeft");
+        await Assert.That(bl1Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(bl1Node.BorderType).IsEqualTo(BorderKind.Left);
         await Assert.That(bl1Node.Rank).IsEqualTo(2);
         await Assert.That(bl1Node.Width).IsEqualTo(0);
         await Assert.That(bl1Node.Height).IsEqualTo(0);
         await Assert.That(graph.Parent(bl1)).IsEqualTo("sg");
 
         var br1Node = graph.NodeLabel(br1);
-        await Assert.That(br1Node.Dummy).IsEqualTo("border");
-        await Assert.That(br1Node.BorderType).IsEqualTo("borderRight");
+        await Assert.That(br1Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(br1Node.BorderType).IsEqualTo(BorderKind.Right);
         await Assert.That(br1Node.Rank).IsEqualTo(2);
         await Assert.That(br1Node.Width).IsEqualTo(0);
         await Assert.That(br1Node.Height).IsEqualTo(0);
@@ -121,16 +121,16 @@ public class AddBorderSegmentsTests
         var br1 = graph.NodeLabel("sg1").BorderRight![1];
 
         var bl1Node = graph.NodeLabel(bl1);
-        await Assert.That(bl1Node.Dummy).IsEqualTo("border");
-        await Assert.That(bl1Node.BorderType).IsEqualTo("borderLeft");
+        await Assert.That(bl1Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(bl1Node.BorderType).IsEqualTo(BorderKind.Left);
         await Assert.That(bl1Node.Rank).IsEqualTo(1);
         await Assert.That(bl1Node.Width).IsEqualTo(0);
         await Assert.That(bl1Node.Height).IsEqualTo(0);
         await Assert.That(graph.Parent(bl1)).IsEqualTo("sg1");
 
         var br1Node = graph.NodeLabel(br1);
-        await Assert.That(br1Node.Dummy).IsEqualTo("border");
-        await Assert.That(br1Node.BorderType).IsEqualTo("borderRight");
+        await Assert.That(br1Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(br1Node.BorderType).IsEqualTo(BorderKind.Right);
         await Assert.That(br1Node.Rank).IsEqualTo(1);
         await Assert.That(br1Node.Width).IsEqualTo(0);
         await Assert.That(br1Node.Height).IsEqualTo(0);
@@ -140,16 +140,16 @@ public class AddBorderSegmentsTests
         var br2 = graph.NodeLabel("sg2").BorderRight![1];
 
         var bl2Node = graph.NodeLabel(bl2);
-        await Assert.That(bl2Node.Dummy).IsEqualTo("border");
-        await Assert.That(bl2Node.BorderType).IsEqualTo("borderLeft");
+        await Assert.That(bl2Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(bl2Node.BorderType).IsEqualTo(BorderKind.Left);
         await Assert.That(bl2Node.Rank).IsEqualTo(1);
         await Assert.That(bl2Node.Width).IsEqualTo(0);
         await Assert.That(bl2Node.Height).IsEqualTo(0);
         await Assert.That(graph.Parent(bl2)).IsEqualTo("sg2");
 
         var br2Node = graph.NodeLabel(br2);
-        await Assert.That(br2Node.Dummy).IsEqualTo("border");
-        await Assert.That(br2Node.BorderType).IsEqualTo("borderRight");
+        await Assert.That(br2Node.Dummy).IsEqualTo(DummyKind.Border);
+        await Assert.That(br2Node.BorderType).IsEqualTo(BorderKind.Right);
         await Assert.That(br2Node.Rank).IsEqualTo(1);
         await Assert.That(br2Node.Width).IsEqualTo(0);
         await Assert.That(br2Node.Height).IsEqualTo(0);

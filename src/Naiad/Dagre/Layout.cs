@@ -102,7 +102,7 @@ static class Layout
             Edgesep = 20,
             Nodesep = 50,
             Rankdir = graphLabel.Rankdir,
-            Rankalign = "center"
+            Rankalign = RankAlign.Center
         };
         if (graphLabel.Nodesep is { } gNodesep)
         {
@@ -172,7 +172,7 @@ static class Layout
                 Width = 0,
                 Height = 0,
                 Labeloffset = 10,
-                Labelpos = "r"
+                Labelpos = LabelPos.Right
             };
             if (edge.Minlen is { } eMinlen)
             {
@@ -226,7 +226,7 @@ static class Layout
         {
             var edge = graph.FindEdgeLabel(e);
             edge.Minlen *= 2;
-            if (edge.Labelpos!.Equals("c", StringComparison.OrdinalIgnoreCase))
+            if (edge.Labelpos == LabelPos.Center)
             {
                 continue;
             }
@@ -266,7 +266,7 @@ static class Layout
                     Rank = (w.Rank!.Value - v.Rank!.Value) / 2 + v.Rank!.Value,
                     EdgeObj = e
                 };
-                Util.AddDummyNode(graph, "edge-proxy", label, "_ep");
+                Util.AddDummyNode(graph, DummyKind.EdgeProxy, label, "_ep");
             }
         }
     }
@@ -287,7 +287,7 @@ static class Layout
     {
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (node.Dummy == "edge-proxy")
+            if (node.Dummy == DummyKind.EdgeProxy)
             {
                 graph.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
                 graph.RemoveNode(v);
@@ -396,17 +396,17 @@ static class Layout
             var edge = graph.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
-                if (edge.Labelpos is "l" or "r")
+                if (edge.Labelpos is LabelPos.Left or LabelPos.Right)
                 {
                     edge.Width -= edge.Labeloffset;
                 }
 
                 switch (edge.Labelpos)
                 {
-                    case "l":
+                    case LabelPos.Left:
                         edge.X -= edge.Width!.Value / 2 + edge.Labeloffset;
                         break;
-                    case "r":
+                    case LabelPos.Right:
                         edge.X += edge.Width!.Value / 2 + edge.Labeloffset;
                         break;
                 }
@@ -446,7 +446,7 @@ static class Layout
 
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (node.Dummy == "border")
+            if (node.Dummy == DummyKind.Border)
             {
                 graph.RemoveNode(v);
             }
@@ -480,7 +480,7 @@ static class Layout
                 node.Order = i + orderShift;
                 foreach (var selfEdge in node.SelfEdges ?? [])
                 {
-                    Util.AddDummyNode(graph, "selfedge", new()
+                    Util.AddDummyNode(graph, DummyKind.SelfEdge, new()
                     {
                         Width = selfEdge.Label.Width!.Value,
                         Height = selfEdge.Label.Height!.Value,
@@ -500,7 +500,7 @@ static class Layout
     {
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (node.Dummy == "selfedge")
+            if (node.Dummy == DummyKind.SelfEdge)
             {
                 var selfNode = graph.NodeLabel(node.EdgeObj!.V);
                 var x = selfNode.X!.Value + selfNode.Width / 2;

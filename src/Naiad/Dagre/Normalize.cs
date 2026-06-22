@@ -60,12 +60,12 @@ static class Normalize
                 EdgeObj = e,
                 Rank = vRank
             };
-            var dummy = Util.AddDummyNode(graph, "edge", attrs, "_d");
+            var dummy = Util.AddDummyNode(graph, DummyKind.Edge, attrs, "_d");
             if (vRank == labelRank)
             {
                 attrs.Width = edgeLabel.Width ?? 0;
                 attrs.Height = edgeLabel.Height ?? 0;
-                attrs.Dummy = "edge-label";
+                attrs.Dummy = DummyKind.EdgeLabel;
                 attrs.Labelpos = edgeLabel.Labelpos;
             }
 
@@ -96,7 +96,7 @@ static class Normalize
                 // Point is a non-nullable struct, so coerce a not-yet-positioned dummy's coordinates to 0.
                 // Callers assign coordinates before calling Undo, so this fallback is never observed.
                 origLabel.Points!.Add(new(node.X ?? 0, node.Y ?? 0));
-                if (node.Dummy == "edge-label")
+                if (node.Dummy == DummyKind.EdgeLabel)
                 {
                     origLabel.X = node.X;
                     origLabel.Y = node.Y;
