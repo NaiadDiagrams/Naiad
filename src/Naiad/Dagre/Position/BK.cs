@@ -513,7 +513,7 @@ static class BK
         }
     }
 
-    internal static Dictionary<string, double> Balance(Dictionary<string, Dictionary<string, double>> xss, string? align = null)
+    internal static Dictionary<string, double> Balance(Dictionary<string, Dictionary<string, double>> xss)
     {
         var ulMap = xss.GetValueOrDefault("ul");
         if (ulMap == null)
@@ -523,17 +523,6 @@ static class BK
 
         return Util.MapValues(ulMap, (num, v) =>
         {
-            if (align != null)
-            {
-                var alignmentKey = align.ToLowerInvariant();
-                var alignment = xss.GetValueOrDefault(alignmentKey);
-                if (alignment != null &&
-                    alignment.TryGetValue(v, out var av))
-                {
-                    return av;
-                }
-            }
-
             var xs = xss.Values
                 .Select(_ => _.GetValueOrDefault(v, 0))
                 .OrderBy(_ => _)
@@ -582,7 +571,7 @@ static class BK
 
         var smallestWidth = FindSmallestWidthAlignment(graph, xss);
         AlignCoordinates(xss, smallestWidth);
-        return Balance(xss, graph.Label.Align);
+        return Balance(xss);
     }
 
     internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep) =>
