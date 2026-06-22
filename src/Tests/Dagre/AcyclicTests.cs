@@ -83,7 +83,7 @@ public class AcyclicTests
         graph.SetEdge("a", "b", new() { Minlen = 2, Weight = 3 });
         Acyclic.Run(graph);
         Acyclic.Undo(graph);
-        var label = graph.Edge_("a", "b");
+        var label = graph.FindEdgeLabel("a", "b");
         await Assert.That(label.Minlen).IsEqualTo(2);
         await Assert.That(label.Weight).IsEqualTo(3d);
         await Assert.That(graph.Edges().Count).IsEqualTo(1);
@@ -99,10 +99,10 @@ public class AcyclicTests
         graph.SetEdge("b", "a", new() { Minlen = 3, Weight = 4 });
         Acyclic.Run(graph);
         Acyclic.Undo(graph);
-        var ab = graph.Edge_("a", "b");
+        var ab = graph.FindEdgeLabel("a", "b");
         await Assert.That(ab.Minlen).IsEqualTo(2);
         await Assert.That(ab.Weight).IsEqualTo(3d);
-        var ba = graph.Edge_("b", "a");
+        var ba = graph.FindEdgeLabel("b", "a");
         await Assert.That(ba.Minlen).IsEqualTo(3);
         await Assert.That(ba.Weight).IsEqualTo(4d);
         await Assert.That(graph.Edges().Count).IsEqualTo(2);

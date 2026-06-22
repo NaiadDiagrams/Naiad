@@ -124,5 +124,5 @@ public class GreedyFasTests
     }
 
     static Func<Edge, double> WeightFn(Graph g) =>
-        e => g.Edge_(e).Weight!.Value;
+        e => g.FindEdgeLabel(e).Weight!.Value;
 }

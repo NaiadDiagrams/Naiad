@@ -40,7 +40,7 @@ static class RankUtil
             var rank = double.PositiveInfinity;
             foreach (var e in graph.OutEdgesOf(v))
             {
-                var candidate = Dfs(e.W) - graph.Edge_(e).Minlen!.Value;
+                var candidate = Dfs(e.W) - graph.FindEdgeLabel(e).Minlen!.Value;
                 if (candidate < rank)
                 {
                     rank = candidate;
@@ -67,5 +67,5 @@ static class RankUtil
      * difference between the length of the edge and its minimum length.
      */
     public static int Slack(Graph graph, Edge edge) =>
-        graph.Node(edge.W).Rank!.Value - graph.Node(edge.V).Rank!.Value - graph.Edge_(edge).Minlen!.Value;
+        graph.Node(edge.W).Rank!.Value - graph.Node(edge.V).Rank!.Value - graph.FindEdgeLabel(edge).Minlen!.Value;
 }

@@ -15,7 +15,7 @@ public class UtilTests
         {
             g.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
             var g2 = Util.Simplify(g);
-            var e = g2.Edge_("a", "b");
+            var e = g2.FindEdgeLabel("a", "b");
             await Assert.That(e.Weight).IsEqualTo(1);
             await Assert.That(e.Minlen).IsEqualTo(1);
             await Assert.That(g2.EdgeCount).IsEqualTo(1);
@@ -28,7 +28,7 @@ public class UtilTests
             g.SetEdge("a", "b", new() { Weight = 2, Minlen = 2 }, "multi");
             var g2 = Util.Simplify(g);
             await Assert.That(g2.IsMultigraph).IsFalse();
-            var e = g2.Edge_("a", "b");
+            var e = g2.FindEdgeLabel("a", "b");
             await Assert.That(e.Weight).IsEqualTo(3);
             await Assert.That(e.Minlen).IsEqualTo(2);
             await Assert.That(g2.EdgeCount).IsEqualTo(1);
@@ -70,8 +70,8 @@ public class UtilTests
             g.SetEdge("a", "b", l1);
             g.SetEdge("a", "b", l2, "multi");
             var g2 = Util.AsNonCompoundGraph(g);
-            await Assert.That(g2.Edge_("a", "b").Labelpos).IsEqualTo("bar");
-            await Assert.That(g2.Edge_("a", "b", "multi").Labelpos).IsEqualTo("baz");
+            await Assert.That(g2.FindEdgeLabel("a", "b").Labelpos).IsEqualTo("bar");
+            await Assert.That(g2.FindEdgeLabel("a", "b", "multi").Labelpos).IsEqualTo("baz");
         }
 
         [Test]

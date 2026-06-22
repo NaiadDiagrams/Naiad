@@ -89,7 +89,7 @@ static class GreedyFas
 
         foreach (var edge in graph.InEdges(entry.V) ?? [])
         {
-            var weight = graph.Edge_(edge).Weight!.Value;
+            var weight = graph.FindEdgeLabel(edge).Weight!.Value;
             var uEntry = entries[edge.V];
 
             if (collectPredecessors)
@@ -103,7 +103,7 @@ static class GreedyFas
 
         foreach (var edge in graph.OutEdges(entry.V) ?? [])
         {
-            var weight = graph.Edge_(edge).Weight!.Value;
+            var weight = graph.FindEdgeLabel(edge).Weight!.Value;
             var w = edge.W;
             var wEntry = entries[w];
             wEntry.In -= weight;
@@ -133,7 +133,7 @@ static class GreedyFas
         // into a single edge for the fasGraph.
         foreach (var edge in graph.Edges())
         {
-            var prevWeight = fasGraph.Edge_(edge.V, edge.W)?.Weight ?? 0;
+            var prevWeight = fasGraph.FindEdgeLabel(edge.V, edge.W)?.Weight ?? 0;
             var weight = weightFn(edge);
             var edgeWeight = prevWeight + weight;
             fasGraph.SetEdge(edge.V, edge.W, new() { Weight = edgeWeight });

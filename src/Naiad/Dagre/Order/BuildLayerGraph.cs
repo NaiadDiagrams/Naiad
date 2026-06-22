@@ -30,9 +30,9 @@ static class BuildLayerGraph
                     foreach (var e in edges)
                     {
                         var u = e.V == v ? e.W : e.V;
-                        var edge = result.Edge_(u, v);
+                        var edge = result.FindEdgeLabel(u, v);
                         var weight = edge != null ? edge.Weight!.Value : 0;
-                        result.SetEdge(u, v, new() { Weight = graph.Edge_(e).Weight!.Value + weight });
+                        result.SetEdge(u, v, new() { Weight = graph.FindEdgeLabel(e).Weight!.Value + weight });
                     }
                 }
 

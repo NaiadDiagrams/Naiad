@@ -323,10 +323,10 @@ sealed class Graph
         return this;
     }
 
-    public EdgeLabel Edge_(string v, string w, string? name = null) =>
+    public EdgeLabel FindEdgeLabel(string v, string w, string? name = null) =>
         edgeLabelsMap.GetValueOrDefault(EdgeArgsToId(IsDirected, v, w, name))!;
 
-    public EdgeLabel Edge_(Edge edge) =>
+    public EdgeLabel FindEdgeLabel(Edge edge) =>
         edgeLabelsMap.GetValueOrDefault(EdgeObjToId(IsDirected, edge))!;
 
     public bool HasEdge(string v, string w, string? name = null) =>

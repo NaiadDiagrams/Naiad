@@ -32,8 +32,8 @@ static class Util
 
         foreach (var e in graph.Edges())
         {
-            var simpleLabel = simplified.HasEdge(e.V, e.W) ? simplified.Edge_(e.V, e.W) : new() { Weight = 0, Minlen = 1 };
-            var label = graph.Edge_(e);
+            var simpleLabel = simplified.HasEdge(e.V, e.W) ? simplified.FindEdgeLabel(e.V, e.W) : new() { Weight = 0, Minlen = 1 };
+            var label = graph.FindEdgeLabel(e);
             simplified.SetEdge(e.V, e.W, new()
             {
                 // A label may be missing weight/minlen (the network-simplex tests override an edge label
@@ -59,7 +59,7 @@ static class Util
 
         foreach (var e in graph.Edges())
         {
-            simplified.SetEdge(e, graph.Edge_(e));
+            simplified.SetEdge(e, graph.FindEdgeLabel(e));
         }
 
         return simplified;

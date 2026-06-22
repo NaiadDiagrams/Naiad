@@ -51,7 +51,7 @@ static class NetworkSimplex
     {
         var childLab = tree.Node(child);
         var parent = childLab.Parent!;
-        var edge = tree.Edge_(child, parent);
+        var edge = tree.FindEdgeLabel(child, parent);
         edge.Cutvalue = CalcCutValue(tree, graph, child);
     }
 
@@ -66,12 +66,12 @@ static class NetworkSimplex
         // True if the child is on the tail end of the edge in the directed graph
         var childIsTail = true;
         // The graph's view of the tree edge we're inspecting
-        var graphEdge = graph.Edge_(child, parent);
+        var graphEdge = graph.FindEdgeLabel(child, parent);
 
         if (graphEdge == null)
         {
             childIsTail = false;
-            graphEdge = graph.Edge_(parent, child);
+            graphEdge = graph.FindEdgeLabel(parent, child);
         }
 
         // The accumulated cut value for the edge between this node and its parent
@@ -88,12 +88,12 @@ static class NetworkSimplex
                 if (other != parent)
                 {
                     var pointsToHead = isOutEdge == childIsTail;
-                    var otherWeight = graph.Edge_(edge).Weight!.Value;
+                    var otherWeight = graph.FindEdgeLabel(edge).Weight!.Value;
 
                     cutValue += pointsToHead ? otherWeight : -otherWeight;
                     if (IsTreeEdge(tree, child, other))
                     {
-                        var treeEdge = tree.Edge_(child, other);
+                        var treeEdge = tree.FindEdgeLabel(child, other);
                         var otherCutValue = treeEdge.Cutvalue!.Value;
                         cutValue += pointsToHead ? -otherCutValue : otherCutValue;
                     }
@@ -146,7 +146,7 @@ static class NetworkSimplex
     public static Edge? LeaveEdge(Graph tree) =>
         tree.Edges().FirstOrDefault(e =>
         {
-            var edge = tree.Edge_(e);
+            var edge = tree.FindEdgeLabel(e);
             return edge.Cutvalue!.Value < 0;
         });
 
@@ -223,12 +223,12 @@ static class NetworkSimplex
         {
             var treeNode = t.Node(v);
             var parent = treeNode.Parent!;
-            var edge = g.Edge_(v, parent);
+            var edge = g.FindEdgeLabel(v, parent);
             var flipped = false;
 
             if (edge == null)
             {
-                edge = g.Edge_(parent, v);
+                edge = g.FindEdgeLabel(parent, v);
                 flipped = true;
             }
 

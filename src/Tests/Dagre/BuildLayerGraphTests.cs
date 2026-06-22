@@ -72,10 +72,10 @@ public class BuildLayerGraphTests
 
         await Assert.That(BuildLayerGraph.Run(g, 1, "inEdges").EdgeCount).IsEqualTo(0);
         await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").EdgeCount).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").Edge_("a", "c").Weight).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").Edge_("b", "c").Weight).IsEqualTo(3);
+        await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").FindEdgeLabel("a", "c").Weight).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").FindEdgeLabel("b", "c").Weight).IsEqualTo(3);
         await Assert.That(BuildLayerGraph.Run(g, 3, "inEdges").EdgeCount).IsEqualTo(1);
-        await Assert.That(BuildLayerGraph.Run(g, 3, "inEdges").Edge_("c", "d").Weight).IsEqualTo(4);
+        await Assert.That(BuildLayerGraph.Run(g, 3, "inEdges").FindEdgeLabel("c", "d").Weight).IsEqualTo(4);
     }
 
     [Test]
@@ -90,10 +90,10 @@ public class BuildLayerGraphTests
         g.SetEdge("c", "d", new() { Weight = 4 });
 
         await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").EdgeCount).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").Edge_("c", "a").Weight).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").Edge_("c", "b").Weight).IsEqualTo(3);
+        await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").FindEdgeLabel("c", "a").Weight).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(g, 1, "outEdges").FindEdgeLabel("c", "b").Weight).IsEqualTo(3);
         await Assert.That(BuildLayerGraph.Run(g, 2, "outEdges").EdgeCount).IsEqualTo(1);
-        await Assert.That(BuildLayerGraph.Run(g, 2, "outEdges").Edge_("d", "c").Weight).IsEqualTo(4);
+        await Assert.That(BuildLayerGraph.Run(g, 2, "outEdges").FindEdgeLabel("d", "c").Weight).IsEqualTo(4);
         await Assert.That(BuildLayerGraph.Run(g, 3, "outEdges").EdgeCount).IsEqualTo(0);
     }
 
@@ -105,7 +105,7 @@ public class BuildLayerGraphTests
         g.SetEdge("a", "b", new() { Weight = 2 });
         g.SetEdge("a", "b", new() { Weight = 3 }, "multi");
 
-        await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").Edge_("a", "b").Weight).IsEqualTo(5);
+        await Assert.That(BuildLayerGraph.Run(g, 2, "inEdges").FindEdgeLabel("a", "b").Weight).IsEqualTo(5);
     }
 
     [Test]

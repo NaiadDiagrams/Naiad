@@ -40,7 +40,7 @@ static class NestingGraph
         // tests leave it unset, so only scale it when present.
         foreach (var e in graph.Edges())
         {
-            var edge = graph.Edge_(e);
+            var edge = graph.FindEdgeLabel(e);
             if (edge.Minlen.HasValue)
             {
                 edge.Minlen = (int) (edge.Minlen.Value * nodeSep);
@@ -154,7 +154,7 @@ static class NestingGraph
         var acc = 0d;
         foreach (var e in graph.Edges())
         {
-            acc += graph.Edge_(e).Weight ?? double.NaN;
+            acc += graph.FindEdgeLabel(e).Weight ?? double.NaN;
         }
 
         return acc;
@@ -167,7 +167,7 @@ static class NestingGraph
         graphLabel.NestingRoot = null;
         foreach (var e in graph.Edges())
         {
-            var edge = graph.Edge_(e);
+            var edge = graph.FindEdgeLabel(e);
             if (edge.NestingEdge == true)
             {
                 graph.RemoveEdge(e);

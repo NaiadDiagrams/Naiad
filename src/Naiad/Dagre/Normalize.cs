@@ -34,7 +34,7 @@ static class Normalize
         var w = e.W;
         var wRank = graph.Node(w).Rank!.Value;
         var name = e.Name;
-        var edgeLabel = graph.Edge_(e);
+        var edgeLabel = graph.FindEdgeLabel(e);
         var labelRank = edgeLabel.LabelRank;
 
         if (wRank == vRank + 1)

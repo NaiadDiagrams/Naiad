@@ -290,13 +290,13 @@ public class NetworkSimplexTests
         NetworkSimplex.ExchangeEdges(t, g, new("g", "h"), new("a", "e"));
 
         // check new cut values
-        await Assert.That(t.Edge_("a", "b").Cutvalue).IsEqualTo(2);
-        await Assert.That(t.Edge_("b", "c").Cutvalue).IsEqualTo(2);
-        await Assert.That(t.Edge_("c", "d").Cutvalue).IsEqualTo(2);
-        await Assert.That(t.Edge_("d", "h").Cutvalue).IsEqualTo(2);
-        await Assert.That(t.Edge_("a", "e").Cutvalue).IsEqualTo(1);
-        await Assert.That(t.Edge_("e", "g").Cutvalue).IsEqualTo(1);
-        await Assert.That(t.Edge_("g", "f").Cutvalue).IsEqualTo(0);
+        await Assert.That(t.FindEdgeLabel("a", "b").Cutvalue).IsEqualTo(2);
+        await Assert.That(t.FindEdgeLabel("b", "c").Cutvalue).IsEqualTo(2);
+        await Assert.That(t.FindEdgeLabel("c", "d").Cutvalue).IsEqualTo(2);
+        await Assert.That(t.FindEdgeLabel("d", "h").Cutvalue).IsEqualTo(2);
+        await Assert.That(t.FindEdgeLabel("a", "e").Cutvalue).IsEqualTo(1);
+        await Assert.That(t.FindEdgeLabel("e", "g").Cutvalue).IsEqualTo(1);
+        await Assert.That(t.FindEdgeLabel("g", "f").Cutvalue).IsEqualTo(0);
 
         // ensure lim numbers look right
         var lims = t.Nodes().Select(v => t.Node(v).Lim!.Value).ToList();
@@ -531,13 +531,13 @@ public class NetworkSimplexTests
     {
         NetworkSimplex.InitLowLimValues(gansnerTree);
         NetworkSimplex.InitCutValues(gansnerTree, gansnerGraph);
-        await Assert.That(gansnerTree.Edge_("a", "b").Cutvalue).IsEqualTo(3);
-        await Assert.That(gansnerTree.Edge_("b", "c").Cutvalue).IsEqualTo(3);
-        await Assert.That(gansnerTree.Edge_("c", "d").Cutvalue).IsEqualTo(3);
-        await Assert.That(gansnerTree.Edge_("d", "h").Cutvalue).IsEqualTo(3);
-        await Assert.That(gansnerTree.Edge_("g", "h").Cutvalue).IsEqualTo(-1);
-        await Assert.That(gansnerTree.Edge_("e", "g").Cutvalue).IsEqualTo(0);
-        await Assert.That(gansnerTree.Edge_("f", "g").Cutvalue).IsEqualTo(0);
+        await Assert.That(gansnerTree.FindEdgeLabel("a", "b").Cutvalue).IsEqualTo(3);
+        await Assert.That(gansnerTree.FindEdgeLabel("b", "c").Cutvalue).IsEqualTo(3);
+        await Assert.That(gansnerTree.FindEdgeLabel("c", "d").Cutvalue).IsEqualTo(3);
+        await Assert.That(gansnerTree.FindEdgeLabel("d", "h").Cutvalue).IsEqualTo(3);
+        await Assert.That(gansnerTree.FindEdgeLabel("g", "h").Cutvalue).IsEqualTo(-1);
+        await Assert.That(gansnerTree.FindEdgeLabel("e", "g").Cutvalue).IsEqualTo(0);
+        await Assert.That(gansnerTree.FindEdgeLabel("f", "g").Cutvalue).IsEqualTo(0);
     }
 
     [Test]
@@ -547,13 +547,13 @@ public class NetworkSimplexTests
         gansnerTree.SetEdge("a", "e");
         NetworkSimplex.InitLowLimValues(gansnerTree);
         NetworkSimplex.InitCutValues(gansnerTree, gansnerGraph);
-        await Assert.That(gansnerTree.Edge_("a", "b").Cutvalue).IsEqualTo(2);
-        await Assert.That(gansnerTree.Edge_("b", "c").Cutvalue).IsEqualTo(2);
-        await Assert.That(gansnerTree.Edge_("c", "d").Cutvalue).IsEqualTo(2);
-        await Assert.That(gansnerTree.Edge_("d", "h").Cutvalue).IsEqualTo(2);
-        await Assert.That(gansnerTree.Edge_("a", "e").Cutvalue).IsEqualTo(1);
-        await Assert.That(gansnerTree.Edge_("e", "g").Cutvalue).IsEqualTo(1);
-        await Assert.That(gansnerTree.Edge_("f", "g").Cutvalue).IsEqualTo(0);
+        await Assert.That(gansnerTree.FindEdgeLabel("a", "b").Cutvalue).IsEqualTo(2);
+        await Assert.That(gansnerTree.FindEdgeLabel("b", "c").Cutvalue).IsEqualTo(2);
+        await Assert.That(gansnerTree.FindEdgeLabel("c", "d").Cutvalue).IsEqualTo(2);
+        await Assert.That(gansnerTree.FindEdgeLabel("d", "h").Cutvalue).IsEqualTo(2);
+        await Assert.That(gansnerTree.FindEdgeLabel("a", "e").Cutvalue).IsEqualTo(1);
+        await Assert.That(gansnerTree.FindEdgeLabel("e", "g").Cutvalue).IsEqualTo(1);
+        await Assert.That(gansnerTree.FindEdgeLabel("f", "g").Cutvalue).IsEqualTo(0);
     }
 
     static void Ns(Graph graph)

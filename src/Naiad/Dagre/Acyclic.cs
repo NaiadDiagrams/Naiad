@@ -13,7 +13,7 @@ static class Acyclic
 
         foreach (var e in fas)
         {
-            var label = graph.Edge_(e);
+            var label = graph.FindEdgeLabel(e);
             graph.RemoveEdge(e);
             label.ForwardName = e.Name;
             label.Reversed = true;
@@ -23,7 +23,7 @@ static class Acyclic
         return;
 
         static Func<Edge, double> WeightFn(Graph g) =>
-            e => g.Edge_(e).Weight!.Value;
+            e => g.FindEdgeLabel(e).Weight!.Value;
     }
 
     static List<Edge> DfsFas(Graph graph)
@@ -67,7 +67,7 @@ static class Acyclic
     {
         foreach (var e in graph.Edges())
         {
-            var label = graph.Edge_(e);
+            var label = graph.FindEdgeLabel(e);
             if (label.Reversed == true)
             {
                 graph.RemoveEdge(e);

@@ -35,7 +35,7 @@ static class CrossCount
                 nodeEntries.Add(new()
                 {
                     Pos = southPos[e.W],
-                    Weight = graph.Edge_(e).Weight!.Value
+                    Weight = graph.FindEdgeLabel(e).Weight!.Value
                 });
             }
 

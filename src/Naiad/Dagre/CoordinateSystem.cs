@@ -29,7 +29,7 @@ static class CoordinateSystem
     static void SwapWidthHeight(Graph graph)
     {
         graph.Nodes().ForEach(node => SwapWidthHeightOne(graph.Node(node)));
-        graph.Edges().ForEach(edge => SwapWidthHeightOne(graph.Edge_(edge)));
+        graph.Edges().ForEach(edge => SwapWidthHeightOne(graph.FindEdgeLabel(edge)));
     }
 
     static void SwapWidthHeightOne(NodeLabel attrs)
@@ -52,7 +52,7 @@ static class CoordinateSystem
 
         graph.Edges().ForEach(edge =>
         {
-            var edgeLabel = graph.Edge_(edge);
+            var edgeLabel = graph.FindEdgeLabel(edge);
             if (edgeLabel.Points != null)
             {
                 for (var i = 0; i < edgeLabel.Points.Count; i++)
@@ -84,7 +84,7 @@ static class CoordinateSystem
 
         graph.Edges().ForEach(edge =>
         {
-            var edgeLabel = graph.Edge_(edge);
+            var edgeLabel = graph.FindEdgeLabel(edge);
             if (edgeLabel.Points != null)
             {
                 for (var i = 0; i < edgeLabel.Points.Count; i++)

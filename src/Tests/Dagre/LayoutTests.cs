@@ -52,8 +52,8 @@ public class LayoutTests
             ("b", 75.0 / 2, 100 + 300 + 200.0 / 2));
 
         // We should not get x, y coordinates if the edge has no label
-        await Assert.That(g.Edge_("a", "b").X).IsNull();
-        await Assert.That(g.Edge_("a", "b").Y).IsNull();
+        await Assert.That(g.FindEdgeLabel("a", "b").X).IsNull();
+        await Assert.That(g.FindEdgeLabel("a", "b").Y).IsNull();
     }
 
     [Test]
@@ -68,8 +68,8 @@ public class LayoutTests
         await AssertCoordinates(
             ("a", 75.0 / 2, 100.0 / 2),
             ("b", 75.0 / 2, 100 + 150 + 70 + 150 + 200.0 / 2));
-        await Assert.That(g.Edge_("a", "b").X!.Value).IsEqualTo(75.0 / 2);
-        await Assert.That(g.Edge_("a", "b").Y!.Value).IsEqualTo(100 + 150 + 70.0 / 2);
+        await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
+        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsEqualTo(100 + 150 + 70.0 / 2);
     }
 
     [Test]
@@ -93,8 +93,8 @@ public class LayoutTests
         double p1X, p2X;
         if (rankdir is "TB" or "BT")
         {
-            p1X = g.Edge_("a", "c").X!.Value;
-            p2X = g.Edge_("b", "d").X!.Value;
+            p1X = g.FindEdgeLabel("a", "c").X!.Value;
+            p2X = g.FindEdgeLabel("b", "d").X!.Value;
         }
         else
         {
@@ -125,13 +125,13 @@ public class LayoutTests
 
         if (rankdir is "TB" or "BT")
         {
-            await Assert.That(g.Edge_("a", "b").X!.Value - g.Edge_("a", "b").Points![0].X).IsEqualTo(-1000 - 10.0 / 2);
-            await Assert.That(g.Edge_("c", "d").X!.Value - g.Edge_("c", "d").Points![0].X).IsEqualTo(1000 + 10.0 / 2);
+            await Assert.That(g.FindEdgeLabel("a", "b").X!.Value - g.FindEdgeLabel("a", "b").Points![0].X).IsEqualTo(-1000 - 10.0 / 2);
+            await Assert.That(g.FindEdgeLabel("c", "d").X!.Value - g.FindEdgeLabel("c", "d").Points![0].X).IsEqualTo(1000 + 10.0 / 2);
         }
         else
         {
-            await Assert.That(g.Edge_("a", "b").Y!.Value - g.Edge_("a", "b").Points![0].Y).IsEqualTo(-1000 - 10.0 / 2);
-            await Assert.That(g.Edge_("c", "d").Y!.Value - g.Edge_("c", "d").Points![0].Y).IsEqualTo(1000 + 10.0 / 2);
+            await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value - g.FindEdgeLabel("a", "b").Points![0].Y).IsEqualTo(-1000 - 10.0 / 2);
+            await Assert.That(g.FindEdgeLabel("c", "d").Y!.Value - g.FindEdgeLabel("c", "d").Points![0].Y).IsEqualTo(1000 + 10.0 / 2);
         }
     }
 
@@ -144,9 +144,9 @@ public class LayoutTests
         g.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
         Layout.Run(g);
 
-        await Assert.That(g.Edge_("a", "b").X!.Value).IsEqualTo(75.0 / 2);
-        await Assert.That(g.Edge_("a", "b").Y!.Value).IsGreaterThan(g.Node("a").Y!.Value);
-        await Assert.That(g.Edge_("a", "b").Y!.Value).IsLessThan(g.Node("b").Y!.Value);
+        await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
+        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsGreaterThan(g.Node("a").Y!.Value);
+        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsLessThan(g.Node("b").Y!.Value);
     }
 
     [Test]
@@ -163,8 +163,8 @@ public class LayoutTests
             ("a", 100.0 / 2, 100.0 / 2),
             ("b", 100.0 / 2, 100 + 200 + 100.0 / 2));
         // One arrow should point down, one up
-        await Assert.That(g.Edge_("a", "b").Points![1].Y).IsGreaterThan(g.Edge_("a", "b").Points![0].Y);
-        await Assert.That(g.Edge_("b", "a").Points![0].Y).IsGreaterThan(g.Edge_("b", "a").Points![1].Y);
+        await Assert.That(g.FindEdgeLabel("a", "b").Points![1].Y).IsGreaterThan(g.FindEdgeLabel("a", "b").Points![0].Y);
+        await Assert.That(g.FindEdgeLabel("b", "a").Points![0].Y).IsGreaterThan(g.FindEdgeLabel("b", "a").Points![1].Y);
     }
 
     [Test]
@@ -176,7 +176,7 @@ public class LayoutTests
         g.SetEdge("a", "b");
         Layout.Run(g);
 
-        var points = g.Edge_("a", "b").Points!;
+        var points = g.FindEdgeLabel("a", "b").Points!;
         await Assert.That(points.Count).IsEqualTo(3);
         await AssertPoints(points,
             (100.0 / 2, 100), // intersect with bottom of a
@@ -193,7 +193,7 @@ public class LayoutTests
         g.SetEdge("a", "b", new() { Minlen = 2 });
         Layout.Run(g);
 
-        var points = g.Edge_("a", "b").Points!;
+        var points = g.FindEdgeLabel("a", "b").Points!;
         await Assert.That(points.Count).IsEqualTo(5);
         await AssertPoints(points,
             (100.0 / 2, 100), // intersect with bottom of a
@@ -217,7 +217,7 @@ public class LayoutTests
         Layout.Run(g);
 
         var nodeA = g.Node("a");
-        var points = g.Edge_("a", "a").Points!;
+        var points = g.FindEdgeLabel("a", "a").Points!;
         await Assert.That(points.Count).IsEqualTo(7);
         foreach (var point in points)
         {
@@ -344,11 +344,11 @@ public class LayoutTests
         Layout.Run(g);
         if (rankdir is "TB" or "BT")
         {
-            await Assert.That(g.Edge_("a", "b").X!.Value).IsEqualTo(1000.0 / 2);
+            await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(1000.0 / 2);
         }
         else
         {
-            await Assert.That(g.Edge_("a", "b").Y!.Value).IsEqualTo(2000.0 / 2);
+            await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsEqualTo(2000.0 / 2);
         }
     }
 

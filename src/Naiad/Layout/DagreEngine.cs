@@ -79,7 +79,7 @@ class DagreEngine : ILayoutEngine
         for (var i = 0; i < diagram.Edges.Count; i++)
         {
             var edge = diagram.Edges[i];
-            var label = graph.Edge_(edge.SourceId, edge.TargetId, edgeNames[i]);
+            var label = graph.FindEdgeLabel(edge.SourceId, edge.TargetId, edgeNames[i]);
             edge.Points.Clear();
             if (label.Points != null)
             {

@@ -39,11 +39,11 @@ public class NestingGraphTests
 
         var topToA = g.OutEdges(borderTop!, "a")!;
         await Assert.That(topToA.Count).IsEqualTo(1);
-        await Assert.That(g.Edge_(topToA[0]).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(topToA[0]).Minlen).IsEqualTo(1);
 
         var aToBottom = g.OutEdges("a", borderBottom!)!;
         await Assert.That(aToBottom.Count).IsEqualTo(1);
-        await Assert.That(g.Edge_(aToBottom[0]).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(aToBottom[0]).Minlen).IsEqualTo(1);
 
         var topNode = g.Node(borderTop!);
         await Assert.That(topNode.Width).IsEqualTo(0);
@@ -74,11 +74,11 @@ public class NestingGraphTests
 
         var sg1TopToSg2Top = g.OutEdges(sg1Top!, sg2Top!)!;
         await Assert.That(sg1TopToSg2Top.Count).IsEqualTo(1);
-        await Assert.That(g.Edge_(sg1TopToSg2Top[0]).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(sg1TopToSg2Top[0]).Minlen).IsEqualTo(1);
 
         var sg2BottomToSg1Bottom = g.OutEdges(sg2Bottom!, sg1Bottom!)!;
         await Assert.That(sg2BottomToSg1Bottom.Count).IsEqualTo(1);
-        await Assert.That(g.Edge_(sg2BottomToSg1Bottom[0]).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(sg2BottomToSg1Bottom[0]).Minlen).IsEqualTo(1);
     }
 
     [Test]
@@ -94,8 +94,8 @@ public class NestingGraphTests
 
         var top = g.Node("sg").BorderTop;
         var bot = g.Node("sg").BorderBottom;
-        await Assert.That(g.Edge_(top!, "x").Weight!.Value).IsGreaterThan(300);
-        await Assert.That(g.Edge_("x", bot!).Weight!.Value).IsGreaterThan(300);
+        await Assert.That(g.FindEdgeLabel(top!, "x").Weight!.Value).IsGreaterThan(300);
+        await Assert.That(g.FindEdgeLabel("x", bot!).Weight!.Value).IsGreaterThan(300);
     }
 
     [Test]
@@ -126,7 +126,7 @@ public class NestingGraphTests
         var rootToA = g.OutEdges(root!, "a")!;
         await Assert.That(rootToA.Count).IsEqualTo(1);
 
-        var label = g.Edge_(rootToA[0]);
+        var label = g.FindEdgeLabel(rootToA[0]);
         await Assert.That(label.Weight).IsEqualTo(0);
         await Assert.That(label.Minlen).IsEqualTo(1);
     }
@@ -143,7 +143,7 @@ public class NestingGraphTests
         var rootToA = g.OutEdges(root!, "a")!;
         await Assert.That(rootToA.Count).IsEqualTo(1);
 
-        var label = g.Edge_(rootToA[0]);
+        var label = g.FindEdgeLabel(rootToA[0]);
         await Assert.That(label.Weight).IsEqualTo(0);
         await Assert.That(label.Minlen).IsEqualTo(3);
     }
@@ -161,7 +161,7 @@ public class NestingGraphTests
         var rootToA = g.OutEdges(root!, "a")!;
         await Assert.That(rootToA.Count).IsEqualTo(1);
 
-        var label = g.Edge_(rootToA[0]);
+        var label = g.FindEdgeLabel(rootToA[0]);
         await Assert.That(label.Weight).IsEqualTo(0);
         await Assert.That(label.Minlen).IsEqualTo(5);
     }
@@ -182,7 +182,7 @@ public class NestingGraphTests
     {
         g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
-        await Assert.That(g.Edge_("a", "b").Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel("a", "b").Minlen).IsEqualTo(1);
     }
 
     [Test]
@@ -191,7 +191,7 @@ public class NestingGraphTests
         g.SetParent("a", "sg1");
         g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
-        await Assert.That(g.Edge_("a", "b").Minlen).IsEqualTo(3);
+        await Assert.That(g.FindEdgeLabel("a", "b").Minlen).IsEqualTo(3);
     }
 
     [Test]
@@ -201,7 +201,7 @@ public class NestingGraphTests
         g.SetParent("a", "sg2");
         g.SetEdge("a", "b", new() { Minlen = 1 });
         NestingGraph.Run(g);
-        await Assert.That(g.Edge_("a", "b").Minlen).IsEqualTo(5);
+        await Assert.That(g.FindEdgeLabel("a", "b").Minlen).IsEqualTo(5);
     }
 
     [Test]
@@ -229,13 +229,13 @@ public class NestingGraphTests
         var sg2Top = g.Node("sg2").BorderTop!;
         var sg2Bot = g.Node("sg2").BorderBottom!;
 
-        await Assert.That(g.Edge_(root, sg1Top).Minlen).IsEqualTo(3);
-        await Assert.That(g.Edge_(sg1Top, sg2Top).Minlen).IsEqualTo(1);
-        await Assert.That(g.Edge_(sg1Top, "a").Minlen).IsEqualTo(2);
-        await Assert.That(g.Edge_("a", sg1Bot).Minlen).IsEqualTo(2);
-        await Assert.That(g.Edge_(sg2Top, "b").Minlen).IsEqualTo(1);
-        await Assert.That(g.Edge_("b", sg2Bot).Minlen).IsEqualTo(1);
-        await Assert.That(g.Edge_(sg2Bot, sg1Bot).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(root, sg1Top).Minlen).IsEqualTo(3);
+        await Assert.That(g.FindEdgeLabel(sg1Top, sg2Top).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(sg1Top, "a").Minlen).IsEqualTo(2);
+        await Assert.That(g.FindEdgeLabel("a", sg1Bot).Minlen).IsEqualTo(2);
+        await Assert.That(g.FindEdgeLabel(sg2Top, "b").Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel("b", sg2Bot).Minlen).IsEqualTo(1);
+        await Assert.That(g.FindEdgeLabel(sg2Bot, sg1Bot).Minlen).IsEqualTo(1);
     }
 
     // ----- cleanup -----

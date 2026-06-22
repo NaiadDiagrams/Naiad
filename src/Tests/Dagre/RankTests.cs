@@ -65,7 +65,7 @@ public class RankTests
         {
             var vRank = g.Node(e.V).Rank!.Value;
             var wRank = g.Node(e.W).Rank!.Value;
-            await Assert.That(wRank - vRank).IsGreaterThanOrEqualTo(g.Edge_(e).Minlen!.Value);
+            await Assert.That(wRank - vRank).IsGreaterThanOrEqualTo(g.FindEdgeLabel(e).Minlen!.Value);
         }
     }
 

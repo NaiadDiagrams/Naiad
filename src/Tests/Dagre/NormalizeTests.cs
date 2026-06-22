@@ -89,7 +89,7 @@ public class NormalizeTests
             Normalize.Run(g);
 
             await Assert.That(g.Successors("a")!.Count).IsEqualTo(1);
-            await Assert.That(g.Edge_("a", g.Successors("a")![0]).Weight).IsEqualTo(2);
+            await Assert.That(g.FindEdgeLabel("a", g.Successors("a")![0]).Weight).IsEqualTo(2);
         }
     }
 
@@ -123,7 +123,7 @@ public class NormalizeTests
             Normalize.Run(g);
             Normalize.Undo(g);
 
-            await Assert.That(g.Edge_("a", "b").ForwardName).IsEqualTo("bar");
+            await Assert.That(g.FindEdgeLabel("a", "b").ForwardName).IsEqualTo("bar");
         }
 
         [Test]
@@ -141,7 +141,7 @@ public class NormalizeTests
 
             Normalize.Undo(g);
 
-            var points = g.Edge_("a", "b").Points!;
+            var points = g.FindEdgeLabel("a", "b").Points!;
             await Assert.That(points.Count).IsEqualTo(1);
             await Assert.That(points[0].X).IsEqualTo(5);
             await Assert.That(points[0].Y).IsEqualTo(10);
@@ -170,7 +170,7 @@ public class NormalizeTests
 
             Normalize.Undo(g);
 
-            var points = g.Edge_("a", "b").Points!;
+            var points = g.FindEdgeLabel("a", "b").Points!;
             await Assert.That(points.Count).IsEqualTo(3);
             await Assert.That(points[0].X).IsEqualTo(5);
             await Assert.That(points[0].Y).IsEqualTo(10);
@@ -197,7 +197,7 @@ public class NormalizeTests
 
             Normalize.Undo(g);
 
-            var label = g.Edge_("a", "b");
+            var label = g.FindEdgeLabel("a", "b");
             await Assert.That(label.X).IsEqualTo(50);
             await Assert.That(label.Y).IsEqualTo(60);
             await Assert.That(label.Width).IsEqualTo(20);
@@ -221,7 +221,7 @@ public class NormalizeTests
 
             Normalize.Undo(g);
 
-            var label = g.Edge_("a", "b");
+            var label = g.FindEdgeLabel("a", "b");
             await Assert.That(label.X).IsEqualTo(50);
             await Assert.That(label.Y).IsEqualTo(60);
             await Assert.That(label.Width).IsEqualTo(20);
@@ -255,12 +255,12 @@ public class NormalizeTests
 
             await Assert.That(g.HasEdge("a", "b")).IsFalse();
 
-            var barPoints = g.Edge_("a", "b", "bar").Points!;
+            var barPoints = g.FindEdgeLabel("a", "b", "bar").Points!;
             await Assert.That(barPoints.Count).IsEqualTo(1);
             await Assert.That(barPoints[0].X).IsEqualTo(5);
             await Assert.That(barPoints[0].Y).IsEqualTo(10);
 
-            var fooPoints = g.Edge_("a", "b", "foo").Points!;
+            var fooPoints = g.FindEdgeLabel("a", "b", "foo").Points!;
             await Assert.That(fooPoints.Count).IsEqualTo(1);
             await Assert.That(fooPoints[0].X).IsEqualTo(15);
             await Assert.That(fooPoints[0].Y).IsEqualTo(20);

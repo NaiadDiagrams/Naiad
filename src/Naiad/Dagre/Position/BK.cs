@@ -347,7 +347,7 @@ static class BK
             foreach (var e in blockG.InEdgesOf(elem))
             {
                 var xsV = xs.GetValueOrDefault(e.V, 0);
-                var edgeWeight = blockG.Edge_(e);
+                var edgeWeight = blockG.FindEdgeLabel(e);
                 acc = Math.Max(acc, xsV + (edgeWeight?.Weight ?? 0));
             }
 
@@ -362,7 +362,7 @@ static class BK
             foreach (var e in blockG.OutEdgesOf(elem))
             {
                 var xsW = xs.GetValueOrDefault(e.W, 0);
-                var edgeWeight = blockG.Edge_(e);
+                var edgeWeight = blockG.FindEdgeLabel(e);
                 min = Math.Min(min, xsW - (edgeWeight?.Weight ?? 0));
             }
 
@@ -422,7 +422,7 @@ static class BK
                     {
                         if (root.TryGetValue(u, out var uRoot))
                         {
-                            var prevMax = blockGraph.Edge_(uRoot, vRoot);
+                            var prevMax = blockGraph.FindEdgeLabel(uRoot, vRoot);
                             var prevMaxVal = prevMax?.Weight ?? 0;
                             blockGraph.SetEdge(uRoot, vRoot, new() { Weight = Math.Max(sepFn(graph, v, u), prevMaxVal) });
                         }

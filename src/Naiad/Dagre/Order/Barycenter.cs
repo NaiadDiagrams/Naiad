@@ -13,7 +13,7 @@ static class Barycenter
             foreach (var e in graph.InEdgesOf(v))
             {
                 hasInEdges = true;
-                var edge = graph.Edge_(e);
+                var edge = graph.FindEdgeLabel(e);
                 var nodeU = graph.Node(e.V);
                 sum += edge.Weight!.Value * nodeU.Order!.Value;
                 weight += edge.Weight!.Value;

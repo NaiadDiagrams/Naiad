@@ -72,8 +72,8 @@ static class Layout
 
         foreach (var e in inputGraph.Edges())
         {
-            var inputLabel = inputGraph.Edge_(e);
-            var layoutLabel = layoutGraph.Edge_(e);
+            var inputLabel = inputGraph.FindEdgeLabel(e);
+            var layoutLabel = layoutGraph.FindEdgeLabel(e);
 
             inputLabel.Points = layoutLabel.Points;
             if (layoutLabel.X.HasValue)
@@ -140,7 +140,7 @@ static class Layout
 
         foreach (var e in inputGraph.Edges())
         {
-            var edge = inputGraph.Edge_(e);
+            var edge = inputGraph.FindEdgeLabel(e);
             var newEdge = new EdgeLabel
             {
                 // defaults
@@ -178,7 +178,7 @@ static class Layout
         graph.Ranksep /= 2;
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             edge.Minlen *= 2;
             if (!edge.Labelpos!.Equals("c", StringComparison.OrdinalIgnoreCase))
             {
@@ -204,7 +204,7 @@ static class Layout
     {
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             if (edge.Width is { } width && width != 0 && edge.Height is { } height && height != 0)
             {
                 var v = g.Node(e.V);
@@ -244,7 +244,7 @@ static class Layout
             var node = g.Node(v);
             if (node.Dummy == "edge-proxy")
             {
-                g.Edge_(node.EdgeObj!).LabelRank = node.Rank;
+                g.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
                 g.RemoveNode(v);
             }
         }
@@ -276,7 +276,7 @@ static class Layout
 
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
                 GetExtremes(edge.X!.Value, edge.Y!.Value, edge.Width!.Value, edge.Height!.Value);
@@ -295,7 +295,7 @@ static class Layout
 
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             var points = edge.Points!;
             for (var i = 0; i < points.Count; i++)
             {
@@ -324,7 +324,7 @@ static class Layout
     {
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             var nodeV = g.Node(e.V);
             var nodeW = g.Node(e.W);
             Point p1;
@@ -350,7 +350,7 @@ static class Layout
     {
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
                 if (edge.Labelpos == "l" || edge.Labelpos == "r")
@@ -375,7 +375,7 @@ static class Layout
     {
         foreach (var e in g.Edges())
         {
-            var edge = g.Edge_(e);
+            var edge = g.FindEdgeLabel(e);
             if (edge.Reversed == true)
             {
                 edge.Points!.Reverse();
@@ -419,7 +419,7 @@ static class Layout
             {
                 var node = g.Node(e.V);
                 node.SelfEdges ??= [];
-                node.SelfEdges.Add(new() { E = e, Label = g.Edge_(e) });
+                node.SelfEdges.Add(new() { E = e, Label = g.FindEdgeLabel(e) });
                 g.RemoveEdge(e);
             }
         }
