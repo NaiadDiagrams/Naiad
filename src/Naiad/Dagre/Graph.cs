@@ -75,6 +75,14 @@ sealed class Graph
 
     public List<string> Nodes() => nodesMap.Keys();
 
+    /// <summary>The nodes paired with their labels, in insertion order — a snapshot (safe to remove nodes
+    /// while iterating), avoiding the per-node <see cref="NodeLabel"/> lookup that <see cref="Nodes"/> forces.</summary>
+    public List<KeyValuePair<string, NodeLabel>> NodeEntries() => nodesMap.Entries();
+
+    /// <summary>The node labels in insertion order — the labels of <see cref="Nodes"/> without the per-node
+    /// lookup. A snapshot (safe to mutate the graph while iterating), mirroring <see cref="EdgeLabels"/>.</summary>
+    public List<NodeLabel> NodeLabels() => nodesMap.Values();
+
     public List<string> Sources() => Nodes().Where(v => inMap[v].Count == 0).ToList();
 
     public Graph SetNode(string name)
@@ -403,7 +411,12 @@ sealed class Graph
     {
         if (IsDirected)
         {
-            return inMap.TryGetValue(v, out var setV) ? FilterEdges(setV, v, w) : null;
+            if (inMap.TryGetValue(v, out var setV))
+            {
+                return FilterEdges(setV, v, w);
+            }
+
+            return null;
         }
 
         return NodeEdges(v, w);
@@ -413,7 +426,12 @@ sealed class Graph
     {
         if (IsDirected)
         {
-            return outMap.TryGetValue(v, out var setV) ? FilterEdges(setV, v, w) : null;
+            if (outMap.TryGetValue(v, out var setV))
+            {
+                return FilterEdges(setV, v, w);
+            }
+
+            return null;
         }
 
         return NodeEdges(v, w);
@@ -469,17 +487,19 @@ sealed class Graph
 
     static void DecrementOrRemoveEntry(OrderedMap<int> map, string k)
     {
-        if (map.TryGetValue(k, out var count))
+        if (!map.TryGetValue(k, out var count))
         {
-            count--;
-            if (count == 0)
-            {
-                map.Remove(k);
-            }
-            else
-            {
-                map[k] = count;
-            }
+            return;
+        }
+
+        count--;
+        if (count == 0)
+        {
+            map.Remove(k);
+        }
+        else
+        {
+            map[k] = count;
         }
     }
 

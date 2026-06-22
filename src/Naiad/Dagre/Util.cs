@@ -25,10 +25,9 @@ static class Util
     public static Graph Simplify(Graph graph)
     {
         var simplified = new Graph().SetGraph(graph.Label);
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
             // Copy the label through verbatim — a node may legitimately have none (null).
-            graph.TryGetNodeLabel(v, out var node);
             simplified.SetNode(v, node);
         }
 
@@ -51,12 +50,11 @@ static class Util
     public static Graph AsNonCompoundGraph(Graph graph)
     {
         var simplified = new Graph(multigraph: graph.IsMultigraph).SetGraph(graph.Label);
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
             if (graph.Children(v).Count == 0)
             {
                 // Copy the label through verbatim — a node may legitimately have none (null).
-                graph.TryGetNodeLabel(v, out var node);
                 simplified.SetNode(v, node);
             }
         }
@@ -121,9 +119,8 @@ static class Util
             layering.Add([]);
         }
 
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
-            var node = graph.NodeLabel(v);
             if (node.Rank is { } rank)
             {
                 while (layering.Count <= rank)
@@ -147,11 +144,10 @@ static class Util
 
     public static void NormalizeRanks(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(_ => graph.NodeLabel(_).Rank ?? double.MaxValue).ToList();
+        var nodeRanks = graph.NodeLabels().Select(n => n.Rank ?? double.MaxValue).ToList();
         var min = ApplyMin(nodeRanks);
-        foreach (var v in graph.Nodes())
+        foreach (var node in graph.NodeLabels())
         {
-            var node = graph.NodeLabel(v);
             if (node.Rank.HasValue)
             {
                 node.Rank -= (int) min;
@@ -161,15 +157,15 @@ static class Util
 
     public static void RemoveEmptyRanks(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(v => graph.NodeLabel(v).Rank).Where(r => r.HasValue).Select(r => (double) r!.Value).ToList();
+        var nodeRanks = graph.NodeLabels().Select(n => n.Rank).Where(r => r.HasValue).Select(r => (double) r!.Value).ToList();
         var offset = (int) ApplyMin(nodeRanks);
 
         var layers = new List<List<string>?>();
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
             // A node with no rank (e.g. a compound subgraph parent) has no place in the rank layers, so
             // skip it.
-            if (graph.NodeLabel(v).Rank is not { } rankValue)
+            if (node.Rank is not { } rankValue)
             {
                 continue;
             }
@@ -204,7 +200,7 @@ static class Util
 
     public static double MaxRank(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(_ => graph.NodeLabel(_).Rank ?? double.Epsilon).ToList();
+        var nodeRanks = graph.NodeLabels().Select(n => n.Rank ?? double.Epsilon).ToList();
         return ApplyMax(nodeRanks);
     }
 

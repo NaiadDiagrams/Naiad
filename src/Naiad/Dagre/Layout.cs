@@ -289,9 +289,8 @@ static class Layout
     static void AssignRankMinMax(Graph graph)
     {
         var maxRank = 0;
-        foreach (var v in graph.Nodes())
+        foreach (var node in graph.NodeLabels())
         {
-            var node = graph.NodeLabel(v);
             if (node.BorderTop != null)
             {
                 node.MinRank = graph.NodeLabel(node.BorderTop).Rank;
@@ -305,9 +304,8 @@ static class Layout
 
     static void RemoveEdgeLabelProxies(Graph graph)
     {
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
-            var node = graph.NodeLabel(v);
             if (node.Dummy == "edge-proxy")
             {
                 graph.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
@@ -334,9 +332,8 @@ static class Layout
             maxY = Math.Max(maxY, y + h / 2);
         }
 
-        foreach (var v in graph.Nodes())
+        foreach (var node in graph.NodeLabels())
         {
-            var node = graph.NodeLabel(v);
             GetExtremes(node.X!.Value, node.Y!.Value, node.Width, node.Height);
         }
 
@@ -352,9 +349,8 @@ static class Layout
         minX -= marginX;
         minY -= marginY;
 
-        foreach (var v in graph.Nodes())
+        foreach (var node in graph.NodeLabels())
         {
-            var node = graph.NodeLabel(v);
             node.X -= minX;
             node.Y -= minY;
         }
@@ -451,11 +447,10 @@ static class Layout
 
     static void RemoveBorderNodes(Graph graph)
     {
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
             if (graph.Children(v).Count != 0)
             {
-                var node = graph.NodeLabel(v);
                 var t = graph.NodeLabel(node.BorderTop!);
                 var b = graph.NodeLabel(node.BorderBottom!);
                 var l = graph.NodeLabel(node.BorderLeft![node.BorderLeft!.Count - 1]);
@@ -468,9 +463,9 @@ static class Layout
             }
         }
 
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
-            if (graph.NodeLabel(v).Dummy == "border")
+            if (node.Dummy == "border")
             {
                 graph.RemoveNode(v);
             }
@@ -522,9 +517,8 @@ static class Layout
 
     static void PositionSelfEdges(Graph graph)
     {
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
-            var node = graph.NodeLabel(v);
             if (node.Dummy == "selfedge")
             {
                 var selfNode = graph.NodeLabel(node.EdgeObj!.V);

@@ -64,9 +64,8 @@ static class Order
 
         // Visit the nodes in their original order in the graph, and add each
         // node to the ranks(s) that it belongs to.
-        foreach (var v in graph.Nodes())
+        foreach (var (v, node) in graph.NodeEntries())
         {
-            var node = graph.NodeLabel(v);
             if (node.Rank != null)
             {
                 AddNodeToRank(node.Rank.Value, v);

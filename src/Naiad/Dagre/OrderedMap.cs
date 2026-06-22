@@ -46,6 +46,10 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
     /// <summary>Values in insertion order (a snapshot).</summary>
     public List<TValue> Values() => [..map.Values];
 
+    /// <summary>Key/value pairs in insertion order (a snapshot, safe to mutate the map while iterating the
+    /// result). Carries each value alongside its key, so callers avoid a second lookup per key.</summary>
+    public List<KeyValuePair<string, TValue>> Entries() => [..map];
+
     /// <summary>Keys in insertion order, enumerated without allocating a snapshot list. Unlike
     /// <see cref="Keys"/> the map must not be mutated while the result is iterated.</summary>
     public KeyEnumerable EnumerateKeys() => new(map);
