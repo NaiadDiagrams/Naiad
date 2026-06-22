@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 // Port of dagre's test/data/list-test.ts.
 // The C# port models list entries as `ListNode` subclasses (the TS uses plain objects with a
 // `[key: string]: unknown` index signature). We use small typed payload subclasses so the FIFO

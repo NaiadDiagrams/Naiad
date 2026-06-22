@@ -10,7 +10,7 @@ public class InitOrderTests
     static List<string> Sorted(List<string> vs) =>
         vs.OrderBy(v => v, StringComparer.Ordinal).ToList();
 
-    static string Join(IEnumerable<string> vs) => string.Join(",", vs);
+    static string Join(IEnumerable<string> vs) => string.Join(',', vs);
 
     [Test]
     public async Task AssignsNonOverlappingOrdersForEachRankInATree()

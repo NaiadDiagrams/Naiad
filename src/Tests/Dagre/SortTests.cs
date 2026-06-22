@@ -1,8 +1,6 @@
-namespace Naiad.Dagre.Tests;
-
 public class SortTests
 {
-    static string Join(List<string> vs) => string.Join(",", vs);
+    static string Join(List<string> vs) => string.Join(',', vs);
 
     [Test]
     public async Task SortsNodesByBarycenter()

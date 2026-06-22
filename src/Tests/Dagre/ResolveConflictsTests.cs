@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 public class ResolveConflictsTests
 {
     Graph constraintGraph = null!;
@@ -10,7 +8,7 @@ public class ResolveConflictsTests
     static List<ResolvedEntry> SortByFirstV(List<ResolvedEntry> entries) =>
         entries.OrderBy(e => e.Vs[0], StringComparer.Ordinal).ToList();
 
-    static string Join(List<string> vs) => string.Join(",", vs);
+    static string Join(List<string> vs) => string.Join(',', vs);
 
     [Test]
     public async Task ReturnsBackNodesUnchangedWhenNoConstraintsExist()

@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 // Ported from .dagre-ref/dagre/test/position-test.ts
 public class PositionTests
 {

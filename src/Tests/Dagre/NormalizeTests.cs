@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 // Port of dagre's test/normalize-test.ts.
 public class NormalizeTests
 {
