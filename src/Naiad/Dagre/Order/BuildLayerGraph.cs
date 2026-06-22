@@ -20,38 +20,40 @@ static class BuildLayerGraph
             var node = graph.NodeLabel(v);
             var parent = graph.Parent(v);
 
-            if (node.Rank == rank ||
-                (node is { MinRank: not null, MaxRank: not null } &&
-                 node.MinRank <= rank && rank <= node.MaxRank))
+            if (node.Rank != rank &&
+                (node is not {MinRank: not null, MaxRank: not null} ||
+                 !(node.MinRank <= rank) || !(rank <= node.MaxRank)))
             {
-                result.SetNode(v);
-                result.SetParent(v, parent ?? root);
+                continue;
+            }
 
-                // This assumes we have only short edges!
-                var edges = relationship == "inEdges" ? graph.InEdgesOf(v) : graph.OutEdgesOf(v);
-                foreach (var e in edges)
-                {
-                    var u = e.V == v ? e.W : e.V;
-                    var weight = result.TryGetEdgeLabel(u, v, out var existing) ? existing.Weight!.Value : 0;
-                    result.SetEdge(
-                        u,
-                        v,
-                        new()
-                        {
-                            Weight = graph.FindEdgeLabel(e).Weight!.Value + weight
-                        });
-                }
+            result.SetNode(v);
+            result.SetParent(v, parent ?? root);
 
-                if (node.MinRank != null)
-                {
-                    result.SetNode(
-                        v,
-                        new()
-                        {
-                            BorderLeftId = node.BorderLeft![rank],
-                            BorderRightId = node.BorderRight![rank]
-                        });
-                }
+            // This assumes we have only short edges!
+            var edges = relationship == "inEdges" ? graph.InEdgesOf(v) : graph.OutEdgesOf(v);
+            foreach (var e in edges)
+            {
+                var u = e.V == v ? e.W : e.V;
+                var weight = result.TryGetEdgeLabel(u, v, out var existing) ? existing.Weight!.Value : 0;
+                result.SetEdge(
+                    u,
+                    v,
+                    new()
+                    {
+                        Weight = graph.FindEdgeLabel(e).Weight!.Value + weight
+                    });
+            }
+
+            if (node.MinRank != null)
+            {
+                result.SetNode(
+                    v,
+                    new()
+                    {
+                        BorderLeftId = node.BorderLeft![rank],
+                        BorderRightId = node.BorderRight![rank]
+                    });
             }
         }
 
