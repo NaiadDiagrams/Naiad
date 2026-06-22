@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 // Port of dagre's test/util-test.ts.
 public class UtilTests
 {

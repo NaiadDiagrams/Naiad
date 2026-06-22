@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 // Ported from .dagre-ref/dagre/test/position/bk-test.ts
 public class BkTests
 {
@@ -11,8 +9,6 @@ public class BkTests
         // In JS these are undefined unless a test sets them; the tests that exercise separation always
         // assign them explicitly. We seed dagre's defaults so the unused values don't NPE in C#.
         graph = new Graph().SetGraph(new() { Nodesep = 50, Edgesep = 20, Ranksep = 50 });
-
-    // ---- helpers ----------------------------------------------------------
 
     static Dictionary<string, string> StrMap(params (string K, string V)[] entries)
     {

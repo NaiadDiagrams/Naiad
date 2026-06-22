@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 /// <summary>
 /// Port of dagre's <c>test/layout-test.ts</c> — the big end-to-end layout test.
 /// </summary>

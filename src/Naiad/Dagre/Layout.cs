@@ -93,7 +93,7 @@ static class Layout
     static Graph BuildLayoutGraph(Graph inputGraph)
     {
         var graph = new Graph(multigraph: true, compound: true);
-        var graphLabel = inputGraph.GraphLabel;
+        var graphLabel = inputGraph.GraphLabel!;
 
         var newGraph = new GraphLabel
         {
@@ -104,16 +104,56 @@ static class Layout
             Rankdir = "TB",
             Rankalign = "center"
         };
-        if (graphLabel?.Nodesep is { } gNodesep) newGraph.Nodesep = gNodesep;
-        if (graphLabel?.Edgesep is { } gEdgesep) newGraph.Edgesep = gEdgesep;
-        if (graphLabel?.Ranksep is { } gRanksep) newGraph.Ranksep = gRanksep;
-        if (graphLabel?.Marginx is { } gMarginx) newGraph.Marginx = gMarginx;
-        if (graphLabel?.Marginy is { } gMarginy) newGraph.Marginy = gMarginy;
-        if (graphLabel?.Acyclicer is { } gAcyclicer) newGraph.Acyclicer = gAcyclicer;
-        if (graphLabel?.Ranker is { } gRanker) newGraph.Ranker = gRanker;
-        if (graphLabel?.Rankdir is { } gRankdir) newGraph.Rankdir = gRankdir;
-        if (graphLabel?.Align is { } gAlign) newGraph.Align = gAlign;
-        if (graphLabel?.Rankalign is { } gRankalign) newGraph.Rankalign = gRankalign;
+        if (graphLabel.Nodesep is { } gNodesep)
+        {
+            newGraph.Nodesep = gNodesep;
+        }
+
+        if (graphLabel.Edgesep is { } gEdgesep)
+        {
+            newGraph.Edgesep = gEdgesep;
+        }
+
+        if (graphLabel.Ranksep is { } gRanksep)
+        {
+            newGraph.Ranksep = gRanksep;
+        }
+
+        if (graphLabel.Marginx is { } gMarginx)
+        {
+            newGraph.Marginx = gMarginx;
+        }
+
+        if (graphLabel.Marginy is { } gMarginy)
+        {
+            newGraph.Marginy = gMarginy;
+        }
+
+        if (graphLabel.Acyclicer is { } gAcyclicer)
+        {
+            newGraph.Acyclicer = gAcyclicer;
+        }
+
+        if (graphLabel.Ranker is { } gRanker)
+        {
+            newGraph.Ranker = gRanker;
+        }
+
+        if (graphLabel.Rankdir is { } gRankdir)
+        {
+            newGraph.Rankdir = gRankdir;
+        }
+
+        if (graphLabel.Align is { } gAlign)
+        {
+            newGraph.Align = gAlign;
+        }
+
+        if (graphLabel.Rankalign is { } gRankalign)
+        {
+            newGraph.Rankalign = gRankalign;
+        }
+
         graph.SetGraph(newGraph);
 
         foreach (var v in inputGraph.Nodes())
@@ -126,7 +166,7 @@ static class Layout
                     Height = node.Height,
                     Rank = node.Rank
                 }
-                : new NodeLabel { Width = 0, Height = 0 };
+                : new NodeLabel {Width = 0, Height = 0};
 
             graph.SetNode(v, newNode);
             var parent = inputGraph.Parent(v);
@@ -149,12 +189,35 @@ static class Layout
                 Labeloffset = 10,
                 Labelpos = "r"
             };
-            if (edge.Minlen is { } eMinlen) newEdge.Minlen = eMinlen;
-            if (edge.Weight is { } eWeight) newEdge.Weight = eWeight;
-            if (edge.Width is { } eWidth) newEdge.Width = eWidth;
-            if (edge.Height is { } eHeight) newEdge.Height = eHeight;
-            if (edge.Labeloffset is { } eLabeloffset) newEdge.Labeloffset = eLabeloffset;
-            if (edge.Labelpos is { } eLabelpos) newEdge.Labelpos = eLabelpos;
+            if (edge.Minlen is { } eMinlen)
+            {
+                newEdge.Minlen = eMinlen;
+            }
+
+            if (edge.Weight is { } eWeight)
+            {
+                newEdge.Weight = eWeight;
+            }
+
+            if (edge.Width is { } eWidth)
+            {
+                newEdge.Width = eWidth;
+            }
+
+            if (edge.Height is { } eHeight)
+            {
+                newEdge.Height = eHeight;
+            }
+
+            if (edge.Labeloffset is { } eLabeloffset)
+            {
+                newEdge.Labeloffset = eLabeloffset;
+            }
+
+            if (edge.Labelpos is { } eLabelpos)
+            {
+                newEdge.Labelpos = eLabelpos;
+            }
 
             graph.SetEdge(e, newEdge);
         }
@@ -178,16 +241,18 @@ static class Layout
         {
             var edge = graph.FindEdgeLabel(e);
             edge.Minlen *= 2;
-            if (!edge.Labelpos!.Equals("c", StringComparison.OrdinalIgnoreCase))
+            if (edge.Labelpos!.Equals("c", StringComparison.OrdinalIgnoreCase))
             {
-                if (graphLabel.Rankdir == "TB" || graphLabel.Rankdir == "BT")
-                {
-                    edge.Width += edge.Labeloffset;
-                }
-                else
-                {
-                    edge.Height += edge.Labeloffset;
-                }
+                continue;
+            }
+
+            if (graphLabel.Rankdir is "TB" or "BT")
+            {
+                edge.Width += edge.Labeloffset;
+            }
+            else
+            {
+                edge.Height += edge.Labeloffset;
             }
         }
     }
@@ -336,7 +401,7 @@ static class Layout
             else
             {
                 p1 = edge.Points[0];
-                p2 = edge.Points[edge.Points.Count - 1];
+                p2 = edge.Points[^1];
             }
 
             edge.Points.Insert(0, Util.IntersectRect(nodeV, p1));
@@ -351,7 +416,7 @@ static class Layout
             var edge = graph.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
-                if (edge.Labelpos == "l" || edge.Labelpos == "r")
+                if (edge.Labelpos is "l" or "r")
                 {
                     edge.Width -= edge.Labeloffset;
                 }

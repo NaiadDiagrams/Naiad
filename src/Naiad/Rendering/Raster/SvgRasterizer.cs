@@ -635,7 +635,7 @@ static class SvgRasterizer
              weight.Equals("bolder", StringComparison.OrdinalIgnoreCase) ||
              (int.TryParse(weight, out var numeric) && numeric >= 600));
 
-        static readonly System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<string>> fontFamilyCache = new();
+        static readonly ConcurrentDictionary<string, IReadOnlyList<string>> fontFamilyCache = new();
 
         // The family stack is almost always the single inherited theme font, so resolve each distinct string once.
         static IReadOnlyList<string> FontFamilies(string families) =>

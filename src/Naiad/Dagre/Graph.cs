@@ -182,11 +182,11 @@ sealed class Graph
         }
         else
         {
-            for (var ancestor = (string?) parent; ancestor != null; ancestor = Parent(ancestor))
+            for (var ancestor = parent; ancestor != null; ancestor = Parent(ancestor))
             {
                 if (ancestor == v)
                 {
-                    throw new InvalidOperationException("Setting " + parent + " as parent of " + v + " would create a cycle");
+                    throw new InvalidOperationException($"Setting {parent} as parent of {v} would create a cycle");
                 }
             }
 
