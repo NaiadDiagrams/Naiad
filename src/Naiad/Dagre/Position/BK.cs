@@ -554,10 +554,9 @@ static class BK
         }
 
         var xss = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
-        var adjustedLayering = layering;
         foreach (var vert in new[] { "u", "d" })
         {
-            adjustedLayering = vert == "u" ? layering : Enumerable.Reverse(layering).ToList();
+            var adjustedLayering = vert == "u" ? layering : Enumerable.Reverse(layering).ToList();
             foreach (var horiz in new[] { "l", "r" })
             {
                 if (horiz == "r")
