@@ -1,6 +1,4 @@
-// The TS test loops over RANKERS = ["longest-path", "tight-tree", "network-simplex",
-// "unknown-should-still-work"], running two cases per ranker. Each (ranker, case) pair
-// is expanded into its own [Test] here.
+// Naiad's Dagre uses a single ranker (network-simplex), so these exercise the rank phase directly.
 public class RankTests
 {
     Graph graph = null!;
@@ -18,45 +16,9 @@ public class RankTests
             .SetPath(["a", "f", "graph"]);
     }
 
-    // ---- longest-path ----
     [Test]
-    public Task LongestPath_RespectsTheMinlenAttribute() =>
-        RespectsTheMinlenAttribute("longest-path");
-
-    [Test]
-    public Task LongestPath_CanRankASingleNodeGraph() =>
-        CanRankASingleNodeGraph("longest-path");
-
-    // ---- tight-tree ----
-    [Test]
-    public Task TightTree_RespectsTheMinlenAttribute() =>
-        RespectsTheMinlenAttribute("tight-tree");
-
-    [Test]
-    public Task TightTree_CanRankASingleNodeGraph() =>
-        CanRankASingleNodeGraph("tight-tree");
-
-    // ---- network-simplex ----
-    [Test]
-    public Task NetworkSimplex_RespectsTheMinlenAttribute() =>
-        RespectsTheMinlenAttribute("network-simplex");
-
-    [Test]
-    public Task NetworkSimplex_CanRankASingleNodeGraph() =>
-        CanRankASingleNodeGraph("network-simplex");
-
-    // ---- unknown-should-still-work ----
-    [Test]
-    public Task Unknown_RespectsTheMinlenAttribute() =>
-        RespectsTheMinlenAttribute("unknown-should-still-work");
-
-    [Test]
-    public Task Unknown_CanRankASingleNodeGraph() =>
-        CanRankASingleNodeGraph("unknown-should-still-work");
-
-    async Task RespectsTheMinlenAttribute(string ranker)
+    public async Task RespectsTheMinlenAttribute()
     {
-        graph.Label.Ranker = ranker;
         Rank.Run(graph);
         foreach (var e in graph.Edges())
         {
@@ -66,16 +28,12 @@ public class RankTests
         }
     }
 
-    static async Task CanRankASingleNodeGraph(string ranker)
+    [Test]
+    public async Task CanRankASingleNodeGraph()
     {
-        // (no ranker, so the default ranker runs);
-        // `ranker` is only written onto the node and ignored by the algorithm.
-        // Rank is int? in C#, so the string assignment from the TS test is a no-op
-        // (the algorithm overwrites the node's rank regardless).
-        _ = ranker;
-        var graph = new Graph().SetGraph(new());
-        graph.SetNode("a", new());
-        Rank.Run(graph);
-        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+        var single = new Graph().SetGraph(new());
+        single.SetNode("a", new());
+        Rank.Run(single);
+        await Assert.That(single.NodeLabel("a").Rank).IsEqualTo(0);
     }
 }

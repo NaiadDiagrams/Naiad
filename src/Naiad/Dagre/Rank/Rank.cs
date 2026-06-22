@@ -21,36 +21,5 @@ static class Rank
      *       algorithm. Ranks can start at any index (including negative), we'll
      *       fix them up later.
      */
-    public static void Run(Graph graph)
-    {
-        var ranker = graph.Label.Ranker;
-        switch (ranker)
-        {
-            case "network-simplex":
-                NetworkSimplexRanker(graph);
-                break;
-            case "tight-tree":
-                TightTreeRanker(graph);
-                break;
-            case "longest-path":
-                LongestPathRanker(graph);
-                break;
-            case "none":
-                break;
-            default:
-                NetworkSimplexRanker(graph);
-                break;
-        }
-    }
-
-    // A fast and simple ranker, but results are far from optimal.
-    static void LongestPathRanker(Graph graph) => RankUtil.LongestPath(graph);
-
-    static void TightTreeRanker(Graph graph)
-    {
-        RankUtil.LongestPath(graph);
-        FeasibleTree.Run(graph);
-    }
-
-    static void NetworkSimplexRanker(Graph graph) => NetworkSimplex.Run(graph);
+    public static void Run(Graph graph) => NetworkSimplex.Run(graph);
 }

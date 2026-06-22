@@ -134,11 +134,6 @@ static class Layout
             newGraph.Acyclicer = gAcyclicer;
         }
 
-        if (graphLabel.Ranker is { } gRanker)
-        {
-            newGraph.Ranker = gRanker;
-        }
-
         if (graphLabel.Rankalign is { } gRankalign)
         {
             newGraph.Rankalign = gRankalign;

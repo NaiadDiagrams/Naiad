@@ -87,7 +87,6 @@ sealed class GraphLabel
     public double? Marginx;
     public double? Marginy;
     public string? Acyclicer;        // 'greedy'
-    public string? Ranker;           // 'network-simplex' | 'tight-tree' | 'longest-path'
     public string? Rankalign;        // 'top' | 'center' | 'bottom'
     public string? NestingRoot;
     public int? NodeRankFactor;
