@@ -21,8 +21,8 @@ public class LayoutTests
         Layout.Run(g);
 
         await AssertCoordinates(("a", 50.0 / 2, 100.0 / 2));
-        await Assert.That(g.Node("a").X!.Value).IsEqualTo(50.0 / 2);
-        await Assert.That(g.Node("a").Y!.Value).IsEqualTo(100.0 / 2);
+        await Assert.That(g.NodeLabel("a").X!.Value).IsEqualTo(50.0 / 2);
+        await Assert.That(g.NodeLabel("a").Y!.Value).IsEqualTo(100.0 / 2);
     }
 
     [Test]
@@ -98,8 +98,8 @@ public class LayoutTests
         }
         else
         {
-            p1X = g.Node("a").X!.Value;
-            p2X = g.Node("c").X!.Value;
+            p1X = g.NodeLabel("a").X!.Value;
+            p2X = g.NodeLabel("c").X!.Value;
         }
 
         await Assert.That(Math.Abs(p1X - p2X)).IsGreaterThan(1000);
@@ -145,8 +145,8 @@ public class LayoutTests
         Layout.Run(g);
 
         await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
-        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsGreaterThan(g.Node("a").Y!.Value);
-        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsLessThan(g.Node("b").Y!.Value);
+        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsGreaterThan(g.NodeLabel("a").Y!.Value);
+        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsLessThan(g.NodeLabel("b").Y!.Value);
     }
 
     [Test]
@@ -216,7 +216,7 @@ public class LayoutTests
         g.SetEdge("a", "a", new() { Width = 50, Height = 50 });
         Layout.Run(g);
 
-        var nodeA = g.Node("a");
+        var nodeA = g.NodeLabel("a");
         var points = g.FindEdgeLabel("a", "a").Points!;
         await Assert.That(points.Count).IsEqualTo(7);
         foreach (var point in points)
@@ -264,7 +264,7 @@ public class LayoutTests
         // force nodes x and y to be on different ranks, which we want our ranker
         // to avoid.
         Layout.Run(g);
-        await Assert.That(g.Node("x").Y!.Value).IsEqualTo(g.Node("y").Y!.Value);
+        await Assert.That(g.NodeLabel("x").Y!.Value).IsEqualTo(g.NodeLabel("y").Y!.Value);
     }
 
     [Test]
@@ -279,7 +279,7 @@ public class LayoutTests
         g.SetNode("sg", new());
         g.SetParent("c", "sg");
         Layout.Run(g);
-        await Assert.That(g.Node("b").Y!.Value - g.Node("a").Y!.Value).IsEqualTo(100);
+        await Assert.That(g.NodeLabel("b").Y!.Value - g.NodeLabel("a").Y!.Value).IsEqualTo(100);
     }
 
     [Test]
@@ -291,10 +291,10 @@ public class LayoutTests
 
         async Task Check()
         {
-            await Assert.That(g.Node("sg").Width).IsGreaterThan(50);
-            await Assert.That(g.Node("sg").Height).IsGreaterThan(50);
-            await Assert.That(g.Node("sg").X!.Value).IsGreaterThan(50.0 / 2);
-            await Assert.That(g.Node("sg").Y!.Value).IsGreaterThan(50.0 / 2);
+            await Assert.That(g.NodeLabel("sg").Width).IsGreaterThan(50);
+            await Assert.That(g.NodeLabel("sg").Height).IsGreaterThan(50);
+            await Assert.That(g.NodeLabel("sg").X!.Value).IsGreaterThan(50.0 / 2);
+            await Assert.That(g.NodeLabel("sg").Y!.Value).IsGreaterThan(50.0 / 2);
         }
 
         foreach (var rankdir in new[] { "tb", "bt", "lr", "rl" })
@@ -325,8 +325,8 @@ public class LayoutTests
         g.GraphLabel.Rankdir = rankdir;
         g.SetNode("a", new() { Width = 100, Height = 200 });
         Layout.Run(g);
-        await Assert.That(g.Node("a").X!.Value).IsEqualTo(100.0 / 2);
-        await Assert.That(g.Node("a").Y!.Value).IsEqualTo(200.0 / 2);
+        await Assert.That(g.NodeLabel("a").X!.Value).IsEqualTo(100.0 / 2);
+        await Assert.That(g.NodeLabel("a").Y!.Value).IsEqualTo(200.0 / 2);
     }
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> edge, labelpos = l
@@ -377,7 +377,7 @@ public class LayoutTests
         var acc = new Dictionary<string, (double X, double Y)>(StringComparer.Ordinal);
         foreach (var v in g.Nodes())
         {
-            var node = g.Node(v);
+            var node = g.NodeLabel(v);
             acc[v] = (node.X!.Value, node.Y!.Value);
         }
 

@@ -40,7 +40,7 @@ public class NetworkSimplexTests
     {
         g.SetNode("a");
         Ns(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
     }
 
     [Test]
@@ -48,8 +48,8 @@ public class NetworkSimplexTests
     {
         g.SetEdge("a", "b");
         Ns(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
     }
 
     [Test]
@@ -58,10 +58,10 @@ public class NetworkSimplexTests
         g.SetPath(["a", "b", "d"]);
         g.SetPath(["a", "c", "d"]);
         Ns(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("c").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(2);
     }
 
     [Test]
@@ -71,13 +71,13 @@ public class NetworkSimplexTests
         g.SetEdge("a", "c");
         g.SetEdge("c", "d", new() { Minlen = 2 });
         Ns(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
         // longest path biases towards the lowest rank it can assign. Since the
         // graph has no optimization opportunities we can assume that the longest
         // path ranking is used.
-        await Assert.That(g.Node("b").Rank).IsEqualTo(2);
-        await Assert.That(g.Node("c").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(3);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
     }
 
     [Test]
@@ -85,14 +85,14 @@ public class NetworkSimplexTests
     {
         g = gansnerGraph;
         Ns(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("c").Rank).IsEqualTo(2);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(3);
-        await Assert.That(g.Node("h").Rank).IsEqualTo(4);
-        await Assert.That(g.Node("e").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("f").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("g").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
+        await Assert.That(g.NodeLabel("h").Rank).IsEqualTo(4);
+        await Assert.That(g.NodeLabel("e").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("f").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("g").Rank).IsEqualTo(2);
     }
 
     [Test]
@@ -103,12 +103,12 @@ public class NetworkSimplexTests
         g.SetEdge("e", "d");
         g.SetEdge("b", "c", new() { Weight = 1, Minlen = 2 }, "multi");
         Ns(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
         // b -> c has minlen = 1 and minlen = 2, so it should be 2 ranks apart.
-        await Assert.That(g.Node("c").Rank).IsEqualTo(3);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(4);
-        await Assert.That(g.Node("e").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(3);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(4);
+        await Assert.That(g.NodeLabel("e").Rank).IsEqualTo(1);
     }
 
     // describe("leaveEdge")
@@ -248,13 +248,13 @@ public class NetworkSimplexTests
 
         NetworkSimplex.InitLowLimValues(graph, "a");
 
-        var a = graph.Node("a");
-        var b = graph.Node("b");
-        var c = graph.Node("c");
-        var d = graph.Node("d");
-        var e = graph.Node("e");
+        var a = graph.NodeLabel("a");
+        var b = graph.NodeLabel("b");
+        var c = graph.NodeLabel("c");
+        var d = graph.NodeLabel("d");
+        var e = graph.NodeLabel("e");
 
-        var lims = graph.Nodes().Select(v => graph.Node(v).Lim!.Value).ToList();
+        var lims = graph.Nodes().Select(v => graph.NodeLabel(v).Lim!.Value).ToList();
         lims.Sort();
         await Assert.That(lims).IsEquivalentTo(new List<int> { 1, 2, 3, 4, 5 });
 
@@ -299,7 +299,7 @@ public class NetworkSimplexTests
         await Assert.That(t.FindEdgeLabel("g", "f").Cutvalue).IsEqualTo(0);
 
         // ensure lim numbers look right
-        var lims = t.Nodes().Select(v => t.Node(v).Lim!.Value).ToList();
+        var lims = t.Nodes().Select(v => t.NodeLabel(v).Lim!.Value).ToList();
         lims.Sort();
         await Assert.That(lims).IsEquivalentTo(new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 });
     }
@@ -316,14 +316,14 @@ public class NetworkSimplexTests
         Util.NormalizeRanks(g);
 
         // check new ranks
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("c").Rank).IsEqualTo(2);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(3);
-        await Assert.That(g.Node("e").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("f").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("g").Rank).IsEqualTo(2);
-        await Assert.That(g.Node("h").Rank).IsEqualTo(4);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
+        await Assert.That(g.NodeLabel("e").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("f").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("g").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("h").Rank).IsEqualTo(4);
     }
 
     // describe("calcCutValue")

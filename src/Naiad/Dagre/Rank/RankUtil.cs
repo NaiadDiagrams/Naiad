@@ -29,7 +29,7 @@ static class RankUtil
 
         double Dfs(string v)
         {
-            var label = graph.Node(v);
+            var label = graph.NodeLabel(v);
             if (visited.ContainsKey(v))
             {
                 return label.Rank!.Value;
@@ -67,5 +67,5 @@ static class RankUtil
      * difference between the length of the edge and its minimum length.
      */
     public static int Slack(Graph graph, Edge edge) =>
-        graph.Node(edge.W).Rank!.Value - graph.Node(edge.V).Rank!.Value - graph.FindEdgeLabel(edge).Minlen!.Value;
+        graph.NodeLabel(edge.W).Rank!.Value - graph.NodeLabel(edge.V).Rank!.Value - graph.FindEdgeLabel(edge).Minlen!.Value;
 }

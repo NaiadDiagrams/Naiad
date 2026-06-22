@@ -50,13 +50,13 @@ public class BuildLayerGraphTests
 
         var lg = BuildLayerGraph.Run(g, 2, "inEdges");
 
-        await Assert.That(lg.Node("a").Order).IsEqualTo(1);
-        g.Node("a").Order = 99;
-        await Assert.That(lg.Node("a").Order).IsEqualTo(99);
+        await Assert.That(lg.NodeLabel("a").Order).IsEqualTo(1);
+        g.NodeLabel("a").Order = 99;
+        await Assert.That(lg.NodeLabel("a").Order).IsEqualTo(99);
 
-        await Assert.That(lg.Node("b").Order).IsEqualTo(2);
-        g.Node("b").Order = 99;
-        await Assert.That(lg.Node("b").Order).IsEqualTo(99);
+        await Assert.That(lg.NodeLabel("b").Order).IsEqualTo(2);
+        g.NodeLabel("b").Order = 99;
+        await Assert.That(lg.NodeLabel("b").Order).IsEqualTo(99);
     }
 
     [Test]

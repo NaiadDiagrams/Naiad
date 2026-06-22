@@ -19,9 +19,9 @@ public class SmokeTest
 
         Layout.Run(g);
 
-        var a = g.Node("a");
-        var b = g.Node("b");
-        var c = g.Node("c");
+        var a = g.NodeLabel("a");
+        var b = g.NodeLabel("b");
+        var c = g.NodeLabel("c");
 
         await Assert.That(a.X).IsNotNull();
         await Assert.That(a.Y).IsNotNull();
@@ -50,8 +50,8 @@ public class SmokeTest
         Layout.Run(g);
 
         // b and c are siblings on the same rank; a above, d below.
-        await Assert.That(g.Node("b").Y!.Value).IsEqualTo(g.Node("c").Y!.Value).Within(0.001);
-        await Assert.That(g.Node("a").Y!.Value).IsLessThan(g.Node("b").Y!.Value);
-        await Assert.That(g.Node("d").Y!.Value).IsGreaterThan(g.Node("b").Y!.Value);
+        await Assert.That(g.NodeLabel("b").Y!.Value).IsEqualTo(g.NodeLabel("c").Y!.Value).Within(0.001);
+        await Assert.That(g.NodeLabel("a").Y!.Value).IsLessThan(g.NodeLabel("b").Y!.Value);
+        await Assert.That(g.NodeLabel("d").Y!.Value).IsGreaterThan(g.NodeLabel("b").Y!.Value);
     }
 }

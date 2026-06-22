@@ -5,7 +5,7 @@ static class SortSubgraph
     public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false)
     {
         var movable = graph.Children(v);
-        var node = graph.Node(v);
+        var node = graph.NodeLabel(v);
         var bl = node?.BorderLeftId;
         var br = node?.BorderRightId;
         var subgraphs = new Dictionary<string, SortResult>(StringComparer.Ordinal);
@@ -43,9 +43,9 @@ static class SortSubgraph
             var blPredecessors = graph.Predecessors(bl);
             if (blPredecessors != null && blPredecessors.Count != 0)
             {
-                var blPred = graph.Node(blPredecessors[0]);
+                var blPred = graph.NodeLabel(blPredecessors[0]);
                 var brPredecessors = graph.Predecessors(br);
-                var brPred = graph.Node(brPredecessors![0]);
+                var brPred = graph.NodeLabel(brPredecessors![0]);
                 if (result.Barycenter == null)
                 {
                     result.Barycenter = 0;

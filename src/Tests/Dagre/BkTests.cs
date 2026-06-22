@@ -110,7 +110,7 @@ public class BkTests
         [Arguments("d")]
         public async Task DoesNotMarkType0ConflictsWhenOneIsDummy(string v)
         {
-            g.Node(v).Dummy = "true";
+            g.NodeLabel(v).Dummy = "true";
 
             var conflicts = BK.FindType1Conflicts(g, layering);
             await Assert.That(BK.HasConflict(conflicts, "a", "d")).IsFalse();
@@ -128,7 +128,7 @@ public class BkTests
             {
                 if (v != w)
                 {
-                    g.Node(w).Dummy = "true";
+                    g.NodeLabel(w).Dummy = "true";
                 }
             }
 
@@ -150,7 +150,7 @@ public class BkTests
         {
             foreach (var v in new[] { "a", "b", "c", "d" })
             {
-                g.Node(v).Dummy = "true";
+                g.NodeLabel(v).Dummy = "true";
             }
 
             var conflicts = BK.FindType1Conflicts(g, layering);
@@ -189,12 +189,12 @@ public class BkTests
         {
             foreach (var v in new[] { "a", "d" })
             {
-                g.Node(v).Dummy = "true";
+                g.NodeLabel(v).Dummy = "true";
             }
 
             foreach (var v in new[] { "b", "c" })
             {
-                g.Node(v).Dummy = "border";
+                g.NodeLabel(v).Dummy = "border";
             }
 
             var conflicts = BK.FindType2Conflicts(g, layering);
@@ -208,12 +208,12 @@ public class BkTests
         {
             foreach (var v in new[] { "b", "c" })
             {
-                g.Node(v).Dummy = "true";
+                g.NodeLabel(v).Dummy = "true";
             }
 
             foreach (var v in new[] { "a", "d" })
             {
-                g.Node(v).Dummy = "border";
+                g.NodeLabel(v).Dummy = "border";
             }
 
             var conflicts = BK.FindType2Conflicts(g, layering);

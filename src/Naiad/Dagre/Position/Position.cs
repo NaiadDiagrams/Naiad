@@ -9,7 +9,7 @@ static class Position
         PositionY(graph);
         foreach (var (v, x) in BK.PositionX(graph))
         {
-            graph.Node(v).X = x;
+            graph.NodeLabel(v).X = x;
         }
     }
 
@@ -25,12 +25,12 @@ static class Position
             double maxHeight = 0;
             foreach (var v in layer)
             {
-                maxHeight = Math.Max(maxHeight, graph.Node(v).Height);
+                maxHeight = Math.Max(maxHeight, graph.NodeLabel(v).Height);
             }
 
             foreach (var v in layer)
             {
-                var node = graph.Node(v);
+                var node = graph.NodeLabel(v);
                 if (rankAlign == "top")
                 {
                     node.Y = prevY + node.Height / 2;

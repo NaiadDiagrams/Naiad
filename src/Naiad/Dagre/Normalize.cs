@@ -30,9 +30,9 @@ static class Normalize
     static void NormalizeEdge(Graph graph, Edge e)
     {
         var v = e.V;
-        var vRank = graph.Node(v).Rank!.Value;
+        var vRank = graph.NodeLabel(v).Rank!.Value;
         var w = e.W;
-        var wRank = graph.Node(w).Rank!.Value;
+        var wRank = graph.NodeLabel(w).Rank!.Value;
         var name = e.Name;
         var edgeLabel = graph.FindEdgeLabel(e);
         var labelRank = edgeLabel.LabelRank;
@@ -86,7 +86,7 @@ static class Normalize
         foreach (var start in graph.GraphLabel.DummyChains!)
         {
             var v = start;
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             var origLabel = node.EdgeLabel!;
             graph.SetEdge(node.EdgeObj!, origLabel);
             while (node.Dummy != null)
@@ -105,7 +105,7 @@ static class Normalize
                 }
 
                 v = w;
-                node = graph.Node(v);
+                node = graph.NodeLabel(v);
             }
         }
     }

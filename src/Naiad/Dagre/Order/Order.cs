@@ -66,7 +66,7 @@ static class Order
         // node to the ranks(s) that it belongs to.
         foreach (var v in graph.Nodes())
         {
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             if (node.Rank != null)
             {
                 AddNodeToRank(node.Rank.Value, v);
@@ -100,7 +100,7 @@ static class Order
             var sorted = SortSubgraph.Run(lg, root, cg, biasRight);
             for (var i = 0; i < sorted.Vs.Count; i++)
             {
-                lg.Node(sorted.Vs[i]).Order = i;
+                lg.NodeLabel(sorted.Vs[i]).Order = i;
             }
 
             AddSubgraphConstraints.Run(lg, cg, sorted.Vs);
@@ -113,7 +113,7 @@ static class Order
         {
             for (var i = 0; i < layer.Count; i++)
             {
-                graph.Node(layer[i]).Order = i;
+                graph.NodeLabel(layer[i]).Order = i;
             }
         }
     }

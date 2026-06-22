@@ -122,7 +122,7 @@ static class FeasibleTree
     {
         foreach (var v in tree.Nodes())
         {
-            graph.Node(v).Rank += delta;
+            graph.NodeLabel(v).Rank += delta;
         }
     }
 }

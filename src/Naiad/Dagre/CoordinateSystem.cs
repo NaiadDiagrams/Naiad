@@ -28,7 +28,7 @@ static class CoordinateSystem
 
     static void SwapWidthHeight(Graph graph)
     {
-        graph.Nodes().ForEach(node => SwapWidthHeightOne(graph.Node(node)));
+        graph.Nodes().ForEach(node => SwapWidthHeightOne(graph.NodeLabel(node)));
         graph.Edges().ForEach(edge => SwapWidthHeightOne(graph.FindEdgeLabel(edge)));
     }
 
@@ -48,7 +48,7 @@ static class CoordinateSystem
 
     static void ReverseY(Graph graph)
     {
-        graph.Nodes().ForEach(node => ReverseYOne(graph.Node(node)));
+        graph.Nodes().ForEach(node => ReverseYOne(graph.NodeLabel(node)));
 
         graph.Edges().ForEach(edge =>
         {
@@ -80,7 +80,7 @@ static class CoordinateSystem
 
     static void SwapXY(Graph graph)
     {
-        graph.Nodes().ForEach(node => SwapXYOne(graph.Node(node)));
+        graph.Nodes().ForEach(node => SwapXYOne(graph.NodeLabel(node)));
 
         graph.Edges().ForEach(edge =>
         {

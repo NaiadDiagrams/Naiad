@@ -27,7 +27,7 @@ static class Util
         var simplified = new Graph().SetGraph(graph.GraphLabel);
         foreach (var v in graph.Nodes())
         {
-            simplified.SetNode(v, graph.Node(v));
+            simplified.SetNode(v, graph.NodeLabel(v));
         }
 
         foreach (var e in graph.Edges())
@@ -53,7 +53,7 @@ static class Util
         {
             if (graph.Children(v).Count == 0)
             {
-                simplified.SetNode(v, graph.Node(v));
+                simplified.SetNode(v, graph.NodeLabel(v));
             }
         }
 
@@ -119,7 +119,7 @@ static class Util
 
         foreach (var v in graph.Nodes())
         {
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             if (node.Rank is { } rank)
             {
                 while (layering.Count <= rank)
@@ -143,11 +143,11 @@ static class Util
 
     public static void NormalizeRanks(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank is { } r ? r : double.MaxValue).ToList();
+        var nodeRanks = graph.Nodes().Select(v => graph.NodeLabel(v).Rank is { } r ? r : double.MaxValue).ToList();
         var min = ApplyMin(nodeRanks);
         foreach (var v in graph.Nodes())
         {
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             if (node.Rank.HasValue)
             {
                 node.Rank -= (int) min;
@@ -157,7 +157,7 @@ static class Util
 
     public static void RemoveEmptyRanks(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank).Where(r => r.HasValue).Select(r => (double) r!.Value).ToList();
+        var nodeRanks = graph.Nodes().Select(v => graph.NodeLabel(v).Rank).Where(r => r.HasValue).Select(r => (double) r!.Value).ToList();
         var offset = (int) ApplyMin(nodeRanks);
 
         var layers = new List<List<string>?>();
@@ -165,7 +165,7 @@ static class Util
         {
             // A node with no rank (e.g. a compound subgraph parent) has no place in the rank layers, so
             // skip it.
-            if (graph.Node(v).Rank is not { } rankValue)
+            if (graph.NodeLabel(v).Rank is not { } rankValue)
             {
                 continue;
             }
@@ -192,7 +192,7 @@ static class Util
             {
                 foreach (var v in vs)
                 {
-                    graph.Node(v).Rank += delta;
+                    graph.NodeLabel(v).Rank += delta;
                 }
             }
         }
@@ -200,7 +200,7 @@ static class Util
 
     public static double MaxRank(Graph graph)
     {
-        var nodeRanks = graph.Nodes().Select(v => graph.Node(v).Rank is { } r ? r : double.Epsilon).ToList();
+        var nodeRanks = graph.Nodes().Select(v => graph.NodeLabel(v).Rank is { } r ? r : double.Epsilon).ToList();
         return ApplyMax(nodeRanks);
     }
 

@@ -58,7 +58,7 @@ public class UtilTests
             g.SetNode("a", aLabel);
             g.SetNode("b");
             var g2 = Util.AsNonCompoundGraph(g);
-            await Assert.That(g2.Node("a")).IsSameReferenceAs(aLabel);
+            await Assert.That(g2.NodeLabel("a")).IsSameReferenceAs(aLabel);
             await Assert.That(g2.HasNode("b")).IsTrue();
         }
 
@@ -185,9 +185,9 @@ public class UtilTests
 
             Util.NormalizeRanks(g);
 
-            await Assert.That(g.Node("a").Rank).IsEqualTo(1);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("c").Rank).IsEqualTo(2);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(1);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(2);
         }
 
         [Test]
@@ -199,8 +199,8 @@ public class UtilTests
 
             Util.NormalizeRanks(g);
 
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
         }
 
         [Test]
@@ -213,8 +213,8 @@ public class UtilTests
 
             Util.NormalizeRanks(g);
 
-            await Assert.That(g.Node("sg").Rank).IsNull();
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("sg").Rank).IsNull();
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
         }
     }
 
@@ -228,8 +228,8 @@ public class UtilTests
                 .SetNode("a", new() { Rank = 0 })
                 .SetNode("b", new() { Rank = 4 });
             Util.RemoveEmptyRanks(g);
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
         }
 
         [Test]
@@ -240,8 +240,8 @@ public class UtilTests
                 .SetNode("a", new() { Rank = 0 })
                 .SetNode("b", new() { Rank = 8 });
             Util.RemoveEmptyRanks(g);
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
         }
 
         [Test]
@@ -254,9 +254,9 @@ public class UtilTests
             g.SetNode("sg", new());
             g.SetParent("a", "sg");
             Util.RemoveEmptyRanks(g);
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
-            await Assert.That(g.Node("sg").Rank).IsNull();
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
+            await Assert.That(g.NodeLabel("sg").Rank).IsNull();
         }
     }
 

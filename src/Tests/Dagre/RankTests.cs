@@ -63,8 +63,8 @@ public class RankTests
         Rank.Run(g);
         foreach (var e in g.Edges())
         {
-            var vRank = g.Node(e.V).Rank!.Value;
-            var wRank = g.Node(e.W).Rank!.Value;
+            var vRank = g.NodeLabel(e.V).Rank!.Value;
+            var wRank = g.NodeLabel(e.W).Rank!.Value;
             await Assert.That(wRank - vRank).IsGreaterThanOrEqualTo(g.FindEdgeLabel(e).Minlen!.Value);
         }
     }
@@ -79,6 +79,6 @@ public class RankTests
         var g = new Graph().SetGraph(new());
         g.SetNode("a", new());
         Rank.Run(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
     }
 }

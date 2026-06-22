@@ -49,7 +49,7 @@ static class BK
             {
                 var v = layer[i];
                 var w = FindOtherInnerSegmentNode(graph, v);
-                var k1 = w != null ? graph.Node(w).Order!.Value : prevLayerLength;
+                var k1 = w != null ? graph.NodeLabel(w).Order!.Value : prevLayerLength;
 
                 if (w != null || v == lastNode)
                 {
@@ -60,10 +60,10 @@ static class BK
                         {
                             foreach (var u in preds)
                             {
-                                var uLabel = graph.Node(u);
+                                var uLabel = graph.NodeLabel(u);
                                 var uPos = uLabel.Order!.Value;
                                 if ((uPos < k0 || k1 < uPos) &&
-                                    !(uLabel.Dummy != null && graph.Node(scanNode).Dummy != null))
+                                    !(uLabel.Dummy != null && graph.NodeLabel(scanNode).Dummy != null))
                                 {
                                     AddConflict(conflicts, u, scanNode);
                                 }
@@ -105,14 +105,14 @@ static class BK
                     continue;
                 }
 
-                if (graph.Node(v).Dummy != null)
+                if (graph.NodeLabel(v).Dummy != null)
                 {
                     var preds = graph.Predecessors(v);
                     if (preds != null)
                     {
                         foreach (var u in preds)
                         {
-                            var uNode = graph.Node(u);
+                            var uNode = graph.NodeLabel(u);
                             if (uNode.Dummy != null &&
                                 (uNode.Order!.Value < prevNorthBorder || uNode.Order!.Value > nextNorthBorder))
                             {
@@ -133,13 +133,13 @@ static class BK
             for (var southLookahead = 0; southLookahead < south.Count; southLookahead++)
             {
                 var v = south[southLookahead];
-                if (graph.Node(v).Dummy == "border")
+                if (graph.NodeLabel(v).Dummy == "border")
                 {
                     var predecessors = graph.Predecessors(v);
                     if (predecessors != null && predecessors.Count != 0)
                     {
                         var firstPred = predecessors[0];
-                        nextNorthPos = graph.Node(firstPred).Order!.Value;
+                        nextNorthPos = graph.NodeLabel(firstPred).Order!.Value;
                         Scan(south, southPos, southLookahead, prevNorthPos, nextNorthPos);
                         southPos = southLookahead;
                         prevNorthPos = nextNorthPos;
@@ -166,12 +166,12 @@ static class BK
 
     internal static string? FindOtherInnerSegmentNode(Graph graph, string v)
     {
-        if (graph.Node(v).Dummy != null)
+        if (graph.NodeLabel(v).Dummy != null)
         {
             var preds = graph.Predecessors(v);
             if (preds != null)
             {
-                return preds.FirstOrDefault(u => graph.Node(u).Dummy != null);
+                return preds.FirstOrDefault(u => graph.NodeLabel(u).Dummy != null);
             }
         }
 
@@ -366,7 +366,7 @@ static class BK
                 min = Math.Min(min, xsW - (edgeWeight?.Weight ?? 0));
             }
 
-            var node = graph.Node(elem);
+            var node = graph.NodeLabel(elem);
             if (!double.IsPositiveInfinity(min) && node.BorderType != borderType)
             {
                 xs[elem] = Math.Max(xs.GetValueOrDefault(elem, 0), min);
@@ -581,8 +581,8 @@ static class BK
     internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep) =>
         (g, v, w) =>
         {
-            var vLabel = g.Node(v);
-            var wLabel = g.Node(w);
+            var vLabel = g.NodeLabel(v);
+            var wLabel = g.NodeLabel(w);
             double sum = 0;
             double? delta = null;
 
@@ -632,5 +632,5 @@ static class BK
             return sum;
         };
 
-    internal static double Width(Graph graph, string v) => graph.Node(v).Width;
+    internal static double Width(Graph graph, string v) => graph.NodeLabel(v).Width;
 }

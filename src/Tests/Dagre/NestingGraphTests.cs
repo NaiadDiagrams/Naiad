@@ -30,8 +30,8 @@ public class NestingGraphTests
         g.SetParent("a", "sg1");
         NestingGraph.Run(g);
 
-        var borderTop = g.Node("sg1").BorderTop;
-        var borderBottom = g.Node("sg1").BorderBottom;
+        var borderTop = g.NodeLabel("sg1").BorderTop;
+        var borderBottom = g.NodeLabel("sg1").BorderBottom;
         await Assert.That(borderTop).IsNotNull();
         await Assert.That(borderBottom).IsNotNull();
         await Assert.That(g.Parent(borderTop!)).IsEqualTo("sg1");
@@ -45,12 +45,12 @@ public class NestingGraphTests
         await Assert.That(aToBottom.Count).IsEqualTo(1);
         await Assert.That(g.FindEdgeLabel(aToBottom[0]).Minlen).IsEqualTo(1);
 
-        var topNode = g.Node(borderTop!);
+        var topNode = g.NodeLabel(borderTop!);
         await Assert.That(topNode.Width).IsEqualTo(0);
         await Assert.That(topNode.Height).IsEqualTo(0);
         await Assert.That(topNode.Dummy).IsEqualTo("border");
 
-        var bottomNode = g.Node(borderBottom!);
+        var bottomNode = g.NodeLabel(borderBottom!);
         await Assert.That(bottomNode.Width).IsEqualTo(0);
         await Assert.That(bottomNode.Height).IsEqualTo(0);
         await Assert.That(bottomNode.Dummy).IsEqualTo("border");
@@ -63,10 +63,10 @@ public class NestingGraphTests
         g.SetParent("a", "sg2");
         NestingGraph.Run(g);
 
-        var sg1Top = g.Node("sg1").BorderTop;
-        var sg1Bottom = g.Node("sg1").BorderBottom;
-        var sg2Top = g.Node("sg2").BorderTop;
-        var sg2Bottom = g.Node("sg2").BorderBottom;
+        var sg1Top = g.NodeLabel("sg1").BorderTop;
+        var sg1Bottom = g.NodeLabel("sg1").BorderBottom;
+        var sg2Top = g.NodeLabel("sg2").BorderTop;
+        var sg2Bottom = g.NodeLabel("sg2").BorderBottom;
         await Assert.That(sg1Top).IsNotNull();
         await Assert.That(sg1Bottom).IsNotNull();
         await Assert.That(sg2Top).IsNotNull();
@@ -92,8 +92,8 @@ public class NestingGraphTests
         g.SetEdge("x", "b", new() { Weight = 200 });
         NestingGraph.Run(g);
 
-        var top = g.Node("sg").BorderTop;
-        var bot = g.Node("sg").BorderBottom;
+        var top = g.NodeLabel("sg").BorderTop;
+        var bot = g.NodeLabel("sg").BorderBottom;
         await Assert.That(g.FindEdgeLabel(top!, "x").Weight!.Value).IsGreaterThan(300);
         await Assert.That(g.FindEdgeLabel("x", bot!).Weight!.Value).IsGreaterThan(300);
     }
@@ -105,7 +105,7 @@ public class NestingGraphTests
         NestingGraph.Run(g);
 
         var root = g.GraphLabel.NestingRoot;
-        var borderTop = g.Node("sg1").BorderTop;
+        var borderTop = g.NodeLabel("sg1").BorderTop;
         await Assert.That(root).IsNotNull();
         await Assert.That(borderTop).IsNotNull();
 
@@ -224,10 +224,10 @@ public class NestingGraphTests
         // 7: close sg1
 
         var root = g.GraphLabel.NestingRoot!;
-        var sg1Top = g.Node("sg1").BorderTop!;
-        var sg1Bot = g.Node("sg1").BorderBottom!;
-        var sg2Top = g.Node("sg2").BorderTop!;
-        var sg2Bot = g.Node("sg2").BorderBottom!;
+        var sg1Top = g.NodeLabel("sg1").BorderTop!;
+        var sg1Bot = g.NodeLabel("sg1").BorderBottom!;
+        var sg2Top = g.NodeLabel("sg2").BorderTop!;
+        var sg2Bot = g.NodeLabel("sg2").BorderBottom!;
 
         await Assert.That(g.FindEdgeLabel(root, sg1Top).Minlen).IsEqualTo(3);
         await Assert.That(g.FindEdgeLabel(sg1Top, sg2Top).Minlen).IsEqualTo(1);

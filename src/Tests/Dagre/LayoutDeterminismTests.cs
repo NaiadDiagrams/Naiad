@@ -59,7 +59,7 @@ public class LayoutDeterminismTests
         var builder = new StringBuilder();
         foreach (var v in RealNodes)
         {
-            var n = g.Node(v);
+            var n = g.NodeLabel(v);
             builder.Append(CultureInfo.InvariantCulture, $"{v}:{n.X:0.##},{n.Y:0.##};");
         }
 

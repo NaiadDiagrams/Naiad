@@ -49,7 +49,7 @@ static class NetworkSimplex
 
     public static void AssignCutValue(Graph tree, Graph graph, string child)
     {
-        var childLab = tree.Node(child);
+        var childLab = tree.NodeLabel(child);
         var parent = childLab.Parent!;
         var edge = tree.FindEdgeLabel(child, parent);
         edge.Cutvalue = CalcCutValue(tree, graph, child);
@@ -61,7 +61,7 @@ static class NetworkSimplex
      */
     public static double CalcCutValue(Graph tree, Graph graph, string child)
     {
-        var childLab = tree.Node(child);
+        var childLab = tree.NodeLabel(child);
         var parent = childLab.Parent!;
         // True if the child is on the tail end of the edge in the directed graph
         var childIsTail = true;
@@ -113,7 +113,7 @@ static class NetworkSimplex
     public static int DfsAssignLowLim(Graph tree, Dictionary<string, bool> visited, int nextLim, string v, string? parent)
     {
         var low = nextLim;
-        var label = tree.Node(v);
+        var label = tree.NodeLabel(v);
 
         visited[v] = true;
         var neighbors = tree.Neighbors(v);
@@ -164,8 +164,8 @@ static class NetworkSimplex
             w = edge.V;
         }
 
-        var vLabel = tree.Node(v);
-        var wLabel = tree.Node(w);
+        var vLabel = tree.NodeLabel(v);
+        var wLabel = tree.NodeLabel(w);
         var tailLabel = vLabel;
         var flip = false;
 
@@ -178,8 +178,8 @@ static class NetworkSimplex
         }
 
         var candidates = graph.Edges().Where(candidate =>
-            flip == IsDescendant(tree, tree.Node(candidate.V), tailLabel) &&
-            flip != IsDescendant(tree, tree.Node(candidate.W), tailLabel)).ToList();
+            flip == IsDescendant(tree, tree.NodeLabel(candidate.V), tailLabel) &&
+            flip != IsDescendant(tree, tree.NodeLabel(candidate.W), tailLabel)).ToList();
 
         var acc = candidates[0];
         for (var i = 1; i < candidates.Count; i++)
@@ -209,7 +209,7 @@ static class NetworkSimplex
     {
         var root = t.Nodes().FirstOrDefault(v =>
         {
-            var node = t.Node(v);
+            var node = t.NodeLabel(v);
             return node.Parent == null;
         });
         if (root == null)
@@ -221,7 +221,7 @@ static class NetworkSimplex
         vs = vs.GetRange(1, vs.Count - 1);
         foreach (var v in vs)
         {
-            var treeNode = t.Node(v);
+            var treeNode = t.NodeLabel(v);
             var parent = treeNode.Parent!;
             var edge = g.FindEdgeLabel(v, parent);
             var flipped = false;
@@ -232,7 +232,7 @@ static class NetworkSimplex
                 flipped = true;
             }
 
-            g.Node(v).Rank = g.Node(parent).Rank!.Value + (flipped ? edge.Minlen!.Value : -edge.Minlen!.Value);
+            g.NodeLabel(v).Rank = g.NodeLabel(parent).Rank!.Value + (flipped ? edge.Minlen!.Value : -edge.Minlen!.Value);
         }
     }
 

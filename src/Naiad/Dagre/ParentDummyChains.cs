@@ -21,7 +21,7 @@ static class ParentDummyChains
         foreach (var v0 in graph.GraphLabel.DummyChains!)
         {
             var v = v0;
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             var edgeObj = node.EdgeObj!;
             var pathData = FindPath(graph, postorderNums, edgeObj.V, edgeObj.W);
             var path = pathData.Path;
@@ -32,12 +32,12 @@ static class ParentDummyChains
 
             while (v != edgeObj.W)
             {
-                node = graph.Node(v);
+                node = graph.NodeLabel(v);
 
                 if (ascending)
                 {
                     while ((pathV = path[pathIdx]) != lca &&
-                        graph.Node(pathV!).MaxRank!.Value < node.Rank!.Value)
+                        graph.NodeLabel(pathV!).MaxRank!.Value < node.Rank!.Value)
                     {
                         pathIdx++;
                     }
@@ -51,7 +51,7 @@ static class ParentDummyChains
                 if (!ascending)
                 {
                     while (pathIdx < path.Count - 1 &&
-                        graph.Node(path[pathIdx + 1]!).MinRank!.Value <= node.Rank!.Value)
+                        graph.NodeLabel(path[pathIdx + 1]!).MinRank!.Value <= node.Rank!.Value)
                     {
                         pathIdx++;
                     }

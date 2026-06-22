@@ -97,7 +97,7 @@ public class ParentDummyChainsTests
             g.SetNode("d" + (i + 1), new() { Rank = i + 3 });
         }
 
-        g.Node("d1").EdgeObj = new("a", "b");
+        g.NodeLabel("d1").EdgeObj = new("a", "b");
         g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "d4", "d5", "b"]);
 

@@ -7,7 +7,7 @@ static class AddBorderSegments
         void Dfs(string v)
         {
             var children = graph.Children(v);
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             if (children.Count != 0)
             {
                 foreach (var child in children)

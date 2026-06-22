@@ -83,7 +83,7 @@ static class NestingGraph
 
         var top = Util.AddBorderNode(graph, "_bt");
         var bottom = Util.AddBorderNode(graph, "_bb");
-        var label = graph.Node(v);
+        var label = graph.NodeLabel(v);
 
         graph.SetParent(top, v);
         label.BorderTop = top;
@@ -94,7 +94,7 @@ static class NestingGraph
         {
             Dfs(graph, root, nodeSep, weight, height, depths, child);
 
-            var childNode = graph.Node(child);
+            var childNode = graph.NodeLabel(child);
             var childTop = childNode.BorderTop ?? child;
             var childBottom = childNode.BorderBottom ?? child;
             var thisWeight = childNode.BorderTop != null ? weight : 2 * weight;

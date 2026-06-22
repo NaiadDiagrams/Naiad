@@ -14,15 +14,15 @@ static class AddSubgraphConstraints
             {
                 var parent = graph.Parent(child);
                 string? prevChild;
-                if (parent != null)
-                {
-                    prevChild = prev.GetValueOrDefault(parent);
-                    prev[parent] = child;
-                }
-                else
+                if (parent == null)
                 {
                     prevChild = rootPrev;
                     rootPrev = child;
+                }
+                else
+                {
+                    prevChild = prev.GetValueOrDefault(parent);
+                    prev[parent] = child;
                 }
 
                 if (prevChild != null && prevChild != child)

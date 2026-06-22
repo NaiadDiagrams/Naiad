@@ -8,12 +8,16 @@ static class BuildLayerGraph
 
         var root = CreateRootNode(graph);
         var result = new Graph(compound: true)
-            .SetGraph(new() { Root = root })
-            .SetDefaultNodeLabel(v => graph.Node(v));
+            .SetGraph(
+                new()
+                {
+                    Root = root
+                })
+            .SetDefaultNodeLabel(graph.NodeLabel);
 
         foreach (var v in nodesWithRank)
         {
-            var node = graph.Node(v);
+            var node = graph.NodeLabel(v);
             var parent = graph.Parent(v);
 
             if (node.Rank == rank ||

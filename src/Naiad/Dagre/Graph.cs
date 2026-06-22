@@ -120,7 +120,7 @@ sealed class Graph
         NodeCount++;
     }
 
-    public NodeLabel Node(string name) => nodesMap.GetValueOrDefault(name)!;
+    public NodeLabel NodeLabel(string name) => nodesMap.GetValueOrDefault(name)!;
 
     public bool HasNode(string name) => nodesMap.ContainsKey(name);
 

@@ -52,8 +52,8 @@ static class Layout
     {
         foreach (var v in inputGraph.Nodes())
         {
-            var inputLabel = inputGraph.Node(v);
-            var layoutLabel = layoutGraph.Node(v);
+            var inputLabel = inputGraph.NodeLabel(v);
+            var layoutLabel = layoutGraph.NodeLabel(v);
 
             if (inputLabel != null)
             {
@@ -119,7 +119,7 @@ static class Layout
 
         foreach (var v in inputGraph.Nodes())
         {
-            var node = inputGraph.Node(v);
+            var node = inputGraph.NodeLabel(v);
             // Implicit nodes created via SetParent have no label; default a null label to width/height 0.
             var newNode = node == null
                 ? new NodeLabel { Width = 0, Height = 0 }
@@ -207,8 +207,8 @@ static class Layout
             var edge = g.FindEdgeLabel(e);
             if (edge.Width is { } width && width != 0 && edge.Height is { } height && height != 0)
             {
-                var v = g.Node(e.V);
-                var w = g.Node(e.W);
+                var v = g.NodeLabel(e.V);
+                var w = g.NodeLabel(e.W);
                 // {rank: (w.rank - v.rank) / 2 + v.rank, e: e}
                 var label = new NodeLabel
                 {
@@ -225,11 +225,11 @@ static class Layout
         var maxRank = 0;
         foreach (var v in g.Nodes())
         {
-            var node = g.Node(v);
+            var node = g.NodeLabel(v);
             if (node.BorderTop != null)
             {
-                node.MinRank = g.Node(node.BorderTop).Rank;
-                node.MaxRank = g.Node(node.BorderBottom!).Rank;
+                node.MinRank = g.NodeLabel(node.BorderTop).Rank;
+                node.MaxRank = g.NodeLabel(node.BorderBottom!).Rank;
                 maxRank = Math.Max(maxRank, node.MaxRank!.Value);
             }
         }
@@ -241,7 +241,7 @@ static class Layout
     {
         foreach (var v in g.Nodes())
         {
-            var node = g.Node(v);
+            var node = g.NodeLabel(v);
             if (node.Dummy == "edge-proxy")
             {
                 g.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
@@ -270,7 +270,7 @@ static class Layout
 
         foreach (var v in g.Nodes())
         {
-            var node = g.Node(v);
+            var node = g.NodeLabel(v);
             GetExtremes(node.X!.Value, node.Y!.Value, node.Width, node.Height);
         }
 
@@ -288,7 +288,7 @@ static class Layout
 
         foreach (var v in g.Nodes())
         {
-            var node = g.Node(v);
+            var node = g.NodeLabel(v);
             node.X -= minX;
             node.Y -= minY;
         }
@@ -325,8 +325,8 @@ static class Layout
         foreach (var e in g.Edges())
         {
             var edge = g.FindEdgeLabel(e);
-            var nodeV = g.Node(e.V);
-            var nodeW = g.Node(e.W);
+            var nodeV = g.NodeLabel(e.V);
+            var nodeW = g.NodeLabel(e.W);
             Point p1;
             Point p2;
             if (edge.Points == null)
@@ -389,11 +389,11 @@ static class Layout
         {
             if (g.Children(v).Count != 0)
             {
-                var node = g.Node(v);
-                var t = g.Node(node.BorderTop!);
-                var b = g.Node(node.BorderBottom!);
-                var l = g.Node(node.BorderLeft![node.BorderLeft!.Count - 1]);
-                var r = g.Node(node.BorderRight![node.BorderRight!.Count - 1]);
+                var node = g.NodeLabel(v);
+                var t = g.NodeLabel(node.BorderTop!);
+                var b = g.NodeLabel(node.BorderBottom!);
+                var l = g.NodeLabel(node.BorderLeft![node.BorderLeft!.Count - 1]);
+                var r = g.NodeLabel(node.BorderRight![node.BorderRight!.Count - 1]);
 
                 node.Width = Math.Abs(r.X!.Value - l.X!.Value);
                 node.Height = Math.Abs(b.Y!.Value - t.Y!.Value);
@@ -404,7 +404,7 @@ static class Layout
 
         foreach (var v in g.Nodes())
         {
-            if (g.Node(v).Dummy == "border")
+            if (g.NodeLabel(v).Dummy == "border")
             {
                 g.RemoveNode(v);
             }
@@ -417,7 +417,7 @@ static class Layout
         {
             if (e.V == e.W)
             {
-                var node = g.Node(e.V);
+                var node = g.NodeLabel(e.V);
                 node.SelfEdges ??= [];
                 node.SelfEdges.Add(new() { E = e, Label = g.FindEdgeLabel(e) });
                 g.RemoveEdge(e);
@@ -434,7 +434,7 @@ static class Layout
             for (var i = 0; i < layer.Count; i++)
             {
                 var v = layer[i];
-                var node = g.Node(v);
+                var node = g.NodeLabel(v);
                 node.Order = i + orderShift;
                 foreach (var selfEdge in node.SelfEdges ?? [])
                 {
@@ -458,10 +458,10 @@ static class Layout
     {
         foreach (var v in g.Nodes())
         {
-            var node = g.Node(v);
+            var node = g.NodeLabel(v);
             if (node.Dummy == "selfedge")
             {
-                var selfNode = g.Node(node.EdgeObj!.V);
+                var selfNode = g.NodeLabel(node.EdgeObj!.V);
                 var x = selfNode.X!.Value + selfNode.Width / 2;
                 var y = selfNode.Y!.Value;
                 var dx = node.X!.Value - x;

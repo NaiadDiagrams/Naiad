@@ -19,7 +19,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "TB" });
             CoordinateSystem.Adjust(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.Width).IsEqualTo(100);
             await Assert.That(a.Height).IsEqualTo(200);
         }
@@ -29,7 +29,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "BT" });
             CoordinateSystem.Adjust(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.Width).IsEqualTo(100);
             await Assert.That(a.Height).IsEqualTo(200);
         }
@@ -39,7 +39,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "LR" });
             CoordinateSystem.Adjust(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.Width).IsEqualTo(200);
             await Assert.That(a.Height).IsEqualTo(100);
         }
@@ -49,7 +49,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "RL" });
             CoordinateSystem.Adjust(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.Width).IsEqualTo(200);
             await Assert.That(a.Height).IsEqualTo(100);
         }
@@ -71,7 +71,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "TB" });
             CoordinateSystem.Undo(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.X).IsEqualTo(20);
             await Assert.That(a.Y).IsEqualTo(40);
             await Assert.That(a.Width).IsEqualTo(100);
@@ -83,7 +83,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "BT" });
             CoordinateSystem.Undo(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.X).IsEqualTo(20);
             await Assert.That(a.Y).IsEqualTo(-40);
             await Assert.That(a.Width).IsEqualTo(100);
@@ -95,7 +95,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "LR" });
             CoordinateSystem.Undo(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.X).IsEqualTo(40);
             await Assert.That(a.Y).IsEqualTo(20);
             await Assert.That(a.Width).IsEqualTo(200);
@@ -107,7 +107,7 @@ public class CoordinateSystemTests
         {
             g.SetGraph(new() { Rankdir = "RL" });
             CoordinateSystem.Undo(g);
-            var a = g.Node("a");
+            var a = g.NodeLabel("a");
             await Assert.That(a.X).IsEqualTo(-40);
             await Assert.That(a.Y).IsEqualTo(20);
             await Assert.That(a.Width).IsEqualTo(200);

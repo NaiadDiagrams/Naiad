@@ -24,8 +24,8 @@ public class NormalizeTests
 
             var incident = g.Edges().Select(IncidentNodes).ToList();
             await Assert.That(incident).IsEquivalentTo(new List<(string, string)> { ("a", "b") });
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
         }
 
         [Test]
@@ -39,11 +39,11 @@ public class NormalizeTests
 
             await Assert.That(g.Successors("a")!.Count).IsEqualTo(1);
             var successor = g.Successors("a")![0];
-            await Assert.That(g.Node(successor).Dummy).IsEqualTo("edge");
-            await Assert.That(g.Node(successor).Rank).IsEqualTo(1);
+            await Assert.That(g.NodeLabel(successor).Dummy).IsEqualTo("edge");
+            await Assert.That(g.NodeLabel(successor).Rank).IsEqualTo(1);
             await Assert.That(g.Successors(successor)).IsEquivalentTo(new List<string> { "b" });
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
 
             await Assert.That(g.GraphLabel.DummyChains!.Count).IsEqualTo(1);
             await Assert.That(g.GraphLabel.DummyChains![0]).IsEqualTo(successor);
@@ -60,8 +60,8 @@ public class NormalizeTests
 
             await Assert.That(g.Successors("a")!.Count).IsEqualTo(1);
             var successor = g.Successors("a")![0];
-            await Assert.That(g.Node(successor).Width).IsEqualTo(0);
-            await Assert.That(g.Node(successor).Height).IsEqualTo(0);
+            await Assert.That(g.NodeLabel(successor).Width).IsEqualTo(0);
+            await Assert.That(g.NodeLabel(successor).Height).IsEqualTo(0);
         }
 
         [Test]
@@ -74,7 +74,7 @@ public class NormalizeTests
             Normalize.Run(g);
 
             var labelV = g.Successors(g.Successors("a")![0])![0];
-            var labelNode = g.Node(labelV);
+            var labelNode = g.NodeLabel(labelV);
             await Assert.That(labelNode.Width).IsEqualTo(20);
             await Assert.That(labelNode.Height).IsEqualTo(10);
         }
@@ -107,8 +107,8 @@ public class NormalizeTests
 
             var incident = g.Edges().Select(IncidentNodes).ToList();
             await Assert.That(incident).IsEquivalentTo(new List<(string, string)> { ("a", "b") });
-            await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-            await Assert.That(g.Node("b").Rank).IsEqualTo(2);
+            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
         }
 
         [Test]
@@ -135,7 +135,7 @@ public class NormalizeTests
 
             Normalize.Run(g);
 
-            var dummyLabel = g.Node(g.Neighbors("a")![0]);
+            var dummyLabel = g.NodeLabel(g.Neighbors("a")![0]);
             dummyLabel.X = 5;
             dummyLabel.Y = 10;
 
@@ -156,15 +156,15 @@ public class NormalizeTests
 
             Normalize.Run(g);
 
-            var aSucLabel = g.Node(g.Neighbors("a")![0]);
+            var aSucLabel = g.NodeLabel(g.Neighbors("a")![0]);
             aSucLabel.X = 5;
             aSucLabel.Y = 10;
 
-            var midLabel = g.Node(g.Successors(g.Successors("a")![0])![0]);
+            var midLabel = g.NodeLabel(g.Successors(g.Successors("a")![0])![0]);
             midLabel.X = 20;
             midLabel.Y = 25;
 
-            var bPredLabel = g.Node(g.Neighbors("b")![0]);
+            var bPredLabel = g.NodeLabel(g.Neighbors("b")![0]);
             bPredLabel.X = 100;
             bPredLabel.Y = 200;
 
@@ -189,7 +189,7 @@ public class NormalizeTests
 
             Normalize.Run(g);
 
-            var labelNode = g.Node(g.Successors("a")![0]);
+            var labelNode = g.NodeLabel(g.Successors("a")![0]);
             labelNode.X = 50;
             labelNode.Y = 60;
             labelNode.Width = 20;
@@ -213,7 +213,7 @@ public class NormalizeTests
 
             Normalize.Run(g);
 
-            var labelNode = g.Node(g.Successors(g.Successors("a")![0])![0]);
+            var labelNode = g.NodeLabel(g.Successors(g.Successors("a")![0])![0]);
             labelNode.X = 50;
             labelNode.Y = 60;
             labelNode.Width = 20;
@@ -243,11 +243,11 @@ public class NormalizeTests
                 .ToList();
             await Assert.That(outEdges.Count).IsEqualTo(2);
 
-            var barDummy = g.Node(outEdges[0].W);
+            var barDummy = g.NodeLabel(outEdges[0].W);
             barDummy.X = 5;
             barDummy.Y = 10;
 
-            var fooDummy = g.Node(outEdges[1].W);
+            var fooDummy = g.NodeLabel(outEdges[1].W);
             fooDummy.X = 15;
             fooDummy.Y = 20;
 

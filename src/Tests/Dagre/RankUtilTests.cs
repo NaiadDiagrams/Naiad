@@ -17,7 +17,7 @@ public class RankUtilTests
         g.SetNode("a");
         RankUtil.LongestPath(g);
         Util.NormalizeRanks(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
     }
 
     [Test]
@@ -27,8 +27,8 @@ public class RankUtilTests
         g.SetNode("b");
         RankUtil.LongestPath(g);
         Util.NormalizeRanks(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(0);
     }
 
     [Test]
@@ -37,8 +37,8 @@ public class RankUtilTests
         g.SetEdge("a", "b");
         RankUtil.LongestPath(g);
         Util.NormalizeRanks(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
     }
 
     [Test]
@@ -48,10 +48,10 @@ public class RankUtilTests
         g.SetPath(["a", "c", "d"]);
         RankUtil.LongestPath(g);
         Util.NormalizeRanks(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
-        await Assert.That(g.Node("b").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("c").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(2);
     }
 
     [Test]
@@ -62,10 +62,10 @@ public class RankUtilTests
         g.SetEdge("c", "d", new() { Minlen = 2 });
         RankUtil.LongestPath(g);
         Util.NormalizeRanks(g);
-        await Assert.That(g.Node("a").Rank).IsEqualTo(0);
+        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
         // longest path biases towards the lowest rank it can assign
-        await Assert.That(g.Node("b").Rank).IsEqualTo(2);
-        await Assert.That(g.Node("c").Rank).IsEqualTo(1);
-        await Assert.That(g.Node("d").Rank).IsEqualTo(3);
+        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
+        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(1);
+        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
     }
 }

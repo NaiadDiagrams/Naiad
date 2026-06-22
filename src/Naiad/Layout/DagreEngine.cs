@@ -64,13 +64,13 @@ class DagreEngine : ILayoutEngine
 
         foreach (var node in diagram.Nodes)
         {
-            var laidOut = graph.Node(node.Id);
+            var laidOut = graph.NodeLabel(node.Id);
             node.Position = new(laidOut.X ?? 0, laidOut.Y ?? 0);
         }
 
         foreach (var subgraph in Flatten(diagram.Subgraphs))
         {
-            var laidOut = graph.Node(subgraph.Id);
+            var laidOut = graph.NodeLabel(subgraph.Id);
             subgraph.Position = new(laidOut.X ?? 0, laidOut.Y ?? 0);
             subgraph.Width = laidOut.Width;
             subgraph.Height = laidOut.Height;
