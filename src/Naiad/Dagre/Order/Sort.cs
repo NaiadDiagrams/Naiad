@@ -6,10 +6,9 @@ static class Sort
     {
         var parts = Util.Partition(entries, entry => entry.Barycenter != null);
         var sortable = parts.Lhs;
-        var unsortable = parts.Rhs;
 
         // descending by i, stable for ties.
-        unsortable = unsortable.OrderByDescending(entry => entry.I).ToList();
+        var unsortable = parts.Rhs.OrderByDescending(entry => entry.I).ToList();
 
         var vs = new List<List<string>>();
         var sum = 0d;

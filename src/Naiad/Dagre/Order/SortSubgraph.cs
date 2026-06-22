@@ -18,14 +18,16 @@ static class SortSubgraph
         var barycenters = Barycenter.Run(graph, movable);
         foreach (var entry in barycenters)
         {
-            if (graph.Children(entry.V).Count != 0)
+            if (graph.Children(entry.V).Count == 0)
             {
-                var subgraphResult = Run(graph, entry.V, constraintGraph, biasRight);
-                subgraphs[entry.V] = subgraphResult;
-                if (subgraphResult.Barycenter != null)
-                {
-                    MergeBarycenters(entry, subgraphResult);
-                }
+                continue;
+            }
+
+            var subgraphResult = Run(graph, entry.V, constraintGraph, biasRight);
+            subgraphs[entry.V] = subgraphResult;
+            if (subgraphResult.Barycenter != null)
+            {
+                MergeBarycenters(entry, subgraphResult);
             }
         }
 
@@ -53,7 +55,8 @@ static class SortSubgraph
                 }
 
                 result.Barycenter = (result.Barycenter!.Value * result.Weight!.Value +
-                    blPred.Order!.Value + brPred.Order!.Value) / (result.Weight!.Value + 2);
+                                     blPred.Order!.Value + brPred.Order!.Value) /
+                                    (result.Weight!.Value + 2);
                 result.Weight = result.Weight!.Value + 2;
             }
         }

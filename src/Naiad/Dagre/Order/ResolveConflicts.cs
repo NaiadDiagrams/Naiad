@@ -112,7 +112,7 @@ static class ResolveConflicts
         }
 
         return entries
-            .Where(entry => !entry.Merged)
+            .Where(_ => !_.Merged)
             .Select(entry => new ResolvedEntry
             {
                 Vs = entry.Vs,

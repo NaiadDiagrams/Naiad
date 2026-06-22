@@ -40,7 +40,7 @@ static class Acyclic
             }
 
             stack[v] = true;
-            foreach (var e in graph.OutEdges(v)!)
+            foreach (var e in graph.OutEdgesOf(v))
             {
                 if (stack.ContainsKey(e.W))
                 {

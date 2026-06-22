@@ -5,22 +5,22 @@ static class InitOrder
     public static List<List<string>> Run(Graph graph)
     {
         var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
-        var simpleNodes = graph.Nodes().Where(v => graph.Children(v).Count == 0).ToList();
-        var simpleNodesRanks = simpleNodes.Select(v => (double) graph.NodeLabel(v).Rank!.Value).ToList();
+        var simpleNodes = graph.Nodes().Where(_ => graph.Children(_).Count == 0).ToList();
+        var simpleNodesRanks = simpleNodes.Select(_ => (double) graph.NodeLabel(_).Rank!.Value).ToList();
         var maxRank = (int) Util.ApplyMax(simpleNodesRanks);
         var layers = Util.Range(maxRank + 1).Select(_ => new List<string>()).ToList();
 
-        void Dfs(string v)
+        void Dfs(string visit)
         {
-            if (visited.GetValueOrDefault(v))
+            if (visited.GetValueOrDefault(visit))
             {
                 return;
             }
 
-            visited[v] = true;
-            var node = graph.NodeLabel(v);
-            layers[node.Rank!.Value].Add(v);
-            var successors = graph.Successors(v);
+            visited[visit] = true;
+            var node = graph.NodeLabel(visit);
+            layers[node.Rank!.Value].Add(visit);
+            var successors = graph.Successors(visit);
             if (successors != null)
             {
                 foreach (var w in successors)
@@ -31,7 +31,7 @@ static class InitOrder
         }
 
         // Stable sort: preserve original order for nodes of equal rank.
-        var orderedVs = simpleNodes.OrderBy(v => graph.NodeLabel(v).Rank!.Value).ToList();
+        var orderedVs = simpleNodes.OrderBy(_ => graph.NodeLabel(_).Rank!.Value).ToList();
         foreach (var v in orderedVs)
         {
             Dfs(v);

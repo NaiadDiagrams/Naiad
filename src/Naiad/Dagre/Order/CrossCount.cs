@@ -32,11 +32,12 @@ static class CrossCount
             nodeEntries.Clear();
             foreach (var e in graph.OutEdgesOf(v))
             {
-                nodeEntries.Add(new()
-                {
-                    Pos = southPos[e.W],
-                    Weight = graph.FindEdgeLabel(e).Weight!.Value
-                });
+                nodeEntries.Add(
+                    new()
+                    {
+                        Pos = southPos[e.W],
+                        Weight = graph.FindEdgeLabel(e).Weight!.Value
+                    });
             }
 
             nodeEntries.Sort((a, b) => a.Pos - b.Pos);
