@@ -3,43 +3,43 @@ namespace Naiad.Dagre;
 /// <summary>Top-level layout driver.</summary>
 static class Layout
 {
-    public static Graph Run(Graph g)
+    public static Graph Run(Graph graph)
     {
-        var layoutGraph = BuildLayoutGraph(g);
+        var layoutGraph = BuildLayoutGraph(graph);
         RunLayout(layoutGraph);
-        UpdateInputGraph(g, layoutGraph);
+        UpdateInputGraph(graph, layoutGraph);
         return layoutGraph;
     }
 
-    static void RunLayout(Graph g)
+    static void RunLayout(Graph graph)
     {
-        MakeSpaceForEdgeLabels(g);
-        RemoveSelfEdges(g);
-        Acyclic.Run(g);
-        NestingGraph.Run(g);
-        Rank.Run(Util.AsNonCompoundGraph(g));
-        InjectEdgeLabelProxies(g);
-        Util.RemoveEmptyRanks(g);
-        NestingGraph.Cleanup(g);
-        Util.NormalizeRanks(g);
-        AssignRankMinMax(g);
-        RemoveEdgeLabelProxies(g);
-        Normalize.Run(g);
-        ParentDummyChains.Run(g);
-        AddBorderSegments.Run(g);
-        Order.Run(g);
-        InsertSelfEdges(g);
-        CoordinateSystem.Adjust(g);
-        Position.Run(g);
-        PositionSelfEdges(g);
-        RemoveBorderNodes(g);
-        Normalize.Undo(g);
-        FixupEdgeLabelCoords(g);
-        CoordinateSystem.Undo(g);
-        TranslateGraph(g);
-        AssignNodeIntersects(g);
-        ReversePointsForReversedEdges(g);
-        Acyclic.Undo(g);
+        MakeSpaceForEdgeLabels(graph);
+        RemoveSelfEdges(graph);
+        Acyclic.Run(graph);
+        NestingGraph.Run(graph);
+        Rank.Run(Util.AsNonCompoundGraph(graph));
+        InjectEdgeLabelProxies(graph);
+        Util.RemoveEmptyRanks(graph);
+        NestingGraph.Cleanup(graph);
+        Util.NormalizeRanks(graph);
+        AssignRankMinMax(graph);
+        RemoveEdgeLabelProxies(graph);
+        Normalize.Run(graph);
+        ParentDummyChains.Run(graph);
+        AddBorderSegments.Run(graph);
+        Order.Run(graph);
+        InsertSelfEdges(graph);
+        CoordinateSystem.Adjust(graph);
+        Position.Run(graph);
+        PositionSelfEdges(graph);
+        RemoveBorderNodes(graph);
+        Normalize.Undo(graph);
+        FixupEdgeLabelCoords(graph);
+        CoordinateSystem.Undo(graph);
+        TranslateGraph(graph);
+        AssignNodeIntersects(graph);
+        ReversePointsForReversedEdges(graph);
+        Acyclic.Undo(graph);
     }
 
     /*
@@ -93,8 +93,8 @@ static class Layout
     /// </summary>
     static Graph BuildLayoutGraph(Graph inputGraph)
     {
-        var g = new Graph(multigraph: true, compound: true);
-        var graph = inputGraph.GraphLabel;
+        var graph = new Graph(multigraph: true, compound: true);
+        var graphLabel = inputGraph.GraphLabel;
 
         var newGraph = new GraphLabel
         {
@@ -105,17 +105,17 @@ static class Layout
             Rankdir = "TB",
             Rankalign = "center"
         };
-        if (graph?.Nodesep is { } gNodesep) newGraph.Nodesep = gNodesep;
-        if (graph?.Edgesep is { } gEdgesep) newGraph.Edgesep = gEdgesep;
-        if (graph?.Ranksep is { } gRanksep) newGraph.Ranksep = gRanksep;
-        if (graph?.Marginx is { } gMarginx) newGraph.Marginx = gMarginx;
-        if (graph?.Marginy is { } gMarginy) newGraph.Marginy = gMarginy;
-        if (graph?.Acyclicer is { } gAcyclicer) newGraph.Acyclicer = gAcyclicer;
-        if (graph?.Ranker is { } gRanker) newGraph.Ranker = gRanker;
-        if (graph?.Rankdir is { } gRankdir) newGraph.Rankdir = gRankdir;
-        if (graph?.Align is { } gAlign) newGraph.Align = gAlign;
-        if (graph?.Rankalign is { } gRankalign) newGraph.Rankalign = gRankalign;
-        g.SetGraph(newGraph);
+        if (graphLabel?.Nodesep is { } gNodesep) newGraph.Nodesep = gNodesep;
+        if (graphLabel?.Edgesep is { } gEdgesep) newGraph.Edgesep = gEdgesep;
+        if (graphLabel?.Ranksep is { } gRanksep) newGraph.Ranksep = gRanksep;
+        if (graphLabel?.Marginx is { } gMarginx) newGraph.Marginx = gMarginx;
+        if (graphLabel?.Marginy is { } gMarginy) newGraph.Marginy = gMarginy;
+        if (graphLabel?.Acyclicer is { } gAcyclicer) newGraph.Acyclicer = gAcyclicer;
+        if (graphLabel?.Ranker is { } gRanker) newGraph.Ranker = gRanker;
+        if (graphLabel?.Rankdir is { } gRankdir) newGraph.Rankdir = gRankdir;
+        if (graphLabel?.Align is { } gAlign) newGraph.Align = gAlign;
+        if (graphLabel?.Rankalign is { } gRankalign) newGraph.Rankalign = gRankalign;
+        graph.SetGraph(newGraph);
 
         foreach (var v in inputGraph.Nodes())
         {
@@ -130,11 +130,11 @@ static class Layout
                     Rank = node.Rank
                 };
 
-            g.SetNode(v, newNode);
+            graph.SetNode(v, newNode);
             var parent = inputGraph.Parent(v);
             if (parent != null)
             {
-                g.SetParent(v, parent);
+                graph.SetParent(v, parent);
             }
         }
 
@@ -158,10 +158,10 @@ static class Layout
             if (edge.Labeloffset is { } eLabeloffset) newEdge.Labeloffset = eLabeloffset;
             if (edge.Labelpos is { } eLabelpos) newEdge.Labelpos = eLabelpos;
 
-            g.SetEdge(e, newEdge);
+            graph.SetEdge(e, newEdge);
         }
 
-        return g;
+        return graph;
     }
 
     /*
@@ -172,17 +172,17 @@ static class Layout
      * We also add some minimal padding to the width to push the label for the edge
      * away from the edge itself a bit.
      */
-    static void MakeSpaceForEdgeLabels(Graph g)
+    static void MakeSpaceForEdgeLabels(Graph graph)
     {
-        var graph = g.GraphLabel;
-        graph.Ranksep /= 2;
-        foreach (var e in g.Edges())
+        var graphLabel = graph.GraphLabel;
+        graphLabel.Ranksep /= 2;
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
+            var edge = graph.FindEdgeLabel(e);
             edge.Minlen *= 2;
             if (!edge.Labelpos!.Equals("c", StringComparison.OrdinalIgnoreCase))
             {
-                if (graph.Rankdir == "TB" || graph.Rankdir == "BT")
+                if (graphLabel.Rankdir == "TB" || graphLabel.Rankdir == "BT")
                 {
                     edge.Width += edge.Labeloffset;
                 }
@@ -200,63 +200,63 @@ static class Layout
      * so that we can safely remove empty ranks while preserving balance for the
      * label's position.
      */
-    static void InjectEdgeLabelProxies(Graph g)
+    static void InjectEdgeLabelProxies(Graph graph)
     {
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
+            var edge = graph.FindEdgeLabel(e);
             if (edge.Width is { } width && width != 0 && edge.Height is { } height && height != 0)
             {
-                var v = g.NodeLabel(e.V);
-                var w = g.NodeLabel(e.W);
+                var v = graph.NodeLabel(e.V);
+                var w = graph.NodeLabel(e.W);
                 // {rank: (w.rank - v.rank) / 2 + v.rank, e: e}
                 var label = new NodeLabel
                 {
                     Rank = (w.Rank!.Value - v.Rank!.Value) / 2 + v.Rank!.Value,
                     EdgeObj = e
                 };
-                Util.AddDummyNode(g, "edge-proxy", label, "_ep");
+                Util.AddDummyNode(graph, "edge-proxy", label, "_ep");
             }
         }
     }
 
-    static void AssignRankMinMax(Graph g)
+    static void AssignRankMinMax(Graph graph)
     {
         var maxRank = 0;
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            var node = g.NodeLabel(v);
+            var node = graph.NodeLabel(v);
             if (node.BorderTop != null)
             {
-                node.MinRank = g.NodeLabel(node.BorderTop).Rank;
-                node.MaxRank = g.NodeLabel(node.BorderBottom!).Rank;
+                node.MinRank = graph.NodeLabel(node.BorderTop).Rank;
+                node.MaxRank = graph.NodeLabel(node.BorderBottom!).Rank;
                 maxRank = Math.Max(maxRank, node.MaxRank!.Value);
             }
         }
 
-        g.GraphLabel.MaxRank = maxRank;
+        graph.GraphLabel.MaxRank = maxRank;
     }
 
-    static void RemoveEdgeLabelProxies(Graph g)
+    static void RemoveEdgeLabelProxies(Graph graph)
     {
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            var node = g.NodeLabel(v);
+            var node = graph.NodeLabel(v);
             if (node.Dummy == "edge-proxy")
             {
-                g.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
-                g.RemoveNode(v);
+                graph.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
+                graph.RemoveNode(v);
             }
         }
     }
 
-    static void TranslateGraph(Graph g)
+    static void TranslateGraph(Graph graph)
     {
         var minX = double.PositiveInfinity;
         var maxX = 0.0;
         var minY = double.PositiveInfinity;
         var maxY = 0.0;
-        var graphLabel = g.GraphLabel;
+        var graphLabel = graph.GraphLabel;
         var marginX = graphLabel.Marginx ?? 0;
         var marginY = graphLabel.Marginy ?? 0;
 
@@ -268,15 +268,15 @@ static class Layout
             maxY = Math.Max(maxY, y + h / 2);
         }
 
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            var node = g.NodeLabel(v);
+            var node = graph.NodeLabel(v);
             GetExtremes(node.X!.Value, node.Y!.Value, node.Width, node.Height);
         }
 
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
+            var edge = graph.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
                 GetExtremes(edge.X!.Value, edge.Y!.Value, edge.Width!.Value, edge.Height!.Value);
@@ -286,16 +286,16 @@ static class Layout
         minX -= marginX;
         minY -= marginY;
 
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            var node = g.NodeLabel(v);
+            var node = graph.NodeLabel(v);
             node.X -= minX;
             node.Y -= minY;
         }
 
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
+            var edge = graph.FindEdgeLabel(e);
             var points = edge.Points!;
             for (var i = 0; i < points.Count; i++)
             {
@@ -320,13 +320,13 @@ static class Layout
         graphLabel.Height = maxY - minY + marginY;
     }
 
-    static void AssignNodeIntersects(Graph g)
+    static void AssignNodeIntersects(Graph graph)
     {
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
-            var nodeV = g.NodeLabel(e.V);
-            var nodeW = g.NodeLabel(e.W);
+            var edge = graph.FindEdgeLabel(e);
+            var nodeV = graph.NodeLabel(e.V);
+            var nodeW = graph.NodeLabel(e.W);
             Point p1;
             Point p2;
             if (edge.Points == null)
@@ -346,11 +346,11 @@ static class Layout
         }
     }
 
-    static void FixupEdgeLabelCoords(Graph g)
+    static void FixupEdgeLabelCoords(Graph graph)
     {
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
+            var edge = graph.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
                 if (edge.Labelpos == "l" || edge.Labelpos == "r")
@@ -371,11 +371,11 @@ static class Layout
         }
     }
 
-    static void ReversePointsForReversedEdges(Graph g)
+    static void ReversePointsForReversedEdges(Graph graph)
     {
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
-            var edge = g.FindEdgeLabel(e);
+            var edge = graph.FindEdgeLabel(e);
             if (edge.Reversed == true)
             {
                 edge.Points!.Reverse();
@@ -383,17 +383,17 @@ static class Layout
         }
     }
 
-    static void RemoveBorderNodes(Graph g)
+    static void RemoveBorderNodes(Graph graph)
     {
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            if (g.Children(v).Count != 0)
+            if (graph.Children(v).Count != 0)
             {
-                var node = g.NodeLabel(v);
-                var t = g.NodeLabel(node.BorderTop!);
-                var b = g.NodeLabel(node.BorderBottom!);
-                var l = g.NodeLabel(node.BorderLeft![node.BorderLeft!.Count - 1]);
-                var r = g.NodeLabel(node.BorderRight![node.BorderRight!.Count - 1]);
+                var node = graph.NodeLabel(v);
+                var t = graph.NodeLabel(node.BorderTop!);
+                var b = graph.NodeLabel(node.BorderBottom!);
+                var l = graph.NodeLabel(node.BorderLeft![node.BorderLeft!.Count - 1]);
+                var r = graph.NodeLabel(node.BorderRight![node.BorderRight!.Count - 1]);
 
                 node.Width = Math.Abs(r.X!.Value - l.X!.Value);
                 node.Height = Math.Abs(b.Y!.Value - t.Y!.Value);
@@ -402,43 +402,43 @@ static class Layout
             }
         }
 
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            if (g.NodeLabel(v).Dummy == "border")
+            if (graph.NodeLabel(v).Dummy == "border")
             {
-                g.RemoveNode(v);
+                graph.RemoveNode(v);
             }
         }
     }
 
-    static void RemoveSelfEdges(Graph g)
+    static void RemoveSelfEdges(Graph graph)
     {
-        foreach (var e in g.Edges())
+        foreach (var e in graph.Edges())
         {
             if (e.V == e.W)
             {
-                var node = g.NodeLabel(e.V);
+                var node = graph.NodeLabel(e.V);
                 node.SelfEdges ??= [];
-                node.SelfEdges.Add(new() { E = e, Label = g.FindEdgeLabel(e) });
-                g.RemoveEdge(e);
+                node.SelfEdges.Add(new() { E = e, Label = graph.FindEdgeLabel(e) });
+                graph.RemoveEdge(e);
             }
         }
     }
 
-    static void InsertSelfEdges(Graph g)
+    static void InsertSelfEdges(Graph graph)
     {
-        var layers = Util.BuildLayerMatrix(g);
+        var layers = Util.BuildLayerMatrix(graph);
         foreach (var layer in layers)
         {
             var orderShift = 0;
             for (var i = 0; i < layer.Count; i++)
             {
                 var v = layer[i];
-                var node = g.NodeLabel(v);
+                var node = graph.NodeLabel(v);
                 node.Order = i + orderShift;
                 foreach (var selfEdge in node.SelfEdges ?? [])
                 {
-                    Util.AddDummyNode(g, "selfedge", new()
+                    Util.AddDummyNode(graph, "selfedge", new()
                     {
                         Width = selfEdge.Label.Width!.Value,
                         Height = selfEdge.Label.Height!.Value,
@@ -454,21 +454,21 @@ static class Layout
         }
     }
 
-    static void PositionSelfEdges(Graph g)
+    static void PositionSelfEdges(Graph graph)
     {
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            var node = g.NodeLabel(v);
+            var node = graph.NodeLabel(v);
             if (node.Dummy == "selfedge")
             {
-                var selfNode = g.NodeLabel(node.EdgeObj!.V);
+                var selfNode = graph.NodeLabel(node.EdgeObj!.V);
                 var x = selfNode.X!.Value + selfNode.Width / 2;
                 var y = selfNode.Y!.Value;
                 var dx = node.X!.Value - x;
                 var dy = selfNode.Height / 2;
                 var label = node.EdgeLabel!;
-                g.SetEdge(node.EdgeObj!, label);
-                g.RemoveNode(v);
+                graph.SetEdge(node.EdgeObj!, label);
+                graph.RemoveNode(v);
                 label.Points =
                 [
                     new(x + 2 * dx / 3, y - dy),

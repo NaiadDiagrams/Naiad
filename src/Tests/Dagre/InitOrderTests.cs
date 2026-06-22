@@ -2,11 +2,11 @@ namespace Naiad.Dagre.Tests;
 
 public class InitOrderTests
 {
-    Graph g = null!;
+    Graph graph = null!;
 
     [Before(Test)]
     public void Setup() =>
-        g = new Graph(compound: true)
+        graph = new Graph(compound: true)
             .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
 
     static List<string> Sorted(List<string> vs) =>
@@ -19,14 +19,14 @@ public class InitOrderTests
     {
         foreach (var (v, rank) in new[] { ("a", 0), ("b", 1), ("c", 2), ("d", 2), ("e", 1) })
         {
-            g.SetNode(v, new() { Rank = rank });
+            graph.SetNode(v, new() { Rank = rank });
         }
 
-        g.SetPath(["a", "b", "c"]);
-        g.SetEdge("b", "d");
-        g.SetEdge("a", "e");
+        graph.SetPath(["a", "b", "c"]);
+        graph.SetEdge("b", "d");
+        graph.SetEdge("a", "e");
 
-        var layering = InitOrder.Run(g);
+        var layering = InitOrder.Run(graph);
         await Assert.That(Join(layering[0])).IsEqualTo("a");
         await Assert.That(Join(Sorted(layering[1]))).IsEqualTo("b,e");
         await Assert.That(Join(Sorted(layering[2]))).IsEqualTo("c,d");
@@ -37,13 +37,13 @@ public class InitOrderTests
     {
         foreach (var (v, rank) in new[] { ("a", 0), ("b", 1), ("c", 1), ("d", 2) })
         {
-            g.SetNode(v, new() { Rank = rank });
+            graph.SetNode(v, new() { Rank = rank });
         }
 
-        g.SetPath(["a", "b", "d"]);
-        g.SetPath(["a", "c", "d"]);
+        graph.SetPath(["a", "b", "d"]);
+        graph.SetPath(["a", "c", "d"]);
 
-        var layering = InitOrder.Run(g);
+        var layering = InitOrder.Run(graph);
         await Assert.That(Join(layering[0])).IsEqualTo("a");
         await Assert.That(Join(Sorted(layering[1]))).IsEqualTo("b,c");
         await Assert.That(Join(Sorted(layering[2]))).IsEqualTo("d");
@@ -52,11 +52,11 @@ public class InitOrderTests
     [Test]
     public async Task DoesNotAssignAnOrderToSubgraphNodes()
     {
-        g.SetNode("a", new() { Rank = 0 });
-        g.SetNode("sg1", new());
-        g.SetParent("a", "sg1");
+        graph.SetNode("a", new() { Rank = 0 });
+        graph.SetNode("sg1", new());
+        graph.SetParent("a", "sg1");
 
-        var layering = InitOrder.Run(g);
+        var layering = InitOrder.Run(graph);
         await Assert.That(layering.Count).IsEqualTo(1);
         await Assert.That(Join(layering[0])).IsEqualTo("a");
     }

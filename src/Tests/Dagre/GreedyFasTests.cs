@@ -5,68 +5,68 @@ public class GreedyFasTests
     [Test]
     public async Task ReturnsTheEmptySetForEmptyGraphs()
     {
-        var g = new Graph();
-        await Assert.That(GreedyFas.Run(g)).IsEmpty();
+        var graph = new Graph();
+        await Assert.That(GreedyFas.Run(graph)).IsEmpty();
     }
 
     [Test]
     public async Task ReturnsTheEmptySetForSingleNodeGraphs()
     {
-        var g = new Graph();
-        g.SetNode("a");
-        await Assert.That(GreedyFas.Run(g)).IsEmpty();
+        var graph = new Graph();
+        graph.SetNode("a");
+        await Assert.That(GreedyFas.Run(graph)).IsEmpty();
     }
 
     [Test]
     public async Task ReturnsAnEmptySetIfTheInputGraphIsAcyclic()
     {
-        var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
-        g.SetEdge("a", "b");
-        g.SetEdge("b", "c");
-        g.SetEdge("b", "d");
-        g.SetEdge("a", "e");
-        await Assert.That(GreedyFas.Run(g)).IsEmpty();
+        var graph = new Graph();
+        graph.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
+        graph.SetEdge("a", "b");
+        graph.SetEdge("b", "c");
+        graph.SetEdge("b", "d");
+        graph.SetEdge("a", "e");
+        await Assert.That(GreedyFas.Run(graph)).IsEmpty();
     }
 
     [Test]
     public Task ReturnsASingleEdgeWithASimpleCycle()
     {
-        var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
-        g.SetEdge("a", "b");
-        g.SetEdge("b", "a");
-        return CheckFas(g, GreedyFas.Run(g));
+        var graph = new Graph();
+        graph.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
+        graph.SetEdge("a", "b");
+        graph.SetEdge("b", "a");
+        return CheckFas(graph, GreedyFas.Run(graph));
     }
 
     [Test]
     public Task ReturnsASingleEdgeInA4NodeCycle()
     {
-        var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
-        g.SetEdge("n1", "n2");
-        g.SetPath(["n2", "n3", "n4", "n5", "n2"]);
-        g.SetEdge("n3", "n5");
-        g.SetEdge("n4", "n2");
-        g.SetEdge("n4", "n6");
-        return CheckFas(g, GreedyFas.Run(g));
+        var graph = new Graph();
+        graph.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
+        graph.SetEdge("n1", "n2");
+        graph.SetPath(["n2", "n3", "n4", "n5", "n2"]);
+        graph.SetEdge("n3", "n5");
+        graph.SetEdge("n4", "n2");
+        graph.SetEdge("n4", "n6");
+        return CheckFas(graph, GreedyFas.Run(graph));
     }
 
     [Test]
     public Task ReturnsTwoEdgesForTwo4NodeCycles()
     {
-        var g = new Graph();
-        g.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
-        g.SetEdge("n1", "n2");
-        g.SetPath(["n2", "n3", "n4", "n5", "n2"]);
-        g.SetEdge("n3", "n5");
-        g.SetEdge("n4", "n2");
-        g.SetEdge("n4", "n6");
-        g.SetPath(["n6", "n7", "n8", "n9", "n6"]);
-        g.SetEdge("n7", "n9");
-        g.SetEdge("n8", "n6");
-        g.SetEdge("n8", "n10");
-        return CheckFas(g, GreedyFas.Run(g));
+        var graph = new Graph();
+        graph.SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
+        graph.SetEdge("n1", "n2");
+        graph.SetPath(["n2", "n3", "n4", "n5", "n2"]);
+        graph.SetEdge("n3", "n5");
+        graph.SetEdge("n4", "n2");
+        graph.SetEdge("n4", "n6");
+        graph.SetPath(["n6", "n7", "n8", "n9", "n6"]);
+        graph.SetEdge("n7", "n9");
+        graph.SetEdge("n8", "n6");
+        graph.SetEdge("n8", "n10");
+        return CheckFas(graph, GreedyFas.Run(graph));
     }
 
     [Test]
@@ -93,11 +93,11 @@ public class GreedyFasTests
     [Test]
     public async Task WorksForMultigraphs()
     {
-        var g = new Graph(multigraph: true);
-        g.SetEdge("a", "b", new() { Weight = 5 }, "foo");
-        g.SetEdge("b", "a", new() { Weight = 2 }, "bar");
-        g.SetEdge("b", "a", new() { Weight = 2 }, "baz");
-        var result = GreedyFas.Run(g, WeightFn(g));
+        var graph = new Graph(multigraph: true);
+        graph.SetEdge("a", "b", new() { Weight = 5 }, "foo");
+        graph.SetEdge("b", "a", new() { Weight = 2 }, "bar");
+        graph.SetEdge("b", "a", new() { Weight = 2 }, "baz");
+        var result = GreedyFas.Run(graph, WeightFn(graph));
         result.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
         var expected = new List<Edge>
         {
@@ -107,22 +107,22 @@ public class GreedyFasTests
         await Assert.That(result).IsEquivalentTo(expected);
     }
 
-    static async Task CheckFas(Graph g, List<Edge> fas)
+    static async Task CheckFas(Graph graph, List<Edge> fas)
     {
-        var n = g.NodeCount;
-        var m = g.EdgeCount;
+        var n = graph.NodeCount;
+        var m = graph.EdgeCount;
         foreach (var edge in fas)
         {
-            g.RemoveEdge(edge.V, edge.W);
+            graph.RemoveEdge(edge.V, edge.W);
         }
 
-        await Assert.That(Alg.FindCycles(g)).IsEmpty();
+        await Assert.That(Alg.FindCycles(graph)).IsEmpty();
         // The more direct m/2 - n/6 fails for the simple cycle A <-> B, where one
         // edge must be reversed, but the performance bound implies that only 2/3rds
         // of an edge can be reversed. I'm using floors to acount for this.
         await Assert.That(fas.Count).IsLessThanOrEqualTo((int)Math.Floor(m / 2.0) - (int)Math.Floor(n / 6.0));
     }
 
-    static Func<Edge, double> WeightFn(Graph g) =>
-        e => g.FindEdgeLabel(e).Weight!.Value;
+    static Func<Edge, double> WeightFn(Graph graph) =>
+        e => graph.FindEdgeLabel(e).Weight!.Value;
 }

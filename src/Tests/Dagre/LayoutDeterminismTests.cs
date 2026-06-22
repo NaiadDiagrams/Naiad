@@ -3,7 +3,7 @@
 
 public class LayoutDeterminismTests
 {
-    static readonly string[] RealNodes = ["a", "b", "c", "d", "e", "f", "g", "h", "sg1", "sg2"];
+    static readonly string[] RealNodes = ["a", "b", "c", "d", "e", "f", "graph", "h", "sg1", "sg2"];
 
     static Graph BuildGraph()
     {
@@ -17,7 +17,7 @@ public class LayoutDeterminismTests
                 Edgesep = 20
             });
         graph.SetDefaultEdgeLabel(new EdgeLabel());
-        foreach (var v in new[] { "a", "b", "c", "d", "e", "f", "g", "h" })
+        foreach (var v in new[] { "a", "b", "c", "d", "e", "f", "graph", "h" })
         {
             graph.SetNode(
                 v,
@@ -33,7 +33,7 @@ public class LayoutDeterminismTests
         graph.SetParent("c", "sg1");
         graph.SetParent("d", "sg1");
         graph.SetParent("f", "sg2");
-        graph.SetParent("g", "sg2");
+        graph.SetParent("graph", "sg2");
 
         void E(string a, string b) => graph.SetEdge(a, b, new() { Minlen = 1, Weight = 1 });
         E("a", "b");
@@ -42,11 +42,11 @@ public class LayoutDeterminismTests
         E("c", "e");
         E("d", "e");
         E("a", "f");
-        E("f", "g");
-        E("g", "h");
+        E("f", "graph");
+        E("graph", "h");
         E("e", "h");
         E("a", "h");   // long edge -> dummy chain
-        E("b", "g");   // crosses subgraphs -> dummy chain
+        E("b", "graph");   // crosses subgraphs -> dummy chain
         E("h", "a");   // back-edge -> cycle (acyclic must reverse), like a "reset" transition
         E("h", "b");   // another back-edge
         E("e", "e");   // self-edge, like a self-transition
@@ -54,12 +54,12 @@ public class LayoutDeterminismTests
         return graph;
     }
 
-    static string Positions(Graph g)
+    static string Positions(Graph graph)
     {
         var builder = new StringBuilder();
         foreach (var v in RealNodes)
         {
-            var n = g.NodeLabel(v);
+            var n = graph.NodeLabel(v);
             builder.Append(CultureInfo.InvariantCulture, $"{v}:{n.X:0.##},{n.Y:0.##};");
         }
 

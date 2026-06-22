@@ -10,18 +10,18 @@ public class SmokeTest
     [Test]
     public async Task LaysOutASimpleChainTopToBottom()
     {
-        var g = NewGraph();
-        g.SetNode("a", new() { Width = 50, Height = 50 });
-        g.SetNode("b", new() { Width = 50, Height = 50 });
-        g.SetNode("c", new() { Width = 50, Height = 50 });
-        g.SetEdge("a", "b");
-        g.SetEdge("b", "c");
+        var graph = NewGraph();
+        graph.SetNode("a", new() { Width = 50, Height = 50 });
+        graph.SetNode("b", new() { Width = 50, Height = 50 });
+        graph.SetNode("c", new() { Width = 50, Height = 50 });
+        graph.SetEdge("a", "b");
+        graph.SetEdge("b", "c");
 
-        Layout.Run(g);
+        Layout.Run(graph);
 
-        var a = g.NodeLabel("a");
-        var b = g.NodeLabel("b");
-        var c = g.NodeLabel("c");
+        var a = graph.NodeLabel("a");
+        var b = graph.NodeLabel("b");
+        var c = graph.NodeLabel("c");
 
         await Assert.That(a.X).IsNotNull();
         await Assert.That(a.Y).IsNotNull();
@@ -36,22 +36,22 @@ public class SmokeTest
     [Test]
     public async Task RanksABranch()
     {
-        var g = NewGraph();
+        var graph = NewGraph();
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
-            g.SetNode(v, new() { Width = 40, Height = 40 });
+            graph.SetNode(v, new() { Width = 40, Height = 40 });
         }
 
-        g.SetEdge("a", "b");
-        g.SetEdge("a", "c");
-        g.SetEdge("b", "d");
-        g.SetEdge("c", "d");
+        graph.SetEdge("a", "b");
+        graph.SetEdge("a", "c");
+        graph.SetEdge("b", "d");
+        graph.SetEdge("c", "d");
 
-        Layout.Run(g);
+        Layout.Run(graph);
 
         // b and c are siblings on the same rank; a above, d below.
-        await Assert.That(g.NodeLabel("b").Y!.Value).IsEqualTo(g.NodeLabel("c").Y!.Value).Within(0.001);
-        await Assert.That(g.NodeLabel("a").Y!.Value).IsLessThan(g.NodeLabel("b").Y!.Value);
-        await Assert.That(g.NodeLabel("d").Y!.Value).IsGreaterThan(g.NodeLabel("b").Y!.Value);
+        await Assert.That(graph.NodeLabel("b").Y!.Value).IsEqualTo(graph.NodeLabel("c").Y!.Value).Within(0.001);
+        await Assert.That(graph.NodeLabel("a").Y!.Value).IsLessThan(graph.NodeLabel("b").Y!.Value);
+        await Assert.That(graph.NodeLabel("d").Y!.Value).IsGreaterThan(graph.NodeLabel("b").Y!.Value);
     }
 }

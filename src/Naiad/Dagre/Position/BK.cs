@@ -348,7 +348,7 @@ static class BK
             {
                 var xsV = xs.GetValueOrDefault(e.V, 0);
                 var edgeWeight = blockG.FindEdgeLabel(e);
-                acc = Math.Max(acc, xsV + (edgeWeight?.Weight ?? 0));
+                acc = Math.Max(acc, xsV + (edgeWeight.Weight ?? 0));
             }
 
             xs[elem] = acc;
@@ -363,7 +363,7 @@ static class BK
             {
                 var xsW = xs.GetValueOrDefault(e.W, 0);
                 var edgeWeight = blockG.FindEdgeLabel(e);
-                min = Math.Min(min, xsW - (edgeWeight?.Weight ?? 0));
+                min = Math.Min(min, xsW - (edgeWeight.Weight ?? 0));
             }
 
             var node = graph.NodeLabel(elem);
@@ -422,8 +422,7 @@ static class BK
                     {
                         if (root.TryGetValue(u, out var uRoot))
                         {
-                            var prevMax = blockGraph.FindEdgeLabel(uRoot, vRoot);
-                            var prevMaxVal = prevMax?.Weight ?? 0;
+                            var prevMaxVal = blockGraph.TryGetEdgeLabel(uRoot, vRoot, out var prevMax) ? prevMax.Weight ?? 0 : 0;
                             blockGraph.SetEdge(uRoot, vRoot, new() { Weight = Math.Max(sepFn(graph, v, u), prevMaxVal) });
                         }
                     }
@@ -579,10 +578,10 @@ static class BK
     }
 
     internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep) =>
-        (g, v, w) =>
+        (graph, v, w) =>
         {
-            var vLabel = g.NodeLabel(v);
-            var wLabel = g.NodeLabel(w);
+            var vLabel = graph.NodeLabel(v);
+            var wLabel = graph.NodeLabel(w);
             double sum = 0;
             double? delta = null;
 

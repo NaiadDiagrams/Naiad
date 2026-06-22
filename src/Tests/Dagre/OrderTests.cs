@@ -2,33 +2,33 @@ namespace Naiad.Dagre.Tests;
 
 public class OrderTests
 {
-    Graph g = null!;
+    Graph graph = null!;
 
     [Before(Test)]
     public void Setup() =>
-        g = new Graph()
+        graph = new Graph()
             .SetDefaultEdgeLabel(new EdgeLabel { Weight = 1 });
 
     [Test]
     public async Task DoesNotAddCrossingsToATreeStructure()
     {
-        g.SetNode("a", new() { Rank = 1 });
+        graph.SetNode("a", new() { Rank = 1 });
         foreach (var v in new[] { "b", "e" })
         {
-            g.SetNode(v, new() { Rank = 2 });
+            graph.SetNode(v, new() { Rank = 2 });
         }
 
         foreach (var v in new[] { "c", "d", "f" })
         {
-            g.SetNode(v, new() { Rank = 3 });
+            graph.SetNode(v, new() { Rank = 3 });
         }
 
-        g.SetPath(["a", "b", "c"]);
-        g.SetEdge("b", "d");
-        g.SetPath(["a", "e", "f"]);
-        Order.Run(g);
-        var layering = Util.BuildLayerMatrix(g);
-        await Assert.That(CrossCount.Run(g, layering)).IsEqualTo(0);
+        graph.SetPath(["a", "b", "c"]);
+        graph.SetEdge("b", "d");
+        graph.SetPath(["a", "e", "f"]);
+        Order.Run(graph);
+        var layering = Util.BuildLayerMatrix(graph);
+        await Assert.That(CrossCount.Run(graph, layering)).IsEqualTo(0);
     }
 
     [Test]
@@ -37,67 +37,67 @@ public class OrderTests
         // This graph resulted in a single crossing for previous versions of dagre.
         foreach (var v in new[] { "a", "d" })
         {
-            g.SetNode(v, new() { Rank = 1 });
+            graph.SetNode(v, new() { Rank = 1 });
         }
 
         foreach (var v in new[] { "b", "f", "e" })
         {
-            g.SetNode(v, new() { Rank = 2 });
+            graph.SetNode(v, new() { Rank = 2 });
         }
 
-        foreach (var v in new[] { "c", "g" })
+        foreach (var v in new[] { "c", "graph" })
         {
-            g.SetNode(v, new() { Rank = 3 });
+            graph.SetNode(v, new() { Rank = 3 });
         }
 
-        Order.Run(g);
-        var layering = Util.BuildLayerMatrix(g);
-        await Assert.That(CrossCount.Run(g, layering)).IsEqualTo(0);
+        Order.Run(graph);
+        var layering = Util.BuildLayerMatrix(graph);
+        await Assert.That(CrossCount.Run(graph, layering)).IsEqualTo(0);
     }
 
     [Test]
     public async Task CanMinimizeCrossings()
     {
-        g.SetNode("a", new() { Rank = 1 });
-        foreach (var v in new[] { "b", "e", "g" })
+        graph.SetNode("a", new() { Rank = 1 });
+        foreach (var v in new[] { "b", "e", "graph" })
         {
-            g.SetNode(v, new() { Rank = 2 });
+            graph.SetNode(v, new() { Rank = 2 });
         }
 
         foreach (var v in new[] { "c", "f", "h" })
         {
-            g.SetNode(v, new() { Rank = 3 });
+            graph.SetNode(v, new() { Rank = 3 });
         }
 
-        g.SetNode("d", new() { Rank = 4 });
-        Order.Run(g);
-        var layering = Util.BuildLayerMatrix(g);
-        await Assert.That(CrossCount.Run(g, layering)).IsLessThanOrEqualTo(1);
+        graph.SetNode("d", new() { Rank = 4 });
+        Order.Run(graph);
+        var layering = Util.BuildLayerMatrix(graph);
+        await Assert.That(CrossCount.Run(graph, layering)).IsLessThanOrEqualTo(1);
     }
 
     [Test]
     public async Task CanSkipTheOptimalOrdering()
     {
-        g.SetNode("a", new() { Rank = 1 });
+        graph.SetNode("a", new() { Rank = 1 });
         foreach (var v in new[] { "b", "d" })
         {
-            g.SetNode(v, new() { Rank = 2 });
+            graph.SetNode(v, new() { Rank = 2 });
         }
 
         foreach (var v in new[] { "c", "e" })
         {
-            g.SetNode(v, new() { Rank = 3 });
+            graph.SetNode(v, new() { Rank = 3 });
         }
 
-        g.SetPath(["a", "b", "c"]);
-        g.SetPath(["a", "d"]);
-        g.SetEdge("b", "e");
-        g.SetEdge("d", "c");
+        graph.SetPath(["a", "b", "c"]);
+        graph.SetPath(["a", "d"]);
+        graph.SetEdge("b", "e");
+        graph.SetEdge("d", "c");
 
         var opts = new OrderOptions { DisableOptimalOrderHeuristic = true };
 
-        Order.Run(g, opts);
-        var layering = Util.BuildLayerMatrix(g);
-        await Assert.That(CrossCount.Run(g, layering)).IsEqualTo(1);
+        Order.Run(graph, opts);
+        var layering = Util.BuildLayerMatrix(graph);
+        await Assert.That(CrossCount.Run(graph, layering)).IsEqualTo(1);
     }
 }

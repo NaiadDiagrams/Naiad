@@ -3,7 +3,7 @@ namespace Naiad.Dagre.Tests;
 // Port of dagre test/rank/network-simplex-test.ts (describe "network simplex").
 public class NetworkSimplexTests
 {
-    Graph g = null!;
+    Graph graph = null!;
     Graph t = null!;
     Graph gansnerGraph = null!;
     Graph gansnerTree = null!;
@@ -11,7 +11,7 @@ public class NetworkSimplexTests
     [Before(Test)]
     public void Setup()
     {
-        g = new Graph(multigraph: true)
+        graph = new Graph(multigraph: true)
             .SetDefaultNodeLabel(_ => new())
             .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
 
@@ -24,91 +24,91 @@ public class NetworkSimplexTests
             .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
         gansnerGraph
             .SetPath(["a", "b", "c", "d", "h"])
-            .SetPath(["a", "e", "g", "h"])
-            .SetPath(["a", "f", "g"]);
+            .SetPath(["a", "e", "graph", "h"])
+            .SetPath(["a", "f", "graph"]);
 
         gansnerTree = new Graph(directed: false)
             .SetDefaultNodeLabel(_ => new())
             .SetDefaultEdgeLabel((_, _, _) => new());
         gansnerTree
-            .SetPath(["a", "b", "c", "d", "h", "g", "e"])
-            .SetEdge("g", "f");
+            .SetPath(["a", "b", "c", "d", "h", "graph", "e"])
+            .SetEdge("graph", "f");
     }
 
     [Test]
     public async Task CanAssignARankToASingleNode()
     {
-        g.SetNode("a");
-        Ns(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        graph.SetNode("a");
+        Ns(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
     }
 
     [Test]
     public async Task CanAssignARankToA2NodeConnectedGraph()
     {
-        g.SetEdge("a", "b");
-        Ns(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+        graph.SetEdge("a", "b");
+        Ns(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
     }
 
     [Test]
     public async Task CanAssignRanksForADiamond()
     {
-        g.SetPath(["a", "b", "d"]);
-        g.SetPath(["a", "c", "d"]);
-        Ns(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(2);
+        graph.SetPath(["a", "b", "d"]);
+        graph.SetPath(["a", "c", "d"]);
+        Ns(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("c").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("d").Rank).IsEqualTo(2);
     }
 
     [Test]
     public async Task UsesTheMinlenAttributeOnTheEdge()
     {
-        g.SetPath(["a", "b", "d"]);
-        g.SetEdge("a", "c");
-        g.SetEdge("c", "d", new() { Minlen = 2 });
-        Ns(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        graph.SetPath(["a", "b", "d"]);
+        graph.SetEdge("a", "c");
+        graph.SetEdge("c", "d", new() { Minlen = 2 });
+        Ns(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
         // longest path biases towards the lowest rank it can assign. Since the
         // graph has no optimization opportunities we can assume that the longest
         // path ranking is used.
-        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
-        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
+        await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(2);
+        await Assert.That(graph.NodeLabel("c").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("d").Rank).IsEqualTo(3);
     }
 
     [Test]
     public async Task CanRankTheGansnerGraph()
     {
-        g = gansnerGraph;
-        Ns(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(2);
-        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
-        await Assert.That(g.NodeLabel("h").Rank).IsEqualTo(4);
-        await Assert.That(g.NodeLabel("e").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("f").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("g").Rank).IsEqualTo(2);
+        graph = gansnerGraph;
+        Ns(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("c").Rank).IsEqualTo(2);
+        await Assert.That(graph.NodeLabel("d").Rank).IsEqualTo(3);
+        await Assert.That(graph.NodeLabel("h").Rank).IsEqualTo(4);
+        await Assert.That(graph.NodeLabel("e").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("f").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("graph").Rank).IsEqualTo(2);
     }
 
     [Test]
     public async Task CanHandleMultiEdges()
     {
-        g.SetPath(["a", "b", "c", "d"]);
-        g.SetEdge("a", "e", new() { Weight = 2, Minlen = 1 });
-        g.SetEdge("e", "d");
-        g.SetEdge("b", "c", new() { Weight = 1, Minlen = 2 }, "multi");
-        Ns(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+        graph.SetPath(["a", "b", "c", "d"]);
+        graph.SetEdge("a", "e", new() { Weight = 2, Minlen = 1 });
+        graph.SetEdge("e", "d");
+        graph.SetEdge("b", "c", new() { Weight = 1, Minlen = 2 }, "multi");
+        Ns(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
         // b -> c has minlen = 1 and minlen = 2, so it should be 2 ranks apart.
-        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(3);
-        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(4);
-        await Assert.That(g.NodeLabel("e").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("c").Rank).IsEqualTo(3);
+        await Assert.That(graph.NodeLabel("d").Rank).IsEqualTo(4);
+        await Assert.That(graph.NodeLabel("e").Rank).IsEqualTo(1);
     }
 
     // describe("leaveEdge")
@@ -137,7 +137,7 @@ public class NetworkSimplexTests
     [Test]
     public async Task EnterEdge_FindsAnEdgeFromTheHeadToTailComponent()
     {
-        g
+        graph
             .SetNode("a", new() { Rank = 0 })
             .SetNode("b", new() { Rank = 2 })
             .SetNode("c", new() { Rank = 3 })
@@ -146,14 +146,14 @@ public class NetworkSimplexTests
         t.SetPath(["b", "c", "a"]);
         NetworkSimplex.InitLowLimValues(t, "c");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("b", "c"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("b", "c"));
         await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new("a", "b")));
     }
 
     [Test]
     public async Task EnterEdge_WorksWhenTheRootOfTheTreeIsInTheTailComponent()
     {
-        g
+        graph
             .SetNode("a", new() { Rank = 0 })
             .SetNode("b", new() { Rank = 2 })
             .SetNode("c", new() { Rank = 3 })
@@ -162,14 +162,14 @@ public class NetworkSimplexTests
         t.SetPath(["b", "c", "a"]);
         NetworkSimplex.InitLowLimValues(t, "b");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("b", "c"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("b", "c"));
         await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new("a", "b")));
     }
 
     [Test]
     public async Task EnterEdge_FindsTheEdgeWithTheLeastSlack()
     {
-        g
+        graph
             .SetNode("a", new() { Rank = 0 })
             .SetNode("b", new() { Rank = 1 })
             .SetNode("c", new() { Rank = 3 })
@@ -180,19 +180,19 @@ public class NetworkSimplexTests
         t.SetPath(["c", "d", "a", "b"]);
         NetworkSimplex.InitLowLimValues(t, "a");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("c", "d"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("c", "d"));
         await Assert.That(UndirectedEdge(f)).IsEqualTo(UndirectedEdge(new("b", "c")));
     }
 
     [Test]
     public async Task EnterEdge_FindsAnAppropriateEdgeForGansnerGraph1()
     {
-        g = gansnerGraph;
+        graph = gansnerGraph;
         t = gansnerTree;
-        RankUtil.LongestPath(g);
+        RankUtil.LongestPath(graph);
         NetworkSimplex.InitLowLimValues(t, "a");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("g", "h"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("graph", "h"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -200,12 +200,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task EnterEdge_FindsAnAppropriateEdgeForGansnerGraph2()
     {
-        g = gansnerGraph;
+        graph = gansnerGraph;
         t = gansnerTree;
-        RankUtil.LongestPath(g);
+        RankUtil.LongestPath(graph);
         NetworkSimplex.InitLowLimValues(t, "e");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("g", "h"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("graph", "h"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -213,12 +213,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task EnterEdge_FindsAnAppropriateEdgeForGansnerGraph3()
     {
-        g = gansnerGraph;
+        graph = gansnerGraph;
         t = gansnerTree;
-        RankUtil.LongestPath(g);
+        RankUtil.LongestPath(graph);
         NetworkSimplex.InitLowLimValues(t, "a");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("h", "g"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("h", "graph"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -226,12 +226,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task EnterEdge_FindsAnAppropriateEdgeForGansnerGraph4()
     {
-        g = gansnerGraph;
+        graph = gansnerGraph;
         t = gansnerTree;
-        RankUtil.LongestPath(g);
+        RankUtil.LongestPath(graph);
         NetworkSimplex.InitLowLimValues(t, "e");
 
-        var f = NetworkSimplex.EnterEdge(t, g, new("h", "g"));
+        var f = NetworkSimplex.EnterEdge(t, graph, new("h", "graph"));
         await Assert.That(UndirectedEdge(f).V).IsEqualTo("a");
         await Assert.That(["e", "f"]).Contains(UndirectedEdge(f).W);
     }
@@ -282,12 +282,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task ExchangeEdges_ExchangesEdgesAndUpdatesCutValuesAndLowLimNumbers()
     {
-        g = gansnerGraph;
+        graph = gansnerGraph;
         t = gansnerTree;
-        RankUtil.LongestPath(g);
+        RankUtil.LongestPath(graph);
         NetworkSimplex.InitLowLimValues(t);
 
-        NetworkSimplex.ExchangeEdges(t, g, new("g", "h"), new("a", "e"));
+        NetworkSimplex.ExchangeEdges(t, graph, new("graph", "h"), new("a", "e"));
 
         // check new cut values
         await Assert.That(t.FindEdgeLabel("a", "b").Cutvalue).IsEqualTo(2);
@@ -295,8 +295,8 @@ public class NetworkSimplexTests
         await Assert.That(t.FindEdgeLabel("c", "d").Cutvalue).IsEqualTo(2);
         await Assert.That(t.FindEdgeLabel("d", "h").Cutvalue).IsEqualTo(2);
         await Assert.That(t.FindEdgeLabel("a", "e").Cutvalue).IsEqualTo(1);
-        await Assert.That(t.FindEdgeLabel("e", "g").Cutvalue).IsEqualTo(1);
-        await Assert.That(t.FindEdgeLabel("g", "f").Cutvalue).IsEqualTo(0);
+        await Assert.That(t.FindEdgeLabel("e", "graph").Cutvalue).IsEqualTo(1);
+        await Assert.That(t.FindEdgeLabel("graph", "f").Cutvalue).IsEqualTo(0);
 
         // ensure lim numbers look right
         var lims = t.Nodes().Select(v => t.NodeLabel(v).Lim!.Value).ToList();
@@ -307,23 +307,23 @@ public class NetworkSimplexTests
     [Test]
     public async Task ExchangeEdges_UpdatesRanks()
     {
-        g = gansnerGraph;
+        graph = gansnerGraph;
         t = gansnerTree;
-        RankUtil.LongestPath(g);
+        RankUtil.LongestPath(graph);
         NetworkSimplex.InitLowLimValues(t);
 
-        NetworkSimplex.ExchangeEdges(t, g, new("g", "h"), new("a", "e"));
-        Util.NormalizeRanks(g);
+        NetworkSimplex.ExchangeEdges(t, graph, new("graph", "h"), new("a", "e"));
+        Util.NormalizeRanks(graph);
 
         // check new ranks
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-        await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(2);
-        await Assert.That(g.NodeLabel("d").Rank).IsEqualTo(3);
-        await Assert.That(g.NodeLabel("e").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("f").Rank).IsEqualTo(1);
-        await Assert.That(g.NodeLabel("g").Rank).IsEqualTo(2);
-        await Assert.That(g.NodeLabel("h").Rank).IsEqualTo(4);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+        await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("c").Rank).IsEqualTo(2);
+        await Assert.That(graph.NodeLabel("d").Rank).IsEqualTo(3);
+        await Assert.That(graph.NodeLabel("e").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("f").Rank).IsEqualTo(1);
+        await Assert.That(graph.NodeLabel("graph").Rank).IsEqualTo(2);
+        await Assert.That(graph.NodeLabel("h").Rank).IsEqualTo(4);
     }
 
     // describe("calcCutValue")
@@ -332,39 +332,39 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksForA2NodeTreeWithCToP()
     {
-        g.SetPath(["c", "p"]);
+        graph.SetPath(["c", "p"]);
         t.SetPath(["p", "c"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(1);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(1);
     }
 
     [Test]
     public async Task CalcCutValue_WorksForA2NodeTreeWithCFromP()
     {
-        g.SetPath(["p", "c"]);
+        graph.SetPath(["p", "c"]);
         t.SetPath(["p", "c"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(1);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(1);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcToCToP()
     {
-        g.SetPath(["gc", "c", "p"]);
+        graph.SetPath(["gc", "c", "p"]);
         t
             .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(3);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(3);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcToCFromP()
     {
-        g
+        graph
             .SetEdge("p", "c")
             .SetEdge("gc", "c");
         t
@@ -372,13 +372,13 @@ public class NetworkSimplexTests
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(-1);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-1);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcFromCToP()
     {
-        g
+        graph
             .SetEdge("c", "p")
             .SetEdge("c", "gc");
         t
@@ -386,25 +386,25 @@ public class NetworkSimplexTests
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(-1);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-1);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcFromCFromP()
     {
-        g.SetPath(["p", "c", "gc"]);
+        graph.SetPath(["p", "c", "gc"]);
         t
             .SetEdge("gc", "c", new() { Cutvalue = 3 })
             .SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(3);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(3);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCToPToO_WithOToC()
     {
-        g
+        graph
             .SetEdge("o", "c", new() { Weight = 7 })
             .SetPath(["gc", "c", "p", "o"]);
         t
@@ -412,13 +412,13 @@ public class NetworkSimplexTests
             .SetPath(["c", "p", "o"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(-4);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-4);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCToPToO_WithOFromC()
     {
-        g
+        graph
             .SetEdge("c", "o", new() { Weight = 7 })
             .SetPath(["gc", "c", "p", "o"]);
         t
@@ -426,13 +426,13 @@ public class NetworkSimplexTests
             .SetPath(["c", "p", "o"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(10);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(10);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCToP_WithOToC()
     {
-        g
+        graph
             .SetEdge("o", "c", new() { Weight = 7 })
             .SetPath(["o", "gc", "c", "p"]);
         t
@@ -441,13 +441,13 @@ public class NetworkSimplexTests
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(-4);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-4);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCToP_WithOFromC()
     {
-        g
+        graph
             .SetEdge("c", "o", new() { Weight = 7 })
             .SetPath(["o", "gc", "c", "p"]);
         t
@@ -456,13 +456,13 @@ public class NetworkSimplexTests
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(10);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(10);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCFromPToO_WithOToC()
     {
-        g
+        graph
             .SetEdge("gc", "c")
             .SetEdge("p", "c")
             .SetEdge("p", "o")
@@ -473,13 +473,13 @@ public class NetworkSimplexTests
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(6);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(6);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCFromPToO_WithOFromC()
     {
-        g
+        graph
             .SetEdge("gc", "c")
             .SetEdge("p", "c")
             .SetEdge("p", "o")
@@ -490,13 +490,13 @@ public class NetworkSimplexTests
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(-8);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-8);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCFromP_WithOToC()
     {
-        g
+        graph
             .SetEdge("o", "c", new() { Weight = 7 })
             .SetPath(["o", "gc", "c"])
             .SetEdge("p", "c");
@@ -506,13 +506,13 @@ public class NetworkSimplexTests
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(6);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(6);
     }
 
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCFromP_WithOFromC()
     {
-        g
+        graph
             .SetEdge("c", "o", new() { Weight = 7 })
             .SetPath(["o", "gc", "c"])
             .SetEdge("p", "c");
@@ -522,7 +522,7 @@ public class NetworkSimplexTests
             .SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
-        await Assert.That(NetworkSimplex.CalcCutValue(t, g, "c")).IsEqualTo(-8);
+        await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-8);
     }
 
     // describe("initCutValues")
@@ -535,15 +535,15 @@ public class NetworkSimplexTests
         await Assert.That(gansnerTree.FindEdgeLabel("b", "c").Cutvalue).IsEqualTo(3);
         await Assert.That(gansnerTree.FindEdgeLabel("c", "d").Cutvalue).IsEqualTo(3);
         await Assert.That(gansnerTree.FindEdgeLabel("d", "h").Cutvalue).IsEqualTo(3);
-        await Assert.That(gansnerTree.FindEdgeLabel("g", "h").Cutvalue).IsEqualTo(-1);
-        await Assert.That(gansnerTree.FindEdgeLabel("e", "g").Cutvalue).IsEqualTo(0);
-        await Assert.That(gansnerTree.FindEdgeLabel("f", "g").Cutvalue).IsEqualTo(0);
+        await Assert.That(gansnerTree.FindEdgeLabel("graph", "h").Cutvalue).IsEqualTo(-1);
+        await Assert.That(gansnerTree.FindEdgeLabel("e", "graph").Cutvalue).IsEqualTo(0);
+        await Assert.That(gansnerTree.FindEdgeLabel("f", "graph").Cutvalue).IsEqualTo(0);
     }
 
     [Test]
     public async Task InitCutValues_WorksForUpdatedGansnerGraph()
     {
-        gansnerTree.RemoveEdge("g", "h");
+        gansnerTree.RemoveEdge("graph", "h");
         gansnerTree.SetEdge("a", "e");
         NetworkSimplex.InitLowLimValues(gansnerTree);
         NetworkSimplex.InitCutValues(gansnerTree, gansnerGraph);
@@ -552,8 +552,8 @@ public class NetworkSimplexTests
         await Assert.That(gansnerTree.FindEdgeLabel("c", "d").Cutvalue).IsEqualTo(2);
         await Assert.That(gansnerTree.FindEdgeLabel("d", "h").Cutvalue).IsEqualTo(2);
         await Assert.That(gansnerTree.FindEdgeLabel("a", "e").Cutvalue).IsEqualTo(1);
-        await Assert.That(gansnerTree.FindEdgeLabel("e", "g").Cutvalue).IsEqualTo(1);
-        await Assert.That(gansnerTree.FindEdgeLabel("f", "g").Cutvalue).IsEqualTo(0);
+        await Assert.That(gansnerTree.FindEdgeLabel("e", "graph").Cutvalue).IsEqualTo(1);
+        await Assert.That(gansnerTree.FindEdgeLabel("f", "graph").Cutvalue).IsEqualTo(0);
     }
 
     static void Ns(Graph graph)

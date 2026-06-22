@@ -53,7 +53,7 @@ public class AddSubgraphConstraintsTests
     [Test]
     public async Task WorksForMultipleLevels()
     {
-        var vs = new List<string> { "a", "b", "c", "d", "e", "f", "g", "h" };
+        var vs = new List<string> { "a", "b", "c", "d", "e", "f", "graph", "h" };
         foreach (var v in vs)
         {
             graph.SetNode(v);
@@ -65,7 +65,7 @@ public class AddSubgraphConstraintsTests
         graph.SetParent("d", "sg3");
         graph.SetParent("sg3", "sg1");
         graph.SetParent("f", "sg4");
-        graph.SetParent("g", "sg5");
+        graph.SetParent("graph", "sg5");
         graph.SetParent("sg5", "sg4");
         AddSubgraphConstraints.Run(graph, constraintGraph, vs);
 

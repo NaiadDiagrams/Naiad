@@ -22,8 +22,8 @@ static class Acyclic
 
         return;
 
-        static Func<Edge, double> WeightFn(Graph g) =>
-            e => g.FindEdgeLabel(e).Weight!.Value;
+        static Func<Edge, double> WeightFn(Graph graph) =>
+            e => graph.FindEdgeLabel(e).Weight!.Value;
     }
 
     static List<Edge> DfsFas(Graph graph)

@@ -5,16 +5,16 @@ public class UtilTests
 {
     public class SimplifyTests
     {
-        Graph g = null!;
+        Graph graph = null!;
 
         [Before(Test)]
-        public void Setup() => g = new(multigraph: true);
+        public void Setup() => graph = new(multigraph: true);
 
         [Test]
         public async Task CopiesWithoutChangeAGraphWithNoMultiEdges()
         {
-            g.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
-            var g2 = Util.Simplify(g);
+            graph.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
+            var g2 = Util.Simplify(graph);
             var e = g2.FindEdgeLabel("a", "b");
             await Assert.That(e.Weight).IsEqualTo(1);
             await Assert.That(e.Minlen).IsEqualTo(1);
@@ -24,9 +24,9 @@ public class UtilTests
         [Test]
         public async Task CollapsesMultiEdges()
         {
-            g.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
-            g.SetEdge("a", "b", new() { Weight = 2, Minlen = 2 }, "multi");
-            var g2 = Util.Simplify(g);
+            graph.SetEdge("a", "b", new() { Weight = 1, Minlen = 1 });
+            graph.SetEdge("a", "b", new() { Weight = 2, Minlen = 2 }, "multi");
+            var g2 = Util.Simplify(graph);
             await Assert.That(g2.IsMultigraph).IsFalse();
             var e = g2.FindEdgeLabel("a", "b");
             await Assert.That(e.Weight).IsEqualTo(3);
@@ -38,26 +38,26 @@ public class UtilTests
         public async Task CopiesTheGraphObject()
         {
             var label = new GraphLabel { NestingRoot = "bar" };
-            g.SetGraph(label);
-            var g2 = Util.Simplify(g);
+            graph.SetGraph(label);
+            var g2 = Util.Simplify(graph);
             await Assert.That(g2.GraphLabel).IsSameReferenceAs(label);
         }
     }
 
     public class AsNonCompoundGraphTests
     {
-        Graph g = null!;
+        Graph graph = null!;
 
         [Before(Test)]
-        public void Setup() => g = new(multigraph: true, compound: true);
+        public void Setup() => graph = new(multigraph: true, compound: true);
 
         [Test]
         public async Task CopiesAllNodes()
         {
             var aLabel = new NodeLabel { Label = "bar" };
-            g.SetNode("a", aLabel);
-            g.SetNode("b");
-            var g2 = Util.AsNonCompoundGraph(g);
+            graph.SetNode("a", aLabel);
+            graph.SetNode("b");
+            var g2 = Util.AsNonCompoundGraph(graph);
             await Assert.That(g2.NodeLabel("a")).IsSameReferenceAs(aLabel);
             await Assert.That(g2.HasNode("b")).IsTrue();
         }
@@ -67,9 +67,9 @@ public class UtilTests
         {
             var l1 = new EdgeLabel { Labelpos = "bar" };
             var l2 = new EdgeLabel { Labelpos = "baz" };
-            g.SetEdge("a", "b", l1);
-            g.SetEdge("a", "b", l2, "multi");
-            var g2 = Util.AsNonCompoundGraph(g);
+            graph.SetEdge("a", "b", l1);
+            graph.SetEdge("a", "b", l2, "multi");
+            var g2 = Util.AsNonCompoundGraph(graph);
             await Assert.That(g2.FindEdgeLabel("a", "b").Labelpos).IsEqualTo("bar");
             await Assert.That(g2.FindEdgeLabel("a", "b", "multi").Labelpos).IsEqualTo("baz");
         }
@@ -77,8 +77,8 @@ public class UtilTests
         [Test]
         public async Task DoesNotCopyCompoundNodes()
         {
-            g.SetParent("a", "sg1");
-            var g2 = Util.AsNonCompoundGraph(g);
+            graph.SetParent("a", "sg1");
+            var g2 = Util.AsNonCompoundGraph(graph);
             await Assert.That(g2.Parent("sg1")).IsNull();
             await Assert.That(g2.Parent("a")).IsNull();
             await Assert.That(g2.IsCompound).IsFalse();
@@ -88,8 +88,8 @@ public class UtilTests
         public async Task CopiesTheGraphObject()
         {
             var label = new GraphLabel { NestingRoot = "bar" };
-            g.SetGraph(label);
-            var g2 = Util.AsNonCompoundGraph(g);
+            graph.SetGraph(label);
+            var g2 = Util.AsNonCompoundGraph(graph);
             await Assert.That(g2.GraphLabel).IsSameReferenceAs(label);
         }
     }
@@ -156,12 +156,12 @@ public class UtilTests
         [Test]
         public async Task CreatesAMatrixBasedOnRankAndOrderOfNodesInTheGraph()
         {
-            var g = new Graph();
-            g.SetNode("a", new() { Rank = 0, Order = 0 });
-            g.SetNode("b", new() { Rank = 0, Order = 1 });
-            g.SetNode("c", new() { Rank = 1, Order = 0 });
-            g.SetNode("d", new() { Rank = 1, Order = 1 });
-            g.SetNode("e", new() { Rank = 2, Order = 0 });
+            var graph = new Graph();
+            graph.SetNode("a", new() { Rank = 0, Order = 0 });
+            graph.SetNode("b", new() { Rank = 0, Order = 1 });
+            graph.SetNode("c", new() { Rank = 1, Order = 0 });
+            graph.SetNode("d", new() { Rank = 1, Order = 1 });
+            graph.SetNode("e", new() { Rank = 2, Order = 0 });
 
             var expected = new List<List<string>>
             {
@@ -169,7 +169,7 @@ public class UtilTests
                 new() { "c", "d" },
                 new() { "e" }
             };
-            await Assert.That(Util.BuildLayerMatrix(g)).IsEquivalentTo(expected);
+            await Assert.That(Util.BuildLayerMatrix(graph)).IsEquivalentTo(expected);
         }
     }
 
@@ -178,43 +178,43 @@ public class UtilTests
         [Test]
         public async Task AdjustRanksSuchThatAllAreGteZeroAndAtLeastOneIsZero()
         {
-            var g = new Graph()
+            var graph = new Graph()
                 .SetNode("a", new() { Rank = 3 })
                 .SetNode("b", new() { Rank = 2 })
                 .SetNode("c", new() { Rank = 4 });
 
-            Util.NormalizeRanks(g);
+            Util.NormalizeRanks(graph);
 
-            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(1);
-            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(0);
-            await Assert.That(g.NodeLabel("c").Rank).IsEqualTo(2);
+            await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(1);
+            await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(0);
+            await Assert.That(graph.NodeLabel("c").Rank).IsEqualTo(2);
         }
 
         [Test]
         public async Task WorksForNegativeRanks()
         {
-            var g = new Graph()
+            var graph = new Graph()
                 .SetNode("a", new() { Rank = -3 })
                 .SetNode("b", new() { Rank = -2 });
 
-            Util.NormalizeRanks(g);
+            Util.NormalizeRanks(graph);
 
-            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+            await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
         }
 
         [Test]
         public async Task DoesNotAssignARankToSubgraphs()
         {
-            var g = new Graph(compound: true)
+            var graph = new Graph(compound: true)
                 .SetNode("a", new() { Rank = 0 });
-            g.SetNode("sg", new());
-            g.SetParent("a", "sg");
+            graph.SetNode("sg", new());
+            graph.SetParent("a", "sg");
 
-            Util.NormalizeRanks(g);
+            Util.NormalizeRanks(graph);
 
-            await Assert.That(g.NodeLabel("sg").Rank).IsNull();
-            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(graph.NodeLabel("sg").Rank).IsNull();
+            await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
         }
     }
 
@@ -223,40 +223,40 @@ public class UtilTests
         [Test]
         public async Task RemovesBorderRanksWithoutAnyNodes()
         {
-            var g = new Graph()
+            var graph = new Graph()
                 .SetGraph(new() { NodeRankFactor = 4 })
                 .SetNode("a", new() { Rank = 0 })
                 .SetNode("b", new() { Rank = 4 });
-            Util.RemoveEmptyRanks(g);
-            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(1);
+            Util.RemoveEmptyRanks(graph);
+            await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
         }
 
         [Test]
         public async Task DoesNotRemoveNonBorderRanks()
         {
-            var g = new Graph()
+            var graph = new Graph()
                 .SetGraph(new() { NodeRankFactor = 4 })
                 .SetNode("a", new() { Rank = 0 })
                 .SetNode("b", new() { Rank = 8 });
-            Util.RemoveEmptyRanks(g);
-            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
+            Util.RemoveEmptyRanks(graph);
+            await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(2);
         }
 
         [Test]
         public async Task HandlesParentsWithUndefinedRanks()
         {
-            var g = new Graph(compound: true)
+            var graph = new Graph(compound: true)
                 .SetGraph(new() { NodeRankFactor = 3 })
                 .SetNode("a", new() { Rank = 0 })
                 .SetNode("b", new() { Rank = 6 });
-            g.SetNode("sg", new());
-            g.SetParent("a", "sg");
-            Util.RemoveEmptyRanks(g);
-            await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
-            await Assert.That(g.NodeLabel("b").Rank).IsEqualTo(2);
-            await Assert.That(g.NodeLabel("sg").Rank).IsNull();
+            graph.SetNode("sg", new());
+            graph.SetParent("a", "sg");
+            Util.RemoveEmptyRanks(graph);
+            await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
+            await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(2);
+            await Assert.That(graph.NodeLabel("sg").Rank).IsNull();
         }
     }
 

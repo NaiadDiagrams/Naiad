@@ -3,15 +3,15 @@ namespace Naiad.Dagre;
 /// <summary>Graph algorithms (traversal, connected components, cycle detection) used by the layout passes.</summary>
 static class Alg
 {
-    static T Reduce<T>(Graph g, IReadOnlyList<string> vs, bool postorder, Func<T, string, T> fn, T acc)
+    static T Reduce<T>(Graph graph, IReadOnlyList<string> vs, bool postorder, Func<T, string, T> fn, T acc)
     {
         List<string> Navigation(string v) =>
-            (g.IsDirected ? g.Successors(v) : g.Neighbors(v)) ?? [];
+            (graph.IsDirected ? graph.Successors(v) : graph.Neighbors(v)) ?? [];
 
         var visited = new HashSet<string>(StringComparer.Ordinal);
         foreach (var v in vs)
         {
-            if (!g.HasNode(v))
+            if (!graph.HasNode(v))
             {
                 throw new InvalidOperationException("Graph does not have node: " + v);
             }
@@ -45,10 +45,10 @@ static class Alg
         return acc;
     }
 
-    static List<string> Dfs(Graph g, IReadOnlyList<string> vs, bool postorder)
+    static List<string> Dfs(Graph graph, IReadOnlyList<string> vs, bool postorder)
     {
         var acc = new List<string>();
-        Reduce(g, vs, postorder, (a, v) =>
+        Reduce(graph, vs, postorder, (a, v) =>
         {
             a.Add(v);
             return a;
@@ -56,9 +56,9 @@ static class Alg
         return acc;
     }
 
-    public static List<string> Preorder(Graph g, IReadOnlyList<string> vs) => Dfs(g, vs, false);
+    public static List<string> Preorder(Graph graph, IReadOnlyList<string> vs) => Dfs(graph, vs, false);
 
-    public static List<string> Postorder(Graph g, IReadOnlyList<string> vs) => Dfs(g, vs, true);
+    public static List<string> Postorder(Graph graph, IReadOnlyList<string> vs) => Dfs(graph, vs, true);
 
     public static List<List<string>> Components(Graph graph)
     {

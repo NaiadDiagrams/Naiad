@@ -113,14 +113,14 @@ public class AcyclicTests
     [Test]
     public async Task GreedyPrefersToBreakCyclesAtLowWeightEdges()
     {
-        var g = NewGraph();
-        g.GraphLabel.Acyclicer = "greedy";
-        g.SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 2 });
-        g.SetPath(["a", "b", "c", "d", "a"]);
-        g.SetEdge("c", "d", new() { Weight = 1 });
-        Acyclic.Run(g);
-        await Assert.That(Alg.FindCycles(g)).IsEmpty();
-        await Assert.That(g.HasEdge("c", "d")).IsFalse();
+        var graph = NewGraph();
+        graph.GraphLabel.Acyclicer = "greedy";
+        graph.SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 2 });
+        graph.SetPath(["a", "b", "c", "d", "a"]);
+        graph.SetEdge("c", "d", new() { Weight = 1 });
+        Acyclic.Run(graph);
+        await Assert.That(Alg.FindCycles(graph)).IsEmpty();
+        await Assert.That(graph.HasEdge("c", "d")).IsFalse();
     }
 
     static Edge StripLabel(Edge edge) =>

@@ -17,10 +17,10 @@ public class UniqueIdTests
     [Test]
     public async Task CallingUniqueIdNameMultipleTimesGenerateDistinctValues()
     {
-        var g = new Graph();
-        var first = g.UniqueId("name");
-        var second = g.UniqueId("name");
-        var third = g.UniqueId("name");
+        var graph = new Graph();
+        var first = graph.UniqueId("name");
+        var second = graph.UniqueId("name");
+        var third = graph.UniqueId("name");
         await Assert.That(first).IsNotEqualTo(second);
         await Assert.That(second).IsNotEqualTo(third);
     }

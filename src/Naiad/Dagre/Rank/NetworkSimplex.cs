@@ -66,9 +66,7 @@ static class NetworkSimplex
         // True if the child is on the tail end of the edge in the directed graph
         var childIsTail = true;
         // The graph's view of the tree edge we're inspecting
-        var graphEdge = graph.FindEdgeLabel(child, parent);
-
-        if (graphEdge == null)
+        if (!graph.TryGetEdgeLabel(child, parent, out var graphEdge))
         {
             childIsTail = false;
             graphEdge = graph.FindEdgeLabel(parent, child);
@@ -194,18 +192,18 @@ static class NetworkSimplex
         return acc;
     }
 
-    public static void ExchangeEdges(Graph t, Graph g, Edge e, Edge f)
+    public static void ExchangeEdges(Graph t, Graph graph, Edge e, Edge f)
     {
         var v = e.V;
         var w = e.W;
         t.RemoveEdge(v, w);
         t.SetEdge(f.V, f.W, new());
         InitLowLimValues(t);
-        InitCutValues(t, g);
-        UpdateRanks(t, g);
+        InitCutValues(t, graph);
+        UpdateRanks(t, graph);
     }
 
-    public static void UpdateRanks(Graph t, Graph g)
+    public static void UpdateRanks(Graph t, Graph graph)
     {
         var root = t.Nodes().FirstOrDefault(v =>
         {
@@ -223,16 +221,14 @@ static class NetworkSimplex
         {
             var treeNode = t.NodeLabel(v);
             var parent = treeNode.Parent!;
-            var edge = g.FindEdgeLabel(v, parent);
             var flipped = false;
-
-            if (edge == null)
+            if (!graph.TryGetEdgeLabel(v, parent, out var edge))
             {
-                edge = g.FindEdgeLabel(parent, v);
+                edge = graph.FindEdgeLabel(parent, v);
                 flipped = true;
             }
 
-            g.NodeLabel(v).Rank = g.NodeLabel(parent).Rank!.Value + (flipped ? edge.Minlen!.Value : -edge.Minlen!.Value);
+            graph.NodeLabel(v).Rank = graph.NodeLabel(parent).Rank!.Value + (flipped ? edge.Minlen!.Value : -edge.Minlen!.Value);
         }
     }
 

@@ -46,11 +46,11 @@ static class Rank
     // A fast and simple ranker, but results are far from optimal.
     static void LongestPathRanker(Graph graph) => RankUtil.LongestPath(graph);
 
-    static void TightTreeRanker(Graph g)
+    static void TightTreeRanker(Graph graph)
     {
-        RankUtil.LongestPath(g);
-        FeasibleTree.Run(g);
+        RankUtil.LongestPath(graph);
+        FeasibleTree.Run(graph);
     }
 
-    static void NetworkSimplexRanker(Graph g) => NetworkSimplex.Run(g);
+    static void NetworkSimplexRanker(Graph graph) => NetworkSimplex.Run(graph);
 }

@@ -324,10 +324,23 @@ sealed class Graph
     }
 
     public EdgeLabel FindEdgeLabel(string v, string w, string? name = null) =>
-        edgeLabelsMap.GetValueOrDefault(EdgeArgsToId(IsDirected, v, w, name))!;
+        edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, name), out var label)
+            ? label
+            : throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(v, w, name)}");
 
     public EdgeLabel FindEdgeLabel(Edge edge) =>
-        edgeLabelsMap.GetValueOrDefault(EdgeObjToId(IsDirected, edge))!;
+        edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out var label)
+            ? label
+            : throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(edge.V, edge.W, edge.Name)}");
+
+    public bool TryGetEdgeLabel(string v, string w, out EdgeLabel label) =>
+        edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, null), out label);
+
+    public bool TryGetEdgeLabel(Edge edge, out EdgeLabel label) =>
+        edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out label);
+
+    static string DescribeEdge(string v, string w, string? name) =>
+        name == null ? $"({v}, {w})" : $"({v}, {w}, {name})";
 
     public bool HasEdge(string v, string w, string? name = null) =>
         edgeLabelsMap.ContainsKey(EdgeArgsToId(IsDirected, v, w, name));

@@ -40,33 +40,33 @@ static class GreedyFas
         return results.SelectMany(edge => graph.OutEdges(edge.V, edge.W) ?? []).ToList();
     }
 
-    static List<Edge> DoGreedyFas(Graph g, Dictionary<string, FasEntry> entries, List<DoublyLinkedList> buckets, int zeroIdx)
+    static List<Edge> DoGreedyFas(Graph graph, Dictionary<string, FasEntry> entries, List<DoublyLinkedList> buckets, int zeroIdx)
     {
         var results = new List<Edge>();
         var sources = buckets[^1];
         var sinks = buckets[0];
 
-        while (g.NodeCount != 0)
+        while (graph.NodeCount != 0)
         {
             FasEntry? entry;
             while ((entry = (FasEntry?)sinks.Dequeue()) != null)
             {
-                RemoveNode(g, entries, buckets, zeroIdx, entry);
+                RemoveNode(graph, entries, buckets, zeroIdx, entry);
             }
 
             while ((entry = (FasEntry?)sources.Dequeue()) != null)
             {
-                RemoveNode(g, entries, buckets, zeroIdx, entry);
+                RemoveNode(graph, entries, buckets, zeroIdx, entry);
             }
 
-            if (g.NodeCount != 0)
+            if (graph.NodeCount != 0)
             {
                 for (var i = buckets.Count - 2; i > 0; --i)
                 {
                     entry = (FasEntry?)buckets[i].Dequeue();
                     if (entry != null)
                     {
-                        results = results.Concat(RemoveNode(g, entries, buckets, zeroIdx, entry, true) ?? []).ToList();
+                        results = results.Concat(RemoveNode(graph, entries, buckets, zeroIdx, entry, true) ?? []).ToList();
                         break;
                     }
                 }
@@ -133,7 +133,7 @@ static class GreedyFas
         // into a single edge for the fasGraph.
         foreach (var edge in graph.Edges())
         {
-            var prevWeight = fasGraph.FindEdgeLabel(edge.V, edge.W)?.Weight ?? 0;
+            var prevWeight = fasGraph.TryGetEdgeLabel(edge.V, edge.W, out var prevLabel) ? prevLabel.Weight ?? 0 : 0;
             var weight = weightFn(edge);
             var edgeWeight = prevWeight + weight;
             fasGraph.SetEdge(edge.V, edge.W, new() { Weight = edgeWeight });

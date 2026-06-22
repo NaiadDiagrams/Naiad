@@ -6,19 +6,19 @@ namespace Naiad.Dagre.Tests;
 // is expanded into its own [Test] here.
 public class RankTests
 {
-    Graph g = null!;
+    Graph graph = null!;
 
     [Before(Test)]
     public void Setup()
     {
-        g = new Graph()
+        graph = new Graph()
             .SetGraph(new())
             .SetDefaultNodeLabel(_ => new())
             .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
-        g
+        graph
             .SetPath(["a", "b", "c", "d", "h"])
-            .SetPath(["a", "e", "g", "h"])
-            .SetPath(["a", "f", "g"]);
+            .SetPath(["a", "e", "graph", "h"])
+            .SetPath(["a", "f", "graph"]);
     }
 
     // ---- longest-path ----
@@ -59,13 +59,13 @@ public class RankTests
 
     async Task RespectsTheMinlenAttribute(string ranker)
     {
-        g.GraphLabel.Ranker = ranker;
-        Rank.Run(g);
-        foreach (var e in g.Edges())
+        graph.GraphLabel.Ranker = ranker;
+        Rank.Run(graph);
+        foreach (var e in graph.Edges())
         {
-            var vRank = g.NodeLabel(e.V).Rank!.Value;
-            var wRank = g.NodeLabel(e.W).Rank!.Value;
-            await Assert.That(wRank - vRank).IsGreaterThanOrEqualTo(g.FindEdgeLabel(e).Minlen!.Value);
+            var vRank = graph.NodeLabel(e.V).Rank!.Value;
+            var wRank = graph.NodeLabel(e.W).Rank!.Value;
+            await Assert.That(wRank - vRank).IsGreaterThanOrEqualTo(graph.FindEdgeLabel(e).Minlen!.Value);
         }
     }
 
@@ -76,9 +76,9 @@ public class RankTests
         // Rank is int? in C#, so the string assignment from the TS test is a no-op
         // (the algorithm overwrites the node's rank regardless).
         _ = ranker;
-        var g = new Graph().SetGraph(new());
-        g.SetNode("a", new());
-        Rank.Run(g);
-        await Assert.That(g.NodeLabel("a").Rank).IsEqualTo(0);
+        var graph = new Graph().SetGraph(new());
+        graph.SetNode("a", new());
+        Rank.Run(graph);
+        await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
     }
 }

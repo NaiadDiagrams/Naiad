@@ -5,33 +5,33 @@ namespace Naiad.Dagre.Tests;
 /// </summary>
 public class LayoutTests
 {
-    Graph g = null!;
+    Graph graph = null!;
 
     [Before(Test)]
     public void Setup() =>
         // new Graph({multigraph: true, compound: true}).setGraph({}).setDefaultEdgeLabel(() => ({}));
-        g = new Graph(directed: true, multigraph: true, compound: true)
+        graph = new Graph(directed: true, multigraph: true, compound: true)
             .SetGraph(new())
             .SetDefaultEdgeLabel((_, _, _) => new());
 
     [Test]
     public async Task CanLayoutASingleNode()
     {
-        g.SetNode("a", new() { Width = 50, Height = 100 });
-        Layout.Run(g);
+        graph.SetNode("a", new() { Width = 50, Height = 100 });
+        Layout.Run(graph);
 
         await AssertCoordinates(("a", 50.0 / 2, 100.0 / 2));
-        await Assert.That(g.NodeLabel("a").X!.Value).IsEqualTo(50.0 / 2);
-        await Assert.That(g.NodeLabel("a").Y!.Value).IsEqualTo(100.0 / 2);
+        await Assert.That(graph.NodeLabel("a").X!.Value).IsEqualTo(50.0 / 2);
+        await Assert.That(graph.NodeLabel("a").Y!.Value).IsEqualTo(100.0 / 2);
     }
 
     [Test]
     public Task CanLayoutTwoNodesOnTheSameRank()
     {
-        g.GraphLabel.Nodesep = 200;
-        g.SetNode("a", new() { Width = 50, Height = 100 });
-        g.SetNode("b", new() { Width = 75, Height = 200 });
-        Layout.Run(g);
+        graph.GraphLabel.Nodesep = 200;
+        graph.SetNode("a", new() { Width = 50, Height = 100 });
+        graph.SetNode("b", new() { Width = 75, Height = 200 });
+        Layout.Run(graph);
 
         return AssertCoordinates(
             ("a", 50.0 / 2, 200.0 / 2),
@@ -41,35 +41,35 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutTwoNodesConnectedByAnEdge()
     {
-        g.GraphLabel.Ranksep = 300;
-        g.SetNode("a", new() { Width = 50, Height = 100 });
-        g.SetNode("b", new() { Width = 75, Height = 200 });
-        g.SetEdge("a", "b");
-        Layout.Run(g);
+        graph.GraphLabel.Ranksep = 300;
+        graph.SetNode("a", new() { Width = 50, Height = 100 });
+        graph.SetNode("b", new() { Width = 75, Height = 200 });
+        graph.SetEdge("a", "b");
+        Layout.Run(graph);
 
         await AssertCoordinates(
             ("a", 75.0 / 2, 100.0 / 2),
             ("b", 75.0 / 2, 100 + 300 + 200.0 / 2));
 
         // We should not get x, y coordinates if the edge has no label
-        await Assert.That(g.FindEdgeLabel("a", "b").X).IsNull();
-        await Assert.That(g.FindEdgeLabel("a", "b").Y).IsNull();
+        await Assert.That(graph.FindEdgeLabel("a", "b").X).IsNull();
+        await Assert.That(graph.FindEdgeLabel("a", "b").Y).IsNull();
     }
 
     [Test]
     public async Task CanLayoutAnEdgeWithALabel()
     {
-        g.GraphLabel.Ranksep = 300;
-        g.SetNode("a", new() { Width = 50, Height = 100 });
-        g.SetNode("b", new() { Width = 75, Height = 200 });
-        g.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = "c" });
-        Layout.Run(g);
+        graph.GraphLabel.Ranksep = 300;
+        graph.SetNode("a", new() { Width = 50, Height = 100 });
+        graph.SetNode("b", new() { Width = 75, Height = 200 });
+        graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = "c" });
+        Layout.Run(graph);
 
         await AssertCoordinates(
             ("a", 75.0 / 2, 100.0 / 2),
             ("b", 75.0 / 2, 100 + 150 + 70 + 150 + 200.0 / 2));
-        await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
-        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsEqualTo(100 + 150 + 70.0 / 2);
+        await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
+        await Assert.That(graph.FindEdgeLabel("a", "b").Y!.Value).IsEqualTo(100 + 150 + 70.0 / 2);
     }
 
     [Test]
@@ -79,27 +79,27 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanLayoutAnEdgeWithALongLabel(string rankdir)
     {
-        g.GraphLabel.Nodesep = g.GraphLabel.Edgesep = 10;
-        g.GraphLabel.Rankdir = rankdir;
+        graph.GraphLabel.Nodesep = graph.GraphLabel.Edgesep = 10;
+        graph.GraphLabel.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
-            g.SetNode(v, new() { Width = 10, Height = 10 });
+            graph.SetNode(v, new() { Width = 10, Height = 10 });
         }
 
-        g.SetEdge("a", "c", new() { Width = 2000, Height = 10, Labelpos = "c" });
-        g.SetEdge("b", "d", new() { Width = 1, Height = 1 });
-        Layout.Run(g);
+        graph.SetEdge("a", "c", new() { Width = 2000, Height = 10, Labelpos = "c" });
+        graph.SetEdge("b", "d", new() { Width = 1, Height = 1 });
+        Layout.Run(graph);
 
         double p1X, p2X;
         if (rankdir is "TB" or "BT")
         {
-            p1X = g.FindEdgeLabel("a", "c").X!.Value;
-            p2X = g.FindEdgeLabel("b", "d").X!.Value;
+            p1X = graph.FindEdgeLabel("a", "c").X!.Value;
+            p2X = graph.FindEdgeLabel("b", "d").X!.Value;
         }
         else
         {
-            p1X = g.NodeLabel("a").X!.Value;
-            p2X = g.NodeLabel("c").X!.Value;
+            p1X = graph.NodeLabel("a").X!.Value;
+            p2X = graph.NodeLabel("c").X!.Value;
         }
 
         await Assert.That(Math.Abs(p1X - p2X)).IsGreaterThan(1000);
@@ -112,71 +112,71 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanApplyAnOffset(string rankdir)
     {
-        g.GraphLabel.Nodesep = g.GraphLabel.Edgesep = 10;
-        g.GraphLabel.Rankdir = rankdir;
+        graph.GraphLabel.Nodesep = graph.GraphLabel.Edgesep = 10;
+        graph.GraphLabel.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
-            g.SetNode(v, new() { Width = 10, Height = 10 });
+            graph.SetNode(v, new() { Width = 10, Height = 10 });
         }
 
-        g.SetEdge("a", "b", new() { Width = 10, Height = 10, Labelpos = "l", Labeloffset = 1000 });
-        g.SetEdge("c", "d", new() { Width = 10, Height = 10, Labelpos = "r", Labeloffset = 1000 });
-        Layout.Run(g);
+        graph.SetEdge("a", "b", new() { Width = 10, Height = 10, Labelpos = "l", Labeloffset = 1000 });
+        graph.SetEdge("c", "d", new() { Width = 10, Height = 10, Labelpos = "r", Labeloffset = 1000 });
+        Layout.Run(graph);
 
         if (rankdir is "TB" or "BT")
         {
-            await Assert.That(g.FindEdgeLabel("a", "b").X!.Value - g.FindEdgeLabel("a", "b").Points![0].X).IsEqualTo(-1000 - 10.0 / 2);
-            await Assert.That(g.FindEdgeLabel("c", "d").X!.Value - g.FindEdgeLabel("c", "d").Points![0].X).IsEqualTo(1000 + 10.0 / 2);
+            await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value - graph.FindEdgeLabel("a", "b").Points![0].X).IsEqualTo(-1000 - 10.0 / 2);
+            await Assert.That(graph.FindEdgeLabel("c", "d").X!.Value - graph.FindEdgeLabel("c", "d").Points![0].X).IsEqualTo(1000 + 10.0 / 2);
         }
         else
         {
-            await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value - g.FindEdgeLabel("a", "b").Points![0].Y).IsEqualTo(-1000 - 10.0 / 2);
-            await Assert.That(g.FindEdgeLabel("c", "d").Y!.Value - g.FindEdgeLabel("c", "d").Points![0].Y).IsEqualTo(1000 + 10.0 / 2);
+            await Assert.That(graph.FindEdgeLabel("a", "b").Y!.Value - graph.FindEdgeLabel("a", "b").Points![0].Y).IsEqualTo(-1000 - 10.0 / 2);
+            await Assert.That(graph.FindEdgeLabel("c", "d").Y!.Value - graph.FindEdgeLabel("c", "d").Points![0].Y).IsEqualTo(1000 + 10.0 / 2);
         }
     }
 
     [Test]
     public async Task CanLayoutALongEdgeWithALabel()
     {
-        g.GraphLabel.Ranksep = 300;
-        g.SetNode("a", new() { Width = 50, Height = 100 });
-        g.SetNode("b", new() { Width = 75, Height = 200 });
-        g.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
-        Layout.Run(g);
+        graph.GraphLabel.Ranksep = 300;
+        graph.SetNode("a", new() { Width = 50, Height = 100 });
+        graph.SetNode("b", new() { Width = 75, Height = 200 });
+        graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
+        Layout.Run(graph);
 
-        await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
-        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsGreaterThan(g.NodeLabel("a").Y!.Value);
-        await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsLessThan(g.NodeLabel("b").Y!.Value);
+        await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(75.0 / 2);
+        await Assert.That(graph.FindEdgeLabel("a", "b").Y!.Value).IsGreaterThan(graph.NodeLabel("a").Y!.Value);
+        await Assert.That(graph.FindEdgeLabel("a", "b").Y!.Value).IsLessThan(graph.NodeLabel("b").Y!.Value);
     }
 
     [Test]
     public async Task CanLayoutOutAShortCycle()
     {
-        g.GraphLabel.Ranksep = 200;
-        g.SetNode("a", new() { Width = 100, Height = 100 });
-        g.SetNode("b", new() { Width = 100, Height = 100 });
-        g.SetEdge("a", "b", new() { Weight = 2 });
-        g.SetEdge("b", "a");
-        Layout.Run(g);
+        graph.GraphLabel.Ranksep = 200;
+        graph.SetNode("a", new() { Width = 100, Height = 100 });
+        graph.SetNode("b", new() { Width = 100, Height = 100 });
+        graph.SetEdge("a", "b", new() { Weight = 2 });
+        graph.SetEdge("b", "a");
+        Layout.Run(graph);
 
         await AssertCoordinates(
             ("a", 100.0 / 2, 100.0 / 2),
             ("b", 100.0 / 2, 100 + 200 + 100.0 / 2));
         // One arrow should point down, one up
-        await Assert.That(g.FindEdgeLabel("a", "b").Points![1].Y).IsGreaterThan(g.FindEdgeLabel("a", "b").Points![0].Y);
-        await Assert.That(g.FindEdgeLabel("b", "a").Points![0].Y).IsGreaterThan(g.FindEdgeLabel("b", "a").Points![1].Y);
+        await Assert.That(graph.FindEdgeLabel("a", "b").Points![1].Y).IsGreaterThan(graph.FindEdgeLabel("a", "b").Points![0].Y);
+        await Assert.That(graph.FindEdgeLabel("b", "a").Points![0].Y).IsGreaterThan(graph.FindEdgeLabel("b", "a").Points![1].Y);
     }
 
     [Test]
     public async Task AddsRectangleIntersectsForEdges()
     {
-        g.GraphLabel.Ranksep = 200;
-        g.SetNode("a", new() { Width = 100, Height = 100 });
-        g.SetNode("b", new() { Width = 100, Height = 100 });
-        g.SetEdge("a", "b");
-        Layout.Run(g);
+        graph.GraphLabel.Ranksep = 200;
+        graph.SetNode("a", new() { Width = 100, Height = 100 });
+        graph.SetNode("b", new() { Width = 100, Height = 100 });
+        graph.SetEdge("a", "b");
+        Layout.Run(graph);
 
-        var points = g.FindEdgeLabel("a", "b").Points!;
+        var points = graph.FindEdgeLabel("a", "b").Points!;
         await Assert.That(points.Count).IsEqualTo(3);
         await AssertPoints(points,
             (100.0 / 2, 100), // intersect with bottom of a
@@ -187,13 +187,13 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdgesSpanningMultipleRanks()
     {
-        g.GraphLabel.Ranksep = 200;
-        g.SetNode("a", new() { Width = 100, Height = 100 });
-        g.SetNode("b", new() { Width = 100, Height = 100 });
-        g.SetEdge("a", "b", new() { Minlen = 2 });
-        Layout.Run(g);
+        graph.GraphLabel.Ranksep = 200;
+        graph.SetNode("a", new() { Width = 100, Height = 100 });
+        graph.SetNode("b", new() { Width = 100, Height = 100 });
+        graph.SetEdge("a", "b", new() { Minlen = 2 });
+        Layout.Run(graph);
 
-        var points = g.FindEdgeLabel("a", "b").Points!;
+        var points = graph.FindEdgeLabel("a", "b").Points!;
         await Assert.That(points.Count).IsEqualTo(5);
         await AssertPoints(points,
             (100.0 / 2, 100), // intersect with bottom of a
@@ -210,14 +210,14 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanLayoutASelfLoop(string rankdir)
     {
-        g.GraphLabel.Edgesep = 75;
-        g.GraphLabel.Rankdir = rankdir;
-        g.SetNode("a", new() { Width = 100, Height = 100 });
-        g.SetEdge("a", "a", new() { Width = 50, Height = 50 });
-        Layout.Run(g);
+        graph.GraphLabel.Edgesep = 75;
+        graph.GraphLabel.Rankdir = rankdir;
+        graph.SetNode("a", new() { Width = 100, Height = 100 });
+        graph.SetEdge("a", "a", new() { Width = 50, Height = 50 });
+        Layout.Run(graph);
 
-        var nodeA = g.NodeLabel("a");
-        var points = g.FindEdgeLabel("a", "a").Points!;
+        var nodeA = graph.NodeLabel("a");
+        var points = graph.FindEdgeLabel("a", "a").Points!;
         await Assert.That(points.Count).IsEqualTo(7);
         foreach (var point in points)
         {
@@ -238,11 +238,11 @@ public class LayoutTests
     public async Task CanLayoutAGraphWithSubgraphs()
     {
         // To be expanded, this primarily ensures nothing blows up for the moment.
-        g.SetNode("a", new() { Width = 50, Height = 50 });
-        g.SetParent("a", "sg1");
-        Layout.Run(g);
+        graph.SetNode("a", new() { Width = 50, Height = 50 });
+        graph.SetParent("a", "sg1");
+        Layout.Run(graph);
         // No assertions in the original test; passing means no exception thrown.
-        await Assert.That(g.HasNode("a")).IsTrue();
+        await Assert.That(graph.HasNode("a")).IsTrue();
     }
 
     [Test]
@@ -250,21 +250,21 @@ public class LayoutTests
     {
         foreach (var v in new[] { "a", "b", "c", "d", "x", "y" })
         {
-            g.SetNode(v, new() { Width = 50, Height = 50 });
+            graph.SetNode(v, new() { Width = 50, Height = 50 });
         }
 
-        g.SetPath(new List<string> { "a", "b", "c", "d" });
-        g.SetEdge("a", "x", new() { Weight = 100 });
-        g.SetEdge("y", "d", new() { Weight = 100 });
-        g.SetParent("x", "sg");
-        g.SetParent("y", "sg");
+        graph.SetPath(new List<string> { "a", "b", "c", "d" });
+        graph.SetEdge("a", "x", new() { Weight = 100 });
+        graph.SetEdge("y", "d", new() { Weight = 100 });
+        graph.SetParent("x", "sg");
+        graph.SetParent("y", "sg");
 
         // We did not set up an edge (x, y), and we set up high-weight edges from
         // outside of the subgraph to nodes in the subgraph. This is to try to
         // force nodes x and y to be on different ranks, which we want our ranker
         // to avoid.
-        Layout.Run(g);
-        await Assert.That(g.NodeLabel("x").Y!.Value).IsEqualTo(g.NodeLabel("y").Y!.Value);
+        Layout.Run(graph);
+        await Assert.That(graph.NodeLabel("x").Y!.Value).IsEqualTo(graph.NodeLabel("y").Y!.Value);
     }
 
     [Test]
@@ -272,35 +272,35 @@ public class LayoutTests
     {
         foreach (var v in new[] { "a", "b", "c" })
         {
-            g.SetNode(v, new() { Width = 50, Height = 50 });
+            graph.SetNode(v, new() { Width = 50, Height = 50 });
         }
 
-        g.SetPath(["a", "b", "c"]);
-        g.SetNode("sg", new());
-        g.SetParent("c", "sg");
-        Layout.Run(g);
-        await Assert.That(g.NodeLabel("b").Y!.Value - g.NodeLabel("a").Y!.Value).IsEqualTo(100);
+        graph.SetPath(["a", "b", "c"]);
+        graph.SetNode("sg", new());
+        graph.SetParent("c", "sg");
+        Layout.Run(graph);
+        await Assert.That(graph.NodeLabel("b").Y!.Value - graph.NodeLabel("a").Y!.Value).IsEqualTo(100);
     }
 
     [Test]
     public async Task CanLayoutSubgraphsWithDifferentRankdirs()
     {
-        g.SetNode("a", new() { Width = 50, Height = 50 });
-        g.SetNode("sg", new());
-        g.SetParent("a", "sg");
+        graph.SetNode("a", new() { Width = 50, Height = 50 });
+        graph.SetNode("sg", new());
+        graph.SetParent("a", "sg");
 
         async Task Check()
         {
-            await Assert.That(g.NodeLabel("sg").Width).IsGreaterThan(50);
-            await Assert.That(g.NodeLabel("sg").Height).IsGreaterThan(50);
-            await Assert.That(g.NodeLabel("sg").X!.Value).IsGreaterThan(50.0 / 2);
-            await Assert.That(g.NodeLabel("sg").Y!.Value).IsGreaterThan(50.0 / 2);
+            await Assert.That(graph.NodeLabel("sg").Width).IsGreaterThan(50);
+            await Assert.That(graph.NodeLabel("sg").Height).IsGreaterThan(50);
+            await Assert.That(graph.NodeLabel("sg").X!.Value).IsGreaterThan(50.0 / 2);
+            await Assert.That(graph.NodeLabel("sg").Y!.Value).IsGreaterThan(50.0 / 2);
         }
 
         foreach (var rankdir in new[] { "tb", "bt", "lr", "rl" })
         {
-            g.GraphLabel.Rankdir = rankdir;
-            Layout.Run(g);
+            graph.GraphLabel.Rankdir = rankdir;
+            Layout.Run(graph);
             await Check();
         }
     }
@@ -308,10 +308,10 @@ public class LayoutTests
     [Test]
     public async Task AddsDimensionsToTheGraph()
     {
-        g.SetNode("a", new() { Width = 100, Height = 50 });
-        Layout.Run(g);
-        await Assert.That(g.GraphLabel.Width!.Value).IsEqualTo(100);
-        await Assert.That(g.GraphLabel.Height!.Value).IsEqualTo(50);
+        graph.SetNode("a", new() { Width = 100, Height = 50 });
+        Layout.Run(graph);
+        await Assert.That(graph.GraphLabel.Width!.Value).IsEqualTo(100);
+        await Assert.That(graph.GraphLabel.Height!.Value).IsEqualTo(50);
     }
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> node
@@ -322,11 +322,11 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task BoundingBoxNode(string rankdir)
     {
-        g.GraphLabel.Rankdir = rankdir;
-        g.SetNode("a", new() { Width = 100, Height = 200 });
-        Layout.Run(g);
-        await Assert.That(g.NodeLabel("a").X!.Value).IsEqualTo(100.0 / 2);
-        await Assert.That(g.NodeLabel("a").Y!.Value).IsEqualTo(200.0 / 2);
+        graph.GraphLabel.Rankdir = rankdir;
+        graph.SetNode("a", new() { Width = 100, Height = 200 });
+        Layout.Run(graph);
+        await Assert.That(graph.NodeLabel("a").X!.Value).IsEqualTo(100.0 / 2);
+        await Assert.That(graph.NodeLabel("a").Y!.Value).IsEqualTo(200.0 / 2);
     }
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> edge, labelpos = l
@@ -337,32 +337,32 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task BoundingBoxEdgeLabelposL(string rankdir)
     {
-        g.GraphLabel.Rankdir = rankdir;
-        g.SetNode("a", new() { Width = 100, Height = 100 });
-        g.SetNode("b", new() { Width = 100, Height = 100 });
-        g.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
-        Layout.Run(g);
+        graph.GraphLabel.Rankdir = rankdir;
+        graph.SetNode("a", new() { Width = 100, Height = 100 });
+        graph.SetNode("b", new() { Width = 100, Height = 100 });
+        graph.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
+        Layout.Run(graph);
         if (rankdir is "TB" or "BT")
         {
-            await Assert.That(g.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(1000.0 / 2);
+            await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(1000.0 / 2);
         }
         else
         {
-            await Assert.That(g.FindEdgeLabel("a", "b").Y!.Value).IsEqualTo(2000.0 / 2);
+            await Assert.That(graph.FindEdgeLabel("a", "b").Y!.Value).IsEqualTo(2000.0 / 2);
         }
     }
 
     [Test]
     public Task TreatsAttributesWithCaseInsensitivity()
     {
-        // The original test sets `g.graph().nodeSep = 200` (capital S) and relies on dagre's
+        // The original test sets `graph.graph().nodeSep = 200` (capital S) and relies on dagre's
         // `canonicalize` step lowercasing keys. The C# port uses a strongly-typed GraphLabel
         // where the only spelling is `Nodesep`, so case-insensitivity is not expressible and the
         // canonical field is set directly.
-        g.GraphLabel.Nodesep = 200;
-        g.SetNode("a", new() { Width = 50, Height = 100 });
-        g.SetNode("b", new() { Width = 75, Height = 200 });
-        Layout.Run(g);
+        graph.GraphLabel.Nodesep = 200;
+        graph.SetNode("a", new() { Width = 50, Height = 100 });
+        graph.SetNode("b", new() { Width = 75, Height = 200 });
+        Layout.Run(graph);
 
         return AssertCoordinates(
             ("a", 50.0 / 2, 200.0 / 2),
@@ -371,13 +371,13 @@ public class LayoutTests
 
     // === helpers =========================================================
 
-    /// <summary>Port of the TS <c>extractCoordinates(g)</c> helper.</summary>
-    static Dictionary<string, (double X, double Y)> ExtractCoordinates(Graph g)
+    /// <summary>Port of the TS <c>extractCoordinates(graph)</c> helper.</summary>
+    static Dictionary<string, (double X, double Y)> ExtractCoordinates(Graph graph)
     {
         var acc = new Dictionary<string, (double X, double Y)>(StringComparer.Ordinal);
-        foreach (var v in g.Nodes())
+        foreach (var v in graph.Nodes())
         {
-            var node = g.NodeLabel(v);
+            var node = graph.NodeLabel(v);
             acc[v] = (node.X!.Value, node.Y!.Value);
         }
 
@@ -386,7 +386,7 @@ public class LayoutTests
 
     async Task AssertCoordinates(params (string V, double X, double Y)[] expected)
     {
-        var actual = ExtractCoordinates(g);
+        var actual = ExtractCoordinates(graph);
         await Assert.That(actual.Count).IsEqualTo(expected.Length);
         foreach (var (v, x, y) in expected)
         {
