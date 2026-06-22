@@ -3,16 +3,10 @@ namespace Naiad.Dagre;
 /// <summary>An edge descriptor: {v, w, name}.</summary>
 sealed record Edge(string V, string W, string? Name = null);
 
-struct Point
+struct Point(double x, double y)
 {
-    public double X;
-    public double Y;
-
-    public Point(double x, double y)
-    {
-        X = x;
-        Y = y;
-    }
+    public double X = x;
+    public double Y = y;
 }
 
 sealed class PartitionResult<T>

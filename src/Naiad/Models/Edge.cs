@@ -4,9 +4,9 @@ public class Edge
 {
     public required string SourceId { get; init; }
     public required string TargetId { get; init; }
-    public string? Label { get; set; }
-    public EdgeType Type { get; set; } = EdgeType.Arrow;
-    public EdgeStyle LineStyle { get; set; } = EdgeStyle.Solid;
+    public string? Label { get; init; }
+    public EdgeType Type { get; init; } = EdgeType.Arrow;
+    public EdgeStyle LineStyle { get; init; } = EdgeStyle.Solid;
 
     // Optional layout hint (e.g. "place these on the same rank").
     public RankConstraint RankConstraint { get; set; } = RankConstraint.None;
