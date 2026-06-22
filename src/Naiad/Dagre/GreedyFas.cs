@@ -64,11 +64,18 @@ static class GreedyFas
                 for (var i = buckets.Count - 2; i > 0; --i)
                 {
                     entry = (FasEntry?)buckets[i].Dequeue();
-                    if (entry != null)
+                    if (entry == null)
                     {
-                        results = results.Concat(RemoveNode(graph, entries, buckets, zeroIdx, entry, true) ?? []).ToList();
-                        break;
+                        continue;
                     }
+
+                    var removed = RemoveNode(graph, entries, buckets, zeroIdx, entry, true);
+                    if (removed != null)
+                    {
+                        results.AddRange(removed);
+                    }
+
+                    break;
                 }
             }
         }
