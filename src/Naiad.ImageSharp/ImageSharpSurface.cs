@@ -7,7 +7,7 @@ using Color = SixLabors.ImageSharp.Color;
 /// the diagram's transforms; stroke widths are scaled to match (ImageSharp strokes in device space),
 /// mirroring the Skia backend.
 /// </summary>
-sealed class ImageSharpSurface(int width, int height, Rgba background) :
+sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompression compression) :
     IRenderSurface
 {
     static ConcurrentDictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
@@ -73,7 +73,12 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
             stream,
             new()
             {
-                CompressionLevel = PngCompressionLevel.BestCompression
+                CompressionLevel = compression switch
+                {
+                    PngCompression.Fast => PngCompressionLevel.BestSpeed,
+                    PngCompression.Small => PngCompressionLevel.BestCompression,
+                    _ => PngCompressionLevel.Level6,
+                }
             });
 
     static DrawingOptions Options(Matrix3x2 transform, FillRule rule) =>

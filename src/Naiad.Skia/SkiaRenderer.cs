@@ -46,7 +46,7 @@ public static class SkiaRenderer
     static void RenderDocument(SvgDocument document, Stream stream, RenderOptions options)
     {
         var background = CssColor.TryParse(options.Png.Background, out var color) ? color : Rgba.White;
-        using var surface = SvgRasterizer.Paint(document, options.Png.Scale, (width, height) => new SkiaSurface(width, height, background));
+        using var surface = SvgRasterizer.Paint(document, options.Png.Scale, (width, height) => new SkiaSurface(width, height, background, options.Png.Compression));
         surface.Encode(stream);
     }
 }

@@ -10,12 +10,14 @@ sealed class SkiaSurface : IRenderSurface
 
     SKBitmap bitmap;
     SKCanvas canvas;
+    readonly PngCompression compression;
 
-    public SkiaSurface(int width, int height, Rgba background)
+    public SkiaSurface(int width, int height, Rgba background, PngCompression compression)
     {
         bitmap = new(width, height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
         canvas = new(bitmap);
         canvas.Clear(ToColor(background));
+        this.compression = compression;
     }
 
     public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
@@ -94,9 +96,16 @@ sealed class SkiaSurface : IRenderSurface
 
     public void Encode(Stream stream)
     {
-        using var image = SKImage.FromBitmap(bitmap);
-        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-        data.SaveTo(stream);
+        var zlibLevel = compression switch
+        {
+            PngCompression.Fast => 1,
+            PngCompression.Small => 9,
+            _ => 6,
+        };
+
+        using var pixmap = bitmap.PeekPixels();
+        using var wstream = new SKManagedWStream(stream);
+        pixmap.Encode(wstream, new SKPngEncoderOptions(SKPngEncoderFilterFlags.AllFilters, zlibLevel));
     }
 
     static void ApplyPaint(SKPaint skPaint, Paint paint, float opacity)
