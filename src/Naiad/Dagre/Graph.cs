@@ -323,15 +323,25 @@ sealed class Graph
         return this;
     }
 
-    public EdgeLabel FindEdgeLabel(string v, string w, string? name = null) =>
-        edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, name), out var label)
-            ? label
-            : throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(v, w, name)}");
+    public EdgeLabel FindEdgeLabel(string v, string w, string? name = null)
+    {
+        if (edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, name), out var label))
+        {
+            return label;
+        }
 
-    public EdgeLabel FindEdgeLabel(Edge edge) =>
-        edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out var label)
-            ? label
-            : throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(edge.V, edge.W, edge.Name)}");
+        throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(v, w, name)}");
+    }
+
+    public EdgeLabel FindEdgeLabel(Edge edge)
+    {
+        if (edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out var label))
+        {
+            return label;
+        }
+
+        throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(edge.V, edge.W, edge.Name)}");
+    }
 
     public bool TryGetEdgeLabel(string v, string w, out EdgeLabel label) =>
         edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, null), out label);
@@ -339,8 +349,15 @@ sealed class Graph
     public bool TryGetEdgeLabel(Edge edge, out EdgeLabel label) =>
         edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out label);
 
-    static string DescribeEdge(string v, string w, string? name) =>
-        name == null ? $"({v}, {w})" : $"({v}, {w}, {name})";
+    static string DescribeEdge(string v, string w, string? name)
+    {
+        if (name == null)
+        {
+            return $"({v}, {w})";
+        }
+
+        return $"({v}, {w}, {name})";
+    }
 
     public bool HasEdge(string v, string w, string? name = null) =>
         edgeLabelsMap.ContainsKey(EdgeArgsToId(IsDirected, v, w, name));
