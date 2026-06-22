@@ -429,7 +429,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"));
             var align = StrMap(("a", "a"), ("b", "b"));
-            g.Graph_().Nodesep = 100;
+            g.GraphLabel.Nodesep = 100;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100 });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 200 });
 
@@ -443,7 +443,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"));
             var align = StrMap(("a", "a"), ("b", "b"));
-            g.Graph_().Edgesep = 20;
+            g.GraphLabel.Edgesep = 20;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100, Dummy = "true" });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 200, Dummy = "true" });
 
@@ -470,7 +470,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "a"), ("c", "c"));
             var align = StrMap(("a", "b"), ("b", "a"), ("c", "c"));
-            g.Graph_().Nodesep = 75;
+            g.GraphLabel.Nodesep = 75;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100 });
             g.SetNode("b", new() { Rank = 1, Order = 1, Width = 200 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 50 });
@@ -486,7 +486,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"), ("d", "b"));
             var align = StrMap(("a", "a"), ("b", "d"), ("c", "c"), ("d", "b"));
-            g.Graph_().Nodesep = 75;
+            g.GraphLabel.Nodesep = 75;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100 });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 200 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 50 });
@@ -504,7 +504,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "a"), ("d", "b"));
             var align = StrMap(("a", "c"), ("b", "d"), ("c", "a"), ("d", "b"));
-            g.Graph_().Nodesep = 75;
+            g.GraphLabel.Nodesep = 75;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 50 });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 150 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 60 });
@@ -522,7 +522,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "a"), ("d", "b"));
             var align = StrMap(("a", "c"), ("b", "d"), ("c", "a"), ("d", "b"));
-            g.Graph_().Nodesep = 75;
+            g.GraphLabel.Nodesep = 75;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 50 });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 70 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 60 });
@@ -540,7 +540,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"), ("d", "d"), ("e", "b"), ("f", "f"), ("g", "d"));
             var align = StrMap(("a", "a"), ("b", "e"), ("c", "c"), ("d", "g"), ("e", "b"), ("f", "f"), ("g", "d"));
-            g.Graph_().Nodesep = 75;
+            g.GraphLabel.Nodesep = 75;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 50 });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 50 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 50 });
@@ -565,7 +565,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
-            g.Graph_().Edgesep = 50;
+            g.GraphLabel.Edgesep = 50;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100, Dummy = "edge" });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 200, Dummy = "edge-label", Labelpos = "l" });
             g.SetNode("c", new() { Rank = 0, Order = 2, Width = 300, Dummy = "edge" });
@@ -581,7 +581,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
-            g.Graph_().Edgesep = 50;
+            g.GraphLabel.Edgesep = 50;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100, Dummy = "edge" });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 200, Dummy = "edge-label", Labelpos = "c" });
             g.SetNode("c", new() { Rank = 0, Order = 2, Width = 300, Dummy = "edge" });
@@ -597,7 +597,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
-            g.Graph_().Edgesep = 50;
+            g.GraphLabel.Edgesep = 50;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 100, Dummy = "edge" });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 200, Dummy = "edge-label", Labelpos = "r" });
             g.SetNode("c", new() { Rank = 0, Order = 2, Width = 300, Dummy = "edge" });
@@ -798,7 +798,7 @@ public class BkTests
         [Test]
         public Task CentersANodeIfItIsAPredecessorOfTwoSameSizedNodes()
         {
-            g.Graph_().Nodesep = 10;
+            g.GraphLabel.Nodesep = 10;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 20 });
             g.SetNode("b", new() { Rank = 1, Order = 0, Width = 50 });
             g.SetNode("c", new() { Rank = 1, Order = 1, Width = 50 });
@@ -813,7 +813,7 @@ public class BkTests
         [Test]
         public Task ShiftsBlocksOnBothSidesOfAlignedBlock()
         {
-            g.Graph_().Nodesep = 10;
+            g.GraphLabel.Nodesep = 10;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 50 });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 60 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 70 });
@@ -833,8 +833,8 @@ public class BkTests
         [Test]
         public Task AlignsInnerSegments()
         {
-            g.Graph_().Nodesep = 10;
-            g.Graph_().Edgesep = 10;
+            g.GraphLabel.Nodesep = 10;
+            g.GraphLabel.Edgesep = 10;
             g.SetNode("a", new() { Rank = 0, Order = 0, Width = 50, Dummy = "true" });
             g.SetNode("b", new() { Rank = 0, Order = 1, Width = 60 });
             g.SetNode("c", new() { Rank = 1, Order = 0, Width = 70 });

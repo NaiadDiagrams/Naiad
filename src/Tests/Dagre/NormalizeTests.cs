@@ -45,8 +45,8 @@ public class NormalizeTests
             await Assert.That(g.Node("a").Rank).IsEqualTo(0);
             await Assert.That(g.Node("b").Rank).IsEqualTo(2);
 
-            await Assert.That(g.Graph_().DummyChains!.Count).IsEqualTo(1);
-            await Assert.That(g.Graph_().DummyChains![0]).IsEqualTo(successor);
+            await Assert.That(g.GraphLabel.DummyChains!.Count).IsEqualTo(1);
+            await Assert.That(g.GraphLabel.DummyChains![0]).IsEqualTo(successor);
         }
 
         [Test]

@@ -40,7 +40,7 @@ public class UtilTests
             var label = new GraphLabel { NestingRoot = "bar" };
             g.SetGraph(label);
             var g2 = Util.Simplify(g);
-            await Assert.That(g2.Graph_()).IsSameReferenceAs(label);
+            await Assert.That(g2.GraphLabel).IsSameReferenceAs(label);
         }
     }
 
@@ -90,7 +90,7 @@ public class UtilTests
             var label = new GraphLabel { NestingRoot = "bar" };
             g.SetGraph(label);
             var g2 = Util.AsNonCompoundGraph(g);
-            await Assert.That(g2.Graph_()).IsSameReferenceAs(label);
+            await Assert.That(g2.GraphLabel).IsSameReferenceAs(label);
         }
     }
 

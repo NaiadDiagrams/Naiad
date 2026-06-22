@@ -28,7 +28,7 @@ public class LayoutTests
     [Test]
     public Task CanLayoutTwoNodesOnTheSameRank()
     {
-        g.Graph_().Nodesep = 200;
+        g.GraphLabel.Nodesep = 200;
         g.SetNode("a", new() { Width = 50, Height = 100 });
         g.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(g);
@@ -41,7 +41,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutTwoNodesConnectedByAnEdge()
     {
-        g.Graph_().Ranksep = 300;
+        g.GraphLabel.Ranksep = 300;
         g.SetNode("a", new() { Width = 50, Height = 100 });
         g.SetNode("b", new() { Width = 75, Height = 200 });
         g.SetEdge("a", "b");
@@ -59,7 +59,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutAnEdgeWithALabel()
     {
-        g.Graph_().Ranksep = 300;
+        g.GraphLabel.Ranksep = 300;
         g.SetNode("a", new() { Width = 50, Height = 100 });
         g.SetNode("b", new() { Width = 75, Height = 200 });
         g.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = "c" });
@@ -79,8 +79,8 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanLayoutAnEdgeWithALongLabel(string rankdir)
     {
-        g.Graph_().Nodesep = g.Graph_().Edgesep = 10;
-        g.Graph_().Rankdir = rankdir;
+        g.GraphLabel.Nodesep = g.GraphLabel.Edgesep = 10;
+        g.GraphLabel.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
             g.SetNode(v, new() { Width = 10, Height = 10 });
@@ -112,8 +112,8 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanApplyAnOffset(string rankdir)
     {
-        g.Graph_().Nodesep = g.Graph_().Edgesep = 10;
-        g.Graph_().Rankdir = rankdir;
+        g.GraphLabel.Nodesep = g.GraphLabel.Edgesep = 10;
+        g.GraphLabel.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
             g.SetNode(v, new() { Width = 10, Height = 10 });
@@ -138,7 +138,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutALongEdgeWithALabel()
     {
-        g.Graph_().Ranksep = 300;
+        g.GraphLabel.Ranksep = 300;
         g.SetNode("a", new() { Width = 50, Height = 100 });
         g.SetNode("b", new() { Width = 75, Height = 200 });
         g.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = "c" });
@@ -152,7 +152,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutOutAShortCycle()
     {
-        g.Graph_().Ranksep = 200;
+        g.GraphLabel.Ranksep = 200;
         g.SetNode("a", new() { Width = 100, Height = 100 });
         g.SetNode("b", new() { Width = 100, Height = 100 });
         g.SetEdge("a", "b", new() { Weight = 2 });
@@ -170,7 +170,7 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdges()
     {
-        g.Graph_().Ranksep = 200;
+        g.GraphLabel.Ranksep = 200;
         g.SetNode("a", new() { Width = 100, Height = 100 });
         g.SetNode("b", new() { Width = 100, Height = 100 });
         g.SetEdge("a", "b");
@@ -187,7 +187,7 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdgesSpanningMultipleRanks()
     {
-        g.Graph_().Ranksep = 200;
+        g.GraphLabel.Ranksep = 200;
         g.SetNode("a", new() { Width = 100, Height = 100 });
         g.SetNode("b", new() { Width = 100, Height = 100 });
         g.SetEdge("a", "b", new() { Minlen = 2 });
@@ -210,8 +210,8 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task CanLayoutASelfLoop(string rankdir)
     {
-        g.Graph_().Edgesep = 75;
-        g.Graph_().Rankdir = rankdir;
+        g.GraphLabel.Edgesep = 75;
+        g.GraphLabel.Rankdir = rankdir;
         g.SetNode("a", new() { Width = 100, Height = 100 });
         g.SetEdge("a", "a", new() { Width = 50, Height = 50 });
         Layout.Run(g);
@@ -299,7 +299,7 @@ public class LayoutTests
 
         foreach (var rankdir in new[] { "tb", "bt", "lr", "rl" })
         {
-            g.Graph_().Rankdir = rankdir;
+            g.GraphLabel.Rankdir = rankdir;
             Layout.Run(g);
             await Check();
         }
@@ -310,8 +310,8 @@ public class LayoutTests
     {
         g.SetNode("a", new() { Width = 100, Height = 50 });
         Layout.Run(g);
-        await Assert.That(g.Graph_().Width!.Value).IsEqualTo(100);
-        await Assert.That(g.Graph_().Height!.Value).IsEqualTo(50);
+        await Assert.That(g.GraphLabel.Width!.Value).IsEqualTo(100);
+        await Assert.That(g.GraphLabel.Height!.Value).IsEqualTo(50);
     }
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> node
@@ -322,7 +322,7 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task BoundingBoxNode(string rankdir)
     {
-        g.Graph_().Rankdir = rankdir;
+        g.GraphLabel.Rankdir = rankdir;
         g.SetNode("a", new() { Width = 100, Height = 200 });
         Layout.Run(g);
         await Assert.That(g.Node("a").X!.Value).IsEqualTo(100.0 / 2);
@@ -337,7 +337,7 @@ public class LayoutTests
     [Arguments("RL")]
     public async Task BoundingBoxEdgeLabelposL(string rankdir)
     {
-        g.Graph_().Rankdir = rankdir;
+        g.GraphLabel.Rankdir = rankdir;
         g.SetNode("a", new() { Width = 100, Height = 100 });
         g.SetNode("b", new() { Width = 100, Height = 100 });
         g.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
@@ -359,7 +359,7 @@ public class LayoutTests
         // `canonicalize` step lowercasing keys. The C# port uses a strongly-typed GraphLabel
         // where the only spelling is `Nodesep`, so case-insensitivity is not expressible and the
         // canonical field is set directly.
-        g.Graph_().Nodesep = 200;
+        g.GraphLabel.Nodesep = 200;
         g.SetNode("a", new() { Width = 50, Height = 100 });
         g.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(g);

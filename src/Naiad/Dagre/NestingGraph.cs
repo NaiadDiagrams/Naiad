@@ -33,7 +33,7 @@ static class NestingGraph
         var height = Util.ApplyMax(depthsArr) - 1; // Note: depths is an Object not an array
         var nodeSep = 2 * height + 1;
 
-        graph.Graph_().NestingRoot = root;
+        graph.GraphLabel.NestingRoot = root;
 
         // Multiply minlen by nodeSep to align nodes on non-border ranks.
         // The real pipeline guarantees every edge has a minlen before this runs; some unit
@@ -58,7 +58,7 @@ static class NestingGraph
 
         // Save the multiplier for node layers for later removal of empty border
         // layers.
-        graph.Graph_().NodeRankFactor = (int) nodeSep;
+        graph.GraphLabel.NodeRankFactor = (int) nodeSep;
     }
 
     static void Dfs(
@@ -162,7 +162,7 @@ static class NestingGraph
 
     public static void Cleanup(Graph graph)
     {
-        var graphLabel = graph.Graph_();
+        var graphLabel = graph.GraphLabel;
         graph.RemoveNode(graphLabel.NestingRoot!);
         graphLabel.NestingRoot = null;
         foreach (var e in graph.Edges())

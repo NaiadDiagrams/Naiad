@@ -16,7 +16,7 @@ static class Position
     internal static void PositionY(Graph graph)
     {
         var layering = Util.BuildLayerMatrix(graph);
-        var graphLabel = graph.Graph_();
+        var graphLabel = graph.GraphLabel;
         var rankSep = graphLabel.Ranksep!.Value;
         var rankAlign = graphLabel.Rankalign;
         double prevY = 0;

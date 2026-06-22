@@ -96,7 +96,7 @@ static class Order
         var cg = new Graph();
         foreach (var lg in layerGraphs)
         {
-            var root = lg.Graph_().Root!;
+            var root = lg.GraphLabel.Root!;
             var sorted = SortSubgraph.Run(lg, root, cg, biasRight);
             for (var i = 0; i < sorted.Vs.Count; i++)
             {

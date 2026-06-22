@@ -14,7 +14,7 @@ public class ParentDummyChainsTests
         g.SetNode("a");
         g.SetNode("b");
         g.SetNode("d1", new() { EdgeObj = new("a", "b") });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "b"]);
 
         ParentDummyChains.Run(g);
@@ -27,7 +27,7 @@ public class ParentDummyChainsTests
         g.SetParent("a", "sg1");
         g.SetNode("sg1", new() { MinRank = 0, MaxRank = 2 });
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "b"]);
 
         ParentDummyChains.Run(g);
@@ -40,7 +40,7 @@ public class ParentDummyChainsTests
         g.SetParent("b", "sg1");
         g.SetNode("sg1", new() { MinRank = 1, MaxRank = 3 });
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 1 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "b"]);
 
         ParentDummyChains.Run(g);
@@ -55,7 +55,7 @@ public class ParentDummyChainsTests
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
         g.SetNode("d2", new() { Rank = 3 });
         g.SetNode("d3", new() { Rank = 4 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "b"]);
 
         ParentDummyChains.Run(g);
@@ -72,7 +72,7 @@ public class ParentDummyChainsTests
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 1 });
         g.SetNode("d2", new() { Rank = 2 });
         g.SetNode("d3", new() { Rank = 3 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "b"]);
 
         ParentDummyChains.Run(g);
@@ -98,7 +98,7 @@ public class ParentDummyChainsTests
         }
 
         g.Node("d1").EdgeObj = new("a", "b");
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "d4", "d5", "b"]);
 
         ParentDummyChains.Run(g);
@@ -119,7 +119,7 @@ public class ParentDummyChainsTests
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
         g.SetNode("d2", new() { Rank = 3 });
         g.SetNode("d3", new() { Rank = 4 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "d3", "b"]);
 
         ParentDummyChains.Run(g);
@@ -138,7 +138,7 @@ public class ParentDummyChainsTests
         g.SetNode("sg2", new() { MinRank = 3, MaxRank = 5 });
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
         g.SetNode("d2", new() { Rank = 3 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "b"]);
 
         ParentDummyChains.Run(g);
@@ -156,7 +156,7 @@ public class ParentDummyChainsTests
         g.SetNode("sg2", new() { MinRank = 1, MaxRank = 3 });
         g.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 3 });
         g.SetNode("d2", new() { Rank = 4 });
-        g.Graph_().DummyChains = ["d1"];
+        g.GraphLabel.DummyChains = ["d1"];
         g.SetPath(["a", "d1", "d2", "b"]);
 
         ParentDummyChains.Run(g);

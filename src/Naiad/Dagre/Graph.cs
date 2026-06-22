@@ -6,9 +6,9 @@ namespace Naiad.Dagre;
 /// </summary>
 sealed class Graph
 {
-    internal const string DefaultEdgeName = "\x00";
+    const string defaultEdgeName = "\x00";
     internal const string GraphNode = "\x00";
-    const string EdgeKeyDelim = "\x01";
+    const string edgeKeyDelim = "\x01";
 
     GraphLabel? label;
     readonly OrderedMap<NodeLabel> nodesMap = new();
@@ -63,7 +63,7 @@ sealed class Graph
         return this;
     }
 
-    public GraphLabel Graph_() => label!;
+    public GraphLabel GraphLabel => label!;
 
     public Graph SetDefaultNodeLabel(Func<string, NodeLabel> fn)
     {
@@ -450,7 +450,7 @@ sealed class Graph
             (v, w) = (w, v);
         }
 
-        return v + EdgeKeyDelim + w + EdgeKeyDelim + (name ?? DefaultEdgeName);
+        return v + edgeKeyDelim + w + edgeKeyDelim + (name ?? defaultEdgeName);
     }
 
     static Edge EdgeArgsToObj(bool isDirected, string vIn, string wIn, string? name)

@@ -24,7 +24,7 @@ static class Util
     /// <summary>Returns a new graph with only simple edges; aggregates multi-edge weight/minlen.</summary>
     public static Graph Simplify(Graph graph)
     {
-        var simplified = new Graph().SetGraph(graph.Graph_());
+        var simplified = new Graph().SetGraph(graph.GraphLabel);
         foreach (var v in graph.Nodes())
         {
             simplified.SetNode(v, graph.Node(v));
@@ -48,7 +48,7 @@ static class Util
 
     public static Graph AsNonCompoundGraph(Graph graph)
     {
-        var simplified = new Graph(multigraph: graph.IsMultigraph).SetGraph(graph.Graph_());
+        var simplified = new Graph(multigraph: graph.IsMultigraph).SetGraph(graph.GraphLabel);
         foreach (var v in graph.Nodes())
         {
             if (graph.Children(v).Count == 0)
@@ -180,7 +180,7 @@ static class Util
         }
 
         var delta = 0;
-        var nodeRankFactor = graph.Graph_().NodeRankFactor!.Value;
+        var nodeRankFactor = graph.GraphLabel.NodeRankFactor!.Value;
         for (var i = 0; i < layers.Count; i++)
         {
             var vs = layers[i];

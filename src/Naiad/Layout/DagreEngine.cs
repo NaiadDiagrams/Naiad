@@ -90,7 +90,7 @@ class DagreEngine : ILayoutEngine
             }
         }
 
-        var graphLabel = graph.Graph_();
+        var graphLabel = graph.GraphLabel;
         return new()
         {
             Width = graphLabel.Width ?? 0,

@@ -20,7 +20,7 @@ static class Normalize
 {
     public static void Run(Graph graph)
     {
-        graph.Graph_().DummyChains = [];
+        graph.GraphLabel.DummyChains = [];
         foreach (var edge in graph.Edges())
         {
             NormalizeEdge(graph, edge);
@@ -72,7 +72,7 @@ static class Normalize
             graph.SetEdge(v, dummy, new() { Weight = edgeLabel.Weight }, name);
             if (i == 0)
             {
-                graph.Graph_().DummyChains!.Add(dummy);
+                graph.GraphLabel.DummyChains!.Add(dummy);
             }
 
             v = dummy;
@@ -83,7 +83,7 @@ static class Normalize
 
     public static void Undo(Graph graph)
     {
-        foreach (var start in graph.Graph_().DummyChains!)
+        foreach (var start in graph.GraphLabel.DummyChains!)
         {
             var v = start;
             var node = graph.Node(v);

@@ -59,7 +59,7 @@ public class RankTests
 
     async Task RespectsTheMinlenAttribute(string ranker)
     {
-        g.Graph_().Ranker = ranker;
+        g.GraphLabel.Ranker = ranker;
         Rank.Run(g);
         foreach (var e in g.Edges())
         {

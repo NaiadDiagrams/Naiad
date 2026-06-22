@@ -18,9 +18,9 @@ public class BuildLayerGraphTests
         g.SetNode("d", new() { Rank = 3 });
 
         var lg = BuildLayerGraph.Run(g, 1, "inEdges");
-        await Assert.That(lg.HasNode(lg.Graph_().Root!)).IsTrue();
-        await Assert.That(lg.Children(Graph.GraphNode)).IsEquivalentTo(new List<string> { lg.Graph_().Root! }, CollectionOrdering.Matching);
-        await Assert.That(lg.Children(lg.Graph_().Root!)).IsEquivalentTo(new List<string> { "a", "b" }, CollectionOrdering.Matching);
+        await Assert.That(lg.HasNode(lg.GraphLabel.Root!)).IsTrue();
+        await Assert.That(lg.Children(Graph.GraphNode)).IsEquivalentTo(new List<string> { lg.GraphLabel.Root! }, CollectionOrdering.Matching);
+        await Assert.That(lg.Children(lg.GraphLabel.Root!)).IsEquivalentTo(new List<string> { "a", "b" }, CollectionOrdering.Matching);
     }
 
     [Test]
@@ -127,7 +127,7 @@ public class BuildLayerGraphTests
         }
 
         var lg = BuildLayerGraph.Run(g, 0, "inEdges");
-        var root = lg.Graph_().Root!;
+        var root = lg.GraphLabel.Root!;
         var children = lg.Children(root);
         children.Sort(StringComparer.Ordinal);
         await Assert.That(children).IsEquivalentTo(new List<string> { "c", "sg" }, CollectionOrdering.Matching);
