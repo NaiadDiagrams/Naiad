@@ -1,6 +1,4 @@
-﻿namespace Naiad.Dagre;
-
-sealed class BarycenterEntry
+﻿sealed class BarycenterEntry
 {
     public string V = "";
     public double? Barycenter;

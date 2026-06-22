@@ -385,26 +385,26 @@ sealed class Graph
     public bool HasEdge(Edge edge) =>
         edgeLabelsMap.ContainsKey(EdgeObjToId(IsDirected, edge));
 
-    public Graph RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(IsDirected, v, w, name));
+    public void RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(IsDirected, v, w, name));
 
-    public Graph RemoveEdge(Edge edge) => RemoveEdgeId(EdgeObjToId(IsDirected, edge));
+    public void RemoveEdge(Edge edge) => RemoveEdgeId(EdgeObjToId(IsDirected, edge));
 
-    Graph RemoveEdgeId(string e)
+    void RemoveEdgeId(string e)
     {
-        if (edgeObjsMap.TryGetValue(e, out var edge))
+        if (!edgeObjsMap.TryGetValue(e, out var edge))
         {
-            var vStr = edge.V;
-            var wStr = edge.W;
-            edgeLabelsMap.Remove(e);
-            edgeObjsMap.Remove(e);
-            DecrementOrRemoveEntry(predsMap[wStr], vStr);
-            DecrementOrRemoveEntry(sucsMap[vStr], wStr);
-            inMap[wStr].Remove(e);
-            outMap[vStr].Remove(e);
-            EdgeCount--;
+            return;
         }
 
-        return this;
+        var vStr = edge.V;
+        var wStr = edge.W;
+        edgeLabelsMap.Remove(e);
+        edgeObjsMap.Remove(e);
+        DecrementOrRemoveEntry(predsMap[wStr], vStr);
+        DecrementOrRemoveEntry(sucsMap[vStr], wStr);
+        inMap[wStr].Remove(e);
+        outMap[vStr].Remove(e);
+        EdgeCount--;
     }
 
     public List<Edge>? InEdges(string v, string? w = null)

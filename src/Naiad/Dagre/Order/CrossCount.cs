@@ -1,4 +1,4 @@
-namespace Naiad.Dagre;
+using Naiad.Dagre;
 
 static class CrossCount
 {
