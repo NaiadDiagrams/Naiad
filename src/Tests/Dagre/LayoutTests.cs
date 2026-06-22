@@ -1,3 +1,5 @@
+using Direction = Naiad.Models.Direction;
+
 public class LayoutTests
 {
     Graph graph = null!;
@@ -68,11 +70,11 @@ public class LayoutTests
     }
 
     [Test]
-    [Arguments("TB")]
-    [Arguments("BT")]
-    [Arguments("LR")]
-    [Arguments("RL")]
-    public async Task CanLayoutAnEdgeWithALongLabel(string rankdir)
+    [Arguments(Direction.TopToBottom)]
+    [Arguments(Direction.BottomToTop)]
+    [Arguments(Direction.LeftToRight)]
+    [Arguments(Direction.RightToLeft)]
+    public async Task CanLayoutAnEdgeWithALongLabel(Direction rankdir)
     {
         graph.Label.Nodesep = graph.Label.Edgesep = 10;
         graph.Label.Rankdir = rankdir;
@@ -86,7 +88,7 @@ public class LayoutTests
         Layout.Run(graph);
 
         double p1X, p2X;
-        if (rankdir is "TB" or "BT")
+        if (rankdir is Direction.TopToBottom or Direction.BottomToTop)
         {
             p1X = graph.FindEdgeLabel("a", "c").X!.Value;
             p2X = graph.FindEdgeLabel("b", "d").X!.Value;
@@ -101,11 +103,11 @@ public class LayoutTests
     }
 
     [Test]
-    [Arguments("TB")]
-    [Arguments("BT")]
-    [Arguments("LR")]
-    [Arguments("RL")]
-    public async Task CanApplyAnOffset(string rankdir)
+    [Arguments(Direction.TopToBottom)]
+    [Arguments(Direction.BottomToTop)]
+    [Arguments(Direction.LeftToRight)]
+    [Arguments(Direction.RightToLeft)]
+    public async Task CanApplyAnOffset(Direction rankdir)
     {
         graph.Label.Nodesep = graph.Label.Edgesep = 10;
         graph.Label.Rankdir = rankdir;
@@ -118,7 +120,7 @@ public class LayoutTests
         graph.SetEdge("c", "d", new() { Width = 10, Height = 10, Labelpos = "r", Labeloffset = 1000 });
         Layout.Run(graph);
 
-        if (rankdir is "TB" or "BT")
+        if (rankdir is Direction.TopToBottom or Direction.BottomToTop)
         {
             await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value - graph.FindEdgeLabel("a", "b").Points![0].X).IsEqualTo(-1000 - 10.0 / 2);
             await Assert.That(graph.FindEdgeLabel("c", "d").X!.Value - graph.FindEdgeLabel("c", "d").Points![0].X).IsEqualTo(1000 + 10.0 / 2);
@@ -199,11 +201,11 @@ public class LayoutTests
     }
 
     [Test]
-    [Arguments("TB")]
-    [Arguments("BT")]
-    [Arguments("LR")]
-    [Arguments("RL")]
-    public async Task CanLayoutASelfLoop(string rankdir)
+    [Arguments(Direction.TopToBottom)]
+    [Arguments(Direction.BottomToTop)]
+    [Arguments(Direction.LeftToRight)]
+    [Arguments(Direction.RightToLeft)]
+    public async Task CanLayoutASelfLoop(Direction rankdir)
     {
         graph.Label.Edgesep = 75;
         graph.Label.Rankdir = rankdir;
@@ -216,7 +218,7 @@ public class LayoutTests
         await Assert.That(points.Count).IsEqualTo(7);
         foreach (var point in points)
         {
-            if (rankdir != "LR" && rankdir != "RL")
+            if (rankdir != Direction.LeftToRight && rankdir != Direction.RightToLeft)
             {
                 await Assert.That(point.X).IsGreaterThan(nodeA.X!.Value);
                 await Assert.That(Math.Abs(point.Y - nodeA.Y!.Value)).IsLessThanOrEqualTo(nodeA.Height / 2);
@@ -292,7 +294,7 @@ public class LayoutTests
             await Assert.That(graph.NodeLabel("sg").Y!.Value).IsGreaterThan(50.0 / 2);
         }
 
-        foreach (var rankdir in new[] { "tb", "bt", "lr", "rl" })
+        foreach (var rankdir in new[] { Direction.TopToBottom, Direction.BottomToTop, Direction.LeftToRight, Direction.RightToLeft })
         {
             graph.Label.Rankdir = rankdir;
             Layout.Run(graph);
@@ -311,11 +313,11 @@ public class LayoutTests
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> node
     [Test]
-    [Arguments("TB")]
-    [Arguments("BT")]
-    [Arguments("LR")]
-    [Arguments("RL")]
-    public async Task BoundingBoxNode(string rankdir)
+    [Arguments(Direction.TopToBottom)]
+    [Arguments(Direction.BottomToTop)]
+    [Arguments(Direction.LeftToRight)]
+    [Arguments(Direction.RightToLeft)]
+    public async Task BoundingBoxNode(Direction rankdir)
     {
         graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 200 });
@@ -326,18 +328,18 @@ public class LayoutTests
 
     // describe("ensures all coordinates are in the bounding box for the graph") -> edge, labelpos = l
     [Test]
-    [Arguments("TB")]
-    [Arguments("BT")]
-    [Arguments("LR")]
-    [Arguments("RL")]
-    public async Task BoundingBoxEdgeLabelposL(string rankdir)
+    [Arguments(Direction.TopToBottom)]
+    [Arguments(Direction.BottomToTop)]
+    [Arguments(Direction.LeftToRight)]
+    [Arguments(Direction.RightToLeft)]
+    public async Task BoundingBoxEdgeLabelposL(Direction rankdir)
     {
         graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b", new() { Width = 1000, Height = 2000, Labelpos = "l", Labeloffset = 0 });
         Layout.Run(graph);
-        if (rankdir is "TB" or "BT")
+        if (rankdir is Direction.TopToBottom or Direction.BottomToTop)
         {
             await Assert.That(graph.FindEdgeLabel("a", "b").X!.Value).IsEqualTo(1000.0 / 2);
         }

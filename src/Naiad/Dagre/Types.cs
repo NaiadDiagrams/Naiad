@@ -81,7 +81,7 @@ sealed class GraphLabel
 {
     public double? Width;
     public double? Height;
-    public string? Rankdir;          // 'TB' | 'BT' | 'LR' | 'RL'
+    public Direction Rankdir;
     public string? Align;            // 'UL' | 'UR' | 'DL' | 'DR'
     public double? Nodesep;
     public double? Edgesep;

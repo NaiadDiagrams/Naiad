@@ -4,8 +4,8 @@ static class CoordinateSystem
 {
     public static void Adjust(Graph graph)
     {
-        var rankDir = graph.Label.Rankdir?.ToLowerInvariant();
-        if (rankDir is "lr" or "rl")
+        var rankDir = graph.Label.Rankdir;
+        if (rankDir is Direction.LeftToRight or Direction.RightToLeft)
         {
             SwapWidthHeight(graph);
         }
@@ -13,13 +13,13 @@ static class CoordinateSystem
 
     public static void Undo(Graph graph)
     {
-        var rankDir = graph.Label.Rankdir?.ToLowerInvariant();
-        if (rankDir is "bt" or "rl")
+        var rankDir = graph.Label.Rankdir;
+        if (rankDir is Direction.BottomToTop or Direction.RightToLeft)
         {
             ReverseY(graph);
         }
 
-        if (rankDir is "lr" or "rl")
+        if (rankDir is Direction.LeftToRight or Direction.RightToLeft)
         {
             SwapXY(graph);
             SwapWidthHeight(graph);

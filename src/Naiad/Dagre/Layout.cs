@@ -101,7 +101,7 @@ static class Layout
             Ranksep = 50,
             Edgesep = 20,
             Nodesep = 50,
-            Rankdir = "TB",
+            Rankdir = graphLabel.Rankdir,
             Rankalign = "center"
         };
         if (graphLabel.Nodesep is { } gNodesep)
@@ -137,11 +137,6 @@ static class Layout
         if (graphLabel.Ranker is { } gRanker)
         {
             newGraph.Ranker = gRanker;
-        }
-
-        if (graphLabel.Rankdir is { } gRankdir)
-        {
-            newGraph.Rankdir = gRankdir;
         }
 
         if (graphLabel.Align is { } gAlign)
@@ -246,7 +241,7 @@ static class Layout
                 continue;
             }
 
-            if (graphLabel.Rankdir is "TB" or "BT")
+            if (graphLabel.Rankdir is Direction.TopToBottom or Direction.BottomToTop)
             {
                 edge.Width += edge.Labeloffset;
             }

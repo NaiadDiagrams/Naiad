@@ -1,3 +1,5 @@
+using Direction = Naiad.Models.Direction;
+
 // Regression guard: dagre's output must be independent of the global dummy-node id counter (as real dagre
 // is), so a layout is reproducible no matter how many layouts ran before it in the same process.
 
@@ -11,7 +13,7 @@ public class LayoutDeterminismTests
         graph.SetGraph(
             new()
             {
-                Rankdir = "TB",
+                Rankdir = Direction.TopToBottom,
                 Nodesep = 50,
                 Ranksep = 50,
                 Edgesep = 20

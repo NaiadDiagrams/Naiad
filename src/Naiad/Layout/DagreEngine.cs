@@ -20,13 +20,7 @@ class DagreEngine : ILayoutEngine
         var graph = new DagreGraph(directed: true, multigraph: true, compound: true);
         graph.SetGraph(new()
         {
-            Rankdir = options.Direction switch
-            {
-                Direction.BottomToTop => "BT",
-                Direction.LeftToRight => "LR",
-                Direction.RightToLeft => "RL",
-                _ => "TB"
-            },
+            Rankdir = options.Direction,
             Nodesep = options.NodeSeparation,
             Ranksep = options.RankSeparation
         });
