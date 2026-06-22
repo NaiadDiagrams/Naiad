@@ -1,4 +1,3 @@
-// Port of dagre test/rank/util-test.ts (describe "rank/util" > "longestPath").
 public class RankUtilTests
 {
     Graph graph = null!;

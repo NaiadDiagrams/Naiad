@@ -1,7 +1,3 @@
-using TUnit.Assertions.Enums;
-
-namespace Naiad.Dagre.Tests;
-
 public class SortSubgraphTests
 {
     Graph graph = null!;

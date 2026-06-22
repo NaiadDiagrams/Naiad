@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 public class OrderTests
 {
     Graph graph = null!;

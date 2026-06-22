@@ -1,6 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
-// Port of dagre test/rank/feasible-tree-test.ts (describe "feasibleTree").
 public class FeasibleTreeTests
 {
     [Test]

@@ -11,3 +11,4 @@ global using Microsoft.CodeAnalysis.CSharp.Syntax;
 global using Naiad.Dagre;
 global using SkiaSharp;
 global using Svg.Skia;
+global using TUnit.Assertions.Enums;

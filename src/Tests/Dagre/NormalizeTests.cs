@@ -1,4 +1,3 @@
-// Port of dagre's test/normalize-test.ts.
 public class NormalizeTests
 {
     Graph graph = null!;

@@ -1,6 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
-// Port of dagre test/rank/network-simplex-test.ts (describe "network simplex").
 public class NetworkSimplexTests
 {
     Graph graph = null!;

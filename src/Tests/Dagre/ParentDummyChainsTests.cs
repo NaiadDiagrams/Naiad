@@ -1,5 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
 public class ParentDummyChainsTests
 {
     Graph graph = null!;

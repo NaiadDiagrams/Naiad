@@ -1,7 +1,3 @@
-namespace Naiad.Dagre.Tests;
-
-// Port of dagre's test/unique-id-test.ts. dagre's uniqueId is a module-global; here it is a per-graph
-// counter (Graph.UniqueId), so the distinct-value test uses a single graph instance.
 public class UniqueIdTests
 {
     [Test]

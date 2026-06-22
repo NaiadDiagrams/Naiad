@@ -1,4 +1,3 @@
-// Ported from .dagre-ref/dagre/test/position-test.ts
 public class PositionTests
 {
     Graph graph = null!;

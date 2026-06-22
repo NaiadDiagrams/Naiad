@@ -1,4 +1,3 @@
-// Port of dagre test/rank/rank-test.ts (describe "rank").
 // The TS test loops over RANKERS = ["longest-path", "tight-tree", "network-simplex",
 // "unknown-should-still-work"], running two cases per ranker. Each (ranker, case) pair
 // is expanded into its own [Test] here.

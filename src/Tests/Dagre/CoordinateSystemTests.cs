@@ -1,4 +1,3 @@
-// Port of dagre's test/coordinate-system-test.ts.
 public class CoordinateSystemTests
 {
     public class AdjustTests

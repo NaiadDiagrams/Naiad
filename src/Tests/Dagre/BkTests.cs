@@ -1,22 +1,5 @@
-// Ported from .dagre-ref/dagre/test/position/bk-test.ts
 public class BkTests
 {
-    Graph graph = null!;
-
-    [Before(Test)]
-    public void Setup() =>
-        // The bk functions read graphLabel.nodesep/edgesep eagerly when building the block graph.
-        // In JS these are undefined unless a test sets them; the tests that exercise separation always
-        // assign them explicitly. We seed dagre's defaults so the unused values don't NPE in C#.
-        graph = new Graph()
-            .SetGraph(
-                new()
-                {
-                    Nodesep = 50,
-                    Edgesep = 20,
-                    Ranksep = 50
-                });
-
     static Dictionary<string, string> StrMap(params (string K, string V)[] entries)
     {
         var d = new Dictionary<string, string>(StringComparer.Ordinal);

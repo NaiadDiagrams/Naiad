@@ -1,4 +1,3 @@
-// Port of dagre's test/util-test.ts.
 public class UtilTests
 {
     public class SimplifyTests

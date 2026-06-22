@@ -13,7 +13,7 @@ static class BuildLayerGraph
                 {
                     Root = root
                 })
-            .SetDefaultNodeLabel(v => graph.TryGetNodeLabel(v, out var lbl) ? lbl : null!);
+            .SetDefaultNodeLabel(_ => graph.TryGetNodeLabel(_, out var lbl) ? lbl : null!);
 
         foreach (var v in nodesWithRank)
         {
