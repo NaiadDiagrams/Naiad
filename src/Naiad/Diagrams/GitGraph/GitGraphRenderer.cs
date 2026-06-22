@@ -68,8 +68,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             var y = offsetY + branch.Column * commitSpacingY;
             var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
 
-            var firstCommit = branch.Commits.OrderBy(_ => _.Row).First();
-            var lastCommit = branch.Commits.OrderBy(_ => _.Row).Last();
+            var firstCommit = branch.Commits.MinBy(_ => _.Row)!;
+            var lastCommit = branch.Commits.MaxBy(_ => _.Row)!;
 
             var startX = offsetX + firstCommit.Row * commitSpacingX;
             var endX = offsetX + lastCommit.Row * commitSpacingX;
@@ -112,8 +112,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         double offsetX,
         double offsetY)
     {
-        var fromBranch = graph.Branches.Find(_ => _.Name == from.Branch);
-        var toBranch = graph.Branches.Find(_ => _.Name == to.Branch);
+        var fromBranch = graph.FindBranch(from.Branch);
+        var toBranch = graph.FindBranch(to.Branch);
 
         if (fromBranch == null || toBranch == null)
         {
@@ -150,7 +150,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     static void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
         double offsetX, double offsetY, RenderOptions options)
     {
-        var branch = graph.Branches.Find(_ => _.Name == commit.Branch);
+        var branch = graph.FindBranch(commit.Branch);
         if (branch == null)
         {
             return;

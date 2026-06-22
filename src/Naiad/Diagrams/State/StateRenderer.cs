@@ -986,6 +986,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             .OrderBy(_ => stateMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
             .ToList();
 
+        // Index back-edges once so the per-transition loop is O(E), not O(E²) via IndexOf.
+        var backEdgeIndices = new Dictionary<StateTransition, int>();
+        for (var i = 0; i < backEdges.Count; i++)
+        {
+            backEdgeIndices[backEdges[i]] = i;
+        }
+
         foreach (var transition in model.Transitions)
         {
             var pairKey = GetPairKey(transition.FromId, transition.ToId);
@@ -998,7 +1005,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             else if (IsBackEdge(transition, stateMap))
             {
                 // Single back-edge (no forward counterpart) - curve to the right with offset
-                var backEdgeIndex = backEdges.IndexOf(transition);
+                var backEdgeIndex = backEdgeIndices.GetValueOrDefault(transition, -1);
                 RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, model, backEdgeIndex, options);
             }
             else

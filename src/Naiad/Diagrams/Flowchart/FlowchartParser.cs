@@ -435,7 +435,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                         if (!nodeDict.TryGetValue(node.Id, out var existingNode))
                         {
                             nodeDict[node.Id] = node;
-                            model.Nodes.Add(node);
+                            model.AddNode(node);
                         }
                         else
                         {

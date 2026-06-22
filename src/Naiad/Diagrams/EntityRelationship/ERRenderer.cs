@@ -33,10 +33,17 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             .Size(layoutResult.Width, layoutResult.Height)
             .Padding(options.Padding);
 
+        // Index entities by name so relationship endpoint lookups are O(1), not O(R·E) via List.Find.
+        var entitiesByName = new Dictionary<string, Entity>(StringComparer.Ordinal);
+        foreach (var entity in model.Entities)
+        {
+            entitiesByName[entity.Name] = entity;
+        }
+
         // Render relationships first (behind entities)
         foreach (var relationship in model.Relationships)
         {
-            RenderRelationship(builder, relationship, model, options);
+            RenderRelationship(builder, relationship, model, entitiesByName, options);
         }
 
         // Render entities
@@ -198,15 +205,15 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, Dictionary<string, Entity> entitiesByName, RenderOptions options)
     {
-        var fromEntity = model.Entities.Find(_ => _.Name == rel.FromEntity);
+        var fromEntity = entitiesByName.GetValueOrDefault(rel.FromEntity);
         if (fromEntity == null)
         {
             return;
         }
 
-        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
+        var toEntity = entitiesByName.GetValueOrDefault(rel.ToEntity);
         if (toEntity == null)
         {
             return;

@@ -72,6 +72,14 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         // Draw links first (behind nodes)
         var sourceOffsets = new Dictionary<string, double>();
         var targetOffsets = new Dictionary<string, double>();
+        // Index each node's column position once for link colouring (was an O(N) ToArray()+IndexOf per link).
+        var nodeColorIndices = new Dictionary<string, int>(StringComparer.Ordinal);
+        var colorIdx = 0;
+        foreach (var key in nodes.Keys)
+        {
+            nodeColorIndices[key] = colorIdx++;
+        }
+
         foreach (var link in model.Links)
         {
             var sourceNode = nodes[link.Source];
@@ -94,7 +102,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
             // Draw bezier curve for link (tapers from source band to target band so each end meets its node edge exactly)
             var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, sourceBand, targetBand);
-            var colorIndex = Array.IndexOf(nodes.Keys.ToArray(), link.Source) % NodeColors.Length;
+            var colorIndex = nodeColorIndices[link.Source] % NodeColors.Length;
             builder.AddPath(
                 pathData,
                 fill: NodeColors[colorIndex],
