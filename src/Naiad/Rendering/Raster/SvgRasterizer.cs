@@ -62,10 +62,15 @@ static class SvgRasterizer
         // for the whole document instead of allocating a list per element.
         readonly List<MatchedDeclaration> matchBuffer = [];
 
+        // Markers are shared def instances drawn many times (~2 per edge); their flattened geometry and
+        // resolved fill/stroke depend only on the marker and the root style, so resolve each once.
+        readonly Dictionary<SvgMarker, IReadOnlyList<SubPath>> markerGeometryCache = new();
+        readonly Dictionary<SvgMarker, (Rgba? Fill, Rgba? Stroke)> markerColorCache = new();
+
         public ComputedStyle ResolveRootStyle(ElementMatch rootMatch)
         {
             var style = new ComputedStyle();
-            ApplyCascade(style, [rootMatch], presentation: null, inlineStyle: null);
+            ApplyCascade(ref style, [rootMatch], presentation: null, inlineStyle: null);
             return style;
         }
 
@@ -77,7 +82,7 @@ static class SvgRasterizer
             try
             {
                 var style = inherited.CloneForChild();
-                ApplyCascade(style, chain, Presentation(element), element.Style);
+                ApplyCascade(ref style, chain, Presentation(element), element.Style);
                 var opacity = groupOpacity * (float)style.Opacity;
 
                 switch (element)
@@ -396,9 +401,7 @@ static class SvgRasterizer
             var (fill, stroke) = MarkerColors(marker, chain);
             var strokeWidth = (float)marker.StrokeWidth;
 
-            IReadOnlyList<SubPath> content = marker.UseCircle
-                ? BuildEllipse(marker.CircleCx, marker.CircleCy, marker.CircleR, marker.CircleR)
-                : PathFlattener.Flatten(marker.Path);
+            var content = MarkerGeometry(marker);
             if (content.Count == 0)
             {
                 return;
@@ -417,11 +420,17 @@ static class SvgRasterizer
 
         (Rgba? Fill, Rgba? Stroke) MarkerColors(SvgMarker marker, List<ElementMatch> chain)
         {
+            if (markerColorCache.TryGetValue(marker, out var cached))
+            {
+                return cached;
+            }
+
             // Resolve the marker's own fill/stroke as if it were an element under the root, so the
-            // `.marker { fill:#333333 }` rule (inherited by the marker's content) is honoured.
+            // `.marker { fill:#333333 }` rule (inherited by the marker's content) is honoured. The result
+            // depends only on the marker and the root match, so it is resolved once per marker.
             var markerMatch = new ElementMatch("marker", marker.Id, Split(marker.ClassName));
             var style = new ComputedStyle();
-            ApplyCascade(style, [chain[0], markerMatch], presentation: null, inlineStyle: null);
+            ApplyCascade(ref style, [chain[0], markerMatch], presentation: null, inlineStyle: null);
             if (marker.Fill != null)
             {
                 style.Fill = marker.Fill;
@@ -429,7 +438,22 @@ static class SvgRasterizer
 
             var fill = ResolveColor(style.Fill, style) ?? new Rgba(0x33, 0x33, 0x33, 255);
             var stroke = ResolveColor(style.Stroke, style) ?? fill;
-            return (fill, stroke);
+            var result = (fill, stroke);
+            markerColorCache[marker] = result;
+            return result;
+        }
+
+        IReadOnlyList<SubPath> MarkerGeometry(SvgMarker marker)
+        {
+            if (!markerGeometryCache.TryGetValue(marker, out var content))
+            {
+                content = marker.UseCircle
+                    ? BuildEllipse(marker.CircleCx, marker.CircleCy, marker.CircleR, marker.CircleR)
+                    : PathFlattener.Flatten(marker.Path);
+                markerGeometryCache[marker] = content;
+            }
+
+            return content;
         }
 
         SvgMarker? MarkerLookup(string reference)
@@ -440,7 +464,7 @@ static class SvgRasterizer
 
         // --- style resolution -------------------------------------------------------------------
 
-        void ApplyCascade(ComputedStyle style, IReadOnlyList<ElementMatch> chain, IReadOnlyList<(string, string)>? presentation, string? inlineStyle)
+        void ApplyCascade(ref ComputedStyle style, IReadOnlyList<ElementMatch> chain, IReadOnlyList<(string, string)>? presentation, string? inlineStyle)
         {
             // 1. presentation attributes (lowest author priority).
             if (presentation != null)
@@ -608,12 +632,15 @@ static class SvgRasterizer
              weight.Equals("bolder", StringComparison.OrdinalIgnoreCase) ||
              (int.TryParse(weight, out var numeric) && numeric >= 600));
 
+        static readonly System.Collections.Concurrent.ConcurrentDictionary<string, IReadOnlyList<string>> fontFamilyCache = new();
+
+        // The family stack is almost always the single inherited theme font, so resolve each distinct string once.
         static IReadOnlyList<string> FontFamilies(string families) =>
-            families
-                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Select(_ => _.Trim('\'', '"'))
-                .Where(_ => _.Length > 0)
-                .ToList();
+            fontFamilyCache.GetOrAdd(families, static f =>
+                f.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Select(_ => _.Trim('\'', '"'))
+                    .Where(_ => _.Length > 0)
+                    .ToList());
 
         // --- presentation attributes ------------------------------------------------------------
 
@@ -679,13 +706,14 @@ static class SvgRasterizer
         static IReadOnlyList<string> Split(string? classes) =>
             classes?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
 
-        static List<(string Property, string Value, bool Important)> InlineDeclarations(string? style)
+        static IReadOnlyList<(string Property, string Value, bool Important)> InlineDeclarations(string? style)
         {
-            var result = new List<(string, string, bool)>();
             if (string.IsNullOrWhiteSpace(style))
             {
-                return result;
+                return [];
             }
+
+            var result = new List<(string, string, bool)>();
 
             foreach (var piece in style.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
