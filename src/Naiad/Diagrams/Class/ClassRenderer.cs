@@ -1,10 +1,8 @@
 namespace Naiad.Diagrams.Class;
 
-public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
+public class ClassRenderer :
     IDiagramRenderer<ClassModel>
 {
-    ILayoutEngine _layoutEngine = layoutEngine ?? new DagreEngine();
-
     const double classPadding = 10;
     const double lineHeight = 20;
     const double minWidth = 100;
@@ -22,7 +20,8 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 60,
             RankSeparation = 80
         };
-        var layoutResult = _layoutEngine.Layout(graphModel, layoutOptions);
+        var dagreEngine = new DagreEngine();
+        var layoutResult = dagreEngine.Layout(graphModel, layoutOptions);
 
         // Build SVG
         var builder = new SvgBuilder()
@@ -67,7 +66,10 @@ public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
 
     static GraphDiagramBase ConvertToGraphModel(ClassModel model, RenderOptions options)
     {
-        var graph = new FlowchartModel {Direction = model.Direction};
+        var graph = new FlowchartModel
+        {
+            Direction = model.Direction
+        };
 
         // Create nodes for each class
         foreach (var classDef in model.Classes)
