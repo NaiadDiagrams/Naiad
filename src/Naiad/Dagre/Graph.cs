@@ -285,6 +285,9 @@ sealed class Graph
 
     public List<Edge> Edges() => edgeObjsMap.Values();
 
+    // Allocation-free enumeration of all edges — the network-simplex pivot loop scans these per iteration.
+    public OrderedMap<Edge>.ValueEnumerable EnumerateEdges() => edgeObjsMap.EnumerateValues();
+
     /// <summary>The edge labels in insertion order — the labels of <see cref="Edges"/>, without the per-edge lookup.</summary>
     public List<EdgeLabel> EdgeLabels() => edgeLabelsMap.Values();
 

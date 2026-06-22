@@ -144,12 +144,18 @@ static class NetworkSimplex
         return nextLim;
     }
 
-    public static Edge? LeaveEdge(Graph tree) =>
-        tree.Edges().FirstOrDefault(e =>
+    public static Edge? LeaveEdge(Graph tree)
+    {
+        foreach (var e in tree.EnumerateEdges())
         {
-            var edge = tree.FindEdgeLabel(e);
-            return edge.Cutvalue!.Value < 0;
-        });
+            if (tree.FindEdgeLabel(e).Cutvalue!.Value < 0)
+            {
+                return e;
+            }
+        }
+
+        return null;
+    }
 
     public static Edge EnterEdge(Graph tree, Graph graph, Edge edge)
     {
@@ -178,21 +184,25 @@ static class NetworkSimplex
             flip = true;
         }
 
-        var candidates = graph.Edges().Where(candidate =>
-            flip == IsDescendant(tree, tree.NodeLabel(candidate.V), tailLabel) &&
-            flip != IsDescendant(tree, tree.NodeLabel(candidate.W), tailLabel)).ToList();
-
-        var acc = candidates[0];
-        for (var i = 1; i < candidates.Count; i++)
+        // Find the minimum-slack candidate in a single pass: folding the filter into the scan avoids
+        // snapshotting the whole edge list (and re-computing the incumbent's slack) on every pivot.
+        Edge? acc = null;
+        var accSlack = 0;
+        foreach (var candidate in graph.EnumerateEdges())
         {
-            var candidate = candidates[i];
-            if (RankUtil.Slack(graph, candidate) < RankUtil.Slack(graph, acc))
+            if (flip == IsDescendant(tree, tree.NodeLabel(candidate.V), tailLabel) &&
+                flip != IsDescendant(tree, tree.NodeLabel(candidate.W), tailLabel))
             {
-                acc = candidate;
+                var slack = RankUtil.Slack(graph, candidate);
+                if (acc == null || slack < accSlack)
+                {
+                    acc = candidate;
+                    accSlack = slack;
+                }
             }
         }
 
-        return acc;
+        return acc!;
     }
 
     public static void ExchangeEdges(Graph t, Graph graph, Edge e, Edge f)
