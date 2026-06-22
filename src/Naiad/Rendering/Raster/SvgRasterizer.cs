@@ -67,10 +67,15 @@ static class SvgRasterizer
         readonly Dictionary<SvgMarker, IReadOnlyList<SubPath>> markerGeometryCache = new();
         readonly Dictionary<SvgMarker, (Rgba? Fill, Rgba? Stroke)> markerColorCache = new();
 
+        // Gradients are looked up by id per fill; index them and cache each gradient's resolved stops so a
+        // gradient referenced by many shapes is parsed once (only the per-shape bounds vary).
+        readonly Dictionary<string, SvgGradient> gradientLookup = BuildGradientLookup(defs);
+        readonly Dictionary<string, List<GradientStop>> gradientStopsCache = new();
+
         public ComputedStyle ResolveRootStyle(ElementMatch rootMatch)
         {
             var style = new ComputedStyle();
-            ApplyCascade(ref style, [rootMatch], presentation: null, inlineStyle: null);
+            ApplyCascade(ref style, [rootMatch], presentationElement: null, inlineStyle: null);
             return style;
         }
 
@@ -82,7 +87,7 @@ static class SvgRasterizer
             try
             {
                 var style = inherited.CloneForChild();
-                ApplyCascade(ref style, chain, Presentation(element), element.Style);
+                ApplyCascade(ref style, chain, element, element.Style);
                 var opacity = groupOpacity * (float)style.Opacity;
 
                 switch (element)
@@ -430,7 +435,7 @@ static class SvgRasterizer
             // depends only on the marker and the root match, so it is resolved once per marker.
             var markerMatch = new ElementMatch("marker", marker.Id, Split(marker.ClassName));
             var style = new ComputedStyle();
-            ApplyCascade(ref style, [chain[0], markerMatch], presentation: null, inlineStyle: null);
+            ApplyCascade(ref style, [chain[0], markerMatch], presentationElement: null, inlineStyle: null);
             if (marker.Fill != null)
             {
                 style.Fill = marker.Fill;
@@ -464,15 +469,12 @@ static class SvgRasterizer
 
         // --- style resolution -------------------------------------------------------------------
 
-        void ApplyCascade(ref ComputedStyle style, IReadOnlyList<ElementMatch> chain, IReadOnlyList<(string, string)>? presentation, string? inlineStyle)
+        void ApplyCascade(ref ComputedStyle style, IReadOnlyList<ElementMatch> chain, SvgElement? presentationElement, string? inlineStyle)
         {
             // 1. presentation attributes (lowest author priority).
-            if (presentation != null)
+            if (presentationElement != null)
             {
-                foreach (var (property, value) in presentation)
-                {
-                    style.Apply(property, value);
-                }
+                ApplyPresentation(ref style, presentationElement);
             }
 
             stylesheet.Match(chain, matchBuffer);
@@ -562,20 +564,21 @@ static class SvgRasterizer
 
         Paint? ResolveGradient(string? id, IReadOnlyList<SubPath> subpaths)
         {
-            if (id == null)
+            if (id == null || !gradientLookup.TryGetValue(id, out var gradient) || gradient.Stops.Count == 0)
             {
                 return null;
             }
 
-            var gradient = defs.Gradients.FirstOrDefault(_ => _.Id == id);
-            if (gradient == null || gradient.Stops.Count == 0)
+            if (!gradientStopsCache.TryGetValue(id, out var stops))
             {
-                return null;
-            }
+                stops = new List<GradientStop>(gradient.Stops.Count);
+                foreach (var stop in gradient.Stops)
+                {
+                    stops.Add(new GradientStop((float)(stop.Offset / 100), CssColor.TryParse(stop.Color, out var c) ? c : Rgba.Black));
+                }
 
-            var stops = gradient.Stops
-                .Select(_ => new GradientStop((float)(_.Offset / 100), CssColor.TryParse(_.Color, out var c) ? c : Rgba.Black))
-                .ToList();
+                gradientStopsCache[id] = stops;
+            }
 
             var (min, max) = Bounds(subpaths);
             if (gradient.IsRadial)
@@ -644,46 +647,83 @@ static class SvgRasterizer
 
         // --- presentation attributes ------------------------------------------------------------
 
-        static IReadOnlyList<(string, string)>? Presentation(SvgElement element) =>
-            element switch
-            {
-                SvgRect rect => Attributes(("fill", rect.Fill), ("stroke", rect.Stroke), ("stroke-width", Num(rect.StrokeWidth))),
-                SvgCircle circle => Attributes(("fill", circle.Fill), ("stroke", circle.Stroke), ("stroke-width", Num(circle.StrokeWidth))),
-                SvgEllipse ellipse => Attributes(("fill", ellipse.Fill), ("stroke", ellipse.Stroke)),
-                SvgLine line => Attributes(("stroke", line.Stroke), ("stroke-width", Num(line.StrokeWidth)), ("stroke-dasharray", line.StrokeDasharray)),
-                SvgPolygon polygon => Attributes(("fill", polygon.Fill), ("stroke", polygon.Stroke)),
-                SvgPath path => Attributes(
-                    ("fill", path.Fill),
-                    ("stroke", path.Stroke),
-                    ("stroke-width", Num(path.StrokeWidth)),
-                    ("stroke-dasharray", path.StrokeDasharray),
-                    ("opacity", Num(path.Opacity))),
-                SvgText text => Attributes(
-                    ("fill", text.Fill),
-                    ("font-size", text.FontSize is { } size ? size.ToString(CultureInfo.InvariantCulture) : null),
-                    ("font-family", text.FontFamily),
-                    ("font-weight", text.FontWeight),
-                    ("text-anchor", text.TextAnchor),
-                    ("dominant-baseline", text.DominantBaseline)),
-                _ => null,
-            };
-
-        static IReadOnlyList<(string, string)>? Attributes(params (string Property, string? Value)[] pairs)
+        // Applies an element's presentation attributes (the lowest cascade tier) straight onto the style —
+        // no intermediate (string,string) list per shape, and numeric values bypass the double→string→double
+        // round-trip that routing them through the string Apply would incur.
+        static void ApplyPresentation(ref ComputedStyle style, SvgElement element)
         {
-            List<(string, string)>? result = null;
-            foreach (var (property, value) in pairs)
+            switch (element)
             {
-                if (value != null)
-                {
-                    (result ??= []).Add((property, value));
-                }
+                case SvgRect rect:
+                    ApplyAttr(ref style, "fill", rect.Fill);
+                    ApplyAttr(ref style, "stroke", rect.Stroke);
+                    ApplyAttr(ref style, "stroke-width", rect.StrokeWidth);
+                    break;
+                case SvgCircle circle:
+                    ApplyAttr(ref style, "fill", circle.Fill);
+                    ApplyAttr(ref style, "stroke", circle.Stroke);
+                    ApplyAttr(ref style, "stroke-width", circle.StrokeWidth);
+                    break;
+                case SvgEllipse ellipse:
+                    ApplyAttr(ref style, "fill", ellipse.Fill);
+                    ApplyAttr(ref style, "stroke", ellipse.Stroke);
+                    break;
+                case SvgLine line:
+                    ApplyAttr(ref style, "stroke", line.Stroke);
+                    ApplyAttr(ref style, "stroke-width", line.StrokeWidth);
+                    ApplyAttr(ref style, "stroke-dasharray", line.StrokeDasharray);
+                    break;
+                case SvgPolygon polygon:
+                    ApplyAttr(ref style, "fill", polygon.Fill);
+                    ApplyAttr(ref style, "stroke", polygon.Stroke);
+                    break;
+                case SvgPath path:
+                    ApplyAttr(ref style, "fill", path.Fill);
+                    ApplyAttr(ref style, "stroke", path.Stroke);
+                    ApplyAttr(ref style, "stroke-width", path.StrokeWidth);
+                    ApplyAttr(ref style, "stroke-dasharray", path.StrokeDasharray);
+                    ApplyAttr(ref style, "opacity", path.Opacity);
+                    break;
+                case SvgText text:
+                    ApplyAttr(ref style, "fill", text.Fill);
+                    ApplyAttr(ref style, "font-size", text.FontSize);
+                    ApplyAttr(ref style, "font-family", text.FontFamily);
+                    ApplyAttr(ref style, "font-weight", text.FontWeight);
+                    ApplyAttr(ref style, "text-anchor", text.TextAnchor);
+                    ApplyAttr(ref style, "dominant-baseline", text.DominantBaseline);
+                    break;
             }
-
-            return result;
         }
 
-        static string? Num(double? value) =>
-            value?.ToString(CultureInfo.InvariantCulture);
+        static void ApplyAttr(ref ComputedStyle style, string property, string? value)
+        {
+            if (value != null)
+            {
+                style.Apply(property, value);
+            }
+        }
+
+        static void ApplyAttr(ref ComputedStyle style, string property, double? value)
+        {
+            if (value is not { } number)
+            {
+                return;
+            }
+
+            // The numeric presentation attributes carry no units, so set them directly (matching Apply).
+            switch (property)
+            {
+                case "stroke-width":
+                    style.StrokeWidth = number;
+                    break;
+                case "font-size":
+                    style.FontSize = number;
+                    break;
+                case "opacity":
+                    style.Opacity = Math.Clamp(number, 0, 1);
+                    break;
+            }
+        }
 
         static ElementMatch MatchFor(SvgElement element) =>
             new(TagName(element), element.Id, Split(element.Class));
@@ -748,6 +788,17 @@ static class SvgRasterizer
             foreach (var marker in defs.Markers)
             {
                 lookup[marker.Id] = marker;
+            }
+
+            return lookup;
+        }
+
+        static Dictionary<string, SvgGradient> BuildGradientLookup(SvgDefs defs)
+        {
+            var lookup = new Dictionary<string, SvgGradient>(StringComparer.Ordinal);
+            foreach (var gradient in defs.Gradients)
+            {
+                lookup.TryAdd(gradient.Id, gradient);
             }
 
             return lookup;

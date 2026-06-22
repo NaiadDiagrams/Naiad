@@ -14,12 +14,17 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
 
     Image<Rgba32> image = new(width, height, ToPixel(background));
 
+    // Draw operations are buffered and replayed in a single image.Mutate at Encode time. Each Mutate spins
+    // up (and tears down) a processing context, so collapsing the per-primitive Mutates into one is a large
+    // saving on diagrams with many primitives. Safe because the surface is only ever written then encoded.
+    readonly List<Action<IImageProcessingContext>> pending = [];
+
     public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
     {
         var path = ToPath(subpaths);
         var brush = ToBrush(paint, opacity);
         var options = Options(transform, rule);
-        image.Mutate(context => context.Paint(options, inner => inner.Fill(brush, path)));
+        pending.Add(context => context.Paint(options, inner => inner.Fill(brush, path)));
     }
 
     public void StrokePath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Rgba color, float width, IReadOnlyList<float>? dash, float opacity)
@@ -29,7 +34,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
         // with the diagram (and with the Skia backend, where the canvas matrix scales it automatically).
         var pen = ToPen(ToColor(color.MultiplyAlpha(opacity)), width * Scale(transform), dash);
         var options = Options(transform, FillRule.NonZero);
-        image.Mutate(context => context.Paint(options, inner => inner.Draw(pen, path)));
+        pending.Add(context => context.Paint(options, inner => inner.Draw(pen, path)));
     }
 
     public void DrawText(string text, float x, float y, Matrix3x2 transform, TextStyle style)
@@ -65,16 +70,37 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
         };
         var brush = new SolidBrush(ToColor(style.Color.MultiplyAlpha(style.Opacity)));
         var options = Options(transform, FillRule.NonZero);
-        image.Mutate(context => context.Paint(options, inner => inner.DrawText(textOptions, text, brush, null)));
+        pending.Add(context => context.Paint(options, inner => inner.DrawText(textOptions, text, brush, null)));
     }
 
-    public void Encode(Stream stream) =>
+    public void Encode(Stream stream)
+    {
+        Flush();
         image.SaveAsPng(
             stream,
             new()
             {
                 CompressionLevel = PngCompressionLevel.BestCompression
             });
+    }
+
+    // Replay every buffered draw operation against the image in a single Mutate pass.
+    void Flush()
+    {
+        if (pending.Count == 0)
+        {
+            return;
+        }
+
+        image.Mutate(context =>
+        {
+            foreach (var op in pending)
+            {
+                op(context);
+            }
+        });
+        pending.Clear();
+    }
 
     static DrawingOptions Options(Matrix3x2 transform, FillRule rule) =>
         new()
@@ -104,8 +130,14 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
                 continue;
             }
 
+            var points = new PointF[subpath.Points.Count];
+            for (var i = 0; i < points.Length; i++)
+            {
+                points[i] = new(subpath.Points[i].X, subpath.Points[i].Y);
+            }
+
             builder.StartFigure();
-            builder.AddLines(subpath.Points.Select(_ => new PointF(_.X, _.Y)).ToArray());
+            builder.AddLines(points);
             if (subpath.Closed)
             {
                 builder.CloseFigure();
