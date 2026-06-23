@@ -40,7 +40,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     {
         if (model.Elements.Count == 0 && model.Boundaries.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,

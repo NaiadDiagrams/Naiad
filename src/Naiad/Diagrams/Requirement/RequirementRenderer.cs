@@ -14,7 +14,8 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
     {
         if (model.Requirements.Count == 0 && model.Elements.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -33,7 +34,8 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         var height = maxItems * (boxHeight + boxSpacing) + options.Padding * 2 + titleOffset;
         var width = 2 * (boxWidth + boxSpacing) + options.Padding * 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Add arrow marker
         builder.AddArrowMarker("reqarrow", "#666");

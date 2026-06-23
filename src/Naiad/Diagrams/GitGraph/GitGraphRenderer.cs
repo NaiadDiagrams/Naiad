@@ -36,7 +36,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var width = graphWidth + options.Padding * 2;
         var height = graphHeight + options.Padding * 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         var offsetX = options.Padding + branchLabelWidth;
         var offsetY = options.Padding + commitSpacingY / 2;

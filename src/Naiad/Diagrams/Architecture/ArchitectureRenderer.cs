@@ -2,13 +2,13 @@ namespace Naiad.Diagrams.Architecture;
 
 public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
 {
-    const double ServiceWidth = 100;
-    const double ServiceHeight = 80;
-    const double ServiceSpacing = 40;
-    const double GroupPadding = 20;
-    const double IconSize = 32;
+    const double serviceWidth = 100;
+    const double serviceHeight = 80;
+    const double serviceSpacing = 40;
+    const double groupPadding = 20;
+    const double iconSize = 32;
 
-    static readonly Dictionary<string, string> IconPaths = new()
+    static readonly Dictionary<string, string> iconPaths = new()
     {
         ["cloud"] = "M25,60 Q0,60 0,45 Q0,30 15,30 Q15,15 35,15 Q55,15 55,30 Q70,30 70,45 Q70,60 45,60 Z",
         ["database"] = "M10,20 L10,50 Q25,60 40,50 L40,20 Q25,10 10,20 M10,20 Q25,30 40,20",
@@ -26,22 +26,24 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         ["server"] = "#90A4AE"
     };
 
-    static readonly string[] GroupColors =
+    static readonly string[] groupColors =
     [
         "#E3F2FD", "#E8F5E9", "#FFF3E0", "#F3E5F5",
         "#FCE4EC", "#E0F7FA", "#FFF8E1", "#F1F8E9"
     ];
 
-    const double GroupLabelHeight = 24;
-    const double GroupIconScale = 0.4;
-    const double GroupIconReservedWidth = 34;
-    const double GroupIconBox = 28;
+    const double groupLabelHeight = 24;
+    const double groupIconScale = 0.4;
+    const double groupIconReservedWidth = 34;
+    const double groupIconBox = 28;
 
     public SvgDocument Render(ArchitectureModel model, RenderOptions options)
     {
-        if (model.Services.Count == 0 && model.Groups.Count == 0)
+        if (model.Services.Count == 0 &&
+            model.Groups.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -58,8 +60,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
                         model.Services.Any(s => !string.IsNullOrEmpty(s.Parent));
 
         // Offset for group padding (to make room for group bounds)
-        var offsetX = hasGroups ? GroupPadding : 0;
-        var offsetY = hasGroups ? GroupPadding + GroupLabelHeight : 0;
+        var offsetX = hasGroups ? groupPadding : 0;
+        var offsetY = hasGroups ? groupPadding + groupLabelHeight : 0;
 
         // Assign each service/junction a grid cell, honoring edge directions
         var cells = ComputeCells(model);
@@ -68,8 +70,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var gridRows = cells.Count == 0 ? 0 : cells.Values.Max(c => c.row) + 1;
 
         // Content dimensions (with extra space for groups if needed)
-        var contentWidth = gridCols * ServiceWidth + Math.Max(0, gridCols - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 : 0);
-        var contentHeight = gridRows * ServiceHeight + Math.Max(0, gridRows - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 + GroupLabelHeight : 0);
+        var contentWidth = gridCols * serviceWidth + Math.Max(0, gridCols - 1) * serviceSpacing + (hasGroups ? groupPadding * 2 : 0);
+        var contentHeight = gridRows * serviceHeight + Math.Max(0, gridRows - 1) * serviceSpacing + (hasGroups ? groupPadding * 2 + groupLabelHeight : 0);
 
         var builder = new SvgBuilder();
         builder.Size(contentWidth, contentHeight);
@@ -83,11 +85,11 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         foreach (var service in model.Services)
         {
             var (col, row) = cells[service.Id];
-            var x = offsetX + col * (ServiceWidth + ServiceSpacing);
-            var y = offsetY + row * (ServiceHeight + ServiceSpacing);
+            var x = offsetX + col * (serviceWidth + serviceSpacing);
+            var y = offsetY + row * (serviceHeight + serviceSpacing);
 
-            positions[service.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
-            servicePositions[service.Id] = (x, y, ServiceWidth, ServiceHeight);
+            positions[service.Id] = (x + serviceWidth / 2, y + serviceHeight / 2);
+            servicePositions[service.Id] = (x, y, serviceWidth, serviceHeight);
         }
 
         // Position junctions
@@ -95,11 +97,11 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         foreach (var junction in model.Junctions)
         {
             var (col, row) = cells[junction.Id];
-            var x = offsetX + col * (ServiceWidth + ServiceSpacing);
-            var y = offsetY + row * (ServiceHeight + ServiceSpacing);
+            var x = offsetX + col * (serviceWidth + serviceSpacing);
+            var y = offsetY + row * (serviceHeight + serviceSpacing);
 
-            positions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
-            junctionPositions[junction.Id] = (x + ServiceWidth / 2, y + ServiceHeight / 2);
+            positions[junction.Id] = (x + serviceWidth / 2, y + serviceHeight / 2);
+            junctionPositions[junction.Id] = (x + serviceWidth / 2, y + serviceHeight / 2);
         }
 
         // Draw groups first (as background), keeping each group's bounds so an edge flagged with
@@ -115,7 +117,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             }
 
             groupBounds[group.Id] = bounds.Value;
-            var color = GroupColors[colorIndex % GroupColors.Length];
+            var color = groupColors[colorIndex % groupColors.Length];
             DrawGroup(builder, group, bounds.Value, color, options);
             colorIndex++;
         }
@@ -280,10 +282,10 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             return null;
 
         return (
-            minX.Value - GroupPadding,
-            minY.Value - GroupPadding - GroupLabelHeight,
-            maxX.Value - minX.Value + GroupPadding * 2,
-            maxY.Value - minY.Value + GroupPadding * 2 + GroupLabelHeight
+            minX.Value - groupPadding,
+            minY.Value - groupPadding - groupLabelHeight,
+            maxX.Value - minX.Value + groupPadding * 2,
+            maxY.Value - minY.Value + groupPadding * 2 + groupLabelHeight
         );
     }
 
@@ -306,17 +308,17 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             style: "stroke-dasharray: 5,3");
 
         // Group icon (top-left of the header)
-        var labelX = bounds.x + GroupPadding;
-        if (DrawIcon(builder, icon, borderColor, bounds.x + 10, bounds.y + 8, GroupIconBox, GroupIconScale))
+        var labelX = bounds.x + groupPadding;
+        if (DrawIcon(builder, icon, borderColor, bounds.x + 10, bounds.y + 8, groupIconBox, groupIconScale))
         {
-            labelX = bounds.x + 10 + GroupIconReservedWidth;
+            labelX = bounds.x + 10 + groupIconReservedWidth;
         }
 
         // Group label
         var label = group.Label ?? group.Id;
         builder.AddText(
             labelX,
-            bounds.y + GroupLabelHeight / 2 + GroupPadding / 2,
+            bounds.y + groupLabelHeight / 2 + groupPadding / 2,
             label,
             anchor: "start",
             baseline: "middle",
@@ -334,23 +336,23 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         // Background
         builder.AddRect(
             x, y,
-            ServiceWidth,
-            ServiceHeight,
+            serviceWidth,
+            serviceHeight,
             rx: 8,
             fill: "#FAFAFA",
             stroke: color,
             strokeWidth: 2);
 
         // Icon
-        var iconX = x + (ServiceWidth - IconSize) / 2;
+        var iconX = x + (serviceWidth - iconSize) / 2;
         var iconY = y + 8;
-        DrawIcon(builder, icon, color, iconX, iconY, IconSize, 0.64);
+        DrawIcon(builder, icon, color, iconX, iconY, iconSize, 0.64);
 
         // Label
         var label = service.Label ?? service.Id;
         builder.AddText(
-            x + ServiceWidth / 2,
-            y + ServiceHeight - 12,
+            x + serviceWidth / 2,
+            y + serviceHeight - 12,
             label,
             anchor: "middle",
             baseline: "middle",
@@ -378,7 +380,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             return true;
         }
 
-        if (IconPaths.TryGetValue(icon, out var path))
+        if (iconPaths.TryGetValue(icon, out var path))
         {
             builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"translate({x:0.##},{y:0.##}) scale({builtinScale})"));
             builder.AddPath(path, fill: accent, stroke: "#333", strokeWidth: 1);
@@ -446,7 +448,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         }
 
         var offset = GetDirectionOffset(side);
-        return (center.x + offset.x * ServiceWidth / 2, center.y + offset.y * ServiceHeight / 2);
+        return (center.x + offset.x * serviceWidth / 2, center.y + offset.y * serviceHeight / 2);
     }
 
     // Resolves the group an edge endpoint should anchor to, or null when it has no {group} flag, isn't a

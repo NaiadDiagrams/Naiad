@@ -23,7 +23,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
     {
         if (model.Elements.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -44,7 +45,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         var width = columns * cellWidth + options.Padding * 2;
         var height = rows * cellHeight + options.Padding * 2 + titleOffset;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))

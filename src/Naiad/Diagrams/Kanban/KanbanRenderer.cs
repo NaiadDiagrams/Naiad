@@ -25,7 +25,8 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
     {
         if (model.Columns.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -44,7 +45,8 @@ public class KanbanRenderer : IDiagramRenderer<KanbanModel>
         var width = model.Columns.Count * (columnWidth + columnPadding) + options.Padding * 2;
         var height = contentHeight + options.Padding * 2 + titleOffset;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))

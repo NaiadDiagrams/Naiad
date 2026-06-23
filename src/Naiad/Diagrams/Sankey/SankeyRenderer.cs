@@ -2,13 +2,13 @@ namespace Naiad.Diagrams.Sankey;
 
 public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 {
-    const double NodeWidth = 20;
-    const double NodePadding = 10;
-    const double ColumnSpacing = 200;
-    const double MinNodeHeight = 20;
-    const double TitleHeight = 40;
+    const double nodeWidth = 20;
+    const double nodePadding = 10;
+    const double columnSpacing = 200;
+    const double minNodeHeight = 20;
+    const double titleHeight = 40;
 
-    static readonly string[] NodeColors =
+    static string[] nodeColors =
     [
         "#4CAF50",
         "#2196F3",
@@ -24,7 +24,8 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
     {
         if (model.Links.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100, 50,
                 "Empty diagram",
@@ -43,21 +44,22 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         var maxColumn = nodes.Values.Max(_ => _.Column);
         var totalValue = nodes.Values.Where(_ => _.Column == 0).Sum(_ => _.OutputValue);
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
         var chartHeight = Math.Max(300, totalValue * 2);
-        var chartWidth = (maxColumn + 1) * ColumnSpacing;
+        var chartWidth = (maxColumn + 1) * columnSpacing;
 
         var width = chartWidth + options.Padding * 2 + 100;
         var height = chartHeight + options.Padding * 2 + titleOffset;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -97,15 +99,15 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             sourceOffsets[link.Source] = sOff + sourceBand;
             targetOffsets[link.Target] = tOff + targetBand;
 
-            var sourceX = options.Padding + sourceNode.Column * ColumnSpacing + NodeWidth;
-            var targetX = options.Padding + targetNode.Column * ColumnSpacing;
+            var sourceX = options.Padding + sourceNode.Column * columnSpacing + nodeWidth;
+            var targetX = options.Padding + targetNode.Column * columnSpacing;
 
             // Draw bezier curve for link (tapers from source band to target band so each end meets its node edge exactly)
             var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, sourceBand, targetBand);
-            var colorIndex = nodeColorIndices[link.Source] % NodeColors.Length;
+            var colorIndex = nodeColorIndices[link.Source] % nodeColors.Length;
             builder.AddPath(
                 pathData,
-                fill: NodeColors[colorIndex],
+                fill: nodeColors[colorIndex],
                 stroke: "none");
         }
 
@@ -113,13 +115,13 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         var nodeIndex = 0;
         foreach (var (name, node) in nodes)
         {
-            var x = options.Padding + node.Column * ColumnSpacing;
-            var color = NodeColors[nodeIndex % NodeColors.Length];
+            var x = options.Padding + node.Column * columnSpacing;
+            var color = nodeColors[nodeIndex % nodeColors.Length];
 
             builder.AddRect(
                 x,
                 node.Y,
-                NodeWidth,
+                nodeWidth,
                 node.Height,
                 fill: color,
                 stroke: "#333",
@@ -127,7 +129,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
             // Node label
             var labelX = node.Column == maxColumn
-                ? x + NodeWidth + 5
+                ? x + nodeWidth + 5
                 : x - 5;
             var anchor = node.Column == maxColumn ? "start" : "end";
 
@@ -217,15 +219,15 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         {
             var columnNodes = nodes.Values.Where(_ => _.Column == col).ToList();
             var totalValue = columnNodes.Sum(_ => Math.Max(_.InputValue, _.OutputValue));
-            var scale = (chartHeight - (columnNodes.Count - 1) * NodePadding) / Math.Max(1, totalValue);
+            var scale = (chartHeight - (columnNodes.Count - 1) * nodePadding) / Math.Max(1, totalValue);
 
             var y = topOffset;
             foreach (var node in columnNodes)
             {
                 var value = Math.Max(node.InputValue, node.OutputValue);
-                node.Height = Math.Max(MinNodeHeight, value * scale);
+                node.Height = Math.Max(minNodeHeight, value * scale);
                 node.Y = y;
-                y += node.Height + NodePadding;
+                y += node.Height + nodePadding;
             }
         }
     }

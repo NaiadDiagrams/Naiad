@@ -35,7 +35,8 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         if (model.Sections.Count == 0 ||
             model.Sections.All(_ => _.Periods.Count == 0))
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -58,7 +59,8 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         var width = totalPeriods * periodWidth + options.Padding * 2 + sectionPadding * model.Sections.Count;
         var height = titleOffset + timelineY + eventsHeight + options.Padding * 2 + 40;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))

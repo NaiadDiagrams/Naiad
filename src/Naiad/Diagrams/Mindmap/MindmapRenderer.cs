@@ -25,7 +25,8 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     {
         if (model.Root == null)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -51,7 +52,9 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         width += options.Padding * 2;
         height += options.Padding * 2;
 
-        var builder = new SvgBuilder().Options(options).Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Options(options);
+        builder.Size(width, height);
 
         // Draw connections first (behind nodes)
         DrawConnections(builder, model.Root);

@@ -19,7 +19,8 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
     {
         if (model.Axes.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,

@@ -17,7 +17,8 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
     {
         if (model.Series.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -33,7 +34,8 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         var width = chartWidth + leftMargin + rightMargin + options.Padding * 2;
         var height = chartHeight + topMargin + bottomMargin + titleOffset + options.Padding * 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         var chartLeft = options.Padding + leftMargin;
         var chartTop = options.Padding + titleOffset + topMargin;

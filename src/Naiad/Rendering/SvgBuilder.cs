@@ -13,21 +13,19 @@ public class SvgBuilder
 
     // Threads render options that affect element emission (currently the HTML/no-HTML
     // label seam and the fonts used for the native-text fallback).
-    public SvgBuilder Options(RenderOptions options)
+    public void Options(RenderOptions options)
     {
         allowHtmlElements = options.AllowHtmlElements;
         labelFontSize = options.FontSize;
         labelFontFamily = options.FontFamily;
-        return this;
     }
 
-    public SvgBuilder Size(double width, double height)
+    public void Size(double width, double height)
     {
         contentWidth = width;
         contentHeight = height;
         document.Width = width;
         document.Height = height;
-        return this;
     }
 
     public void Padding(double padding)
