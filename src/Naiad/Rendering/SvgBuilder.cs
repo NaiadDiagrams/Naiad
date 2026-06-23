@@ -126,7 +126,7 @@ public class SvgBuilder
             });
     }
 
-    public SvgBuilder AddMermaidCircleMarker()
+    public void AddMermaidCircleMarker()
     {
         document.Defs.Markers.Add(
             new()
@@ -162,7 +162,6 @@ public class SvgBuilder
                 MarkerUnits = "userSpaceOnUse",
                 ClassName = "marker"
             });
-        return this;
     }
 
     public SvgBuilder AddMermaidCrossMarker()
@@ -204,7 +203,7 @@ public class SvgBuilder
     /// <see cref="SvgForeignObject.HtmlContent"/>). Any user-supplied text within it must already be
     /// HTML-encoded by the caller.
     /// </remarks>
-    public SvgBuilder AddForeignObject(
+    public void AddForeignObject(
         double x,
         double y,
         double width,
@@ -222,7 +221,6 @@ public class SvgBuilder
             Class = className
         };
         AddElement(foreignObject);
-        return this;
     }
 
     /// <summary>
@@ -235,7 +233,7 @@ public class SvgBuilder
     /// <see cref="SvgForeignObject.HtmlContent"/>). Any user-supplied text within it must already be
     /// HTML-encoded by the caller; the native-text fallback escapes <paramref name="plainText"/> itself.
     /// </remarks>
-    public SvgBuilder AddLabel(
+    public void AddLabel(
         double x,
         double y,
         double width,
@@ -246,16 +244,17 @@ public class SvgBuilder
     {
         if (allowHtmlElements)
         {
-            return AddForeignObject(x, y, width, height, html, className);
+            AddForeignObject(x, y, width, height, html, className);
+            return;
         }
 
         var text = plainText.Trim();
         if (text.Length == 0)
         {
-            return this;
+            return;
         }
 
-        return AddText(
+        AddText(
             x + width / 2,
             y + height / 2,
             text,
@@ -365,7 +364,7 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder AddEllipse(
+    public void AddEllipse(
         double cx,
         double cy,
         double rx,
@@ -383,10 +382,9 @@ public class SvgBuilder
             Stroke = stroke
         };
         AddElement(ellipse);
-        return this;
     }
 
-    public SvgBuilder AddLine(
+    public void AddLine(
         double x1,
         double y1,
         double x2,
@@ -406,10 +404,9 @@ public class SvgBuilder
             StrokeDasharray = strokeDasharray
         };
         AddElement(line);
-        return this;
     }
 
-    public SvgBuilder AddPath(
+    public void AddPath(
         string d,
         string? fill = null,
         string? stroke = null,
@@ -433,16 +430,12 @@ public class SvgBuilder
             Class = cssClass
         };
         AddElement(path);
-        return this;
     }
 
-    public SvgBuilder AddRawSvg(string markup)
-    {
+    public void AddRawSvg(string markup) =>
         AddElement(new SvgRaw {Markup = markup});
-        return this;
-    }
 
-    public SvgBuilder AddPolygon(
+    public void AddPolygon(
         IEnumerable<Position> points,
         string? fill = null,
         string? stroke = null)
@@ -450,10 +443,9 @@ public class SvgBuilder
         var polygon = new SvgPolygon {Fill = fill, Stroke = stroke};
         polygon.Points.AddRange(points);
         AddElement(polygon);
-        return this;
     }
 
-    public SvgBuilder AddText(
+    public void AddText(
         double x,
         double y,
         string content,
@@ -487,7 +479,6 @@ public class SvgBuilder
             Style = style
         };
         AddElement(text);
-        return this;
     }
 
     void AddElement(SvgElement element)

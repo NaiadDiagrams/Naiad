@@ -78,16 +78,15 @@ sealed class Graph
 
     public List<string> Sources() => Nodes().Where(v => inMap[v].Count == 0).ToList();
 
-    public Graph SetNode(string name)
+    public void SetNode(string name)
     {
         if (nodesMap.ContainsKey(name))
         {
-            return this;
+            return;
         }
 
         nodesMap[name] = defaultNodeLabelFn(name);
         InitNode(name);
-        return this;
     }
 
     public void SetNode(string name, NodeLabel value)
