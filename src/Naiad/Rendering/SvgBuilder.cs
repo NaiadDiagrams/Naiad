@@ -96,7 +96,7 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder AddMermaidArrowMarker()
+    public void AddMermaidArrowMarker()
     {
         document.Defs.Markers.Add(
             new()
@@ -124,7 +124,6 @@ public class SvgBuilder
                 MarkerUnits = "userSpaceOnUse",
                 ClassName = "marker"
             });
-        return this;
     }
 
     public SvgBuilder AddMermaidCircleMarker()

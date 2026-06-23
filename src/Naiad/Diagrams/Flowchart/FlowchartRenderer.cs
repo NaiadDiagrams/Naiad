@@ -76,10 +76,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // The arrow/circle/cross markers are only referenced by edges; skip the defs entirely when there are none.
         if (model.Edges.Count > 0)
         {
-            builder
-                .AddMermaidArrowMarker()
-                .AddMermaidCircleMarker()
-                .AddMermaidCrossMarker();
+            builder.AddMermaidArrowMarker();
+            builder.AddMermaidCircleMarker();
+            builder.AddMermaidCrossMarker();
         }
 
         // Add Mermaid CSS styles
