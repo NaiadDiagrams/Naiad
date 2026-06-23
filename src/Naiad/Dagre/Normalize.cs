@@ -63,8 +63,8 @@ static class Normalize
             var dummy = Util.AddDummyNode(graph, DummyKind.Edge, attrs, "_d");
             if (vRank == labelRank)
             {
-                attrs.Width = edgeLabel.Width ?? 0;
-                attrs.Height = edgeLabel.Height ?? 0;
+                attrs.Width = edgeLabel.Width;
+                attrs.Height = edgeLabel.Height;
                 attrs.Dummy = DummyKind.EdgeLabel;
                 attrs.Labelpos = edgeLabel.Labelpos;
             }

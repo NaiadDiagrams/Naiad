@@ -145,13 +145,14 @@ static class Layout
             var edge = inputGraph.FindEdgeLabel(e);
             var newEdge = new EdgeLabel
             {
-                // defaults
+                // Minlen/Weight stay nullable on input (null = unset); default them here.
                 Minlen = 1,
                 Weight = 1,
-                Width = 0,
-                Height = 0,
-                Labeloffset = 10,
-                Labelpos = LabelPos.Right
+                // Width/Height/Labeloffset/Labelpos are non-nullable with type-level defaults; copy through.
+                Width = edge.Width,
+                Height = edge.Height,
+                Labeloffset = edge.Labeloffset,
+                Labelpos = edge.Labelpos
             };
             if (edge.Minlen is { } eMinlen)
             {
@@ -161,26 +162,6 @@ static class Layout
             if (edge.Weight is { } eWeight)
             {
                 newEdge.Weight = eWeight;
-            }
-
-            if (edge.Width is { } eWidth)
-            {
-                newEdge.Width = eWidth;
-            }
-
-            if (edge.Height is { } eHeight)
-            {
-                newEdge.Height = eHeight;
-            }
-
-            if (edge.Labeloffset is { } eLabeloffset)
-            {
-                newEdge.Labeloffset = eLabeloffset;
-            }
-
-            if (edge.Labelpos is { } eLabelpos)
-            {
-                newEdge.Labelpos = eLabelpos;
             }
 
             graph.SetEdge(e, newEdge);
@@ -232,10 +213,7 @@ static class Layout
         foreach (var e in graph.Edges())
         {
             var edge = graph.FindEdgeLabel(e);
-            if (edge.Width is { } width &&
-                width != 0 &&
-                edge.Height is { } height &&
-                height != 0)
+            if (edge.Width != 0 && edge.Height != 0)
             {
                 var v = graph.NodeLabel(e.V);
                 var w = graph.NodeLabel(e.W);
@@ -300,7 +278,7 @@ static class Layout
             var edge = graph.FindEdgeLabel(e);
             if (edge.X.HasValue)
             {
-                GetExtremes(edge.X!.Value, edge.Y!.Value, edge.Width!.Value, edge.Height!.Value);
+                GetExtremes(edge.X!.Value, edge.Y!.Value, edge.Width, edge.Height);
             }
         }
 
@@ -376,10 +354,10 @@ static class Layout
                 switch (edge.Labelpos)
                 {
                     case LabelPos.Left:
-                        edge.X -= edge.Width!.Value / 2 + edge.Labeloffset;
+                        edge.X -= edge.Width / 2 + edge.Labeloffset;
                         break;
                     case LabelPos.Right:
-                        edge.X += edge.Width!.Value / 2 + edge.Labeloffset;
+                        edge.X += edge.Width / 2 + edge.Labeloffset;
                         break;
                 }
             }
@@ -454,8 +432,8 @@ static class Layout
                 {
                     Util.AddDummyNode(graph, DummyKind.SelfEdge, new()
                     {
-                        Width = selfEdge.Label.Width!.Value,
-                        Height = selfEdge.Label.Height!.Value,
+                        Width = selfEdge.Label.Width,
+                        Height = selfEdge.Label.Height,
                         Rank = node.Rank,
                         Order = i + (++orderShift),
                         EdgeObj = selfEdge.E,

@@ -46,12 +46,12 @@ sealed class SelfEdge
 sealed class EdgeLabel
 {
     public List<Position>? Points;
-    public double? Width;
-    public double? Height;
+    public double Width;
+    public double Height;
     public int? Minlen;
     public double? Weight;
-    public LabelPos? Labelpos;
-    public double? Labeloffset;
+    public LabelPos Labelpos = LabelPos.Right;
+    public double Labeloffset = 10;
     public int? LabelRank;
     public double? X;
     public double? Y;
