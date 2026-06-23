@@ -15,9 +15,9 @@ public class NestingGraphTests
     {
         graph.SetNode("a");
         graph.SetNode("b");
-        await Assert.That(Alg.Components(graph).Count).IsEqualTo(2);
+        await Assert.That(GraphAlgorithms.Components(graph).Count).IsEqualTo(2);
         NestingGraph.Run(graph);
-        await Assert.That(Alg.Components(graph).Count).IsEqualTo(1);
+        await Assert.That(GraphAlgorithms.Components(graph).Count).IsEqualTo(1);
         await Assert.That(graph.HasNode("a")).IsTrue();
         await Assert.That(graph.HasNode("b")).IsTrue();
     }

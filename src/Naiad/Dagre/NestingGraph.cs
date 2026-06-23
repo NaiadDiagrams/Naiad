@@ -51,7 +51,7 @@ static class NestingGraph
         var weight = SumWeights(graph) + 1;
 
         // Create border nodes and link them up
-        foreach (var child in graph.Children(Util.GraphNode))
+        foreach (var child in graph.Children())
         {
             Dfs(graph, root, nodeSep, weight, height, depths, child);
         }
@@ -168,7 +168,7 @@ static class NestingGraph
             depths[v] = depth;
         }
 
-        foreach (var v in graph.Children(Util.GraphNode))
+        foreach (var v in graph.Children())
         {
             Dfs(v, 1);
         }

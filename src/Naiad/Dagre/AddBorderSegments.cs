@@ -30,7 +30,7 @@ static class AddBorderSegments
             }
         }
 
-        foreach (var v in graph.Children(Util.GraphNode))
+        foreach (var v in graph.Children())
         {
             Dfs(v);
         }

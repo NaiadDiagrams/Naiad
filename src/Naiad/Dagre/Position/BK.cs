@@ -507,7 +507,11 @@ static class BK
 
                 if (delta != 0)
                 {
-                    xss[alignment] = Util.MapValues(xs, (x, _) => x + delta);
+                    // xs is xss[alignment] (guarded != alignTo above); mutate it in place.
+                    foreach (var key in xs.Keys.ToList())
+                    {
+                        xs[key] += delta;
+                    }
                 }
             }
         }
@@ -521,14 +525,19 @@ static class BK
             return new(StringComparer.Ordinal);
         }
 
-        return Util.MapValues(ulMap, (num, v) =>
-        {
-            var xs = xss.Values
-                .Select(_ => _.GetValueOrDefault(v, 0))
-                .OrderBy(_ => _)
-                .ToList();
-            return ((xs.Count > 1 ? xs[1] : 0) + (xs.Count > 2 ? xs[2] : 0)) / 2;
-        });
+        // Build a new dictionary: the per-key lambda reads xss.Values (which includes ulMap), so mutating
+        // ulMap in place would corrupt later reads.
+        return ulMap.ToDictionary(
+            kv => kv.Key,
+            kv =>
+            {
+                var xs = xss.Values
+                    .Select(_ => _.GetValueOrDefault(kv.Key, 0))
+                    .OrderBy(_ => _)
+                    .ToList();
+                return ((xs.Count > 1 ? xs[1] : 0) + (xs.Count > 2 ? xs[2] : 0)) / 2;
+            },
+            StringComparer.Ordinal);
     }
 
     internal static Dictionary<string, double> PositionX(Graph graph)
@@ -562,7 +571,11 @@ static class BK
                 var xs = HorizontalCompaction(graph, adjustedLayering, align.Root, align.Align, biasRight);
                 if (biasRight)
                 {
-                    xs = Util.MapValues(xs, (x, _) => -x);
+                    // xs is freshly returned by HorizontalCompaction and not aliased; negate in place.
+                    foreach (var key in xs.Keys.ToList())
+                    {
+                        xs[key] = -xs[key];
+                    }
                 }
 
                 xss[vert + horiz] = xs;

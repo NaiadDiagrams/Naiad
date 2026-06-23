@@ -2,8 +2,6 @@ namespace Naiad.Dagre;
 
 static class Util
 {
-    public const string GraphNode = "\x00";
-
     /// <summary>Adds a dummy node to the graph and returns its id.</summary>
     public static string AddDummyNode(Graph graph, DummyKind type, NodeLabel attrs, string name)
     {
@@ -204,22 +202,23 @@ static class Util
         return ApplyMax(nodeRanks);
     }
 
-    public static PartitionResult<T> Partition<T>(IEnumerable<T> collection, Func<T, bool> fn)
+    public static (List<T> Lhs, List<T> Rhs) Partition<T>(IEnumerable<T> collection, Func<T, bool> fn)
     {
-        var result = new PartitionResult<T>();
+        var lhs = new List<T>();
+        var rhs = new List<T>();
         foreach (var value in collection)
         {
             if (fn(value))
             {
-                result.Lhs.Add(value);
+                lhs.Add(value);
             }
             else
             {
-                result.Rhs.Add(value);
+                rhs.Add(value);
             }
         }
 
-        return result;
+        return (lhs, rhs);
     }
 
     public static List<int> Range(int limit) => Range(0, limit, 1);
@@ -243,28 +242,6 @@ static class Util
         }
 
         return range;
-    }
-
-    public static Dictionary<string, R> MapValues<T, R>(IEnumerable<KeyValuePair<string, T>> obj, Func<T, string, R> fn)
-    {
-        var acc = new Dictionary<string, R>(StringComparer.Ordinal);
-        foreach (var (k, v) in obj)
-        {
-            acc[k] = fn(v, k);
-        }
-
-        return acc;
-    }
-
-    public static Dictionary<string, T> ZipObject<T>(IReadOnlyList<string> props, IReadOnlyList<T> values)
-    {
-        var acc = new Dictionary<string, T>(StringComparer.Ordinal);
-        for (var i = 0; i < props.Count; i++)
-        {
-            acc[props[i]] = values[i];
-        }
-
-        return acc;
     }
 
     // An empty sequence reduces to ±Infinity.

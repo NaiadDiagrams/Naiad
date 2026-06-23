@@ -24,7 +24,12 @@ static class CrossCount
         // Sort all of the edges between the north and south layers by their position
         // in the north layer and then the south. Map these edges to the position of
         // their head in the south layer.
-        var southPos = Util.ZipObject(southLayer, Util.Range(southLayer.Count));
+        var southPos = new Dictionary<string, int>(southLayer.Count, StringComparer.Ordinal);
+        for (var i = 0; i < southLayer.Count; i++)
+        {
+            southPos[southLayer[i]] = i;
+        }
+
         var southEntries = new List<SouthEntry>();
         var nodeEntries = new List<SouthEntry>();
         foreach (var v in northLayer)

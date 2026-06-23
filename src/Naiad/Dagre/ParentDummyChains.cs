@@ -125,7 +125,7 @@ static class ParentDummyChains
             result[v] = new() { Low = low, Lim = lim++ };
         }
 
-        foreach (var v in graph.Children(Util.GraphNode))
+        foreach (var v in graph.Children())
         {
             Dfs(v);
         }

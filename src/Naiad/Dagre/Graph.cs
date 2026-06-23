@@ -395,22 +395,7 @@ sealed class Graph
         outMap[vStr].Remove(e);
     }
 
-    public List<Edge>? OutEdges(string v, string? w = null)
-    {
-        if (IsDirected)
-        {
-            if (outMap.TryGetValue(v, out var setV))
-            {
-                return FilterEdges(setV, v, w);
-            }
-
-            return null;
-        }
-
-        return NodeEdges(v, w);
-    }
-
-    public List<Edge>? NodeEdges(string v, string? w = null)
+    public List<Edge>? NodeEdges(string v)
     {
         if (nodesMap.ContainsKey(v))
         {
@@ -425,26 +410,13 @@ sealed class Graph
                 combined[kv.Key] = kv.Value;
             }
 
-            return FilterEdges(combined, v, w);
+            return combined.Values();
         }
 
         return null;
     }
 
     void RemoveFromParentsChildList(string v) => childrenMap![parentMap![v]].Remove(v);
-
-    static List<Edge> FilterEdges(OrderedMap<Edge> setV, string localEdge, string? remoteEdge)
-    {
-        var edges = setV.Values();
-        if (remoteEdge == null)
-        {
-            return edges;
-        }
-
-        return edges.Where(edge =>
-            (edge.V == localEdge && edge.W == remoteEdge) ||
-            (edge.V == remoteEdge && edge.W == localEdge)).ToList();
-    }
 
     static void IncrementOrInitEntry(OrderedMap<int> map, string k)
     {

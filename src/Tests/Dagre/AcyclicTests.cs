@@ -37,7 +37,7 @@ public class AcyclicTests
         var graph = NewGraph();
         graph.SetPath(["a", "b", "c", "d", "a"]);
         Acyclic.Run(graph);
-        await Assert.That(Alg.FindCycles(graph)).IsEmpty();
+        await Assert.That(GraphAlgorithms.FindCycles(graph)).IsEmpty();
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class AcyclicTests
         var graph = NewGraph();
         graph.SetPath(["a", "b", "a"]);
         Acyclic.Run(graph);
-        await Assert.That(Alg.FindCycles(graph)).IsEmpty();
+        await Assert.That(GraphAlgorithms.FindCycles(graph)).IsEmpty();
         if (graph.HasEdge("a", "b"))
         {
             await Assert.That(graph.OutEdges("a", "b")!.Count).IsEqualTo(2);

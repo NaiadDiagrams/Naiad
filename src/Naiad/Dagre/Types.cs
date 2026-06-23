@@ -3,12 +3,6 @@ namespace Naiad.Dagre;
 /// <summary>An edge descriptor: {v, w, name}.</summary>
 sealed record Edge(string V, string W, string? Name = null);
 
-sealed class PartitionResult<T>
-{
-    public List<T> Lhs = [];
-    public List<T> Rhs = [];
-}
-
 /// <summary>Node label carrying every property the layout may read or write on a node.</summary>
 sealed class NodeLabel
 {

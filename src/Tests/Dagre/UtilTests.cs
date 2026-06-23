@@ -283,39 +283,4 @@ public class UtilTests
             await Assert.That(range[5]).IsEqualTo(0);
         }
     }
-
-    public class MapValuesTests
-    {
-        sealed record User(int Id);
-
-        [Test]
-        public async Task CreatesAnObjectWithTheSameKeys()
-        {
-            var users = new Dictionary<string, User>(StringComparer.Ordinal)
-            {
-                ["fred"] = new(40),
-                ["pebbles"] = new(1)
-            };
-
-            var ids = Util.MapValues(users, (user, _) => user.Id);
-            await Assert.That(ids["fred"]).IsEqualTo(40);
-            await Assert.That(ids["pebbles"]).IsEqualTo(1);
-        }
-
-        [Test]
-        public async Task CanTakeAPropertyName()
-        {
-            // The TS second overload accepts a property-name string; the C# port has only the
-            // function form, so the equivalent is a lambda projecting that property.
-            var users = new Dictionary<string, User>(StringComparer.Ordinal)
-            {
-                ["fred"] = new(40),
-                ["pebbles"] = new(1)
-            };
-
-            var ids = Util.MapValues(users, (user, _) => user.Id);
-            await Assert.That(ids["fred"]).IsEqualTo(40);
-            await Assert.That(ids["pebbles"]).IsEqualTo(1);
-        }
-    }
 }
