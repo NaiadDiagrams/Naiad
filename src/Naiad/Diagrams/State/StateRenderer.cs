@@ -104,10 +104,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         this.svgWidth = svgWidth;
         this.svgHeight = svgHeight;
 #endif
-        var builder = new SvgBuilder()
-            .Size(svgWidth, svgHeight)
-            .Padding(options.Padding)
-            .AddArrowMarker();
+        var builder = new SvgBuilder();
+        builder.Size(svgWidth, svgHeight);
+        builder.Padding(options.Padding);
+        builder.AddArrowMarker();
 
         // Render transitions first (behind states)
         RenderTransitions(builder, model, options);

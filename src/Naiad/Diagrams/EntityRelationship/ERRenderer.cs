@@ -29,9 +29,9 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         CopyPositionsToModel(model, graphModel);
 
         // Build SVG
-        var builder = new SvgBuilder()
-            .Size(layoutResult.Width, layoutResult.Height)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(layoutResult.Width, layoutResult.Height);
+        builder.Padding(options.Padding);
 
         // Index entities by name so relationship endpoint lookups are O(1), not O(R·E) via List.Find.
         var entitiesByName = new Dictionary<string, Entity>(StringComparer.Ordinal);

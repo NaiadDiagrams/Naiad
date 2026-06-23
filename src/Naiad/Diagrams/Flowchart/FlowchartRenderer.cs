@@ -9,7 +9,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     const string nodeFill = "#ECECFF";
     const string nodeStroke = "#9370DB";
     const string edgeStroke = "#333333";
+
     const string labelBackground = "rgba(232,232,232,0.8)";
+
     // Mermaid's default cluster palette (pale yellow), so subgraph boxes read clearly against a white canvas.
     const string subgraphFill = "#ffffde";
     const string subgraphStroke = "#aaaa33";
@@ -17,6 +19,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     // Matches "prefix:name" icon tokens in labels — FontAwesome (fa:fa-bell) or a
     // registered iconify pack (logos:aws). Tokens that resolve to neither stay as text.
     static Regex iconPattern = IconPatternMyRegex();
+
     [GeneratedRegex("[A-Za-z0-9]+:[A-Za-z0-9][A-Za-z0-9_-]*", RegexOptions.Compiled)]
     private static partial Regex IconPatternMyRegex();
 
@@ -68,10 +71,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var layoutResult = layoutEngine.Layout(model, layoutOptions);
 
         // Build SVG
-        var builder = new SvgBuilder()
-            .Options(options)
-            .Size(layoutResult.Width, layoutResult.Height)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Options(options);
+        builder.Size(layoutResult.Width, layoutResult.Height);
+        builder.Padding(options.Padding);
 
         // The arrow/circle/cross markers are only referenced by edges; skip the defs entirely when there are none.
         if (model.Edges.Count > 0)
@@ -259,8 +262,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         };
 
         var markerEnd = edge.HasArrowHead ? "url(#naiad_flowchart-pointEnd)" :
-                        edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
-                        edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
+            edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
+            edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
 
         var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-pointStart)" : null;
 

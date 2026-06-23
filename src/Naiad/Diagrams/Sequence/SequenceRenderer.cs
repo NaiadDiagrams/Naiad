@@ -17,11 +17,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var (height, elementYPositions) = CalculateHeight(model, options);
         var width = CalculateWidth(model, options);
 
-        var builder = new SvgBuilder()
-            .Size(width, height)
-            .AddArrowMarker()
-            .AddArrowMarker("arrowhead-dotted")
-            .AddCrossMarker();
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
+        builder.AddArrowMarker();
+        builder.AddArrowMarker("arrowhead-dotted");
+        builder.AddCrossMarker();
 
         // Add title if present
         var titleOffset = 0.0;

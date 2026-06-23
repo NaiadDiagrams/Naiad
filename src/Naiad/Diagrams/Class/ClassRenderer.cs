@@ -24,11 +24,11 @@ public class ClassRenderer :
         var layoutResult = dagreEngine.Layout(graphModel, layoutOptions);
 
         // Build SVG
-        var builder = new SvgBuilder()
-            .Size(layoutResult.Width, layoutResult.Height)
-            .Padding(options.Padding)
-            .AddArrowMarker()
-            .AddArrowMarker("arrowhead-open");
+        var builder = new SvgBuilder();
+        builder.Size(layoutResult.Width, layoutResult.Height);
+        builder.Padding(options.Padding);
+        builder.AddArrowMarker();
+        builder.AddArrowMarker("arrowhead-open");
 
         // Add relationship markers
         AddRelationshipMarkers(builder);

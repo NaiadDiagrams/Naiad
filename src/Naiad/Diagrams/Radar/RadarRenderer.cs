@@ -40,9 +40,9 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         const double centerX = chartRadius + labelOffsetX;
         var centerY = chartRadius + labelOffsetY + titleOffset;
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))

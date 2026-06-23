@@ -190,9 +190,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         var contentWidth = Math.Max(bodyWidth, titleWidth);
         var contentHeight = bodyHeight + titleOffset;
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         if (!string.IsNullOrEmpty(model.Title))
         {
@@ -347,9 +347,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         var contentWidth = Math.Max(bodyWidth, titleWidth);
         var contentHeight = bodyHeight + titleOffset;
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         if (!string.IsNullOrEmpty(model.Title))
         {

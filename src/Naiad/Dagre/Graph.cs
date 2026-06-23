@@ -129,7 +129,7 @@ sealed class Graph
 
     public bool HasNode(string name) => nodesMap.ContainsKey(name);
 
-    public Graph RemoveNode(string name)
+    public void RemoveNode(string name)
     {
         if (nodesMap.ContainsKey(name))
         {
@@ -162,8 +162,6 @@ sealed class Graph
             sucsMap.Remove(name);
             NodeCount--;
         }
-
-        return this;
     }
 
     public Graph SetParent(string v, string? parent = null)

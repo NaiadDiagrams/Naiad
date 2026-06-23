@@ -71,9 +71,9 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         var contentWidth = gridCols * ServiceWidth + Math.Max(0, gridCols - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 : 0);
         var contentHeight = gridRows * ServiceHeight + Math.Max(0, gridRows - 1) * ServiceSpacing + (hasGroups ? GroupPadding * 2 + GroupLabelHeight : 0);
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         // Add arrow marker
         builder.AddArrowMarker("arch-arrow", "#666");

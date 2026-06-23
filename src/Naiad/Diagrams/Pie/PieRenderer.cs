@@ -56,10 +56,10 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         const double cx = 225.0;
         const double cy = 225.0;
 
-        var builder = new SvgBuilder()
-            .Size(width, height)
-            .DiagramType(null!, "pie")
-            .AddStyles(MermaidStyles.PieStyles);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
+        builder.DiagramType(null!, "pie");
+        builder.AddStyles(MermaidStyles.PieStyles);
 
         // Empty group (Mermaid artifact)
         builder.BeginGroup();

@@ -30,37 +30,30 @@ public class SvgBuilder
         return this;
     }
 
-    public SvgBuilder Padding(double padding)
+    public void Padding(double padding)
     {
         this.padding = padding;
         // Adjust document size to include padding on all sides
         document.Width = contentWidth + padding * 2;
         document.Height = contentHeight + padding * 2;
-        return this;
     }
 
-    public SvgBuilder DiagramType(string diagramClass, string ariaRoledescription)
+    public void DiagramType(string diagramClass, string ariaRoledescription)
     {
         document.DiagramClass = diagramClass;
         document.AriaRoledescription = ariaRoledescription;
-        return this;
     }
 
-    public SvgBuilder AddStyles(string css)
-    {
-        document.CssStyles = css;
-        return this;
-    }
+    public void AddStyles(string css) => document.CssStyles = css;
 
-    public SvgBuilder AddMarker(
+    public void AddMarker(
         string id,
         string path,
         double width,
         double height,
         double refX,
         double refY,
-        string? fill = null)
-    {
+        string? fill = null) =>
         document.Defs.Markers.Add(
             new()
             {
@@ -72,10 +65,8 @@ public class SvgBuilder
                 RefY = refY,
                 Fill = fill
             });
-        return this;
-    }
 
-    public SvgBuilder AddArrowMarker(
+    public void AddArrowMarker(
         string id = "arrowhead",
         string fill = "#333") =>
         AddMarker(id, "M0,0 L10,3.5 L0,7 Z", 10, 7, 9, 3.5, fill);
