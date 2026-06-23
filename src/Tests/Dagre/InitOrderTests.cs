@@ -3,9 +3,11 @@ public class InitOrderTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph(compound: true)
-            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
+    public void Setup()
+    {
+        graph = new(compound: true);
+        graph.SetDefaultEdgeLabel((_, _, _) => new() {Weight = 1});
+    }
 
     static List<string> Sorted(List<string> vs) =>
         vs.OrderBy(v => v, StringComparer.Ordinal).ToList();

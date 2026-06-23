@@ -158,7 +158,7 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph();
+            graph = new();
             graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
             graph.SetDefaultEdgeLabel(new EdgeLabel());
             graph.SetNode("a", new() {Rank = 0, Order = 0});
@@ -403,7 +403,7 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph();
+            graph = new();
             graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
         }
 
@@ -765,7 +765,7 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph();
+            graph = new();
             graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
         }
 

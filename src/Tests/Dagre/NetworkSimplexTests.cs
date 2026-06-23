@@ -8,15 +8,15 @@ public class NetworkSimplexTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph(multigraph: true);
+        graph = new(multigraph: true);
         graph.SetDefaultNodeLabel(_ => new());
         graph.SetDefaultEdgeLabel((_, _, _) => new() {Minlen = 1, Weight = 1});
 
-        t = new Graph(directed: false);
+        t = new(directed: false);
         t.SetDefaultNodeLabel(_ => new());
         t.SetDefaultEdgeLabel((_, _, _) => new());
 
-        gansnerGraph = new Graph();
+        gansnerGraph = new();
         gansnerGraph.SetDefaultNodeLabel(_ => new());
         gansnerGraph.SetDefaultEdgeLabel((_, _, _) => new() {Minlen = 1, Weight = 1});
         gansnerGraph
@@ -24,7 +24,7 @@ public class NetworkSimplexTests
             .SetPath(["a", "e", "graph", "h"])
             .SetPath(["a", "f", "graph"]);
 
-        gansnerTree = new Graph(directed: false);
+        gansnerTree = new(directed: false);
         gansnerTree.SetDefaultNodeLabel(_ => new());
         gansnerTree.SetDefaultEdgeLabel((_, _, _) => new());
         gansnerTree
@@ -170,7 +170,7 @@ public class NetworkSimplexTests
         graph.SetNode("d", new() {Rank = 4});
         graph.SetEdge("a", "d");
         graph.SetPath(["a", "c", "d"]);
-        graph   .SetEdge("b", "c");
+        graph.SetEdge("b", "c");
         t.SetPath(["c", "d", "a", "b"]);
         NetworkSimplex.InitLowLimValues(t, "a");
 
@@ -347,9 +347,8 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcToCToP()
     {
         graph.SetPath(["gc", "c", "p"]);
-        t
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("p", "c");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(3);
@@ -358,12 +357,10 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcToCFromP()
     {
-        graph
-            .SetEdge("p", "c")
-            .SetEdge("gc", "c");
-        t
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("p", "c");
+        graph.SetEdge("p", "c");
+        graph.SetEdge("gc", "c");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-1);
@@ -372,12 +369,10 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcFromCToP()
     {
-        graph
-            .SetEdge("c", "p")
-            .SetEdge("c", "gc");
-        t
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("p", "c");
+        graph.SetEdge("c", "p");
+        graph.SetEdge("c", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-1);
@@ -387,9 +382,8 @@ public class NetworkSimplexTests
     public async Task CalcCutValue_WorksFor3NodeTreeWithGcFromCFromP()
     {
         graph.SetPath(["p", "c", "gc"]);
-        t
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("p", "c");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("p", "c");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(3);
@@ -398,12 +392,10 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCToPToO_WithOToC()
     {
-        graph
-            .SetEdge("o", "c", new() {Weight = 7})
-            .SetPath(["gc", "c", "p", "o"]);
-        t
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetPath(["c", "p", "o"]);
+        graph.SetEdge("o", "c", new() {Weight = 7});
+        graph.SetPath(["gc", "c", "p", "o"]);
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetPath(["c", "p", "o"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-4);
@@ -412,12 +404,10 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCToPToO_WithOFromC()
     {
-        graph
-            .SetEdge("c", "o", new() {Weight = 7})
-            .SetPath(["gc", "c", "p", "o"]);
-        t
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetPath(["c", "p", "o"]);
+        graph.SetEdge("c", "o", new() {Weight = 7});
+        graph.SetPath(["gc", "c", "p", "o"]);
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetPath(["c", "p", "o"]);
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(10);
@@ -426,13 +416,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCToP_WithOToC()
     {
-        graph
-            .SetEdge("o", "c", new() {Weight = 7})
-            .SetPath(["o", "gc", "c", "p"]);
+        graph.SetEdge("o", "c", new() {Weight = 7});
+        graph.SetPath(["o", "gc", "c", "p"]);
         t
-            .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("c", "p");
+            .SetEdge("o", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-4);
@@ -441,13 +430,11 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCToP_WithOFromC()
     {
-        graph
-            .SetEdge("c", "o", new() {Weight = 7})
-            .SetPath(["o", "gc", "c", "p"]);
-        t
-            .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("c", "p");
+        graph.SetEdge("c", "o", new() {Weight = 7});
+        graph.SetPath(["o", "gc", "c", "p"]);
+        t.SetEdge("o", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(10);
@@ -456,15 +443,13 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCFromPToO_WithOToC()
     {
-        graph
-            .SetEdge("gc", "c")
-            .SetEdge("p", "c")
-            .SetEdge("p", "o")
-            .SetEdge("o", "c", new() {Weight = 7});
-        t
-            .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("c", "p");
+        graph.SetEdge("gc", "c");
+        graph.SetEdge("p", "c");
+        graph.SetEdge("p", "o");
+        graph.SetEdge("o", "c", new() {Weight = 7});
+        t.SetEdge("o", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(6);
@@ -473,15 +458,13 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeGcToCFromPToO_WithOFromC()
     {
-        graph
-            .SetEdge("gc", "c")
-            .SetEdge("p", "c")
-            .SetEdge("p", "o")
-            .SetEdge("c", "o", new() {Weight = 7});
-        t
-            .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("c", "p");
+        graph.SetEdge("gc", "c");
+        graph.SetEdge("p", "c");
+        graph.SetEdge("p", "o");
+        graph.SetEdge("c", "o", new() {Weight = 7});
+        t.SetEdge("o", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-8);
@@ -490,14 +473,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCFromP_WithOToC()
     {
-        graph
-            .SetEdge("o", "c", new() {Weight = 7})
-            .SetPath(["o", "gc", "c"])
-            .SetEdge("p", "c");
-        t
-            .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("c", "p");
+        graph.SetEdge("o", "c", new() {Weight = 7});
+        graph.SetPath(["o", "gc", "c"]);
+        graph.SetEdge("p", "c");
+        t.SetEdge("o", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(6);
@@ -506,14 +487,12 @@ public class NetworkSimplexTests
     [Test]
     public async Task CalcCutValue_WorksFor4NodeTreeOToGcToCFromP_WithOFromC()
     {
-        graph
-            .SetEdge("c", "o", new() {Weight = 7})
-            .SetPath(["o", "gc", "c"])
-            .SetEdge("p", "c");
-        t
-            .SetEdge("o", "gc")
-            .SetEdge("gc", "c", new() {Cutvalue = 3})
-            .SetEdge("c", "p");
+        graph.SetEdge("c", "o", new() {Weight = 7});
+        graph.SetPath(["o", "gc", "c"]);
+        graph.SetEdge("p", "c");
+        t.SetEdge("o", "gc");
+        t.SetEdge("gc", "c", new() {Cutvalue = 3});
+        t.SetEdge("c", "p");
         NetworkSimplex.InitLowLimValues(t, "p");
 
         await Assert.That(NetworkSimplex.CalcCutValue(t, graph, "c")).IsEqualTo(-8);

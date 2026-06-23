@@ -164,7 +164,7 @@ sealed class Graph
         }
     }
 
-    public Graph SetParent(string v, string? parent = null)
+    public void SetParent(string v, string? parent = null)
     {
         if (!IsCompound)
         {
@@ -192,7 +192,6 @@ sealed class Graph
         RemoveFromParentsChildList(v);
         parentMap![v] = parent;
         childrenMap![parent][v] = true;
-        return this;
     }
 
     public string? Parent(string v)
@@ -276,11 +275,8 @@ sealed class Graph
         return null;
     }
 
-    public Graph SetDefaultEdgeLabel(Func<string, string, string?, EdgeLabel> fn)
-    {
+    public void SetDefaultEdgeLabel(Func<string, string, string?, EdgeLabel> fn) =>
         defaultEdgeLabelFn = fn;
-        return this;
-    }
 
     public void SetDefaultEdgeLabel(EdgeLabel value) => defaultEdgeLabelFn = (_, _, _) => value;
 
@@ -292,15 +288,15 @@ sealed class Graph
     /// <summary>The edge labels in insertion order — the labels of <see cref="Edges"/>, without the per-edge lookup.</summary>
     public List<EdgeLabel> EdgeLabels() => edgeLabelsMap.Values();
 
-    public Graph SetEdge(string v, string w) => SetEdgeCore(v, w, null, null, false);
+    public void SetEdge(string v, string w) => SetEdgeCore(v, w, null, null, false);
 
-    public Graph SetEdge(string v, string w, EdgeLabel? value) => SetEdgeCore(v, w, null, value, true);
+    public void SetEdge(string v, string w, EdgeLabel? value) => SetEdgeCore(v, w, null, value, true);
 
-    public Graph SetEdge(string v, string w, EdgeLabel? value, string? name) => SetEdgeCore(v, w, name, value, true);
+    public void SetEdge(string v, string w, EdgeLabel? value, string? name) => SetEdgeCore(v, w, name, value, true);
 
-    public Graph SetEdge(Edge edge, EdgeLabel? value) => SetEdgeCore(edge.V, edge.W, edge.Name, value, true);
+    public void SetEdge(Edge edge, EdgeLabel? value) => SetEdgeCore(edge.V, edge.W, edge.Name, value, true);
 
-    Graph SetEdgeCore(string v, string w, string? name, EdgeLabel? value, bool valueSpecified)
+    void SetEdgeCore(string v, string w, string? name, EdgeLabel? value, bool valueSpecified)
     {
         var e = EdgeArgsToId(IsDirected, v, w, name);
         if (edgeLabelsMap.ContainsKey(e))
@@ -310,7 +306,7 @@ sealed class Graph
                 edgeLabelsMap[e] = value!;
             }
 
-            return this;
+            return;
         }
 
         if (name != null && !IsMultigraph)
@@ -332,7 +328,6 @@ sealed class Graph
         IncrementOrInitEntry(sucsMap[vStr], wStr);
         inMap[wStr][e] = edgeObj;
         outMap[vStr][e] = edgeObj;
-        return this;
     }
 
     public EdgeLabel FindEdgeLabel(string v, string w, string? name = null)

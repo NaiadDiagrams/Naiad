@@ -5,7 +5,7 @@ public class PositionTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph(compound: true);
+        graph = new(compound: true);
         graph.SetGraph(new()
         {
             RankSeparation = 50,

@@ -6,7 +6,7 @@ public class RankTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph();
+        graph = new();
         graph.SetGraph(new());
         graph.SetDefaultNodeLabel(_ => new());
         graph.SetDefaultEdgeLabel((_, _, _) => new() {Minlen = 1, Weight = 1});

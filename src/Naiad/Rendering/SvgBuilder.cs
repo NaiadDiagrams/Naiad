@@ -69,8 +69,7 @@ public class SvgBuilder
         string fill = "#333") =>
         AddMarker(id, "M0,0 L10,3.5 L0,7 Z", 10, 7, 9, 3.5, fill);
 
-    public SvgBuilder AddCrossMarker(string id = "cross")
-    {
+    public void AddCrossMarker(string id = "cross") =>
         document.Defs.Markers.Add(
             new()
             {
@@ -82,8 +81,6 @@ public class SvgBuilder
                 RefY = 4,
                 Fill = "none"
             });
-        return this;
-    }
 
     public void AddMermaidArrowMarker()
     {
@@ -153,7 +150,7 @@ public class SvgBuilder
             });
     }
 
-    public SvgBuilder AddMermaidCrossMarker()
+    public void AddMermaidCrossMarker()
     {
         document.Defs.Markers.Add(
             new()
@@ -183,7 +180,6 @@ public class SvgBuilder
                 ClassName = "marker cross",
                 StrokeWidth = 2
             });
-        return this;
     }
 
     /// <summary>Adds a <c>&lt;foreignObject&gt;</c> carrying raw label markup.</summary>

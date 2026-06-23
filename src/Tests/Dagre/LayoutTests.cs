@@ -8,7 +8,7 @@ public class LayoutTests
     public void Setup()
     {
         // new Graph({multigraph: true, compound: true}).setGraph({}).setDefaultEdgeLabel(() => ({}));
-        graph = new Graph(directed: true, multigraph: true, compound: true);
+        graph = new(directed: true, multigraph: true, compound: true);
         graph.SetGraph(new());
         graph.SetDefaultEdgeLabel((_, _, _) => new());
     }

@@ -3,15 +3,15 @@ public class CrossCountTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph()
-            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
+    public void Setup()
+    {
+        graph = new Graph();
+        graph.SetDefaultEdgeLabel((_, _, _) => new() {Weight = 1});
+    }
 
     [Test]
-    public async Task Returns0ForAnEmptyLayering()
-    {
+    public async Task Returns0ForAnEmptyLayering() =>
         await Assert.That(CrossCount.Run(graph, [])).IsEqualTo(0);
-    }
 
     [Test]
     public async Task Returns0ForALayeringWithNoCrossings()
