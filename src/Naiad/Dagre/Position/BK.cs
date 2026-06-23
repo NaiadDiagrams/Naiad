@@ -414,7 +414,7 @@ static class BK
     {
         var blockGraph = new Graph();
         var graphLabel = graph.Label;
-        var sepFn = Sep(graphLabel.Nodesep!.Value, graphLabel.Edgesep!.Value, reverseSep);
+        var sepFn = Sep(graphLabel.NodeSeparation!.Value, graphLabel.EdgeSeparation!.Value, reverseSep);
 
         foreach (var layer in layering)
         {

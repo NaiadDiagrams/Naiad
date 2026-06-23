@@ -8,16 +8,16 @@ public class PositionTests
         graph = new Graph(compound: true)
             .SetGraph(new()
             {
-                Ranksep = 50,
-                Nodesep = 50,
-                Edgesep = 10
+                RankSeparation = 50,
+                NodeSeparation = 50,
+                EdgeSeparation = 10
             });
     }
 
     [Test]
-    public async Task RespectsRanksep()
+    public async Task RespectsRankSeparation()
     {
-        graph.Label.Ranksep = 1000;
+        graph.Label.RankSeparation = 1000;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 80, Rank = 1, Order = 0 });
         graph.SetEdge("a", "b");
@@ -26,9 +26,9 @@ public class PositionTests
     }
 
     [Test]
-    public async Task UseTheLargestHeightInEachRankWithRanksep()
+    public async Task UseTheLargestHeightInEachRankWithRankSeparation()
     {
-        graph.Label.Ranksep = 1000;
+        graph.Label.RankSeparation = 1000;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 80, Rank = 0, Order = 1 });
         graph.SetNode("c", new() { Width = 50, Height = 90, Rank = 1, Order = 0 });
@@ -40,9 +40,9 @@ public class PositionTests
     }
 
     [Test]
-    public async Task RespectsNodesep()
+    public async Task RespectsNodeSeparation()
     {
-        graph.Label.Nodesep = 1000;
+        graph.Label.NodeSeparation = 1000;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 70, Height = 80, Rank = 0, Order = 1 });
         Positioning.Run(graph);

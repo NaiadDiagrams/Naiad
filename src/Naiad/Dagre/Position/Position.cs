@@ -17,7 +17,7 @@ static class Positioning
     {
         var layering = Util.BuildLayerMatrix(graph);
         var graphLabel = graph.Label;
-        var rankSep = graphLabel.Ranksep!.Value;
+        var rankSep = graphLabel.RankSeparation!.Value;
         double prevY = 0;
         foreach (var layer in layering)
         {

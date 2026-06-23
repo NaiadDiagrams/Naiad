@@ -55,7 +55,7 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph().SetGraph(new() {Nodesep = 50, Edgesep = 20, Ranksep = 50});
+            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
             graph.SetDefaultEdgeLabel(new EdgeLabel());
             graph.SetNode("a", new() {Rank = 0, Order = 0});
             graph.SetNode("b", new() {Rank = 0, Order = 1});
@@ -157,7 +157,7 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph().SetGraph(new() {Nodesep = 50, Edgesep = 20, Ranksep = 50});
+            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
             graph.SetDefaultEdgeLabel(new EdgeLabel());
             graph.SetNode("a", new() {Rank = 0, Order = 0});
             graph.SetNode("b", new() {Rank = 0, Order = 1});
@@ -243,7 +243,7 @@ public class BkTests
 
         [Before(Test)]
         public void Setup() =>
-            graph = new Graph().SetGraph(new() {Nodesep = 50, Edgesep = 20, Ranksep = 50});
+            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
 
         [Test]
         public async Task AlignsWithItselfIfTheNodeHasNoAdjacencies()
@@ -397,7 +397,7 @@ public class BkTests
 
         [Before(Test)]
         public void Setup() =>
-            graph = new Graph().SetGraph(new() {Nodesep = 50, Edgesep = 20, Ranksep = 50});
+            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
 
         [Test]
         public async Task PlacesTheCenterOfASingleNodeGraphAtOrigin()
@@ -415,7 +415,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"));
             var align = StrMap(("a", "a"), ("b", "b"));
-            graph.Label.Nodesep = 100;
+            graph.Label.NodeSeparation = 100;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200});
 
@@ -429,7 +429,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"));
             var align = StrMap(("a", "a"), ("b", "b"));
-            graph.Label.Edgesep = 20;
+            graph.Label.EdgeSeparation = 20;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.Edge});
 
@@ -456,7 +456,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "a"), ("c", "c"));
             var align = StrMap(("a", "b"), ("b", "a"), ("c", "c"));
-            graph.Label.Nodesep = 75;
+            graph.Label.NodeSeparation = 75;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100});
             graph.SetNode("b", new() {Rank = 1, Order = 1, Width = 200});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 50});
@@ -472,7 +472,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"), ("d", "b"));
             var align = StrMap(("a", "a"), ("b", "d"), ("c", "c"), ("d", "b"));
-            graph.Label.Nodesep = 75;
+            graph.Label.NodeSeparation = 75;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 50});
@@ -490,7 +490,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "a"), ("d", "b"));
             var align = StrMap(("a", "c"), ("b", "d"), ("c", "a"), ("d", "b"));
-            graph.Label.Nodesep = 75;
+            graph.Label.NodeSeparation = 75;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 150});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 60});
@@ -508,7 +508,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "a"), ("d", "b"));
             var align = StrMap(("a", "c"), ("b", "d"), ("c", "a"), ("d", "b"));
-            graph.Label.Nodesep = 75;
+            graph.Label.NodeSeparation = 75;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 70});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 60});
@@ -526,7 +526,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"), ("d", "d"), ("e", "b"), ("f", "f"), ("graph", "d"));
             var align = StrMap(("a", "a"), ("b", "e"), ("c", "c"), ("d", "graph"), ("e", "b"), ("f", "f"), ("graph", "d"));
-            graph.Label.Nodesep = 75;
+            graph.Label.NodeSeparation = 75;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 50});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 50});
@@ -551,7 +551,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
-            graph.Label.Edgesep = 50;
+            graph.Label.EdgeSeparation = 50;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Left});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
@@ -567,7 +567,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
-            graph.Label.Edgesep = 50;
+            graph.Label.EdgeSeparation = 50;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Center});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
@@ -583,7 +583,7 @@ public class BkTests
         {
             var root = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
-            graph.Label.Edgesep = 50;
+            graph.Label.EdgeSeparation = 50;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Right});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
@@ -656,7 +656,7 @@ public class BkTests
 
         [Before(Test)]
         public void Setup() =>
-            graph = new Graph().SetGraph(new() {Nodesep = 50, Edgesep = 20, Ranksep = 50});
+            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
 
         [Test]
         public Task FindsTheAlignmentWithTheSmallestWidth()
@@ -753,7 +753,7 @@ public class BkTests
 
         [Before(Test)]
         public void Setup() =>
-            graph = new Graph().SetGraph(new() {Nodesep = 50, Edgesep = 20, Ranksep = 50});
+            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
 
         [Test]
         public Task PositionsASingleNodeAtOrigin()
@@ -784,7 +784,7 @@ public class BkTests
         [Test]
         public Task CentersANodeIfItIsAPredecessorOfTwoSameSizedNodes()
         {
-            graph.Label.Nodesep = 10;
+            graph.Label.NodeSeparation = 10;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 20});
             graph.SetNode("b", new() {Rank = 1, Order = 0, Width = 50});
             graph.SetNode("c", new() {Rank = 1, Order = 1, Width = 50});
@@ -799,7 +799,7 @@ public class BkTests
         [Test]
         public Task ShiftsBlocksOnBothSidesOfAlignedBlock()
         {
-            graph.Label.Nodesep = 10;
+            graph.Label.NodeSeparation = 10;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 60});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 70});
@@ -819,8 +819,8 @@ public class BkTests
         [Test]
         public Task AlignsInnerSegments()
         {
-            graph.Label.Nodesep = 10;
-            graph.Label.Edgesep = 10;
+            graph.Label.NodeSeparation = 10;
+            graph.Label.EdgeSeparation = 10;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 50, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 60});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 70});

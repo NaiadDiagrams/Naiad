@@ -21,8 +21,8 @@ class DagreEngine : ILayoutEngine
         graph.SetGraph(new()
         {
             Rankdir = options.Direction,
-            Nodesep = options.NodeSeparation,
-            Ranksep = options.RankSeparation
+            NodeSeparation = options.NodeSeparation,
+            RankSeparation = options.RankSeparation
         });
         graph.SetDefaultEdgeLabel(new DagreEdgeLabel());
 

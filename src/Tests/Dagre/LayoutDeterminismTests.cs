@@ -14,9 +14,9 @@ public class LayoutDeterminismTests
             new()
             {
                 Rankdir = Direction.TopToBottom,
-                Nodesep = 50,
-                Ranksep = 50,
-                Edgesep = 20
+                NodeSeparation = 50,
+                RankSeparation = 50,
+                EdgeSeparation = 20
             });
         graph.SetDefaultEdgeLabel(new EdgeLabel());
         foreach (var v in new[] { "a", "b", "c", "d", "e", "f", "graph", "h" })

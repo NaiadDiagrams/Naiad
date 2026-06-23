@@ -79,9 +79,9 @@ sealed class GraphLabel
     public double? Width;
     public double? Height;
     public Direction Rankdir;
-    public double? Nodesep;
-    public double? Edgesep;
-    public double? Ranksep;
+    public double? NodeSeparation;
+    public double? EdgeSeparation;
+    public double? RankSeparation;
     public string? NestingRoot;
     public int? NodeRankFactor;
     public List<string>? DummyChains;

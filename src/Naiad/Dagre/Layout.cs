@@ -98,24 +98,24 @@ static class Layout
         var newGraph = new GraphLabel
         {
             // defaults
-            Ranksep = 50,
-            Edgesep = 20,
-            Nodesep = 50,
+            RankSeparation = 50,
+            EdgeSeparation = 20,
+            NodeSeparation = 50,
             Rankdir = graphLabel.Rankdir
         };
-        if (graphLabel.Nodesep is { } gNodesep)
+        if (graphLabel.NodeSeparation is { } gNodeSeparation)
         {
-            newGraph.Nodesep = gNodesep;
+            newGraph.NodeSeparation = gNodeSeparation;
         }
 
-        if (graphLabel.Edgesep is { } gEdgesep)
+        if (graphLabel.EdgeSeparation is { } gEdgeSeparation)
         {
-            newGraph.Edgesep = gEdgesep;
+            newGraph.EdgeSeparation = gEdgeSeparation;
         }
 
-        if (graphLabel.Ranksep is { } gRanksep)
+        if (graphLabel.RankSeparation is { } gRankSeparation)
         {
-            newGraph.Ranksep = gRanksep;
+            newGraph.RankSeparation = gRankSeparation;
         }
 
         graph.SetGraph(newGraph);
@@ -200,7 +200,7 @@ static class Layout
     static void MakeSpaceForEdgeLabels(Graph graph)
     {
         var graphLabel = graph.Label;
-        graphLabel.Ranksep /= 2;
+        graphLabel.RankSeparation /= 2;
         foreach (var e in graph.Edges())
         {
             var edge = graph.FindEdgeLabel(e);

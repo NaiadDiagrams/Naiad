@@ -25,7 +25,7 @@ public class LayoutTests
     [Test]
     public Task CanLayoutTwoNodesOnTheSameRank()
     {
-        graph.Label.Nodesep = 200;
+        graph.Label.NodeSeparation = 200;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(graph);
@@ -38,7 +38,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutTwoNodesConnectedByAnEdge()
     {
-        graph.Label.Ranksep = 300;
+        graph.Label.RankSeparation = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         graph.SetEdge("a", "b");
@@ -56,7 +56,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutAnEdgeWithALabel()
     {
-        graph.Label.Ranksep = 300;
+        graph.Label.RankSeparation = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Labelpos = LabelPos.Center });
@@ -76,7 +76,7 @@ public class LayoutTests
     [Arguments(Direction.RightToLeft)]
     public async Task CanLayoutAnEdgeWithALongLabel(Direction rankdir)
     {
-        graph.Label.Nodesep = graph.Label.Edgesep = 10;
+        graph.Label.NodeSeparation = graph.Label.EdgeSeparation = 10;
         graph.Label.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
@@ -109,7 +109,7 @@ public class LayoutTests
     [Arguments(Direction.RightToLeft)]
     public async Task CanApplyAnOffset(Direction rankdir)
     {
-        graph.Label.Nodesep = graph.Label.Edgesep = 10;
+        graph.Label.NodeSeparation = graph.Label.EdgeSeparation = 10;
         graph.Label.Rankdir = rankdir;
         foreach (var v in new[] { "a", "b", "c", "d" })
         {
@@ -135,7 +135,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutALongEdgeWithALabel()
     {
-        graph.Label.Ranksep = 300;
+        graph.Label.RankSeparation = 300;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         graph.SetEdge("a", "b", new() { Width = 60, Height = 70, Minlen = 2, Labelpos = LabelPos.Center });
@@ -149,7 +149,7 @@ public class LayoutTests
     [Test]
     public async Task CanLayoutOutAShortCycle()
     {
-        graph.Label.Ranksep = 200;
+        graph.Label.RankSeparation = 200;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b", new() { Weight = 2 });
@@ -167,7 +167,7 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdges()
     {
-        graph.Label.Ranksep = 200;
+        graph.Label.RankSeparation = 200;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b");
@@ -184,7 +184,7 @@ public class LayoutTests
     [Test]
     public async Task AddsRectangleIntersectsForEdgesSpanningMultipleRanks()
     {
-        graph.Label.Ranksep = 200;
+        graph.Label.RankSeparation = 200;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetNode("b", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "b", new() { Minlen = 2 });
@@ -207,7 +207,7 @@ public class LayoutTests
     [Arguments(Direction.RightToLeft)]
     public async Task CanLayoutASelfLoop(Direction rankdir)
     {
-        graph.Label.Edgesep = 75;
+        graph.Label.EdgeSeparation = 75;
         graph.Label.Rankdir = rankdir;
         graph.SetNode("a", new() { Width = 100, Height = 100 });
         graph.SetEdge("a", "a", new() { Width = 50, Height = 50 });
@@ -354,9 +354,9 @@ public class LayoutTests
     {
         // The original test sets `graph.graph().nodeSep = 200` (capital S) and relies on dagre's
         // `canonicalize` step lowercasing keys. The C# port uses a strongly-typed GraphLabel
-        // where the only spelling is `Nodesep`, so case-insensitivity is not expressible and the
+        // where the only spelling is `NodeSeparation`, so case-insensitivity is not expressible and the
         // canonical field is set directly.
-        graph.Label.Nodesep = 200;
+        graph.Label.NodeSeparation = 200;
         graph.SetNode("a", new() { Width = 50, Height = 100 });
         graph.SetNode("b", new() { Width = 75, Height = 200 });
         Layout.Run(graph);
