@@ -470,7 +470,12 @@ static class SvgRasterizer
         SvgMarker? MarkerLookup(string reference)
         {
             var id = ExtractUrlId(reference);
-            return id != null && markers.TryGetValue(id, out var marker) ? marker : null;
+            if (id != null && markers.TryGetValue(id, out var marker))
+            {
+                return marker;
+            }
+
+            return null;
         }
 
         // --- style resolution -------------------------------------------------------------------
@@ -550,7 +555,8 @@ static class SvgRasterizer
 
         Paint? ResolveFill(string? raw, ComputedStyle style, IReadOnlyList<SubPath> subpaths)
         {
-            if (string.IsNullOrWhiteSpace(raw) || raw.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(raw) ||
+                raw.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -562,15 +568,27 @@ static class SvgRasterizer
 
             if (raw.Equals("currentColor", StringComparison.OrdinalIgnoreCase))
             {
-                return CssColor.TryParse(style.Color, out var current) ? new SolidPaint(current) : null;
+                if (CssColor.TryParse(style.Color, out var current))
+                {
+                    return new SolidPaint(current);
+                }
+
+                return null;
             }
 
-            return CssColor.TryParse(raw, out var color) ? new SolidPaint(color) : null;
+            if (CssColor.TryParse(raw, out var color))
+            {
+                return new SolidPaint(color);
+            }
+
+            return null;
         }
 
         Paint? ResolveGradient(string? id, IReadOnlyList<SubPath> subpaths)
         {
-            if (id == null || !gradientLookup.TryGetValue(id, out var gradient) || gradient.Stops.Count == 0)
+            if (id == null ||
+                !gradientLookup.TryGetValue(id, out var gradient) ||
+                gradient.Stops.Count == 0)
             {
                 return null;
             }
@@ -599,7 +617,8 @@ static class SvgRasterizer
 
         static Rgba? ResolveColor(string? raw, ComputedStyle style)
         {
-            if (string.IsNullOrWhiteSpace(raw) || raw.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(raw) ||
+                raw.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -609,7 +628,12 @@ static class SvgRasterizer
                 return CssColor.TryParse(style.Color, out var current) ? current : null;
             }
 
-            return CssColor.TryParse(raw, out var color) ? color : null;
+            if (CssColor.TryParse(raw, out var color))
+            {
+                return color;
+            }
+
+            return null;
         }
 
         static TextStyle TextStyleFrom(ComputedStyle style, Rgba color, float opacity) =>
