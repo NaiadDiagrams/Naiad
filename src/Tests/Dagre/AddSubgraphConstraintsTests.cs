@@ -21,7 +21,7 @@ public class AddSubgraphConstraintsTests
 
         AddSubgraphConstraints.Run(graph, constraintGraph, vs);
         await Assert.That(constraintGraph.NodeCount).IsEqualTo(0);
-        await Assert.That(constraintGraph.EdgeCount).IsEqualTo(0);
+        await Assert.That(constraintGraph.Edges().Count).IsEqualTo(0);
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class AddSubgraphConstraintsTests
 
         AddSubgraphConstraints.Run(graph, constraintGraph, vs);
         await Assert.That(constraintGraph.NodeCount).IsEqualTo(0);
-        await Assert.That(constraintGraph.EdgeCount).IsEqualTo(0);
+        await Assert.That(constraintGraph.Edges().Count).IsEqualTo(0);
     }
 
     [Test]

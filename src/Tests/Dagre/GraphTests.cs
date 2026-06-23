@@ -53,16 +53,6 @@ public class GraphTests
             await Assert.That(graph.TryGetEdgeLabel("a", "b", out var found)).IsTrue();
             await Assert.That(found).IsSameReferenceAs(label);
         }
-
-        [Test]
-        public async Task EdgeOverloadProbesExistence()
-        {
-            var graph = new Graph();
-            graph.SetEdge("a", "b", new EdgeLabel { Weight = 1 });
-
-            await Assert.That(graph.TryGetEdgeLabel(new Edge("a", "b"), out _)).IsTrue();
-            await Assert.That(graph.TryGetEdgeLabel(new Edge("b", "c"), out _)).IsFalse();
-        }
     }
 
     public class NodeLabelTests

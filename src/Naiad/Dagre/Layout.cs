@@ -101,8 +101,7 @@ static class Layout
             Ranksep = 50,
             Edgesep = 20,
             Nodesep = 50,
-            Rankdir = graphLabel.Rankdir,
-            Rankalign = RankAlign.Center
+            Rankdir = graphLabel.Rankdir
         };
         if (graphLabel.Nodesep is { } gNodesep)
         {
@@ -117,26 +116,6 @@ static class Layout
         if (graphLabel.Ranksep is { } gRanksep)
         {
             newGraph.Ranksep = gRanksep;
-        }
-
-        if (graphLabel.Marginx is { } gMarginx)
-        {
-            newGraph.Marginx = gMarginx;
-        }
-
-        if (graphLabel.Marginy is { } gMarginy)
-        {
-            newGraph.Marginy = gMarginy;
-        }
-
-        if (graphLabel.Acyclicer is { } gAcyclicer)
-        {
-            newGraph.Acyclicer = gAcyclicer;
-        }
-
-        if (graphLabel.Rankalign is { } gRankalign)
-        {
-            newGraph.Rankalign = gRankalign;
         }
 
         graph.SetGraph(newGraph);
@@ -302,8 +281,6 @@ static class Layout
         var minY = double.PositiveInfinity;
         var maxY = 0.0;
         var graphLabel = graph.Label;
-        var marginX = graphLabel.Marginx ?? 0;
-        var marginY = graphLabel.Marginy ?? 0;
 
         void GetExtremes(double x, double y, double w, double h)
         {
@@ -326,9 +303,6 @@ static class Layout
                 GetExtremes(edge.X!.Value, edge.Y!.Value, edge.Width!.Value, edge.Height!.Value);
             }
         }
-
-        minX -= marginX;
-        minY -= marginY;
 
         foreach (var node in graph.NodeLabels())
         {
@@ -359,8 +333,8 @@ static class Layout
             }
         }
 
-        graphLabel.Width = maxX - minX + marginX;
-        graphLabel.Height = maxY - minY + marginY;
+        graphLabel.Width = maxX - minX;
+        graphLabel.Height = maxY - minY;
     }
 
     static void AssignNodeIntersects(Graph graph)

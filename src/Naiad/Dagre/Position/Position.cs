@@ -18,7 +18,6 @@ static class Positioning
         var layering = Util.BuildLayerMatrix(graph);
         var graphLabel = graph.Label;
         var rankSep = graphLabel.Ranksep!.Value;
-        var rankAlign = graphLabel.Rankalign;
         double prevY = 0;
         foreach (var layer in layering)
         {
@@ -31,18 +30,7 @@ static class Positioning
             foreach (var v in layer)
             {
                 var node = graph.NodeLabel(v);
-                if (rankAlign == RankAlign.Top)
-                {
-                    node.Y = prevY + node.Height / 2;
-                }
-                else if (rankAlign == RankAlign.Bottom)
-                {
-                    node.Y = prevY + maxHeight - node.Height / 2;
-                }
-                else
-                {
-                    node.Y = prevY + maxHeight / 2;
-                }
+                node.Y = prevY + maxHeight / 2;
             }
 
             prevY += maxHeight + rankSep;

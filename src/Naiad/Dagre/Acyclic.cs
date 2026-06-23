@@ -7,11 +7,7 @@ static class Acyclic
 {
     public static void Run(Graph graph)
     {
-        var fas = graph.Label.Acyclicer == "greedy"
-            ? GreedyFas.Run(graph, WeightFn(graph))
-            : DfsFas(graph);
-
-        foreach (var e in fas)
+        foreach (var e in DfsFas(graph))
         {
             var label = graph.FindEdgeLabel(e);
             graph.RemoveEdge(e);
@@ -19,11 +15,6 @@ static class Acyclic
             label.Reversed = true;
             graph.SetEdge(e.W, e.V, label, graph.UniqueId("rev"));
         }
-
-        return;
-
-        static Func<Edge, double> WeightFn(Graph graph) =>
-            e => graph.FindEdgeLabel(e).Weight!.Value;
     }
 
     static List<Edge> DfsFas(Graph graph)

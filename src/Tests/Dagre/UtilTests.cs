@@ -15,7 +15,7 @@ public class UtilTests
             var e = g2.FindEdgeLabel("a", "b");
             await Assert.That(e.Weight).IsEqualTo(1);
             await Assert.That(e.Minlen).IsEqualTo(1);
-            await Assert.That(g2.EdgeCount).IsEqualTo(1);
+            await Assert.That(g2.Edges().Count).IsEqualTo(1);
         }
 
         [Test]
@@ -28,7 +28,7 @@ public class UtilTests
             var e = g2.FindEdgeLabel("a", "b");
             await Assert.That(e.Weight).IsEqualTo(3);
             await Assert.That(e.Minlen).IsEqualTo(2);
-            await Assert.That(g2.EdgeCount).IsEqualTo(1);
+            await Assert.That(g2.Edges().Count).IsEqualTo(1);
         }
 
         [Test]
@@ -51,7 +51,7 @@ public class UtilTests
         [Test]
         public async Task CopiesAllNodes()
         {
-            var aLabel = new NodeLabel { Label = "bar" };
+            var aLabel = new NodeLabel { Width = 1 };
             graph.SetNode("a", aLabel);
             graph.SetNode("b");
             var g2 = Util.AsNonCompoundGraph(graph);

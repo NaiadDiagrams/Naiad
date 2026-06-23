@@ -1,12 +1,5 @@
 public class AcyclicTests
 {
-    public static IEnumerable<string> Acyclicers()
-    {
-        yield return "greedy";
-        yield return "dfs";
-        yield return "unknown-should-still-work";
-    }
-
     static Graph NewGraph() =>
         new Graph(multigraph: true)
             .SetGraph(new())
@@ -20,11 +13,9 @@ public class AcyclicTests
     // === run ===
 
     [Test]
-    [MethodDataSource(nameof(Acyclicers))]
-    public async Task RunDoesNotChangeAnAlreadyAcyclicGraph(string acyclicer)
+    public async Task RunDoesNotChangeAnAlreadyAcyclicGraph()
     {
         var graph = NewGraph();
-        graph.Label.Acyclicer = acyclicer;
         graph.SetPath(["a", "b", "d"]);
         graph.SetPath(["a", "c", "d"]);
         Acyclic.Run(graph);
@@ -41,22 +32,18 @@ public class AcyclicTests
     }
 
     [Test]
-    [MethodDataSource(nameof(Acyclicers))]
-    public async Task RunBreaksCyclesInTheInputGraph(string acyclicer)
+    public async Task RunBreaksCyclesInTheInputGraph()
     {
         var graph = NewGraph();
-        graph.Label.Acyclicer = acyclicer;
         graph.SetPath(["a", "b", "c", "d", "a"]);
         Acyclic.Run(graph);
         await Assert.That(Alg.FindCycles(graph)).IsEmpty();
     }
 
     [Test]
-    [MethodDataSource(nameof(Acyclicers))]
-    public async Task RunCreatesAMultiEdgeWhereNecessary(string acyclicer)
+    public async Task RunCreatesAMultiEdgeWhereNecessary()
     {
         var graph = NewGraph();
-        graph.Label.Acyclicer = acyclicer;
         graph.SetPath(["a", "b", "a"]);
         Acyclic.Run(graph);
         await Assert.That(Alg.FindCycles(graph)).IsEmpty();
@@ -69,17 +56,15 @@ public class AcyclicTests
             await Assert.That(graph.OutEdges("b", "a")!.Count).IsEqualTo(2);
         }
 
-        await Assert.That(graph.EdgeCount).IsEqualTo(2);
+        await Assert.That(graph.Edges().Count).IsEqualTo(2);
     }
 
     // === undo ===
 
     [Test]
-    [MethodDataSource(nameof(Acyclicers))]
-    public async Task UndoDoesNotChangeEdgesWhereTheOriginalGraphWasAcyclic(string acyclicer)
+    public async Task UndoDoesNotChangeEdgesWhereTheOriginalGraphWasAcyclic()
     {
         var graph = NewGraph();
-        graph.Label.Acyclicer = acyclicer;
         graph.SetEdge("a", "b", new() { Minlen = 2, Weight = 3 });
         Acyclic.Run(graph);
         Acyclic.Undo(graph);
@@ -90,11 +75,9 @@ public class AcyclicTests
     }
 
     [Test]
-    [MethodDataSource(nameof(Acyclicers))]
-    public async Task UndoCanRestorePreviouslyReversedEdges(string acyclicer)
+    public async Task UndoCanRestorePreviouslyReversedEdges()
     {
         var graph = NewGraph();
-        graph.Label.Acyclicer = acyclicer;
         graph.SetEdge("a", "b", new() { Minlen = 2, Weight = 3 });
         graph.SetEdge("b", "a", new() { Minlen = 3, Weight = 4 });
         Acyclic.Run(graph);
@@ -106,21 +89,6 @@ public class AcyclicTests
         await Assert.That(ba.Minlen).IsEqualTo(3);
         await Assert.That(ba.Weight).IsEqualTo(4d);
         await Assert.That(graph.Edges().Count).IsEqualTo(2);
-    }
-
-    // === greedy-specific functionality ===
-
-    [Test]
-    public async Task GreedyPrefersToBreakCyclesAtLowWeightEdges()
-    {
-        var graph = NewGraph();
-        graph.Label.Acyclicer = "greedy";
-        graph.SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 2 });
-        graph.SetPath(["a", "b", "c", "d", "a"]);
-        graph.SetEdge("c", "d", new() { Weight = 1 });
-        Acyclic.Run(graph);
-        await Assert.That(Alg.FindCycles(graph)).IsEmpty();
-        await Assert.That(graph.HasEdge("c", "d")).IsFalse();
     }
 
     static Edge StripLabel(Edge edge) =>

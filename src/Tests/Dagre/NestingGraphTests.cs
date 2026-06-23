@@ -109,7 +109,7 @@ public class NestingGraphTests
 
         var rootToTop = graph.OutEdges(root!, borderTop!)!;
         await Assert.That(rootToTop.Count).IsEqualTo(1);
-        await Assert.That(graph.HasEdge(rootToTop[0])).IsTrue();
+        await Assert.That(graph.HasEdge(rootToTop[0].V, rootToTop[0].W, rootToTop[0].Name)).IsTrue();
     }
 
     [Test]

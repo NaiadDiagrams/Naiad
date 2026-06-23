@@ -25,11 +25,3 @@ enum LabelPos
     Center,
     Right
 }
-
-/// <summary>Vertical alignment of nodes within their rank.</summary>
-enum RankAlign
-{
-    Top,
-    Center,
-    Bottom
-}

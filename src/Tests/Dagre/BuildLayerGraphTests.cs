@@ -66,11 +66,11 @@ public class BuildLayerGraphTests
         graph.SetEdge("b", "c", new() { Weight = 3 });
         graph.SetEdge("c", "d", new() { Weight = 4 });
 
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "inEdges").EdgeCount).IsEqualTo(0);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").EdgeCount).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(graph, 1, "inEdges").Edges().Count).IsEqualTo(0);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").Edges().Count).IsEqualTo(2);
         await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").FindEdgeLabel("a", "c").Weight).IsEqualTo(2);
         await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").FindEdgeLabel("b", "c").Weight).IsEqualTo(3);
-        await Assert.That(BuildLayerGraph.Run(graph, 3, "inEdges").EdgeCount).IsEqualTo(1);
+        await Assert.That(BuildLayerGraph.Run(graph, 3, "inEdges").Edges().Count).IsEqualTo(1);
         await Assert.That(BuildLayerGraph.Run(graph, 3, "inEdges").FindEdgeLabel("c", "d").Weight).IsEqualTo(4);
     }
 
@@ -85,12 +85,12 @@ public class BuildLayerGraphTests
         graph.SetEdge("b", "c", new() { Weight = 3 });
         graph.SetEdge("c", "d", new() { Weight = 4 });
 
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").EdgeCount).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").Edges().Count).IsEqualTo(2);
         await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").FindEdgeLabel("c", "a").Weight).IsEqualTo(2);
         await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").FindEdgeLabel("c", "b").Weight).IsEqualTo(3);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "outEdges").EdgeCount).IsEqualTo(1);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, "outEdges").Edges().Count).IsEqualTo(1);
         await Assert.That(BuildLayerGraph.Run(graph, 2, "outEdges").FindEdgeLabel("d", "c").Weight).IsEqualTo(4);
-        await Assert.That(BuildLayerGraph.Run(graph, 3, "outEdges").EdgeCount).IsEqualTo(0);
+        await Assert.That(BuildLayerGraph.Run(graph, 3, "outEdges").Edges().Count).IsEqualTo(0);
     }
 
     [Test]

@@ -61,31 +61,8 @@ public class PositionTests
     }
 
     [Test]
-    public async Task AlignsNodesToTopOfRankWhenRankalignIsTop()
+    public async Task AlignsNodesToCenterOfRank()
     {
-        graph.Label.Rankalign = RankAlign.Top;
-        graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
-        graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
-        Positioning.Run(graph);
-        await Assert.That(graph.NodeLabel("a").Y!.Value).IsEqualTo(100 / 2.0);
-        await Assert.That(graph.NodeLabel("b").Y!.Value).IsEqualTo(60 / 2.0);
-    }
-
-    [Test]
-    public async Task AlignsNodesToBottomOfRankWhenRankalignIsBottom()
-    {
-        graph.Label.Rankalign = RankAlign.Bottom;
-        graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
-        graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
-        Positioning.Run(graph);
-        await Assert.That(graph.NodeLabel("a").Y!.Value).IsEqualTo(100 - 100 / 2.0);
-        await Assert.That(graph.NodeLabel("b").Y!.Value).IsEqualTo(100 - 60 / 2.0);
-    }
-
-    [Test]
-    public async Task AlignsNodesToCenterOfRankWhenRankalignIsCenter()
-    {
-        graph.Label.Rankalign = RankAlign.Center;
         graph.SetNode("a", new() { Width = 50, Height = 100, Rank = 0, Order = 0 });
         graph.SetNode("b", new() { Width = 50, Height = 60, Rank = 0, Order = 1 });
         Positioning.Run(graph);

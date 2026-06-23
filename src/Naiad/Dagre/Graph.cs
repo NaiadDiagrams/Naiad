@@ -287,8 +287,6 @@ sealed class Graph
         return this;
     }
 
-    public int EdgeCount { get; private set; }
-
     public List<Edge> Edges() => edgeObjsMap.Values();
 
     // Allocation-free enumeration of all edges — the network-simplex pivot loop scans these per iteration.
@@ -302,8 +300,6 @@ sealed class Graph
     public Graph SetEdge(string v, string w, EdgeLabel? value) => SetEdgeCore(v, w, null, value, true);
 
     public Graph SetEdge(string v, string w, EdgeLabel? value, string? name) => SetEdgeCore(v, w, name, value, true);
-
-    public Graph SetEdge(Edge edge) => SetEdgeCore(edge.V, edge.W, edge.Name, null, false);
 
     public Graph SetEdge(Edge edge, EdgeLabel? value) => SetEdgeCore(edge.V, edge.W, edge.Name, value, true);
 
@@ -339,7 +335,6 @@ sealed class Graph
         IncrementOrInitEntry(sucsMap[vStr], wStr);
         inMap[wStr][e] = edgeObj;
         outMap[vStr][e] = edgeObj;
-        EdgeCount++;
         return this;
     }
 
@@ -366,9 +361,6 @@ sealed class Graph
     public bool TryGetEdgeLabel(string v, string w, out EdgeLabel label) =>
         edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, null), out label);
 
-    public bool TryGetEdgeLabel(Edge edge, out EdgeLabel label) =>
-        edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out label);
-
     static string DescribeEdge(string v, string w, string? name)
     {
         if (name == null)
@@ -381,9 +373,6 @@ sealed class Graph
 
     public bool HasEdge(string v, string w, string? name = null) =>
         edgeLabelsMap.ContainsKey(EdgeArgsToId(IsDirected, v, w, name));
-
-    public bool HasEdge(Edge edge) =>
-        edgeLabelsMap.ContainsKey(EdgeObjToId(IsDirected, edge));
 
     public void RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(IsDirected, v, w, name));
 
@@ -404,7 +393,6 @@ sealed class Graph
         DecrementOrRemoveEntry(sucsMap[vStr], wStr);
         inMap[wStr].Remove(e);
         outMap[vStr].Remove(e);
-        EdgeCount--;
     }
 
     public List<Edge>? InEdges(string v, string? w = null)

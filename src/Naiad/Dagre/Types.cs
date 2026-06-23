@@ -34,7 +34,6 @@ sealed class NodeLabel
     public string? BorderRightId;    // order/build-layer-graph: the single border-right id for one rank
     public int? MinRank;
     public int? MaxRank;
-    public string? Label;
     public LabelPos? Labelpos;
     public EdgeLabel? EdgeLabel;
     public Edge? EdgeObj;
@@ -68,7 +67,6 @@ sealed class EdgeLabel
     public int? LabelRank;
     public double? X;
     public double? Y;
-    public double? E;
     public bool? Reversed;
     public string? ForwardName;
     public bool? NestingEdge;
@@ -84,10 +82,6 @@ sealed class GraphLabel
     public double? Nodesep;
     public double? Edgesep;
     public double? Ranksep;
-    public double? Marginx;
-    public double? Marginy;
-    public string? Acyclicer;        // 'greedy'
-    public RankAlign? Rankalign;
     public string? NestingRoot;
     public int? NodeRankFactor;
     public List<string>? DummyChains;
