@@ -250,7 +250,7 @@ public class SvgBuilder
             cssClass: className);
     }
 
-    public SvgBuilder BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
+    public void BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
     {
         var group = new SvgGroup
         {
@@ -269,20 +269,17 @@ public class SvgBuilder
         }
 
         groupStack.Push(group);
-        return this;
     }
 
-    public SvgBuilder EndGroup()
+    public void EndGroup()
     {
         if (groupStack.Count > 0)
         {
             groupStack.Pop();
         }
-
-        return this;
     }
 
-    public SvgBuilder AddRect(
+    public void AddRect(
         double x,
         double y,
         double width,
@@ -311,10 +308,9 @@ public class SvgBuilder
             Style = style
         };
         AddElement(rect);
-        return this;
     }
 
-    public SvgBuilder AddRectNoXY(double width, double height, string? style = null)
+    public void AddRectNoXY(double width, double height, string? style = null)
     {
         var rect = new SvgRectNoXY
         {
@@ -323,10 +319,9 @@ public class SvgBuilder
             Style = style
         };
         AddElement(rect);
-        return this;
     }
 
-    public SvgBuilder AddCircle(
+    public void AddCircle(
         double cx,
         double cy,
         double r,
@@ -346,7 +341,6 @@ public class SvgBuilder
             Class = cssClass
         };
         AddElement(circle);
-        return this;
     }
 
     public void AddEllipse(

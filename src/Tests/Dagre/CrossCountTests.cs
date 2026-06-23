@@ -5,7 +5,7 @@ public class CrossCountTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph();
+        graph = new();
         graph.SetDefaultEdgeLabel((_, _, _) => new() {Weight = 1});
     }
 
