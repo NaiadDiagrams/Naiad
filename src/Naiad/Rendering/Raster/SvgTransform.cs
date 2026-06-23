@@ -5,7 +5,7 @@
 /// <see cref="System.Numerics"/>; a transform list is composed so the leftmost entry is the outermost
 /// transform, exactly as SVG specifies.
 /// </summary>
-static partial class SvgTransform
+static class SvgTransform
 {
     public static Matrix3x2 Parse(string? transform)
     {
@@ -14,12 +14,55 @@ static partial class SvgTransform
             return Matrix3x2.Identity;
         }
 
+        // Hand-rolled span scan over "name(args) name(args) ...": avoids the regex (MatchCollection/Match/
+        // Group/captured strings), the args Split array + substrings, and the per-function double[] that the
+        // old parser allocated on every transformed element. The arg buffer is reused across functions.
         var combined = Matrix3x2.Identity;
-        foreach (Match match in FunctionRegex().Matches(transform))
+        var s = transform.AsSpan();
+        Span<double> args = stackalloc double[6];
+
+        var i = 0;
+        while (i < s.Length)
         {
-            var name = match.Groups["name"].Value;
-            var args = ParseArgs(match.Groups["args"].Value);
-            if (Build(name, args) is { } op)
+            if (!IsNameChar(s[i]))
+            {
+                i++;
+                continue;
+            }
+
+            var nameStart = i;
+            while (i < s.Length && IsNameChar(s[i]))
+            {
+                i++;
+            }
+
+            var name = s[nameStart..i];
+
+            while (i < s.Length && char.IsWhiteSpace(s[i]))
+            {
+                i++;
+            }
+
+            if (i >= s.Length || s[i] != '(')
+            {
+                // A bare identifier with no argument list — skip it and keep scanning.
+                continue;
+            }
+
+            i++; // consume '('
+            var argsStart = i;
+            while (i < s.Length && s[i] != ')')
+            {
+                i++;
+            }
+
+            var count = ParseArgs(s[argsStart..i], args);
+            if (i < s.Length)
+            {
+                i++; // consume ')'
+            }
+
+            if (Build(name, args[..count]) is { } op)
             {
                 // Document order: each successive entry is the outer transform of the ones before it,
                 // so pre-multiply (op then accumulated) — see the class remarks.
@@ -30,7 +73,7 @@ static partial class SvgTransform
         return combined;
     }
 
-    static Matrix3x2? Build(string name, double[] a) =>
+    static Matrix3x2? Build(CharSpan name, ReadOnlySpan<double> a) =>
         name switch
         {
             "translate" => a.Length switch
@@ -63,22 +106,46 @@ static partial class SvgTransform
     static float Radians(double degrees) =>
         (float)(degrees * Math.PI / 180);
 
-    static double[] ParseArgs(string args)
+    // Parses up to dest.Length numbers separated by commas/whitespace into dest; returns how many were read.
+    static int ParseArgs(CharSpan args, Span<double> dest)
     {
-        var parts = args.Split([',', ' ', '\t', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        var values = new double[parts.Length];
         var count = 0;
-        foreach (var part in parts)
+        var i = 0;
+        while (i < args.Length && count < dest.Length)
         {
-            if (double.TryParse(part, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            while (i < args.Length && IsSeparator(args[i]))
             {
-                values[count++] = value;
+                i++;
+            }
+
+            if (i >= args.Length)
+            {
+                break;
+            }
+
+            var start = i;
+            while (i < args.Length && !IsSeparator(args[i]))
+            {
+                i++;
+            }
+
+            if (double.TryParse(args[start..i], NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            {
+                dest[count++] = value;
             }
         }
 
-        return count == values.Length ? values : values[..count];
+        return count;
     }
 
-    [GeneratedRegex(@"(?<name>\w+)\s*\((?<args>[^)]*)\)")]
-    private static partial Regex FunctionRegex();
+    // Mirrors the regex \w (identifier) for the function name.
+    static bool IsNameChar(char c) => char.IsLetterOrDigit(c) ||
+                                      c == '_';
+
+    static bool IsSeparator(char c) => c is
+        ',' or
+        ' ' or
+        '\t' or
+        '\n' or
+        '\r';
 }
