@@ -16,10 +16,10 @@ public class EdgeLabelBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        graph = new Graph(multigraph: true);
+        graph = new(multigraph: true);
         for (var i = 0; i < EdgeCount; i++)
         {
-            graph.SetEdge("n" + i, "n" + (i + 1), new EdgeLabel { Weight = i });
+            graph.SetEdge("n" + i, "n" + (i + 1), new() { Weight = i });
         }
     }
 

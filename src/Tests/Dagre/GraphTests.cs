@@ -17,7 +17,7 @@ public class GraphTests
         {
             var graph = new Graph();
 
-            await Assert.That(() => graph.FindEdgeLabel(new Edge("a", "b"))).Throws<KeyNotFoundException>();
+            await Assert.That(() => graph.FindEdgeLabel(new("a", "b"))).Throws<KeyNotFoundException>();
         }
 
         [Test]
