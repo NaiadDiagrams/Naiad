@@ -3,9 +3,11 @@ public class OrderTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph()
-            .SetDefaultEdgeLabel(new EdgeLabel { Weight = 1 });
+    public void Setup()
+    {
+        graph = new();
+        graph.SetDefaultEdgeLabel(new EdgeLabel {Weight = 1});
+    }
 
     [Test]
     public async Task DoesNotAddCrossingsToATreeStructure()

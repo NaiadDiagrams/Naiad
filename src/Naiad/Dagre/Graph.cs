@@ -61,11 +61,8 @@ sealed class Graph
 
     public GraphLabel Label => label!;
 
-    public Graph SetDefaultNodeLabel(Func<string, NodeLabel> fn)
-    {
+    public void SetDefaultNodeLabel(Func<string, NodeLabel> fn) =>
         defaultNodeLabelFn = fn;
-        return this;
-    }
 
     public int NodeCount { get; private set; }
 
@@ -93,17 +90,16 @@ sealed class Graph
         return this;
     }
 
-    public Graph SetNode(string name, NodeLabel value)
+    public void SetNode(string name, NodeLabel value)
     {
         if (nodesMap.ContainsKey(name))
         {
             nodesMap[name] = value;
-            return this;
+            return;
         }
 
         nodesMap[name] = value;
         InitNode(name);
-        return this;
     }
 
     void InitNode(string name)
@@ -289,11 +285,7 @@ sealed class Graph
         return this;
     }
 
-    public Graph SetDefaultEdgeLabel(EdgeLabel value)
-    {
-        defaultEdgeLabelFn = (_, _, _) => value;
-        return this;
-    }
+    public void SetDefaultEdgeLabel(EdgeLabel value) => defaultEdgeLabelFn = (_, _, _) => value;
 
     public List<Edge> Edges() => edgeObjsMap.Values();
 

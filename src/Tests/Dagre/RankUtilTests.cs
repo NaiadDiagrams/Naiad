@@ -3,10 +3,12 @@ public class RankUtilTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph()
-            .SetDefaultNodeLabel(_ => new())
-            .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1 });
+    public void Setup()
+    {
+        graph = new();
+        graph.SetDefaultNodeLabel(_ => new());
+        graph.SetDefaultEdgeLabel((_, _, _) => new() {Minlen = 1});
+    }
 
     [Test]
     public async Task CanAssignARankToASingleNodeGraph()

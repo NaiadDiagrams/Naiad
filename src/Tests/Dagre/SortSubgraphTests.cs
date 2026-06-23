@@ -6,13 +6,13 @@ public class SortSubgraphTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph(compound: true)
-            .SetDefaultNodeLabel(_ => new())
-            .SetDefaultEdgeLabel((_, _, _) => new() { Weight = 1 });
-        var ids = new[] { "0", "1", "2", "3", "4" };
+        graph = new(compound: true);
+        graph.SetDefaultNodeLabel(_ => new());
+        graph.SetDefaultEdgeLabel((_, _, _) => new() {Weight = 1});
+        var ids = new[] {"0", "1", "2", "3", "4"};
         for (var i = 0; i < ids.Length; i++)
         {
-            graph.SetNode(ids[i], new() { Order = i });
+            graph.SetNode(ids[i], new() {Order = i});
         }
 
         constraintGraph = new();

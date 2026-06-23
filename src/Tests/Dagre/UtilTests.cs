@@ -175,10 +175,10 @@ public class UtilTests
         [Test]
         public async Task AdjustRanksSuchThatAllAreGteZeroAndAtLeastOneIsZero()
         {
-            var graph = new Graph()
-                .SetNode("a", new() { Rank = 3 })
-                .SetNode("b", new() { Rank = 2 })
-                .SetNode("c", new() { Rank = 4 });
+            var graph = new Graph();
+            graph.SetNode("a", new() {Rank = 3});
+            graph.SetNode("b", new() {Rank = 2});
+            graph.SetNode("c", new() {Rank = 4});
 
             Util.NormalizeRanks(graph);
 
@@ -190,9 +190,9 @@ public class UtilTests
         [Test]
         public async Task WorksForNegativeRanks()
         {
-            var graph = new Graph()
-                .SetNode("a", new() { Rank = -3 })
-                .SetNode("b", new() { Rank = -2 });
+            var graph = new Graph();
+            graph.SetNode("a", new() {Rank = -3});
+            graph.SetNode("b", new() {Rank = -2});
 
             Util.NormalizeRanks(graph);
 
@@ -203,8 +203,8 @@ public class UtilTests
         [Test]
         public async Task DoesNotAssignARankToSubgraphs()
         {
-            var graph = new Graph(compound: true)
-                .SetNode("a", new() { Rank = 0 });
+            var graph = new Graph(compound: true);
+            graph.SetNode("a", new() {Rank = 0});
             graph.SetNode("sg", new());
             graph.SetParent("a", "sg");
 
