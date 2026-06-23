@@ -342,8 +342,8 @@ static class Layout
             var edge = graph.FindEdgeLabel(e);
             var nodeV = graph.NodeLabel(e.V);
             var nodeW = graph.NodeLabel(e.W);
-            Point p1;
-            Point p2;
+            Position p1;
+            Position p2;
             if (edge.Points == null)
             {
                 edge.Points = [];

@@ -63,7 +63,7 @@ static class CoordinateSystem
 
     static void ReverseYOne(EdgeLabel attrs) => attrs.Y = -attrs.Y!.Value;
 
-    static Point ReverseYOne(Point attrs) => attrs with { Y = -attrs.Y };
+    static Position ReverseYOne(Position attrs) => attrs with { Y = -attrs.Y };
 
     static void SwapXY(Graph graph)
     {
@@ -92,5 +92,5 @@ static class CoordinateSystem
     static void SwapXYOne(EdgeLabel attrs) =>
         (attrs.X, attrs.Y) = (attrs.Y, attrs.X);
 
-    static Point SwapXYOne(Point attrs) => attrs with { X = attrs.Y, Y = attrs.X };
+    static Position SwapXYOne(Position attrs) => attrs with { X = attrs.Y, Y = attrs.X };
 }

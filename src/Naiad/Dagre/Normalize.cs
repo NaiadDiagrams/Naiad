@@ -93,7 +93,7 @@ static class Normalize
             {
                 var w = graph.Successors(v)![0];
                 graph.RemoveNode(v);
-                // Point is a non-nullable struct, so coerce a not-yet-positioned dummy's coordinates to 0.
+                // Position is a non-nullable struct, so coerce a not-yet-positioned dummy's coordinates to 0.
                 // Callers assign coordinates before calling Undo, so this fallback is never observed.
                 origLabel.Points!.Add(new(node.X ?? 0, node.Y ?? 0));
                 if (node.Dummy == DummyKind.EdgeLabel)

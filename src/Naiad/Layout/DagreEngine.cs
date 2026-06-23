@@ -84,10 +84,7 @@ class DagreEngine : ILayoutEngine
             edge.Points.Clear();
             if (label.Points != null)
             {
-                foreach (var point in label.Points)
-                {
-                    edge.Points.Add(new(point.X, point.Y));
-                }
+                edge.Points.AddRange(label.Points);
             }
         }
 

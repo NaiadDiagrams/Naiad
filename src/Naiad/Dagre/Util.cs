@@ -68,7 +68,7 @@ static class Util
     }
 
     /// <summary>Where a line from <paramref name="point"/> toward the rect's center crosses the rect border.</summary>
-    public static Point IntersectRect(NodeLabel rect, Point point)
+    public static Position IntersectRect(NodeLabel rect, Position point)
     {
         var x = rect.X!.Value;
         var y = rect.Y!.Value;

@@ -244,7 +244,7 @@ sealed class Graph
         sucsMap.TryGetValue(v, out var sucsV) ? sucsV.Keys() : null;
 
     // Allocation-free neighbour/edge views for the hot order/position passes. The node must exist
-    // (those passes only ever pass real nodes), so unlike Successors/InEdges these never return null
+    // (those passes only ever pass real nodes), so unlike Successors/OutEdges these never return null
     // and must not be used while the graph is being mutated.
     public OrderedMap<int>.KeyEnumerable SuccessorsOf(string v) => sucsMap[v].EnumerateKeys();
 
@@ -393,21 +393,6 @@ sealed class Graph
         DecrementOrRemoveEntry(sucsMap[vStr], wStr);
         inMap[wStr].Remove(e);
         outMap[vStr].Remove(e);
-    }
-
-    public List<Edge>? InEdges(string v, string? w = null)
-    {
-        if (IsDirected)
-        {
-            if (inMap.TryGetValue(v, out var setV))
-            {
-                return FilterEdges(setV, v, w);
-            }
-
-            return null;
-        }
-
-        return NodeEdges(v, w);
     }
 
     public List<Edge>? OutEdges(string v, string? w = null)

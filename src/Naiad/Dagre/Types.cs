@@ -3,8 +3,6 @@ namespace Naiad.Dagre;
 /// <summary>An edge descriptor: {v, w, name}.</summary>
 sealed record Edge(string V, string W, string? Name = null);
 
-readonly record struct Point(double X, double Y);
-
 sealed class PartitionResult<T>
 {
     public List<T> Lhs = [];
@@ -53,7 +51,7 @@ sealed class SelfEdge
 /// <summary>Edge label carrying every property the layout may read or write on an edge.</summary>
 sealed class EdgeLabel
 {
-    public List<Point>? Points;
+    public List<Position>? Points;
     public double? Width;
     public double? Height;
     public int? Minlen;
