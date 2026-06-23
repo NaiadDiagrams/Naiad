@@ -1,4 +1,5 @@
 using DagreGraph = Naiad.Dagre.Graph;
+using DagreNodeLabel = Naiad.Dagre.NodeLabel;
 using DagreEdgeLabel = Naiad.Dagre.EdgeLabel;
 
 /// <summary>
@@ -8,6 +9,13 @@ using DagreEdgeLabel = Naiad.Dagre.EdgeLabel;
 /// are read back. This gives Mermaid-equivalent ranking, crossing minimisation, cluster nesting and
 /// shape-avoiding edge routing.
 /// </summary>
+/// <remarks>
+/// Read-back relies on a contract of <see cref="Naiad.Dagre.Layout.Run"/>: it writes the final layout
+/// (positions, cluster sizes, routed points) back onto the very label instances passed in here via
+/// <c>UpdateInputGraph</c>, rather than returning fresh labels. So we keep a reference to each label we
+/// hand to the graph and read results straight off it — no second keyed lookup. If a future re-sync with
+/// upstream dagre changes that to return new labels, this read-back must switch back to per-id lookups.
+/// </remarks>
 class DagreEngine : ILayoutEngine
 {
     public LayoutResult Layout(GraphDiagramBase diagram, LayoutOptions options)
@@ -26,28 +34,25 @@ class DagreEngine : ILayoutEngine
         });
         graph.SetDefaultEdgeLabel(new DagreEdgeLabel());
 
+        var nodeLabels = new List<(Node Node, DagreNodeLabel Label)>(diagram.Nodes.Count);
         foreach (var node in diagram.Nodes)
         {
-            graph.SetNode(node.Id, new() { Width = node.Width, Height = node.Height });
+            var label = new DagreNodeLabel { Width = node.Width, Height = node.Height };
+            graph.SetNode(node.Id, label);
+            nodeLabels.Add((node, label));
         }
 
+        var subgraphLabels = new List<(Subgraph Subgraph, DagreNodeLabel Label)>();
         foreach (var subgraph in diagram.Subgraphs)
         {
-            AddSubgraph(graph, subgraph);
+            AddSubgraph(graph, subgraph, subgraphLabels);
         }
 
-        var edgeNames = new List<string>(diagram.Edges.Count);
+        var edgeLabels = new List<(Edge Edge, DagreEdgeLabel Label)>(diagram.Edges.Count);
         for (var i = 0; i < diagram.Edges.Count; i++)
         {
             var edge = diagram.Edges[i];
-            var name = "e" + i.ToString(CultureInfo.InvariantCulture);
-            edgeNames.Add(name);
-
-            var label = new DagreEdgeLabel
-            {
-                Minlen = 1,
-                Weight = 1
-            };
+            var label = new DagreEdgeLabel();
             if (!string.IsNullOrEmpty(edge.Label))
             {
                 label.Width = edge.LabelWidth;
@@ -55,29 +60,27 @@ class DagreEngine : ILayoutEngine
                 label.Labelpos = Naiad.Dagre.LabelPos.Center;
             }
 
-            graph.SetEdge(edge.SourceId, edge.TargetId, label, name);
+            // A unique per-edge name keeps parallel edges (same source/target) distinct in the multigraph.
+            graph.SetEdge(edge.SourceId, edge.TargetId, label, "e" + i.ToString(CultureInfo.InvariantCulture));
+            edgeLabels.Add((edge, label));
         }
 
         Naiad.Dagre.Layout.Run(graph);
 
-        foreach (var node in diagram.Nodes)
+        foreach (var (node, label) in nodeLabels)
         {
-            var laidOut = graph.NodeLabel(node.Id);
-            node.Position = new(laidOut.X ?? 0, laidOut.Y ?? 0);
+            node.Position = new(label.X ?? 0, label.Y ?? 0);
         }
 
-        foreach (var subgraph in Flatten(diagram.Subgraphs))
+        foreach (var (subgraph, label) in subgraphLabels)
         {
-            var laidOut = graph.NodeLabel(subgraph.Id);
-            subgraph.Position = new(laidOut.X ?? 0, laidOut.Y ?? 0);
-            subgraph.Width = laidOut.Width;
-            subgraph.Height = laidOut.Height;
+            subgraph.Position = new(label.X ?? 0, label.Y ?? 0);
+            subgraph.Width = label.Width;
+            subgraph.Height = label.Height;
         }
 
-        for (var i = 0; i < diagram.Edges.Count; i++)
+        foreach (var (edge, label) in edgeLabels)
         {
-            var edge = diagram.Edges[i];
-            var label = graph.FindEdgeLabel(edge.SourceId, edge.TargetId, edgeNames[i]);
             edge.Points.Clear();
             if (label.Points != null)
             {
@@ -96,9 +99,12 @@ class DagreEngine : ILayoutEngine
         };
     }
 
-    static void AddSubgraph(DagreGraph graph, Subgraph subgraph)
+    static void AddSubgraph(DagreGraph graph, Subgraph subgraph, List<(Subgraph, DagreNodeLabel)> collected)
     {
-        graph.SetNode(subgraph.Id, new());
+        var label = new DagreNodeLabel();
+        graph.SetNode(subgraph.Id, label);
+        collected.Add((subgraph, label));
+
         foreach (var nodeId in subgraph.NodeIds)
         {
             graph.SetParent(nodeId, subgraph.Id);
@@ -106,20 +112,8 @@ class DagreEngine : ILayoutEngine
 
         foreach (var nested in subgraph.NestedSubgraphs)
         {
-            AddSubgraph(graph, nested);
+            AddSubgraph(graph, nested, collected);
             graph.SetParent(nested.Id, subgraph.Id);
-        }
-    }
-
-    static IEnumerable<Subgraph> Flatten(IEnumerable<Subgraph> subgraphs)
-    {
-        foreach (var subgraph in subgraphs)
-        {
-            yield return subgraph;
-            foreach (var nested in Flatten(subgraph.NestedSubgraphs))
-            {
-                yield return nested;
-            }
         }
     }
 }

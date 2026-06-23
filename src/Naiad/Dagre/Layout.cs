@@ -317,9 +317,7 @@ static class Layout
             for (var i = 0; i < points.Count; i++)
             {
                 var p = points[i];
-                p.X -= minX;
-                p.Y -= minY;
-                points[i] = p;
+                points[i] = p with { X = p.X - minX, Y = p.Y - minY };
             }
 
             if (edge.X.HasValue)
