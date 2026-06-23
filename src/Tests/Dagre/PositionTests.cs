@@ -5,13 +5,13 @@ public class PositionTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph(compound: true)
-            .SetGraph(new()
-            {
-                RankSeparation = 50,
-                NodeSeparation = 50,
-                EdgeSeparation = 10
-            });
+        graph = new Graph(compound: true);
+        graph.SetGraph(new()
+        {
+            RankSeparation = 50,
+            NodeSeparation = 50,
+            EdgeSeparation = 10
+        });
     }
 
     [Test]

@@ -220,10 +220,10 @@ public class UtilTests
         [Test]
         public async Task RemovesBorderRanksWithoutAnyNodes()
         {
-            var graph = new Graph()
-                .SetGraph(new() { NodeRankFactor = 4 })
-                .SetNode("a", new() { Rank = 0 })
-                .SetNode("b", new() { Rank = 4 });
+            var graph = new Graph();
+            graph.SetGraph(new() {NodeRankFactor = 4});
+            graph.SetNode("a", new() {Rank = 0});
+            graph.SetNode("b", new() {Rank = 4});
             Util.RemoveEmptyRanks(graph);
             await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
             await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(1);
@@ -232,10 +232,10 @@ public class UtilTests
         [Test]
         public async Task DoesNotRemoveNonBorderRanks()
         {
-            var graph = new Graph()
-                .SetGraph(new() { NodeRankFactor = 4 })
-                .SetNode("a", new() { Rank = 0 })
-                .SetNode("b", new() { Rank = 8 });
+            var graph = new Graph();
+            graph.SetGraph(new() {NodeRankFactor = 4});
+            graph.SetNode("a", new() {Rank = 0});
+            graph.SetNode("b", new() {Rank = 8});
             Util.RemoveEmptyRanks(graph);
             await Assert.That(graph.NodeLabel("a").Rank).IsEqualTo(0);
             await Assert.That(graph.NodeLabel("b").Rank).IsEqualTo(2);
@@ -244,10 +244,10 @@ public class UtilTests
         [Test]
         public async Task HandlesParentsWithUndefinedRanks()
         {
-            var graph = new Graph(compound: true)
-                .SetGraph(new() { NodeRankFactor = 3 })
-                .SetNode("a", new() { Rank = 0 })
-                .SetNode("b", new() { Rank = 6 });
+            var graph = new Graph(compound: true);
+            graph.SetGraph(new() {NodeRankFactor = 3});
+            graph.SetNode("a", new() {Rank = 0});
+            graph.SetNode("b", new() {Rank = 6});
             graph.SetNode("sg", new());
             graph.SetParent("a", "sg");
             Util.RemoveEmptyRanks(graph);

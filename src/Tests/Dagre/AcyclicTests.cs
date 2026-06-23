@@ -1,14 +1,17 @@
 public class AcyclicTests
 {
-    static Graph NewGraph() =>
-        new Graph(multigraph: true)
-            .SetGraph(new())
-            .SetDefaultEdgeLabel((_, _, _) =>
-                new()
-                {
-                    Minlen = 1,
-                    Weight = 1
-                });
+    static Graph NewGraph()
+    {
+        var graph = new Graph(multigraph: true);
+        graph.SetGraph(new());
+        graph.SetDefaultEdgeLabel((_, _, _) =>
+            new()
+            {
+                Minlen = 1,
+                Weight = 1
+            });
+        return graph;
+    }
 
     // === run ===
 

@@ -57,11 +57,7 @@ sealed class Graph
 
     /* === Graph functions ========= */
 
-    public Graph SetGraph(GraphLabel? value)
-    {
-        label = value;
-        return this;
-    }
+    public void SetGraph(GraphLabel? value) => label = value;
 
     public GraphLabel Label => label!;
 

@@ -1,9 +1,12 @@
 public class SmokeTest
 {
-    static Graph NewGraph() =>
-        new Graph(directed: true, multigraph: true, compound: true)
-            .SetGraph(new())
-            .SetDefaultEdgeLabel(new EdgeLabel());
+    static Graph NewGraph()
+    {
+        var graph = new Graph(directed: true, multigraph: true, compound: true);
+        graph.SetGraph(new());
+        graph.SetDefaultEdgeLabel(new EdgeLabel());
+        return graph;
+    }
 
     [Test]
     public async Task LaysOutASimpleChainTopToBottom()

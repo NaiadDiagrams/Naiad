@@ -3,10 +3,12 @@ public class NestingGraphTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph(compound: true)
-            .SetGraph(new())
-            .SetDefaultNodeLabel(_ => new());
+    public void Setup()
+    {
+        graph = new(compound: true);
+        graph.SetGraph(new());
+        graph .SetDefaultNodeLabel(_ => new());
+    }
 
     // ----- run -----
 

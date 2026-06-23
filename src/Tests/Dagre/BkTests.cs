@@ -55,7 +55,8 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+            graph = new();
+            graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
             graph.SetDefaultEdgeLabel(new EdgeLabel());
             graph.SetNode("a", new() {Rank = 0, Order = 0});
             graph.SetNode("b", new() {Rank = 0, Order = 1});
@@ -157,7 +158,8 @@ public class BkTests
         [Before(Test)]
         public void Setup()
         {
-            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+            graph = new Graph();
+            graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
             graph.SetDefaultEdgeLabel(new EdgeLabel());
             graph.SetNode("a", new() {Rank = 0, Order = 0});
             graph.SetNode("b", new() {Rank = 0, Order = 1});
@@ -242,8 +244,11 @@ public class BkTests
         Graph graph = null!;
 
         [Before(Test)]
-        public void Setup() =>
-            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        public void Setup()
+        {
+            graph = new();
+            graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        }
 
         [Test]
         public async Task AlignsWithItselfIfTheNodeHasNoAdjacencies()
@@ -396,8 +401,11 @@ public class BkTests
         Graph graph = null!;
 
         [Before(Test)]
-        public void Setup() =>
-            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        public void Setup()
+        {
+            graph = new Graph();
+            graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        }
 
         [Test]
         public async Task PlacesTheCenterOfASingleNodeGraphAtOrigin()
@@ -655,8 +663,11 @@ public class BkTests
         Graph graph = null!;
 
         [Before(Test)]
-        public void Setup() =>
-            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        public void Setup()
+        {
+            graph = new();
+            graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        }
 
         [Test]
         public Task FindsTheAlignmentWithTheSmallestWidth()
@@ -752,8 +763,11 @@ public class BkTests
         Graph graph = null!;
 
         [Before(Test)]
-        public void Setup() =>
-            graph = new Graph().SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        public void Setup()
+        {
+            graph = new Graph();
+            graph.SetGraph(new() {NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50});
+        }
 
         [Test]
         public Task PositionsASingleNodeAtOrigin()

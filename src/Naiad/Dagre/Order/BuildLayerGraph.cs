@@ -7,13 +7,13 @@ static class BuildLayerGraph
         nodesWithRank ??= graph.Nodes();
 
         var root = CreateRootNode(graph);
-        var result = new Graph(compound: true)
-            .SetGraph(
-                new()
-                {
-                    Root = root
-                })
-            .SetDefaultNodeLabel(_ => graph.TryGetNodeLabel(_, out var lbl) ? lbl : null!);
+        var result = new Graph(compound: true);
+        result.SetGraph(
+            new()
+            {
+                Root = root
+            });
+        result.SetDefaultNodeLabel(_ => graph.TryGetNodeLabel(_, out var lbl) ? lbl : null!);
 
         foreach (var v in nodesWithRank)
         {

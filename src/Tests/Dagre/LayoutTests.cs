@@ -5,11 +5,13 @@ public class LayoutTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
+    public void Setup()
+    {
         // new Graph({multigraph: true, compound: true}).setGraph({}).setDefaultEdgeLabel(() => ({}));
-        graph = new Graph(directed: true, multigraph: true, compound: true)
-            .SetGraph(new())
-            .SetDefaultEdgeLabel((_, _, _) => new());
+        graph = new Graph(directed: true, multigraph: true, compound: true);
+        graph.SetGraph(new());
+        graph.SetDefaultEdgeLabel((_, _, _) => new());
+    }
 
     [Test]
     public async Task CanLayoutASingleNode()

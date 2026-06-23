@@ -6,10 +6,10 @@ public class RankTests
     [Before(Test)]
     public void Setup()
     {
-        graph = new Graph()
-            .SetGraph(new())
-            .SetDefaultNodeLabel(_ => new())
-            .SetDefaultEdgeLabel((_, _, _) => new() { Minlen = 1, Weight = 1 });
+        graph = new Graph();
+        graph.SetGraph(new());
+        graph.SetDefaultNodeLabel(_ => new());
+        graph.SetDefaultEdgeLabel((_, _, _) => new() {Minlen = 1, Weight = 1});
         graph
             .SetPath(["a", "b", "c", "d", "h"])
             .SetPath(["a", "e", "graph", "h"])
@@ -31,7 +31,8 @@ public class RankTests
     [Test]
     public async Task CanRankASingleNodeGraph()
     {
-        var single = new Graph().SetGraph(new());
+        var single = new Graph();
+        single.SetGraph(new());
         single.SetNode("a", new());
         Rank.Run(single);
         await Assert.That(single.NodeLabel("a").Rank).IsEqualTo(0);

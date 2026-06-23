@@ -3,8 +3,11 @@ public class NormalizeTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph(multigraph: true, compound: true).SetGraph(new());
+    public void Setup()
+    {
+        graph = new(multigraph: true, compound: true);
+        graph.SetGraph(new());
+    }
 
     static (string V, string W) IncidentNodes(Edge edge) => (edge.V, edge.W);
 

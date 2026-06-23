@@ -3,8 +3,11 @@ public class ParentDummyChainsTests
     Graph graph = null!;
 
     [Before(Test)]
-    public void Setup() =>
-        graph = new Graph(compound: true).SetGraph(new());
+    public void Setup()
+    {
+        graph = new Graph(compound: true);
+        graph.SetGraph(new());
+    }
 
     [Test]
     public async Task DoesNotSetAParentIfBothTheTailAndHeadHaveNoParent()
