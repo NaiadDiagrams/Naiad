@@ -354,8 +354,15 @@ static class SvgRasterizer
             }
         }
 
-        static double XmlNum(XElement element, string name) =>
-            double.TryParse((string?) element.Attribute(name), NumberStyles.Float, CultureInfo.InvariantCulture, out var value) ? value : 0;
+        static double XmlNum(XElement element, string name)
+        {
+            if (double.TryParse((string?) element.Attribute(name), NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            {
+                return value;
+            }
+
+            return 0;
+        }
 
         static List<Vector2> XmlPoints(XElement element)
         {
@@ -381,13 +388,15 @@ static class SvgRasterizer
 
         void DrawMarkers(SvgPath path, IReadOnlyList<SubPath> subpaths, Matrix3x2 ctm, List<ElementMatch> chain)
         {
-            if (path.MarkerStart is { } start && MarkerLookup(start) is { } startMarker &&
+            if (path.MarkerStart is { } start &&
+                MarkerLookup(start) is { } startMarker &&
                 EndpointDirection(subpaths, atStart: true) is var (startPoint, startAngle))
             {
                 DrawMarker(startMarker, startPoint, startAngle, ctm, chain);
             }
 
-            if (path.MarkerEnd is { } end && MarkerLookup(end) is { } endMarker &&
+            if (path.MarkerEnd is { } end &&
+                MarkerLookup(end) is { } endMarker &&
                 EndpointDirection(subpaths, atStart: false) is var (endPoint, endAngle))
             {
                 DrawMarker(endMarker, endPoint, endAngle, ctm, chain);
@@ -470,7 +479,8 @@ static class SvgRasterizer
         SvgMarker? MarkerLookup(string reference)
         {
             var id = ExtractUrlId(reference);
-            if (id != null && markers.TryGetValue(id, out var marker))
+            if (id != null &&
+                markers.TryGetValue(id, out var marker))
             {
                 return marker;
             }
@@ -549,7 +559,12 @@ static class SvgRasterizer
             static int Compare(MatchedDeclaration a, MatchedDeclaration b)
             {
                 var bySpecificity = a.Specificity.CompareTo(b.Specificity);
-                return bySpecificity != 0 ? bySpecificity : a.Order.CompareTo(b.Order);
+                if (bySpecificity == 0)
+                {
+                    return a.Order.CompareTo(b.Order);
+                }
+
+                return bySpecificity;
             }
         }
 

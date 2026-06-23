@@ -22,7 +22,7 @@ static class SortSubgraph
         var barycenters = Barycenter.Run(graph, movable);
         foreach (var entry in barycenters)
         {
-            if (graph.Children(entry.V).Count == 0)
+            if (graph.ChildCount(entry.V) == 0)
             {
                 continue;
             }

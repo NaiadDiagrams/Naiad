@@ -50,7 +50,7 @@ static class Util
         var simplified = new Graph(multigraph: graph.IsMultigraph).SetGraph(graph.Label);
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (graph.Children(v).Count == 0)
+            if (graph.ChildCount(v) == 0)
             {
                 // Copy the label through verbatim — a node may legitimately have none (null).
                 simplified.SetNode(v, node);

@@ -61,7 +61,7 @@ static class Layout
                 inputLabel.Order = layoutLabel.Order;
                 inputLabel.Rank = layoutLabel.Rank;
 
-                if (layoutGraph.Children(v).Count != 0)
+                if (layoutGraph.ChildCount(v) != 0)
                 {
                     inputLabel.Width = layoutLabel.Width;
                     inputLabel.Height = layoutLabel.Height;
@@ -380,7 +380,7 @@ static class Layout
     {
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (graph.Children(v).Count != 0)
+            if (graph.ChildCount(v) != 0)
             {
                 var t = graph.NodeLabel(node.BorderTop!);
                 var b = graph.NodeLabel(node.BorderBottom!);

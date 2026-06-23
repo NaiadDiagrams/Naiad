@@ -5,7 +5,7 @@ static class InitOrder
     public static List<List<string>> Run(Graph graph)
     {
         var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
-        var simpleNodes = graph.Nodes().Where(_ => graph.Children(_).Count == 0).ToList();
+        var simpleNodes = graph.Nodes().Where(_ => graph.ChildCount(_) == 0).ToList();
         var simpleNodesRanks = simpleNodes.Select(_ => (double) graph.NodeLabel(_).Rank!.Value).ToList();
         var maxRank = (int) Util.ApplyMax(simpleNodesRanks);
         var layers = Util.Range(maxRank + 1).Select(_ => new List<string>()).ToList();

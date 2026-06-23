@@ -237,6 +237,18 @@ sealed class Graph
         return [];
     }
 
+    // The number of children of v without materialising the key list that Children allocates — for the hot
+    // leaf checks (SortSubgraph, AsNonCompoundGraph, InitOrder, copy-out) that only need the count.
+    public int ChildCount(string v = GraphNode)
+    {
+        if (IsCompound)
+        {
+            return childrenMap!.TryGetValue(v, out var children) ? children.Count : 0;
+        }
+
+        return v == GraphNode ? NodeCount : 0;
+    }
+
     public List<string>? Predecessors(string v) =>
         predsMap.TryGetValue(v, out var predsV) ? predsV.Keys() : null;
 
