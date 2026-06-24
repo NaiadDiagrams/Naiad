@@ -1,5 +1,3 @@
-using Direction = Naiad.Models.Direction;
-
 // Regression guard: dagre's output must be independent of the global dummy-node id counter (as real dagre
 // is), so a layout is reproducible no matter how many layouts ran before it in the same process.
 

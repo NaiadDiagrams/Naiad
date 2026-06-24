@@ -1,4 +1,4 @@
-namespace Naiad.Models;
+namespace Naiad;
 
 /// <summary>
 /// Per-element visual overrides resolved from <c>classDef</c>/<c>class</c>/<c>style</c>

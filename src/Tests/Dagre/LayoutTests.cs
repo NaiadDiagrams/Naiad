@@ -1,5 +1,3 @@
-using Direction = Naiad.Models.Direction;
-
 public class LayoutTests
 {
     Graph graph = null!;
@@ -395,7 +393,7 @@ public class LayoutTests
         }
     }
 
-    static async Task AssertPoints(List<Naiad.Models.Position> actual, params (double X, double Y)[] expected)
+    static async Task AssertPoints(List<Position> actual, params (double X, double Y)[] expected)
     {
         await Assert.That(actual.Count).IsEqualTo(expected.Length);
         for (var i = 0; i < expected.Length; i++)

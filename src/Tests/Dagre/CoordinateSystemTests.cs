@@ -1,5 +1,3 @@
-using Direction = Naiad.Models.Direction;
-
 public class CoordinateSystemTests
 {
     public class AdjustTests
@@ -10,13 +8,23 @@ public class CoordinateSystemTests
         public void Setup()
         {
             graph = new();
-            graph.SetNode("a", new() { Width = 100, Height = 200 });
+            graph.SetNode(
+                "a",
+                new()
+                {
+                    Width = 100,
+                    Height = 200
+                });
         }
 
         [Test]
         public async Task DoesNothingToNodeDimensionsWithRankdirTb()
         {
-            graph.SetGraph(new() { Rankdir = Direction.TopToBottom });
+            graph.SetGraph(
+                new()
+                {
+                    Rankdir = Direction.TopToBottom
+                });
             CoordinateSystem.Adjust(graph);
             var a = graph.NodeLabel("a");
             await Assert.That(a.Width).IsEqualTo(100);

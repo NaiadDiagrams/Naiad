@@ -1,4 +1,4 @@
-﻿namespace Naiad.Models;
+﻿namespace Naiad;
 
 public class Subgraph
 {

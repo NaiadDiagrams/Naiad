@@ -31,7 +31,6 @@ global using Naiad.Diagrams.Timeline;
 global using Naiad.Diagrams.Treemap;
 global using Naiad.Diagrams.UserJourney;
 global using Naiad.Diagrams.XYChart;
-global using Naiad.Models;
 global using Pidgin;
 global using static Pidgin.Parser;
 global using static Pidgin.Parser<char>;

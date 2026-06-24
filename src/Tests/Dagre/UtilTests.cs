@@ -96,7 +96,7 @@ public class UtilTests
         static NodeLabel Rect(double x, double y, double width, double height) =>
             new() { X = x, Y = y, Width = width, Height = height };
 
-        static async Task ExpectIntersects(NodeLabel rect, Naiad.Models.Position point)
+        static async Task ExpectIntersects(NodeLabel rect, Position point)
         {
             var cross = Util.IntersectRect(rect, point);
             if (cross.X != point.X)
@@ -107,7 +107,7 @@ public class UtilTests
             }
         }
 
-        static async Task ExpectTouchesBorder(NodeLabel rect, Naiad.Models.Position point)
+        static async Task ExpectTouchesBorder(NodeLabel rect, Position point)
         {
             var cross = Util.IntersectRect(rect, point);
             if (Math.Abs(rect.X!.Value - cross.X) != rect.Width / 2)

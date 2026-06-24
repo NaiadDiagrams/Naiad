@@ -1,5 +1,4 @@
 using Naiad;
-using Naiad.Models;
 
 namespace Benchmarks;
 
