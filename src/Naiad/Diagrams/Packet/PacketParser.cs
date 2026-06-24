@@ -1,61 +1,82 @@
 class PacketParser : IDiagramParser<PacketModel>
 {
-    static Parser<char, string> quotedLabel =
-        Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+    static readonly Parser<char, string> quotedLabel;
 
     // Unquoted label (rest of line)
-    static Parser<char, string> unquotedLabel =
-        Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()
-            .Select(_ => _.Trim());
+    static readonly Parser<char, string> unquotedLabel;
 
     // Label (quoted or unquoted)
-    static Parser<char, string> labelParser =
-        quotedLabel.Or(unquotedLabel);
+    static readonly Parser<char, string> labelParser;
 
     // "+bits": a width relative to where the previous field ended.
-    static Parser<char, RawField> relativeSpec =
-        from _ in Char('+')
-        from bits in Digit.AtLeastOnceString().Select(int.Parse)
-        select new RawField(null, null, bits, "");
+    static readonly Parser<char, RawField> relativeSpec;
 
     // "start" (single bit) or "start-end" (explicit range).
-    static Parser<char, RawField> explicitSpec =
-        from start in Digit.AtLeastOnceString().Select(int.Parse)
-        from end in Try(Char('-').Then(Digit.AtLeastOnceString().Select(int.Parse))).Optional()
-        select new RawField(start, end.HasValue ? end.Value : null, null, "");
+    static readonly Parser<char, RawField> explicitSpec;
 
     // Field: a bit spec ("start", "start-end", or "+bits") then ": label". Mermaid accepts all three;
     // absolute positions and contiguity are resolved in BuildModel since "+bits" depends on order.
-    static Parser<char, RawField> fieldParser =
-        from _ in CommonParsers.InlineWhitespace
-        from spec in relativeSpec.Or(explicitSpec)
-        from __ in Char(':')
-        from ___ in CommonParsers.InlineWhitespace
-        from label in labelParser
-        from ____ in CommonParsers.LineEnd
-        select spec with
-        {
-            Label = label
-        };
+    static readonly Parser<char, RawField> fieldParser;
 
     // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
-        Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-            .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+    static readonly Parser<char, Unit> skipLine;
 
-    static Parser<char, RawField?> ContentItem =>
-        OneOf(
-            Try(fieldParser.Select<RawField?>(_ => _)),
-            skipLine.ThenReturn<RawField?>(null)
-        );
+    static readonly Parser<char, RawField?> ContentItem;
 
-    public static Parser<char, PacketModel> Parser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in OneOf(CIString("packet-beta"), CIString("packet"))
-        from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
-        from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+    static readonly Parser<char, PacketModel> Parser;
+
+    static PacketParser()
+    {
+        quotedLabel =
+            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+
+        unquotedLabel =
+            Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()
+                .Select(_ => _.Trim());
+
+        labelParser =
+            quotedLabel.Or(unquotedLabel);
+
+        relativeSpec =
+            from _ in Char('+')
+            from bits in Digit.AtLeastOnceString().Select(int.Parse)
+            select new RawField(null, null, bits, "");
+
+        explicitSpec =
+            from start in Digit.AtLeastOnceString().Select(int.Parse)
+            from end in Try(Char('-').Then(Digit.AtLeastOnceString().Select(int.Parse))).Optional()
+            select new RawField(start, end.HasValue ? end.Value : null, null, "");
+
+        fieldParser =
+            from _ in CommonParsers.InlineWhitespace
+            from spec in relativeSpec.Or(explicitSpec)
+            from __ in Char(':')
+            from ___ in CommonParsers.InlineWhitespace
+            from label in labelParser
+            from ____ in CommonParsers.LineEnd
+            select spec with
+            {
+                Label = label
+            };
+
+        skipLine =
+            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
+                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+
+        ContentItem =
+            OneOf(
+                Try(fieldParser.Select<RawField?>(_ => _)),
+                skipLine.ThenReturn<RawField?>(null)
+            );
+
+        Parser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in OneOf(CIString("packet-beta"), CIString("packet"))
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            from result in ContentItem.ManyThen(End)
+            select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+    }
 
     // Resolve each raw field to absolute bit positions and validate the sequence the way Mermaid does:
     // fields must tile the packet contiguously from bit 0 with no gaps, overlaps, or reversed ranges.

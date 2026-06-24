@@ -1,55 +1,72 @@
 class TreemapParser : IDiagramParser<TreemapModel>
 {
-    // Quoted string: "text"
-    static Parser<char, string> quotedString =
-        Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
-
-    // Number
-    static Parser<char, double> number = CommonParsers.SignedDecimal;
-
-    // CSS class: :::className
-    static Parser<char, string> cssClass =
-        String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
-
     // Node line
     internal record NodeLine(int Indent, string Name, double? Value, string? CssClass);
 
-    public static Parser<char, NodeLine> nodeLineParser =
-        from indent in CommonParsers.Indentation
-        from name in quotedString
-        from value in (
-            from _ in CommonParsers.InlineWhitespace
-            from __ in Char(':')
-            from ___ in CommonParsers.InlineWhitespace
-            from v in number
-            select v
-        ).Optional()
-        from cssClass in (
-            from _ in CommonParsers.InlineWhitespace
-            from cls in cssClass
-            select cls
-        ).Optional()
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CommonParsers.LineEnd
-        select new NodeLine(indent, name, value.GetValueOrDefault(), cssClass.GetValueOrDefault());
+    // Quoted string: "text"
+    static readonly Parser<char, string> quotedString;
+
+    // Number
+    static readonly Parser<char, double> number;
+
+    // CSS class: :::className
+    static readonly Parser<char, string> cssClass;
+
+    static readonly Parser<char, NodeLine> nodeLineParser;
 
     // Skip line
-    public static Parser<char, Unit> skipLine =
-        Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-            .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+    static readonly Parser<char, Unit> skipLine;
 
     // Content item
-    public static Parser<char, NodeLine?> ContentItem =>
-        Try(nodeLineParser.Select<NodeLine?>(_ => _))
-            .Or(skipLine.ThenReturn<NodeLine?>(null));
+    static readonly Parser<char, NodeLine?> ContentItem;
 
-    public static Parser<char, TreemapModel> Parser =
-        from whitespance in CommonParsers.InlineWhitespace
-        from ciString in CIString("treemap-beta")
-        from innerWhitespace in CommonParsers.InlineWhitespace
-        from lineEnd in CommonParsers.LineEnd
-        from lines in ContentItem.ManyThen(End)
-        select BuildModel(lines.Item1.Where(_ => _ != null).ToList());
+    static readonly Parser<char, TreemapModel> Parser;
+
+    static TreemapParser()
+    {
+        quotedString =
+            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+
+        number = CommonParsers.SignedDecimal;
+
+        cssClass =
+            String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
+
+        nodeLineParser =
+            from indent in CommonParsers.Indentation
+            from name in quotedString
+            from value in (
+                from _ in CommonParsers.InlineWhitespace
+                from __ in Char(':')
+                from ___ in CommonParsers.InlineWhitespace
+                from v in number
+                select v
+            ).Optional()
+            from cssClass in (
+                from _ in CommonParsers.InlineWhitespace
+                from cls in cssClass
+                select cls
+            ).Optional()
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CommonParsers.LineEnd
+            select new NodeLine(indent, name, value.GetValueOrDefault(), cssClass.GetValueOrDefault());
+
+        skipLine =
+            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
+                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+
+        ContentItem =
+            Try(nodeLineParser.Select<NodeLine?>(_ => _))
+                .Or(skipLine.ThenReturn<NodeLine?>(null));
+
+        Parser =
+            from whitespance in CommonParsers.InlineWhitespace
+            from ciString in CIString("treemap-beta")
+            from innerWhitespace in CommonParsers.InlineWhitespace
+            from lineEnd in CommonParsers.LineEnd
+            from lines in ContentItem.ManyThen(End)
+            select BuildModel(lines.Item1.Where(_ => _ != null).ToList());
+    }
 
     static TreemapModel BuildModel(List<NodeLine> lines)
     {
