@@ -6,7 +6,7 @@
 /// shape-avoiding edge routing.
 /// </summary>
 /// <remarks>
-/// Read-back relies on a contract of <see cref="Naiad.Dagre.Layout.Run"/>: it writes the final layout
+/// Read-back relies on a contract of <see cref="Layout.Run"/>: it writes the final layout
 /// (positions, cluster sizes, routed points) back onto the very label instances passed in here via
 /// <c>UpdateInputGraph</c>, rather than returning fresh labels. So we keep a reference to each label we
 /// hand to the graph and read results straight off it — no second keyed lookup. If a future re-sync with

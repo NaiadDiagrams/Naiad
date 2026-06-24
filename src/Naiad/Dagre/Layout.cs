@@ -15,7 +15,7 @@ static class Layout
         RemoveSelfEdges(graph);
         Acyclic.Run(graph);
         NestingGraph.Run(graph);
-        Rank.Run(Util.AsNonCompoundGraph(graph));
+        NetworkSimplex.Run(Util.AsNonCompoundGraph(graph));
         InjectEdgeLabelProxies(graph);
         Util.RemoveEmptyRanks(graph);
         NestingGraph.Cleanup(graph);

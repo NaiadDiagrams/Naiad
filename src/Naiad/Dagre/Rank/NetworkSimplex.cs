@@ -129,15 +129,7 @@ static class NetworkSimplex
 
         label.Low = low;
         label.Lim = nextLim++;
-        if (parent == null)
-        {
-            // TODO should be able to remove this when we incrementally update low lim
-            label.Parent = null;
-        }
-        else
-        {
-            label.Parent = parent;
-        }
+        label.Parent = parent;
 
         return nextLim;
     }
@@ -188,8 +180,8 @@ static class NetworkSimplex
         var accSlack = 0;
         foreach (var candidate in graph.EnumerateEdges())
         {
-            if (flip == IsDescendant(tree, tree.NodeLabel(candidate.V), tailLabel) &&
-                flip != IsDescendant(tree, tree.NodeLabel(candidate.W), tailLabel))
+            if (flip == IsDescendant(tree.NodeLabel(candidate.V), tailLabel) &&
+                flip != IsDescendant(tree.NodeLabel(candidate.W), tailLabel))
             {
                 var slack = RankUtil.Slack(graph, candidate);
                 if (acc == null || slack < accSlack)
@@ -246,13 +238,13 @@ static class NetworkSimplex
     /*
      * Returns true if the edge is in the tree.
      */
-    public static bool IsTreeEdge(Graph tree, string u, string v) =>
+    static bool IsTreeEdge(Graph tree, string u, string v) =>
         tree.HasEdge(u, v);
 
     /*
      * Returns true if the specified node is descendant of the root node per the
      * assigned low and lim attributes in the tree.
      */
-    public static bool IsDescendant(Graph tree, NodeLabel vLabel, NodeLabel rootLabel) =>
+    static bool IsDescendant(NodeLabel vLabel, NodeLabel rootLabel) =>
         rootLabel.Low!.Value <= vLabel.Lim!.Value && vLabel.Lim!.Value <= rootLabel.Lim!.Value;
 }

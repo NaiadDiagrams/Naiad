@@ -74,30 +74,4 @@ public class OrderTests
         var layering = Util.BuildLayerMatrix(graph);
         await Assert.That(CrossCount.Run(graph, layering)).IsLessThanOrEqualTo(1);
     }
-
-    [Test]
-    public async Task CanSkipTheOptimalOrdering()
-    {
-        graph.SetNode("a", new() { Rank = 1 });
-        foreach (var v in new[] { "b", "d" })
-        {
-            graph.SetNode(v, new() { Rank = 2 });
-        }
-
-        foreach (var v in new[] { "c", "e" })
-        {
-            graph.SetNode(v, new() { Rank = 3 });
-        }
-
-        graph.SetPath(["a", "b", "c"]);
-        graph.SetPath(["a", "d"]);
-        graph.SetEdge("b", "e");
-        graph.SetEdge("d", "c");
-
-        var opts = new OrderOptions { DisableOptimalOrderHeuristic = true };
-
-        Order.Run(graph, opts);
-        var layering = Util.BuildLayerMatrix(graph);
-        await Assert.That(CrossCount.Run(graph, layering)).IsEqualTo(1);
-    }
 }

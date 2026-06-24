@@ -1,20 +1,13 @@
 static class Order
 {
-    public static void Run(Graph graph, OrderOptions? opts = null)
+    public static void Run(Graph graph)
     {
-        opts ??= new();
-
         var maxRank = (int) Util.MaxRank(graph);
         var downLayerGraphs = BuildLayerGraphs(graph, Util.Range(1, maxRank + 1), "inEdges");
         var upLayerGraphs = BuildLayerGraphs(graph, Util.Range(maxRank - 1, -1, -1), "outEdges");
 
         var layering = InitOrder.Run(graph);
         AssignOrder(graph, layering);
-
-        if (opts.DisableOptimalOrderHeuristic == true)
-        {
-            return;
-        }
 
         var bestCC = double.PositiveInfinity;
         List<List<string>>? best = null;

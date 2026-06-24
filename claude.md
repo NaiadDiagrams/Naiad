@@ -35,7 +35,7 @@ dotnet test src --configuration Release -- --treenode-filter "/*/*/PngRegenerato
 
 **PNG rendering:** Two optional packages render to PNG: `Naiad.Skia` (SkiaSharp) and `Naiad.ImageSharp` (SixLabors.ImageSharp). Both share one pipeline in `src/Naiad/Rendering/Raster/`: `SvgRasterizer` walks an `SvgDocument` (resolving the CSS cascade via `Stylesheet`/`ComputedStyle`, composing transforms, flattening path/shape geometry to polyline `SubPath`s with `PathFlattener`, drawing markers, and laying out `<text>`/`<foreignObject>` labels) and paints into an internal `IRenderSurface`. Each backend is just a thin `IRenderSurface` over its rasterizer + a public `SkiaRenderer`/`ImageSharpRenderer` `RenderPng(...)` facade. The seam types are `internal`, exposed to the backends (and tests) via `InternalsVisibleTo`; all three assemblies sign with `src/key.snk`. There is intentionally no built-in (dependency-free) rasterizer. Rasterization is controlled by `RenderOptions.Png` (`Scale`, `Background`).
 
-**Layout engine:** `DagreEngine` in `src/Naiad/Layout/` (a faithful C# port of dagre under `src/Naiad/Dagre/`) implements Sugiyama-style graph layout (used by Flowchart and similar graph-based diagrams).
+**Layout engine:** `DagreEngine` in `src/Naiad/Layout/` (a C# implementation of dagre under `src/Naiad/Dagre/`) implements Sugiyama-style graph layout (used by Flowchart and similar graph-based diagrams).
 
 **Key directories:**
 - `src/Naiad/Diagrams/` — one subfolder per diagram type, each containing parser and renderer

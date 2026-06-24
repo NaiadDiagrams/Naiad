@@ -19,7 +19,7 @@ public class RankTests
     [Test]
     public async Task RespectsTheMinlenAttribute()
     {
-        Rank.Run(graph);
+        NetworkSimplex.Run(graph);
         foreach (var e in graph.Edges())
         {
             var vRank = graph.NodeLabel(e.V).Rank!.Value;
@@ -34,7 +34,7 @@ public class RankTests
         var single = new Graph();
         single.SetGraph(new());
         single.SetNode("a", new());
-        Rank.Run(single);
+        NetworkSimplex.Run(single);
         await Assert.That(single.NodeLabel("a").Rank).IsEqualTo(0);
     }
 }
