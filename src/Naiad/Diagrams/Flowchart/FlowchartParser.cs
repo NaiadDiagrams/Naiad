@@ -1,6 +1,6 @@
 class FlowchartParser : IDiagramParser<FlowchartModel>
 {
-    static readonly Parser<char, FlowchartModel> Parser;
+    static Parser<char, FlowchartModel> parser;
 
     static FlowchartParser()
     {
@@ -185,7 +185,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from ____ in CommonParsers.RequiredWhitespace
             from props in restOfLine
             from lineEnd in CommonParsers.LineEnd
-            select (FlowStatement) new StyleStatement(id, props);
+            select new StyleStatement(id, props);
 
         // Class definition: `classDef className fill:#color,...` (className may be a comma-separated list).
         var classDefDirective =
@@ -196,7 +196,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from ____ in CommonParsers.RequiredWhitespace
             from props in restOfLine
             from lineEnd in CommonParsers.LineEnd
-            select (FlowStatement) new ClassDefStatement(names, props);
+            select new ClassDefStatement(names, props);
 
         // Class application: `class nodeId,nodeId2 className`.
         var classDirective =
@@ -208,7 +208,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from className in nonWhitespaceToken
             from _____ in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
-            select (FlowStatement) new ClassAssignStatement(ids, className);
+            select new ClassAssignStatement(ids, className);
 
         // Click directive: click nodeId callback
         var clickDirective =
@@ -232,7 +232,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             ).Optional()
             from rest in Token(_ => _ != '\r' && _ != '\n').ManyString()
             from lineEnd in CommonParsers.LineEnd
-            select (FlowStatement) new SubgraphStartStatement(id, label.HasValue ? label.Value : null);
+            select new SubgraphStartStatement(id, label.HasValue ? label.Value : null);
 
         // Subgraph end: end
         var subgraphEnd =
@@ -240,7 +240,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from end in String("end")
             from ___ in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
-            select (FlowStatement) new SubgraphEndStatement();
+            select new SubgraphEndStatement();
 
         // Direction statement, e.g. `direction LR` (sets the enclosing subgraph's direction, or the chart's).
         var directionStatement =
@@ -250,7 +250,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from dir in flowchartDirection
             from ___ in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
-            select (FlowStatement) new DirectionStatement(dir);
+            select new DirectionStatement(dir);
 
         // Any non-empty line that matched no earlier rule. Consuming it (rather than failing) keeps one
         // unsupported construct - e.g. a `linkStyle` line, or a node line using syntax we don't parse - from
@@ -273,23 +273,23 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             CommonParsers.InlineWhitespace
                 .Then(statementParser)
                 .Before(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd))
-                .Select(_ => (FlowStatement?) new NodeChainStatement(_.Nodes, _.Edges));
+                .Select<FlowStatement?>(_ => new NodeChainStatement(_.Nodes, _.Edges));
 
         var item = OneOf(
-            Try(subgraphStart.Select(_ => (FlowStatement?) _)),
-            Try(subgraphEnd.Select(_ => (FlowStatement?) _)),
-            Try(directionStatement.Select(_ => (FlowStatement?) _)),
+            Try(subgraphStart.Select<FlowStatement?>(_ => _)),
+            Try(subgraphEnd.Select<FlowStatement?>(_ => _)),
+            Try(directionStatement.Select<FlowStatement?>(_ =>  _)),
             // classDef before class (the latter is a prefix of the former); both before nodeStatement so a
             // styling line is never mis-parsed as a node named "class"/"style".
-            Try(classDefDirective.Select(_ => (FlowStatement?) _)),
-            Try(classDirective.Select(_ => (FlowStatement?) _)),
-            Try(styleDirective.Select(_ => (FlowStatement?) _)),
+            Try(classDefDirective.Select<FlowStatement?>(_ =>  _)),
+            Try(classDirective.Select<FlowStatement?>(_ => _)),
+            Try(styleDirective.Select<FlowStatement?>(_ => _)),
             Try(nodeStatement),
-            skipLine.Select(_ => (FlowStatement?) null));
+            skipLine.Select<FlowStatement?>(_ => null));
 
         var parseStatements = item.Many().Select(_ => _.OfType<FlowStatement>().ToList());
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in Try(String("flowchart")).Or(String("graph"))
             from __ in CommonParsers.InlineWhitespace
@@ -612,7 +612,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         return double.TryParse(trimmed, NumberStyles.Float, CultureInfo.InvariantCulture, out width);
     }
 
-    public Result<char, FlowchartModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, FlowchartModel> Parse(string input) => parser.Parse(input);
 
     abstract record FlowStatement;
 

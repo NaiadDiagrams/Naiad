@@ -1,6 +1,6 @@
 class GanttParser : IDiagramParser<GanttModel>
 {
-    static readonly Parser<char, GanttModel> Parser;
+    static Parser<char, GanttModel> parser;
 
     static GanttParser()
     {
@@ -88,7 +88,7 @@ class GanttParser : IDiagramParser<GanttModel>
                 skipLine.ThenReturn<IGanttContent?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("gantt")
             from ___ in CommonParsers.InlineWhitespace
@@ -99,7 +99,10 @@ class GanttParser : IDiagramParser<GanttModel>
 
     static GanttTask ParseTaskLine(string name, string partsStr)
     {
-        var task = new GanttTask {Name = name};
+        var task = new GanttTask
+        {
+            Name = name
+        };
         var parts = partsStr.Split(',').Select(_ => _.Trim()).Where(_ => !string.IsNullOrEmpty(_)).ToList();
 
         foreach (var part in parts)
@@ -163,8 +166,12 @@ class GanttParser : IDiagramParser<GanttModel>
             }
 
             // Check for date (YYYY-MM-DD)
-            if (DateTime.TryParseExact(part, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-                    DateTimeStyles.None, out var date))
+            if (DateTime.TryParseExact(
+                    part,
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var date))
             {
                 if (task.StartDate == null &&
                     task.AfterTaskId == null)
@@ -211,25 +218,35 @@ class GanttParser : IDiagramParser<GanttModel>
                     break;
 
                 case ExcludesItem excludes:
-                    foreach (var ex in excludes.Values)
+                    foreach (var exclude in excludes.Values)
                     {
-                        if (ex.Equals("weekends", StringComparison.InvariantCultureIgnoreCase))
+                        if (exclude.Equals("weekends", StringComparison.InvariantCultureIgnoreCase))
+                        {
                             model.ExcludeWeekends = true;
+                        }
                         else
-                            model.ExcludeDays.Add(ex);
+                        {
+                            model.ExcludeDays.Add(exclude);
+                        }
                     }
 
                     break;
 
                 case SectionItem section:
-                    currentSection = new() {Name = section.Name};
+                    currentSection = new()
+                    {
+                        Name = section.Name
+                    };
                     model.Sections.Add(currentSection);
                     break;
 
                 case TaskItem taskItem:
                     if (currentSection == null)
                     {
-                        currentSection = new() {Name = ""};
+                        currentSection = new()
+                        {
+                            Name = ""
+                        };
                         model.Sections.Add(currentSection);
                     }
 
@@ -242,9 +259,9 @@ class GanttParser : IDiagramParser<GanttModel>
         return model;
     }
 
-    public Result<char, GanttModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, GanttModel> Parse(string input) => parser.Parse(input);
 
-    internal interface IGanttContent;
+    interface IGanttContent;
     readonly record struct TitleItem(string Value) : IGanttContent;
     readonly record struct DateFormatItem(string Value) : IGanttContent;
     readonly record struct AxisFormatItem(string Value) : IGanttContent;
