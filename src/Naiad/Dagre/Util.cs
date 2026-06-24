@@ -15,7 +15,15 @@ static class Util
     }
 
     public static string AddBorderNode(Graph graph, string prefix) =>
-        AddDummyNode(graph, DummyKind.Border, new() { Width = 0, Height = 0 }, prefix);
+        AddDummyNode(
+            graph,
+            DummyKind.Border,
+            new()
+            {
+                Width = 0,
+                Height = 0
+            },
+            prefix);
 
     /// <summary>Returns a new graph with only simple edges; aggregates multi-edge weight/minlen.</summary>
     public static Graph Simplify(Graph graph)
@@ -119,22 +127,24 @@ static class Util
 
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (node.Rank is { } rank)
+            if (node.Rank is not { } rank)
             {
-                while (layering.Count <= rank)
-                {
-                    layering.Add([]);
-                }
-
-                var row = layering[rank];
-                var order = node.Order!.Value;
-                while (row.Count <= order)
-                {
-                    row.Add(null!);
-                }
-
-                row[order] = v;
+                continue;
             }
+
+            while (layering.Count <= rank)
+            {
+                layering.Add([]);
+            }
+
+            var row = layering[rank];
+            var order = node.Order!.Value;
+            while (row.Count <= order)
+            {
+                row.Add(null!);
+            }
+
+            row[order] = v;
         }
 
         return layering;
@@ -142,7 +152,7 @@ static class Util
 
     public static void NormalizeRanks(Graph graph)
     {
-        var nodeRanks = graph.NodeLabels().Select(n => n.Rank ?? double.MaxValue).ToList();
+        var nodeRanks = graph.NodeLabels().Select(_ => _.Rank ?? double.MaxValue).ToList();
         var min = ApplyMin(nodeRanks);
         foreach (var node in graph.NodeLabels())
         {
@@ -155,7 +165,12 @@ static class Util
 
     public static void RemoveEmptyRanks(Graph graph)
     {
-        var nodeRanks = graph.NodeLabels().Select(n => n.Rank).Where(r => r.HasValue).Select(r => (double) r!.Value).ToList();
+        var nodeRanks = graph
+            .NodeLabels()
+            .Select(_ => _.Rank)
+            .Where(_ => _.HasValue)
+            .Select(r => (double) r!.Value)
+            .ToList();
         var offset = (int) ApplyMin(nodeRanks);
 
         var layers = new List<List<string>?>();
@@ -198,7 +213,10 @@ static class Util
 
     public static double MaxRank(Graph graph)
     {
-        var nodeRanks = graph.NodeLabels().Select(n => n.Rank ?? double.Epsilon).ToList();
+        var nodeRanks = graph
+            .NodeLabels()
+            .Select(_ => _.Rank ?? double.Epsilon)
+            .ToList();
         return ApplyMax(nodeRanks);
     }
 
@@ -245,7 +263,9 @@ static class Util
     }
 
     // An empty sequence reduces to ±Infinity.
-    public static double ApplyMax(IReadOnlyList<double> values) => values.Count == 0 ? double.NegativeInfinity : values.Max();
+    public static double ApplyMax(IReadOnlyList<double> values) =>
+        values.Count == 0 ? double.NegativeInfinity : values.Max();
 
-    public static double ApplyMin(IReadOnlyList<double> values) => values.Count == 0 ? double.PositiveInfinity : values.Min();
+    public static double ApplyMin(IReadOnlyList<double> values) =>
+        values.Count == 0 ? double.PositiveInfinity : values.Min();
 }
