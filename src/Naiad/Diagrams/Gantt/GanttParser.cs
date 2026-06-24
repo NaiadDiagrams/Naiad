@@ -44,7 +44,7 @@ class GanttParser : IDiagramParser<GanttModel>
             from requiredWhitespace in CommonParsers.RequiredWhitespace
             from innerExcludes in restOfLine
             from lineEnd in CommonParsers.LineEnd
-            select innerExcludes.Trim().Split(',').Select(_ => _.Trim()).ToList();
+            select ParseExcludes(innerExcludes);
 
         // Section: section Section Name
         var sectionParser =
@@ -199,11 +199,24 @@ class GanttParser : IDiagramParser<GanttModel>
         return task;
     }
 
+    static List<string> ParseExcludes(string excludes)
+    {
+        var span = excludes.AsSpan().Trim();
+        var result = new List<string>();
+        foreach (var range in span.Split(','))
+        {
+            result.Add(span[range].Trim().ToString());
+        }
+
+        return result;
+    }
+
     static bool IsIdentifier(CharSpan value)
     {
         foreach (var ch in value)
         {
-            if (!char.IsLetterOrDigit(ch) && ch != '_' && ch != '-')
+            if (!char.IsLetterOrDigit(ch) &&
+                ch != '_' && ch != '-')
             {
                 return false;
             }
