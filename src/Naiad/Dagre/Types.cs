@@ -1,7 +1,7 @@
 namespace Naiad.Dagre;
 
 /// <summary>An edge descriptor: {v, w, name}.</summary>
-sealed record Edge(string V, string W, string? Name = null);
+sealed record EdgeKey(string V, string W, string? Name = null);
 
 /// <summary>Node label carrying every property the layout may read or write on a node.</summary>
 sealed class NodeLabel
@@ -24,7 +24,7 @@ sealed class NodeLabel
     public int? MaxRank;
     public LabelPos? Labelpos;
     public EdgeLabel? EdgeLabel;
-    public Edge? EdgeObj;
+    public EdgeKey? EdgeObj;
 
     // Network-simplex tree node values.
     public int? Low;
@@ -38,7 +38,7 @@ sealed class NodeLabel
 /// <summary>A self-edge captured during layout: the original edge object plus its label.</summary>
 sealed class SelfEdge
 {
-    public required Edge E;
+    public required EdgeKey E;
     public required EdgeLabel Label;
 }
 

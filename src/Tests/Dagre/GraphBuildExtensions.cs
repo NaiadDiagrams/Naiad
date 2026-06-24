@@ -10,14 +10,14 @@ static class GraphBuildExtensions
 {
     /// <summary>Out-edges of <paramref name="v"/>, optionally filtered to those ending at <paramref name="w"/>.
     /// Mirrors graphlib's directed <c>outEdges</c>: returns null when the node is absent.</summary>
-    public static List<Edge>? OutEdges(this Graph graph, string v, string? w = null)
+    public static List<EdgeKey>? OutEdges(this Graph graph, string v, string? w = null)
     {
         if (!graph.HasNode(v))
         {
             return null;
         }
 
-        var edges = new List<Edge>();
+        var edges = new List<EdgeKey>();
         foreach (var e in graph.OutEdgesOf(v))
         {
             if (w == null || e.W == w)

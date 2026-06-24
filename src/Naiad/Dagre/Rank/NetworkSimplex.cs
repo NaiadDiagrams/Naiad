@@ -144,7 +144,7 @@ static class NetworkSimplex
         return nextLim;
     }
 
-    public static Edge? LeaveEdge(Graph tree)
+    public static EdgeKey? LeaveEdge(Graph tree)
     {
         foreach (var e in tree.EnumerateEdges())
         {
@@ -157,7 +157,7 @@ static class NetworkSimplex
         return null;
     }
 
-    public static Edge EnterEdge(Graph tree, Graph graph, Edge edge)
+    public static EdgeKey EnterEdge(Graph tree, Graph graph, EdgeKey edge)
     {
         var v = edge.V;
         var w = edge.W;
@@ -186,7 +186,7 @@ static class NetworkSimplex
 
         // Find the minimum-slack candidate in a single pass: folding the filter into the scan avoids
         // snapshotting the whole edge list (and re-computing the incumbent's slack) on every pivot.
-        Edge? acc = null;
+        EdgeKey? acc = null;
         var accSlack = 0;
         foreach (var candidate in graph.EnumerateEdges())
         {
@@ -205,7 +205,7 @@ static class NetworkSimplex
         return acc!;
     }
 
-    public static void ExchangeEdges(Graph t, Graph graph, Edge e, Edge f)
+    public static void ExchangeEdges(Graph t, Graph graph, EdgeKey e, EdgeKey f)
     {
         var v = e.V;
         var w = e.W;

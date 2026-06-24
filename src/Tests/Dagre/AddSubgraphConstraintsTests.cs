@@ -45,7 +45,7 @@ public class AddSubgraphConstraintsTests
         graph.SetParent("a", "sg1");
         graph.SetParent("b", "sg2");
         AddSubgraphConstraints.Run(graph, constraintGraph, vs);
-        await Assert.That(constraintGraph.Edges()).IsEquivalentTo(new List<Edge> { new("sg1", "sg2") });
+        await Assert.That(constraintGraph.Edges()).IsEquivalentTo(new List<EdgeKey> { new("sg1", "sg2") });
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class AddSubgraphConstraintsTests
         var edges = constraintGraph.Edges()
             .OrderBy(e => e.V, StringComparer.Ordinal)
             .ToList();
-        await Assert.That(edges).IsEquivalentTo(new List<Edge>
+        await Assert.That(edges).IsEquivalentTo(new List<EdgeKey>
         {
             new("sg1", "sg4"),
             new("sg2", "sg3")

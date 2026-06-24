@@ -66,6 +66,6 @@ static class RankUtil
      * Returns the amount of slack for the given edge. The slack is defined as the
      * difference between the length of the edge and its minimum length.
      */
-    public static int Slack(Graph graph, Edge edge) =>
+    public static int Slack(Graph graph, EdgeKey edge) =>
         graph.NodeLabel(edge.W).Rank!.Value - graph.NodeLabel(edge.V).Rank!.Value - graph.FindEdgeLabel(edge).Minlen!.Value;
 }

@@ -17,9 +17,9 @@ static class Acyclic
         }
     }
 
-    static List<Edge> DfsFas(Graph graph)
+    static List<EdgeKey> DfsFas(Graph graph)
     {
-        var fas = new List<Edge>();
+        var fas = new List<EdgeKey>();
         var stack = new Dictionary<string, bool>(StringComparer.Ordinal);
         var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
 

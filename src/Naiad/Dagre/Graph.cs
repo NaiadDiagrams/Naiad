@@ -12,11 +12,11 @@ sealed class Graph
 
     GraphLabel? label;
     readonly OrderedMap<NodeLabel> nodesMap = new();
-    readonly OrderedMap<OrderedMap<Edge>> inMap = new();      // v -> edgeId -> edgeObj
+    readonly OrderedMap<OrderedMap<EdgeKey>> inMap = new();      // v -> edgeId -> edgeObj
     readonly OrderedMap<OrderedMap<int>> predsMap = new();    // u -> v -> count
-    readonly OrderedMap<OrderedMap<Edge>> outMap = new();     // v -> edgeId -> edgeObj
+    readonly OrderedMap<OrderedMap<EdgeKey>> outMap = new();     // v -> edgeId -> edgeObj
     readonly OrderedMap<OrderedMap<int>> sucsMap = new();     // v -> w -> count
-    readonly OrderedMap<Edge> edgeObjsMap = new();            // edgeId -> edgeObj
+    readonly OrderedMap<EdgeKey> edgeObjsMap = new();            // edgeId -> edgeObj
     readonly OrderedMap<EdgeLabel> edgeLabelsMap = new();     // edgeId -> label
     int uniqueIdCounter;
     readonly OrderedMap<string>? parentMap;
@@ -250,9 +250,9 @@ sealed class Graph
 
     public OrderedMap<int>.KeyEnumerable PredecessorsOf(string v) => predsMap[v].EnumerateKeys();
 
-    public OrderedMap<Edge>.ValueEnumerable InEdgesOf(string v) => inMap[v].EnumerateValues();
+    public OrderedMap<EdgeKey>.ValueEnumerable InEdgesOf(string v) => inMap[v].EnumerateValues();
 
-    public OrderedMap<Edge>.ValueEnumerable OutEdgesOf(string v) => outMap[v].EnumerateValues();
+    public OrderedMap<EdgeKey>.ValueEnumerable OutEdgesOf(string v) => outMap[v].EnumerateValues();
 
     public List<string>? Neighbors(string v)
     {
@@ -280,10 +280,10 @@ sealed class Graph
 
     public void SetDefaultEdgeLabel(EdgeLabel value) => defaultEdgeLabelFn = (_, _, _) => value;
 
-    public List<Edge> Edges() => edgeObjsMap.Values();
+    public List<EdgeKey> Edges() => edgeObjsMap.Values();
 
     // Allocation-free enumeration of all edges — the network-simplex pivot loop scans these per iteration.
-    public OrderedMap<Edge>.ValueEnumerable EnumerateEdges() => edgeObjsMap.EnumerateValues();
+    public OrderedMap<EdgeKey>.ValueEnumerable EnumerateEdges() => edgeObjsMap.EnumerateValues();
 
     /// <summary>The edge labels in insertion order — the labels of <see cref="Edges"/>, without the per-edge lookup.</summary>
     public List<EdgeLabel> EdgeLabels() => edgeLabelsMap.Values();
@@ -294,7 +294,7 @@ sealed class Graph
 
     public void SetEdge(string v, string w, EdgeLabel? value, string? name) => SetEdgeCore(v, w, name, value, true);
 
-    public void SetEdge(Edge edge, EdgeLabel? value) => SetEdgeCore(edge.V, edge.W, edge.Name, value, true);
+    public void SetEdge(EdgeKey edge, EdgeLabel? value) => SetEdgeCore(edge.V, edge.W, edge.Name, value, true);
 
     void SetEdgeCore(string v, string w, string? name, EdgeLabel? value, bool valueSpecified)
     {
@@ -340,9 +340,9 @@ sealed class Graph
         throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(v, w, name)}");
     }
 
-    public EdgeLabel FindEdgeLabel(Edge edge)
+    public EdgeLabel FindEdgeLabel(EdgeKey edge)
     {
-        if (edgeLabelsMap.TryGetValue(EdgeObjToId(IsDirected, edge), out var label))
+        if (edgeLabelsMap.TryGetValue(EdgeKeyToId(IsDirected, edge), out var label))
         {
             return label;
         }
@@ -368,7 +368,7 @@ sealed class Graph
 
     public void RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(IsDirected, v, w, name));
 
-    public void RemoveEdge(Edge edge) => RemoveEdgeId(EdgeObjToId(IsDirected, edge));
+    public void RemoveEdge(EdgeKey edge) => RemoveEdgeId(EdgeKeyToId(IsDirected, edge));
 
     void RemoveEdgeId(string e)
     {
@@ -387,11 +387,11 @@ sealed class Graph
         outMap[vStr].Remove(e);
     }
 
-    public List<Edge>? NodeEdges(string v)
+    public List<EdgeKey>? NodeEdges(string v)
     {
         if (nodesMap.ContainsKey(v))
         {
-            var combined = new OrderedMap<Edge>();
+            var combined = new OrderedMap<EdgeKey>();
             foreach (var kv in inMap[v])
             {
                 combined[kv.Key] = kv.Value;
@@ -452,7 +452,7 @@ sealed class Graph
         return v + edgeKeyDelim + w + edgeKeyDelim + (name ?? defaultEdgeName);
     }
 
-    static Edge EdgeArgsToObj(bool isDirected, string vIn, string wIn, string? name)
+    static EdgeKey EdgeArgsToObj(bool isDirected, string vIn, string wIn, string? name)
     {
         var v = vIn;
         var w = wIn;
@@ -464,6 +464,6 @@ sealed class Graph
         return new(v, w, string.IsNullOrEmpty(name) ? null : name);
     }
 
-    static string EdgeObjToId(bool isDirected, Edge edgeObj) =>
+    static string EdgeKeyToId(bool isDirected, EdgeKey edgeObj) =>
         EdgeArgsToId(isDirected, edgeObj.V, edgeObj.W, edgeObj.Name);
 }

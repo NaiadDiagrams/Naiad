@@ -24,7 +24,7 @@ public class AcyclicTests
         Acyclic.Run(graph);
         var results = graph.Edges().Select(StripLabel).ToList();
         results.Sort(SortEdges);
-        var expected = new List<Edge>
+        var expected = new List<EdgeKey>
         {
             new("a", "b"),
             new("a", "c"),
@@ -94,11 +94,11 @@ public class AcyclicTests
         await Assert.That(graph.Edges().Count).IsEqualTo(2);
     }
 
-    static Edge StripLabel(Edge edge) =>
-        // The TS test strips the "label" property; the C# Edge record already carries only {V, W, Name}.
+    static EdgeKey StripLabel(EdgeKey edge) =>
+        // The TS test strips the "label" property; the C# EdgeKey record already carries only {V, W, Name}.
         new(edge.V, edge.W, edge.Name);
 
-    static int SortEdges(Edge a, Edge b)
+    static int SortEdges(EdgeKey a, EdgeKey b)
     {
         if (a.Name != null && b.Name != null)
         {

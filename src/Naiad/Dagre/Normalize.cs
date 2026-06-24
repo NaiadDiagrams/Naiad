@@ -27,7 +27,7 @@ static class Normalize
         }
     }
 
-    static void NormalizeEdge(Graph graph, Edge e)
+    static void NormalizeEdge(Graph graph, EdgeKey e)
     {
         var v = e.V;
         var vRank = graph.NodeLabel(v).Rank!.Value;

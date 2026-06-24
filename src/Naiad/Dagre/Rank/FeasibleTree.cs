@@ -94,12 +94,12 @@ static class FeasibleTree
      * Finds the edge with the smallest slack that is incident on tree and returns
      * it.
      */
-    static Edge? FindMinSlackEdge(Graph tree, Graph graph)
+    static EdgeKey? FindMinSlackEdge(Graph tree, Graph graph)
     {
         var edges = graph.Edges();
 
         var accSlack = double.PositiveInfinity;
-        Edge? accEdge = null;
+        EdgeKey? accEdge = null;
         foreach (var edge in edges)
         {
             var edgeSlack = double.PositiveInfinity;

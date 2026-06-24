@@ -9,7 +9,7 @@ public class NormalizeTests
         graph.SetGraph(new());
     }
 
-    static (string V, string W) IncidentNodes(Edge edge) => (edge.V, edge.W);
+    static (string V, string W) IncidentNodes(EdgeKey edge) => (edge.V, edge.W);
 
     public class RunTests : NormalizeTests
     {
