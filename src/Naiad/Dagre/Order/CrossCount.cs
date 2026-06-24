@@ -1,5 +1,3 @@
-using Naiad.Dagre;
-
 static class CrossCount
 {
     public static int Run(Graph graph, List<List<string>> layering)

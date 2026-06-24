@@ -21,7 +21,7 @@ public class ClassRenderer :
             RankSeparation = 80
         };
         var dagreEngine = new DagreEngine();
-        var layoutResult = dagreEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = dagreEngine.BuildLayout(graphModel, layoutOptions);
 
         // Build SVG
         var builder = new SvgBuilder();

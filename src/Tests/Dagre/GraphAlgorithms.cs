@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>
 /// Connected-components and cycle-detection algorithms used only as assertion oracles by the ported dagre
 /// tests (e.g. verifying that <c>Acyclic.Run</c> leaves no cycles, or that <c>NestingGraph.Run</c> connects a

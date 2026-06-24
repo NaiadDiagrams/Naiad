@@ -14,7 +14,6 @@ public class SvgDocument
     public string Id { get; set; } = "naiad";
     public string? DiagramClass { get; set; }
     public string? AriaRoledescription { get; set; }
-    public string? Role { get; set; } = "graphics-document document";
     public string? FontAwesomeImport { get; set; } = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css\");";
 
     public void ToXml(StringBuilder builder)
@@ -30,10 +29,7 @@ public class SvgDocument
         builder.Append($" viewBox='{ViewBox}'");
         builder.Append(CultureInfo.InvariantCulture, $" style='max-width: {Width:0.######}px;'");
 
-        if (!string.IsNullOrEmpty(Role))
-        {
-            builder.Append($" role='{Role}'");
-        }
+        builder.Append(" role='graphics-document document'");
 
         if (!string.IsNullOrEmpty(AriaRoledescription))
         {

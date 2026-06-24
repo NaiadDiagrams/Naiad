@@ -1,5 +1,3 @@
-using Naiad.Dagre;
-
 static class BuildLayerGraph
 {
     public static Graph Run(Graph graph, int rank, string relationship, List<string>? nodesWithRank = null)

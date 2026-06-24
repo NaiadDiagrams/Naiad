@@ -1,5 +1,3 @@
-using Naiad.Dagre;
-
 static class CoordinateSystem
 {
     public static void Adjust(Graph graph)

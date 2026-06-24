@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>Depth-first traversal (pre/post-order) used by the network-simplex ranking pass.</summary>
 static class Alg
 {

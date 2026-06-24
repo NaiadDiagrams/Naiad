@@ -1,5 +1,3 @@
-using Naiad.Dagre;
-
 static class AddSubgraphConstraints
 {
     public static void Run(Graph graph, Graph constraintGraph, List<string> vs)

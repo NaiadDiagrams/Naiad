@@ -23,7 +23,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 80,
             RankSeparation = 100
         };
-        var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graphModel, layoutOptions);
 
         // Copy positions back to entities
         CopyPositionsToModel(model, graphModel);

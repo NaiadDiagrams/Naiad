@@ -1,5 +1,3 @@
-using Naiad.Dagre;
-
 namespace Benchmarks;
 
 // Measures the cost of reaching every edge's label two ways:

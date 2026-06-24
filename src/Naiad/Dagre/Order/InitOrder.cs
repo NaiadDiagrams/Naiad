@@ -1,5 +1,3 @@
-using Naiad.Dagre;
-
 static class InitOrder
 {
     public static List<List<string>> Run(Graph graph)

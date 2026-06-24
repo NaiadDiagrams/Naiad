@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class Order
 {
     public static void Run(Graph graph, OrderOptions? opts = null)

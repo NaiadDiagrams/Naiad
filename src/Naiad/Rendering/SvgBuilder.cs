@@ -419,7 +419,11 @@ public class SvgBuilder
         string? fill = null,
         string? stroke = null)
     {
-        var polygon = new SvgPolygon {Fill = fill, Stroke = stroke};
+        var polygon = new SvgPolygon
+        {
+            Fill = fill,
+            Stroke = stroke
+        };
         polygon.Points.AddRange(points);
         AddElement(polygon);
     }

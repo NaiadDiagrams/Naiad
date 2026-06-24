@@ -1,6 +1,4 @@
-﻿namespace Naiad.Dagre;
-
-/// <summary>Resolved entry: {vs, i, barycenter?, weight?}.</summary>
+﻿/// <summary>Resolved entry: {vs, i, barycenter?, weight?}.</summary>
 sealed class ResolvedEntry
 {
     public List<string> Vs = [];

@@ -1,6 +1,4 @@
-﻿namespace Naiad.Dagre;
-
-/// <summary>Options for <see cref="Order.Run"/>.</summary>
+﻿/// <summary>Options for <see cref="Order.Run"/>.</summary>
 sealed class OrderOptions
 {
     public bool? DisableOptimalOrderHeuristic;

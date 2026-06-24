@@ -1,7 +1,3 @@
-using DagreGraph = Naiad.Dagre.Graph;
-using DagreNodeLabel = Naiad.Dagre.NodeLabel;
-using DagreEdgeLabel = Naiad.Dagre.EdgeLabel;
-
 /// <summary>
 /// Lays out a node/edge diagram with the faithful C# port of dagre (<c>Naiad.Dagre</c>) — the same
 /// layered/Sugiyama engine Mermaid uses. The diagram is mapped to a compound dagre graph (subgraphs become
@@ -18,46 +14,50 @@ using DagreEdgeLabel = Naiad.Dagre.EdgeLabel;
 /// </remarks>
 class DagreEngine : ILayoutEngine
 {
-    public LayoutResult Layout(GraphDiagramBase diagram, LayoutOptions options)
+    public LayoutResult BuildLayout(GraphDiagramBase diagram, LayoutOptions options)
     {
         if (diagram.Nodes.Count == 0)
         {
             return new() { Width = 0, Height = 0 };
         }
 
-        var graph = new DagreGraph(directed: true, multigraph: true, compound: true);
+        var graph = new Graph(directed: true, multigraph: true, compound: true);
         graph.SetGraph(new()
         {
             Rankdir = options.Direction,
             NodeSeparation = options.NodeSeparation,
             RankSeparation = options.RankSeparation
         });
-        graph.SetDefaultEdgeLabel(new DagreEdgeLabel());
+        graph.SetDefaultEdgeLabel(new EdgeLabel());
 
-        var nodeLabels = new List<(Node Node, DagreNodeLabel Label)>(diagram.Nodes.Count);
+        var nodeLabels = new List<(Node Node, NodeLabel Label)>(diagram.Nodes.Count);
         foreach (var node in diagram.Nodes)
         {
-            var label = new DagreNodeLabel { Width = node.Width, Height = node.Height };
+            var label = new NodeLabel
+            {
+                Width = node.Width,
+                Height = node.Height
+            };
             graph.SetNode(node.Id, label);
             nodeLabels.Add((node, label));
         }
 
-        var subgraphLabels = new List<(Subgraph Subgraph, DagreNodeLabel Label)>();
+        var subgraphLabels = new List<(Subgraph Subgraph, NodeLabel Label)>();
         foreach (var subgraph in diagram.Subgraphs)
         {
             AddSubgraph(graph, subgraph, subgraphLabels);
         }
 
-        var edgeLabels = new List<(Edge Edge, DagreEdgeLabel Label)>(diagram.Edges.Count);
+        var edgeLabels = new List<(Edge Edge, EdgeLabel Label)>(diagram.Edges.Count);
         for (var i = 0; i < diagram.Edges.Count; i++)
         {
             var edge = diagram.Edges[i];
-            var label = new DagreEdgeLabel();
+            var label = new EdgeLabel();
             if (!string.IsNullOrEmpty(edge.Label))
             {
                 label.Width = edge.LabelWidth;
                 label.Height = edge.LabelHeight;
-                label.Labelpos = Naiad.Dagre.LabelPos.Center;
+                label.Labelpos = LabelPos.Center;
             }
 
             // A unique per-edge name keeps parallel edges (same source/target) distinct in the multigraph.
@@ -65,7 +65,7 @@ class DagreEngine : ILayoutEngine
             edgeLabels.Add((edge, label));
         }
 
-        Naiad.Dagre.Layout.Run(graph);
+        Layout.Run(graph);
 
         foreach (var (node, label) in nodeLabels)
         {
@@ -96,9 +96,9 @@ class DagreEngine : ILayoutEngine
         };
     }
 
-    static void AddSubgraph(DagreGraph graph, Subgraph subgraph, List<(Subgraph, DagreNodeLabel)> collected)
+    static void AddSubgraph(Graph graph, Subgraph subgraph, List<(Subgraph, NodeLabel)> collected)
     {
-        var label = new DagreNodeLabel();
+        var label = new NodeLabel();
         graph.SetNode(subgraph.Id, label);
         collected.Add((subgraph, label));
 

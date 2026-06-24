@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class AddBorderSegments
 {
     public static void Run(Graph graph)

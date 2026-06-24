@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class Sort
 {
     public static SortResult Run(List<ResolvedEntry> entries, bool biasRight = false)

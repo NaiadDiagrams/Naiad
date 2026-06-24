@@ -124,7 +124,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = ComputeNodeSeparation(model, options),
             RankSeparation = 90
         };
-        var layoutResult = layoutEngine.Layout(graph, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graph, layoutOptions);
 
         // Resolve each edge's polyline and label point. Positional relationships
         // (Up/Left/Right/Neighbor) are drawn as straight border-to-border lines
@@ -515,7 +515,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = nodeSeparation,
             RankSeparation = 90
         };
-        layoutEngine.Layout(graph, layoutOptions);
+        layoutEngine.BuildLayout(graph, layoutOptions);
 
         var minX = double.MaxValue;
         var minY = double.MaxValue;

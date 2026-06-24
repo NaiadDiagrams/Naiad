@@ -68,7 +68,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 50,
             RankSeparation = 70
         };
-        var layoutResult = layoutEngine.Layout(model, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(model, layoutOptions);
 
         // Build SVG
         var builder = new SvgBuilder();

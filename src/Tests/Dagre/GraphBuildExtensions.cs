@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>
 /// Test-only graph conveniences ported from graphlib's <c>Graph</c> API (<c>setNodes</c>/<c>setPath</c>/
 /// <c>outEdges</c>). They are only ever used as scaffolding by the ported dagre tests, so they live in the

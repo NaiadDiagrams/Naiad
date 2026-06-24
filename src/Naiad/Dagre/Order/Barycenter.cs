@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class Barycenter
 {
     public static List<BarycenterEntry> Run(Graph graph, List<string> movable)

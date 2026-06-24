@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /*
  * A nesting graph creates dummy nodes for the tops and bottoms of subgraphs,
  * adds appropriate edges to ensure that all cluster nodes are placed between

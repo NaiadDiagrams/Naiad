@@ -54,7 +54,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 120,
             RankSeparation = 80
         };
-        var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graphModel, layoutOptions);
 
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);

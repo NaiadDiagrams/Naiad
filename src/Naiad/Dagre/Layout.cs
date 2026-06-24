@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>Top-level layout driver.</summary>
 static class Layout
 {

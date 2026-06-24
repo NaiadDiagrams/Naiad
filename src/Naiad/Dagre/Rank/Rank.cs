@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class Rank
 {
     /*

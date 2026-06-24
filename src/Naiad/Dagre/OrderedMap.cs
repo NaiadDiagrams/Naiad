@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>
 /// A string-keyed map that preserves insertion order across additions and removals. Backed by the runtime's
 /// array-based <see cref="OrderedDictionary{TKey,TValue}"/> (one object holding two internal arrays) rather

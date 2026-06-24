@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>
 /// A directed, optionally multigraph and/or compound graph, specialized to the layout label types.
 /// Node/edge insertion order is preserved because the layout's output depends on iteration order.

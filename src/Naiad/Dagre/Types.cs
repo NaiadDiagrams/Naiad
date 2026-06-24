@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>An edge descriptor: {v, w, name}.</summary>
 sealed record EdgeKey(string V, string W, string? Name = null);
 

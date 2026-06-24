@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class SortSubgraph
 {
     public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false)

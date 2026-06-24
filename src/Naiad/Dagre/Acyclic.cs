@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /// <summary>
 /// Makes a graph acyclic by reversing edges that participate in cycles, then restores them later.
 /// </summary>

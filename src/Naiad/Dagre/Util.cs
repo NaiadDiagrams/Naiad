@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 static class Util
 {
     /// <summary>Adds a dummy node to the graph and returns its id.</summary>

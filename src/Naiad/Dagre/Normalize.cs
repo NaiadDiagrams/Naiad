@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /*
  * Breaks any long edges in the graph into short segments that span 1 layer
  * each. This operation is undoable with the denormalize function.

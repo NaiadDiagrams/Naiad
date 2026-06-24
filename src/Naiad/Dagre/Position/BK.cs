@@ -1,5 +1,3 @@
-namespace Naiad.Dagre;
-
 /*
  * This module provides coordinate assignment based on Brandes and Köpf, "Fast
  * and Simple Horizontal Coordinate Assignment."
@@ -429,7 +427,13 @@ static class BK
                         if (root.TryGetValue(u, out var uRoot))
                         {
                             var prevMaxVal = blockGraph.TryGetEdgeLabel(uRoot, vRoot, out var prevMax) ? prevMax.Weight ?? 0 : 0;
-                            blockGraph.SetEdge(uRoot, vRoot, new() { Weight = Math.Max(sepFn(graph, v, u), prevMaxVal) });
+                            blockGraph.SetEdge(
+                                uRoot,
+                                vRoot,
+                                new()
+                                {
+                                    Weight = Math.Max(sepFn(graph, v, u), prevMaxVal)
+                                });
                         }
                     }
 
