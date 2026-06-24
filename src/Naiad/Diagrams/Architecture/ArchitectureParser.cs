@@ -1,6 +1,6 @@
 class ArchitectureParser : IDiagramParser<ArchitectureModel>
 {
-    static readonly Parser<char, ArchitectureModel> Parser;
+    static Parser<char, ArchitectureModel> parser;
 
     static ArchitectureParser()
     {
@@ -130,7 +130,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
                 skipLine.ThenReturn<IArchitectureContent?>(null)
             );
 
-        Parser =
+        parser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from architecture in CIString("architecture-beta")
             from innerInlineWhitespace in CommonParsers.InlineWhitespace
@@ -182,7 +182,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
         return model;
     }
 
-    public Result<char, ArchitectureModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, ArchitectureModel> Parse(string input) => parser.Parse(input);
 
     internal interface IArchitectureContent;
     readonly record struct GroupItem(ArchitectureGroup Value) : IArchitectureContent;

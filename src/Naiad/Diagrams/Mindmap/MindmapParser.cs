@@ -1,6 +1,6 @@
 class MindmapParser : IDiagramParser<MindmapModel>
 {
-    static readonly Parser<char, MindmapModel> Parser;
+    static Parser<char, MindmapModel> parser;
 
     static MindmapParser()
     {
@@ -117,7 +117,7 @@ class MindmapParser : IDiagramParser<MindmapModel>
                     .ThenReturn(((int, string, MindmapShape, string?, string?)?)null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("mindmap")
             from ___ in CommonParsers.InlineWhitespace
@@ -183,5 +183,5 @@ class MindmapParser : IDiagramParser<MindmapModel>
         return model;
     }
 
-    public Result<char, MindmapModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, MindmapModel> Parse(string input) => parser.Parse(input);
 }

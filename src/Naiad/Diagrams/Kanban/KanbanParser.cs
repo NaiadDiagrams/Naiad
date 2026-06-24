@@ -1,6 +1,6 @@
 class KanbanParser : IDiagramParser<KanbanModel>
 {
-    static readonly Parser<char, KanbanModel> Parser;
+    static Parser<char, KanbanModel> parser;
 
     static KanbanParser()
     {
@@ -44,7 +44,7 @@ class KanbanParser : IDiagramParser<KanbanModel>
                 skipLine.ThenReturn<IKanbanContent?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("kanban")
             from ___ in CommonParsers.InlineWhitespace
@@ -85,7 +85,7 @@ class KanbanParser : IDiagramParser<KanbanModel>
         return model;
     }
 
-    public Result<char, KanbanModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, KanbanModel> Parse(string input) => parser.Parse(input);
 
     internal interface IKanbanContent;
     readonly record struct ColumnItem(string Id, string Name) : IKanbanContent;

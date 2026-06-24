@@ -1,6 +1,6 @@
 class GitGraphParser : IDiagramParser<GitGraphModel>
 {
-    static readonly Parser<char, GitGraphModel> Parser;
+    static Parser<char, GitGraphModel> parser;
 
     static GitGraphParser()
     {
@@ -179,7 +179,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
             ).Optional()
             select options.HasValue ? options.Value : (direction: null, mainBranch: null);
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in CIString("gitGraph")
             from options in optionsParser
@@ -255,7 +255,7 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
         return model;
     }
 
-    public Result<char, GitGraphModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, GitGraphModel> Parse(string input) => parser.Parse(input);
 
     internal interface ICommitAttr;
     readonly record struct IdAttr(string Value) : ICommitAttr;

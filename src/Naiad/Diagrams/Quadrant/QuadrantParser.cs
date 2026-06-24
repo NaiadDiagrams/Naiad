@@ -1,6 +1,6 @@
 class QuadrantParser : IDiagramParser<QuadrantModel>
 {
-    static readonly Parser<char, QuadrantModel> Parser;
+    static Parser<char, QuadrantModel> parser;
 
     static QuadrantParser()
     {
@@ -105,7 +105,7 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
                 skipLine.ThenReturn<IQuadrantContent?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("quadrantChart")
             from ___ in CommonParsers.InlineWhitespace
@@ -155,7 +155,7 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
         return model;
     }
 
-    public Result<char, QuadrantModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, QuadrantModel> Parse(string input) => parser.Parse(input);
 
     internal interface IQuadrantContent;
     readonly record struct TitleItem(string Value) : IQuadrantContent;

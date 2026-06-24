@@ -1,6 +1,6 @@
 class RadarParser : IDiagramParser<RadarModel>
 {
-    static readonly Parser<char, RadarModel> Parser;
+    static Parser<char, RadarModel> parser;
 
     static RadarParser()
     {
@@ -77,7 +77,7 @@ class RadarParser : IDiagramParser<RadarModel>
                 skipLine.ThenReturn<IRadarContent?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("radar-beta")
             from ___ in CommonParsers.InlineWhitespace
@@ -113,7 +113,7 @@ class RadarParser : IDiagramParser<RadarModel>
         return model;
     }
 
-    public Result<char, RadarModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, RadarModel> Parse(string input) => parser.Parse(input);
 
     interface IRadarContent;
     readonly record struct TitleItem(string Value) : IRadarContent;

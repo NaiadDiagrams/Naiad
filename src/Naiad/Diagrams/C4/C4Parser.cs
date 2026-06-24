@@ -1,6 +1,6 @@
 class C4Parser : IDiagramParser<C4Model>
 {
-    static readonly Parser<char, C4Model> Parser;
+    static Parser<char, C4Model> parser;
 
     static C4Parser()
     {
@@ -273,7 +273,7 @@ class C4Parser : IDiagramParser<C4Model>
                 Try(CIString("C4Deployment")).ThenReturn(C4DiagramType.Deployment)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from type in diagramTypeParser
             from __ in CommonParsers.InlineWhitespace
@@ -347,7 +347,7 @@ class C4Parser : IDiagramParser<C4Model>
         }
     }
 
-    public Result<char, C4Model> Parse(string input) => Parser.Parse(input);
+    public Result<char, C4Model> Parse(string input) => parser.Parse(input);
 
     internal interface IC4Content;
     internal readonly record struct TitleItem(string Value) : IC4Content;

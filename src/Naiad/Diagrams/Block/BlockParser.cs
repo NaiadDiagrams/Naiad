@@ -1,6 +1,6 @@
 class BlockParser : IDiagramParser<BlockModel>
 {
-    static readonly Parser<char, BlockModel> Parser;
+    static Parser<char, BlockModel> parser;
 
     static BlockParser()
     {
@@ -117,7 +117,7 @@ class BlockParser : IDiagramParser<BlockModel>
                 skipLine.ThenReturn<IBlockContent?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in OneOf(CIString("block-beta"), CIString("block"))
             from ___ in CommonParsers.InlineWhitespace
@@ -147,7 +147,7 @@ class BlockParser : IDiagramParser<BlockModel>
         return model;
     }
 
-    public Result<char, BlockModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, BlockModel> Parse(string input) => parser.Parse(input);
 
     internal interface IBlockContent;
     readonly record struct ColumnsItem(int Count) : IBlockContent;

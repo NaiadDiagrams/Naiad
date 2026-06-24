@@ -1,6 +1,6 @@
 class ERParser : IDiagramParser<ERModel>
 {
-    static readonly Parser<char, ERModel> Parser;
+    static Parser<char, ERModel> parser;
 
     static ERParser()
     {
@@ -131,7 +131,7 @@ class ERParser : IDiagramParser<ERModel>
                 skipLine.ThenReturn<IERContent?>(null)
             ).Many();
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("erDiagram")
             from __ in CommonParsers.InlineWhitespace
@@ -194,7 +194,7 @@ class ERParser : IDiagramParser<ERModel>
         model.Entities.Add(entity);
     }
 
-    public Result<char, ERModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, ERModel> Parse(string input) => parser.Parse(input);
 
     internal interface IERContent;
     readonly record struct EntityItem(Entity Value) : IERContent;

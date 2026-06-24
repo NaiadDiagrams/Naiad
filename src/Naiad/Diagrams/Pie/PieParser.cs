@@ -1,6 +1,6 @@
 class PieParser : IDiagramParser<PieModel>
 {
-    static readonly Parser<char, PieModel> Parser;
+    static Parser<char, PieModel> parser;
 
     static PieParser()
     {
@@ -46,7 +46,7 @@ class PieParser : IDiagramParser<PieModel>
                 sections: lines.Where(_ => _.section != null).Select(_ => _.section!).ToList()
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("pie")
             from __ in CommonParsers.InlineWhitespace
@@ -70,5 +70,5 @@ class PieParser : IDiagramParser<PieModel>
         return model;
     }
 
-    public Result<char, PieModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, PieModel> Parse(string input) => parser.Parse(input);
 }

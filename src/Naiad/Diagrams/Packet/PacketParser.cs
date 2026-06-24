@@ -1,6 +1,6 @@
 class PacketParser : IDiagramParser<PacketModel>
 {
-    static readonly Parser<char, PacketModel> Parser;
+    static Parser<char, PacketModel> parser;
 
     static PacketParser()
     {
@@ -53,7 +53,7 @@ class PacketParser : IDiagramParser<PacketModel>
                 skipLine.ThenReturn<RawField?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in OneOf(CIString("packet-beta"), CIString("packet"))
             from ___ in CommonParsers.InlineWhitespace
@@ -118,7 +118,7 @@ class PacketParser : IDiagramParser<PacketModel>
         return model;
     }
 
-    public Result<char, PacketModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, PacketModel> Parse(string input) => parser.Parse(input);
 
     // A field as written, before resolution: an explicit Start (with optional End), or a relative
     // width in Bits ("+N"). Exactly one of (Start, Bits) is set.

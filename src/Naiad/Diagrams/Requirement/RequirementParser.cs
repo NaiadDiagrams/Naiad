@@ -1,6 +1,6 @@
 class RequirementParser : IDiagramParser<RequirementModel>
 {
-    static readonly Parser<char, RequirementModel> Parser;
+    static Parser<char, RequirementModel> parser;
 
     static RequirementParser()
     {
@@ -105,7 +105,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
                 skipLine.ThenReturn<IRequirementContent?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("requirementDiagram")
             from ___ in CommonParsers.InlineWhitespace
@@ -184,7 +184,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
         return model;
     }
 
-    public Result<char, RequirementModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, RequirementModel> Parse(string input) => parser.Parse(input);
 
     internal interface IRequirementContent;
     readonly record struct RequirementBlockItem(Requirement Value) : IRequirementContent;

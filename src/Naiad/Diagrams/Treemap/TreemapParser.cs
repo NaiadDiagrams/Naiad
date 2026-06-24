@@ -3,7 +3,7 @@ class TreemapParser : IDiagramParser<TreemapModel>
     // Node line
     internal record NodeLine(int Indent, string Name, double? Value, string? CssClass);
 
-    static readonly Parser<char, TreemapModel> Parser;
+    static Parser<char, TreemapModel> parser;
 
     static TreemapParser()
     {
@@ -47,7 +47,7 @@ class TreemapParser : IDiagramParser<TreemapModel>
             Try(nodeLineParser.Select<NodeLine?>(_ => _))
                 .Or(skipLine.ThenReturn<NodeLine?>(null));
 
-        Parser =
+        parser =
             from whitespance in CommonParsers.InlineWhitespace
             from ciString in CIString("treemap-beta")
             from innerWhitespace in CommonParsers.InlineWhitespace
@@ -94,5 +94,5 @@ class TreemapParser : IDiagramParser<TreemapModel>
         return model;
     }
 
-    public Result<char, TreemapModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, TreemapModel> Parse(string input) => parser.Parse(input);
 }

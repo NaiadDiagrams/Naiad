@@ -2,7 +2,7 @@ using NotePosition = Naiad.Diagrams.State.NotePosition;
 
 class StateParser : IDiagramParser<StateModel>
 {
-    static readonly Parser<char, StateModel> Parser;
+    static Parser<char, StateModel> parser;
 
     static StateParser()
     {
@@ -176,7 +176,7 @@ class StateParser : IDiagramParser<StateModel>
                 skipLine.ThenReturn<IStateContent?>(null)
             ).Many();
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in Try(String("stateDiagram-v2")).Or(String("stateDiagram"))
             from __ in CommonParsers.InlineWhitespace
@@ -357,7 +357,7 @@ class StateParser : IDiagramParser<StateModel>
         }
     }
 
-    public Result<char, StateModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, StateModel> Parse(string input) => parser.Parse(input);
 
     internal interface IStateContent;
     readonly record struct DirectionItem(Direction Value) : IStateContent;

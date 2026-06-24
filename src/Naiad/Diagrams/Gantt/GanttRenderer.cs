@@ -188,7 +188,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
 
         // Horizontal grid lines
-        var numRows = (int)(chartHeight / rowHeight);
+        var numRows = (int) (chartHeight / rowHeight);
         for (var i = 0; i <= numRows; i++)
         {
             var y = offsetY + i * rowHeight;
@@ -346,6 +346,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 {
                     task.ComputedEnd = task.ComputedStart.AddDays(1);
                 }
+
                 changed = true;
             }
         }

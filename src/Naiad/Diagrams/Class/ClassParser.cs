@@ -1,6 +1,6 @@
 class ClassParser : IDiagramParser<ClassModel>
 {
-    static readonly Parser<char, ClassModel> Parser;
+    static Parser<char, ClassModel> parser;
 
     static ClassParser()
     {
@@ -226,7 +226,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 skipLine.ThenReturn<IClassContent?>(null)
             ).Many();
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("classDiagram")
             from __ in CommonParsers.InlineWhitespace
@@ -332,7 +332,7 @@ class ClassParser : IDiagramParser<ClassModel>
         return model;
     }
 
-    public Result<char, ClassModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, ClassModel> Parse(string input) => parser.Parse(input);
 
     interface IClassBodyContent;
 

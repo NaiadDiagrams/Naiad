@@ -1,6 +1,6 @@
 class SankeyParser : IDiagramParser<SankeyModel>
 {
-    static readonly Parser<char, SankeyModel> Parser;
+    static Parser<char, SankeyModel> parser;
 
     static SankeyParser()
     {
@@ -48,7 +48,7 @@ class SankeyParser : IDiagramParser<SankeyModel>
                 skipLine.ThenReturn<SankeyLink?>(null)
             );
 
-        Parser =
+        parser =
             from _ in CommonParsers.InlineWhitespace
             from __ in OneOf(CIString("sankey-beta"), CIString("sankey"))
             from ___ in CommonParsers.InlineWhitespace
@@ -64,5 +64,5 @@ class SankeyParser : IDiagramParser<SankeyModel>
         return model;
     }
 
-    public Result<char, SankeyModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, SankeyModel> Parse(string input) => parser.Parse(input);
 }
