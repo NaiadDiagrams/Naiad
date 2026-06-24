@@ -69,7 +69,7 @@ class GanttParser : IDiagramParser<GanttModel>
             from ____ in CommonParsers.InlineWhitespace
             from parts in Token(_ => _ != '\r' && _ != '\n').ManyString()
             from lineEnd in CommonParsers.LineEnd
-            select ParseTaskLine(name.Trim(), parts.Trim());
+            select ParseTaskLine(name.Trim(), parts.AsSpan().Trim());
 
         // Skip line (comments, empty lines)
         var skipLine =
@@ -97,47 +97,50 @@ class GanttParser : IDiagramParser<GanttModel>
             select BuildModel(content);
     }
 
-    static GanttTask ParseTaskLine(string name, string partsStr)
+    static GanttTask ParseTaskLine(string name, CharSpan parts)
     {
         var task = new GanttTask
         {
             Name = name
         };
-        var parts = partsStr.Split(',').Select(_ => _.Trim()).Where(_ => !string.IsNullOrEmpty(_)).ToList();
 
-        foreach (var part in parts)
+        foreach (var range in parts.Split(','))
         {
-            var lower = part.ToLowerInvariant();
+            var part = parts[range].Trim();
+            if (part.IsEmpty)
+            {
+                continue;
+            }
 
             // Check for modifiers
-            if (lower == "active")
+            if (part.Equals("active", StringComparison.OrdinalIgnoreCase))
             {
                 task.Status = GanttTaskStatus.Active;
                 continue;
             }
 
-            if (lower == "done")
+            if (part.Equals("done", StringComparison.OrdinalIgnoreCase))
             {
                 task.Status = GanttTaskStatus.Done;
                 continue;
             }
 
-            if (lower == "crit")
+            if (part.Equals("crit", StringComparison.OrdinalIgnoreCase))
             {
                 task.IsCritical = true;
                 continue;
             }
 
-            if (lower == "milestone")
+            if (part.Equals("milestone", StringComparison.OrdinalIgnoreCase))
             {
                 task.IsMilestone = true;
                 continue;
             }
 
             // Check for after reference
-            if (lower.StartsWith("after "))
+            if (part.StartsWith("after ", StringComparison.OrdinalIgnoreCase))
             {
-                task.AfterTaskId = part[6..].Trim();
+                task.AfterTaskId = part[6..].Trim().ToString();
                 continue;
             }
 
@@ -152,7 +155,7 @@ class GanttParser : IDiagramParser<GanttModel>
                     digitEnd++;
                 }
                 var unit = part[^1];
-                if (int.TryParse(part.AsSpan(0, digitEnd), out var num))
+                if (int.TryParse(part[..digitEnd], out var num))
                 {
                     task.Duration = unit switch
                     {
@@ -187,13 +190,26 @@ class GanttParser : IDiagramParser<GanttModel>
             }
 
             // Must be an ID (alphanumeric identifier)
-            if (part.All(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-'))
+            if (IsIdentifier(part))
             {
-                task.Id ??= part;
+                task.Id ??= part.ToString();
             }
         }
 
         return task;
+    }
+
+    static bool IsIdentifier(CharSpan value)
+    {
+        foreach (var ch in value)
+        {
+            if (!char.IsLetterOrDigit(ch) && ch != '_' && ch != '-')
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     static GanttModel BuildModel(IEnumerable<IGanttContent?> content)
