@@ -604,7 +604,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         return style;
     }
 
-    static bool TryParseWidth(string value, out double width)
+    static bool TryParseWidth(CharSpan value, out double width)
     {
         var trimmed = value.EndsWith("px", StringComparison.OrdinalIgnoreCase)
             ? value[..^2].Trim()
