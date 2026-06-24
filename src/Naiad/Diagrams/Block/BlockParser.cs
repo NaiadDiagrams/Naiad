@@ -18,7 +18,7 @@ class BlockParser : IDiagramParser<BlockModel>
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from columns in CIString("columns")
             from rRequiredWhitespace in CommonParsers.RequiredWhitespace
-            from num in Digit.AtLeastOnceString().Select(int.Parse)
+            from num in CommonParsers.UnsignedInt
             from innerInlineWhitespace in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
             select num;
@@ -80,7 +80,7 @@ class BlockParser : IDiagramParser<BlockModel>
         // Span: :N
         var spanParser =
             from _ in Char(':')
-            from num in Digit.AtLeastOnceString().Select(int.Parse)
+            from num in CommonParsers.UnsignedInt
             select num;
 
         // Block element: id["label"]:2

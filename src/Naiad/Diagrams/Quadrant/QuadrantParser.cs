@@ -60,11 +60,10 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
         var coordinateParser =
             Char('1').ThenReturn(1d)
                 .Or(
-                    from _ in Char('0')
-                    from frac in Try(Char('.').Then(Digit.AtLeastOnceString())).Optional()
-                    select frac.HasValue
-                        ? double.Parse("0." + frac.Value, CultureInfo.InvariantCulture)
-                        : 0d);
+                    // Parse the matched 0 / 0.x span directly instead of building a "0."+frac string.
+                    Char('0')
+                        .Then(Try(Char('.').Then(Digit.SkipAtLeastOnce())).Optional())
+                        .Slice((span, _) => double.Parse(span, NumberStyles.Float, CultureInfo.InvariantCulture)));
 
         // Point: Name: [0.5, 0.7]
         var pointParser =

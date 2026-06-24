@@ -38,7 +38,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
             from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
             from colon in Char(':')
             from whitespace in CommonParsers.InlineWhitespace
-            from score in Digit.AtLeastOnceString().Select(int.Parse)
+            from score in CommonParsers.UnsignedInt
             from innerColon in Char(':')
             from innerWhitespace in CommonParsers.InlineWhitespace
             from actors in actorListParser

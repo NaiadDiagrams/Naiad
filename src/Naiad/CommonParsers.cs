@@ -28,6 +28,9 @@ public static class CommonParsers
 
     public static readonly Parser<char, int> Integer;
 
+    // An unsigned base-10 integer (\d+), parsed straight from the matched span with no intermediate string.
+    public static readonly Parser<char, int> UnsignedInt;
+
     // Mermaid's numeric token [+-]?(?:\d+(?:\.\d+)?|\.\d+): an optional sign, then digits with an
     // optional fraction, or a bare-dot fraction like .5. No exponent (Mermaid rejects 1e5) and the
     // parse is culture-invariant. Shared by the value-bearing diagrams (xychart, sankey, radar, treemap).
@@ -84,20 +87,21 @@ public static class CommonParsers
         Integer =
             Num.Labelled("integer");
 
+        UnsignedInt =
+            Digit.SkipAtLeastOnce()
+                .Slice((span, _) => int.Parse(span, CultureInfo.InvariantCulture))
+                .Labelled("integer");
+
+        // Match [+-]?(\d+(\.\d+)?|\.\d+) structurally, without building intermediate strings, then parse
+        // the matched input span directly. Slice hands the selector the ReadOnlySpan<char> the parser
+        // consumed, so a number costs zero string allocations (vs. the previous build-string-then-parse).
         SignedDecimal =
-            (from sign in OneOf(Char('+'), Char('-')).Optional()
-             from magnitude in
-                 (from integer in Digit.AtLeastOnceString()
-                  from fraction in Try(Char('.').Then(Digit.AtLeastOnceString())).Optional()
-                  select integer + (fraction.HasValue ? "." + fraction.Value : ""))
-                 .Or(
-                     from _ in Char('.')
-                     from fraction in Digit.AtLeastOnceString()
-                     select "." + fraction)
-             select double.Parse(
-                 (sign is { HasValue: true, Value: '-' } ? "-" : "") + magnitude,
-                 CultureInfo.InvariantCulture))
-            .Labelled("number");
+            OneOf(Char('+'), Char('-')).Optional()
+                .Then(OneOf(
+                    Digit.SkipAtLeastOnce().Before(Try(Char('.').Then(Digit.SkipAtLeastOnce())).Optional()),
+                    Char('.').Then(Digit.SkipAtLeastOnce())))
+                .Slice((span, _) => double.Parse(span, NumberStyles.Float, CultureInfo.InvariantCulture))
+                .Labelled("number");
 
         DirectionParser =
             OneOf(

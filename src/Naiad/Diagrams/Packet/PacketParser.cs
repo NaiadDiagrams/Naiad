@@ -19,13 +19,13 @@ class PacketParser : IDiagramParser<PacketModel>
         // "+bits": a width relative to where the previous field ended.
         var relativeSpec =
             from _ in Char('+')
-            from bits in Digit.AtLeastOnceString().Select(int.Parse)
+            from bits in CommonParsers.UnsignedInt
             select new RawField(null, null, bits, "");
 
         // "start" (single bit) or "start-end" (explicit range).
         var explicitSpec =
-            from start in Digit.AtLeastOnceString().Select(int.Parse)
-            from end in Try(Char('-').Then(Digit.AtLeastOnceString().Select(int.Parse))).Optional()
+            from start in CommonParsers.UnsignedInt
+            from end in Try(Char('-').Then(CommonParsers.UnsignedInt)).Optional()
             select new RawField(start, end.HasValue ? end.Value : null, null, "");
 
         // Field: a bit spec ("start", "start-end", or "+bits") then ": label". Mermaid accepts all three;
