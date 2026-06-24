@@ -239,18 +239,21 @@ class ClassParser : IDiagramParser<ClassModel>
     {
         var parameters = new List<MethodParameter>();
         if (string.IsNullOrWhiteSpace(paramStr))
+        {
             return parameters;
+        }
 
         foreach (var param in paramStr.Split(','))
         {
             var parts = param.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 1)
             {
+                var moreThan1 = parts.Length >= 2;
                 parameters.Add(
                     new()
                     {
-                        Name = parts.Length >= 2 ? parts[1] : parts[0],
-                        Type = parts.Length >= 2 ? parts[0] : null
+                        Name = moreThan1 ? parts[1] : parts[0],
+                        Type = moreThan1 ? parts[0] : null
                     });
             }
         }

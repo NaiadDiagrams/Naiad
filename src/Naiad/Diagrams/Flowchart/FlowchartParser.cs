@@ -511,15 +511,31 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             var style = baseStyle;
             foreach (var className in classes)
             {
-                if (classDefs.TryGetValue(className, out var classStyle))
+                if (!classDefs.TryGetValue(className, out var classStyle))
                 {
-                    style = style is null ? classStyle : style.MergedWith(classStyle);
+                    continue;
+                }
+
+                if (style is null)
+                {
+                    style = classStyle;
+                }
+                else
+                {
+                    style = style.MergedWith(classStyle);
                 }
             }
 
             if (inlineStyles.TryGetValue(id, out var inlineStyle))
             {
-                style = style is null ? inlineStyle : style.MergedWith(inlineStyle);
+                if (style is null)
+                {
+                    style = inlineStyle;
+                }
+                else
+                {
+                    style = style.MergedWith(inlineStyle);
+                }
             }
 
             return style;
@@ -552,14 +568,14 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             {
                 continue;
             }
-
-            var key = part[..colon].Trim().ToLowerInvariant();
             // A trailing ';' terminates the directive in Mermaid; drop it from the final value.
             var value = part[(colon + 1)..].Trim().TrimEnd(';').Trim();
             if (value.Length == 0)
             {
                 continue;
             }
+
+            var key = part[..colon].Trim().ToLowerInvariant();
 
             switch (key)
             {
