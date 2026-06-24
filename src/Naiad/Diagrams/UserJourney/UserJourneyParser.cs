@@ -1,42 +1,24 @@
 class UserJourneyParser : IDiagramParser<UserJourneyModel>
 {
-    // Rest of line (for text content)
-    static readonly Parser<char, string> restOfLine;
-
-    // Title: title My Journey
-    static readonly Parser<char, string> titleParser;
-
-    // Section: section Section Name
-    static readonly Parser<char, string> sectionParser;
-
-    // Actor list: Me, Cat, Dog
-    static readonly Parser<char, List<string>> actorListParser;
-
-    // Task: Task Name: 5: Me, Cat
-    static readonly Parser<char, JourneyTask> taskParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    // Content item
-    static readonly Parser<char, IUserJourneyContent?> ContentItem;
-
     static readonly Parser<char, UserJourneyModel> parser;
 
     static UserJourneyParser()
     {
-        restOfLine =
+        // Rest of line (for text content)
+        var restOfLine =
             Token(_ => _ != '\r' && _ != '\n').ManyString();
 
-        titleParser =
+        // Title: title My Journey
+        var titleParser =
             from whitespace in CommonParsers.InlineWhitespace
             from title in CIString("title")
             from requiredWhitespace in CommonParsers.RequiredWhitespace
-            from restOfLine in restOfLine
+            from text in restOfLine
             from lineEnd in CommonParsers.LineEnd
-            select restOfLine.Trim();
+            select text.Trim();
 
-        sectionParser =
+        // Section: section Section Name
+        var sectionParser =
             from whiteSpace in CommonParsers.InlineWhitespace
             from section in CIString("section")
             from requireWhitespace in CommonParsers.RequiredWhitespace
@@ -44,12 +26,14 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
             from lineEnd in CommonParsers.LineEnd
             select name.Trim();
 
-        actorListParser =
+        // Actor list: Me, Cat, Dog
+        var actorListParser =
             Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
                 .SeparatedAtLeastOnce(Char(',').Then(CommonParsers.InlineWhitespace))
                 .Select(actors => actors.Select(_ => _.Trim()).ToList());
 
-        taskParser =
+        // Task: Task Name: 5: Me, Cat
+        var taskParser =
             from _ in CommonParsers.InlineWhitespace
             from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
             from colon in Char(':')
@@ -66,11 +50,13 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
                 Actors = actors
             };
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        ContentItem =
+        // Content item
+        var contentItem =
             OneOf(
                 Try(titleParser.Select<IUserJourneyContent?>(_ => new TitleItem(_))),
                 Try(sectionParser.Select<IUserJourneyContent?>(_ => new SectionItem(_))),
@@ -83,7 +69,7 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
             from journey in CIString("journey")
             from inerWhitespace in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(result.Item1);
     }
 

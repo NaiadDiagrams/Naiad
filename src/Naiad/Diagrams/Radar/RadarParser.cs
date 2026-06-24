@@ -1,44 +1,20 @@
 class RadarParser : IDiagramParser<RadarModel>
 {
-    static readonly Parser<char, string> identifier;
-
-    static readonly Parser<char, double> number;
-
-    // Quoted label: ["label"]
-    static readonly Parser<char, string> quotedLabel;
-
-    // Axis list: axis id1, id2, id3
-    static readonly Parser<char, List<RadarAxis>> axisParser;
-
-    // Value list: {1, 2, 3}
-    static readonly Parser<char, List<double>> valueList;
-
-    // Curve definition: curve id["label"]{1, 2, 3}
-    static readonly Parser<char, RadarCurve> curveItemParser;
-
-    // Curve line: curve id1["label"]{1, 2, 3}, id2{4, 5, 6}
-    static readonly Parser<char, List<RadarCurve>> curveLineParser;
-
-    static readonly Parser<char, string> titleParser;
-
-    static readonly Parser<char, Unit> skipLine;
-
-    // Content item
-    static readonly Parser<char, IRadarContent?> ContentItem;
-
     static readonly Parser<char, RadarModel> Parser;
 
     static RadarParser()
     {
-        identifier =
+        var identifier =
             Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-        number = CommonParsers.SignedDecimal;
+        var number = CommonParsers.SignedDecimal;
 
-        quotedLabel =
+        // Quoted label: ["label"]
+        var quotedLabel =
             Char('[').Then(Char('"')).Then(Token(_ => _ != '"').ManyString()).Before(Char('"')).Before(Char(']'));
 
-        axisParser =
+        // Axis list: axis id1, id2, id3
+        var axisParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("axis")
             from ___ in CommonParsers.RequiredWhitespace
@@ -48,7 +24,8 @@ class RadarParser : IDiagramParser<RadarModel>
             from _____ in CommonParsers.LineEnd
             select axes.Select(_ => new RadarAxis { Id = _, Label = _ }).ToList();
 
-        valueList =
+        // Value list: {1, 2, 3}
+        var valueList =
             Char('{')
                 .Then(CommonParsers.InlineWhitespace)
                 .Then(number.SeparatedAtLeastOnce(
@@ -57,7 +34,8 @@ class RadarParser : IDiagramParser<RadarModel>
                 .Before(Char('}'))
                 .Select(_ => _.ToList());
 
-        curveItemParser =
+        // Curve definition: curve id["label"]{1, 2, 3}
+        var curveItemParser =
             from id in identifier
             from label in quotedLabel.Optional()
             from values in valueList
@@ -67,7 +45,8 @@ class RadarParser : IDiagramParser<RadarModel>
                 Label = label.GetValueOrDefault() ?? id
             }.WithValues(values);
 
-        curveLineParser =
+        // Curve line: curve id1["label"]{1, 2, 3}, id2{4, 5, 6}
+        var curveLineParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("curve")
             from ___ in CommonParsers.RequiredWhitespace
@@ -77,7 +56,7 @@ class RadarParser : IDiagramParser<RadarModel>
             from _____ in CommonParsers.LineEnd
             select curves.ToList();
 
-        titleParser =
+        var titleParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("title")
             from ___ in CommonParsers.RequiredWhitespace
@@ -85,11 +64,12 @@ class RadarParser : IDiagramParser<RadarModel>
             from ____ in CommonParsers.LineEnd
             select title.Trim();
 
-        skipLine =
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        ContentItem =
+        // Content item
+        var contentItem =
             OneOf(
                 Try(titleParser.Select<IRadarContent?>(_ => new TitleItem(_))),
                 Try(axisParser.Select<IRadarContent?>(_ => new AxisItem(_))),
@@ -102,7 +82,7 @@ class RadarParser : IDiagramParser<RadarModel>
             from __ in CIString("radar-beta")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(result.Item1);
     }
 

@@ -57,7 +57,7 @@ static class Normalize
                 Width = 0,
                 Height = 0,
                 EdgeLabel = edgeLabel,
-                EdgeObj = e,
+                EdgeKey = e,
                 Rank = vRank
             };
             var dummy = Util.AddDummyNode(graph, DummyKind.Edge, attrs, "_d");
@@ -88,7 +88,7 @@ static class Normalize
             var v = start;
             var node = graph.NodeLabel(v);
             var origLabel = node.EdgeLabel!;
-            graph.SetEdge(node.EdgeObj!, origLabel);
+            graph.SetEdge(node.EdgeKey!, origLabel);
             while (node.Dummy != null)
             {
                 var w = graph.Successors(v)![0];

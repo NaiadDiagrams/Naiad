@@ -18,13 +18,15 @@ sealed class NodeLabel
     public string? BorderBottom;
     public List<string>? BorderLeft;
     public List<string>? BorderRight;
-    public string? BorderLeftId;     // order/build-layer-graph: the single border-left id for one rank
-    public string? BorderRightId;    // order/build-layer-graph: the single border-right id for one rank
+    // order/build-layer-graph: the single border-left id for one rank
+    public string? BorderLeftId;
+    // order/build-layer-graph: the single border-right id for one rank
+    public string? BorderRightId;
     public int? MinRank;
     public int? MaxRank;
     public LabelPos? Labelpos;
     public EdgeLabel? EdgeLabel;
-    public EdgeKey? EdgeObj;
+    public EdgeKey? EdgeKey;
 
     // Network-simplex tree node values.
     public int? Low;
@@ -73,5 +75,6 @@ sealed class GraphLabel
     public string? NestingRoot;
     public int? NodeRankFactor;
     public List<string>? DummyChains;
-    public string? Root;             // order/build-layer-graph: the synthetic root node id
+    // order/build-layer-graph: the synthetic root node id
+    public string? Root;
 }

@@ -14,7 +14,7 @@ public class ParentDummyChainsTests
     {
         graph.SetNode("a");
         graph.SetNode("b");
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b") });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b") });
         graph.Label.DummyChains = ["d1"];
         graph.SetPath(["a", "d1", "b"]);
 
@@ -27,7 +27,7 @@ public class ParentDummyChainsTests
     {
         graph.SetParent("a", "sg1");
         graph.SetNode("sg1", new() { MinRank = 0, MaxRank = 2 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 2 });
         graph.Label.DummyChains = ["d1"];
         graph.SetPath(["a", "d1", "b"]);
 
@@ -40,7 +40,7 @@ public class ParentDummyChainsTests
     {
         graph.SetParent("b", "sg1");
         graph.SetNode("sg1", new() { MinRank = 1, MaxRank = 3 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 1 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 1 });
         graph.Label.DummyChains = ["d1"];
         graph.SetPath(["a", "d1", "b"]);
 
@@ -53,7 +53,7 @@ public class ParentDummyChainsTests
     {
         graph.SetParent("a", "sg1");
         graph.SetNode("sg1", new() { MinRank = 0, MaxRank = 2 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 2 });
         graph.SetNode("d2", new() { Rank = 3 });
         graph.SetNode("d3", new() { Rank = 4 });
         graph.Label.DummyChains = ["d1"];
@@ -70,7 +70,7 @@ public class ParentDummyChainsTests
     {
         graph.SetParent("b", "sg1");
         graph.SetNode("sg1", new() { MinRank = 3, MaxRank = 5 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 1 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 1 });
         graph.SetNode("d2", new() { Rank = 2 });
         graph.SetNode("d3", new() { Rank = 3 });
         graph.Label.DummyChains = ["d1"];
@@ -98,7 +98,7 @@ public class ParentDummyChainsTests
             graph.SetNode("d" + (i + 1), new() { Rank = i + 3 });
         }
 
-        graph.NodeLabel("d1").EdgeObj = new("a", "b");
+        graph.NodeLabel("d1").EdgeKey = new("a", "b");
         graph.Label.DummyChains = ["d1"];
         graph.SetPath(["a", "d1", "d2", "d3", "d4", "d5", "b"]);
 
@@ -117,7 +117,7 @@ public class ParentDummyChainsTests
         graph.SetNode("sg1", new() { MinRank = 0, MaxRank = 3 });
         graph.SetParent("b", "sg2");
         graph.SetNode("sg2", new() { MinRank = 2, MaxRank = 6 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 2 });
         graph.SetNode("d2", new() { Rank = 3 });
         graph.SetNode("d3", new() { Rank = 4 });
         graph.Label.DummyChains = ["d1"];
@@ -137,7 +137,7 @@ public class ParentDummyChainsTests
         graph.SetNode("sg1", new() { MinRank = 0, MaxRank = 6 });
         graph.SetParent("b", "sg2");
         graph.SetNode("sg2", new() { MinRank = 3, MaxRank = 5 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 2 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 2 });
         graph.SetNode("d2", new() { Rank = 3 });
         graph.Label.DummyChains = ["d1"];
         graph.SetPath(["a", "d1", "d2", "b"]);
@@ -155,7 +155,7 @@ public class ParentDummyChainsTests
         graph.SetNode("sg1", new() { MinRank = 0, MaxRank = 6 });
         graph.SetParent("b", "sg1");
         graph.SetNode("sg2", new() { MinRank = 1, MaxRank = 3 });
-        graph.SetNode("d1", new() { EdgeObj = new("a", "b"), Rank = 3 });
+        graph.SetNode("d1", new() { EdgeKey = new("a", "b"), Rank = 3 });
         graph.SetNode("d2", new() { Rank = 4 });
         graph.Label.DummyChains = ["d1"];
         graph.SetPath(["a", "d1", "d2", "b"]);

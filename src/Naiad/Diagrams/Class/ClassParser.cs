@@ -1,59 +1,17 @@
 class ClassParser : IDiagramParser<ClassModel>
 {
-    // Identifier for class names (alphanumeric and underscore)
-    static readonly Parser<char, string> classIdentifier;
-
-    // Visibility modifier
-    static readonly Parser<char, Visibility> visibilityParser;
-
-    // Type annotation like : String or : int
-    static readonly Parser<char, string> typeAnnotation;
-
-    // Method parameters like (String name, int age)
-    static readonly Parser<char, List<MethodParameter>> parametersParser;
-
-    // Member: +String name (type first) or +name : String (type after colon)
-    static readonly Parser<char, ClassMember> memberParser;
-
-    // Method: +makeSound() void or +makeSound(String s) : void
-    static readonly Parser<char, ClassMethod> methodParser;
-
-    // Class annotation: <<interface>>, <<abstract>>, etc.
-    static readonly Parser<char, ClassAnnotation> annotationParser;
-
-    // Class body content: { ... }
-    static readonly Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> ParseClassBody;
-
-    // Class definition: class ClassName { ... } or class ClassName
-    static readonly Parser<char, ClassDefinition> classDefinitionParser;
-
-    // Relationship arrows
-    static readonly Parser<char, RelationshipType> relationshipArrowParser;
-
-    // Cardinality like "1", "0..1", "1..*", "*"
-    static readonly Parser<char, string> cardinalityParser;
-
-    // Relationship: ClassA <|-- ClassB : label
-    static readonly Parser<char, ClassRelationship> relationshipParser;
-
-    // Direction directive
-    static readonly Parser<char, Direction> directionDirectiveParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    static readonly Parser<char, IEnumerable<IClassContent?>> ParseContent;
-
     static readonly Parser<char, ClassModel> Parser;
 
     static ClassParser()
     {
-        classIdentifier =
+        // Identifier for class names (alphanumeric and underscore)
+        var classIdentifier =
             Token(_ => char.IsLetterOrDigit(_) || _ == '_')
                 .AtLeastOnceString()
                 .Labelled("class identifier");
 
-        visibilityParser =
+        // Visibility modifier
+        var visibilityParser =
             OneOf(
                 Char('+').ThenReturn(Visibility.Public),
                 Char('-').ThenReturn(Visibility.Private),
@@ -61,14 +19,16 @@ class ClassParser : IDiagramParser<ClassModel>
                 Char('~').ThenReturn(Visibility.PackagePrivate)
             );
 
-        typeAnnotation =
+        // Type annotation like : String or : int
+        var typeAnnotation =
             CommonParsers.InlineWhitespace
                 .Then(Char(':'))
                 .Then(CommonParsers.InlineWhitespace)
                 .Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '<' || _ == '>' || _ == '[' || _ == ']' || _ == ',')
                     .AtLeastOnceString());
 
-        parametersParser =
+        // Method parameters like (String name, int age)
+        var parametersParser =
             Char('(')
                 .Then(
                     Token(_ => _ != ')' && _ != '\r' && _ != '\n')
@@ -77,7 +37,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Before(Char(')'))
                 .Select(ParseParameters);
 
-        memberParser =
+        // Member: +String name (type first) or +name : String (type after colon)
+        var memberParser =
             from _ in CommonParsers.InlineWhitespace
             from visibility in visibilityParser.Optional()
             from isStatic in Char('$').Optional()
@@ -102,7 +63,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 IsStatic = isStatic.HasValue
             };
 
-        methodParser =
+        // Method: +makeSound() void or +makeSound(String s) : void
+        var methodParser =
             from _ in CommonParsers.InlineWhitespace
             from visibility in visibilityParser.Optional()
             from isStatic in Char('$').Optional()
@@ -121,7 +83,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 IsAbstract = isAbstract.HasValue
             };
 
-        annotationParser =
+        // Class annotation: <<interface>>, <<abstract>>, etc.
+        var annotationParser =
             CommonParsers.InlineWhitespace
                 .Then(String("<<"))
                 .Then(OneOf(
@@ -134,6 +97,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Before(CommonParsers.InlineWhitespace)
                 .Before(CommonParsers.LineEnd);
 
+        // Class body content: { ... }
+        Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> parseClassBody;
         {
             var annotationLine = Try(annotationParser.Select<IClassBodyContent?>(_ => new AnnotationItem(_)));
             var methodLine = Try(methodParser.Select<IClassBodyContent?>(_ => new MethodItem(_)));
@@ -143,7 +108,7 @@ class ClassParser : IDiagramParser<ClassModel>
 
             var contentLine = OneOf(annotationLine, methodLine, memberLine, emptyLine);
 
-            ParseClassBody = contentLine.Many().Select(items =>
+            parseClassBody = contentLine.Many().Select(items =>
             {
                 ClassAnnotation? annotation = null;
                 var members = new List<ClassMember>();
@@ -169,7 +134,8 @@ class ClassParser : IDiagramParser<ClassModel>
             });
         }
 
-        classDefinitionParser =
+        // Class definition: class ClassName { ... } or class ClassName
+        var classDefinitionParser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("class")
             from __ in CommonParsers.RequiredWhitespace
@@ -178,7 +144,7 @@ class ClassParser : IDiagramParser<ClassModel>
             from body in Try(
                 from open in Char('{')
                 from ____ in CommonParsers.LineEnd
-                from content in ParseClassBody
+                from content in parseClassBody
                 from _____ in CommonParsers.InlineWhitespace
                 from close in Char('}')
                 from ______ in CommonParsers.LineEnd
@@ -187,7 +153,8 @@ class ClassParser : IDiagramParser<ClassModel>
             from _______ in CommonParsers.LineEnd.Optional()
             select CreateClassDefinition(id, body);
 
-        relationshipArrowParser =
+        // Relationship arrows
+        var relationshipArrowParser =
             OneOf(
                 Try(String("<|--")).ThenReturn(RelationshipType.Inheritance),
                 Try(String("--|>")).ThenReturn(RelationshipType.Inheritance),
@@ -204,12 +171,14 @@ class ClassParser : IDiagramParser<ClassModel>
                 String("--").ThenReturn(RelationshipType.Link)
             );
 
-        cardinalityParser =
+        // Cardinality like "1", "0..1", "1..*", "*"
+        var cardinalityParser =
             Char('"')
                 .Then(Token(_ => _ != '"').AtLeastOnceString())
                 .Before(Char('"'));
 
-        relationshipParser =
+        // Relationship: ClassA <|-- ClassB : label
+        var relationshipParser =
             from _ in CommonParsers.InlineWhitespace
             from fromCardinality in Try(cardinalityParser.Before(CommonParsers.InlineWhitespace)).Optional()
             from fromId in classIdentifier
@@ -236,18 +205,20 @@ class ClassParser : IDiagramParser<ClassModel>
                 ToCardinality = toCardinality.HasValue ? toCardinality.Value : null
             };
 
-        directionDirectiveParser =
+        // Direction directive
+        var directionDirectiveParser =
             CommonParsers.InlineWhitespace
                 .Then(String("direction"))
                 .Then(CommonParsers.RequiredWhitespace)
                 .Then(CommonParsers.DirectionParser)
                 .Before(CommonParsers.LineEnd);
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             CommonParsers.InlineWhitespace
                 .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-        ParseContent =
+        var parseContent =
             OneOf(
                 Try(directionDirectiveParser.Select<IClassContent?>(_ => new DirectionItem(_))),
                 Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
@@ -260,7 +231,7 @@ class ClassParser : IDiagramParser<ClassModel>
             from keyword in String("classDiagram")
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
-            from content in ParseContent
+            from content in parseContent
             select BuildModel(content);
     }
 

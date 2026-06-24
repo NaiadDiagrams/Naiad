@@ -52,20 +52,22 @@ static class Layout
     {
         foreach (var v in inputGraph.Nodes())
         {
-            if (inputGraph.TryGetNodeLabel(v, out var inputLabel))
+            if (!inputGraph.TryGetNodeLabel(v, out var inputLabel))
             {
-                var layoutLabel = layoutGraph.NodeLabel(v);
+                continue;
+            }
 
-                inputLabel.X = layoutLabel.X;
-                inputLabel.Y = layoutLabel.Y;
-                inputLabel.Order = layoutLabel.Order;
-                inputLabel.Rank = layoutLabel.Rank;
+            var layoutLabel = layoutGraph.NodeLabel(v);
 
-                if (layoutGraph.ChildCount(v) != 0)
-                {
-                    inputLabel.Width = layoutLabel.Width;
-                    inputLabel.Height = layoutLabel.Height;
-                }
+            inputLabel.X = layoutLabel.X;
+            inputLabel.Y = layoutLabel.Y;
+            inputLabel.Order = layoutLabel.Order;
+            inputLabel.Rank = layoutLabel.Rank;
+
+            if (layoutGraph.ChildCount(v) != 0)
+            {
+                inputLabel.Width = layoutLabel.Width;
+                inputLabel.Height = layoutLabel.Height;
             }
         }
 
@@ -213,18 +215,20 @@ static class Layout
         foreach (var e in graph.Edges())
         {
             var edge = graph.FindEdgeLabel(e);
-            if (edge.Width != 0 && edge.Height != 0)
+            if (edge.Width == 0 || edge.Height == 0)
             {
-                var v = graph.NodeLabel(e.V);
-                var w = graph.NodeLabel(e.W);
-                // {rank: (w.rank - v.rank) / 2 + v.rank, e: e}
-                var label = new NodeLabel
-                {
-                    Rank = (w.Rank!.Value - v.Rank!.Value) / 2 + v.Rank!.Value,
-                    EdgeObj = e
-                };
-                Util.AddDummyNode(graph, DummyKind.EdgeProxy, label, "_ep");
+                continue;
             }
+
+            var v = graph.NodeLabel(e.V);
+            var w = graph.NodeLabel(e.W);
+            // {rank: (w.rank - v.rank) / 2 + v.rank, e: e}
+            var label = new NodeLabel
+            {
+                Rank = (w.Rank!.Value - v.Rank!.Value) / 2 + v.Rank!.Value,
+                EdgeKey = e
+            };
+            Util.AddDummyNode(graph, DummyKind.EdgeProxy, label, "_ep");
         }
     }
 
@@ -246,7 +250,7 @@ static class Layout
         {
             if (node.Dummy == DummyKind.EdgeProxy)
             {
-                graph.FindEdgeLabel(node.EdgeObj!).LabelRank = node.Rank;
+                graph.FindEdgeLabel(node.EdgeKey!).LabelRank = node.Rank;
                 graph.RemoveNode(v);
             }
         }
@@ -344,22 +348,24 @@ static class Layout
         foreach (var e in graph.Edges())
         {
             var edge = graph.FindEdgeLabel(e);
-            if (edge.X.HasValue)
+            if (!edge.X.HasValue)
             {
-                if (edge.Labelpos is LabelPos.Left or LabelPos.Right)
-                {
-                    edge.Width -= edge.Labeloffset;
-                }
+                continue;
+            }
 
-                switch (edge.Labelpos)
-                {
-                    case LabelPos.Left:
-                        edge.X -= edge.Width / 2 + edge.Labeloffset;
-                        break;
-                    case LabelPos.Right:
-                        edge.X += edge.Width / 2 + edge.Labeloffset;
-                        break;
-                }
+            if (edge.Labelpos is LabelPos.Left or LabelPos.Right)
+            {
+                edge.Width -= edge.Labeloffset;
+            }
+
+            switch (edge.Labelpos)
+            {
+                case LabelPos.Left:
+                    edge.X -= edge.Width / 2 + edge.Labeloffset;
+                    break;
+                case LabelPos.Right:
+                    edge.X += edge.Width / 2 + edge.Labeloffset;
+                    break;
             }
         }
     }
@@ -380,18 +386,20 @@ static class Layout
     {
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (graph.ChildCount(v) != 0)
+            if (graph.ChildCount(v) == 0)
             {
-                var t = graph.NodeLabel(node.BorderTop!);
-                var b = graph.NodeLabel(node.BorderBottom!);
-                var l = graph.NodeLabel(node.BorderLeft![node.BorderLeft!.Count - 1]);
-                var r = graph.NodeLabel(node.BorderRight![node.BorderRight!.Count - 1]);
-
-                node.Width = Math.Abs(r.X!.Value - l.X!.Value);
-                node.Height = Math.Abs(b.Y!.Value - t.Y!.Value);
-                node.X = l.X!.Value + node.Width / 2;
-                node.Y = t.Y!.Value + node.Height / 2;
+                continue;
             }
+
+            var t = graph.NodeLabel(node.BorderTop!);
+            var b = graph.NodeLabel(node.BorderBottom!);
+            var l = graph.NodeLabel(node.BorderLeft![node.BorderLeft!.Count - 1]);
+            var r = graph.NodeLabel(node.BorderRight![node.BorderRight!.Count - 1]);
+
+            node.Width = Math.Abs(r.X!.Value - l.X!.Value);
+            node.Height = Math.Abs(b.Y!.Value - t.Y!.Value);
+            node.X = l.X!.Value + node.Width / 2;
+            node.Y = t.Y!.Value + node.Height / 2;
         }
 
         foreach (var (v, node) in graph.NodeEntries())
@@ -430,15 +438,19 @@ static class Layout
                 node.Order = i + orderShift;
                 foreach (var selfEdge in node.SelfEdges ?? [])
                 {
-                    Util.AddDummyNode(graph, DummyKind.SelfEdge, new()
-                    {
-                        Width = selfEdge.Label.Width,
-                        Height = selfEdge.Label.Height,
-                        Rank = node.Rank,
-                        Order = i + (++orderShift),
-                        EdgeObj = selfEdge.E,
-                        EdgeLabel = selfEdge.Label
-                    }, "_se");
+                    Util.AddDummyNode(
+                        graph,
+                        DummyKind.SelfEdge,
+                        new()
+                        {
+                            Width = selfEdge.Label.Width,
+                            Height = selfEdge.Label.Height,
+                            Rank = node.Rank,
+                            Order = i + (++orderShift),
+                            EdgeKey = selfEdge.E,
+                            EdgeLabel = selfEdge.Label
+                        },
+                        "_se");
                 }
 
                 node.SelfEdges = null;
@@ -450,27 +462,29 @@ static class Layout
     {
         foreach (var (v, node) in graph.NodeEntries())
         {
-            if (node.Dummy == DummyKind.SelfEdge)
+            if (node.Dummy != DummyKind.SelfEdge)
             {
-                var selfNode = graph.NodeLabel(node.EdgeObj!.V);
-                var x = selfNode.X!.Value + selfNode.Width / 2;
-                var y = selfNode.Y!.Value;
-                var dx = node.X!.Value - x;
-                var dy = selfNode.Height / 2;
-                var label = node.EdgeLabel!;
-                graph.SetEdge(node.EdgeObj!, label);
-                graph.RemoveNode(v);
-                label.Points =
-                [
-                    new(x + 2 * dx / 3, y - dy),
-                    new(x + 5 * dx / 6, y - dy),
-                    new(x + dx, y),
-                    new(x + 5 * dx / 6, y + dy),
-                    new(x + 2 * dx / 3, y + dy)
-                ];
-                label.X = node.X;
-                label.Y = node.Y;
+                continue;
             }
+
+            var selfNode = graph.NodeLabel(node.EdgeKey!.V);
+            var x = selfNode.X!.Value + selfNode.Width / 2;
+            var y = selfNode.Y!.Value;
+            var dx = node.X!.Value - x;
+            var dy = selfNode.Height / 2;
+            var label = node.EdgeLabel!;
+            graph.SetEdge(node.EdgeKey!, label);
+            graph.RemoveNode(v);
+            label.Points =
+            [
+                new(x + 2 * dx / 3, y - dy),
+                new(x + 5 * dx / 6, y - dy),
+                new(x + dx, y),
+                new(x + 5 * dx / 6, y + dy),
+                new(x + 2 * dx / 3, y + dy)
+            ];
+            label.X = node.X;
+            label.Y = node.Y;
         }
     }
 }

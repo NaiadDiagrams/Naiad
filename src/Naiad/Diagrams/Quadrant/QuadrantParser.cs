@@ -1,40 +1,14 @@
 class QuadrantParser : IDiagramParser<QuadrantModel>
 {
-    static readonly Parser<char, string> restOfLine;
-
-    // Title: title My Chart
-    static readonly Parser<char, string> titleParser;
-
-    // X-axis: x-axis Low --> High
-    static readonly Parser<char, (string left, string right)> xAxisParser;
-
-    // Y-axis: y-axis Low --> High
-    static readonly Parser<char, (string bottom, string top)> yAxisParser;
-
-    // Quadrant labels: quadrant-1 Label
-    static readonly Parser<char, (int quadrant, string label)> quadrantLabelParser;
-
-    // Coordinate value. Mirrors Mermaid's lexer rule (1)|(0(\.\d+)?): either a bare 1, or a 0 with
-    // an optional fraction. Anything else (1.0, 1.5, 2, -3, ...) fails to parse, exactly as mermaid.js
-    // rejects it with a lexical error — so a parsed value is always within [0, 1].
-    static readonly Parser<char, double> coordinateParser;
-
-    // Point: Name: [0.5, 0.7]
-    static readonly Parser<char, QuadrantPoint> pointParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    static readonly Parser<char, IQuadrantContent?> ContentItem;
-
     static readonly Parser<char, QuadrantModel> Parser;
 
     static QuadrantParser()
     {
-        restOfLine =
+        var restOfLine =
             Token(_ => _ != '\r' && _ != '\n').ManyString();
 
-        titleParser =
+        // Title: title My Chart
+        var titleParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("title")
             from ___ in CommonParsers.RequiredWhitespace
@@ -42,7 +16,8 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
             from ____ in CommonParsers.LineEnd
             select title.Trim();
 
-        xAxisParser =
+        // X-axis: x-axis Low --> High
+        var xAxisParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("x-axis")
             from ___ in CommonParsers.RequiredWhitespace
@@ -53,9 +28,10 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
             from ____ in CommonParsers.InlineWhitespace
             from right in restOfLine
             from _____ in CommonParsers.LineEnd
-            select (left.Trim().TrimEnd('-').Trim(), right.Trim());
+            select (left: left.Trim().TrimEnd('-').Trim(), right: right.Trim());
 
-        yAxisParser =
+        // Y-axis: y-axis Low --> High
+        var yAxisParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("y-axis")
             from ___ in CommonParsers.RequiredWhitespace
@@ -66,18 +42,22 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
             from ____ in CommonParsers.InlineWhitespace
             from top in restOfLine
             from _____ in CommonParsers.LineEnd
-            select (bottom.Trim().TrimEnd('-').Trim(), top.Trim());
+            select (bottom: bottom.Trim().TrimEnd('-').Trim(), top: top.Trim());
 
-        quadrantLabelParser =
+        // Quadrant labels: quadrant-1 Label
+        var quadrantLabelParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("quadrant-")
             from num in Digit.Select(_ => _ - '0')
             from ___ in CommonParsers.RequiredWhitespace
             from label in restOfLine
             from ____ in CommonParsers.LineEnd
-            select (num, label.Trim());
+            select (quadrant: num, label: label.Trim());
 
-        coordinateParser =
+        // Coordinate value. Mirrors Mermaid's lexer rule (1)|(0(\.\d+)?): either a bare 1, or a 0 with
+        // an optional fraction. Anything else (1.0, 1.5, 2, -3, ...) fails to parse, exactly as mermaid.js
+        // rejects it with a lexical error — so a parsed value is always within [0, 1].
+        var coordinateParser =
             Char('1').ThenReturn(1d)
                 .Or(
                     from _ in Char('0')
@@ -86,7 +66,8 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
                         ? double.Parse("0." + frac.Value, CultureInfo.InvariantCulture)
                         : 0d);
 
-        pointParser =
+        // Point: Name: [0.5, 0.7]
+        var pointParser =
             from _ in CommonParsers.InlineWhitespace
             from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
             from __ in Char(':')
@@ -109,11 +90,12 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
                 Y = y
             };
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        ContentItem =
+        var contentItem =
             OneOf(
                 Try(titleParser.Select<IQuadrantContent?>(_ => new TitleItem(_))),
                 Try(xAxisParser.Select<IQuadrantContent?>(_ => new XAxisItem(_.left, _.right))),
@@ -128,7 +110,7 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
             from __ in CIString("quadrantChart")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(result.Item1);
     }
 

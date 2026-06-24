@@ -22,7 +22,7 @@ static class ParentDummyChains
         {
             var v = v0;
             var node = graph.NodeLabel(v);
-            var edgeObj = node.EdgeObj!;
+            var edgeObj = node.EdgeKey!;
             var pathData = FindPath(graph, postorderNums, edgeObj.V, edgeObj.W);
             var path = pathData.Path;
             var lca = pathData.Lca;

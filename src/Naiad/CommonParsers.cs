@@ -21,8 +21,6 @@ public static class CommonParsers
     // Quoted strings
     public static readonly Parser<char, string> DoubleQuotedString;
 
-    static readonly Parser<char, string> SingleQuotedString;
-
     public static readonly Parser<char, string> QuotedString;
 
     // Numbers
@@ -72,14 +70,13 @@ public static class CommonParsers
                 .Before(Char('"'))
                 .Labelled("double-quoted string");
 
-        SingleQuotedString =
-            Char('\'')
-                .Then(Token(_ => _ != '\'').ManyString())
-                .Before(Char('\''))
-                .Labelled("single-quoted string");
+        var singleQuotedString = Char('\'')
+            .Then(Token(_ => _ != '\'').ManyString())
+            .Before(Char('\''))
+            .Labelled("single-quoted string");
 
         QuotedString =
-            DoubleQuotedString.Or(SingleQuotedString);
+            DoubleQuotedString.Or(singleQuotedString);
 
         Number =
             Real.Labelled("number");

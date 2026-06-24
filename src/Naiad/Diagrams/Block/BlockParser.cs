@@ -1,64 +1,20 @@
 class BlockParser : IDiagramParser<BlockModel>
 {
-    static readonly Parser<char, string> identifier;
-
-    // Label content (text inside shape brackets)
-    static readonly Parser<char, string> labelContent;
-
-    static readonly Parser<char, string> quotedLabel;
-
-    static readonly Parser<char, int> columnsParser;
-
-    // Rectangle shape: ["label"] or [label]
-    static readonly Parser<char, (string label, BlockShape shape)> rectangleShape;
-
-    // Rounded shape: ("label") or (label)
-    static readonly Parser<char, (string label, BlockShape shape)> roundedShape;
-
-    // Stadium shape: (["label"]) or ([label])
-    static readonly Parser<char, (string label, BlockShape shape)> stadiumShape;
-
-    // Circle shape: (("label")) or ((label))
-    static readonly Parser<char, (string label, BlockShape shape)> circleShape;
-
-    // Diamond shape: {"label"} or {label}
-    static readonly Parser<char, (string label, BlockShape shape)> diamondShape;
-
-    // Hexagon shape: {{"label"}} or {{label}}
-    static readonly Parser<char, (string label, BlockShape shape)> hexagonShape;
-
-    // Shape parser (order matters - more specific first)
-    static readonly Parser<char, (string label, BlockShape shape)> shapeParser;
-
-    // Span: :N
-    static readonly Parser<char, int> spanParser;
-
-    // Block element: id["label"]:2
-    static readonly Parser<char, BlockElement> elementParser;
-
-    // Elements on a line (space separated)
-    static readonly Parser<char, List<BlockElement>> elementsLineParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    // Content item
-    static readonly Parser<char, IBlockContent?> ContentItem;
-
     static readonly Parser<char, BlockModel> Parser;
 
     static BlockParser()
     {
-        identifier =
+        var identifier =
             Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-        labelContent =
+        // Label content (text inside shape brackets)
+        var labelContent =
             Token(_ => _ != '"' && _ != ']' && _ != ')' && _ != '}').ManyString();
 
-        quotedLabel =
+        var quotedLabel =
             Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
-        columnsParser =
+        var columnsParser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from columns in CIString("columns")
             from rRequiredWhitespace in CommonParsers.RequiredWhitespace
@@ -67,44 +23,51 @@ class BlockParser : IDiagramParser<BlockModel>
             from lineEnd in CommonParsers.LineEnd
             select num;
 
-        rectangleShape =
+        // Rectangle shape: ["label"] or [label]
+        var rectangleShape =
             from left in Char('[')
             from label in quotedLabel.Or(labelContent)
             from right in Char(']')
-            select (label.Trim(), BlockShape.Rectangle);
+            select (label: label.Trim(), shape: BlockShape.Rectangle);
 
-        roundedShape =
+        // Rounded shape: ("label") or (label)
+        var roundedShape =
             from left in Char('(')
             from label in quotedLabel.Or(Token(_ => _ != ')').ManyString())
             from right in Char(')')
-            select (label.Trim(), BlockShape.Rounded);
+            select (label: label.Trim(), shape: BlockShape.Rounded);
 
-        stadiumShape =
+        // Stadium shape: (["label"]) or ([label])
+        var stadiumShape =
             from left in String("([")
             from label in quotedLabel.Or(Token(_ => _ != ']').ManyString())
             from right in String("])")
-            select (label.Trim(), BlockShape.Stadium);
+            select (label: label.Trim(), shape: BlockShape.Stadium);
 
-        circleShape =
+        // Circle shape: (("label")) or ((label))
+        var circleShape =
             from left in String("((")
             from label in quotedLabel.Or(Token(_ => _ != ')').ManyString())
             from right in String("))")
-            select (label.Trim(), BlockShape.Circle);
+            select (label: label.Trim(), shape: BlockShape.Circle);
 
-        diamondShape =
+        // Diamond shape: {"label"} or {label}
+        var diamondShape =
             from left in Char('{')
             from notDouble in Lookahead(AnyCharExcept('{'))
             from label in quotedLabel.Or(Token(_ => _ != '}').ManyString())
             from right in Char('}')
-            select (label.Trim(), BlockShape.Diamond);
+            select (label: label.Trim(), shape: BlockShape.Diamond);
 
-        hexagonShape =
+        // Hexagon shape: {{"label"}} or {{label}}
+        var hexagonShape =
             from left in String("{{")
             from label in quotedLabel.Or(Token(_ => _ != '}').ManyString())
             from right in String("}}")
-            select (label.Trim(), BlockShape.Hexagon);
+            select (label: label.Trim(), shape: BlockShape.Hexagon);
 
-        shapeParser =
+        // Shape parser (order matters - more specific first)
+        var shapeParser =
             OneOf(
                 Try(stadiumShape),
                 Try(circleShape),
@@ -114,12 +77,14 @@ class BlockParser : IDiagramParser<BlockModel>
                 Try(rectangleShape)
             );
 
-        spanParser =
+        // Span: :N
+        var spanParser =
             from _ in Char(':')
             from num in Digit.AtLeastOnceString().Select(int.Parse)
             select num;
 
-        elementParser =
+        // Block element: id["label"]:2
+        var elementParser =
             from id in identifier
             from shape in shapeParser.Optional()
             from span in spanParser.Optional()
@@ -131,18 +96,21 @@ class BlockParser : IDiagramParser<BlockModel>
                 Span = span.GetValueOrDefault(1)
             };
 
-        elementsLineParser =
+        // Elements on a line (space separated)
+        var elementsLineParser =
             from _ in CommonParsers.InlineWhitespace
             from elements in elementParser.SeparatedAtLeastOnce(CommonParsers.RequiredWhitespace)
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
             select elements.ToList();
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        ContentItem =
+        // Content item
+        var contentItem =
             OneOf(
                 Try(columnsParser.Select<IBlockContent?>(_ => new ColumnsItem(_))),
                 Try(elementsLineParser.Select<IBlockContent?>(_ => new ElementsItem(_))),
@@ -154,7 +122,7 @@ class BlockParser : IDiagramParser<BlockModel>
             from __ in OneOf(CIString("block-beta"), CIString("block"))
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(result.Item1);
     }
 

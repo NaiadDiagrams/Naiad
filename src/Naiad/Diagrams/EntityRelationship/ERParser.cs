@@ -1,50 +1,17 @@
 class ERParser : IDiagramParser<ERModel>
 {
-    // Entity name (alphanumeric, underscore, hyphen)
-    static readonly Parser<char, string> entityName;
-
-    // Left cardinality markers
-    static readonly Parser<char, Cardinality> leftCardinality;
-
-    // Right cardinality markers
-    static readonly Parser<char, Cardinality> rightCardinality;
-
-    // Line style (-- for identifying, .. for non-identifying)
-    static readonly Parser<char, bool> lineStyle;
-
-    // Relationship: ENTITY1 ||--o{ ENTITY2 : label
-    static readonly Parser<char, Relationship> relationshipParser;
-
-    // Attribute key type
-    static readonly Parser<char, AttributeKeyType> keyTypeParser;
-
-    // Attribute comment (in quotes)
-    static readonly Parser<char, string> attributeComment;
-
-    // Entity attribute: type name PK "comment"
-    static readonly Parser<char, EntityAttribute> attributeParser;
-
-    // Entity body content: individual attribute lines
-    static readonly Parser<char, List<EntityAttribute>> EntityBodyParser;
-
-    // Entity definition: EntityName { attributes }
-    static readonly Parser<char, Entity> EntityDefinitionParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    static readonly Parser<char, IEnumerable<IERContent?>> ParseContent;
-
     static readonly Parser<char, ERModel> Parser;
 
     static ERParser()
     {
-        entityName =
+        // Entity name (alphanumeric, underscore, hyphen)
+        var entityName =
             Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
                 .AtLeastOnceString()
                 .Labelled("entity name");
 
-        leftCardinality =
+        // Left cardinality markers
+        var leftCardinality =
             OneOf(
                 Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
                 Try(String("|o")).ThenReturn(Cardinality.ZeroOrOne),
@@ -52,7 +19,8 @@ class ERParser : IDiagramParser<ERModel>
                 String("}o").ThenReturn(Cardinality.ZeroOrMore)
             );
 
-        rightCardinality =
+        // Right cardinality markers
+        var rightCardinality =
             OneOf(
                 Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
                 Try(String("o|")).ThenReturn(Cardinality.ZeroOrOne),
@@ -60,13 +28,15 @@ class ERParser : IDiagramParser<ERModel>
                 String("o{").ThenReturn(Cardinality.ZeroOrMore)
             );
 
-        lineStyle =
+        // Line style (-- for identifying, .. for non-identifying)
+        var lineStyle =
             OneOf(
                 String("--").ThenReturn(true),
                 String("..").ThenReturn(false)
             );
 
-        relationshipParser =
+        // Relationship: ENTITY1 ||--o{ ENTITY2 : label
+        var relationshipParser =
             from _ in CommonParsers.InlineWhitespace
             from fromEntity in entityName
             from __ in CommonParsers.InlineWhitespace
@@ -93,17 +63,20 @@ class ERParser : IDiagramParser<ERModel>
                 Identifying = identifying
             };
 
-        keyTypeParser =
+        // Attribute key type
+        var keyTypeParser =
             OneOf(
                 Try(String("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
                 Try(String("FK")).ThenReturn(AttributeKeyType.ForeignKey),
                 String("UK").ThenReturn(AttributeKeyType.UniqueKey)
             );
 
-        attributeComment =
+        // Attribute comment (in quotes)
+        var attributeComment =
             CommonParsers.DoubleQuotedString;
 
-        attributeParser =
+        // Entity attribute: type name PK "comment"
+        var attributeParser =
             from _ in CommonParsers.InlineWhitespace
             from type in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '[' || _ == ']').AtLeastOnceString()
             from __ in CommonParsers.RequiredWhitespace
@@ -122,7 +95,8 @@ class ERParser : IDiagramParser<ERModel>
                 Comment = comment.HasValue ? comment.Value : null
             };
 
-        EntityBodyParser =
+        // Entity body content: individual attribute lines
+        var entityBodyParser =
             OneOf(
                 Try(attributeParser.Select<EntityAttribute?>(_ => _)),
                 Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd))
@@ -130,27 +104,29 @@ class ERParser : IDiagramParser<ERModel>
             ).Many()
             .Select(_ => _.Where(_ => _ != null).Cast<EntityAttribute>().ToList());
 
-        EntityDefinitionParser =
+        // Entity definition: EntityName { attributes }
+        var entityDefinitionParser =
             Try(
                 from _ in CommonParsers.InlineWhitespace
                 from name in entityName
                 from __ in CommonParsers.InlineWhitespace
                 from open in Char('{')
                 from ___ in CommonParsers.LineEnd
-                from attributes in EntityBodyParser
+                from attributes in entityBodyParser
                 from ____ in CommonParsers.InlineWhitespace
                 from close in Char('}')
                 from _____ in CommonParsers.LineEnd
                 select CreateEntity(name, attributes)
             );
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             CommonParsers.InlineWhitespace
                 .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-        ParseContent =
+        var parseContent =
             OneOf(
-                Try(EntityDefinitionParser.Select<IERContent?>(_ => new EntityItem(_))),
+                Try(entityDefinitionParser.Select<IERContent?>(_ => new EntityItem(_))),
                 Try(relationshipParser.Select<IERContent?>(_ => new RelationshipItem(_))),
                 skipLine.ThenReturn<IERContent?>(null)
             ).Many();
@@ -160,7 +136,7 @@ class ERParser : IDiagramParser<ERModel>
             from keyword in String("erDiagram")
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
-            from content in ParseContent
+            from content in parseContent
             select BuildModel(content);
     }
 

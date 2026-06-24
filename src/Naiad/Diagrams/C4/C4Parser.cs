@@ -1,73 +1,20 @@
 class C4Parser : IDiagramParser<C4Model>
 {
-    static readonly Parser<char, string> identifier;
-
-    static readonly Parser<char, string> quotedString;
-
-    static readonly Parser<char, string> restOfLine;
-
-    // Title: title My Diagram
-    static readonly Parser<char, string> titleParser;
-
-    // Person(id, "label", "description")
-    static readonly Parser<char, C4Element> personParser;
-
-    // System(id, "label", "description") or System_Ext
-    static readonly Parser<char, C4Element> systemParser;
-
-    // Optional quoted string with comma prefix
-    static readonly Parser<char, string> optionalQuotedArg;
-
-    // SystemDb(id, "label", "description") or SystemDb_Ext
-    static readonly Parser<char, C4Element> systemDbParser;
-
-    // Container(id, "label", "tech", "description") or Container_Ext
-    static readonly Parser<char, C4Element> containerParser;
-
-    // Component(id, "label", "tech", "description")
-    static readonly Parser<char, C4Element> componentParser;
-
-    // Rel(from, to, "label", "tech")
-    static readonly Parser<char, C4Relationship> relParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    // Boundary opening: Type_Boundary(id, "label") {
-    static readonly Parser<char, (string id, string label, C4BoundaryType type)> BoundaryOpen;
-
-    // Boundary closing: }
-    static readonly Parser<char, Unit> boundaryClose;
-
-    // Element inside boundary (sets BoundaryId later)
-    static readonly Parser<char, IC4Content?> BoundaryContentItem;
-
-    // Recursive boundary parser - parses boundary with nested content
-    static readonly Parser<char, BoundaryItem> BoundaryParser;
-
-    // Content inside boundary: either nested boundary or regular element
-    static readonly Parser<char, IC4Content?> BoundaryContentOrNestedBoundary;
-
-    // Content item (top level)
-    static readonly Parser<char, IC4Content?> ContentItem;
-
-    // Diagram type header
-    static readonly Parser<char, C4DiagramType> diagramTypeParser;
-
     static readonly Parser<char, C4Model> Parser;
 
     static C4Parser()
     {
-        identifier =
+        var identifier =
             Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-        quotedString =
+        var quotedString =
             Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
-        restOfLine =
+        var restOfLine =
             Token(_ => _ != '\r' && _ != '\n').ManyString();
 
-        titleParser =
+        // Title: title My Diagram
+        var titleParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("title")
             from ___ in CommonParsers.RequiredWhitespace
@@ -75,7 +22,8 @@ class C4Parser : IDiagramParser<C4Model>
             from ____ in CommonParsers.LineEnd
             select title.Trim();
 
-        personParser =
+        // Person(id, "label", "description")
+        var personParser =
             from _ in CommonParsers.InlineWhitespace
             from type in OneOf(Try(CIString("Person_Ext")), CIString("Person"))
             from __ in Char('(')
@@ -98,7 +46,8 @@ class C4Parser : IDiagramParser<C4Model>
                 IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
             };
 
-        systemParser =
+        // System(id, "label", "description") or System_Ext
+        var systemParser =
             from _ in CommonParsers.InlineWhitespace
             from type in OneOf(Try(CIString("System_Ext")), CIString("System"))
             from __ in Char('(')
@@ -121,11 +70,13 @@ class C4Parser : IDiagramParser<C4Model>
                 IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
             };
 
-        optionalQuotedArg =
+        // Optional quoted string with comma prefix
+        var optionalQuotedArg =
             CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
                 .Then(quotedString);
 
-        systemDbParser =
+        // SystemDb(id, "label", "description") or SystemDb_Ext
+        var systemDbParser =
             from _ in CommonParsers.InlineWhitespace
             from type in OneOf(Try(CIString("SystemDb_Ext")), CIString("SystemDb"))
             from __ in Char('(')
@@ -145,7 +96,8 @@ class C4Parser : IDiagramParser<C4Model>
                 IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
             };
 
-        containerParser =
+        // Container(id, "label", "tech", "description") or Container_Ext
+        var containerParser =
             from _ in CommonParsers.InlineWhitespace
             from type in OneOf(
                 Try(CIString("Container_Ext")),
@@ -175,7 +127,8 @@ class C4Parser : IDiagramParser<C4Model>
                 IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
             };
 
-        componentParser =
+        // Component(id, "label", "tech", "description")
+        var componentParser =
             from _ in CommonParsers.InlineWhitespace
             from type in OneOf(Try(CIString("Component_Ext")), CIString("Component"))
             from __ in Char('(')
@@ -197,7 +150,8 @@ class C4Parser : IDiagramParser<C4Model>
                 IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
             };
 
-        relParser =
+        // Rel(from, to, "label", "tech")
+        var relParser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in OneOf(
                 Try(CIString("Rel_D")), Try(CIString("Rel_U")),
@@ -222,11 +176,13 @@ class C4Parser : IDiagramParser<C4Model>
                 Direction = MapRelationshipDirection(keyword)
             };
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        BoundaryOpen =
+        // Boundary opening: Type_Boundary(id, "label") {
+        var boundaryOpen =
             from _ in CommonParsers.InlineWhitespace
             from boundaryType in OneOf(
                 Try(CIString("Container_Boundary")).ThenReturn(C4BoundaryType.Container),
@@ -246,16 +202,18 @@ class C4Parser : IDiagramParser<C4Model>
             from ______ in Char('{')
             from _______ in CommonParsers.InlineWhitespace
             from ________ in CommonParsers.LineEnd.Optional()
-            select (id, label, boundaryType);
+            select (id, label, type: boundaryType);
 
-        boundaryClose =
+        // Boundary closing: }
+        var boundaryClose =
             from _ in CommonParsers.InlineWhitespace
             from __ in Char('}')
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd.Optional()
             select Unit.Value;
 
-        BoundaryContentItem =
+        // Element inside boundary (sets BoundaryId later)
+        var boundaryContentItem =
             OneOf(
                 Try(personParser.Select<IC4Content?>(_ => new ElementItem(_))),
                 Try(systemDbParser.Select<IC4Content?>(_ => new ElementItem(_))),
@@ -266,11 +224,14 @@ class C4Parser : IDiagramParser<C4Model>
                 skipLine.ThenReturn<IC4Content?>(null)
             );
 
-        BoundaryParser =
-            from open in BoundaryOpen
-            // BoundaryContentOrNestedBoundary is assigned later in this constructor; the reference is only
-            // dereferenced at parse time (inside this `from` continuation), by which point it is non-null.
-            from content in BoundaryContentOrNestedBoundary!.Until(Lookahead(Try(boundaryClose)))
+        // Assigned just below; boundaryParser captures the variable and only dereferences it at
+        // parse time, by which point the real parser is in place.
+        Parser<char, IC4Content?> boundaryContentOrNestedBoundary = null!;
+
+        // Recursive boundary parser - parses boundary with nested content
+        var boundaryParser =
+            from open in boundaryOpen
+            from content in boundaryContentOrNestedBoundary.Until(Lookahead(Try(boundaryClose)))
             from close in boundaryClose
             select new BoundaryItem(
                 new()
@@ -282,16 +243,18 @@ class C4Parser : IDiagramParser<C4Model>
                 content.ToList()
             );
 
-        BoundaryContentOrNestedBoundary =
+        // Content inside boundary: either nested boundary or regular element
+        boundaryContentOrNestedBoundary =
             OneOf(
-                Try(BoundaryParser.Select<IC4Content?>(_ => _)),
-                BoundaryContentItem
+                Try(boundaryParser.Select<IC4Content?>(_ => _)),
+                boundaryContentItem
             );
 
-        ContentItem =
+        // Content item (top level)
+        var contentItem =
             OneOf(
                 Try(titleParser.Select<IC4Content?>(_ => new TitleItem(_))),
-                Try(BoundaryParser.Select<IC4Content?>(_ => _)),
+                Try(boundaryParser.Select<IC4Content?>(_ => _)),
                 Try(personParser.Select<IC4Content?>(_ => new ElementItem(_))),
                 Try(systemDbParser.Select<IC4Content?>(_ => new ElementItem(_))),
                 Try(systemParser.Select<IC4Content?>(_ => new ElementItem(_))),
@@ -301,7 +264,8 @@ class C4Parser : IDiagramParser<C4Model>
                 skipLine.ThenReturn<IC4Content?>(null)
             );
 
-        diagramTypeParser =
+        // Diagram type header
+        var diagramTypeParser =
             OneOf(
                 Try(CIString("C4Context")).ThenReturn(C4DiagramType.Context),
                 Try(CIString("C4Container")).ThenReturn(C4DiagramType.Container),
@@ -314,7 +278,7 @@ class C4Parser : IDiagramParser<C4Model>
             from type in diagramTypeParser
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(type, result.Item1);
     }
 

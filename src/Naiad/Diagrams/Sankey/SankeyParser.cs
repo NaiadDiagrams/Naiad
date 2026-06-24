@@ -1,40 +1,25 @@
 class SankeyParser : IDiagramParser<SankeyModel>
 {
-    static readonly Parser<char, double> numberParser;
-
-    static readonly Parser<char, string> quotedString;
-
-    // Unquoted name (no commas or newlines)
-    static readonly Parser<char, string> unquotedName;
-
-    // Name (quoted or unquoted)
-    static readonly Parser<char, string> name;
-
-    // Link: source,target,value
-    static readonly Parser<char, SankeyLink> linkParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    static readonly Parser<char, SankeyLink?> ContentItem;
-
     static readonly Parser<char, SankeyModel> Parser;
 
     static SankeyParser()
     {
-        numberParser = CommonParsers.SignedDecimal;
+        var numberParser = CommonParsers.SignedDecimal;
 
-        quotedString =
+        var quotedString =
             Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
-        unquotedName =
+        // Unquoted name (no commas or newlines)
+        var unquotedName =
             Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
                 .Select(_ => _.Trim());
 
-        name =
+        // Name (quoted or unquoted)
+        var name =
             quotedString.Or(unquotedName);
 
-        linkParser =
+        // Link: source,target,value
+        var linkParser =
             from _ in CommonParsers.InlineWhitespace
             from source in name
             from __ in Char(',')
@@ -52,11 +37,12 @@ class SankeyParser : IDiagramParser<SankeyModel>
                 Value = value
             };
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        ContentItem =
+        var contentItem =
             OneOf(
                 Try(linkParser.Select<SankeyLink?>(_ => _)),
                 skipLine.ThenReturn<SankeyLink?>(null)
@@ -67,7 +53,7 @@ class SankeyParser : IDiagramParser<SankeyModel>
             from __ in OneOf(CIString("sankey-beta"), CIString("sankey"))
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(result.Item1.Where(_ => _ != null).ToList());
     }
 

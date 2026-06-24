@@ -1,54 +1,19 @@
 class XYChartParser : IDiagramParser<XYChartModel>
 {
-    // Rest of line (for text content)
-    static readonly Parser<char, string> restOfLine;
-
-    // Quoted string
-    static readonly Parser<char, string> quotedString;
-
-    // Title: title "My Chart" or title My Chart
-    static readonly Parser<char, string> titleParser;
-
-    // Number parser
-    static readonly Parser<char, double> numberParser;
-
-    // Category item (unquoted or quoted)
-    static readonly Parser<char, string> categoryItem;
-
-    // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]
-    static readonly Parser<char, List<string>> categoryListParser;
-
-    // X-axis: x-axis [cat1, cat2] or x-axis "Label" [cat1, cat2]
-    static readonly Parser<char, (string label, List<string> categories)> xAxisParser;
-
-    // Y-axis: y-axis "Label" min --> max or y-axis min --> max
-    static readonly Parser<char, (string label, double min, double max)> yAxisParser;
-
-    // Data list: [100, 200, 300]
-    static readonly Parser<char, List<double>> dataListParser;
-
-    // Bar series: bar [100, 200, 300]
-    static readonly Parser<char, ChartSeries> barParser;
-
-    // Line series: line [100, 200, 300]
-    static readonly Parser<char, ChartSeries> lineParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    static readonly Parser<char, IXYContent?> ContentItem;
-
     static readonly Parser<char, XYChartModel> parser;
 
     static XYChartParser()
     {
-        restOfLine =
+        // Rest of line (for text content)
+        var restOfLine =
             Token(_ => _ != '\r' && _ != '\n').ManyString();
 
-        quotedString =
+        // Quoted string
+        var quotedString =
             Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
-        titleParser =
+        // Title: title "My Chart" or title My Chart
+        var titleParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("title")
             from ___ in CommonParsers.RequiredWhitespace
@@ -56,14 +21,17 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from ____ in CommonParsers.LineEnd
             select title.Trim();
 
-        numberParser = CommonParsers.SignedDecimal;
+        // Number parser
+        var numberParser = CommonParsers.SignedDecimal;
 
-        categoryItem =
+        // Category item (unquoted or quoted)
+        var categoryItem =
             quotedString.Or(
                 Token(_ => _ != ',' && _ != ']' && _ != '\r' && _ != '\n').AtLeastOnceString()
                     .Select(_ => _.Trim()));
 
-        categoryListParser =
+        // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]
+        var categoryListParser =
             from _ in Char('[')
             from __ in CommonParsers.InlineWhitespace
             from items in categoryItem.SeparatedAtLeastOnce(
@@ -72,7 +40,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from ____ in Char(']')
             select items.ToList();
 
-        xAxisParser =
+        // X-axis: x-axis [cat1, cat2] or x-axis "Label" [cat1, cat2]
+        var xAxisParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("x-axis")
             from ___ in CommonParsers.RequiredWhitespace
@@ -80,9 +49,10 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from categories in categoryListParser
             from ____ in CommonParsers.InlineWhitespace
             from _____ in CommonParsers.LineEnd
-            select (label.GetValueOrDefault() ?? "", categories);
+            select (label: label.GetValueOrDefault() ?? "", categories);
 
-        yAxisParser =
+        // Y-axis: y-axis "Label" min --> max or y-axis min --> max
+        var yAxisParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("y-axis")
             from ___ in CommonParsers.RequiredWhitespace
@@ -97,11 +67,12 @@ class XYChartParser : IDiagramParser<XYChartModel>
             ).Optional()
             from ______ in CommonParsers.InlineWhitespace
             from _______ in CommonParsers.LineEnd
-            select (label.GetValueOrDefault() ?? "",
-                    range.HasValue ? range.Value.min : 0,
-                    range.HasValue ? range.Value.max : 100);
+            select (label: label.GetValueOrDefault() ?? "",
+                    min: range.HasValue ? range.Value.min : 0,
+                    max: range.HasValue ? range.Value.max : 100);
 
-        dataListParser =
+        // Data list: [100, 200, 300]
+        var dataListParser =
             from _ in Char('[')
             from __ in CommonParsers.InlineWhitespace
             from items in numberParser.SeparatedAtLeastOnce(
@@ -110,7 +81,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from ____ in Char(']')
             select items.ToList();
 
-        barParser =
+        // Bar series: bar [100, 200, 300]
+        var barParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("bar")
             from ___ in CommonParsers.RequiredWhitespace
@@ -119,7 +91,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from _____ in CommonParsers.LineEnd
             select new ChartSeries { Type = ChartSeriesType.Bar, Data = data };
 
-        lineParser =
+        // Line series: line [100, 200, 300]
+        var lineParser =
             from _ in CommonParsers.InlineWhitespace
             from __ in CIString("line")
             from ___ in CommonParsers.RequiredWhitespace
@@ -128,11 +101,12 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from _____ in CommonParsers.LineEnd
             select new ChartSeries { Type = ChartSeriesType.Line, Data = data };
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
                 .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-        ContentItem =
+        var contentItem =
             OneOf(
                 Try(titleParser.Select<IXYContent?>(_ => new TitleItem(_))),
                 Try(xAxisParser.Select<IXYContent?>(_ => new XAxisItem(_.label, _.categories))),
@@ -147,7 +121,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
             from __ in OneOf(CIString("xychart-beta"), CIString("xychart"))
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
-            from result in ContentItem.ManyThen(End)
+            from result in contentItem.ManyThen(End)
             select BuildModel(result.Item1);
     }
 

@@ -1,47 +1,17 @@
 class GanttParser : IDiagramParser<GanttModel>
 {
-    // Basic parsers
-    static readonly Parser<char, string> restOfLine;
-
-    // Title: title My Chart Title
-    static readonly Parser<char, string> titleParser;
-
-    // Date format: dateFormat YYYY-MM-DD
-    static readonly Parser<char, string> dateFormatParser;
-
-    // Axis format: axisFormat %Y-%m-%d
-    static readonly Parser<char, string> axisFormatParser;
-
-    // Excludes: excludes weekends
-    static readonly Parser<char, List<string>> excludesParser;
-
-    // Section: section Section Name
-    static readonly Parser<char, string> sectionParser;
-
-    // Task line parser - handles multiple formats
-    // Format: Task name :modifiers, id, start, duration
-    // Examples:
-    //   Task A :a1, 2024-01-01, 30d
-    //   Task B :done, after a1, 20d
-    //   Task C :crit, milestone, 2024-02-01, 0d
-    static readonly Parser<char, GanttTask> taskParser;
-
-    // Skip line (comments, empty lines)
-    static readonly Parser<char, Unit> skipLine;
-
-    // Content item
-    static readonly Parser<char, IGanttContent?> ContentItem;
-
     static readonly Parser<char, GanttModel> Parser;
 
     static GanttParser()
     {
-        restOfLine =
+        // Basic parsers
+        var restOfLine =
             Token(_ => _ != '\r' &&
                        _ != '\n')
                 .ManyString();
 
-        titleParser =
+        // Title: title My Chart Title
+        var titleParser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from title in CIString("title")
             from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -49,7 +19,8 @@ class GanttParser : IDiagramParser<GanttModel>
             from lineEnd in CommonParsers.LineEnd
             select innerTitle.Trim();
 
-        dateFormatParser =
+        // Date format: dateFormat YYYY-MM-DD
+        var dateFormatParser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from dateFormat in CIString("dateFormat")
             from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -57,7 +28,8 @@ class GanttParser : IDiagramParser<GanttModel>
             from lineEnd in CommonParsers.LineEnd
             select format.Trim();
 
-        axisFormatParser =
+        // Axis format: axisFormat %Y-%m-%d
+        var axisFormatParser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from axisFormat in CIString("axisFormat")
             from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -65,7 +37,8 @@ class GanttParser : IDiagramParser<GanttModel>
             from lienEnd in CommonParsers.LineEnd
             select format.Trim();
 
-        excludesParser =
+        // Excludes: excludes weekends
+        var excludesParser =
             from whitespace in CommonParsers.InlineWhitespace
             from excludes in CIString("excludes")
             from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -73,7 +46,8 @@ class GanttParser : IDiagramParser<GanttModel>
             from lineEnd in CommonParsers.LineEnd
             select innerExcludes.Trim().Split(',').Select(_ => _.Trim()).ToList();
 
-        sectionParser =
+        // Section: section Section Name
+        var sectionParser =
             from inlienWhitespace in CommonParsers.InlineWhitespace
             from section in CIString("section")
             from requiredWhitespace in CommonParsers.RequiredWhitespace
@@ -81,7 +55,13 @@ class GanttParser : IDiagramParser<GanttModel>
             from lineEnd in CommonParsers.LineEnd
             select name.Trim();
 
-        taskParser =
+        // Task line parser - handles multiple formats
+        // Format: Task name :modifiers, id, start, duration
+        // Examples:
+        //   Task A :a1, 2024-01-01, 30d
+        //   Task B :done, after a1, 20d
+        //   Task C :crit, milestone, 2024-02-01, 0d
+        var taskParser =
             from _ in CommonParsers.InlineWhitespace
             from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
             from __ in CommonParsers.InlineWhitespace
@@ -91,11 +71,13 @@ class GanttParser : IDiagramParser<GanttModel>
             from lineEnd in CommonParsers.LineEnd
             select ParseTaskLine(name.Trim(), parts.Trim());
 
-        skipLine =
+        // Skip line (comments, empty lines)
+        var skipLine =
             CommonParsers.InlineWhitespace
                 .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
-        ContentItem =
+        // Content item
+        var contentItem =
             OneOf(
                 Try(titleParser.Select<IGanttContent?>(_ => new TitleItem(_))),
                 Try(dateFormatParser.Select<IGanttContent?>(_ => new DateFormatItem(_))),
@@ -111,7 +93,7 @@ class GanttParser : IDiagramParser<GanttModel>
             from __ in CIString("gantt")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
-            from content in ContentItem.Many()
+            from content in contentItem.Many()
             select BuildModel(content);
     }
 
