@@ -186,7 +186,7 @@ static class Layout
         {
             var edge = graph.FindEdgeLabel(e);
             edge.Minlen *= 2;
-            if (edge.Labelpos == LabelPos.Center)
+            if (edge.Labelpos == LabelPosition.Center)
             {
                 continue;
             }
@@ -226,7 +226,7 @@ static class Layout
                 Rank = (w.Rank!.Value - v.Rank!.Value) / 2 + v.Rank!.Value,
                 EdgeKey = e
             };
-            Util.AddDummyNode(graph, DummyKind.EdgeProxy, label, "_ep");
+            Util.AddDummyNode(graph, DummyKind.EdgeProxy, label, DummyNames.EdgeProxy);
         }
     }
 
@@ -351,17 +351,17 @@ static class Layout
                 continue;
             }
 
-            if (edge.Labelpos is LabelPos.Left or LabelPos.Right)
+            if (edge.Labelpos is LabelPosition.Left or LabelPosition.Right)
             {
                 edge.Width -= edge.Labeloffset;
             }
 
             switch (edge.Labelpos)
             {
-                case LabelPos.Left:
+                case LabelPosition.Left:
                     edge.X -= edge.Width / 2 + edge.Labeloffset;
                     break;
-                case LabelPos.Right:
+                case LabelPosition.Right:
                     edge.X += edge.Width / 2 + edge.Labeloffset;
                     break;
             }
@@ -448,7 +448,7 @@ static class Layout
                             EdgeKey = selfEdge.E,
                             EdgeLabel = selfEdge.Label
                         },
-                        "_se");
+                        DummyNames.SelfEdge);
                 }
 
                 node.SelfEdges = null;

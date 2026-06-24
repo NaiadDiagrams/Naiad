@@ -3,6 +3,9 @@
 /// </summary>
 static class Acyclic
 {
+    /// <summary>Id prefix for the synthetic edges created when reversing a cycle edge.</summary>
+    const string ReversedEdgePrefix = "rev";
+
     public static void Run(Graph graph)
     {
         foreach (var e in DfsFas(graph))
@@ -11,7 +14,7 @@ static class Acyclic
             graph.RemoveEdge(e);
             label.ForwardName = e.Name;
             label.Reversed = true;
-            graph.SetEdge(e.W, e.V, label, graph.UniqueId("rev"));
+            graph.SetEdge(e.W, e.V, label, graph.UniqueId(ReversedEdgePrefix));
         }
     }
 

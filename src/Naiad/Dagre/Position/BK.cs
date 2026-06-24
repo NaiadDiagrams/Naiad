@@ -604,10 +604,10 @@ static class BK
             {
                 switch (vLabel.Labelpos)
                 {
-                    case LabelPos.Left:
+                    case LabelPosition.Left:
                         delta = -vLabel.Width / 2;
                         break;
-                    case LabelPos.Right:
+                    case LabelPosition.Right:
                         delta = vLabel.Width / 2;
                         break;
                 }
@@ -628,10 +628,10 @@ static class BK
             {
                 switch (wLabel.Labelpos)
                 {
-                    case LabelPos.Left:
+                    case LabelPosition.Left:
                         delta = wLabel.Width / 2;
                         break;
-                    case LabelPos.Right:
+                    case LabelPosition.Right:
                         delta = -wLabel.Width / 2;
                         break;
                 }

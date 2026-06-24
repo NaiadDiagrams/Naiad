@@ -1,6 +1,6 @@
 static class BuildLayerGraph
 {
-    public static Graph Run(Graph graph, int rank, string relationship, List<string>? nodesWithRank = null)
+    public static Graph Run(Graph graph, int rank, Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf, List<string>? nodesWithRank = null)
     {
         nodesWithRank ??= graph.Nodes();
 
@@ -29,8 +29,7 @@ static class BuildLayerGraph
             result.SetParent(v, parent ?? root);
 
             // This assumes we have only short edges!
-            var edges = relationship == "inEdges" ? graph.InEdgesOf(v) : graph.OutEdgesOf(v);
-            foreach (var e in edges)
+            foreach (var e in edgesOf(v))
             {
                 var u = e.V == v ? e.W : e.V;
                 var weight = result.TryGetEdgeLabel(u, v, out var existing) ? existing.Weight!.Value : 0;
@@ -61,7 +60,7 @@ static class BuildLayerGraph
     static string CreateRootNode(Graph graph)
     {
         string v;
-        while (graph.HasNode(v = graph.UniqueId("_root")))
+        while (graph.HasNode(v = graph.UniqueId(DummyNames.Root)))
         {
         }
 

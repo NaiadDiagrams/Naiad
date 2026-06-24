@@ -22,8 +22,8 @@ static class AddBorderSegments
                     rank < maxRank;
                     ++rank)
                 {
-                    AddBorderNode(graph, BorderKind.Left, "_bl", v, node, rank);
-                    AddBorderNode(graph, BorderKind.Right, "_br", v, node, rank);
+                    AddBorderNode(graph, BorderKind.Left, DummyNames.BorderLeft, v, node, rank);
+                    AddBorderNode(graph, BorderKind.Right, DummyNames.BorderRight, v, node, rank);
                 }
             }
         }

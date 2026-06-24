@@ -561,7 +561,7 @@ public class BkTests
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             graph.Label.EdgeSeparation = 50;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Left});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPosition.Left});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
@@ -577,7 +577,7 @@ public class BkTests
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             graph.Label.EdgeSeparation = 50;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Center});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPosition.Center});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
@@ -593,7 +593,7 @@ public class BkTests
             var align = StrMap(("a", "a"), ("b", "b"), ("c", "c"));
             graph.Label.EdgeSeparation = 50;
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
-            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPos.Right});
+            graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPosition.Right});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
             var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);

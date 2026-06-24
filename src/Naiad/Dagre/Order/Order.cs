@@ -3,8 +3,8 @@ static class Order
     public static void Run(Graph graph)
     {
         var maxRank = (int) Util.MaxRank(graph);
-        var downLayerGraphs = BuildLayerGraphs(graph, Util.Range(1, maxRank + 1), "inEdges");
-        var upLayerGraphs = BuildLayerGraphs(graph, Util.Range(maxRank - 1, -1, -1), "outEdges");
+        var downLayerGraphs = BuildLayerGraphs(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf);
+        var upLayerGraphs = BuildLayerGraphs(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf);
 
         var layering = InitOrder.Run(graph);
         AssignOrder(graph, layering);
@@ -35,7 +35,7 @@ static class Order
         AssignOrder(graph, best!);
     }
 
-    static List<Graph> BuildLayerGraphs(Graph graph, List<int> ranks, string relationship)
+    static List<Graph> BuildLayerGraphs(Graph graph, List<int> ranks, Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf)
     {
         // Build an index mapping from rank to the nodes with that rank.
         // This helps to avoid a quadratic search for all nodes with the same rank as
@@ -84,7 +84,7 @@ static class Order
         }
 
         return ranks.Select(rank =>
-            BuildLayerGraph.Run(graph, rank, relationship, nodesByRank.GetValueOrDefault(rank) ?? [])).ToList();
+            BuildLayerGraph.Run(graph, rank, edgesOf, nodesByRank.GetValueOrDefault(rank) ?? [])).ToList();
     }
 
     static void SweepLayerGraphs(List<Graph> layerGraphs, bool biasRight)

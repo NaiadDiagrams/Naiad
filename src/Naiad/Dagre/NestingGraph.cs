@@ -25,7 +25,7 @@ static class NestingGraph
 {
     public static void Run(Graph graph)
     {
-        var root = Util.AddDummyNode(graph, DummyKind.Root, new(), "_root");
+        var root = Util.AddDummyNode(graph, DummyKind.Root, new(), DummyNames.Root);
         var depths = TreeDepths(graph);
         var depthsArr = depths.Values.Select(d => (double) d).ToList();
         var height = Util.ApplyMax(depthsArr) - 1; // Note: depths is an Object not an array
@@ -86,8 +86,8 @@ static class NestingGraph
             return;
         }
 
-        var top = Util.AddBorderNode(graph, "_bt");
-        var bottom = Util.AddBorderNode(graph, "_bb");
+        var top = Util.AddBorderNode(graph, DummyNames.BorderTop);
+        var bottom = Util.AddBorderNode(graph, DummyNames.BorderBottom);
         var label = graph.NodeLabel(v);
 
         graph.SetParent(top, v);

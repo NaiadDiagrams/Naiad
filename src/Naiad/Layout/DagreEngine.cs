@@ -57,7 +57,7 @@ class DagreEngine : ILayoutEngine
             {
                 label.Width = edge.LabelWidth;
                 label.Height = edge.LabelHeight;
-                label.Labelpos = LabelPos.Center;
+                label.Labelpos = LabelPosition.Center;
             }
 
             // A unique per-edge name keeps parallel edges (same source/target) distinct in the multigraph.

@@ -13,7 +13,7 @@ public class BuildLayerGraphTests
         graph.SetNode("c", new() { Rank = 2 });
         graph.SetNode("d", new() { Rank = 3 });
 
-        var lg = BuildLayerGraph.Run(graph, 1, "inEdges");
+        var lg = BuildLayerGraph.Run(graph, 1, graph.InEdgesOf);
         await Assert.That(lg.HasNode(lg.Label.Root!)).IsTrue();
         await Assert.That(lg.Children(Graph.GraphNode)).IsEquivalentTo(new List<string> { lg.Label.Root! }, CollectionOrdering.Matching);
         await Assert.That(lg.Children(lg.Label.Root!)).IsEquivalentTo(new List<string> { "a", "b" }, CollectionOrdering.Matching);
@@ -27,10 +27,10 @@ public class BuildLayerGraphTests
         graph.SetNode("c", new() { Rank = 2 });
         graph.SetNode("d", new() { Rank = 3 });
 
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "inEdges").Nodes()).Contains("a");
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "inEdges").Nodes()).Contains("b");
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").Nodes()).Contains("c");
-        await Assert.That(BuildLayerGraph.Run(graph, 3, "inEdges").Nodes()).Contains("d");
+        await Assert.That(BuildLayerGraph.Run(graph, 1, graph.InEdgesOf).Nodes()).Contains("a");
+        await Assert.That(BuildLayerGraph.Run(graph, 1, graph.InEdgesOf).Nodes()).Contains("b");
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.InEdgesOf).Nodes()).Contains("c");
+        await Assert.That(BuildLayerGraph.Run(graph, 3, graph.InEdgesOf).Nodes()).Contains("d");
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class BuildLayerGraphTests
         graph.SetNode("b", new() { Order = 2, Rank = 2 });
         graph.SetEdge("a", "b", new() { Weight = 1 });
 
-        var lg = BuildLayerGraph.Run(graph, 2, "inEdges");
+        var lg = BuildLayerGraph.Run(graph, 2, graph.InEdgesOf);
 
         await Assert.That(lg.NodeLabel("a").Order).IsEqualTo(1);
         graph.NodeLabel("a").Order = 99;
@@ -66,12 +66,12 @@ public class BuildLayerGraphTests
         graph.SetEdge("b", "c", new() { Weight = 3 });
         graph.SetEdge("c", "d", new() { Weight = 4 });
 
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "inEdges").Edges().Count).IsEqualTo(0);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").Edges().Count).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").FindEdgeLabel("a", "c").Weight).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").FindEdgeLabel("b", "c").Weight).IsEqualTo(3);
-        await Assert.That(BuildLayerGraph.Run(graph, 3, "inEdges").Edges().Count).IsEqualTo(1);
-        await Assert.That(BuildLayerGraph.Run(graph, 3, "inEdges").FindEdgeLabel("c", "d").Weight).IsEqualTo(4);
+        await Assert.That(BuildLayerGraph.Run(graph, 1, graph.InEdgesOf).Edges().Count).IsEqualTo(0);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.InEdgesOf).Edges().Count).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.InEdgesOf).FindEdgeLabel("a", "c").Weight).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.InEdgesOf).FindEdgeLabel("b", "c").Weight).IsEqualTo(3);
+        await Assert.That(BuildLayerGraph.Run(graph, 3, graph.InEdgesOf).Edges().Count).IsEqualTo(1);
+        await Assert.That(BuildLayerGraph.Run(graph, 3, graph.InEdgesOf).FindEdgeLabel("c", "d").Weight).IsEqualTo(4);
     }
 
     [Test]
@@ -85,12 +85,12 @@ public class BuildLayerGraphTests
         graph.SetEdge("b", "c", new() { Weight = 3 });
         graph.SetEdge("c", "d", new() { Weight = 4 });
 
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").Edges().Count).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").FindEdgeLabel("c", "a").Weight).IsEqualTo(2);
-        await Assert.That(BuildLayerGraph.Run(graph, 1, "outEdges").FindEdgeLabel("c", "b").Weight).IsEqualTo(3);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "outEdges").Edges().Count).IsEqualTo(1);
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "outEdges").FindEdgeLabel("d", "c").Weight).IsEqualTo(4);
-        await Assert.That(BuildLayerGraph.Run(graph, 3, "outEdges").Edges().Count).IsEqualTo(0);
+        await Assert.That(BuildLayerGraph.Run(graph, 1, graph.OutEdgesOf).Edges().Count).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(graph, 1, graph.OutEdgesOf).FindEdgeLabel("c", "a").Weight).IsEqualTo(2);
+        await Assert.That(BuildLayerGraph.Run(graph, 1, graph.OutEdgesOf).FindEdgeLabel("c", "b").Weight).IsEqualTo(3);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.OutEdgesOf).Edges().Count).IsEqualTo(1);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.OutEdgesOf).FindEdgeLabel("d", "c").Weight).IsEqualTo(4);
+        await Assert.That(BuildLayerGraph.Run(graph, 3, graph.OutEdgesOf).Edges().Count).IsEqualTo(0);
     }
 
     [Test]
@@ -101,7 +101,7 @@ public class BuildLayerGraphTests
         graph.SetEdge("a", "b", new() { Weight = 2 });
         graph.SetEdge("a", "b", new() { Weight = 3 }, "multi");
 
-        await Assert.That(BuildLayerGraph.Run(graph, 2, "inEdges").FindEdgeLabel("a", "b").Weight).IsEqualTo(5);
+        await Assert.That(BuildLayerGraph.Run(graph, 2, graph.InEdgesOf).FindEdgeLabel("a", "b").Weight).IsEqualTo(5);
     }
 
     [Test]
@@ -122,7 +122,7 @@ public class BuildLayerGraphTests
             graph.SetParent(v, "sg");
         }
 
-        var lg = BuildLayerGraph.Run(graph, 0, "inEdges");
+        var lg = BuildLayerGraph.Run(graph, 0, graph.InEdgesOf);
         var root = lg.Label.Root!;
         var children = lg.Children(root);
         children.Sort(StringComparer.Ordinal);

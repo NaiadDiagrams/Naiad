@@ -58,7 +58,7 @@ static class Normalize
                 EdgeKey = e,
                 Rank = vRank
             };
-            var dummy = Util.AddDummyNode(graph, DummyKind.Edge, attrs, "_d");
+            var dummy = Util.AddDummyNode(graph, DummyKind.Edge, attrs, DummyNames.Edge);
             if (vRank == labelRank)
             {
                 attrs.Width = edgeLabel.Width;

@@ -22,7 +22,7 @@ sealed class NodeLabel
     public string? BorderRightId;
     public int? MinRank;
     public int? MaxRank;
-    public LabelPos? Labelpos;
+    public LabelPosition? Labelpos;
     public EdgeLabel? EdgeLabel;
     public EdgeKey? EdgeKey;
 
@@ -50,7 +50,7 @@ sealed class EdgeLabel
     public double Height;
     public int? Minlen;
     public double? Weight;
-    public LabelPos Labelpos = LabelPos.Right;
+    public LabelPosition Labelpos = LabelPosition.Right;
     public double Labeloffset = 10;
     public int? LabelRank;
     public double? X;
