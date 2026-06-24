@@ -2,15 +2,15 @@ namespace Naiad.Diagrams.Timeline;
 
 public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 {
-    const double PeriodWidth = 120;
-    const double PeriodMarkerRadius = 8;
-    const double EventHeight = 25;
-    const double EventPadding = 10;
-    const double TimelineY = 80;
-    const double SectionPadding = 20;
-    const double TitleHeight = 40;
+    const double periodWidth = 120;
+    const double periodMarkerRadius = 8;
+    const double eventHeight = 25;
+    const double eventPadding = 10;
+    const double timelineY = 80;
+    const double sectionPadding = 20;
+    const double titleHeight = 40;
 
-    static readonly string[] SectionColors =
+    static string[] sectionColors =
     [
         "#E3F2FD", // light blue
         "#F3E5F5", // light purple
@@ -20,7 +20,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         "#E0F7FA"  // light cyan
     ];
 
-    static readonly string[] PeriodColors =
+    static string[] periodColors =
     [
         "#2196F3", // blue
         "#9C27B0", // purple
@@ -32,9 +32,11 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 
     public SvgDocument Render(TimelineModel model, RenderOptions options)
     {
-        if (model.Sections.Count == 0 || model.Sections.All(_ => _.Periods.Count == 0))
+        if (model.Sections.Count == 0 ||
+            model.Sections.All(_ => _.Periods.Count == 0))
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -50,21 +52,22 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         var totalPeriods = model.Sections.Sum(_ => _.Periods.Count);
         var maxEvents = model.Sections.SelectMany(_ => _.Periods).Max(_ => _.Events.Count);
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var eventsHeight = maxEvents * EventHeight + EventPadding * 2;
-        var timelineYPos = titleOffset + TimelineY + options.Padding;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
+        var eventsHeight = maxEvents * eventHeight + eventPadding * 2;
+        var timelineYPos = titleOffset + timelineY + options.Padding;
 
-        var width = totalPeriods * PeriodWidth + options.Padding * 2 + SectionPadding * model.Sections.Count;
-        var height = titleOffset + TimelineY + eventsHeight + options.Padding * 2 + 40;
+        var width = totalPeriods * periodWidth + options.Padding * 2 + sectionPadding * model.Sections.Count;
+        var height = titleOffset + timelineY + eventsHeight + options.Padding * 2 + 40;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -80,8 +83,8 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 
         foreach (var section in model.Sections)
         {
-            var sectionWidth = section.Periods.Count * PeriodWidth;
-            var sectionColor = SectionColors[sectionIndex % SectionColors.Length];
+            var sectionWidth = section.Periods.Count * periodWidth;
+            var sectionColor = sectionColors[sectionIndex % sectionColors.Length];
 
             // Draw section background
             if (!string.IsNullOrEmpty(section.Name))
@@ -111,14 +114,14 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             // Draw periods in this section
             foreach (var period in section.Periods)
             {
-                var periodX = currentX + (section.Periods.IndexOf(period) + 0.5) * PeriodWidth;
-                var periodColor = PeriodColors[globalPeriodIndex % PeriodColors.Length];
+                var periodX = currentX + (section.Periods.IndexOf(period) + 0.5) * periodWidth;
+                var periodColor = periodColors[globalPeriodIndex % periodColors.Length];
 
                 // Period marker
                 builder.AddCircle(
                     periodX,
                     timelineYPos,
-                    PeriodMarkerRadius,
+                    periodMarkerRadius,
                     fill: periodColor,
                     stroke: "#333",
                     strokeWidth: 2);
@@ -140,14 +143,14 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                 foreach (var evt in period.Events)
                 {
                     // Event box
-                    var eventWidth = MeasureText(evt, options.FontSize) + EventPadding * 2;
+                    var eventWidth = MeasureText(evt, options.FontSize) + eventPadding * 2;
                     var eventX = periodX - eventWidth / 2;
 
                     builder.AddRect(
                         eventX,
                         eventY,
                         eventWidth,
-                        EventHeight - 5,
+                        eventHeight - 5,
                         rx: 4,
                         fill: "#fff",
                         stroke: periodColor,
@@ -155,26 +158,26 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 
                     builder.AddText(
                         periodX,
-                        eventY + (EventHeight - 5) / 2,
+                        eventY + (eventHeight - 5) / 2,
                         evt,
                         anchor: "middle",
                         baseline: "middle",
                         fontSize: options.FontSize - 2,
                         fontFamily: options.FontFamily);
 
-                    eventY += EventHeight;
+                    eventY += eventHeight;
                 }
 
                 globalPeriodIndex++;
             }
 
-            currentX += sectionWidth + SectionPadding;
+            currentX += sectionWidth + sectionPadding;
             sectionIndex++;
         }
 
         // Draw timeline line
-        var lineStartX = options.Padding + PeriodWidth / 2;
-        var lineEndX = currentX - SectionPadding - PeriodWidth / 2;
+        var lineStartX = options.Padding + periodWidth / 2;
+        var lineEndX = currentX - sectionPadding - periodWidth / 2;
         builder.AddLine(
             lineStartX,
             timelineYPos,

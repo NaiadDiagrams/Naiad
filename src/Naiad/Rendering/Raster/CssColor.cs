@@ -56,7 +56,10 @@ static class CssColor
 
                 return false;
             case 4:
-                if (Nibble(hex[0], out var r4) && Nibble(hex[1], out var g4) && Nibble(hex[2], out var b4) && Nibble(hex[3], out var a4))
+                if (Nibble(hex[0], out var r4) &&
+                    Nibble(hex[1], out var g4) &&
+                    Nibble(hex[2], out var b4) &&
+                    Nibble(hex[3], out var a4))
                 {
                     color = new((byte)(r4 * 17), (byte)(g4 * 17), (byte)(b4 * 17), (byte)(a4 * 17));
                     return true;
@@ -64,7 +67,9 @@ static class CssColor
 
                 return false;
             case 6:
-                if (Byte(hex[..2], out var r6) && Byte(hex[2..4], out var g6) && Byte(hex[4..6], out var b6))
+                if (Byte(hex[..2], out var r6) &&
+                    Byte(hex[2..4], out var g6) &&
+                    Byte(hex[4..6], out var b6))
                 {
                     color = new(r6, g6, b6, 255);
                     return true;
@@ -72,7 +77,10 @@ static class CssColor
 
                 return false;
             case 8:
-                if (Byte(hex[..2], out var r8) && Byte(hex[2..4], out var g8) && Byte(hex[4..6], out var b8) && Byte(hex[6..8], out var a8))
+                if (Byte(hex[..2], out var r8) &&
+                    Byte(hex[2..4], out var g8) &&
+                    Byte(hex[4..6], out var b8) &&
+                    Byte(hex[6..8], out var a8))
                 {
                     color = new(r8, g8, b8, a8);
                     return true;

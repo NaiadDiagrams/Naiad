@@ -17,7 +17,8 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
     {
         if (model.RootNodes.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -33,7 +34,8 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
         var chartWidth = defaultWidth - options.Padding * 2;
         var chartHeight = defaultHeight - options.Padding * 2 - titleOffset;
 
-        var builder = new SvgBuilder().Size(defaultWidth, defaultHeight);
+        var builder = new SvgBuilder();
+        builder.Size(defaultWidth, defaultHeight);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))

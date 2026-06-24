@@ -7,7 +7,7 @@ using Color = SixLabors.ImageSharp.Color;
 /// the diagram's transforms; stroke widths are scaled to match (ImageSharp strokes in device space),
 /// mirroring the Skia backend.
 /// </summary>
-sealed class ImageSharpSurface(int width, int height, Rgba background) :
+sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompression compression) :
     IRenderSurface
 {
     static ConcurrentDictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
@@ -73,7 +73,12 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
             stream,
             new()
             {
-                CompressionLevel = PngCompressionLevel.BestCompression
+                CompressionLevel = compression switch
+                {
+                    PngCompression.Fast => PngCompressionLevel.BestSpeed,
+                    PngCompression.Small => PngCompressionLevel.BestCompression,
+                    _ => PngCompressionLevel.Level6,
+                }
             });
 
     static DrawingOptions Options(Matrix3x2 transform, FillRule rule) =>
@@ -104,8 +109,14 @@ sealed class ImageSharpSurface(int width, int height, Rgba background) :
                 continue;
             }
 
+            var points = new PointF[subpath.Points.Count];
+            for (var i = 0; i < points.Length; i++)
+            {
+                points[i] = new(subpath.Points[i].X, subpath.Points[i].Y);
+            }
+
             builder.StartFigure();
-            builder.AddLines(subpath.Points.Select(_ => new PointF(_.X, _.Y)).ToArray());
+            builder.AddLines(points);
             if (subpath.Closed)
             {
                 builder.CloseFigure();

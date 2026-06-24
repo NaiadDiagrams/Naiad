@@ -1,52 +1,57 @@
 class KanbanParser : IDiagramParser<KanbanModel>
 {
-    static Parser<char, string> identifier =
-        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+    static Parser<char, KanbanModel> parser;
 
-    // Label in brackets: [Label Text]
-    static Parser<char, string> labelParser =
-        from _ in Char('[')
-        from label in Token(_ => _ != ']').ManyString()
-        from __ in Char(']')
-        select label.Trim();
+    static KanbanParser()
+    {
+        var identifier =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    // Column: id[Name] (no leading whitespace or minimal)
-    static Parser<char, (string id, string name)> columnParser =
-        from indent in CommonParsers.Indentation.Where(_ => _ < 4)
-        from id in identifier
-        from name in labelParser
-        from __ in CommonParsers.InlineWhitespace
-        from ___ in CommonParsers.LineEnd
-        select (id, name);
+        // Label in brackets: [Label Text]
+        var labelParser =
+            from _ in Char('[')
+            from label in Token(_ => _ != ']').ManyString()
+            from __ in Char(']')
+            select label.Trim();
 
-    // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
-    static Parser<char, (string id, string name)> taskParser =
-        from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
-        from id in identifier
-        from name in labelParser
-        from __ in CommonParsers.InlineWhitespace
-        from ___ in CommonParsers.LineEnd
-        select (id, name);
+        // Column: id[Name] (no leading whitespace or minimal)
+        var columnParser =
+            from indent in CommonParsers.Indentation.Where(_ => _ < 4)
+            from id in identifier
+            from name in labelParser
+            from __ in CommonParsers.InlineWhitespace
+            from ___ in CommonParsers.LineEnd
+            select (id, name);
 
-    // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
-        Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-            .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+        // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
+        var taskParser =
+            from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
+            from id in identifier
+            from name in labelParser
+            from __ in CommonParsers.InlineWhitespace
+            from ___ in CommonParsers.LineEnd
+            select (id, name);
 
-    static Parser<char, IKanbanContent?> ContentItem =>
-        OneOf(
-            Try(taskParser.Select<IKanbanContent?>(_ => new TaskItem(_.id, _.name))),
-            Try(columnParser.Select<IKanbanContent?>(_ => new ColumnItem(_.id, _.name))),
-            skipLine.ThenReturn<IKanbanContent?>(null)
-        );
+        // Skip line (comments, empty lines)
+        var skipLine =
+            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
+                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    public static Parser<char, KanbanModel> Parser =>
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("kanban")
-        from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
-        from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1);
+        var contentItem =
+            OneOf(
+                Try(taskParser.Select<IKanbanContent?>(_ => new TaskItem(_.id, _.name))),
+                Try(columnParser.Select<IKanbanContent?>(_ => new ColumnItem(_.id, _.name))),
+                skipLine.ThenReturn<IKanbanContent?>(null)
+            );
+
+        parser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("kanban")
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            from result in contentItem.ManyThen(End)
+            select BuildModel(result.Item1);
+    }
 
     static KanbanModel BuildModel(IEnumerable<IKanbanContent?> content)
     {
@@ -80,7 +85,7 @@ class KanbanParser : IDiagramParser<KanbanModel>
         return model;
     }
 
-    public Result<char, KanbanModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, KanbanModel> Parse(string input) => parser.Parse(input);
 
     internal interface IKanbanContent;
     readonly record struct ColumnItem(string Id, string Name) : IKanbanContent;

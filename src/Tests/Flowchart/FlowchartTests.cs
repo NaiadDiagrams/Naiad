@@ -33,8 +33,9 @@ public class FlowchartTests : TestBase
     {
         // A large request-lifecycle flowchart that stresses the layout: every supported node shape,
         // all edge styles (solid, dotted, thick-less here but bidirectional and dotted), pipe edge
-        // labels, nested subgraphs, edges that cross subgraph boundaries, and retry cycles
-        // (AUTH<->REF and WK->JOB->RT->BO->WK) that Acyclic must break and restore.
+        // labels, nested subgraphs, edges that cross subgraph boundaries, retry cycles
+        // (AUTH<->REF and WK->JOB->RT->BO->WK) that Acyclic must break and restore, and classDef/class
+        // styling applied across the diagram.
         const string input =
             """
             flowchart TD
@@ -119,6 +120,15 @@ public class FlowchartTests : TestBase
                 E401 -.->|audit| LOG
                 E429 -.->|audit| LOG
                 DLQ -.->|alert| MET
+
+                classDef error fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+                classDef service fill:#dcfce7,stroke:#16a34a,color:#14532d;
+                classDef store fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+                classDef terminal fill:#ede9fe,stroke:#7c3aed,color:#4c1d95;
+                class E429,E401,E403,E422,DLQ error;
+                class SVCA,SVCB,SVCC,FALL service;
+                class PG,RD,OBX,LOG,MET,TRC store;
+                class CRES,R200,END terminal;
             """;
 
         return VerifySvg(input);

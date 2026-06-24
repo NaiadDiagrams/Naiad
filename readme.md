@@ -95,14 +95,18 @@ SkiaRenderer.RenderPng(
             // 2x device-pixel scale for high-DPI output
             Scale = 2,
             // any CSS colour, or "transparent"
-            Background = "white"
+            Background = "white",
+            // trade encode speed against file size: Fast, Balanced (default) or Small
+            Compression = PngCompression.Balanced
         }
     });
 ```
-<sup><a href='/src/Tests/Snippets.cs#L46-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L46-L62' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `RenderPng` also has an overload that writes to a `Stream`.
+
+`Compression` trades PNG encode speed against file size; the rendered pixels are identical at every level. `Fast` (zlib level 1) encodes much faster but produces larger files, `Small` (level 9) the opposite, and `Balanced` (the default, level 6) sits between. Encoding is a sizeable share of render time — especially on the ImageSharp backend — so `Fast` is worth choosing when throughput matters more than file size.
 
 
 ## AllowHtmlElements
@@ -225,7 +229,7 @@ IconPack.Load("logos.json");
 using var stream = File.OpenRead("logos.json");
 IconPack.Load(stream);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L64-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L66-L72' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Pack files are published as [`@iconify-json/*`](https://icon-sets.iconify.design/) packages (the `icons.json` file), e.g. `@iconify-json/logos`. `Load` registers the pack under its prefix and returns it. Register all packs once at startup — calling `IconPack.Load` after the first `Mermaid.Render` throws a `MermaidException`.
@@ -259,7 +263,7 @@ Mermaid.Render(
         Storage ::icon(logos:aws-s3)
     """);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L75-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L77-L101' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.
@@ -288,7 +292,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
         A[fa:fa-bell Alerts]
     """);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L104-L123' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconsInPng' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L106-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconsInPng' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

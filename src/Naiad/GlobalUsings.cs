@@ -1,6 +1,7 @@
 ﻿global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
+global using System.Net;
 global using System.Numerics;
 global using System.Text;
 global using System.Text.Json;
@@ -30,7 +31,6 @@ global using Naiad.Diagrams.Timeline;
 global using Naiad.Diagrams.Treemap;
 global using Naiad.Diagrams.UserJourney;
 global using Naiad.Diagrams.XYChart;
-global using Naiad.Models;
 global using Pidgin;
 global using static Pidgin.Parser;
 global using static Pidgin.Parser<char>;

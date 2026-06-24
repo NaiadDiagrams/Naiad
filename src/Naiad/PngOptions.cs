@@ -18,4 +18,11 @@ public class PngOptions
     /// Diagrams are drawn assuming an opaque light background; use <c>"transparent"</c> for no fill.
     /// </summary>
     public string Background { get; set; } = "white";
+
+    /// <summary>
+    /// How hard the backend compresses the encoded PNG. Lower levels encode markedly faster but produce
+    /// larger files; the rendered pixels are identical regardless. Defaults to
+    /// <see cref="PngCompression.Balanced"/>.
+    /// </summary>
+    public PngCompression Compression { get; set; } = PngCompression.Balanced;
 }

@@ -5,8 +5,15 @@
 /// strings because resolving them needs the surrounding context — gradient lookups and
 /// <c>currentColor</c> — which the walker supplies.
 /// </summary>
-sealed class ComputedStyle
+struct ComputedStyle
 {
+    // A value type so the per-element copy the walker makes (CloneForChild, once per element including the
+    // many transparent group wrappers) stays on the stack instead of allocating. The explicit parameterless
+    // constructor is required for the initial-value property initializers below to run on `new ComputedStyle()`.
+    public ComputedStyle()
+    {
+    }
+
     // SVG initial values. The Mermaid base stylesheet overrides several of these on the root via the
     // `#naiad` rule, which the walker applies before descending.
     public string Fill { get; set; } = "#000";
@@ -39,9 +46,9 @@ sealed class ComputedStyle
 
     /// <summary>Produces the inherited base for a child: every inherited property carries over, while
     /// the non-inherited <see cref="Opacity"/> resets to its initial value.</summary>
-    public ComputedStyle CloneForChild()
+    public readonly ComputedStyle CloneForChild()
     {
-        var clone = (ComputedStyle)MemberwiseClone();
+        var clone = this;
         clone.Opacity = 1;
         return clone;
     }

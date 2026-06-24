@@ -53,7 +53,8 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         var halfWidth = plotWidth / 2;
         var halfHeight = plotHeight / 2;
 
-        var builder = new SvgBuilder().Size(chartSize, chartSize);
+        var builder = new SvgBuilder();
+        builder.Size(chartSize, chartSize);
 
         // Quadrant fills (no stroke; the grid lines come from the border pass below).
         builder.AddRect(plotLeft, plotTop, halfWidth, halfHeight, fill: quadrant2Fill); // top-left

@@ -1,125 +1,130 @@
 class MindmapParser : IDiagramParser<MindmapModel>
 {
-    // Parse indentation (spaces or tabs)
-    static Parser<char, int> indentationParser =
-        Token(_ => _ is ' ' or '\t')
-            .Many()
-            .Select(chars =>
-            {
-                var array = chars as char[] ?? chars.ToArray();
-                return array.Count(_ => _ == '\t') * 4 + array.Count(_ => _ == ' ');
-            });
+    static Parser<char, MindmapModel> parser;
 
-    // Icon: ::icon(fa fa-book)
-    static Parser<char, string> iconParser =
-        from _ in String("::icon(")
-        from icon in Token(_ => _ != ')').AtLeastOnceString()
-        from __ in Char(')')
-        select icon;
+    static MindmapParser()
+    {
+        // Parse indentation (spaces or tabs)
+        var indentationParser =
+            Token(_ => _ is ' ' or '\t')
+                .Many()
+                .Select(chars =>
+                {
+                    var array = chars as char[] ?? chars.ToArray();
+                    return array.Count(_ => _ == '\t') * 4 + array.Count(_ => _ == ' ');
+                });
 
-    // CSS class: :::className
-    static Parser<char, string> cssClassParser =
-        from _ in String(":::")
-        from cls in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString()
-        select cls;
+        // Icon: ::icon(fa fa-book)
+        var iconParser =
+            from _ in String("::icon(")
+            from icon in Token(_ => _ != ')').AtLeastOnceString()
+            from __ in Char(')')
+            select icon;
 
-    // Node with shape: ((circle)), (rounded), [square], {{hexagon}}, ))bang((, )cloud(
-    public static Parser<char, (string text, MindmapShape shape)> ShapedNodeParser =>
-        OneOf(
-            // Circle: ((text))
-            Try(
-                from _ in String("((")
-                from text in Token(_ => _ != ')').AtLeastOnceString()
-                from __ in String("))")
-                select (text, MindmapShape.Circle)
-            ),
-            // Bang/explosion: ))text((
-            Try(
-                from _ in String("))")
-                from text in Token(_ => _ != '(').AtLeastOnceString()
-                from __ in String("((")
-                select (text, MindmapShape.Bang)
-            ),
-            // Cloud: )text(
-            Try(
-                from _ in Char(')')
-                from text in Token(_ => _ != '(').AtLeastOnceString()
-                from __ in Char('(')
-                select (text, MindmapShape.Cloud)
-            ),
-            // Hexagon: {{text}}
-            Try(
-                from _ in String("{{")
-                from text in Token(_ => _ != '}').AtLeastOnceString()
-                from __ in String("}}")
-                select (text, MindmapShape.Hexagon)
-            ),
-            // Rounded: (text)
-            Try(
-                from _ in Char('(')
-                from text in Token(_ => _ != ')').AtLeastOnceString()
-                from __ in Char(')')
-                select (text, MindmapShape.Rounded)
-            ),
-            // Square: [text]
-            Try(
-                from _ in Char('[')
-                from text in Token(_ => _ != ']').AtLeastOnceString()
-                from __ in Char(']')
-                select (text, MindmapShape.Square)
-            )
-        );
+        // CSS class: :::className
+        var cssClassParser =
+            from _ in String(":::")
+            from cls in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString()
+            select cls;
 
-    // Optional node id preceding a shape, e.g. the "root" in root((text)). Mindmap
-    // nodes have no edges, so the id is not used when rendering — the shape's text
-    // is the label.
-    static Parser<char, string> nodeIdParser =
-        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+        // Node with shape: ((circle)), (rounded), [square], {{hexagon}}, ))bang((, )cloud(
+        var shapedNodeParser =
+            OneOf(
+                // Circle: ((text))
+                Try(
+                    from _ in String("((")
+                    from text in Token(_ => _ != ')').AtLeastOnceString()
+                    from __ in String("))")
+                    select (text, shape: MindmapShape.Circle)
+                ),
+                // Bang/explosion: ))text((
+                Try(
+                    from _ in String("))")
+                    from text in Token(_ => _ != '(').AtLeastOnceString()
+                    from __ in String("((")
+                    select (text, shape: MindmapShape.Bang)
+                ),
+                // Cloud: )text(
+                Try(
+                    from _ in Char(')')
+                    from text in Token(_ => _ != '(').AtLeastOnceString()
+                    from __ in Char('(')
+                    select (text, shape: MindmapShape.Cloud)
+                ),
+                // Hexagon: {{text}}
+                Try(
+                    from _ in String("{{")
+                    from text in Token(_ => _ != '}').AtLeastOnceString()
+                    from __ in String("}}")
+                    select (text, shape: MindmapShape.Hexagon)
+                ),
+                // Rounded: (text)
+                Try(
+                    from _ in Char('(')
+                    from text in Token(_ => _ != ')').AtLeastOnceString()
+                    from __ in Char(')')
+                    select (text, shape: MindmapShape.Rounded)
+                ),
+                // Square: [text]
+                Try(
+                    from _ in Char('[')
+                    from text in Token(_ => _ != ']').AtLeastOnceString()
+                    from __ in Char(']')
+                    select (text, shape: MindmapShape.Square)
+                )
+            );
 
-    // A shape with an optional leading id: id((circle)), id[square], or just ((circle)).
-    static Parser<char, (string text, MindmapShape shape)> ShapedNodeWithIdParser =>
-        from _ in Try(nodeIdParser).Optional()
-        from shaped in ShapedNodeParser
-        select shaped;
+        // Optional node id preceding a shape, e.g. the "root" in root((text)). Mindmap
+        // nodes have no edges, so the id is not used when rendering — the shape's text
+        // is the label.
+        var nodeIdParser =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    // Node line: indentation + optional shape + text + optional icon/class
-    static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)> nodeLineParser =
-        from indent in indentationParser
-        from shaped in Try(ShapedNodeWithIdParser).Optional()
-        from plainText in shaped.HasValue
-            ? Return("")
-            : Token(_ => _ != ':' && _ != '\r' && _ != '\n').ManyString()
-        from _ in CommonParsers.InlineWhitespace
-        from icon in Try(iconParser).Optional()
-        from __ in CommonParsers.InlineWhitespace
-        from cssClass in Try(cssClassParser).Optional()
-        from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
-        select (
-            indent,
-            shaped.HasValue ? shaped.Value.text.Trim() : plainText.Trim(),
-            shaped.HasValue ? shaped.Value.shape : MindmapShape.Default,
-            icon.HasValue ? icon.Value : null,
-            cssClass.HasValue ? cssClass.Value : null
-        );
+        // A shape with an optional leading id: id((circle)), id[square], or just ((circle)).
+        var shapedNodeWithIdParser =
+            from _ in Try(nodeIdParser).Optional()
+            from shaped in shapedNodeParser
+            select shaped;
 
-    // Content line - node line, skip line (comment/empty), or end
-    public static Parser<char, (int indent, string text, MindmapShape shape, string? icon, string? cssClass)?> ContentLine =>
-        OneOf(
-            Try(nodeLineParser.Select(_ => ((int, string, MindmapShape, string?, string?)?)_)),
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .ThenReturn(((int, string, MindmapShape, string?, string?)?)null),
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline))
-                .ThenReturn(((int, string, MindmapShape, string?, string?)?)null)
-        );
+        // Node line: indentation + optional shape + text + optional icon/class
+        var nodeLineParser =
+            from indent in indentationParser
+            from shaped in Try(shapedNodeWithIdParser).Optional()
+            from plainText in shaped.HasValue
+                ? Return("")
+                : Token(_ => _ != ':' && _ != '\r' && _ != '\n').ManyString()
+            from _ in CommonParsers.InlineWhitespace
+            from icon in Try(iconParser).Optional()
+            from __ in CommonParsers.InlineWhitespace
+            from cssClass in Try(cssClassParser).Optional()
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            select (
+                indent,
+                shaped.HasValue ? shaped.Value.text.Trim() : plainText.Trim(),
+                shaped.HasValue ? shaped.Value.shape : MindmapShape.Default,
+                icon.HasValue ? icon.Value : null,
+                cssClass.HasValue ? cssClass.Value : null
+            );
 
-    public static Parser<char, MindmapModel> Parser =>
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("mindmap")
-        from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
-        from result in ContentLine.ManyThen(End)
-        select BuildModel(result.Item1.Where(_ => _.HasValue).Select(_ => _!.Value).ToList());
+        // Content line - node line, skip line (comment/empty), or end
+        var contentLine =
+            OneOf(
+                Try(nodeLineParser.Select(_ => ((int, string, MindmapShape, string?, string?)?)_)),
+                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
+                    .ThenReturn(((int, string, MindmapShape, string?, string?)?)null),
+                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline))
+                    .ThenReturn(((int, string, MindmapShape, string?, string?)?)null)
+            );
+
+        parser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("mindmap")
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            from result in contentLine.ManyThen(End)
+            select BuildModel(result.Item1.Where(_ => _.HasValue).Select(_ => _!.Value).ToList());
+    }
 
     static MindmapModel BuildModel(List<(int indent, string text, MindmapShape shape, string? icon, string? cssClass)> lines)
     {
@@ -178,5 +183,5 @@ class MindmapParser : IDiagramParser<MindmapModel>
         return model;
     }
 
-    public Result<char, MindmapModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, MindmapModel> Parse(string input) => parser.Parse(input);
 }

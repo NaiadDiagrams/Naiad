@@ -1,4 +1,4 @@
-﻿namespace Naiad.Models;
+﻿namespace Naiad;
 
 public class Subgraph
 {
@@ -7,6 +7,12 @@ public class Subgraph
     public Direction Direction { get; set; } = Direction.TopToBottom;
     public List<string> NodeIds { get; } = [];
     public List<Subgraph> NestedSubgraphs { get; } = [];
+
+    /// <summary>Style classes assigned via a <c>class</c> directive.</summary>
+    public List<string> Classes { get; } = [];
+
+    /// <summary>Resolved visual overrides (from <c>classDef</c>/<c>class</c>/<c>style</c>), or null for theme defaults.</summary>
+    public NodeStyle? Style { get; set; }
 
     // Layout properties
     public Position Position { get; set; }

@@ -1,5 +1,3 @@
-using Naiad.Models;
-
 public class FlowchartParserTests
 {
     [Test]

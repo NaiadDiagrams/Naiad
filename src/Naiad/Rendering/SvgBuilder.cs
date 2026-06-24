@@ -13,54 +13,45 @@ public class SvgBuilder
 
     // Threads render options that affect element emission (currently the HTML/no-HTML
     // label seam and the fonts used for the native-text fallback).
-    public SvgBuilder Options(RenderOptions options)
+    public void Options(RenderOptions options)
     {
         allowHtmlElements = options.AllowHtmlElements;
         labelFontSize = options.FontSize;
         labelFontFamily = options.FontFamily;
-        return this;
     }
 
-    public SvgBuilder Size(double width, double height)
+    public void Size(double width, double height)
     {
         contentWidth = width;
         contentHeight = height;
         document.Width = width;
         document.Height = height;
-        return this;
     }
 
-    public SvgBuilder Padding(double padding)
+    public void Padding(double padding)
     {
         this.padding = padding;
         // Adjust document size to include padding on all sides
         document.Width = contentWidth + padding * 2;
         document.Height = contentHeight + padding * 2;
-        return this;
     }
 
-    public SvgBuilder DiagramType(string diagramClass, string ariaRoledescription)
+    public void DiagramType(string diagramClass, string ariaRoledescription)
     {
         document.DiagramClass = diagramClass;
         document.AriaRoledescription = ariaRoledescription;
-        return this;
     }
 
-    public SvgBuilder AddStyles(string css)
-    {
-        document.CssStyles = css;
-        return this;
-    }
+    public void AddStyles(string css) => document.CssStyles = css;
 
-    public SvgBuilder AddMarker(
+    public void AddMarker(
         string id,
         string path,
         double width,
         double height,
         double refX,
         double refY,
-        string? fill = null)
-    {
+        string? fill = null) =>
         document.Defs.Markers.Add(
             new()
             {
@@ -72,16 +63,13 @@ public class SvgBuilder
                 RefY = refY,
                 Fill = fill
             });
-        return this;
-    }
 
-    public SvgBuilder AddArrowMarker(
+    public void AddArrowMarker(
         string id = "arrowhead",
         string fill = "#333") =>
         AddMarker(id, "M0,0 L10,3.5 L0,7 Z", 10, 7, 9, 3.5, fill);
 
-    public SvgBuilder AddCrossMarker(string id = "cross")
-    {
+    public void AddCrossMarker(string id = "cross") =>
         document.Defs.Markers.Add(
             new()
             {
@@ -93,10 +81,8 @@ public class SvgBuilder
                 RefY = 4,
                 Fill = "none"
             });
-        return this;
-    }
 
-    public SvgBuilder AddMermaidArrowMarker()
+    public void AddMermaidArrowMarker()
     {
         document.Defs.Markers.Add(
             new()
@@ -124,10 +110,9 @@ public class SvgBuilder
                 MarkerUnits = "userSpaceOnUse",
                 ClassName = "marker"
             });
-        return this;
     }
 
-    public SvgBuilder AddMermaidCircleMarker()
+    public void AddMermaidCircleMarker()
     {
         document.Defs.Markers.Add(
             new()
@@ -163,10 +148,9 @@ public class SvgBuilder
                 MarkerUnits = "userSpaceOnUse",
                 ClassName = "marker"
             });
-        return this;
     }
 
-    public SvgBuilder AddMermaidCrossMarker()
+    public void AddMermaidCrossMarker()
     {
         document.Defs.Markers.Add(
             new()
@@ -196,7 +180,6 @@ public class SvgBuilder
                 ClassName = "marker cross",
                 StrokeWidth = 2
             });
-        return this;
     }
 
     /// <summary>Adds a <c>&lt;foreignObject&gt;</c> carrying raw label markup.</summary>
@@ -205,7 +188,7 @@ public class SvgBuilder
     /// <see cref="SvgForeignObject.HtmlContent"/>). Any user-supplied text within it must already be
     /// HTML-encoded by the caller.
     /// </remarks>
-    public SvgBuilder AddForeignObject(
+    public void AddForeignObject(
         double x,
         double y,
         double width,
@@ -223,7 +206,6 @@ public class SvgBuilder
             Class = className
         };
         AddElement(foreignObject);
-        return this;
     }
 
     /// <summary>
@@ -236,7 +218,7 @@ public class SvgBuilder
     /// <see cref="SvgForeignObject.HtmlContent"/>). Any user-supplied text within it must already be
     /// HTML-encoded by the caller; the native-text fallback escapes <paramref name="plainText"/> itself.
     /// </remarks>
-    public SvgBuilder AddLabel(
+    public void AddLabel(
         double x,
         double y,
         double width,
@@ -247,16 +229,17 @@ public class SvgBuilder
     {
         if (allowHtmlElements)
         {
-            return AddForeignObject(x, y, width, height, html, className);
+            AddForeignObject(x, y, width, height, html, className);
+            return;
         }
 
         var text = plainText.Trim();
         if (text.Length == 0)
         {
-            return this;
+            return;
         }
 
-        return AddText(
+        AddText(
             x + width / 2,
             y + height / 2,
             text,
@@ -267,7 +250,7 @@ public class SvgBuilder
             cssClass: className);
     }
 
-    public SvgBuilder BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
+    public void BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
     {
         var group = new SvgGroup
         {
@@ -286,20 +269,17 @@ public class SvgBuilder
         }
 
         groupStack.Push(group);
-        return this;
     }
 
-    public SvgBuilder EndGroup()
+    public void EndGroup()
     {
         if (groupStack.Count > 0)
         {
             groupStack.Pop();
         }
-
-        return this;
     }
 
-    public SvgBuilder AddRect(
+    public void AddRect(
         double x,
         double y,
         double width,
@@ -328,10 +308,9 @@ public class SvgBuilder
             Style = style
         };
         AddElement(rect);
-        return this;
     }
 
-    public SvgBuilder AddRectNoXY(double width, double height, string? style = null)
+    public void AddRectNoXY(double width, double height, string? style = null)
     {
         var rect = new SvgRectNoXY
         {
@@ -340,10 +319,9 @@ public class SvgBuilder
             Style = style
         };
         AddElement(rect);
-        return this;
     }
 
-    public SvgBuilder AddCircle(
+    public void AddCircle(
         double cx,
         double cy,
         double r,
@@ -363,10 +341,9 @@ public class SvgBuilder
             Class = cssClass
         };
         AddElement(circle);
-        return this;
     }
 
-    public SvgBuilder AddEllipse(
+    public void AddEllipse(
         double cx,
         double cy,
         double rx,
@@ -384,10 +361,9 @@ public class SvgBuilder
             Stroke = stroke
         };
         AddElement(ellipse);
-        return this;
     }
 
-    public SvgBuilder AddLine(
+    public void AddLine(
         double x1,
         double y1,
         double x2,
@@ -407,10 +383,9 @@ public class SvgBuilder
             StrokeDasharray = strokeDasharray
         };
         AddElement(line);
-        return this;
     }
 
-    public SvgBuilder AddPath(
+    public void AddPath(
         string d,
         string? fill = null,
         string? stroke = null,
@@ -434,27 +409,26 @@ public class SvgBuilder
             Class = cssClass
         };
         AddElement(path);
-        return this;
     }
 
-    public SvgBuilder AddRawSvg(string markup)
-    {
+    public void AddRawSvg(string markup) =>
         AddElement(new SvgRaw {Markup = markup});
-        return this;
-    }
 
-    public SvgBuilder AddPolygon(
+    public void AddPolygon(
         IEnumerable<Position> points,
         string? fill = null,
         string? stroke = null)
     {
-        var polygon = new SvgPolygon {Fill = fill, Stroke = stroke};
+        var polygon = new SvgPolygon
+        {
+            Fill = fill,
+            Stroke = stroke
+        };
         polygon.Points.AddRange(points);
         AddElement(polygon);
-        return this;
     }
 
-    public SvgBuilder AddText(
+    public void AddText(
         double x,
         double y,
         string content,
@@ -488,7 +462,6 @@ public class SvgBuilder
             Style = style
         };
         AddElement(text);
-        return this;
     }
 
     void AddElement(SvgElement element)

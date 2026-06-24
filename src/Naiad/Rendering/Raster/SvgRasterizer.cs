@@ -18,12 +18,12 @@ static class SvgRasterizer
         where TSurface : IRenderSurface
     {
         var (minX, minY, viewWidth, viewHeight) = ParseViewBox(document);
-        var width = Math.Max(1, (int)Math.Ceiling(viewWidth * scale));
-        var height = Math.Max(1, (int)Math.Ceiling(viewHeight * scale));
+        var width = Math.Max(1, (int) Math.Ceiling(viewWidth * scale));
+        var height = Math.Max(1, (int) Math.Ceiling(viewHeight * scale));
         var surface = createSurface(width, height);
 
         // Map user space → device: shift the viewBox origin to (0,0) then scale up.
-        var baseTransform = Matrix3x2.CreateTranslation(-(float)minX, -(float)minY) * Matrix3x2.CreateScale((float)scale);
+        var baseTransform = Matrix3x2.CreateTranslation(-(float) minX, -(float) minY) * Matrix3x2.CreateScale((float) scale);
 
         var context = new Context(surface, Stylesheet.Parse(document.CssStyles), document.Defs);
         var rootMatch = new ElementMatch("svg", document.Id, []);
@@ -55,17 +55,27 @@ static class SvgRasterizer
 
     sealed class Context(IRenderSurface surface, Stylesheet stylesheet, SvgDefs defs)
     {
-        readonly Dictionary<string, SvgMarker> markers = BuildMarkerLookup(defs);
+        Dictionary<string, SvgMarker> markers = BuildMarkerLookup(defs);
 
         // Reused across every element's cascade: Match clears and refills it, and it is fully consumed
         // (sorted then applied) before the walk recurses or a marker re-cascades, so one buffer suffices
         // for the whole document instead of allocating a list per element.
-        readonly List<MatchedDeclaration> matchBuffer = [];
+        List<MatchedDeclaration> matchBuffer = [];
+
+        // Markers are shared def instances drawn many times (~2 per edge); their flattened geometry and
+        // resolved fill/stroke depend only on the marker and the root style, so resolve each once.
+        Dictionary<SvgMarker, IReadOnlyList<SubPath>> markerGeometryCache = new();
+        Dictionary<SvgMarker, (Rgba? Fill, Rgba? Stroke)> markerColorCache = new();
+
+        // Gradients are looked up by id per fill; index them and cache each gradient's resolved stops so a
+        // gradient referenced by many shapes is parsed once (only the per-shape bounds vary).
+        Dictionary<string, SvgGradient> gradientLookup = BuildGradientLookup(defs);
+        Dictionary<string, List<GradientStop>> gradientStopsCache = new();
 
         public ComputedStyle ResolveRootStyle(ElementMatch rootMatch)
         {
             var style = new ComputedStyle();
-            ApplyCascade(style, [rootMatch], presentation: null, inlineStyle: null);
+            ApplyCascade(ref style, [rootMatch], presentationElement: null, inlineStyle: null);
             return style;
         }
 
@@ -77,8 +87,8 @@ static class SvgRasterizer
             try
             {
                 var style = inherited.CloneForChild();
-                ApplyCascade(style, chain, Presentation(element), element.Style);
-                var opacity = groupOpacity * (float)style.Opacity;
+                ApplyCascade(ref style, chain, element, element.Style);
+                var opacity = groupOpacity * (float) style.Opacity;
 
                 switch (element)
                 {
@@ -145,12 +155,13 @@ static class SvgRasterizer
 
             if (ResolveFill(style.Fill, style, subpaths) is { } fill)
             {
-                surface.FillPath(subpaths, ctm, fill, FillRule.NonZero, opacity * (float)style.FillOpacity);
+                surface.FillPath(subpaths, ctm, fill, FillRule.NonZero, opacity * (float) style.FillOpacity);
             }
 
-            if (style.StrokeWidth > 0 && ResolveColor(style.Stroke, style) is { } stroke)
+            if (style.StrokeWidth > 0 &&
+                ResolveColor(style.Stroke, style) is { } stroke)
             {
-                surface.StrokePath(subpaths, ctm, stroke, (float)style.StrokeWidth, ParseDash(style.StrokeDasharray), opacity * (float)style.StrokeOpacity);
+                surface.StrokePath(subpaths, ctm, stroke, (float) style.StrokeWidth, ParseDash(style.StrokeDasharray), opacity * (float) style.StrokeOpacity);
             }
         }
 
@@ -175,7 +186,12 @@ static class SvgRasterizer
             }
 
             var color = ResolveColor(style.Fill, style) ?? new Rgba(0x33, 0x33, 0x33, 255);
-            var textStyle = TextStyleFrom(style, color, opacity) with {Anchor = TextAnchorKind.Middle, Baseline = TextBaselineKind.Middle};
+            var textStyle = TextStyleFrom(style, color, opacity)
+                with
+                {
+                    Anchor = TextAnchorKind.Middle,
+                    Baseline = TextBaselineKind.Middle
+                };
 
             var centerX = ToF(foreignObject.X + foreignObject.Width / 2);
             var centerY = ToF(foreignObject.Y + foreignObject.Height / 2);
@@ -223,7 +239,7 @@ static class SvgRasterizer
                 return;
             }
 
-            var iconTransform = Matrix3x2.CreateScale(size / (float)width, size / (float)height) *
+            var iconTransform = Matrix3x2.CreateScale(size / (float) width, size / (float) height) *
                                 Matrix3x2.CreateTranslation(x, y) *
                                 ctm;
             WalkXml(svg, style, iconTransform, opacity);
@@ -253,7 +269,7 @@ static class SvgRasterizer
 
         static (double Width, double Height) IconViewBox(XElement svg)
         {
-            if ((string?)svg.Attribute("viewBox") is { } viewBox)
+            if ((string?) svg.Attribute("viewBox") is { } viewBox)
             {
                 var parts = viewBox.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length == 4 &&
@@ -291,23 +307,23 @@ static class SvgRasterizer
 
         void WalkXml(XElement element, ComputedStyle inherited, Matrix3x2 transform, float opacity)
         {
-            var ctm = SvgTransform.Parse((string?)element.Attribute("transform")) * transform;
+            var ctm = SvgTransform.Parse((string?) element.Attribute("transform")) * transform;
             var style = inherited.CloneForChild();
             foreach (var attribute in element.Attributes())
             {
                 style.Apply(attribute.Name.LocalName.ToLowerInvariant(), attribute.Value);
             }
 
-            foreach (var (property, value, _) in InlineDeclarations((string?)element.Attribute("style")))
+            foreach (var (property, value, _) in InlineDeclarations((string?) element.Attribute("style")))
             {
                 style.Apply(property, value);
             }
 
-            var elementOpacity = opacity * (float)style.Opacity;
+            var elementOpacity = opacity * (float) style.Opacity;
             switch (element.Name.LocalName)
             {
                 case "path":
-                    DrawShape(PathFlattener.Flatten((string?)element.Attribute("d")), ctm, style, elementOpacity);
+                    DrawShape(PathFlattener.Flatten((string?) element.Attribute("d")), ctm, style, elementOpacity);
                     break;
                 case "rect":
                     DrawShape(BuildRect(XmlNum(element, "x"), XmlNum(element, "y"), XmlNum(element, "width"), XmlNum(element, "height"), XmlNum(element, "rx"), XmlNum(element, "ry")), ctm, style, elementOpacity);
@@ -338,13 +354,20 @@ static class SvgRasterizer
             }
         }
 
-        static double XmlNum(XElement element, string name) =>
-            double.TryParse((string?)element.Attribute(name), NumberStyles.Float, CultureInfo.InvariantCulture, out var value) ? value : 0;
+        static double XmlNum(XElement element, string name)
+        {
+            if (double.TryParse((string?) element.Attribute(name), NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            {
+                return value;
+            }
+
+            return 0;
+        }
 
         static List<Vector2> XmlPoints(XElement element)
         {
             var points = new List<Vector2>();
-            var raw = (string?)element.Attribute("points");
+            var raw = (string?) element.Attribute("points");
             if (raw == null)
             {
                 return points;
@@ -356,7 +379,7 @@ static class SvgRasterizer
                 if (double.TryParse(numbers[i], NumberStyles.Float, CultureInfo.InvariantCulture, out var x) &&
                     double.TryParse(numbers[i + 1], NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
                 {
-                    points.Add(new((float)x, (float)y));
+                    points.Add(new((float) x, (float) y));
                 }
             }
 
@@ -365,13 +388,15 @@ static class SvgRasterizer
 
         void DrawMarkers(SvgPath path, IReadOnlyList<SubPath> subpaths, Matrix3x2 ctm, List<ElementMatch> chain)
         {
-            if (path.MarkerStart is { } start && MarkerLookup(start) is { } startMarker &&
+            if (path.MarkerStart is { } start &&
+                MarkerLookup(start) is { } startMarker &&
                 EndpointDirection(subpaths, atStart: true) is var (startPoint, startAngle))
             {
                 DrawMarker(startMarker, startPoint, startAngle, ctm, chain);
             }
 
-            if (path.MarkerEnd is { } end && MarkerLookup(end) is { } endMarker &&
+            if (path.MarkerEnd is { } end &&
+                MarkerLookup(end) is { } endMarker &&
                 EndpointDirection(subpaths, atStart: false) is var (endPoint, endAngle))
             {
                 DrawMarker(endMarker, endPoint, endAngle, ctm, chain);
@@ -381,24 +406,22 @@ static class SvgRasterizer
         void DrawMarker(SvgMarker marker, Vector2 vertex, float angle, Matrix3x2 pathCtm, List<ElementMatch> chain)
         {
             var (vbMinX, vbMinY, vbWidth, vbHeight) = ParseMarkerViewBox(marker);
-            var scaleX = vbWidth > 0 ? (float)(marker.MarkerWidth / vbWidth) : 1;
-            var scaleY = vbHeight > 0 ? (float)(marker.MarkerHeight / vbHeight) : 1;
+            var scaleX = vbWidth > 0 ? (float) (marker.MarkerWidth / vbWidth) : 1;
+            var scaleY = vbHeight > 0 ? (float) (marker.MarkerHeight / vbHeight) : 1;
 
             // marker content space → path-local space: shift refX/refY to the origin, scale into the
             // marker box, rotate to the path direction, then drop onto the path vertex.
             var markerLocal =
-                Matrix3x2.CreateTranslation(-(float)(marker.RefX + vbMinX), -(float)(marker.RefY + vbMinY)) *
+                Matrix3x2.CreateTranslation(-(float) (marker.RefX + vbMinX), -(float) (marker.RefY + vbMinY)) *
                 Matrix3x2.CreateScale(scaleX, scaleY) *
                 Matrix3x2.CreateRotation(angle) *
                 Matrix3x2.CreateTranslation(vertex.X, vertex.Y);
             var ctm = markerLocal * pathCtm;
 
             var (fill, stroke) = MarkerColors(marker, chain);
-            var strokeWidth = (float)marker.StrokeWidth;
+            var strokeWidth = (float) marker.StrokeWidth;
 
-            IReadOnlyList<SubPath> content = marker.UseCircle
-                ? BuildEllipse(marker.CircleCx, marker.CircleCy, marker.CircleR, marker.CircleR)
-                : PathFlattener.Flatten(marker.Path);
+            var content = MarkerGeometry(marker);
             if (content.Count == 0)
             {
                 return;
@@ -417,11 +440,17 @@ static class SvgRasterizer
 
         (Rgba? Fill, Rgba? Stroke) MarkerColors(SvgMarker marker, List<ElementMatch> chain)
         {
+            if (markerColorCache.TryGetValue(marker, out var cached))
+            {
+                return cached;
+            }
+
             // Resolve the marker's own fill/stroke as if it were an element under the root, so the
-            // `.marker { fill:#333333 }` rule (inherited by the marker's content) is honoured.
+            // `.marker { fill:#333333 }` rule (inherited by the marker's content) is honoured. The result
+            // depends only on the marker and the root match, so it is resolved once per marker.
             var markerMatch = new ElementMatch("marker", marker.Id, Split(marker.ClassName));
             var style = new ComputedStyle();
-            ApplyCascade(style, [chain[0], markerMatch], presentation: null, inlineStyle: null);
+            ApplyCascade(ref style, [chain[0], markerMatch], presentationElement: null, inlineStyle: null);
             if (marker.Fill != null)
             {
                 style.Fill = marker.Fill;
@@ -429,26 +458,44 @@ static class SvgRasterizer
 
             var fill = ResolveColor(style.Fill, style) ?? new Rgba(0x33, 0x33, 0x33, 255);
             var stroke = ResolveColor(style.Stroke, style) ?? fill;
-            return (fill, stroke);
+            var result = (fill, stroke);
+            markerColorCache[marker] = result;
+            return result;
+        }
+
+        IReadOnlyList<SubPath> MarkerGeometry(SvgMarker marker)
+        {
+            if (!markerGeometryCache.TryGetValue(marker, out var content))
+            {
+                content = marker.UseCircle
+                    ? BuildEllipse(marker.CircleCx, marker.CircleCy, marker.CircleR, marker.CircleR)
+                    : PathFlattener.Flatten(marker.Path);
+                markerGeometryCache[marker] = content;
+            }
+
+            return content;
         }
 
         SvgMarker? MarkerLookup(string reference)
         {
             var id = ExtractUrlId(reference);
-            return id != null && markers.TryGetValue(id, out var marker) ? marker : null;
+            if (id != null &&
+                markers.TryGetValue(id, out var marker))
+            {
+                return marker;
+            }
+
+            return null;
         }
 
         // --- style resolution -------------------------------------------------------------------
 
-        void ApplyCascade(ComputedStyle style, IReadOnlyList<ElementMatch> chain, IReadOnlyList<(string, string)>? presentation, string? inlineStyle)
+        void ApplyCascade(ref ComputedStyle style, IReadOnlyList<ElementMatch> chain, SvgElement? presentationElement, string? inlineStyle)
         {
             // 1. presentation attributes (lowest author priority).
-            if (presentation != null)
+            if (presentationElement != null)
             {
-                foreach (var (property, value) in presentation)
-                {
-                    style.Apply(property, value);
-                }
+                ApplyPresentation(ref style, presentationElement);
             }
 
             stylesheet.Match(chain, matchBuffer);
@@ -512,13 +559,19 @@ static class SvgRasterizer
             static int Compare(MatchedDeclaration a, MatchedDeclaration b)
             {
                 var bySpecificity = a.Specificity.CompareTo(b.Specificity);
-                return bySpecificity != 0 ? bySpecificity : a.Order.CompareTo(b.Order);
+                if (bySpecificity == 0)
+                {
+                    return a.Order.CompareTo(b.Order);
+                }
+
+                return bySpecificity;
             }
         }
 
         Paint? ResolveFill(string? raw, ComputedStyle style, IReadOnlyList<SubPath> subpaths)
         {
-            if (string.IsNullOrWhiteSpace(raw) || raw.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(raw) ||
+                raw.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -530,28 +583,41 @@ static class SvgRasterizer
 
             if (raw.Equals("currentColor", StringComparison.OrdinalIgnoreCase))
             {
-                return CssColor.TryParse(style.Color, out var current) ? new SolidPaint(current) : null;
+                if (CssColor.TryParse(style.Color, out var current))
+                {
+                    return new SolidPaint(current);
+                }
+
+                return null;
             }
 
-            return CssColor.TryParse(raw, out var color) ? new SolidPaint(color) : null;
+            if (CssColor.TryParse(raw, out var color))
+            {
+                return new SolidPaint(color);
+            }
+
+            return null;
         }
 
         Paint? ResolveGradient(string? id, IReadOnlyList<SubPath> subpaths)
         {
-            if (id == null)
+            if (id == null ||
+                !gradientLookup.TryGetValue(id, out var gradient) ||
+                gradient.Stops.Count == 0)
             {
                 return null;
             }
 
-            var gradient = defs.Gradients.FirstOrDefault(_ => _.Id == id);
-            if (gradient == null || gradient.Stops.Count == 0)
+            if (!gradientStopsCache.TryGetValue(id, out var stops))
             {
-                return null;
-            }
+                stops = new(gradient.Stops.Count);
+                foreach (var stop in gradient.Stops)
+                {
+                    stops.Add(new((float) (stop.Offset / 100), CssColor.TryParse(stop.Color, out var c) ? c : Rgba.Black));
+                }
 
-            var stops = gradient.Stops
-                .Select(_ => new GradientStop((float)(_.Offset / 100), CssColor.TryParse(_.Color, out var c) ? c : Rgba.Black))
-                .ToList();
+                gradientStopsCache[id] = stops;
+            }
 
             var (min, max) = Bounds(subpaths);
             if (gradient.IsRadial)
@@ -566,7 +632,8 @@ static class SvgRasterizer
 
         static Rgba? ResolveColor(string? raw, ComputedStyle style)
         {
-            if (string.IsNullOrWhiteSpace(raw) || raw.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(raw) ||
+                raw.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -576,14 +643,19 @@ static class SvgRasterizer
                 return CssColor.TryParse(style.Color, out var current) ? current : null;
             }
 
-            return CssColor.TryParse(raw, out var color) ? color : null;
+            if (CssColor.TryParse(raw, out var color))
+            {
+                return color;
+            }
+
+            return null;
         }
 
         static TextStyle TextStyleFrom(ComputedStyle style, Rgba color, float opacity) =>
             new()
             {
                 FontFamilies = FontFamilies(style.FontFamily),
-                FontSize = (float)style.FontSize,
+                FontSize = (float) style.FontSize,
                 Bold = IsBold(style.FontWeight),
                 Italic = string.Equals(style.FontStyle, "italic", StringComparison.OrdinalIgnoreCase),
                 Color = color,
@@ -608,55 +680,95 @@ static class SvgRasterizer
              weight.Equals("bolder", StringComparison.OrdinalIgnoreCase) ||
              (int.TryParse(weight, out var numeric) && numeric >= 600));
 
+        static readonly ConcurrentDictionary<string, IReadOnlyList<string>> fontFamilyCache = new();
+
+        // The family stack is almost always the single inherited theme font, so resolve each distinct string once.
         static IReadOnlyList<string> FontFamilies(string families) =>
-            families
-                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Select(_ => _.Trim('\'', '"'))
-                .Where(_ => _.Length > 0)
-                .ToList();
+            fontFamilyCache.GetOrAdd(families, static f =>
+                f.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Select(_ => _.Trim('\'', '"'))
+                    .Where(_ => _.Length > 0)
+                    .ToList());
 
         // --- presentation attributes ------------------------------------------------------------
 
-        static IReadOnlyList<(string, string)>? Presentation(SvgElement element) =>
-            element switch
-            {
-                SvgRect rect => Attributes(("fill", rect.Fill), ("stroke", rect.Stroke), ("stroke-width", Num(rect.StrokeWidth))),
-                SvgCircle circle => Attributes(("fill", circle.Fill), ("stroke", circle.Stroke), ("stroke-width", Num(circle.StrokeWidth))),
-                SvgEllipse ellipse => Attributes(("fill", ellipse.Fill), ("stroke", ellipse.Stroke)),
-                SvgLine line => Attributes(("stroke", line.Stroke), ("stroke-width", Num(line.StrokeWidth)), ("stroke-dasharray", line.StrokeDasharray)),
-                SvgPolygon polygon => Attributes(("fill", polygon.Fill), ("stroke", polygon.Stroke)),
-                SvgPath path => Attributes(
-                    ("fill", path.Fill),
-                    ("stroke", path.Stroke),
-                    ("stroke-width", Num(path.StrokeWidth)),
-                    ("stroke-dasharray", path.StrokeDasharray),
-                    ("opacity", Num(path.Opacity))),
-                SvgText text => Attributes(
-                    ("fill", text.Fill),
-                    ("font-size", text.FontSize is { } size ? size.ToString(CultureInfo.InvariantCulture) : null),
-                    ("font-family", text.FontFamily),
-                    ("font-weight", text.FontWeight),
-                    ("text-anchor", text.TextAnchor),
-                    ("dominant-baseline", text.DominantBaseline)),
-                _ => null,
-            };
-
-        static IReadOnlyList<(string, string)>? Attributes(params (string Property, string? Value)[] pairs)
+        // Applies an element's presentation attributes (the lowest cascade tier) straight onto the style —
+        // no intermediate (string,string) list per shape, and numeric values bypass the double→string→double
+        // round-trip that routing them through the string Apply would incur.
+        static void ApplyPresentation(ref ComputedStyle style, SvgElement element)
         {
-            List<(string, string)>? result = null;
-            foreach (var (property, value) in pairs)
+            switch (element)
             {
-                if (value != null)
-                {
-                    (result ??= []).Add((property, value));
-                }
+                case SvgRect rect:
+                    ApplyAttr(ref style, "fill", rect.Fill);
+                    ApplyAttr(ref style, "stroke", rect.Stroke);
+                    ApplyAttr(ref style, "stroke-width", rect.StrokeWidth);
+                    break;
+                case SvgCircle circle:
+                    ApplyAttr(ref style, "fill", circle.Fill);
+                    ApplyAttr(ref style, "stroke", circle.Stroke);
+                    ApplyAttr(ref style, "stroke-width", circle.StrokeWidth);
+                    break;
+                case SvgEllipse ellipse:
+                    ApplyAttr(ref style, "fill", ellipse.Fill);
+                    ApplyAttr(ref style, "stroke", ellipse.Stroke);
+                    break;
+                case SvgLine line:
+                    ApplyAttr(ref style, "stroke", line.Stroke);
+                    ApplyAttr(ref style, "stroke-width", line.StrokeWidth);
+                    ApplyAttr(ref style, "stroke-dasharray", line.StrokeDasharray);
+                    break;
+                case SvgPolygon polygon:
+                    ApplyAttr(ref style, "fill", polygon.Fill);
+                    ApplyAttr(ref style, "stroke", polygon.Stroke);
+                    break;
+                case SvgPath path:
+                    ApplyAttr(ref style, "fill", path.Fill);
+                    ApplyAttr(ref style, "stroke", path.Stroke);
+                    ApplyAttr(ref style, "stroke-width", path.StrokeWidth);
+                    ApplyAttr(ref style, "stroke-dasharray", path.StrokeDasharray);
+                    ApplyAttr(ref style, "opacity", path.Opacity);
+                    break;
+                case SvgText text:
+                    ApplyAttr(ref style, "fill", text.Fill);
+                    ApplyAttr(ref style, "font-size", text.FontSize);
+                    ApplyAttr(ref style, "font-family", text.FontFamily);
+                    ApplyAttr(ref style, "font-weight", text.FontWeight);
+                    ApplyAttr(ref style, "text-anchor", text.TextAnchor);
+                    ApplyAttr(ref style, "dominant-baseline", text.DominantBaseline);
+                    break;
             }
-
-            return result;
         }
 
-        static string? Num(double? value) =>
-            value?.ToString(CultureInfo.InvariantCulture);
+        static void ApplyAttr(ref ComputedStyle style, string property, string? value)
+        {
+            if (value != null)
+            {
+                style.Apply(property, value);
+            }
+        }
+
+        static void ApplyAttr(ref ComputedStyle style, string property, double? value)
+        {
+            if (value is not { } number)
+            {
+                return;
+            }
+
+            // The numeric presentation attributes carry no units, so set them directly (matching Apply).
+            switch (property)
+            {
+                case "stroke-width":
+                    style.StrokeWidth = number;
+                    break;
+                case "font-size":
+                    style.FontSize = number;
+                    break;
+                case "opacity":
+                    style.Opacity = Math.Clamp(number, 0, 1);
+                    break;
+            }
+        }
 
         static ElementMatch MatchFor(SvgElement element) =>
             new(TagName(element), element.Id, Split(element.Class));
@@ -679,13 +791,14 @@ static class SvgRasterizer
         static IReadOnlyList<string> Split(string? classes) =>
             classes?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
 
-        static List<(string Property, string Value, bool Important)> InlineDeclarations(string? style)
+        static IReadOnlyList<(string Property, string Value, bool Important)> InlineDeclarations(string? style)
         {
-            var result = new List<(string, string, bool)>();
             if (string.IsNullOrWhiteSpace(style))
             {
-                return result;
+                return [];
             }
+
+            var result = new List<(string, string, bool)>();
 
             foreach (var piece in style.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
@@ -720,6 +833,17 @@ static class SvgRasterizer
             foreach (var marker in defs.Markers)
             {
                 lookup[marker.Id] = marker;
+            }
+
+            return lookup;
+        }
+
+        static Dictionary<string, SvgGradient> BuildGradientLookup(SvgDefs defs)
+        {
+            var lookup = new Dictionary<string, SvgGradient>(StringComparer.Ordinal);
+            foreach (var gradient in defs.Gradients)
+            {
+                lookup.TryAdd(gradient.Id, gradient);
             }
 
             return lookup;
@@ -760,12 +884,12 @@ static class SvgRasterizer
         }
 
         // Segment count scales with size so large circles stay smooth without over-tessellating tiny ones.
-        var segments = Math.Clamp((int)Math.Ceiling(Math.Max(rx, ry) * 1.5), 24, 180);
+        var segments = Math.Clamp((int) Math.Ceiling(Math.Max(rx, ry) * 1.5), 24, 180);
         var points = new List<Vector2>(segments);
         for (var i = 0; i < segments; i++)
         {
             var theta = 2 * Math.PI * i / segments;
-            points.Add(new((float)(cx + rx * Math.Cos(theta)), (float)(cy + ry * Math.Sin(theta))));
+            points.Add(new((float) (cx + rx * Math.Cos(theta)), (float) (cy + ry * Math.Sin(theta))));
         }
 
         return [new(points, true)];
@@ -852,7 +976,7 @@ static class SvgRasterizer
     }
 
     static float Angle(Vector2 direction) =>
-        (float)Math.Atan2(direction.Y, direction.X);
+        (float) Math.Atan2(direction.Y, direction.X);
 
     static (double, double, double, double) ParseMarkerViewBox(SvgMarker marker)
     {
@@ -886,7 +1010,7 @@ static class SvgRasterizer
         {
             if (double.TryParse(part.TrimEnd('p', 'x'), NumberStyles.Float, CultureInfo.InvariantCulture, out var value) && value >= 0)
             {
-                values.Add((float)value);
+                values.Add((float) value);
                 anyPositive |= value > 0;
             }
         }
@@ -919,5 +1043,5 @@ static class SvgRasterizer
     }
 
     static float ToF(double value) =>
-        (float)value;
+        (float) value;
 }

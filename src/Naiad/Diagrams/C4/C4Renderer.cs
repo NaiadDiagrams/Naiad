@@ -3,7 +3,7 @@ namespace Naiad.Diagrams.C4;
 public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<C4Model>
 {
-    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
     const double elementWidth = 160;
     const double elementHeight = 100;
@@ -40,7 +40,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     {
         if (model.Elements.Count == 0 && model.Boundaries.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -123,7 +124,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = ComputeNodeSeparation(model, options),
             RankSeparation = 90
         };
-        var layoutResult = layoutEngine.Layout(graph, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graph, layoutOptions);
 
         // Resolve each edge's polyline and label point. Positional relationships
         // (Up/Left/Right/Neighbor) are drawn as straight border-to-border lines
@@ -190,9 +191,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         var contentWidth = Math.Max(bodyWidth, titleWidth);
         var contentHeight = bodyHeight + titleOffset;
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         if (!string.IsNullOrEmpty(model.Title))
         {
@@ -347,9 +348,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         var contentWidth = Math.Max(bodyWidth, titleWidth);
         var contentHeight = bodyHeight + titleOffset;
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         if (!string.IsNullOrEmpty(model.Title))
         {
@@ -514,7 +515,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = nodeSeparation,
             RankSeparation = 90
         };
-        layoutEngine.Layout(graph, layoutOptions);
+        layoutEngine.BuildLayout(graph, layoutOptions);
 
         var minX = double.MaxValue;
         var minY = double.MaxValue;

@@ -54,7 +54,9 @@ static class Snippets
                     // 2x device-pixel scale for high-DPI output
                     Scale = 2,
                     // any CSS colour, or "transparent"
-                    Background = "white"
+                    Background = "white",
+                    // trade encode speed against file size: Fast, Balanced (default) or Small
+                    Compression = PngCompression.Balanced
                 }
             });
     // end-snippet

@@ -1,18 +1,16 @@
-using System.Net;
-
 namespace Naiad.Diagrams.Mindmap;
 
 public class MindmapRenderer : IDiagramRenderer<MindmapModel>
 {
-    const double NodePadding = 15;
-    const double NodeMinWidth = 60;
-    const double NodeHeight = 35;
-    const double HorizontalSpacing = 40;
-    const double VerticalSpacing = 15;
-    const double IconSize = 18;
-    const double IconGap = 6;
+    const double nodePadding = 15;
+    const double nodeMinWidth = 60;
+    const double nodeHeight = 35;
+    const double horizontalSpacing = 40;
+    const double verticalSpacing = 15;
+    const double iconSize = 18;
+    const double iconGap = 6;
 
-    static readonly string[] LevelColors =
+    static string[] levelColors =
     [
         "#FFB6C1", // pink - root
         "#87CEEB", // sky blue - level 1
@@ -27,7 +25,8 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     {
         if (model.Root == null)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -53,7 +52,9 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         width += options.Padding * 2;
         height += options.Padding * 2;
 
-        var builder = new SvgBuilder().Options(options).Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Options(options);
+        builder.Size(width, height);
 
         // Draw connections first (behind nodes)
         DrawConnections(builder, model.Root);
@@ -67,9 +68,9 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     static void CalculateNodeSizes(MindmapNode node, RenderOptions options)
     {
         var textWidth = MeasureText(node.Text, options.FontSize);
-        var iconAllowance = node.Icon is null ? 0 : IconSize + IconGap;
-        node.Width = Math.Max(NodeMinWidth, textWidth + NodePadding * 2 + iconAllowance);
-        node.Height = NodeHeight;
+        var iconAllowance = node.Icon is null ? 0 : iconSize + iconGap;
+        node.Width = Math.Max(nodeMinWidth, textWidth + nodePadding * 2 + iconAllowance);
+        node.Height = nodeHeight;
 
         foreach (var child in node.Children)
         {
@@ -90,7 +91,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         {
             totalChildrenHeight += CalculateSubtreeHeights(child);
         }
-        totalChildrenHeight += (node.Children.Count - 1) * VerticalSpacing;
+        totalChildrenHeight += (node.Children.Count - 1) * verticalSpacing;
 
         node.SubtreeHeight = Math.Max(node.Height, totalChildrenHeight);
         return node.SubtreeHeight;
@@ -105,13 +106,13 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             return;
 
         // Position children
-        var childX = x + node.Width + HorizontalSpacing;
+        var childX = x + node.Width + horizontalSpacing;
         var childY = y + (node.SubtreeHeight - GetChildrenTotalHeight(node)) / 2;
 
         foreach (var child in node.Children)
         {
             LayoutTree(child, childX, childY);
-            childY += child.SubtreeHeight + VerticalSpacing;
+            childY += child.SubtreeHeight + verticalSpacing;
         }
     }
 
@@ -120,7 +121,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         if (node.Children.Count == 0)
             return 0;
 
-        return node.Children.Sum(_ => _.SubtreeHeight) + (node.Children.Count - 1) * VerticalSpacing;
+        return node.Children.Sum(_ => _.SubtreeHeight) + (node.Children.Count - 1) * verticalSpacing;
     }
 
     static (double width, double height) CalculateBounds(MindmapNode node)
@@ -148,8 +149,8 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             var endX = child.Position.X - child.Width / 2;
             var endY = child.Position.Y;
 
-            var controlX1 = startX + HorizontalSpacing / 2;
-            var controlX2 = endX - HorizontalSpacing / 2;
+            var controlX1 = startX + horizontalSpacing / 2;
+            var controlX2 = endX - horizontalSpacing / 2;
 
             var path = string.Create(
                 CultureInfo.InvariantCulture,
@@ -235,10 +236,10 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         }
 
         // Draw icon (left of the text) if present
-        var iconAllowance = node.Icon is null ? 0 : IconSize + IconGap;
+        var iconAllowance = node.Icon is null ? 0 : iconSize + iconGap;
         if (node.Icon is { } icon)
         {
-            DrawIcon(builder, icon, x + NodePadding, node.Position.Y - IconSize / 2, IconSize);
+            DrawIcon(builder, icon, x + nodePadding, node.Position.Y - iconSize / 2, iconSize);
         }
 
         // Draw text, shifted right to leave room for the icon
@@ -314,7 +315,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     }
 
     static string GetLevelColor(int level) =>
-        LevelColors[Math.Min(level, LevelColors.Length - 1)];
+        levelColors[Math.Min(level, levelColors.Length - 1)];
 
     static string DarkenColor(string hexColor)
     {

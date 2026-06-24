@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 179.3 690"
-  style="max-width: 179.3px;"
+  viewBox="0 0 269.7 700"
+  style="max-width: 269.7px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -112,82 +112,86 @@
   <g
     transform="translate(20,20)">
     <rect
-      x="0"
+      x="3.85"
       y="118"
-      width="139.3"
-      height="231"
+      width="225.85"
+      height="236"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="69.65"
+      x="116.78"
       y="132"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Frontend</text>
+      fill="#333333"
+      class="cluster-label">Frontend</text>
     <rect
-      x="3.85"
-      y="419"
-      width="131.6"
-      height="231"
+      x="0"
+      y="424"
+      width="195.45"
+      height="236"
       rx="6"
       ry="6"
-      fill="#ffffff"
-      stroke="#bbbbbb" />
+      fill="#ffffde"
+      stroke="#aaaa33"
+      class="cluster" />
     <text
-      x="69.65"
-      y="433"
+      x="97.73"
+      y="438"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold"
-      fill="#333333">Backend</text>
+      fill="#333333"
+      class="cluster-label">Backend</text>
     <path
-      d="M69.65,48 L69.65,163"
+      d="M102.73,48 L102.73,53.83 C102.73,59.67 102.73,71.33 102.73,83 C102.73,94.67 102.73,106.33 102.73,118 C102.73,129.67 102.73,141.33 102.73,147.17 L102.73,153"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,211 L69.65,281"
+      d="M119.94,201 L124.13,206.83 C128.31,212.67 136.68,224.33 140.87,236 C145.05,247.67 145.05,259.33 145.05,265.17 L145.05,271"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,512 L69.65,582"
+      d="M102.73,507 L102.73,512.83 C102.73,518.67 102.73,530.33 102.73,542 C102.73,553.67 102.73,565.33 102.73,571.17 L102.73,577"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,211 L69.65,464"
+      d="M85.51,201 L81.32,206.83 C77.14,212.67 68.77,224.33 64.58,240 C60.4,255.67 60.4,275.33 60.4,295 C60.4,314.67 60.4,334.33 60.4,350 C60.4,365.67 60.4,377.33 60.4,389 C60.4,400.67 60.4,412.33 64.58,424 C68.77,435.67 77.14,447.33 81.32,453.17 L85.51,459"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M69.65,329 L69.65,464"
+      d="M145.05,319 L145.05,324.83 C145.05,330.67 145.05,342.33 145.05,354 C145.05,365.67 145.05,377.33 145.05,389 C145.05,400.67 145.05,412.33 140.87,424 C136.68,435.67 128.31,447.33 124.13,453.17 L119.94,459"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M35.4,0 H103.9 V48 H35.4 Z"
+      d="M68.48,0 H136.98 V48 H68.48 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="35.4"
+      x="68.48"
       y="0"
       width="68.5"
       height="48"
@@ -201,12 +205,12 @@
       </div>
     </foreignObject>
     <path
-      d="M31.55,163 H107.75 V211 H31.55 Z"
+      d="M64.63,153 H140.83 V201 H64.63 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="31.55"
-      y="163"
+      x="64.63"
+      y="153"
       width="76.2"
       height="48"
       class="nodeLabel">
@@ -219,12 +223,12 @@
       </div>
     </foreignObject>
     <path
-      d="M20,281 H119.3 V329 H20 Z"
+      d="M95.4,271 H194.7 V319 H95.4 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="20"
-      y="281"
+      x="95.4"
+      y="271"
       width="99.3"
       height="48"
       class="nodeLabel">
@@ -237,12 +241,12 @@
       </div>
     </foreignObject>
     <path
-      d="M43.1,464 H96.2 V512 H43.1 Z"
+      d="M76.18,459 H129.28 V507 H76.18 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="43.1"
-      y="464"
+      x="76.18"
+      y="459"
       width="53.1"
       height="48"
       class="nodeLabel">
@@ -255,12 +259,12 @@
       </div>
     </foreignObject>
     <path
-      d="M23.85,586.8 A45.8,4.8 0 0 1 115.45,586.8 V625.2 A45.8,4.8 0 0 1 23.85,625.2 V586.8 Z M23.85,586.8 A45.8,4.8 0 0 0 115.45,586.8"
+      d="M56.93,581.8 A45.8,4.8 0 0 1 148.53,581.8 V620.2 A45.8,4.8 0 0 1 56.93,620.2 V581.8 Z M56.93,581.8 A45.8,4.8 0 0 0 148.53,581.8"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="23.85"
-      y="582"
+      x="56.93"
+      y="577"
       width="91.6"
       height="48"
       class="nodeLabel">

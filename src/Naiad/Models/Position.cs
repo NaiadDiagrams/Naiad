@@ -1,4 +1,4 @@
-namespace Naiad.Models;
+namespace Naiad;
 
 public readonly record struct Position(double X, double Y)
 {

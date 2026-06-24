@@ -3,13 +3,13 @@ namespace Naiad.Diagrams.EntityRelationship;
 public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ERModel>
 {
-    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
-    const double EntityPadding = 10;
-    const double LineHeight = 20;
-    const double MinEntityWidth = 120;
-    const double AttributeIndent = 10;
-    const double HeaderHeight = 30;
+    const double entityPadding = 10;
+    const double lineHeight = 20;
+    const double minEntityWidth = 120;
+    const double attributeIndent = 10;
+    const double headerHeight = 30;
 
     public SvgDocument Render(ERModel model, RenderOptions options)
     {
@@ -23,20 +23,27 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 80,
             RankSeparation = 100
         };
-        var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graphModel, layoutOptions);
 
         // Copy positions back to entities
         CopyPositionsToModel(model, graphModel);
 
         // Build SVG
-        var builder = new SvgBuilder()
-            .Size(layoutResult.Width, layoutResult.Height)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(layoutResult.Width, layoutResult.Height);
+        builder.Padding(options.Padding);
+
+        // Index entities by name so relationship endpoint lookups are O(1), not O(R·E) via List.Find.
+        var entitiesByName = new Dictionary<string, Entity>(StringComparer.Ordinal);
+        foreach (var entity in model.Entities)
+        {
+            entitiesByName[entity.Name] = entity;
+        }
 
         // Render relationships first (behind entities)
         foreach (var relationship in model.Relationships)
         {
-            RenderRelationship(builder, relationship, model, options);
+            RenderRelationship(builder, relationship, entitiesByName, options);
         }
 
         // Render entities
@@ -50,7 +57,10 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
     static GraphDiagramBase ConvertToGraphModel(ERModel model, RenderOptions options)
     {
-        var graph = new ERLayoutGraph { Direction = model.Direction };
+        var graph = new ERLayoutGraph
+        {
+            Direction = model.Direction
+        };
 
         foreach (var entity in model.Entities)
         {
@@ -93,13 +103,13 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             maxTextWidth = Math.Max(maxTextWidth, MeasureText(attrText, options.FontSize));
         }
 
-        var width = Math.Max(MinEntityWidth, maxTextWidth + EntityPadding * 2 + AttributeIndent);
+        var width = Math.Max(minEntityWidth, maxTextWidth + entityPadding * 2 + attributeIndent);
 
         // Calculate height
-        var height = HeaderHeight; // Entity name header
+        var height = headerHeight; // Entity name header
         if (entity.Attributes.Count > 0)
         {
-            height += entity.Attributes.Count * LineHeight + EntityPadding;
+            height += entity.Attributes.Count * lineHeight + entityPadding;
         }
 
         return (width, height);
@@ -139,14 +149,14 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             x,
             y,
             entity.Width,
-            HeaderHeight,
+            headerHeight,
             fill: "#9370DB",
             stroke: "#9370DB",
             strokeWidth: 1);
 
         builder.AddText(
             centerX,
-            y + HeaderHeight / 2,
+            y + headerHeight / 2,
             entity.Name,
             anchor: "middle",
             baseline: "middle",
@@ -160,15 +170,15 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         {
             builder.AddLine(
                 x,
-                y + HeaderHeight,
+                y + headerHeight,
                 x + entity.Width,
-                y + HeaderHeight,
+                y + headerHeight,
                 stroke: "#9370DB",
                 strokeWidth: 1);
         }
 
         // Attributes
-        var attrY = y + HeaderHeight + EntityPadding;
+        var attrY = y + headerHeight + entityPadding;
         foreach (var attr in entity.Attributes)
         {
             var attrText = FormatAttribute(attr);
@@ -177,8 +187,8 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             if (!string.IsNullOrEmpty(keyIndicator))
             {
                 builder.AddText(
-                    x + EntityPadding,
-                    attrY + LineHeight / 2, keyIndicator,
+                    x + entityPadding,
+                    attrY + lineHeight / 2, keyIndicator,
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize - 2,
@@ -187,28 +197,37 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             }
 
             builder.AddText(
-                x + EntityPadding + AttributeIndent + 20,
-                attrY + LineHeight / 2, attrText,
+                x + entityPadding + attributeIndent + 20,
+                attrY + lineHeight / 2, attrText,
                 anchor: "start",
                 baseline: "middle",
                 fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
 
-            attrY += LineHeight;
+            attrY += lineHeight;
         }
     }
 
-    static void RenderRelationship(SvgBuilder builder, Relationship rel, ERModel model, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, Relationship rel, Dictionary<string, Entity> entitiesByName, RenderOptions options)
     {
-        var fromEntity = model.Entities.Find(_ => _.Name == rel.FromEntity);
+        var fromEntity = entitiesByName.GetValueOrDefault(rel.FromEntity);
         if (fromEntity == null)
         {
             return;
         }
 
-        var toEntity = model.Entities.Find(_ => _.Name == rel.ToEntity);
+        var toEntity = entitiesByName.GetValueOrDefault(rel.ToEntity);
         if (toEntity == null)
         {
+            return;
+        }
+
+        // A self-referencing relationship can't use a straight line between two distinct borders; draw a
+        // loop off the entity's right side instead (otherwise the line degenerates to a point and the
+        // label is clipped against the entity's top edge).
+        if (fromEntity == toEntity)
+        {
+            RenderSelfRelationship(builder, rel, fromEntity, options);
             return;
         }
 
@@ -232,24 +251,65 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         DrawCardinalityMarker(builder, endX, endY, startX, startY, rel.ToCardinality);
 
         // Draw label if present
+        if (string.IsNullOrEmpty(rel.Label))
+        {
+            return;
+        }
+
+        var labelX = (startX + endX) / 2;
+        var labelY = (startY + endY) / 2;
+
+        // Background for label
+        var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
+        builder.AddRect(
+            labelX - labelWidth / 2,
+            labelY - 10,
+            labelWidth,
+            20,
+            fill: "#fff",
+            stroke: "none");
+
+        builder.AddText(
+            labelX,
+            labelY,
+            rel.Label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 2,
+            fontFamily: options.FontFamily,
+            fill: "#333");
+    }
+
+    static void RenderSelfRelationship(SvgBuilder builder, Relationship rel, Entity entity, RenderOptions options)
+    {
+        var right = entity.Position.X + entity.Width / 2;
+        var centerY = entity.Position.Y;
+        const double verticalOffset = 14;
+        const double extent = 30;
+        var topY = centerY - verticalOffset;
+        var bottomY = centerY + verticalOffset;
+        var outX = right + extent;
+        var dashArray = rel.Identifying ? null : "5,5";
+
+        // Loop out from the top of the right edge, around, and back to the bottom of the right edge.
+        builder.AddPath(
+            FormattableString.Invariant($"M{right},{topY} L{outX},{topY} L{outX},{bottomY} L{right},{bottomY}"),
+            fill: "none",
+            stroke: "#333",
+            strokeWidth: 1,
+            strokeDasharray: dashArray);
+
+        DrawCardinalityMarker(builder, right, topY, outX, topY, rel.FromCardinality);
+        DrawCardinalityMarker(builder, right, bottomY, outX, bottomY, rel.ToCardinality);
+
         if (!string.IsNullOrEmpty(rel.Label))
         {
-            var labelX = (startX + endX) / 2;
-            var labelY = (startY + endY) / 2;
-
-            // Background for label
             var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
-            builder.AddRect(
-                labelX - labelWidth / 2,
-                labelY - 10,
-                labelWidth,
-                20,
-                fill: "#fff",
-                stroke: "none");
-
+            var labelX = outX + labelWidth / 2 + 4;
+            builder.AddRect(labelX - labelWidth / 2, centerY - 10, labelWidth, 20, fill: "#fff", stroke: "none");
             builder.AddText(
                 labelX,
-                labelY,
+                centerY,
                 rel.Label,
                 anchor: "middle",
                 baseline: "middle",

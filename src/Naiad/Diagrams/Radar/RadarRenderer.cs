@@ -2,13 +2,13 @@ namespace Naiad.Diagrams.Radar;
 
 public class RadarRenderer : IDiagramRenderer<RadarModel>
 {
-    const double ChartRadius = 120;
-    const double TitleHeight = 30;
-    const double LegendHeight = 25;
-    const double LabelOffsetX = 60;  // Space for horizontal labels
-    const double LabelOffsetY = 30;  // Space for vertical labels (including text height)
+    const double chartRadius = 120;
+    const double titleHeight = 30;
+    const double legendHeight = 25;
+    const double labelOffsetX = 60;  // Space for horizontal labels
+    const double labelOffsetY = 30;  // Space for vertical labels (including text height)
 
-    static readonly string[] CurveColors =
+    static string[] curveColors =
     [
         "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728",
         "#9467bd", "#8c564b", "#e377c2", "#7f7f7f",
@@ -19,7 +19,8 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
     {
         if (model.Axes.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -31,25 +32,25 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             return emptyBuilder.Build();
         }
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
-        var legendOffset = model is {ShowLegend: true, Curves.Count: > 0} ? LegendHeight * model.Curves.Count : 0;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
+        var legendOffset = model is {ShowLegend: true, Curves.Count: > 0} ? legendHeight * model.Curves.Count : 0;
 
-        const double contentWidth = (ChartRadius + LabelOffsetX) * 2;
-        var contentHeight = (ChartRadius + LabelOffsetY) * 2 + titleOffset + legendOffset;
+        const double contentWidth = (chartRadius + labelOffsetX) * 2;
+        var contentHeight = (chartRadius + labelOffsetY) * 2 + titleOffset + legendOffset;
 
-        const double centerX = ChartRadius + LabelOffsetX;
-        var centerY = ChartRadius + LabelOffsetY + titleOffset;
+        const double centerX = chartRadius + labelOffsetX;
+        var centerY = chartRadius + labelOffsetY + titleOffset;
 
-        var builder = new SvgBuilder()
-            .Size(contentWidth, contentHeight)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Size(contentWidth, contentHeight);
+        builder.Padding(options.Padding);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 contentWidth / 2,
-                TitleHeight / 2,
+                titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -79,7 +80,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
                 model.Axes.Count,
                 minValue,
                 maxValue,
-                CurveColors[i % CurveColors.Length]);
+                curveColors[i % curveColors.Length]);
         }
 
         // Draw legend
@@ -101,7 +102,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
     {
         for (var i = 1; i <= ticks; i++)
         {
-            var radius = ChartRadius * i / ticks;
+            var radius = chartRadius * i / ticks;
 
             if (graticule == GraticuleType.Circle)
             {
@@ -136,15 +137,15 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         for (var i = 0; i < axes.Count; i++)
         {
             var angle = 2 * Math.PI * i / axes.Count - Math.PI / 2;
-            var x = cx + ChartRadius * Math.Cos(angle);
-            var y = cy + ChartRadius * Math.Sin(angle);
+            var x = cx + chartRadius * Math.Cos(angle);
+            var y = cy + chartRadius * Math.Sin(angle);
 
             // Draw axis line
             builder.AddLine(cx, cy, x, y, stroke: "#BDBDBD", strokeWidth: 1);
 
             // Draw label
-            var labelX = cx + (ChartRadius + 20) * Math.Cos(angle);
-            var labelY = cy + (ChartRadius + 20) * Math.Sin(angle);
+            var labelX = cx + (chartRadius + 20) * Math.Cos(angle);
+            var labelY = cy + (chartRadius + 20) * Math.Sin(angle);
             var anchor = Math.Abs(Math.Cos(angle)) < 0.1 ? "middle" :
                          Math.Cos(angle) > 0 ? "start" : "end";
 
@@ -179,7 +180,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         {
             var value = curve.Values[i];
             var normalizedValue = (value - minValue) / (maxValue - minValue);
-            var radius = ChartRadius * normalizedValue;
+            var radius = chartRadius * normalizedValue;
 
             var angle = 2 * Math.PI * i / axisCount - Math.PI / 2;
             var x = cx + radius * Math.Cos(angle);
@@ -209,7 +210,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         {
             var value = curve.Values[i];
             var normalizedValue = (value - minValue) / (maxValue - minValue);
-            var radius = ChartRadius * normalizedValue;
+            var radius = chartRadius * normalizedValue;
 
             var angle = 2 * Math.PI * i / axisCount - Math.PI / 2;
             var x = cx + radius * Math.Cos(angle);
@@ -223,8 +224,8 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
     {
         for (var i = 0; i < curves.Count; i++)
         {
-            var legendY = y + i * LegendHeight;
-            var color = CurveColors[i % CurveColors.Length];
+            var legendY = y + i * legendHeight;
+            var color = curveColors[i % curveColors.Length];
 
             builder.AddRect(x, legendY, 16, 12, fill: color);
             builder.AddText(

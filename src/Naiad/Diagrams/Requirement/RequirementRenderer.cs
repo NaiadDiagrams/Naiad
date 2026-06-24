@@ -2,19 +2,20 @@ namespace Naiad.Diagrams.Requirement;
 
 public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 {
-    const double BoxWidth = 180;
-    const double BoxHeight = 80;
-    const double BoxSpacing = 60;
-    const double TitleHeight = 40;
+    const double boxWidth = 180;
+    const double boxHeight = 80;
+    const double boxSpacing = 60;
+    const double titleHeight = 40;
 
-    const string RequirementColor = "#C8E6C9";
-    const string ElementColor = "#BBDEFB";
+    const string requirementColor = "#C8E6C9";
+    const string elementColor = "#BBDEFB";
 
     public SvgDocument Render(RequirementModel model, RenderOptions options)
     {
         if (model.Requirements.Count == 0 && model.Elements.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -26,14 +27,15 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             return emptyBuilder.Build();
         }
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
         // Layout: requirements on left, elements on right
         var maxItems = Math.Max(model.Requirements.Count, model.Elements.Count);
-        var height = maxItems * (BoxHeight + BoxSpacing) + options.Padding * 2 + titleOffset;
-        var width = 2 * (BoxWidth + BoxSpacing) + options.Padding * 2;
+        var height = maxItems * (boxHeight + boxSpacing) + options.Padding * 2 + titleOffset;
+        var width = 2 * (boxWidth + boxSpacing) + options.Padding * 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Add arrow marker
         builder.AddArrowMarker("reqarrow", "#666");
@@ -43,7 +45,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -60,20 +62,20 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         for (var i = 0; i < model.Requirements.Count; i++)
         {
             var req = model.Requirements[i];
-            var y = options.Padding + titleOffset + i * (BoxHeight + BoxSpacing);
+            var y = options.Padding + titleOffset + i * (boxHeight + boxSpacing);
 
-            positions[req.Name] = (reqX + BoxWidth / 2, y + BoxHeight / 2);
+            positions[req.Name] = (reqX + boxWidth / 2, y + boxHeight / 2);
             DrawRequirement(builder, req, reqX, y, options);
         }
 
         // Draw elements (right column)
-        var elemX = options.Padding + BoxWidth + BoxSpacing;
+        var elemX = options.Padding + boxWidth + boxSpacing;
         for (var i = 0; i < model.Elements.Count; i++)
         {
             var elem = model.Elements[i];
-            var y = options.Padding + titleOffset + i * (BoxHeight + BoxSpacing);
+            var y = options.Padding + titleOffset + i * (boxHeight + boxSpacing);
 
-            positions[elem.Name] = (elemX + BoxWidth / 2, y + BoxHeight / 2);
+            positions[elem.Name] = (elemX + boxWidth / 2, y + boxHeight / 2);
             DrawElement(builder, elem, elemX, y, options);
         }
 
@@ -96,10 +98,10 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         builder.AddRect(
             x,
             y,
-            BoxWidth,
-            BoxHeight,
+            boxWidth,
+            boxHeight,
             rx: 5,
-            fill: RequirementColor,
+            fill: requirementColor,
             stroke: "#4CAF50",
             strokeWidth: 2);
 
@@ -115,7 +117,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         };
 
         builder.AddText(
-            x + BoxWidth / 2,
+            x + boxWidth / 2,
             y + 15,
             $"<<{typeLabel}>>",
             anchor: "middle",
@@ -126,7 +128,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         // Name
         builder.AddText(
-            x + BoxWidth / 2,
+            x + boxWidth / 2,
             y + 35,
             req.Name,
             anchor: "middle",
@@ -143,15 +145,15 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             RiskLevel.High => "#F44336",
             _ => "#FF9800"
         };
-        builder.AddCircle(x + 15, y + BoxHeight - 15, 6, fill: riskColor, stroke: "#333", strokeWidth: 1);
+        builder.AddCircle(x + 15, y + boxHeight - 15, 6, fill: riskColor, stroke: "#333", strokeWidth: 1);
 
         // Text (truncated)
         if (!string.IsNullOrEmpty(req.Text))
         {
             var text = req.Text.Length > 25 ? string.Concat(req.Text.AsSpan(0, 22), "...") : req.Text;
             builder.AddText(
-                x + BoxWidth / 2,
-                y + BoxHeight - 15,
+                x + boxWidth / 2,
+                y + boxHeight - 15,
                 text,
                 anchor: "middle",
                 baseline: "middle",
@@ -167,16 +169,16 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         builder.AddRect(
             x,
             y,
-            BoxWidth,
-            BoxHeight,
+            boxWidth,
+            boxHeight,
             rx: 5,
-            fill: ElementColor,
+            fill: elementColor,
             stroke: "#2196F3",
             strokeWidth: 2);
 
         // Type label
         builder.AddText(
-            x + BoxWidth / 2,
+            x + boxWidth / 2,
             y + 15,
             "<<Element>>",
             anchor: "middle",
@@ -187,7 +189,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         // Name
         builder.AddText(
-            x + BoxWidth / 2,
+            x + boxWidth / 2,
             y + 35,
             elem.Name,
             anchor: "middle",
@@ -201,7 +203,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         if (!string.IsNullOrEmpty(elem.Type))
         {
             builder.AddText(
-                x + BoxWidth / 2,
+                x + boxWidth / 2,
                 y + 55,
                 $"Type: {elem.Type}",
                 anchor: "middle",
@@ -224,10 +226,10 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         var dy = to.y - from.y;
         var angle = Math.Atan2(dy, dx);
 
-        var fromX = from.x + Math.Cos(angle) * BoxWidth / 2;
-        var fromY = from.y + Math.Sin(angle) * BoxHeight / 2;
-        var toX = to.x - Math.Cos(angle) * BoxWidth / 2;
-        var toY = to.y - Math.Sin(angle) * BoxHeight / 2;
+        var fromX = from.x + Math.Cos(angle) * boxWidth / 2;
+        var fromY = from.y + Math.Sin(angle) * boxHeight / 2;
+        var toX = to.x - Math.Cos(angle) * boxWidth / 2;
+        var toY = to.y - Math.Sin(angle) * boxHeight / 2;
 
         // Draw line
         builder.AddLine(

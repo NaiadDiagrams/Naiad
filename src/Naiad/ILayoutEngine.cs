@@ -2,5 +2,5 @@ namespace Naiad;
 
 public interface ILayoutEngine
 {
-    LayoutResult Layout(GraphDiagramBase diagram, LayoutOptions options);
+    LayoutResult BuildLayout(GraphDiagramBase diagram, LayoutOptions options);
 }

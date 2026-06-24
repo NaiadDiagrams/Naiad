@@ -1,85 +1,90 @@
 class RadarParser : IDiagramParser<RadarModel>
 {
-    static Parser<char, string> identifier =
-        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+    static Parser<char, RadarModel> parser;
 
-    static Parser<char, double> number = CommonParsers.SignedDecimal;
+    static RadarParser()
+    {
+        var identifier =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    // Quoted label: ["label"]
-    static Parser<char, string> quotedLabel =
-        Char('[').Then(Char('"')).Then(Token(_ => _ != '"').ManyString()).Before(Char('"')).Before(Char(']'));
+        var number = CommonParsers.SignedDecimal;
 
-    // Axis list: axis id1, id2, id3
-    static Parser<char, List<RadarAxis>> axisParser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("axis")
-        from ___ in CommonParsers.RequiredWhitespace
-        from axes in identifier.SeparatedAtLeastOnce(
-            CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
-        from ____ in CommonParsers.InlineWhitespace
-        from _____ in CommonParsers.LineEnd
-        select axes.Select(_ => new RadarAxis { Id = _, Label = _ }).ToList();
+        // Quoted label: ["label"]
+        var quotedLabel =
+            Char('[').Then(Char('"')).Then(Token(_ => _ != '"').ManyString()).Before(Char('"')).Before(Char(']'));
 
-    // Value list: {1, 2, 3}
-    static Parser<char, List<double>> valueList =
-        Char('{')
-            .Then(CommonParsers.InlineWhitespace)
-            .Then(number.SeparatedAtLeastOnce(
-                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)))
-            .Before(CommonParsers.InlineWhitespace)
-            .Before(Char('}'))
-            .Select(_ => _.ToList());
+        // Axis list: axis id1, id2, id3
+        var axisParser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("axis")
+            from ___ in CommonParsers.RequiredWhitespace
+            from axes in identifier.SeparatedAtLeastOnce(
+                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select axes.Select(_ => new RadarAxis { Id = _, Label = _ }).ToList();
 
-    // Curve definition: curve id["label"]{1, 2, 3}
-    static Parser<char, RadarCurve> curveItemParser =
-        from id in identifier
-        from label in quotedLabel.Optional()
-        from values in valueList
-        select new RadarCurve
-        {
-            Id = id,
-            Label = label.GetValueOrDefault() ?? id
-        }.WithValues(values);
+        // Value list: {1, 2, 3}
+        var valueList =
+            Char('{')
+                .Then(CommonParsers.InlineWhitespace)
+                .Then(number.SeparatedAtLeastOnce(
+                    CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)))
+                .Before(CommonParsers.InlineWhitespace)
+                .Before(Char('}'))
+                .Select(_ => _.ToList());
 
-    // Curve line: curve id1["label"]{1, 2, 3}, id2{4, 5, 6}
-    static Parser<char, List<RadarCurve>> curveLineParser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("curve")
-        from ___ in CommonParsers.RequiredWhitespace
-        from curves in curveItemParser.SeparatedAtLeastOnce(
-            CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
-        from ____ in CommonParsers.InlineWhitespace
-        from _____ in CommonParsers.LineEnd
-        select curves.ToList();
+        // Curve definition: curve id["label"]{1, 2, 3}
+        var curveItemParser =
+            from id in identifier
+            from label in quotedLabel.Optional()
+            from values in valueList
+            select new RadarCurve
+            {
+                Id = id,
+                Label = label.GetValueOrDefault() ?? id
+            }.WithValues(values);
 
-    static Parser<char, string> titleParser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("title")
-        from ___ in CommonParsers.RequiredWhitespace
-        from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
-        from ____ in CommonParsers.LineEnd
-        select title.Trim();
+        // Curve line: curve id1["label"]{1, 2, 3}, id2{4, 5, 6}
+        var curveLineParser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("curve")
+            from ___ in CommonParsers.RequiredWhitespace
+            from curves in curveItemParser.SeparatedAtLeastOnce(
+                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select curves.ToList();
 
-    static Parser<char, Unit> skipLine =
-        Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-            .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+        var titleParser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("title")
+            from ___ in CommonParsers.RequiredWhitespace
+            from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
+            from ____ in CommonParsers.LineEnd
+            select title.Trim();
 
-    // Content item
-    static Parser<char, IRadarContent?> ContentItem =>
-        OneOf(
-            Try(titleParser.Select<IRadarContent?>(_ => new TitleItem(_))),
-            Try(axisParser.Select<IRadarContent?>(_ => new AxisItem(_))),
-            Try(curveLineParser.Select<IRadarContent?>(_ => new CurveItem(_))),
-            skipLine.ThenReturn<IRadarContent?>(null)
-        );
+        var skipLine =
+            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
+                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
 
-    static Parser<char, RadarModel> Parser =>
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("radar-beta")
-        from ___ in CommonParsers.InlineWhitespace
-        from ____ in CommonParsers.LineEnd
-        from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1);
+        // Content item
+        var contentItem =
+            OneOf(
+                Try(titleParser.Select<IRadarContent?>(_ => new TitleItem(_))),
+                Try(axisParser.Select<IRadarContent?>(_ => new AxisItem(_))),
+                Try(curveLineParser.Select<IRadarContent?>(_ => new CurveItem(_))),
+                skipLine.ThenReturn<IRadarContent?>(null)
+            );
+
+        parser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("radar-beta")
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            from result in contentItem.ManyThen(End)
+            select BuildModel(result.Item1);
+    }
 
     static RadarModel BuildModel(IEnumerable<IRadarContent?> content)
     {
@@ -108,7 +113,7 @@ class RadarParser : IDiagramParser<RadarModel>
         return model;
     }
 
-    public Result<char, RadarModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, RadarModel> Parse(string input) => parser.Parse(input);
 
     interface IRadarContent;
     readonly record struct TitleItem(string Value) : IRadarContent;

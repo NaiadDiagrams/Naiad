@@ -10,3 +10,4 @@ nugets/
 /.claude
 nul
 /BenchmarkDotNet.Artifacts
+.dagre-ref/

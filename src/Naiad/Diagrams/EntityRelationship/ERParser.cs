@@ -1,153 +1,150 @@
 class ERParser : IDiagramParser<ERModel>
 {
-    // Entity name (alphanumeric, underscore, hyphen)
-    static Parser<char, string> entityName =
-        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
-            .AtLeastOnceString()
-            .Labelled("entity name");
+    static Parser<char, ERModel> parser;
 
-    // Left cardinality markers
-    static Parser<char, Cardinality> leftCardinality =
-        OneOf(
-            Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
-            Try(String("|o")).ThenReturn(Cardinality.ZeroOrOne),
-            Try(String("}|")).ThenReturn(Cardinality.OneOrMore),
-            String("}o").ThenReturn(Cardinality.ZeroOrMore)
-        );
-
-    // Right cardinality markers
-    static Parser<char, Cardinality> rightCardinality =
-        OneOf(
-            Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
-            Try(String("o|")).ThenReturn(Cardinality.ZeroOrOne),
-            Try(String("|{")).ThenReturn(Cardinality.OneOrMore),
-            String("o{").ThenReturn(Cardinality.ZeroOrMore)
-        );
-
-    // Line style (-- for identifying, .. for non-identifying)
-    static Parser<char, bool> lineStyle =
-        OneOf(
-            String("--").ThenReturn(true),
-            String("..").ThenReturn(false)
-        );
-
-    // Relationship: ENTITY1 ||--o{ ENTITY2 : label
-    static Parser<char, Relationship> relationshipParser =
-        from _ in CommonParsers.InlineWhitespace
-        from fromEntity in entityName
-        from __ in CommonParsers.InlineWhitespace
-        from leftCard in leftCardinality
-        from identifying in lineStyle
-        from rightCard in rightCardinality
-        from ___ in CommonParsers.InlineWhitespace
-        from toEntity in entityName
-        from label in Try(
-            CommonParsers.InlineWhitespace
-                .Then(Char(':'))
-                .Then(CommonParsers.InlineWhitespace)
-                .Then(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString())
-        ).Optional()
-        from ____ in CommonParsers.InlineWhitespace
-        from _____ in CommonParsers.LineEnd
-        select new Relationship
-        {
-            FromEntity = fromEntity,
-            ToEntity = toEntity,
-            FromCardinality = leftCard,
-            ToCardinality = rightCard,
-            Label = label.HasValue ? label.Value.Trim() : null,
-            Identifying = identifying
-        };
-
-    // Attribute key type
-    static Parser<char, AttributeKeyType> keyTypeParser =
-        OneOf(
-            Try(String("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
-            Try(String("FK")).ThenReturn(AttributeKeyType.ForeignKey),
-            String("UK").ThenReturn(AttributeKeyType.UniqueKey)
-        );
-
-    // Attribute comment (in quotes)
-    static Parser<char, string> attributeComment =
-        CommonParsers.DoubleQuotedString;
-
-    // Entity attribute: type name PK "comment"
-    static Parser<char, EntityAttribute> attributeParser =
-        from _ in CommonParsers.InlineWhitespace
-        from type in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '[' || _ == ']').AtLeastOnceString()
-        from __ in CommonParsers.RequiredWhitespace
-        from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
-        from ___ in CommonParsers.InlineWhitespace
-        from keyType in Try(keyTypeParser).Optional()
-        from ____ in CommonParsers.InlineWhitespace
-        from comment in Try(attributeComment).Optional()
-        from _____ in CommonParsers.InlineWhitespace
-        from lineEnd in CommonParsers.LineEnd
-        select new EntityAttribute
-        {
-            Name = name,
-            Type = type,
-            KeyType = keyType.HasValue ? keyType.Value : AttributeKeyType.None,
-            Comment = comment.HasValue ? comment.Value : null
-        };
-
-    // Entity body content: individual attribute lines
-    static Parser<char, List<EntityAttribute>> EntityBodyParser()
+    static ERParser()
     {
-        var attributeOrEmpty = OneOf(
-            Try(attributeParser.Select<EntityAttribute?>(_ => _)),
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd))
-                .ThenReturn<EntityAttribute?>(null)
-        );
+        // Entity name (alphanumeric, underscore, hyphen)
+        var entityName =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
+                .AtLeastOnceString()
+                .Labelled("entity name");
 
-        return attributeOrEmpty.Many()
-            .Select(_ => _.Where(_ => _ != null).Cast<EntityAttribute>().ToList());
-    }
+        // Left cardinality markers
+        var leftCardinality =
+            OneOf(
+                Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
+                Try(String("|o")).ThenReturn(Cardinality.ZeroOrOne),
+                Try(String("}|")).ThenReturn(Cardinality.OneOrMore),
+                String("}o").ThenReturn(Cardinality.ZeroOrMore)
+            );
 
-    // Entity definition: EntityName { attributes }
-    static Parser<char, Entity> EntityDefinitionParser =>
-        Try(
+        // Right cardinality markers
+        var rightCardinality =
+            OneOf(
+                Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
+                Try(String("o|")).ThenReturn(Cardinality.ZeroOrOne),
+                Try(String("|{")).ThenReturn(Cardinality.OneOrMore),
+                String("o{").ThenReturn(Cardinality.ZeroOrMore)
+            );
+
+        // Line style (-- for identifying, .. for non-identifying)
+        var lineStyle =
+            OneOf(
+                String("--").ThenReturn(true),
+                String("..").ThenReturn(false)
+            );
+
+        // Relationship: ENTITY1 ||--o{ ENTITY2 : label
+        var relationshipParser =
             from _ in CommonParsers.InlineWhitespace
-            from name in entityName
+            from fromEntity in entityName
             from __ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from ___ in CommonParsers.LineEnd
-            from attributes in EntityBodyParser()
+            from leftCard in leftCardinality
+            from identifying in lineStyle
+            from rightCard in rightCardinality
+            from ___ in CommonParsers.InlineWhitespace
+            from toEntity in entityName
+            from label in Try(
+                CommonParsers.InlineWhitespace
+                    .Then(Char(':'))
+                    .Then(CommonParsers.InlineWhitespace)
+                    .Then(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString())
+            ).Optional()
             from ____ in CommonParsers.InlineWhitespace
-            from close in Char('}')
             from _____ in CommonParsers.LineEnd
-            select CreateEntity(name, attributes)
-        );
+            select new Relationship
+            {
+                FromEntity = fromEntity,
+                ToEntity = toEntity,
+                FromCardinality = leftCard,
+                ToCardinality = rightCard,
+                Label = label.HasValue ? label.Value.Trim() : null,
+                Identifying = identifying
+            };
+
+        // Attribute key type
+        var keyTypeParser =
+            OneOf(
+                Try(String("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
+                Try(String("FK")).ThenReturn(AttributeKeyType.ForeignKey),
+                String("UK").ThenReturn(AttributeKeyType.UniqueKey)
+            );
+
+        // Attribute comment (in quotes)
+        var attributeComment =
+            CommonParsers.DoubleQuotedString;
+
+        // Entity attribute: type name PK "comment"
+        var attributeParser =
+            from _ in CommonParsers.InlineWhitespace
+            from type in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '[' || _ == ']').AtLeastOnceString()
+            from __ in CommonParsers.RequiredWhitespace
+            from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
+            from ___ in CommonParsers.InlineWhitespace
+            from keyType in Try(keyTypeParser).Optional()
+            from ____ in CommonParsers.InlineWhitespace
+            from comment in Try(attributeComment).Optional()
+            from _____ in CommonParsers.InlineWhitespace
+            from lineEnd in CommonParsers.LineEnd
+            select new EntityAttribute
+            {
+                Name = name,
+                Type = type,
+                KeyType = keyType.HasValue ? keyType.Value : AttributeKeyType.None,
+                Comment = comment.HasValue ? comment.Value : null
+            };
+
+        // Entity body content: individual attribute lines
+        var entityBodyParser =
+            OneOf(
+                Try(attributeParser.Select<EntityAttribute?>(_ => _)),
+                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd))
+                    .ThenReturn<EntityAttribute?>(null)
+            ).Many()
+            .Select(_ => _.Where(_ => _ != null).Cast<EntityAttribute>().ToList());
+
+        // Entity definition: EntityName { attributes }
+        var entityDefinitionParser =
+            Try(
+                from _ in CommonParsers.InlineWhitespace
+                from name in entityName
+                from __ in CommonParsers.InlineWhitespace
+                from open in Char('{')
+                from ___ in CommonParsers.LineEnd
+                from attributes in entityBodyParser
+                from ____ in CommonParsers.InlineWhitespace
+                from close in Char('}')
+                from _____ in CommonParsers.LineEnd
+                select CreateEntity(name, attributes)
+            );
+
+        // Skip line (comments, empty lines)
+        var skipLine =
+            CommonParsers.InlineWhitespace
+                .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+
+        var parseContent =
+            OneOf(
+                Try(entityDefinitionParser.Select<IERContent?>(_ => new EntityItem(_))),
+                Try(relationshipParser.Select<IERContent?>(_ => new RelationshipItem(_))),
+                skipLine.ThenReturn<IERContent?>(null)
+            ).Many();
+
+        parser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in String("erDiagram")
+            from __ in CommonParsers.InlineWhitespace
+            from ___ in CommonParsers.LineEnd
+            from content in parseContent
+            select BuildModel(content);
+    }
 
     static Entity CreateEntity(string name, List<EntityAttribute> attributes)
     {
         var entity = new Entity { Name = name };
         entity.Attributes.AddRange(attributes);
         return entity;
-    }
-
-    // Skip line (comments, empty lines)
-    static Parser<char, Unit> skipLine =
-        CommonParsers.InlineWhitespace
-            .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
-
-    public static Parser<char, ERModel> Parser =>
-        from _ in CommonParsers.InlineWhitespace
-        from keyword in String("erDiagram")
-        from __ in CommonParsers.InlineWhitespace
-        from ___ in CommonParsers.LineEnd
-        from content in ParseContent()
-        select BuildModel(content);
-
-    public static Parser<char, IEnumerable<IERContent?>> ParseContent()
-    {
-        var element = OneOf(
-            Try(EntityDefinitionParser.Select<IERContent?>(_ => new EntityItem(_))),
-            Try(relationshipParser.Select<IERContent?>(_ => new RelationshipItem(_))),
-            skipLine.ThenReturn<IERContent?>(null)
-        );
-
-        return element.Many();
     }
 
     static ERModel BuildModel(IEnumerable<IERContent?> content)
@@ -197,7 +194,7 @@ class ERParser : IDiagramParser<ERModel>
         model.Entities.Add(entity);
     }
 
-    public Result<char, ERModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, ERModel> Parse(string input) => parser.Parse(input);
 
     internal interface IERContent;
     readonly record struct EntityItem(Entity Value) : IERContent;

@@ -69,21 +69,21 @@
     <line
       x1="130"
       y1="50"
-      x2="50"
-      y2="130"
-      stroke="#333" />
-    <polygon
-      points="50,130 57.07,130 57.07,122.93 50,122.93"
-      fill="#333"
-      stroke="#333" />
-    <line
-      x1="130"
-      y1="50"
       x2="210"
       y2="130"
       stroke="#333" />
     <polygon
       points="210,130 210,122.93 202.93,122.93 202.93,130"
+      fill="#333"
+      stroke="#333" />
+    <line
+      x1="130"
+      y1="50"
+      x2="50"
+      y2="130"
+      stroke="#333" />
+    <polygon
+      points="50,130 57.07,130 57.07,122.93 50,122.93"
       fill="#333"
       stroke="#333" />
     <rect
@@ -102,21 +102,6 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Car</text>
     <rect
-      x="0"
-      y="130"
-      width="100"
-      height="50"
-      fill="#FFFFDE"
-      stroke="#333" />
-    <text
-      x="50"
-      y="150"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold">Engine</text>
-    <rect
       x="160"
       y="130"
       width="100"
@@ -125,6 +110,21 @@
       stroke="#333" />
     <text
       x="210"
+      y="150"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Engine</text>
+    <rect
+      x="0"
+      y="130"
+      width="100"
+      height="50"
+      fill="#FFFFDE"
+      stroke="#333" />
+    <text
+      x="50"
       y="150"
       text-anchor="middle"
       dominant-baseline="middle"

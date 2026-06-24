@@ -5,7 +5,7 @@ namespace Naiad.Diagrams.State;
 public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<StateModel>
 {
-    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
     // Track placed label bounds to avoid label-to-label overlaps
     record LabelBounds(double Left, double Top, double Width, double Height);
@@ -20,7 +20,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
     record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
-    record NodeBounds(double X, double Y, double Width, double Height, string Label);
+    record NodeBounds(double X, double Y, double Width, double Height, string Label, bool IsNote = false);
 #endif
 
     const double stateMinWidth = 40;
@@ -54,7 +54,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 120,
             RankSeparation = 80
         };
-        var layoutResult = layoutEngine.Layout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graphModel, layoutOptions);
 
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
@@ -104,10 +104,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         this.svgWidth = svgWidth;
         this.svgHeight = svgHeight;
 #endif
-        var builder = new SvgBuilder()
-            .Size(svgWidth, svgHeight)
-            .Padding(options.Padding)
-            .AddArrowMarker();
+        var builder = new SvgBuilder();
+        builder.Size(svgWidth, svgHeight);
+        builder.Padding(options.Padding);
+        builder.AddArrowMarker();
 
         // Render transitions first (behind states)
         RenderTransitions(builder, model, options);
@@ -174,8 +174,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     void TrackLine(double x1, double y1, double x2, double y2, string label) =>
         lineBounds.Add(new(x1, y1, x2, y2, label));
 
-    void TrackNode(double x, double y, double width, double height, string label) =>
-        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
+    void TrackNode(double x, double y, double width, double height, string label, bool isNote = false) =>
+        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label, isNote));
 
     void CheckForLinesUnderNodes()
     {
@@ -183,6 +183,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             foreach (var node in nodeBounds)
             {
+                // Notes are opaque annotation boxes drawn on top of the transitions, so a line routing
+                // behind one is hidden by it, not obscured by it. Only real state nodes must stay clear.
+                if (node.IsNote)
+                {
+                    continue;
+                }
+
                 // Skip if line is connected to this node (endpoint is near/inside the node)
                 var nodeRight = node.X + node.Width;
                 var nodeBottom = node.Y + node.Height;
@@ -979,6 +986,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             .OrderBy(_ => stateMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
             .ToList();
 
+        // Index back-edges once so the per-transition loop is O(E), not O(E²) via IndexOf.
+        var backEdgeIndices = new Dictionary<StateTransition, int>();
+        for (var i = 0; i < backEdges.Count; i++)
+        {
+            backEdgeIndices[backEdges[i]] = i;
+        }
+
         foreach (var transition in model.Transitions)
         {
             var pairKey = GetPairKey(transition.FromId, transition.ToId);
@@ -991,7 +1005,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             else if (IsBackEdge(transition, stateMap))
             {
                 // Single back-edge (no forward counterpart) - curve to the right with offset
-                var backEdgeIndex = backEdges.IndexOf(transition);
+                var backEdgeIndex = backEdgeIndices.GetValueOrDefault(transition, -1);
                 RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, model, backEdgeIndex, options);
             }
             else
@@ -1818,7 +1832,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
 #if DEBUG
             // Track note as a node for line-under-node detection
-            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}");
+            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}", isNote: true);
 #endif
 
             // Fold corner
@@ -1881,6 +1895,3 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.6;
 }
-
-// Internal graph model for layout
-internal class StateLayoutGraph : GraphDiagramBase;

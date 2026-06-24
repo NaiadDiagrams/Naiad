@@ -9,7 +9,16 @@ public class TreemapNode
 
     public bool IsLeaf => Children.Count == 0;
 
-    public double TotalValue => IsLeaf
-        ? Value ?? 0
-        : Children.Sum(_ => _.TotalValue);
+    public double TotalValue
+    {
+        get
+        {
+            if (IsLeaf)
+            {
+                return Value ?? 0;
+            }
+
+            return Children.Sum(_ => _.TotalValue);
+        }
+    }
 }

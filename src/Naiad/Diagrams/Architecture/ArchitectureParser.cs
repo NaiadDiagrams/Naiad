@@ -1,117 +1,143 @@
 class ArchitectureParser : IDiagramParser<ArchitectureModel>
 {
-    static Parser<char, string> identifier =
-        Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+    static Parser<char, ArchitectureModel> parser;
 
-    static Parser<char, string> iconParser =
-        Char('(').Then(Token(_ => _ != ')').ManyString()).Before(Char(')'));
+    static ArchitectureParser()
+    {
+        var identifier =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
 
-    static Parser<char, string> labelParser =
-        Char('[').Then(Token(_ => _ != ']').ManyString()).Before(Char(']'));
+        var iconParser =
+            Char('(').Then(Token(_ => _ != ')').ManyString()).Before(Char(')'));
 
-    static Parser<char, string> parentParser =
-        Try(
-            CommonParsers.RequiredWhitespace
-                .Then(CIString("in"))
-                .Then(CommonParsers.RequiredWhitespace)
-                .Then(identifier)
-        );
+        var labelParser =
+            Char('[').Then(Token(_ => _ != ']').ManyString()).Before(Char(']'));
 
-    // Direction: L, R, T, B
-    static Parser<char, EdgeDirection> directionParser =
-        OneOf(
-            Char('L').ThenReturn(EdgeDirection.Left),
-            Char('R').ThenReturn(EdgeDirection.Right),
-            Char('T').ThenReturn(EdgeDirection.Top),
-            Char('B').ThenReturn(EdgeDirection.Bottom)
-        );
+        var parentParser =
+            Try(
+                CommonParsers.RequiredWhitespace
+                    .Then(CIString("in"))
+                    .Then(CommonParsers.RequiredWhitespace)
+                    .Then(identifier)
+            );
 
-    // Group: group id(icon)[label] in parent
-    static Parser<char, ArchitectureGroup> groupParser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("group")
-        from ___ in CommonParsers.RequiredWhitespace
-        from id in identifier
-        from icon in iconParser.Optional()
-        from label in labelParser.Optional()
-        from parent in parentParser.Optional()
-        from ____ in CommonParsers.InlineWhitespace
-        from _____ in CommonParsers.LineEnd
-        select new ArchitectureGroup
-        {
-            Id = id,
-            Icon = icon.GetValueOrDefault(),
-            Label = label.GetValueOrDefault(),
-            Parent = parent.GetValueOrDefault()
-        };
+        // Direction: L, R, T, B
+        var directionParser =
+            OneOf(
+                Char('L').ThenReturn(EdgeDirection.Left),
+                Char('R').ThenReturn(EdgeDirection.Right),
+                Char('T').ThenReturn(EdgeDirection.Top),
+                Char('B').ThenReturn(EdgeDirection.Bottom)
+            );
 
-    // Service: service id(icon)[label] in parent
-    static Parser<char, ArchitectureService> serviceParser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("service")
-        from ___ in CommonParsers.RequiredWhitespace
-        from id in identifier
-        from icon in iconParser.Optional()
-        from label in labelParser.Optional()
-        from parent in parentParser.Optional()
-        from ____ in CommonParsers.InlineWhitespace
-        from _____ in CommonParsers.LineEnd
-        select new ArchitectureService
-        {
-            Id = id,
-            Icon = icon.GetValueOrDefault(),
-            Label = label.GetValueOrDefault(),
-            Parent = parent.GetValueOrDefault()
-        };
+        // Group: group id(icon)[label] in parent
+        var groupParser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("group")
+            from ___ in CommonParsers.RequiredWhitespace
+            from id in identifier
+            from icon in iconParser.Optional()
+            from label in labelParser.Optional()
+            from parent in parentParser.Optional()
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select new ArchitectureGroup
+            {
+                Id = id,
+                Icon = icon.GetValueOrDefault(),
+                Label = label.GetValueOrDefault(),
+                Parent = parent.GetValueOrDefault()
+            };
 
-    // Junction: junction id in parent
-    static Parser<char, ArchitectureJunction> junctionParser =
-        from _ in CommonParsers.InlineWhitespace
-        from __ in CIString("junction")
-        from ___ in CommonParsers.RequiredWhitespace
-        from id in identifier
-        from parent in parentParser.Optional()
-        from ____ in CommonParsers.InlineWhitespace
-        from _____ in CommonParsers.LineEnd
-        select new ArchitectureJunction
-        {
-            Id = id,
-            Parent = parent.GetValueOrDefault()
-        };
+        // Service: service id(icon)[label] in parent
+        var serviceParser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("service")
+            from ___ in CommonParsers.RequiredWhitespace
+            from id in identifier
+            from icon in iconParser.Optional()
+            from label in labelParser.Optional()
+            from parent in parentParser.Optional()
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select new ArchitectureService
+            {
+                Id = id,
+                Icon = icon.GetValueOrDefault(),
+                Label = label.GetValueOrDefault(),
+                Parent = parent.GetValueOrDefault()
+            };
 
-    // Group reference: {groupId}
-    static Parser<char, string> groupRef =
-        Char('{').Then(identifier).Before(Char('}'));
+        // Junction: junction id in parent
+        var junctionParser =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in CIString("junction")
+            from ___ in CommonParsers.RequiredWhitespace
+            from id in identifier
+            from parent in parentParser.Optional()
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select new ArchitectureJunction
+            {
+                Id = id,
+                Parent = parent.GetValueOrDefault()
+            };
 
-    // Source side: id{group}?:direction with optional arrow
-    static Parser<char, (string id, string? grp, EdgeDirection dir, bool arrow)> sourceSideParser =
-        from arw in Char('<').Optional()
-        from nodeId in identifier
-        from grp in groupRef.Optional()
-        from colon in Char(':')
-        from dir in directionParser
-        select (nodeId, grp.GetValueOrDefault(), dir, arw.HasValue);
+        // Group reference: {groupId}
+        var groupRef =
+            Char('{').Then(identifier).Before(Char('}'));
 
-    // Target side: direction:id{group}? with optional arrow
-    static Parser<char, (string id, string? grp, EdgeDirection dir, bool arrow)> targetSideParser =
-        from dir in directionParser
-        from arw in Char('>').Optional()
-        from colon in Char(':')
-        from nodeId in identifier
-        from grp in groupRef.Optional()
-        select (nodeId, grp.GetValueOrDefault(), dir, arw.HasValue);
+        // Source side: id{group}?:direction with optional arrow
+        var sourceSideParser =
+            from arw in Char('<').Optional()
+            from nodeId in identifier
+            from grp in groupRef.Optional()
+            from colon in Char(':')
+            from dir in directionParser
+            select (id: nodeId, grp: grp.GetValueOrDefault(), dir, arrow: arw.HasValue);
 
-    // Edge: source:side <arrow>--<arrow> side:target
-    static Parser<char, ArchitectureEdge> edgeParser =
-        from _ in CommonParsers.InlineWhitespace
-        from source in sourceSideParser
-        from __ in CommonParsers.InlineWhitespace
-        from ___ in String("--")
-        from ____ in CommonParsers.InlineWhitespace
-        from target in targetSideParser
-        from _____ in CommonParsers.InlineWhitespace
-        from ______ in CommonParsers.LineEnd
-        select BuildEdge(source, target);
+        // Target side: direction:id{group}? with optional arrow
+        var targetSideParser =
+            from dir in directionParser
+            from arw in Char('>').Optional()
+            from colon in Char(':')
+            from nodeId in identifier
+            from grp in groupRef.Optional()
+            select (id: nodeId, grp: grp.GetValueOrDefault(), dir, arrow: arw.HasValue);
+
+        // Edge: source:side <arrow>--<arrow> side:target
+        var edgeParser =
+            from _ in CommonParsers.InlineWhitespace
+            from source in sourceSideParser
+            from __ in CommonParsers.InlineWhitespace
+            from ___ in String("--")
+            from ____ in CommonParsers.InlineWhitespace
+            from target in targetSideParser
+            from _____ in CommonParsers.InlineWhitespace
+            from ______ in CommonParsers.LineEnd
+            select BuildEdge(source, target);
+
+        var skipLine =
+            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
+                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+
+        var contentItem =
+            OneOf(
+                Try(groupParser.Select<IArchitectureContent?>(_ => new GroupItem(_))),
+                Try(serviceParser.Select<IArchitectureContent?>(_ => new ServiceItem(_))),
+                Try(junctionParser.Select<IArchitectureContent?>(_ => new JunctionItem(_))),
+                Try(edgeParser.Select<IArchitectureContent?>(_ => new EdgeItem(_))),
+                skipLine.ThenReturn<IArchitectureContent?>(null)
+            );
+
+        parser =
+            from inlineWhitespace in CommonParsers.InlineWhitespace
+            from architecture in CIString("architecture-beta")
+            from innerInlineWhitespace in CommonParsers.InlineWhitespace
+            from lineEnd in CommonParsers.LineEnd
+            from result in contentItem.ManyThen(End)
+            select BuildModel(result.Item1);
+    }
 
     static ArchitectureEdge BuildEdge(
         (string id, string? grp, EdgeDirection dir, bool arrow) source,
@@ -126,27 +152,6 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
         TargetSide = target.dir,
         TargetArrow = target.arrow
     };
-
-    static Parser<char, Unit> skipLine =
-        Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-            .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
-
-    static Parser<char, IArchitectureContent?> ContentItem =>
-        OneOf(
-            Try(groupParser.Select<IArchitectureContent?>(_ => new GroupItem(_))),
-            Try(serviceParser.Select<IArchitectureContent?>(_ => new ServiceItem(_))),
-            Try(junctionParser.Select<IArchitectureContent?>(_ => new JunctionItem(_))),
-            Try(edgeParser.Select<IArchitectureContent?>(_ => new EdgeItem(_))),
-            skipLine.ThenReturn<IArchitectureContent?>(null)
-        );
-
-    public static Parser<char, ArchitectureModel> Parser =>
-        from inlineWhitespace in CommonParsers.InlineWhitespace
-        from architecture in CIString("architecture-beta")
-        from innerInlineWhitespace in CommonParsers.InlineWhitespace
-        from lineEnd in CommonParsers.LineEnd
-        from result in ContentItem.ManyThen(End)
-        select BuildModel(result.Item1);
 
     static ArchitectureModel BuildModel(IEnumerable<IArchitectureContent?> content)
     {
@@ -177,7 +182,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
         return model;
     }
 
-    public Result<char, ArchitectureModel> Parse(string input) => Parser.Parse(input);
+    public Result<char, ArchitectureModel> Parse(string input) => parser.Parse(input);
 
     internal interface IArchitectureContent;
     readonly record struct GroupItem(ArchitectureGroup Value) : IArchitectureContent;

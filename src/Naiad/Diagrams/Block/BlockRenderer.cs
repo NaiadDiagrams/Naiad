@@ -2,12 +2,12 @@ namespace Naiad.Diagrams.Block;
 
 public class BlockRenderer : IDiagramRenderer<BlockModel>
 {
-    const double CellWidth = 120;
-    const double CellHeight = 60;
-    const double CellPadding = 10;
-    const double TitleHeight = 40;
+    const double cellWidth = 120;
+    const double cellHeight = 60;
+    const double cellPadding = 10;
+    const double titleHeight = 40;
 
-    static readonly string[] BlockColors =
+    static readonly string[] blockColors =
     [
         "#E3F2FD",
         "#E8F5E9",
@@ -23,7 +23,8 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
     {
         if (model.Elements.Count == 0)
         {
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -36,22 +37,23 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         }
 
         var columns = Math.Max(1, model.Columns);
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : TitleHeight;
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
         // Calculate rows needed
         var rows = CalculateRows(model.Elements, columns);
 
-        var width = columns * CellWidth + options.Padding * 2;
-        var height = rows * CellHeight + options.Padding * 2 + titleOffset;
+        var width = columns * cellWidth + options.Padding * 2;
+        var height = rows * cellHeight + options.Padding * 2 + titleOffset;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 width / 2,
-                options.Padding + TitleHeight / 2,
+                options.Padding + titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
@@ -76,12 +78,12 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 span = Math.Min(element.Span, columns);
             }
 
-            var x = options.Padding + currentColumn * CellWidth + CellPadding;
-            var y = titleOffset + options.Padding + currentRow * CellHeight + CellPadding;
-            var blockWidth = span * CellWidth - CellPadding * 2;
-            const double blockHeight = CellHeight - CellPadding * 2;
+            var x = options.Padding + currentColumn * cellWidth + cellPadding;
+            var y = titleOffset + options.Padding + currentRow * cellHeight + cellPadding;
+            var blockWidth = span * cellWidth - cellPadding * 2;
+            const double blockHeight = cellHeight - cellPadding * 2;
 
-            var color = BlockColors[colorIndex % BlockColors.Length];
+            var color = blockColors[colorIndex % blockColors.Length];
             var label = element.Label ?? element.Id;
 
             DrawBlock(builder, x, y, blockWidth, blockHeight, label, element.Shape, color, options);
@@ -92,6 +94,7 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 currentColumn = 0;
                 currentRow++;
             }
+
             colorIndex++;
         }
 
@@ -160,16 +163,6 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 break;
 
             case BlockShape.Rounded:
-                builder.AddRect(
-                    x,
-                    y,
-                    width,
-                    height,
-                    rx: height / 2,
-                    fill: color,
-                    stroke: "#333",
-                    strokeWidth: 1);
-                break;
 
             case BlockShape.Stadium:
                 builder.AddRect(

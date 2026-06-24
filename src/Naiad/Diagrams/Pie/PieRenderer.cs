@@ -34,11 +34,21 @@ public class PieRenderer : IDiagramRenderer<PieModel>
     public SvgDocument Render(PieModel model, RenderOptions options)
     {
         var total = model.Sections.Sum(_ => _.Value);
-        if (total == 0) total = 1;
+        if (total == 0)
+        {
+            total = 1;
+        }
 
         // Calculate legend labels (with values if showData is enabled)
         var legendLabels = model.Sections.Select(_ =>
-            model.ShowData ? $"{_.Label} [{(int)_.Value}]" : _.Label).ToList();
+        {
+            if (model.ShowData)
+            {
+                return $"{_.Label} [{(int) _.Value}]";
+            }
+
+            return _.Label;
+        }).ToList();
 
         // Match Mermaid exact dimensions - width varies based on legend text
         var width = model.ShowData ? 613.140625 : 551.6875;
@@ -46,10 +56,10 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         const double cx = 225.0;
         const double cy = 225.0;
 
-        var builder = new SvgBuilder()
-            .Size(width, height)
-            .DiagramType(null!, "pie")
-            .AddStyles(MermaidStyles.PieStyles);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
+        builder.DiagramType(null!, "pie");
+        builder.AddStyles(MermaidStyles.PieStyles);
 
         // Empty group (Mermaid artifact)
         builder.BeginGroup();
@@ -151,19 +161,21 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         {
             return color.StartsWith("rgb") ? color : ConvertToRgb(color);
         }
+
         return defaultColorRgb[index % defaultColorRgb.Length];
     }
 
     static string ConvertToRgb(string color)
     {
-        if (color.StartsWith('#') && color.Length == 7)
+        if (!color.StartsWith('#') || color.Length != 7)
         {
-            var r = Convert.ToInt32(color.Substring(1, 2), 16);
-            var g = Convert.ToInt32(color.Substring(3, 2), 16);
-            var b = Convert.ToInt32(color.Substring(5, 2), 16);
-            return $"rgb({r}, {g}, {b})";
+            return color;
         }
-        return color;
+
+        var r = Convert.ToInt32(color.Substring(1, 2), 16);
+        var g = Convert.ToInt32(color.Substring(3, 2), 16);
+        var b = Convert.ToInt32(color.Substring(5, 2), 16);
+        return $"rgb({r}, {g}, {b})";
     }
 
     static double ToRadians(double degrees) => degrees * Math.PI / 180;
@@ -177,6 +189,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         {
             s = value.ToString("0.#################", CultureInfo.InvariantCulture);
         }
+
         return s;
     }
 }

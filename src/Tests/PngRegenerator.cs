@@ -36,7 +36,7 @@ public class PngRegenerator
 
         if (failures.Count > 0)
         {
-            throw new($"Failed to render {failures.Count} SVG(s):\n{string.Join("\n", failures)}");
+            throw new($"Failed to render {failures.Count} SVG(s):\n{string.Join('\n', failures)}");
         }
     }
 }

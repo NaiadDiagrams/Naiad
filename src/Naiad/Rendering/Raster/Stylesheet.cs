@@ -13,7 +13,7 @@ readonly record struct MatchedDeclaration(string Property, string Value, bool Im
 /// </summary>
 sealed class Stylesheet
 {
-    readonly List<StyleRule> rules;
+    List<StyleRule> rules;
 
     Stylesheet(List<StyleRule> rules) =>
         this.rules = rules;
@@ -74,12 +74,14 @@ sealed class Stylesheet
         into.Clear();
         foreach (var rule in rules)
         {
-            if (rule.Matches(chain))
+            if (!rule.Matches(chain))
             {
-                foreach (var declaration in rule.Declarations)
-                {
-                    into.Add(new(declaration.Property, declaration.Value, declaration.Important, rule.Specificity, rule.Order));
-                }
+                continue;
+            }
+
+            foreach (var declaration in rule.Declarations)
+            {
+                into.Add(new(declaration.Property, declaration.Value, declaration.Important, rule.Specificity, rule.Order));
             }
         }
     }

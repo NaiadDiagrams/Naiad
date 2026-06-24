@@ -1,4 +1,4 @@
-namespace Naiad.Models;
+namespace Naiad;
 
 /// <summary>
 /// Optional layout constraint on an edge, used by the layout engine to pin two

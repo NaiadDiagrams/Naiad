@@ -1,23 +1,25 @@
-using System.Net;
-
 namespace Naiad.Diagrams.Flowchart;
 
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<FlowchartModel>
 {
-    ILayoutEngine layoutEngine = layoutEngine ?? new DagreLayoutEngine();
+    ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
 
     // Mermaid default colors
     const string nodeFill = "#ECECFF";
     const string nodeStroke = "#9370DB";
     const string edgeStroke = "#333333";
+
     const string labelBackground = "rgba(232,232,232,0.8)";
-    const string subgraphFill = "#ffffff";
-    const string subgraphStroke = "#bbbbbb";
+
+    // Mermaid's default cluster palette (pale yellow), so subgraph boxes read clearly against a white canvas.
+    const string subgraphFill = "#ffffde";
+    const string subgraphStroke = "#aaaa33";
 
     // Matches "prefix:name" icon tokens in labels — FontAwesome (fa:fa-bell) or a
     // registered iconify pack (logos:aws). Tokens that resolve to neither stay as text.
     static Regex iconPattern = IconPatternMyRegex();
+
     [GeneratedRegex("[A-Za-z0-9]+:[A-Za-z0-9][A-Za-z0-9_-]*", RegexOptions.Compiled)]
     private static partial Regex IconPatternMyRegex();
 
@@ -46,6 +48,19 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             }
         }
 
+        // Reserve space for edge labels so the layout keeps a rank gap clear for them.
+        foreach (var edge in model.Edges)
+        {
+            if (string.IsNullOrEmpty(edge.Label))
+            {
+                continue;
+            }
+
+            var labelSize = MeasureText(edge.Label, options.FontSize);
+            edge.LabelWidth = labelSize.Width + 16;
+            edge.LabelHeight = labelSize.Height + 8;
+        }
+
         // Run layout
         var layoutOptions = new LayoutOptions
         {
@@ -53,21 +68,20 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             NodeSeparation = 50,
             RankSeparation = 70
         };
-        var layoutResult = layoutEngine.Layout(model, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(model, layoutOptions);
 
         // Build SVG
-        var builder = new SvgBuilder()
-            .Options(options)
-            .Size(layoutResult.Width, layoutResult.Height)
-            .Padding(options.Padding);
+        var builder = new SvgBuilder();
+        builder.Options(options);
+        builder.Size(layoutResult.Width, layoutResult.Height);
+        builder.Padding(options.Padding);
 
         // The arrow/circle/cross markers are only referenced by edges; skip the defs entirely when there are none.
         if (model.Edges.Count > 0)
         {
-            builder
-                .AddMermaidArrowMarker()
-                .AddMermaidCircleMarker()
-                .AddMermaidCrossMarker();
+            builder.AddMermaidArrowMarker();
+            builder.AddMermaidCircleMarker();
+            builder.AddMermaidCrossMarker();
         }
 
         // Add Mermaid CSS styles
@@ -79,7 +93,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
         {
-            RenderEdge(builder, edge);
+            RenderEdge(builder, edge, options.FontSize);
         }
 
         // Render nodes
@@ -105,6 +119,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     static void RenderSubgraphBox(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
     {
         var bounds = subgraph.Bounds;
+        var style = subgraph.Style;
 
         builder.AddRect(
             bounds.X,
@@ -112,9 +127,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             bounds.Width,
             bounds.Height,
             rx: 6,
-            fill: subgraphFill,
-            stroke: subgraphStroke,
-            strokeWidth: 1);
+            fill: style?.Fill ?? subgraphFill,
+            stroke: style?.Stroke ?? subgraphStroke,
+            strokeWidth: style?.StrokeWidth ?? 1,
+            cssClass: "cluster");
 
         var title = subgraph.Title ?? subgraph.Id;
         if (!string.IsNullOrEmpty(title))
@@ -128,7 +144,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 fontSize: options.FontSize,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold",
-                fill: edgeStroke);
+                fill: style?.Color ?? edgeStroke,
+                cssClass: "cluster-label");
         }
     }
 
@@ -139,15 +156,17 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
 
+        var style = node.Style;
         builder.AddPath(
             shapePath,
-            fill: nodeFill,
-            stroke: nodeStroke,
-            strokeWidth: 1);
+            fill: style?.Fill ?? nodeFill,
+            stroke: style?.Stroke ?? nodeStroke,
+            strokeWidth: style?.StrokeWidth ?? 1,
+            strokeDasharray: style?.StrokeDasharray);
 
         // Render label with icon support
         var label = node.Label ?? node.Id;
-        var htmlLabel = ConvertIconsToHtml(label);
+        var htmlLabel = ConvertIconsToHtml(label, style?.Color);
         var (plainText, _) = AnalyzeLabel(label);
 
         builder.AddLabel(
@@ -159,24 +178,76 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             className: "nodeLabel");
     }
 
-    static void RenderEdge(SvgBuilder builder, Edge edge)
+    // Builds a smooth edge path through the routed waypoints using a cubic B-spline (d3 curveBasis): the
+    // interior waypoints are approximated rather than interpolated, so zig-zagging dummy waypoints produce
+    // a gentle curve instead of an S-squiggle. The curve still starts at the first point and ends at the
+    // last (so arrow markers align). A two-point edge stays a straight line.
+    static string BuildEdgePath(List<Position> points)
+    {
+        var path = new StringBuilder();
+
+        static string F(double value) => value.ToString("0.##", CultureInfo.InvariantCulture);
+
+        if (points.Count == 2)
+        {
+            path.Append(CultureInfo.InvariantCulture, $"M{F(points[0].X)},{F(points[0].Y)} L{F(points[1].X)},{F(points[1].Y)}");
+            return path.ToString();
+        }
+
+        double x0 = 0, y0 = 0, x1 = 0, y1 = 0;
+        var stage = 0;
+
+        void Basis(double x, double y) =>
+            path.Append(
+                CultureInfo.InvariantCulture,
+                $" C{F((2 * x0 + x1) / 3)},{F((2 * y0 + y1) / 3)} {F((x0 + 2 * x1) / 3)},{F((y0 + 2 * y1) / 3)} {F((x0 + 4 * x1 + x) / 6)},{F((y0 + 4 * y1 + y) / 6)}");
+
+        foreach (var point in points)
+        {
+            var x = point.X;
+            var y = point.Y;
+            switch (stage)
+            {
+                case 0:
+                    stage = 1;
+                    path.Append(CultureInfo.InvariantCulture, $"M{F(x)},{F(y)}");
+                    break;
+                case 1:
+                    stage = 2;
+                    break;
+                case 2:
+                    stage = 3;
+                    path.Append(CultureInfo.InvariantCulture, $" L{F((5 * x0 + x1) / 6)},{F((5 * y0 + y1) / 6)}");
+                    Basis(x, y);
+                    break;
+                default:
+                    Basis(x, y);
+                    break;
+            }
+
+            x0 = x1;
+            x1 = x;
+            y0 = y1;
+            y1 = y;
+        }
+
+        if (stage == 3)
+        {
+            Basis(x1, y1);
+        }
+
+        path.Append(CultureInfo.InvariantCulture, $" L{F(x1)},{F(y1)}");
+        return path.ToString();
+    }
+
+    static void RenderEdge(SvgBuilder builder, Edge edge, double fontSize)
     {
         if (edge.Points.Count < 2)
         {
             return;
         }
 
-        // Build path from points
-        var points = edge.Points;
-        var pathBuilder = new StringBuilder();
-        pathBuilder.Append(CultureInfo.InvariantCulture, $"M{points[0].X:0.##},{points[0].Y:0.##}");
-
-        for (var i = 1; i < points.Count; i++)
-        {
-            pathBuilder.Append(CultureInfo.InvariantCulture, $" L{points[i].X:0.##},{points[i].Y:0.##}");
-        }
-
-        var pathData = pathBuilder.ToString();
+        var pathData = BuildEdgePath(edge.Points);
 
         var strokeDasharray = edge.LineStyle switch
         {
@@ -191,8 +262,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         };
 
         var markerEnd = edge.HasArrowHead ? "url(#naiad_flowchart-pointEnd)" :
-                        edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
-                        edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
+            edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
+            edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
 
         var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-pointStart)" : null;
 
@@ -211,8 +282,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         {
             var labelX = edge.LabelPosition.X;
             var labelY = edge.LabelPosition.Y;
-            var labelWidth = edge.Label.Length * 8 + 16;
-            const int labelHeight = 24;
+            var labelSize = MeasureText(edge.Label, fontSize);
+            var labelWidth = labelSize.Width + 16;
+            var labelHeight = labelSize.Height + 8;
 
             builder.AddRect(
                 labelX - labelWidth / 2,
@@ -236,9 +308,12 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     /// (<c>fa:fa-name</c>) becomes an <c>&lt;i&gt;</c> element, a registered iconify
     /// pack icon (<c>prefix:name</c>) becomes inline SVG. Other text is HTML-encoded.
     /// </summary>
-    static string ConvertIconsToHtml(string text)
+    static string ConvertIconsToHtml(string text, string? color = null)
     {
-        var html = new StringBuilder("<p>");
+        var html = new StringBuilder(
+            color is null
+                ? "<p>"
+                : $"<p style=\"color:{color}\">");
         var lastIndex = 0;
 
         foreach (Match match in iconPattern.Matches(text))

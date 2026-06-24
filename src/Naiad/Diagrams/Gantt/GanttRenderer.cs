@@ -26,7 +26,8 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         if (tasks.Count == 0)
         {
             // Empty chart
-            var emptyBuilder = new SvgBuilder().Size(200, 100);
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(200, 100);
             emptyBuilder.AddText(
                 100,
                 50,
@@ -64,7 +65,8 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         var width = leftMargin + chartWidth + options.Padding * 2;
         var height = chartHeight + options.Padding * 2;
 
-        var builder = new SvgBuilder().Size(width, height);
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
 
         var offsetX = options.Padding + leftMargin;
         var offsetY = options.Padding;
@@ -186,7 +188,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
 
         // Horizontal grid lines
-        var numRows = (int)(chartHeight / rowHeight);
+        var numRows = (int) (chartHeight / rowHeight);
         for (var i = 0; i <= numRows; i++)
         {
             var y = offsetY + i * rowHeight;
@@ -344,6 +346,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 {
                     task.ComputedEnd = task.ComputedStart.AddDays(1);
                 }
+
                 changed = true;
             }
         }

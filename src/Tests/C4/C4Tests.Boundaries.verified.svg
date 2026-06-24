@@ -58,23 +58,23 @@
         fill="#666"
         stroke="none" />
       <path
-        d="M 175 288 L 260 288"
+        d="M 175 288 L 220 288 L 265 288"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 260 288 L 253.07 292 L 253.07 284 Z"
+        d="M 265 288 L 258.07 292 L 258.07 284 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 425 288 L 510 288"
+        d="M 425 288 L 470 288 L 515 288"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 510 288 L 503.07 292 L 503.07 284 Z"
+        d="M 515 288 L 508.07 292 L 508.07 284 Z"
         fill="#666"
         stroke="none" />
       <path
@@ -285,7 +285,7 @@
         font-family="Arial, sans-serif"
         fill="#888">[HTTPS]</text>
       <rect
-        x="177.5"
+        x="180"
         y="264"
         width="80"
         height="32"
@@ -294,7 +294,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="217.5"
+        x="220"
         y="273.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -302,7 +302,7 @@
         font-family="Arial, sans-serif"
         fill="#666">Calls</text>
       <text
-        x="217.5"
+        x="220"
         y="287.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -310,7 +310,7 @@
         font-family="Arial, sans-serif"
         fill="#888">[JSON/HTTPS]</text>
       <rect
-        x="423.9"
+        x="426.4"
         y="264"
         width="87.2"
         height="32"
@@ -319,7 +319,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="467.5"
+        x="470"
         y="273.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -327,7 +327,7 @@
         font-family="Arial, sans-serif"
         fill="#666">Reads/Writes</text>
       <text
-        x="467.5"
+        x="470"
         y="287.5"
         text-anchor="middle"
         dominant-baseline="middle"

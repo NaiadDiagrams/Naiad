@@ -1,3 +1,4 @@
+global using System.Globalization;
 global using Naiad;
 global using System.Runtime.CompilerServices;
 global using System.Text;
@@ -9,3 +10,4 @@ global using Microsoft.CodeAnalysis.CSharp;
 global using Microsoft.CodeAnalysis.CSharp.Syntax;
 global using SkiaSharp;
 global using Svg.Skia;
+global using TUnit.Assertions.Enums;
