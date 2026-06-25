@@ -91,7 +91,10 @@ public class SvgBuilder
                 Path = "M 0 0 L 10 5 L 0 10 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
-                RefX = 5,
+                // Tip (viewBox x=10) sits at the edge's end vertex — the target node's boundary — so the
+                // arrowhead points flush at the node instead of poking under it. (circleEnd/crossEnd below
+                // use the same out-of-node placement.)
+                RefX = 10,
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
@@ -104,7 +107,9 @@ public class SvgBuilder
                 Path = "M 0 5 L 10 10 L 10 0 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
-                RefX = 4.5,
+                // Mirror of pointEnd: tip (viewBox x=0) sits at the edge's start vertex (the source node's
+                // boundary) so the arrowhead points flush at the node rather than poking under it.
+                RefX = 0,
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
