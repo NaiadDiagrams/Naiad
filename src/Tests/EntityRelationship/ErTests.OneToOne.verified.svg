@@ -2,18 +2,16 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 160 200"
+  viewBox="0 0 160 216"
   style="max-width: 160px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
-    <line
-      x1="60"
-      y1="30"
-      x2="60"
-      y2="130"
+    <path
+      d="M60,30 L60,39.67 C60,49.33 60,68.67 60,88 C60,107.33 60,126.67 60,136.33 L60,146"
+      fill="none"
       stroke="#333" />
     <line
       x1="64"
@@ -29,26 +27,26 @@
       stroke="#333" />
     <line
       x1="56"
-      y1="115"
+      y1="131"
       x2="64"
-      y2="115"
+      y2="131"
       stroke="#333" />
     <line
       x1="56"
-      y1="110"
+      y1="126"
       x2="64"
-      y2="110"
+      y2="126"
       stroke="#333" />
     <rect
       x="46.1"
-      y="72"
+      y="80"
       width="27.8"
       height="16"
       fill="#fff"
       stroke="none" />
     <text
       x="60"
-      y="80"
+      y="88"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
@@ -80,7 +78,7 @@
       fill="#fff">PERSON</text>
     <rect
       x="0"
-      y="130"
+      y="146"
       width="120"
       height="30"
       fill="#ECECFF"
@@ -88,14 +86,14 @@
       stroke-width="2" />
     <rect
       x="0"
-      y="130"
+      y="146"
       width="120"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
       x="60"
-      y="145"
+      y="161"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
