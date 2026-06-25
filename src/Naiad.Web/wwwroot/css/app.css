@@ -317,6 +317,42 @@ header p {
     padding: 2rem;
 }
 
+/* Status bar — a thin strip under the preview reporting facts about the current render. */
+.status-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0.35rem 1rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--muted-color);
+    font-size: 0.78rem;
+}
+
+.status-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0 0.85rem;
+    white-space: nowrap;
+}
+
+.status-item:first-child {
+    padding-left: 0;
+}
+
+/* Divide each fact from the previous one. */
+.status-item:not(:first-child) {
+    border-left: 1px solid var(--border-color);
+}
+
+.status-metric {
+    color: var(--text-color);
+    font-weight: 600;
+    /* Fixed-width digits keep the figures from shifting as they update on each live re-render. */
+    font-variant-numeric: tabular-nums;
+}
+
 /* Error panel */
 .error {
     margin: 1rem;

@@ -56,6 +56,14 @@ static class ModuleInitializer
                     html,
                     "(<textarea\\b[^>]*?) style=\"[^\"]*\"",
                     "$1");
+                // The status bar carries figures that vary run to run (render time) or with the diagram's
+                // layout numbers — the same numbers the SVG above is already scrubbed for (dimensions, byte
+                // size). Pin every value tagged status-volatile so the structure snapshot stays stable; the
+                // diagram type is stable and left to assert.
+                html = Regex.Replace(
+                    html,
+                    "(<span class=\"[^\"]*\\bstatus-volatile\\b[^\"]*\">).*?(</span>)",
+                    "$1scrubbed$2");
                 builder.Clear();
                 builder.Append(html);
             });

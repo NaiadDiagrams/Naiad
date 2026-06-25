@@ -49,5 +49,28 @@
                 <p class="preview-empty">Type Mermaid markup on the left, or load a sample, to see it rendered here.</p>
             }
         </div>
+        @if (stats is { } current)
+        {
+            <div class="status-bar">
+                @if (current.TypeName is { } typeName)
+                {
+                    <span class="status-item" title="Diagram type">
+                        <span class="status-metric">@typeName</span>
+                    </span>
+                }
+                @if (current.Dimensions is { } dimensions)
+                {
+                    <span class="status-item" title="Diagram size in pixels">
+                        <span class="status-metric status-volatile">@FormatDimensions(dimensions)</span>
+                    </span>
+                }
+                <span class="status-item" title="Serialized SVG size">
+                    <span class="status-metric status-volatile">@FormatBytes(current.SvgByteCount)</span>
+                </span>
+                <span class="status-item" title="Time Naiad took to render the diagram">
+                    Rendered in <span class="status-metric status-volatile">@FormatMilliseconds(current.Milliseconds)</span>
+                </span>
+            </div>
+        }
     </section>
 </div>

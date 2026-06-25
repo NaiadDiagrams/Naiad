@@ -1,3 +1,7 @@
+using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace Naiad.Web.Pages;
 
 public partial class Index : IDisposable
@@ -15,6 +19,7 @@ public partial class Index : IDisposable
     string? issueUrl;
     string? userAgent;
     bool isExporting;
+    RenderStats? stats;
     CancelSource? debounce;
 
     // Render once synchronously so the first paint already shows the default sample's diagram.
@@ -57,15 +62,70 @@ public partial class Index : IDisposable
 
     void Render()
     {
+        // Time only the parse-and-render work so the status bar can report how long Naiad took to build the SVG.
+        var stopwatch = Stopwatch.StartNew();
         result = DiagramRenderer.Render(source);
+        stopwatch.Stop();
 
         // Detect from the raw source rather than the render outcome: the opening keyword identifies the type
         // even while the body is mid-edit and not yet parseable, so the docs link stays useful through errors.
         docsLink = DiagramDocs.For(source);
+
+        // Summarise the render for the status bar — only when a diagram was produced; an error or empty
+        // source has nothing to describe.
+        stats = result.Svg is { } svg
+            ? new(docsLink?.Name, ReadDimensions(svg), Encoding.UTF8.GetByteCount(svg), stopwatch.Elapsed.TotalMilliseconds)
+            : null;
+
         issueUrl = result.Unexpected is { } exception
             ? IssueLauncher.ForException("Render diagram", exception, AppInfo.Environment(userAgent), source)
             : null;
     }
+
+    // The diagram's intrinsic pixel size lives only in the SVG's viewBox ("minX minY width height"); the root
+    // element's own width is the responsive "100%". Returns null when the viewBox can't be read.
+    static (double Width, double Height)? ReadDimensions(string svg)
+    {
+        var match = Regex.Match(svg, "viewBox='([^']*)'");
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        var parts = match.Groups[1].Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 4 ||
+            !double.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out var width) ||
+            !double.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out var height))
+        {
+            return null;
+        }
+
+        return (width, height);
+    }
+
+    // Status-bar formatters. InvariantGlobalization fixes the decimal separator across locales.
+
+    // One decimal place keeps a sub-millisecond render legible as e.g. "0.4 ms" instead of collapsing to "0 ms".
+    static string FormatMilliseconds(double value) =>
+        $"{value.ToString("0.#")} ms";
+
+    static string FormatDimensions((double Width, double Height) dimensions) =>
+        $"{(int) Math.Round(dimensions.Width)} × {(int) Math.Round(dimensions.Height)}";
+
+    static string FormatBytes(int bytes)
+    {
+        if (bytes < 1024)
+        {
+            return $"{bytes} B";
+        }
+
+        var kilobytes = bytes / 1024d;
+        return kilobytes < 1024
+            ? $"{kilobytes.ToString("0.#")} KB"
+            : $"{(kilobytes / 1024d).ToString("0.#")} MB";
+    }
+
+    sealed record RenderStats(string? TypeName, (double Width, double Height)? Dimensions, int SvgByteCount, double Milliseconds);
 
     Task DownloadSvg()
     {

@@ -320,8 +320,7 @@ class C4Parser : IDiagramParser<C4Model>
                     model.Relationships.Add(rel.Value);
                     break;
 
-                case BoundaryItem boundaryItem:
-                    var boundary = boundaryItem.Boundary;
+                case BoundaryItem(var boundary, var c4Contents):
                     boundary.ElementIds.Clear();
                     boundary.ChildBoundaryIds.Clear();
                     boundary.ParentBoundaryId = parentBoundaryId;
@@ -335,7 +334,7 @@ class C4Parser : IDiagramParser<C4Model>
                     }
 
                     // Process nested content with this boundary as parent
-                    ProcessContent(model, boundaryItem.Content, boundary.Id);
+                    ProcessContent(model, c4Contents, boundary.Id);
 
                     // Collect direct element IDs that belong to this boundary (not nested)
                     foreach (var el in model.Elements.Where(_ => _.BoundaryId == boundary.Id))
