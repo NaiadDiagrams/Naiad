@@ -278,22 +278,14 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var labelFontSize = options.FontSize - 2;
         var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
         var labelHeight = labelFontSize + 4;
-        builder.AddRect(
-            labelPosition.X - labelWidth / 2,
-            labelPosition.Y - labelHeight / 2,
-            labelWidth,
-            labelHeight,
-            fill: "#fff",
-            stroke: "none");
-
-        builder.AddText(
+        builder.AddEdgeLabel(
             labelPosition.X,
             labelPosition.Y,
+            labelWidth,
+            labelHeight,
             rel.Label,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: labelFontSize,
-            fontFamily: options.FontFamily,
+            labelFontSize,
+            options.FontFamily,
             fill: "#333");
     }
 
@@ -325,15 +317,14 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
             var labelHeight = labelFontSize + 4;
             var labelX = outX + labelWidth / 2 + 4;
-            builder.AddRect(labelX - labelWidth / 2, centerY - labelHeight / 2, labelWidth, labelHeight, fill: "#fff", stroke: "none");
-            builder.AddText(
+            builder.AddEdgeLabel(
                 labelX,
                 centerY,
+                labelWidth,
+                labelHeight,
                 rel.Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: labelFontSize,
-                fontFamily: options.FontFamily,
+                labelFontSize,
+                options.FontFamily,
                 fill: "#333");
         }
     }

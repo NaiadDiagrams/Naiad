@@ -255,6 +255,48 @@ public class SvgBuilder
             cssClass: className);
     }
 
+    // Mermaid's default theme draws a translucent grey pill behind edge labels so the routed line
+    // doesn't read through the text. Shared by every graph diagram (Flowchart, Class, ER, State) so the
+    // colour and centering math stay in one place.
+    public const string EdgeLabelBackground = "rgba(232,232,232,0.8)";
+
+    // Background pill for an edge label, centred on (centerX, centerY). Flowchart draws its label text
+    // itself (via the HTML-capable AddLabel), so it uses this directly; the text-based families go
+    // through AddEdgeLabel below.
+    public void AddEdgeLabelBackground(double centerX, double centerY, double width, double height) =>
+        AddRect(
+            centerX - width / 2,
+            centerY - height / 2,
+            width,
+            height,
+            fill: EdgeLabelBackground,
+            stroke: "none",
+            cssClass: "edgeLabel");
+
+    // Background pill plus a centred <text> label, for the text-based diagram families (Class, ER, State).
+    // fill controls the text colour only; pass null to inherit.
+    public void AddEdgeLabel(
+        double centerX,
+        double centerY,
+        double width,
+        double height,
+        string text,
+        double fontSize,
+        string? fontFamily,
+        string? fill = null)
+    {
+        AddEdgeLabelBackground(centerX, centerY, width, height);
+        AddText(
+            centerX,
+            centerY,
+            text,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+            fill: fill);
+    }
+
     public void BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
     {
         var group = new SvgGroup

@@ -1,4 +1,4 @@
-﻿<svg
+<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
@@ -55,8 +55,9 @@
       y="80"
       width="47.6"
       height="16"
-      fill="#fff"
-      stroke="none" />
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
     <text
       x="60"
       y="88"

@@ -283,14 +283,15 @@ public class ClassRenderer :
         if (!string.IsNullOrEmpty(rel.Label))
         {
             var label = edge.LabelPosition;
-            builder.AddText(
+            var labelFontSize = options.FontSize - 2;
+            builder.AddEdgeLabel(
                 label.X,
-                label.Y - 10,
+                label.Y,
+                MeasureText(rel.Label, labelFontSize) + 8,
+                labelFontSize + 4,
                 rel.Label,
-                anchor: "middle",
-                baseline: "bottom",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
+                labelFontSize,
+                options.FontFamily);
         }
 
         // Draw cardinalities near each end

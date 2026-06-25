@@ -10,8 +10,6 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     const string nodeStroke = "#9370DB";
     const string edgeStroke = "#333333";
 
-    const string labelBackground = "rgba(232,232,232,0.8)";
-
     // Mermaid's default cluster palette (pale yellow), so subgraph boxes read clearly against a white canvas.
     const string subgraphFill = "#ffffde";
     const string subgraphStroke = "#aaaa33";
@@ -224,12 +222,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             var labelWidth = labelSize.Width + 16;
             var labelHeight = labelSize.Height + 8;
 
-            builder.AddRect(
-                labelX - labelWidth / 2,
-                labelY - labelHeight / 2,
-                labelWidth, labelHeight,
-                fill: labelBackground, stroke: "none",
-                cssClass: "edgeLabel");
+            builder.AddEdgeLabelBackground(labelX, labelY, labelWidth, labelHeight);
 
             builder.AddLabel(
                 labelX - labelWidth / 2,

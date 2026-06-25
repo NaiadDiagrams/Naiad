@@ -1,4 +1,4 @@
-﻿<svg
+<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
@@ -73,11 +73,19 @@
     <polygon
       points="50,130 45,121.34 55,121.34"
       fill="#333" />
+    <rect
+      x="22.9"
+      y="82"
+      width="54.2"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
     <text
       x="50"
-      y="80"
+      y="90"
       text-anchor="middle"
-      dominant-baseline="bottom"
+      dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">enrolls</text>
     <rect

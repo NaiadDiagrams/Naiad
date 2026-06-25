@@ -1160,14 +1160,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(rightEdge - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddText(
+                builder.AddEdgeLabel(
                     rightEdge,
                     labelY,
+                    labelWidth,
+                    labelHeight,
                     transition.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily,
+                    options.FontSize - 2,
+                    options.FontFamily,
                     fill: "#666");
 #if DEBUG
                 TrackText(rightEdge, labelY, transition.Label, "middle", options.FontSize - 2);
@@ -1227,15 +1227,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(leftEdge - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddRect(leftEdge - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-                builder.AddText(
+                builder.AddEdgeLabel(
                     leftEdge,
                     labelY,
+                    labelWidth,
+                    labelHeight,
                     transition.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily);
+                    options.FontSize - 2,
+                    options.FontFamily);
 #if DEBUG
                 TrackText(leftEdge, labelY, transition.Label, "middle", options.FontSize - 2);
 #endif
@@ -1304,15 +1303,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-                builder.AddText(
+                builder.AddEdgeLabel(
                     labelX,
                     labelY,
+                    labelWidth,
+                    labelHeight,
                     transition.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily);
+                    options.FontSize - 2,
+                    options.FontFamily);
 #if DEBUG
                 TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
 #endif
@@ -1581,15 +1579,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Register this label's position to prevent future overlaps
             placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-            builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-            builder.AddText(
+            builder.AddEdgeLabel(
                 labelX,
                 labelY,
+                labelWidth,
+                labelHeight,
                 transition.Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
+                options.FontSize - 2,
+                options.FontFamily);
 #if DEBUG
             TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
 #endif
