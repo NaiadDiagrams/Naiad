@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 931.9 936"
-  style="max-width: 931.9px;"
+  viewBox="0 0 801.7 936"
+  style="max-width: 801.7px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -361,30 +361,30 @@
       fill="#333"
       stroke="#333" />
     <path
-      d="M533.9,285 L725.9,285 L733.9,293 L733.9,325 L533.9,325 Z"
+      d="M249.5,285 L441.5,285 L449.5,293 L449.5,325 L249.5,325 Z"
       fill="#FFFFCC"
       stroke="#AAAA33" />
     <line
-      x1="725.9"
+      x1="441.5"
       y1="285"
-      x2="725.9"
+      x2="441.5"
       y2="293"
       stroke="#AAAA33" />
     <line
-      x1="725.9"
+      x1="441.5"
       y1="293"
-      x2="733.9"
+      x2="449.5"
       y2="293"
       stroke="#AAAA33" />
     <text
-      x="633.9"
+      x="349.5"
       y="305"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">This is a processing note</text>
     <path
-      d="M 535.45 260 Q 535.45 272.5, 590.15 285"
+      d="M 447.95 260 Q 447.95 272.5, 393.25 285"
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />
