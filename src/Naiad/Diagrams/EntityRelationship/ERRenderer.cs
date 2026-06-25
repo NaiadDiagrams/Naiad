@@ -40,10 +40,13 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             entitiesByName[entity.Name] = entity;
         }
 
-        // Render relationships first (behind entities)
+        // Render relationships first (behind entities). Relationships sharing an entity pair are fanned
+        // apart so their lines and labels sit side by side instead of stacking on top of each other.
+        var parallelGroups = BuildParallelGroups(model.Relationships, options);
         foreach (var relationship in model.Relationships)
         {
-            RenderRelationship(builder, relationship, entitiesByName, options);
+            var parallel = parallelGroups.GetValueOrDefault(relationship, ParallelInfo.Single);
+            RenderRelationship(builder, relationship, entitiesByName, options, parallel);
         }
 
         // Render entities
@@ -208,7 +211,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void RenderRelationship(SvgBuilder builder, Relationship rel, Dictionary<string, Entity> entitiesByName, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, Relationship rel, Dictionary<string, Entity> entitiesByName, RenderOptions options, ParallelInfo parallel)
     {
         var fromEntity = entitiesByName.GetValueOrDefault(rel.FromEntity);
         if (fromEntity == null)
@@ -233,6 +236,9 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
         var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
+
+        // Fan this line aside — keeping its endpoints on the entity edges — when it shares an entity pair.
+        (startX, startY, endX, endY) = ApplyParallelOffset(fromEntity, toEntity, startX, startY, endX, endY, parallel, options);
 
         var dashArray = rel.Identifying ? null : "5,5";
 
@@ -259,13 +265,17 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         var labelX = (startX + endX) / 2;
         var labelY = (startY + endY) / 2;
 
-        // Background for label
-        var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
+        // Background for the label, sized to the text (plus a small margin) so it masks only as much of the
+        // relationship line as the text actually covers. An oversized box visibly chops the line — most of
+        // all where the line crosses the label diagonally, since the box is axis-aligned.
+        var labelFontSize = options.FontSize - 2;
+        var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
+        var labelHeight = labelFontSize + 4;
         builder.AddRect(
             labelX - labelWidth / 2,
-            labelY - 10,
+            labelY - labelHeight / 2,
             labelWidth,
-            20,
+            labelHeight,
             fill: "#fff",
             stroke: "none");
 
@@ -275,7 +285,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             rel.Label,
             anchor: "middle",
             baseline: "middle",
-            fontSize: options.FontSize - 2,
+            fontSize: labelFontSize,
             fontFamily: options.FontFamily,
             fill: "#333");
     }
@@ -304,16 +314,18 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         if (!string.IsNullOrEmpty(rel.Label))
         {
-            var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
+            var labelFontSize = options.FontSize - 2;
+            var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
+            var labelHeight = labelFontSize + 4;
             var labelX = outX + labelWidth / 2 + 4;
-            builder.AddRect(labelX - labelWidth / 2, centerY - 10, labelWidth, 20, fill: "#fff", stroke: "none");
+            builder.AddRect(labelX - labelWidth / 2, centerY - labelHeight / 2, labelWidth, labelHeight, fill: "#fff", stroke: "none");
             builder.AddText(
                 labelX,
                 centerY,
                 rel.Label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: options.FontSize - 2,
+                fontSize: labelFontSize,
                 fontFamily: options.FontFamily,
                 fill: "#333");
         }
@@ -340,6 +352,97 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         return (from.Position.X, from.Position.Y - from.Height / 2);
+    }
+
+    // Group relationships by the (unordered) pair of entities they connect, so a set of parallel
+    // relationships can be fanned apart. Self-relationships are excluded — they are drawn as loops.
+    static Dictionary<Relationship, ParallelInfo> BuildParallelGroups(List<Relationship> relationships, RenderOptions options)
+    {
+        var groups = new Dictionary<string, List<Relationship>>(StringComparer.Ordinal);
+        foreach (var relationship in relationships)
+        {
+            if (relationship.FromEntity == relationship.ToEntity)
+            {
+                continue;
+            }
+
+            var key = PairKey(relationship.FromEntity, relationship.ToEntity);
+            if (!groups.TryGetValue(key, out var members))
+            {
+                members = [];
+                groups[key] = members;
+            }
+
+            members.Add(relationship);
+        }
+
+        var result = new Dictionary<Relationship, ParallelInfo>();
+        foreach (var members in groups.Values)
+        {
+            var maxLabelWidth = 0.0;
+            foreach (var member in members)
+            {
+                if (!string.IsNullOrEmpty(member.Label))
+                {
+                    maxLabelWidth = Math.Max(maxLabelWidth, MeasureText(member.Label, options.FontSize - 2));
+                }
+            }
+
+            for (var index = 0; index < members.Count; index++)
+            {
+                result[members[index]] = new(index, members.Count, maxLabelWidth);
+            }
+        }
+
+        return result;
+    }
+
+    // Order-independent key for an entity pair, so A→B and B→A land in the same parallel group.
+    static string PairKey(string first, string second) =>
+        string.CompareOrdinal(first, second) <= 0
+            ? $"{first} {second}"
+            : $"{second} {first}";
+
+    static (double startX, double startY, double endX, double endY) ApplyParallelOffset(
+        Entity fromEntity,
+        Entity toEntity,
+        double startX,
+        double startY,
+        double endX,
+        double endY,
+        ParallelInfo parallel,
+        RenderOptions options)
+    {
+        if (parallel.Count <= 1)
+        {
+            return (startX, startY, endX, endY);
+        }
+
+        // Mainly-stacked entities connect through their top/bottom edges, so the fan spreads along X to keep
+        // both endpoints on those edges; side-by-side entities connect through left/right edges and spread
+        // along Y. Offsetting along the shared edge (not perpendicular to the line) is what keeps each line
+        // anchored to the border rather than sliding off a diagonal edge into — or away from — the box.
+        var stacked = Math.Abs(toEntity.Position.Y - fromEntity.Position.Y) >=
+                      Math.Abs(toEntity.Position.X - fromEntity.Position.X);
+
+        // Stacked entities lay their labels side by side (space by label width); side-by-side entities stack
+        // the labels (label height is enough).
+        var spacing = stacked
+            ? parallel.MaxLabelWidth + 12
+            : options.FontSize - 2 + 10;
+
+        // Centre the fan on the original line: e.g. two lines land at -spacing/2 and +spacing/2.
+        var shift = (parallel.Index - (parallel.Count - 1) / 2.0) * spacing;
+
+        // Never let the fan carry an endpoint past the shorter entity's edge.
+        var limit = (stacked
+            ? Math.Min(fromEntity.Width, toEntity.Width)
+            : Math.Min(fromEntity.Height, toEntity.Height)) / 2 - 8;
+        shift = Math.Clamp(shift, -limit, limit);
+
+        return stacked
+            ? (startX + shift, startY, endX + shift, endY)
+            : (startX, startY + shift, endX, endY + shift);
     }
 
     static void DrawCardinalityMarker(
@@ -459,6 +562,13 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     {
         var factor = bold ? 0.65 : 0.55;
         return text.Length * fontSize * factor;
+    }
+
+    // One relationship's place within its set of parallel relationships (those joining the same entity pair):
+    // its position in the fan, how many there are, and the widest label in the set (drives line spacing).
+    readonly record struct ParallelInfo(int Index, int Count, double MaxLabelWidth)
+    {
+        public static ParallelInfo Single { get; } = new(0, 1, 0);
     }
 }
 

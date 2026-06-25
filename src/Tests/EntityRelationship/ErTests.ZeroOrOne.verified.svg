@@ -1,4 +1,4 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
@@ -40,10 +40,10 @@
       y2="107"
       stroke="#333" />
     <rect
-      x="55.95"
-      y="70"
-      width="36.4"
-      height="20"
+      x="56.95"
+      y="72"
+      width="34.4"
+      height="16"
       fill="#fff"
       stroke="none" />
     <text
