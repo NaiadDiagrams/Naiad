@@ -90,7 +90,8 @@ sealed class SkiaSurface : IRenderSurface
 
         canvas.Save();
         canvas.SetMatrix(ToMatrix(transform));
-        canvas.DrawText(text, penX, baseline, font, skPaint);
+        // penX already carries the anchor offset, so draw left-aligned from it.
+        canvas.DrawText(text, penX, baseline, SKTextAlign.Left, font, skPaint);
         canvas.Restore();
     }
 
@@ -158,7 +159,7 @@ sealed class SkiaSurface : IRenderSurface
 
     static SKPath ToPath(IReadOnlyList<SubPath> subpaths)
     {
-        var path = new SKPath();
+        using var builder = new SKPathBuilder();
         foreach (var subpath in subpaths)
         {
             var points = subpath.Points;
@@ -167,19 +168,19 @@ sealed class SkiaSurface : IRenderSurface
                 continue;
             }
 
-            path.MoveTo(points[0].X, points[0].Y);
+            builder.MoveTo(points[0].X, points[0].Y);
             for (var i = 1; i < points.Count; i++)
             {
-                path.LineTo(points[i].X, points[i].Y);
+                builder.LineTo(points[i].X, points[i].Y);
             }
 
             if (subpath.Closed)
             {
-                path.Close();
+                builder.Close();
             }
         }
 
-        return path;
+        return builder.Detach();
     }
 
     static SKTypeface ResolveTypeface(TextStyle style)

@@ -33,22 +33,12 @@ public class ClassRenderer :
         // Add relationship markers
         AddRelationshipMarkers(builder);
 
-        // Render edges first (behind nodes)
-        foreach (var relationship in model.Relationships)
+        // Render edges first (behind nodes). Each relationship is paired with the edge Dagre routed for it
+        // (edges are built in relationship order), so edges curve, parallel relationships separate, and the
+        // routing comes from the shared layout rather than straight lines computed here.
+        for (var index = 0; index < model.Relationships.Count; index++)
         {
-            var fromNode = graphModel.GetNode(relationship.FromId);
-            if (fromNode == null)
-            {
-                continue;
-            }
-
-            var toNode = graphModel.GetNode(relationship.ToId);
-            if (toNode == null)
-            {
-                continue;
-            }
-
-            RenderRelationship(builder, relationship, fromNode, toNode, options);
+            RenderRelationship(builder, model.Relationships[index], graphModel.Edges[index], options);
         }
 
         // Render class boxes
@@ -265,48 +255,51 @@ public class ClassRenderer :
         }
     }
 
-    static void RenderRelationship(SvgBuilder builder, ClassRelationship rel, Node fromNode, Node toNode, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, ClassRelationship rel, Edge edge, RenderOptions options)
     {
-        // Calculate connection points
-        var (startX, startY) = GetConnectionPoint(fromNode, toNode);
-        var (endX, endY) = GetConnectionPoint(toNode, fromNode);
+        var points = edge.Points;
+        if (points.Count < 2)
+        {
+            return;
+        }
 
         var isDotted = rel.Type is RelationshipType.DependencyLeft or RelationshipType.DependencyRight or RelationshipType.Realization;
         var dashArray = isDotted ? "5,5" : null;
 
-        builder.AddLine(
-            startX,
-            startY,
-            endX,
-            endY,
+        // Dagre-routed, B-spline-smoothed path shared with the other graph diagrams.
+        builder.AddPath(
+            EdgePath.Build(points),
+            fill: "none",
             stroke: "#333",
             strokeWidth: 1,
             strokeDasharray: dashArray);
 
-        // Draw the relationship marker at the end
-        DrawRelationshipMarker(builder, rel.Type, endX, endY, startX, startY);
+        // Relationship marker sits at the target end, oriented by the curve's tangent there.
+        var start = points[0];
+        var end = points[^1];
+        DrawRelationshipMarker(builder, rel.Type, end.X, end.Y, points[^2].X, points[^2].Y);
 
         // Draw label if present
         if (!string.IsNullOrEmpty(rel.Label))
         {
-            var labelX = (startX + endX) / 2;
-            var labelY = (startY + endY) / 2 - 10;
-            builder.AddText(
-                labelX,
-                labelY,
+            var label = edge.LabelPosition;
+            var labelFontSize = options.FontSize - 2;
+            builder.AddEdgeLabel(
+                label.X,
+                label.Y,
+                MeasureText(rel.Label, labelFontSize) + 8,
+                labelFontSize + 4,
                 rel.Label,
-                anchor: "middle",
-                baseline: "bottom",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
+                labelFontSize,
+                options.FontFamily);
         }
 
-        // Draw cardinalities
+        // Draw cardinalities near each end
         if (!string.IsNullOrEmpty(rel.FromCardinality))
         {
             builder.AddText(
-                startX + 10,
-                startY - 10,
+                start.X + 10,
+                start.Y - 10,
                 rel.FromCardinality,
                 anchor: "start",
                 baseline: "bottom",
@@ -317,35 +310,14 @@ public class ClassRenderer :
         if (!string.IsNullOrEmpty(rel.ToCardinality))
         {
             builder.AddText(
-                endX - 10,
-                endY - 10,
+                end.X - 10,
+                end.Y - 10,
                 rel.ToCardinality,
                 anchor: "end",
                 baseline: "bottom",
                 fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
         }
-    }
-
-    static (double x, double y) GetConnectionPoint(Node from, Node to)
-    {
-        // Calculate the point on the edge of 'from' node facing 'to' node
-        var dx = to.Position.X - from.Position.X;
-        var dy = to.Position.Y - from.Position.Y;
-
-        // Determine which edge to use based on direction
-        if (Math.Abs(dx) > Math.Abs(dy))
-        {
-            // Horizontal connection
-            return dx > 0
-                ? (from.Position.X + from.Width / 2, from.Position.Y)
-                : (from.Position.X - from.Width / 2, from.Position.Y);
-        }
-
-        // Vertical connection
-        return dy > 0
-            ? (from.Position.X, from.Position.Y + from.Height / 2)
-            : (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
     static void DrawRelationshipMarker(SvgBuilder builder, RelationshipType type, double x, double y, double fromX, double fromY)

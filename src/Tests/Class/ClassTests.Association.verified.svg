@@ -66,20 +66,26 @@
   </defs>
   <g
     transform="translate(20,20)">
-    <line
-      x1="50"
-      y1="50"
-      x2="50"
-      y2="130"
+    <path
+      d="M50,50 L50,56.67 C50,63.33 50,76.67 50,90 C50,103.33 50,116.67 50,123.33 L50,130"
+      fill="none"
       stroke="#333" />
     <polygon
       points="50,130 45,121.34 55,121.34"
       fill="#333" />
+    <rect
+      x="22.9"
+      y="82"
+      width="54.2"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
     <text
       x="50"
-      y="80"
+      y="90"
       text-anchor="middle"
-      dominant-baseline="bottom"
+      dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">enrolls</text>
     <rect

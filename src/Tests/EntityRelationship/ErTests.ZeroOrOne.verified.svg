@@ -2,18 +2,16 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 188.3 200"
+  viewBox="0 0 188.3 216"
   style="max-width: 188.3px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
-    <line
-      x1="74.15"
-      y1="30"
-      x2="74.15"
-      y2="130"
+    <path
+      d="M74.15,30 L74.15,39.67 C74.15,49.33 74.15,68.67 74.15,88 C74.15,107.33 74.15,126.67 74.15,136.33 L74.15,146"
+      fill="none"
       stroke="#333" />
     <circle
       cx="74.15"
@@ -29,26 +27,27 @@
       stroke="#333" />
     <circle
       cx="74.15"
-      cy="115"
+      cy="131"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
       x1="70.15"
-      y1="107"
+      y1="123"
       x2="78.15"
-      y2="107"
+      y2="123"
       stroke="#333" />
     <rect
-      x="55.95"
-      y="70"
-      width="36.4"
-      height="20"
-      fill="#fff"
-      stroke="none" />
+      x="56.95"
+      y="80"
+      width="34.4"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
     <text
       x="74.15"
-      y="80"
+      y="88"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
@@ -80,7 +79,7 @@
       fill="#fff">EMPLOYEE</text>
     <rect
       x="0"
-      y="130"
+      y="146"
       width="148.3"
       height="30"
       fill="#ECECFF"
@@ -88,14 +87,14 @@
       stroke-width="2" />
     <rect
       x="0"
-      y="130"
+      y="146"
       width="148.3"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
       x="74.15"
-      y="145"
+      y="161"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"

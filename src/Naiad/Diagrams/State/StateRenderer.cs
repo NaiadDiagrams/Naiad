@@ -11,7 +11,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     record LabelBounds(double Left, double Top, double Width, double Height);
     List<LabelBounds> placedLabels = [];
 
-#if DEBUG
+    // Layout self-checks (label/line/node overlaps, out-of-bounds). Opt-in via ValidateLayout so the
+    // tracking and O(n^2) checks stay off the production render path; the test suite turns it on to guard
+    // against regressions. When false, the Track* calls below short-circuit and the checks never run.
+    internal bool ValidateLayout { get; set; }
     List<TextBounds> textBounds = [];
     List<LineBounds> lineBounds = [];
     List<NodeBounds> nodeBounds = [];
@@ -21,7 +24,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     record TextBounds(double X, double Y, double Width, double Height, string Label);
     record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
     record NodeBounds(double X, double Y, double Width, double Height, string Label, bool IsNote = false);
-#endif
 
     const double stateMinWidth = 40;
     const double stateHeight = 40;
@@ -37,11 +39,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
         placedLabels.Clear();
-#if DEBUG
         textBounds.Clear();
         lineBounds.Clear();
         nodeBounds.Clear();
-#endif
 
         // Convert to graph model for layout
         var graphModel = ConvertToGraphModel(model, options);
@@ -100,10 +100,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Build SVG
         var svgWidth = layoutResult.Width + noteExtraWidth + totalExtraLeft + curveExtraRight;
         var svgHeight = layoutResult.Height + noteExtraHeight + endExtraHeight + routedExtraHeight;
-#if DEBUG
         this.svgWidth = svgWidth;
         this.svgHeight = svgHeight;
-#endif
         var builder = new SvgBuilder();
         builder.Size(svgWidth, svgHeight);
         builder.Padding(options.Padding);
@@ -118,19 +116,24 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Render notes
         RenderNotes(builder, model, options);
 
-#if DEBUG
-        CheckForTextOverlaps();
-        CheckForLinesUnderNodes();
-        CheckForNodeOverlaps();
-        CheckForElementsOutsideBounds();
-#endif
+        if (ValidateLayout)
+        {
+            CheckForTextOverlaps();
+            CheckForLinesUnderNodes();
+            CheckForNodeOverlaps();
+            CheckForElementsOutsideBounds();
+        }
 
         return builder.Build();
     }
 
-#if DEBUG
     void TrackText(double x, double y, string text, string anchor, double fontSize)
     {
+        if (!ValidateLayout)
+        {
+            return;
+        }
+
         var width = MeasureText(text, fontSize);
         var height = fontSize * 1.2; // Approximate line height
 
@@ -171,11 +174,25 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    void TrackLine(double x1, double y1, double x2, double y2, string label) =>
-        lineBounds.Add(new(x1, y1, x2, y2, label));
+    void TrackLine(double x1, double y1, double x2, double y2, string label)
+    {
+        if (!ValidateLayout)
+        {
+            return;
+        }
 
-    void TrackNode(double x, double y, double width, double height, string label, bool isNote = false) =>
+        lineBounds.Add(new(x1, y1, x2, y2, label));
+    }
+
+    void TrackNode(double x, double y, double width, double height, string label, bool isNote = false)
+    {
+        if (!ValidateLayout)
+        {
+            return;
+        }
+
         nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label, isNote));
+    }
 
     void CheckForLinesUnderNodes()
     {
@@ -183,12 +200,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             foreach (var node in nodeBounds)
             {
-                // Notes are opaque annotation boxes drawn on top of the transitions, so a line routing
-                // behind one is hidden by it, not obscured by it. Only real state nodes must stay clear.
-                if (node.IsNote)
-                {
-                    continue;
-                }
+                // Notes are checked alongside state nodes. Note placement (PlaceNoteToRight) keeps them
+                // off the routed back-edge / forward-edge corridors, so a line under a note is a real defect.
 
                 // Skip if line is connected to this node (endpoint is near/inside the node)
                 var nodeRight = node.X + node.Width;
@@ -333,7 +346,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         return false;
     }
-#endif
 
     static double CalculateCurveExtraLeft(StateModel model, Dictionary<string, State> stateMap)
     {
@@ -484,6 +496,30 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0;
     }
 
+    // Notes sit on the side away from the routed-edge corridor (back-edges curve right, bidirectional
+    // forward edges curve left) so a corridor line never passes under the note. Falls back to the
+    // geometric side when neither side - or both sides - carry a corridor. Shared by CalculateNoteExtraSpace
+    // (space reservation) and RenderNotes (placement) so the two agree on where each note lands.
+    static bool PlaceNoteToRight(StateModel model, State state, Dictionary<string, State> stateMap)
+    {
+        var diagramCenterX = model.States.Average(_ => _.Position.X);
+        var preferRight = state.Position.X >= diagramCenterX;
+        var hasRightCorridor = CalculateCurveExtraRight(model, stateMap) > 0;
+        var hasLeftCorridor = CalculateCurveExtraLeft(model, stateMap) > 0;
+
+        if (preferRight && hasRightCorridor && !hasLeftCorridor)
+        {
+            return false;
+        }
+
+        if (!preferRight && hasLeftCorridor && !hasRightCorridor)
+        {
+            return true;
+        }
+
+        return preferRight;
+    }
+
     static (double extraWidth, double extraHeight, double extraLeft) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
     {
         double maxExtraWidth = 0;
@@ -499,9 +535,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
-            // Check horizontal space needed - notes go to outside of diagram
-            var diagramCenterX = model.States.Average(_ => _.Position.X);
-            var placeToRight = state.Position.X >= diagramCenterX;
+            // Check horizontal space needed - notes go to outside of diagram, on the corridor-free side
+            var placeToRight = PlaceNoteToRight(model, state, stateMap);
             double noteX;
             if (placeToRight)
             {
@@ -819,9 +854,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#333",
                     stroke: "#333",
                     strokeWidth: 1);
-#if DEBUG
                 TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
-#endif
                 break;
 
             case StateType.End:
@@ -840,9 +873,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#333",
                     stroke: "#333",
                     strokeWidth: 1);
-#if DEBUG
                 TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
-#endif
                 break;
 
             case StateType.Fork:
@@ -855,9 +886,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     state.Height,
                     fill: "#333",
                     stroke: "#333");
-#if DEBUG
                 TrackNode(x, y, state.Width, state.Height, state.Id);
-#endif
                 break;
 
             case StateType.Choice:
@@ -872,9 +901,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#fff",
                     stroke: "#333",
                     strokeWidth: 1);
-#if DEBUG
                 TrackNode(x, y, state.Width, state.Height, state.Id);
-#endif
                 break;
 
             default:
@@ -907,9 +934,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "#9370DB",
             strokeWidth: 1);
 
-#if DEBUG
         TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id);
-#endif
 
         var label = state.Description ?? state.Id;
         if (state.Type == StateType.Normal)
@@ -922,9 +947,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 baseline: "middle",
                 fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
-#if DEBUG
             TrackText(state.Position.X, state.Position.Y, label, "middle", options.FontSize);
-#endif
         }
     }
 
@@ -955,9 +978,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
-#if DEBUG
         TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize);
-#endif
 
         // Separator line
         builder.AddLine(
@@ -1133,7 +1154,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
 
-#if DEBUG
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track segments for collision detection (symmetric at both ends)
             // Exit: only track initial horizontal portion before curve rises
@@ -1142,7 +1162,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             TrackLine(rightEdge, startY - curveRadius * 2, rightEdge, endY + curveRadius * 2, lineLabel);
             // Entry: only track final horizontal portion after curve flattens
             TrackLine(endX + curveRadius, endY, endX, endY, lineLabel);
-#endif
 
             // Arrowhead comes in horizontally from the right
             DrawArrowhead(builder, endX + curveRadius, endY, endX, endY);
@@ -1160,18 +1179,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(rightEdge - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddText(
+                builder.AddEdgeLabel(
                     rightEdge,
                     labelY,
+                    labelWidth,
+                    labelHeight,
                     transition.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily,
+                    options.FontSize - 2,
+                    options.FontFamily,
                     fill: "#666");
-#if DEBUG
                 TrackText(rightEdge, labelY, transition.Label, "middle", options.FontSize - 2);
-#endif
             }
         }
         else
@@ -1205,13 +1222,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
 
-#if DEBUG
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track segments for collision detection (mirror of back-edge)
             TrackLine(startX, startY, startX - curveRadius, startY, lineLabel);
             TrackLine(leftEdge, startY + curveRadius * 2, leftEdge, endY - curveRadius * 2, lineLabel);
             TrackLine(endX - curveRadius, endY, endX, endY, lineLabel);
-#endif
 
             // Arrowhead comes in horizontally from the left
             DrawArrowhead(builder, endX - curveRadius, endY, endX, endY);
@@ -1227,18 +1242,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(leftEdge - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddRect(leftEdge - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-                builder.AddText(
+                builder.AddEdgeLabel(
                     leftEdge,
                     labelY,
+                    labelWidth,
+                    labelHeight,
                     transition.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily);
-#if DEBUG
+                    options.FontSize - 2,
+                    options.FontFamily);
                 TrackText(leftEdge, labelY, transition.Label, "middle", options.FontSize - 2);
-#endif
             }
         }
     }
@@ -1283,10 +1295,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Draw straight arrow line
             builder.AddLine(startX, startY, endX, endY, stroke: "#333", strokeWidth: 1);
 
-#if DEBUG
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             TrackLine(startX, startY, endX, endY, lineLabel);
-#endif
 
             // Draw arrowhead
             DrawArrowhead(builder, startX, startY, endX, endY);
@@ -1304,18 +1314,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-                builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-                builder.AddText(
+                builder.AddEdgeLabel(
                     labelX,
                     labelY,
+                    labelWidth,
+                    labelHeight,
                     transition.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily);
-#if DEBUG
+                    options.FontSize - 2,
+                    options.FontFamily);
                 TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
-#endif
             }
         }
         else
@@ -1554,7 +1561,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         builder.AddPath(path, fill: "none", stroke: "#333", strokeWidth: 1);
 
-#if DEBUG
         var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
         // Track the segments
         TrackLine(startX, startY, startX, obstacleTop - margin, lineLabel);
@@ -1562,7 +1568,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         TrackLine(routeX, obstacleTop - margin, routeX, horizontalY, lineLabel);
         TrackLine(routeX, horizontalY, endX, horizontalY, lineLabel);
         TrackLine(endX, horizontalY, endX, endY, lineLabel);
-#endif
 
         // Draw arrowhead (pointing up since we approach from below)
         DrawArrowhead(builder, endX, horizontalY, endX, endY);
@@ -1581,18 +1586,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Register this label's position to prevent future overlaps
             placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
 
-            builder.AddRect(labelX - labelWidth / 2, labelY - 8, labelWidth, 16, fill: "#fff", stroke: "none");
-            builder.AddText(
+            builder.AddEdgeLabel(
                 labelX,
                 labelY,
+                labelWidth,
+                labelHeight,
                 transition.Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
-#if DEBUG
+                options.FontSize - 2,
+                options.FontFamily);
             TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
-#endif
         }
     }
 
@@ -1756,26 +1758,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
             // Determine vertical placement based on available space
-            // But if this state has back-edges AND note would be placed to the right,
-            // prefer placing BELOW to avoid blocking the back-edge path
             var spaceAbove = state.Position.Y;
             var maxY = model.States.Max(_ => _.Position.Y + _.Height / 2);
             var spaceBelow = maxY - state.Position.Y;
+            var placeBelow = spaceBelow >= spaceAbove;
 
-            var hasBackEdgeFromThisState = model.Transitions.Any(_ =>
-                _.FromId == state.Id &&
-                stateMap.TryGetValue(_.ToId, out var to) &&
-                state.Position.Y > to.Position.Y + 20);
-            var diagramCenterX = model.States.Average(_ => _.Position.X);
-            var wouldPlaceToRight = state.Position.X >= diagramCenterX;
-
-            // If this state has back-edges and note would be on the right, force placement below
-            var placeBelow = (hasBackEdgeFromThisState && wouldPlaceToRight) || spaceBelow >= spaceAbove;
-
-            // Position note to the outside of the diagram (away from center)
+            // Position note to the outside of the diagram, on the side clear of the routed-edge corridor
+            var placeToRight = PlaceNoteToRight(model, state, stateMap);
             double noteX;
 
-            if (wouldPlaceToRight)
+            if (placeToRight)
             {
                 // Place to the right of the state (outside edge)
                 noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
@@ -1830,10 +1822,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
-#if DEBUG
             // Track note as a node for line-under-node detection
             TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}", isNote: true);
-#endif
 
             // Fold corner
             builder.AddLine(
@@ -1860,9 +1850,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 baseline: "middle",
                 fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily);
-#if DEBUG
             TrackText(noteX + noteWidth / 2, noteY + noteHeight / 2, note.Text, "middle", options.FontSize - 2);
-#endif
 
             // Curved dashed line connecting note to state using center-targeting algorithm
             var noteCenterX = noteX + noteWidth / 2;
