@@ -21,11 +21,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Install the SDK pinned by global.json (.NET 10). The repo is single-target .NET 10, so no
-      # second SDK is needed.
+      # global.json pins the .NET 11 SDK used for the build. This repo is mixed-target — the Naiad
+      # library is net10.0 while the Blazor app and its tests are net11.0 — so install the .NET 10 SDK
+      # alongside it to keep both target runtimes available.
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
+          dotnet-version: 10.0.x
           global-json-file: global.json
 
       # Optimizes the published WASM (smaller dotnet.wasm via native relinking). The app is
