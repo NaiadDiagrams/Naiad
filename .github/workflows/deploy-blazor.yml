@@ -21,13 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # global.json pins the .NET 11 SDK used for the build. This repo is mixed-target — the Naiad
-      # library is net10.0 while the Blazor app and its tests are net11.0 — so install the .NET 10 SDK
-      # alongside it to keep both target runtimes available.
+      # Install the .NET 11 preview SDK pinned by global.json; it also builds the net10.0 Naiad library.
+      # No extra runtime install is needed here — the hosted Ubuntu image already ships the .NET 10
+      # (LTS) runtime, and the only project run below targets net11.0.
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
           global-json-file: global.json
 
       # Optimizes the published WASM (smaller dotnet.wasm via native relinking). The app is
@@ -45,7 +44,7 @@ jobs:
       # TUnit ships as an executable on Microsoft.Testing.Platform; run it directly rather than via
       # `dotnet test`, which rejects it under the VSTest path.
       - name: Run tests
-        run: dotnet src/Naiad.Web.Tests/bin/Release/net10.0/Naiad.Web.Tests.dll
+        run: dotnet src/Naiad.Web.Tests/bin/Release/net11.0/Naiad.Web.Tests.dll
 
       - name: Publish
         run: dotnet publish src/Naiad.Web --configuration Release --output publish -p:GeneratePackageOnBuild=false
