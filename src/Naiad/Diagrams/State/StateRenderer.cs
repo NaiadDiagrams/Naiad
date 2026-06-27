@@ -785,11 +785,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var barWidth = Math.Max(80, connectedStates.Count * 50);
                 state.Width = barWidth;
                 // Center between leftmost and rightmost connected states
-                var leftState = connectedStates.OrderBy(_ => _.Position.X).First();
-                var rightState = connectedStates.OrderBy(_ => _.Position.X).Last();
+                var leftState = connectedStates.MinBy(_ => _.Position.X);
+                var rightState = connectedStates.MaxBy(_ => _.Position.X);
                 state.Position = state.Position with
                 {
-                    X = (leftState.Position.X + rightState.Position.X) / 2
+                    X = (leftState!.Position.X + rightState!.Position.X) / 2
                 };
             }
         }

@@ -263,8 +263,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         containerOriginAbs.Clear();
         // Ids are user-supplied and not guaranteed unique; group so a reused id
         // resolves to the first element/boundary declared with it instead of throwing.
-        elementsById = model.Elements.GroupBy(_ => _.Id).ToDictionary(_ => _.Key, _ => _.First());
-        boundariesById = model.Boundaries.GroupBy(_ => _.Id).ToDictionary(_ => _.Key, _ => _.First());
+        elementsById = model.Elements.DistinctBy(_ => _.Id).ToDictionary(_ => _.Id);
+        boundariesById = model.Boundaries.DistinctBy(_ => _.Id).ToDictionary(_ => _.Id);
         nodeSeparation = ComputeNodeSeparation(model, options);
 
         // Pass 1: lay out each container, children before parents.
