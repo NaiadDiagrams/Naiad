@@ -40,10 +40,12 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             entitiesByName[entity.Name] = entity;
         }
 
-        // Render relationships first (behind entities)
-        foreach (var relationship in model.Relationships)
+        // Relationships render behind the entities. Each is paired with the edge Dagre routed for it (edges
+        // are built in relationship order), so the curved path, the separation of parallel relationships and
+        // the label gap all come straight from the shared layout rather than being re-derived here.
+        for (var index = 0; index < model.Relationships.Count; index++)
         {
-            RenderRelationship(builder, relationship, entitiesByName, options);
+            RenderRelationship(builder, model.Relationships[index], graphModel.Edges[index], entitiesByName, options);
         }
 
         // Render entities
@@ -86,6 +88,15 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
                 TargetId = rel.ToEntity,
                 Label = rel.Label
             };
+
+            // Reserve the label's footprint so the layout keeps a gap clear for it along the routed path.
+            // Self-relationships are drawn as manual loops (their routed path is ignored), so they get none.
+            if (!string.IsNullOrEmpty(rel.Label) && rel.FromEntity != rel.ToEntity)
+            {
+                edge.LabelWidth = MeasureText(rel.Label, options.FontSize - 2) + 8;
+                edge.LabelHeight = options.FontSize - 2 + 4;
+            }
+
             graph.AddEdge(edge);
         }
 
@@ -208,7 +219,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void RenderRelationship(SvgBuilder builder, Relationship rel, Dictionary<string, Entity> entitiesByName, RenderOptions options)
+    static void RenderRelationship(SvgBuilder builder, Relationship rel, Edge edge, Dictionary<string, Entity> entitiesByName, RenderOptions options)
     {
         var fromEntity = entitiesByName.GetValueOrDefault(rel.FromEntity);
         if (fromEntity == null)
@@ -222,61 +233,59 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             return;
         }
 
-        // A self-referencing relationship can't use a straight line between two distinct borders; draw a
-        // loop off the entity's right side instead (otherwise the line degenerates to a point and the
-        // label is clipped against the entity's top edge).
+        // A self-referencing relationship has no meaningful routed path between two distinct borders; draw a
+        // loop off the entity's right side instead (otherwise the line degenerates to a point and the label
+        // is clipped against the entity's top edge).
         if (fromEntity == toEntity)
         {
             RenderSelfRelationship(builder, rel, fromEntity, options);
             return;
         }
 
-        var (startX, startY) = GetConnectionPoint(fromEntity, toEntity);
-        var (endX, endY) = GetConnectionPoint(toEntity, fromEntity);
+        var points = edge.Points;
+        if (points.Count < 2)
+        {
+            return;
+        }
 
         var dashArray = rel.Identifying ? null : "5,5";
 
-        // Draw line
-        builder.AddLine(
-            startX,
-            startY,
-            endX,
-            endY,
+        // The Dagre-routed, B-spline-smoothed path. Parallel relationships route as separate curves and the
+        // layout has already opened a gap for the label, so no manual fan-out or line masking is needed.
+        builder.AddPath(
+            EdgePath.Build(points),
+            fill: "none",
             stroke: "#333",
             strokeWidth: 1,
             strokeDasharray: dashArray);
 
-        // Draw cardinality markers
-        DrawCardinalityMarker(builder, startX, startY, endX, endY, rel.FromCardinality);
-        DrawCardinalityMarker(builder, endX, endY, startX, startY, rel.ToCardinality);
+        // Cardinality markers sit at each end of the routed path, oriented by the adjacent waypoint so they
+        // follow the curve's tangent into the entity. Source end carries FromCardinality, target end ToCardinality.
+        var start = points[0];
+        var end = points[^1];
+        DrawCardinalityMarker(builder, start.X, start.Y, points[1].X, points[1].Y, rel.FromCardinality);
+        DrawCardinalityMarker(builder, end.X, end.Y, points[^2].X, points[^2].Y, rel.ToCardinality);
 
-        // Draw label if present
         if (string.IsNullOrEmpty(rel.Label))
         {
             return;
         }
 
-        var labelX = (startX + endX) / 2;
-        var labelY = (startY + endY) / 2;
+        var labelPosition = edge.LabelPosition;
 
-        // Background for label
-        var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
-        builder.AddRect(
-            labelX - labelWidth / 2,
-            labelY - 10,
+        // Background sized to the text (plus a small margin) so it masks only as much of the path as the
+        // label covers; the layout reserved a matching gap here when it routed the edge.
+        var labelFontSize = options.FontSize - 2;
+        var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
+        var labelHeight = labelFontSize + 4;
+        builder.AddEdgeLabel(
+            labelPosition.X,
+            labelPosition.Y,
             labelWidth,
-            20,
-            fill: "#fff",
-            stroke: "none");
-
-        builder.AddText(
-            labelX,
-            labelY,
+            labelHeight,
             rel.Label,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize - 2,
-            fontFamily: options.FontFamily,
+            labelFontSize,
+            options.FontFamily,
             fill: "#333");
     }
 
@@ -304,42 +313,20 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         if (!string.IsNullOrEmpty(rel.Label))
         {
-            var labelWidth = MeasureText(rel.Label, options.FontSize - 2) + 10;
+            var labelFontSize = options.FontSize - 2;
+            var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
+            var labelHeight = labelFontSize + 4;
             var labelX = outX + labelWidth / 2 + 4;
-            builder.AddRect(labelX - labelWidth / 2, centerY - 10, labelWidth, 20, fill: "#fff", stroke: "none");
-            builder.AddText(
+            builder.AddEdgeLabel(
                 labelX,
                 centerY,
+                labelWidth,
+                labelHeight,
                 rel.Label,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
+                labelFontSize,
+                options.FontFamily,
                 fill: "#333");
         }
-    }
-
-    static (double x, double y) GetConnectionPoint(Entity from, Entity to)
-    {
-        var dx = to.Position.X - from.Position.X;
-        var dy = to.Position.Y - from.Position.Y;
-
-        if (Math.Abs(dx) > Math.Abs(dy))
-        {
-            if (dx > 0)
-            {
-                return (from.Position.X + from.Width / 2, from.Position.Y);
-            }
-
-            return (from.Position.X - from.Width / 2, from.Position.Y);
-        }
-
-        if (dy > 0)
-        {
-            return (from.Position.X, from.Position.Y + from.Height / 2);
-        }
-
-        return (from.Position.X, from.Position.Y - from.Height / 2);
     }
 
     static void DrawCardinalityMarker(
@@ -461,5 +448,3 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         return text.Length * fontSize * factor;
     }
 }
-
-// Internal graph model for layout

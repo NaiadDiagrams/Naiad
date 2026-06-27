@@ -1,4 +1,4 @@
-<svg
+﻿<svg
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@
       id="naiad_flowchart-pointEnd"
       class="marker"
       viewBox="0 0 10 10"
-      refX="5"
+      refX="10"
       refY="5"
       markerUnits="userSpaceOnUse"
       markerWidth="8"
@@ -36,7 +36,7 @@
       id="naiad_flowchart-pointStart"
       class="marker"
       viewBox="0 0 10 10"
-      refX="4.5"
+      refX="0"
       refY="5"
       markerUnits="userSpaceOnUse"
       markerWidth="8"

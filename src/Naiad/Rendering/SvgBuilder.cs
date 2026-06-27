@@ -91,7 +91,10 @@ public class SvgBuilder
                 Path = "M 0 0 L 10 5 L 0 10 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
-                RefX = 5,
+                // Tip (viewBox x=10) sits at the edge's end vertex — the target node's boundary — so the
+                // arrowhead points flush at the node instead of poking under it. (circleEnd/crossEnd below
+                // use the same out-of-node placement.)
+                RefX = 10,
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
@@ -104,7 +107,9 @@ public class SvgBuilder
                 Path = "M 0 5 L 10 10 L 10 0 z",
                 MarkerWidth = 8,
                 MarkerHeight = 8,
-                RefX = 4.5,
+                // Mirror of pointEnd: tip (viewBox x=0) sits at the edge's start vertex (the source node's
+                // boundary) so the arrowhead points flush at the node rather than poking under it.
+                RefX = 0,
                 RefY = 5,
                 ViewBox = "0 0 10 10",
                 MarkerUnits = "userSpaceOnUse",
@@ -248,6 +253,48 @@ public class SvgBuilder
             fontSize: labelFontSize,
             fontFamily: labelFontFamily,
             cssClass: className);
+    }
+
+    // Mermaid's default theme draws a translucent grey pill behind edge labels so the routed line
+    // doesn't read through the text. Shared by every graph diagram (Flowchart, Class, ER, State) so the
+    // colour and centering math stay in one place.
+    public const string EdgeLabelBackground = "rgba(232,232,232,0.8)";
+
+    // Background pill for an edge label, centred on (centerX, centerY). Flowchart draws its label text
+    // itself (via the HTML-capable AddLabel), so it uses this directly; the text-based families go
+    // through AddEdgeLabel below.
+    public void AddEdgeLabelBackground(double centerX, double centerY, double width, double height) =>
+        AddRect(
+            centerX - width / 2,
+            centerY - height / 2,
+            width,
+            height,
+            fill: EdgeLabelBackground,
+            stroke: "none",
+            cssClass: "edgeLabel");
+
+    // Background pill plus a centred <text> label, for the text-based diagram families (Class, ER, State).
+    // fill controls the text colour only; pass null to inherit.
+    public void AddEdgeLabel(
+        double centerX,
+        double centerY,
+        double width,
+        double height,
+        string text,
+        double fontSize,
+        string? fontFamily,
+        string? fill = null)
+    {
+        AddEdgeLabelBackground(centerX, centerY, width, height);
+        AddText(
+            centerX,
+            centerY,
+            text,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+            fill: fill);
     }
 
     public void BeginGroup(string? id = null, string? cssClass = null, string? transform = null)
