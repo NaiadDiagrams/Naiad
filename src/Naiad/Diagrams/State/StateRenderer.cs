@@ -23,7 +23,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
     record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
-    record NodeBounds(double X, double Y, double Width, double Height, string Label, bool IsNote = false);
+    record NodeBounds(double X, double Y, double Width, double Height, string Label);
 
     const double stateMinWidth = 40;
     const double stateHeight = 40;
@@ -184,14 +184,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         lineBounds.Add(new(x1, y1, x2, y2, label));
     }
 
-    void TrackNode(double x, double y, double width, double height, string label, bool isNote = false)
+    void TrackNode(double x, double y, double width, double height, string label)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label, isNote));
+        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
     }
 
     void CheckForLinesUnderNodes()
@@ -1823,7 +1823,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
             // Track note as a node for line-under-node detection
-            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}", isNote: true);
+            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}");
 
             // Fold corner
             builder.AddLine(

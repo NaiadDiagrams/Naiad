@@ -249,6 +249,12 @@ public class SnapshotTests
             }
             """);
         await page.EvaluateAsync("() => document.fonts.ready");
+        // The footer's download total and RAM figure are filled in from an async interop call off the first
+        // render; wait for them so the captured HTML/PNG always includes them rather than racing a partial
+        // footer. Match on Attached, not the default Visible, since the payload size is display:none at the
+        // mobile viewport — it's still in the DOM, which is all we need to know the interop has completed.
+        await page.WaitForSelectorAsync(".footer-size", new() { State = WaitForSelectorState.Attached });
+        await page.WaitForSelectorAsync(".footer-ram", new() { State = WaitForSelectorState.Attached });
     }
 
     static int GetAvailablePort()

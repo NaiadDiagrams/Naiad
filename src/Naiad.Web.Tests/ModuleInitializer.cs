@@ -64,6 +64,23 @@ static class ModuleInitializer
                     html,
                     "(<span class=\"[^\"]*\\bstatus-volatile\\b[^\"]*\">).*?(</span>)",
                     "$1scrubbed$2");
+                // The footer version comes from AssemblyInformationalVersion, which the SDK suffixes with the
+                // build's git commit SHA — so it changes on every commit. Pin it to keep the snapshot stable.
+                html = Regex.Replace(
+                    html,
+                    "(<span class=\"footer-version\">).*?(</span>)",
+                    "$1scrubbed$2");
+                // The footer download total is measured from the browser's Resource Timing data, so it shifts
+                // with the published bundle's byte size. Pin it too.
+                html = Regex.Replace(
+                    html,
+                    "(<span class=\"footer-size\"[^>]*>).*?(</span>)",
+                    "$1scrubbed$2");
+                // The footer RAM figure is the live WebAssembly heap size, which varies run to run. Pin it too.
+                html = Regex.Replace(
+                    html,
+                    "(<span class=\"footer-ram\"[^>]*>).*?(</span>)",
+                    "$1scrubbed$2");
                 builder.Clear();
                 builder.Append(html);
             });
