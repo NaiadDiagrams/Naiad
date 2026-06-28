@@ -49,8 +49,9 @@ jobs:
       - name: Publish
         run: dotnet publish src/Naiad.Web --configuration Release --output publish -p:GeneratePackageOnBuild=false
 
-      - name: Update base href for GitHub Pages
-        run: sed -i 's|<base href="/" />|<base href="/Naiad/" />|g' publish/wwwroot/index.html
+      # The site is served from the root of the custom domain (naiad.papyrine.org), so the
+      # published <base href="/" /> is already correct — no rewrite needed. (When this was a
+      # GitHub project page at papyrine.github.io/Naiad/ the base had to be rewritten to /Naiad/.)
 
       - name: Add .nojekyll file
         run: touch publish/wwwroot/.nojekyll
