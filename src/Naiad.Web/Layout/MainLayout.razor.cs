@@ -5,7 +5,8 @@ public partial class MainLayout : IDisposable
     ThemeType currentTheme = ThemeType.Light;
     string? userAgent;
     DownloadSize? downloadSize;
-    long? ramBytes;
+    long? liveBytes;
+    long? peakBytes;
     PeriodicTimer? ramPoll;
 
     protected override async Task OnInitializedAsync()
@@ -29,10 +30,10 @@ public partial class MainLayout : IDisposable
         await SampleRamAsync();
         StateHasChanged();
 
-        // The WebAssembly heap grows as diagrams are parsed and rendered — and WASM linear memory never
-        // shrinks back — so the boot-time figure understates the real footprint once any work is done. Poll
-        // it so the footer tracks that high-water mark, repainting only when the number actually moves (so
-        // the poll costs nothing once the heap plateaus).
+        // The managed heap rises and falls as diagrams are parsed and rendered, and the WebAssembly arena it
+        // lives in grows to fit each peak and never shrinks back — so a single boot-time figure tells you
+        // little. Poll both: the live managed heap "now" and that never-shrinking high-water mark, repainting
+        // only when a figure actually moves (so the poll costs nothing while the app sits idle).
         var poll = new PeriodicTimer(TimeSpan.FromSeconds(2));
         ramPoll = poll;
         _ = PollRamAsync(poll);
@@ -48,9 +49,9 @@ public partial class MainLayout : IDisposable
                 // and StateHasChanged must run on the UI thread.
                 await InvokeAsync(async () =>
                 {
-                    var previous = ramBytes;
+                    var previous = (liveBytes, peakBytes);
                     await SampleRamAsync();
-                    if (ramBytes != previous)
+                    if ((liveBytes, peakBytes) != previous)
                     {
                         StateHasChanged();
                     }
@@ -65,10 +66,17 @@ public partial class MainLayout : IDisposable
 
     async Task SampleRamAsync()
     {
-        var ram = await JSRuntime.InvokeAsync<long>("appInfo.ramBytes");
-        if (ram > 0)
+        // Live managed heap: the bytes .NET currently holds in objects. It falls after a collection, so it's
+        // the "right now" usage rather than a peak.
+        liveBytes = GC.GetTotalMemory(false);
+
+        // Committed WebAssembly linear memory — the whole runtime's arena (managed heap + code + thread
+        // stacks + GC headroom). WASM memory only ever grows, so this is already the high-water mark; take
+        // the max anyway to stay honest on the JS-heap fallback path (interop.js), which can shrink.
+        var sample = await JSRuntime.InvokeAsync<long>("appInfo.ramBytes");
+        if (sample > 0)
         {
-            ramBytes = ram;
+            peakBytes = peakBytes is { } previousPeak ? Math.Max(previousPeak, sample) : sample;
         }
     }
 

@@ -34,9 +34,9 @@
         {
             <span class="footer-size" title="Total app download — compressed over the wire / uncompressed">@FormatMb(size.Zipped) zipped · @FormatMb(size.Unzipped) unzipped</span>
         }
-        @if (ramBytes is { } ram)
+        @if (liveBytes is { } live && peakBytes is { } peak)
         {
-            <span class="footer-ram" title="Approximate memory the app is using (WebAssembly heap)">@FormatMb(ram) RAM</span>
+            <span class="footer-ram" title="Memory the app is using — live .NET heap now / peak WebAssembly heap (never shrinks)">@FormatMb(live) RAM (@FormatMb(peak) peak)</span>
         }
     </footer>
 </div>
