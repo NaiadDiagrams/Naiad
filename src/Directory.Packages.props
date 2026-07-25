@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <PackageVersion Include="AngleSharp" Version="1.5.2" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.4.1" />
     <PackageVersion Include="Svg.Skia" Version="5.1.1" />
     <PackageVersion Include="Pidgin" Version="3.5.1" />
