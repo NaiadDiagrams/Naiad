@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4 and Block sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block and Timeline sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -65,9 +65,10 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Cause*: two different ones. The parser already stripped an attribute comment's quotes and the *renderer* put them back when it concatenated the row; relationship labels were taken as the raw rest of the line, quotes included, so the parser now reads a quoted string where there is one. The comment is drawn as its own lighter column rather than concatenated, since without the quotes it would otherwise run straight on from the attribute name.
 - [x] **bug** (found while fixing the above) Entity width omitted the 20px PK/FK/UK gutter that the attribute text is actually indented by, so the longest row overflowed the box — visible as soon as comments became a separate column.
 
-## Timeline
+## Timeline — FIXED (2026-08-27)
 
-- [ ] **bug** Period spacing is fixed at 120 units while event-box width is text-driven, so adjacent event boxes overlap: `Title` ("First Computer" ↔ "Personal Computers" ↔ "Internet Era"), `TextPeriods` (all four boxes chain into one strip with merged borders), and `MultipleSections` (the "Industrial Revolution" box starts left of its own "Modern" section band, painting over the "Medieval" band and overlapping neighbors on both sides). Widen column spacing to the widest label or wrap text in fixed-width boxes.
+- [x] **bug** Period spacing is fixed at 120 units while event-box width is text-driven, so adjacent event boxes overlap (`Title`, `TextPeriods`), and in `MultipleSections` the "Industrial Revolution" box starts left of its own section band, painting over the neighbouring one.
+  - *Cause*: every period got the same 120-unit slot regardless of what was drawn under it, and event boxes are sized to their text and centred on the period, so anything wider than 120 spilled both ways. Each period is now as wide as its own widest event (or its label) plus a gap, and section widths and the canvas follow from that — so a box can no longer reach its neighbour or escape its band. This also removes an `IndexOf` per period, which was both quadratic and wrong for two periods sharing a label.
 
 ## Sankey — FIXED (2026-08-27)
 

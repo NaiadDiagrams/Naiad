@@ -2,22 +2,22 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 820 205"
-  style="max-width: 820px;"
+  viewBox="0 0 938.3 205"
+  style="max-width: 938.3px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <rect
     x="20"
     y="20"
-    width="240"
+    width="279.2"
     height="165"
     rx="5"
     ry="5"
     fill="#E3F2FD"
     stroke="none" />
   <text
-    x="140"
+    x="159.6"
     y="35"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -26,14 +26,14 @@
     font-weight="bold"
     fill="#333">Ancient History</text>
   <circle
-    cx="80"
+    cx="99.6"
     cy="100"
     r="8"
     fill="#2196F3"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="80"
+    x="99.6"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -42,7 +42,7 @@
     font-weight="bold"
     fill="#2196F3">3000 BC</text>
   <rect
-    x="8.4"
+    x="28"
     y="130"
     width="143.2"
     height="20"
@@ -51,21 +51,21 @@
     fill="#fff"
     stroke="#2196F3" />
   <text
-    x="80"
+    x="99.6"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Writing invented</text>
   <circle
-    cx="200"
+    cx="239.2"
     cy="100"
     r="8"
     fill="#9C27B0"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="200"
+    x="239.2"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -74,7 +74,7 @@
     font-weight="bold"
     fill="#9C27B0">500 BC</text>
   <rect
-    x="155.35"
+    x="194.55"
     y="130"
     width="89.3"
     height="20"
@@ -83,23 +83,23 @@
     fill="#fff"
     stroke="#9C27B0" />
   <text
-    x="200"
+    x="239.2"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Democracy</text>
   <rect
-    x="280"
+    x="319.2"
     y="20"
-    width="240"
+    width="240.7"
     height="165"
     rx="5"
     ry="5"
     fill="#F3E5F5"
     stroke="none" />
   <text
-    x="400"
+    x="439.55"
     y="35"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -108,14 +108,14 @@
     font-weight="bold"
     fill="#333">Medieval</text>
   <circle
-    cx="340"
+    cx="379.2"
     cy="100"
     r="8"
     fill="#4CAF50"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="340"
+    x="379.2"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -124,7 +124,7 @@
     font-weight="bold"
     fill="#4CAF50">500 AD</text>
   <rect
-    x="295.35"
+    x="334.55"
     y="130"
     width="89.3"
     height="20"
@@ -133,21 +133,21 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="340"
+    x="379.2"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Dark Ages</text>
   <circle
-    cx="460"
+    cx="499.55"
     cy="100"
     r="8"
     fill="#FF9800"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="460"
+    x="499.55"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -156,7 +156,7 @@
     font-weight="bold"
     fill="#FF9800">1400</text>
   <rect
-    x="407.65"
+    x="447.2"
     y="130"
     width="104.7"
     height="20"
@@ -165,23 +165,23 @@
     fill="#fff"
     stroke="#FF9800" />
   <text
-    x="460"
+    x="499.55"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Renaissance</text>
   <rect
-    x="540"
+    x="579.9"
     y="20"
-    width="240"
+    width="318.4"
     height="165"
     rx="5"
     ry="5"
     fill="#E8F5E9"
     stroke="none" />
   <text
-    x="660"
+    x="739.1"
     y="35"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -190,14 +190,14 @@
     font-weight="bold"
     fill="#333">Modern</text>
   <circle
-    cx="600"
+    cx="678.75"
     cy="100"
     r="8"
     fill="#E91E63"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="600"
+    x="678.75"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -206,7 +206,7 @@
     font-weight="bold"
     fill="#E91E63">1800</text>
   <rect
-    x="509.15"
+    x="587.9"
     y="130"
     width="181.7"
     height="20"
@@ -215,21 +215,21 @@
     fill="#fff"
     stroke="#E91E63" />
   <text
-    x="600"
+    x="678.75"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Industrial Revolution</text>
   <circle
-    cx="720"
+    cx="837.95"
     cy="100"
     r="8"
     fill="#00BCD4"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="720"
+    x="837.95"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -238,7 +238,7 @@
     font-weight="bold"
     fill="#00BCD4">2000</text>
   <rect
-    x="667.65"
+    x="785.6"
     y="130"
     width="104.7"
     height="20"
@@ -247,16 +247,16 @@
     fill="#fff"
     stroke="#00BCD4" />
   <text
-    x="720"
+    x="837.95"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Digital Age</text>
   <line
-    x1="80"
+    x1="99.6"
     y1="100"
-    x2="720"
+    x2="837.95"
     y2="100"
     stroke="#333"
     stroke-width="3" />

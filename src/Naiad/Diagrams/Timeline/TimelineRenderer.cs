@@ -1,8 +1,11 @@
-namespace Naiad.Diagrams.Timeline;
+﻿namespace Naiad.Diagrams.Timeline;
 
 public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 {
     const double periodWidth = 120;
+
+    // Clearance kept between one period's content and the next.
+    const double periodGap = 16;
     const double periodMarkerRadius = 8;
     const double eventHeight = 25;
     const double eventPadding = 10;
@@ -56,7 +59,11 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         var eventsHeight = maxEvents * eventHeight + eventPadding * 2;
         var timelineYPos = titleOffset + timelineY + options.Padding;
 
-        var width = totalPeriods * periodWidth + options.Padding * 2 + sectionPadding * model.Sections.Count;
+        var sectionWidths = model.Sections
+            .Select(section => section.Periods.Sum(period => PeriodWidth(period, options)))
+            .ToList();
+
+        var width = sectionWidths.Sum() + options.Padding * 2 + sectionPadding * model.Sections.Count;
         var height = titleOffset + timelineY + eventsHeight + options.Padding * 2 + 40;
 
         var builder = new SvgBuilder();
@@ -83,7 +90,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 
         foreach (var section in model.Sections)
         {
-            var sectionWidth = section.Periods.Count * periodWidth;
+            var sectionWidth = sectionWidths[sectionIndex];
             var sectionColor = sectionColors[sectionIndex % sectionColors.Length];
 
             // Draw section background
@@ -112,9 +119,12 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             }
 
             // Draw periods in this section
+            var periodStart = currentX;
             foreach (var period in section.Periods)
             {
-                var periodX = currentX + (section.Periods.IndexOf(period) + 0.5) * periodWidth;
+                var thisPeriodWidth = PeriodWidth(period, options);
+                var periodX = periodStart + thisPeriodWidth / 2;
+                periodStart += thisPeriodWidth;
                 var periodColor = periodColors[globalPeriodIndex % periodColors.Length];
 
                 // Period marker
@@ -175,9 +185,11 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             sectionIndex++;
         }
 
-        // Draw timeline line
-        var lineStartX = options.Padding + periodWidth / 2;
-        var lineEndX = currentX - sectionPadding - periodWidth / 2;
+        // Draw timeline line, between the first and last period centres.
+        var firstPeriod = model.Sections.SelectMany(_ => _.Periods).First();
+        var lastPeriod = model.Sections.SelectMany(_ => _.Periods).Last();
+        var lineStartX = options.Padding + PeriodWidth(firstPeriod, options) / 2;
+        var lineEndX = currentX - sectionPadding - PeriodWidth(lastPeriod, options) / 2;
         builder.AddLine(
             lineStartX,
             timelineYPos,
@@ -187,6 +199,22 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             strokeWidth: 3);
 
         return builder.Build();
+    }
+
+    /// <summary>
+    /// How much horizontal room a period needs. Event boxes are sized to their text and centred on the
+    /// period, so a period narrower than its widest event would let that box run into its neighbours —
+    /// and, at a section edge, out of its own section band.
+    /// </summary>
+    static double PeriodWidth(TimePeriod period, RenderOptions options)
+    {
+        var widest = MeasureText(period.Label, options.FontSize);
+        foreach (var evt in period.Events)
+        {
+            widest = Math.Max(widest, MeasureText(evt, options.FontSize) + eventPadding * 2);
+        }
+
+        return Math.Max(periodWidth, widest + periodGap);
     }
 
     static double MeasureText(string text, double fontSize) =>

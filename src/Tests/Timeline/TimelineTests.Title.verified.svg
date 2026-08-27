@@ -2,13 +2,13 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 420 245"
-  style="max-width: 420px;"
+  viewBox="0 0 506.8 245"
+  style="max-width: 506.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <text
-    x="210"
+    x="253.4"
     y="40"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -16,14 +16,14 @@
     font-family="Arial, sans-serif"
     font-weight="bold">History of Computing</text>
   <circle
-    cx="80"
+    cx="91.9"
     cy="140"
     r="8"
     fill="#2196F3"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="80"
+    x="91.9"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -32,7 +32,7 @@
     font-weight="bold"
     fill="#2196F3">1940</text>
   <rect
-    x="16.1"
+    x="28"
     y="170"
     width="127.8"
     height="20"
@@ -41,21 +41,21 @@
     fill="#fff"
     stroke="#2196F3" />
   <text
-    x="80"
+    x="91.9"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">First Computer</text>
   <circle
-    cx="200"
+    cx="251.1"
     cy="140"
     r="8"
     fill="#9C27B0"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="200"
+    x="251.1"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -64,7 +64,7 @@
     font-weight="bold"
     fill="#9C27B0">1970</text>
   <rect
-    x="120.7"
+    x="171.8"
     y="170"
     width="158.6"
     height="20"
@@ -73,21 +73,21 @@
     fill="#fff"
     stroke="#9C27B0" />
   <text
-    x="200"
+    x="251.1"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Personal Computers</text>
   <circle
-    cx="320"
+    cx="402.6"
     cy="140"
     r="8"
     fill="#4CAF50"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="320"
+    x="402.6"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -96,7 +96,7 @@
     font-weight="bold"
     fill="#4CAF50">2000</text>
   <rect
-    x="263.8"
+    x="346.4"
     y="170"
     width="112.4"
     height="20"
@@ -105,16 +105,16 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="320"
+    x="402.6"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Internet Era</text>
   <line
-    x1="80"
+    x1="91.9"
     y1="140"
-    x2="320"
+    x2="402.6"
     y2="140"
     stroke="#333"
     stroke-width="3" />

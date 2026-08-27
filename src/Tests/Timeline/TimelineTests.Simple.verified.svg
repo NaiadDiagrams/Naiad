@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 420 205"
-  style="max-width: 420px;"
+  viewBox="0 0 420.7 205"
+  style="max-width: 420.7px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -72,14 +72,14 @@
     font-size="12px"
     font-family="Arial, sans-serif">Event Two</text>
   <circle
-    cx="320"
+    cx="320.35"
     cy="100"
     r="8"
     fill="#4CAF50"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="320"
+    x="320.35"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -88,7 +88,7 @@
     font-weight="bold"
     fill="#4CAF50">2022</text>
   <rect
-    x="267.65"
+    x="268"
     y="130"
     width="104.7"
     height="20"
@@ -97,7 +97,7 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="320"
+    x="320.35"
     y="140"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -106,7 +106,7 @@
   <line
     x1="80"
     y1="100"
-    x2="320"
+    x2="320.35"
     y2="100"
     stroke="#333"
     stroke-width="3" />
