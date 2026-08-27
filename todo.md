@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship and Sankey sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey and ImageSharp sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -86,9 +86,10 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 - [ ] **cosmetic** Boundary titles are centered at the top edge, exactly where vertical edges enter, so the customer→web edge strikes through the "Internet Banking [System]" caption (`DuplicateElementIds`; grazes in `NestedBoundaries`). Mermaid puts boundary labels top-left.
 - [ ] **cosmetic** Duplicate element ids draw both boxes at identical coordinates — the first ("Web App") is completely hidden under the second ("Duplicate"), which contradicts the test's comment that relationships resolve to the first (`DuplicateElementIds`).
 
-## Naiad.ImageSharp backend
+## Naiad.ImageSharp backend — FIXED (2026-08-27)
 
-- [ ] **bug** Every stroke renders at exactly 2× the intended width at `Png.Scale=2`: `ImageSharpSurface.StrokePath` (`src/Naiad.ImageSharp/ImageSharpSurface.cs` line 30) passes `width * Scale(transform)` to the pen while `DrawingOptions.Transform` applies the same transform to the stroked outline — the scale hits the width twice (Skia matches the Svg.Skia reference exactly; dash lengths are unaffected because the `dash[i]/width` normalization cancels). Fix, then regenerate all 7 `ImageSharp*` baselines.
+- [x] **bug** Every stroke renders at exactly 2× the intended width at `Png.Scale=2`: `ImageSharpSurface.StrokePath` passed `width * Scale(transform)` to the pen while `DrawingOptions.Transform` applies the same transform to the stroked outline — the scale hit the width twice.
+  - *Fixed*: the pen width stays in path units and the transform scales the outline, as it already did for geometry and text. Verified by measurement rather than eye: the class-box border is now 2px in both backends, where ImageSharp was 4px against Skia's 2px. Dash lengths were unaffected either way, since `ToPen` normalises the pattern against whatever width it is handed. `Scale` had no other caller and is gone. All 7 `ImageSharp*` baselines re-accepted.
 
 ## Flowchart
 
