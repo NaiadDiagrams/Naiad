@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class section is fixed and its baselines re-accepted (594 tests green). Everything else below is still open.
+**Status:** the Class and Sequence sections are fixed and their baselines re-accepted (596 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -16,14 +16,21 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Cause*: `RelationshipType` recorded only the *kind* of relationship, not which end carried the glyph, and the renderer always drew it at the target. Each end now carries its own `RelationshipMarker`, parsed from the token on that side of the line, so `<|--`/`--|>`, `*--`/`--*`, `o--`/`--o` and `<--`/`-->` all mark the end the author wrote. Regression test: `ClassTests.ReversedRelationships`.
 - [x] **bug** (found while fixing the above) From-cardinality labels were positioned by a fixed `-10` Y offset, which put them *inside* the source class box; since boxes paint after edges, every `"1"` in `Complex` was invisible. Labels now step along the edge direction, clear of both the border and the marker.
 
-## Sequence
+## Sequence — FIXED (2026-08-27)
 
-- [ ] **bug** Deactivation applies to the wrong participant: the `-` suffix is treated as deactivating the message *receiver*; Mermaid semantics deactivate the *sender*. `Bob-->>-Alice: Hi` therefore tries to deactivate Alice and Bob's activation bar runs to the diagram bottom (`SequenceTests.Activation`). In `Complex`, four bars end at the wrong message or never end.
-- [ ] **bug** Activation rects are drawn after (on top of) messages and notes, so a long bar paints over note and label text (`Complex`: "Validate credentials" / "Token expires in 24h" notes split, message labels hidden). Bars belong beneath text.
-- [ ] **bug** `Note right of Bob` overflows the canvas: note box at x=280–400 in a 290-wide viewBox — the text is entirely outside the visible area (`SequenceTests.Notes`). Diagram width must grow to fit right-of notes.
-- [ ] **bug** `Note over A,B` does not span the named participants: rendered as a fixed 120-unit box centered between them (`Complex`: over User,DB spans x 235–355 instead of x 70–520), so it reads as a note over the wrong participants. Mermaid stretches the note across the full A→B range.
-- [ ] **bug** The `actor` stick figure is malformed: legs are drawn upward-and-outward from the bottom of the body line, producing a circle-with-chevron glyph whose vertex collides with the participant label (`Actors`, `Complex`). Legs should extend downward below the body.
-- [ ] **cosmetic** Notes are fixed-width (120 units); longer text touches/overflows the box border. Size notes to their text.
+- [x] **bug** Deactivation applies to the wrong participant: the `-` suffix is treated as deactivating the message *receiver*; Mermaid semantics deactivate the *sender*. `Bob-->>-Alice: Hi` therefore tries to deactivate Alice and Bob's activation bar runs to the diagram bottom (`SequenceTests.Activation`). In `Complex`, four bars end at the wrong message or never end.
+  - *Fixed*: `-` now closes `msg.FromId`. All four `Complex` bars land on the right message (DB 3→4, Auth 2→6, Email 7→8, Client 1→9).
+- [x] **bug** Activation rects are drawn after (on top of) messages and notes, so a long bar paints over note and label text. Bars belong beneath text.
+  - *Fixed*: activation spans are now computed in their own pass (`CalculateActivations`) and painted before the messages and notes, so the bars still cover the lifeline but sit under everything that crosses them.
+- [x] **bug** `Note right of Bob` overflows the canvas: note box at x=280–400 in a 290-wide viewBox — the text is entirely outside the visible area (`SequenceTests.Notes`).
+  - *Fixed*: the canvas is now sized around everything hanging off the participants — notes on both sides and self-message loops. A note that hangs off the *left* edge shifts the whole diagram right instead of being clipped (`SequenceTests.NoteLeftOfFirstParticipant`).
+- [x] **bug** `Note over A,B` does not span the named participants: rendered as a fixed 120-unit box centered between them, so it reads as a note over the wrong participants.
+  - *Fixed*: an "over" note spans from the outer edge of one named participant to the other.
+- [x] **bug** The `actor` stick figure is malformed: legs are drawn upward-and-outward from the bottom of the body line, producing a circle-with-chevron glyph whose vertex collides with the participant label.
+  - *Cause*: the body already ended 5px past the bottom of the participant band, so the legs ran *upward* to reach it. The figure is now scaled to the band with the legs splaying down and out, and diagrams containing an actor get a taller header so the name sits clear of the lifelines.
+- [x] **cosmetic** Notes are fixed-width (120 units); longer text touches/overflows the box border.
+  - *Fixed*: notes grow to fit their text, with 120 as the minimum.
+- [x] **bug** (found while fixing the above) A standalone `activate X` / `deactivate X` line takes no vertical space, so it inherited the *next* message's slot: `activate Bob` after a message started the bar one message too low and a trailing `deactivate` ran past the last message off the bottom of the diagram. These lines now bind to the message above them, so the explicit form renders identically to `+`/`-`. Regression test: `SequenceTests.ExplicitActivation`.
 
 ## Requirement — structure right, data lost
 

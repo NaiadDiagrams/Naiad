@@ -71,6 +71,36 @@ public class SequenceTests : TestBase
         return VerifySvg(input);
     }
 
+    // A note left of the first participant hangs off the left edge, so the whole diagram has to shift
+    // right rather than the note being clipped.
+    [Test]
+    public Task NoteLeftOfFirstParticipant()
+    {
+        const string input =
+            """
+            sequenceDiagram
+                Alice->>Bob: Hello
+                Note left of Alice: Alice considers it at length
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task ExplicitActivation()
+    {
+        const string input =
+            """
+            sequenceDiagram
+                Alice->>Bob: Hello
+                activate Bob
+                Bob-->>Alice: Hi
+                deactivate Bob
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task AutoNumber()
     {
