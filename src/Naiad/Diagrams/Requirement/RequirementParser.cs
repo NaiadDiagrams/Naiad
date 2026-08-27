@@ -116,7 +116,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
 
     static Requirement BuildRequirement(string name, RequirementType type, List<(string key, string value)> props)
     {
-        var req = new Requirement { Id = name, Name = name, Type = type };
+        var req = new Requirement { Name = name, Type = type };
         foreach (var (key, value) in props)
         {
             switch (key)

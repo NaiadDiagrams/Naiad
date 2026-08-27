@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class and Sequence sections are fixed and their baselines re-accepted (596 tests green). Everything else below is still open.
+**Status:** the Class, Sequence and Requirement sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -32,14 +32,19 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Fixed*: notes grow to fit their text, with 120 as the minimum.
 - [x] **bug** (found while fixing the above) A standalone `activate X` / `deactivate X` line takes no vertical space, so it inherited the *next* message's slot: `activate Bob` after a message started the bar one message too low and a trailing `deactivate` ran past the last message off the bottom of the diagram. These lines now bind to the message above them, so the explicit form renders identically to `+`/`-`. Regression test: `SequenceTests.ExplicitActivation`.
 
-## Requirement — structure right, data lost
+## Requirement — FIXED (2026-08-27)
 
-- [ ] **bug** Declared attributes are silently dropped from requirement/element boxes in all 6 tests: `id:`, `verifymethod:`, and `docref:` never appear, `text:` is truncated with an ellipsis ("The system shall do so…"), and `risk:` is reduced to an unlabeled colored dot. Mermaid renders explicit `Id:` / `Text:` / `Risk:` / `Verification:` / `Doc Ref:` rows. (`Simple`, `Functional`, `Element`, `Multiple`, `Complex`, `AllTypes`.)
-- [ ] **bug** `AllTypes`: req1/req2 declare no risk yet display an orange (medium) risk dot — the render asserts a risk level the input never stated.
-- [ ] **cosmetic** Non-`contains` relationships (satisfies/derives/verifies/…) are solid; Mermaid draws them dashed (dasharray 10,7).
-- [ ] **cosmetic** Diagonal edges clip to a radius around node centers instead of the rectangle borders (`AllTypes`: the `<<verifies>>` edge starts inside elem1's fill and its arrowhead lands inside req2).
-- [ ] **cosmetic** Type headers abbreviate Mermaid's names (`<<Functional>>` vs `<<Functional Requirement>>`, `<<Performance>>` vs `<<Performance Requirement>>`).
-- [ ] **cosmetic** Canvas much larger than content (`Simple`/`Functional`: viewBox 520×180 with content ~220×120 — right half empty; similar in `Multiple`).
+- [x] **bug** Declared attributes are silently dropped from requirement/element boxes in all 6 tests: `id:`, `verifymethod:`, and `docref:` never appear, `text:` is truncated with an ellipsis ("The system shall do so…"), and `risk:` is reduced to an unlabeled colored dot.
+  - *Fixed*: boxes now carry a header (type + name), a separator, and one row per declared attribute — `Id:` / `Text:` / `Risk:` / `Verification:` for requirements, `Type:` / `Doc Ref:` for elements — and are sized to their content instead of truncating into a fixed 180×80 box.
+- [x] **bug** `AllTypes`: req1/req2 declare no risk yet display an orange (medium) risk dot — the render asserts a risk level the input never stated.
+  - *Cause*: `Risk` and `VerifyMethod` were non-nullable with defaults of Medium and Test, so an undeclared value was indistinguishable from a declared one. Both are now nullable and only render when the diagram says so. The unlabeled risk dot is gone — the `Risk:` row states it explicitly.
+- [x] **cosmetic** Non-`contains` relationships (satisfies/derives/verifies/…) are solid; Mermaid draws them dashed (dasharray 10,7).
+- [x] **cosmetic** Diagonal edges clip to a radius around node centers instead of the rectangle borders (`AllTypes`: the `<<verifies>>` edge starts inside elem1's fill and its arrowhead lands inside req2).
+  - *Cause*: scaling both axes by the half-extents traces the inscribed *ellipse*, which is inside the box everywhere except the four edge midpoints. Edges now clip to the rectangle by scaling to the nearer axis limit.
+- [x] **cosmetic** Type headers abbreviate Mermaid's names (`<<Functional>>` vs `<<Functional Requirement>>`).
+- [x] **cosmetic** Canvas much larger than content (`Simple`/`Functional`: viewBox 520×180 with content ~220×120 — right half empty).
+  - *Fixed*: the canvas is measured from the laid-out columns (and the title, which could previously overflow it), so the second column is no longer reserved when there are no elements.
+- [x] **cosmetic** (found while fixing the above) Relation labels sat on top of their line. The label is now pushed along the line's perpendicular by half its own width or height depending on the edge's direction, and always to the upper side regardless of which way the relation was declared.
 
 ## GitGraph — topology right, labels illegible
 

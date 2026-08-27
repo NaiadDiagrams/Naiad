@@ -59,6 +59,22 @@ public class RequirementTests : TestBase
         return VerifySvg(input);
     }
 
+    // Nothing declared but the name, so the box carries no rows and no separator — and in particular no
+    // invented risk or verification method.
+    [Test]
+    public Task NoProperties()
+    {
+        var input =
+            """
+            requirementDiagram
+
+            requirement bare_req {
+            }
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task Multiple()
     {
