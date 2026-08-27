@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp and C4 sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4 and Block sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -102,10 +102,12 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 - [ ] **bug** Subroutine `[[...]]` inner bars collide with the label: bars are inset 10% of node width but the label spans the full width, so the bars cut through glyphs ("**4**29 Too Many Request**s**"). Size the node so label + padding fits between the bars (`ShapePathGenerator.Subroutine`; `ComplexPipeline`, milder in `FullFeaturedSyntax`).
 - [ ] **cosmetic** Edge routing through node bodies/titles: `SVCA <--> PG` and `SVCC <--> PG` cross the "Transactional outbox" cylinder cap; ORCH→Pricing cuts the "Resilience layer" subgraph title; User→Controller runs through both subgraph titles in `NestedSubgraphs`.
 
-## Block
+## Block — FIXED (2026-08-27)
 
-- [ ] **bug** Rounded `b("Rounded")` and stadium `c(["Stadium"])` are indistinguishable: both emit `rx=20` on a 40-high rect (i.e. both are stadiums). `(...)` should get a small (~5px) corner radius (`DifferentShapes`).
-- [ ] **bug** Circle `d(("Circle"))` is a fixed r=20 circle not sized to its label — the text already touches the stroke on both sides, and any longer label overflows the shape. Grow the radius to fit the label (`DifferentShapes`).
+- [x] **bug** Rounded `b("Rounded")` and stadium `c(["Stadium"])` are indistinguishable: both emit `rx=20` on a 40-high rect (i.e. both are stadiums).
+  - *Cause*: `case BlockShape.Rounded:` fell straight through into `case BlockShape.Stadium:`, so both drew with `rx = height / 2`. Rounded has its own case and a small corner radius now.
+- [x] **bug** Circle `d(("Circle"))` is a fixed r=20 circle not sized to its label — the text already touches the stroke on both sides, and any longer label overflows the shape.
+  - *Cause*: the circle is inscribed in its grid cell (`Math.Min(width, height) / 2`), and the grid was a fixed 120x60, so the radius could never exceed 20 whatever the label. The grid now grows to the diameter the largest circle label needs, which leaves the inscribed-circle rule intact and correct.
 
 ## State
 
