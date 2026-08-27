@@ -15,7 +15,7 @@ public class BuildLayerGraphTests
 
         var lg = BuildLayerGraph.Run(graph, 1, graph.InEdgesOf);
         await Assert.That(lg.HasNode(lg.Label.Root!)).IsTrue();
-        await Assert.That(lg.Children(Graph.GraphNode)).IsEquivalentTo(new List<string> { lg.Label.Root! }, CollectionOrdering.Matching);
+        await Assert.That(lg.Children()).IsEquivalentTo(new List<string> { lg.Label.Root! }, CollectionOrdering.Matching);
         await Assert.That(lg.Children(lg.Label.Root!)).IsEquivalentTo(new List<string> { "a", "b" }, CollectionOrdering.Matching);
     }
 

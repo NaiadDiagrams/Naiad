@@ -16,7 +16,6 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.10.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.180" />
     <PackageVersion Include="ProjectFiles" Version="1.4.0" />
-    <PackageVersion Include="Verify.ImageSharp.Compare" Version="3.0.3" />
     <PackageVersion Include="Verify.TUnit" Version="32.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />

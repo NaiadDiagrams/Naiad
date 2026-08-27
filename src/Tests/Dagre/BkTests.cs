@@ -414,7 +414,7 @@ public class BkTests
             var align = StrMap(("a", "a"));
             graph.SetNode("a", new() {Rank = 0, Order = 0});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
         }
 
@@ -427,7 +427,7 @@ public class BkTests
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(100 / 2.0 + 100 + 200 / 2.0);
         }
@@ -441,7 +441,7 @@ public class BkTests
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100, Dummy = DummyKind.Edge});
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.Edge});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(100 / 2.0 + 20 + 200 / 2.0);
         }
@@ -454,7 +454,7 @@ public class BkTests
             graph.SetNode("a", new() {Rank = 0, Order = 0, Width = 100});
             graph.SetNode("b", new() {Rank = 1, Order = 0, Width = 200});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(0d);
         }
@@ -469,7 +469,7 @@ public class BkTests
             graph.SetNode("b", new() {Rank = 1, Order = 1, Width = 200});
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 50});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(50 / 2.0 + 75 + 200 / 2.0);
             await Assert.That(xs["b"]).IsEqualTo(50 / 2.0 + 75 + 200 / 2.0);
             await Assert.That(xs["c"]).IsEqualTo(0d);
@@ -486,7 +486,7 @@ public class BkTests
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 50});
             graph.SetNode("d", new() {Rank = 1, Order = 1, Width = 80});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(100 / 2.0 + 75 + 200 / 2.0);
             await Assert.That(xs["c"]).IsEqualTo(100 / 2.0 + 75 + 200 / 2.0 - 80 / 2.0 - 75 - 50 / 2.0);
@@ -504,7 +504,7 @@ public class BkTests
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 60});
             graph.SetNode("d", new() {Rank = 1, Order = 1, Width = 70});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(50 / 2.0 + 75 + 150 / 2.0);
             await Assert.That(xs["c"]).IsEqualTo(0d);
@@ -522,7 +522,7 @@ public class BkTests
             graph.SetNode("c", new() {Rank = 1, Order = 0, Width = 60});
             graph.SetNode("d", new() {Rank = 1, Order = 1, Width = 150});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(60 / 2.0 + 75 + 150 / 2.0);
             await Assert.That(xs["c"]).IsEqualTo(0d);
@@ -543,7 +543,7 @@ public class BkTests
             graph.SetNode("f", new() {Rank = 2, Order = 0, Width = 50});
             graph.SetNode("graph", new() {Rank = 2, Order = 1, Width = 50});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
 
             // Use f as 0, everything is relative to it
             await Assert.That(xs["a"]).IsEqualTo(xs["b"] - 50 / 2.0 - 75 - 50 / 2.0);
@@ -564,7 +564,7 @@ public class BkTests
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPosition.Left});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(xs["a"] + 100 / 2.0 + 50 + 200);
             await Assert.That(xs["c"]).IsEqualTo(xs["b"] + 0 + 50 + 300 / 2.0);
@@ -580,7 +580,7 @@ public class BkTests
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPosition.Center});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(xs["a"] + 100 / 2.0 + 50 + 200 / 2.0);
             await Assert.That(xs["c"]).IsEqualTo(xs["b"] + 200 / 2.0 + 50 + 300 / 2.0);
@@ -596,7 +596,7 @@ public class BkTests
             graph.SetNode("b", new() {Rank = 0, Order = 1, Width = 200, Dummy = DummyKind.EdgeLabel, Labelpos = LabelPosition.Right});
             graph.SetNode("c", new() {Rank = 0, Order = 2, Width = 300, Dummy = DummyKind.Edge});
 
-            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align, false);
+            var xs = BK.HorizontalCompaction(graph, Util.BuildLayerMatrix(graph), root, align);
             await Assert.That(xs["a"]).IsEqualTo(0d);
             await Assert.That(xs["b"]).IsEqualTo(xs["a"] + 100 / 2.0 + 50 + 0);
             await Assert.That(xs["c"]).IsEqualTo(xs["b"] + 200 + 50 + 300 / 2.0);

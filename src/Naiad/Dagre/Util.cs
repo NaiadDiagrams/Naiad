@@ -239,7 +239,7 @@ static class Util
         return (lhs, rhs);
     }
 
-    public static List<int> Range(int limit) => Range(0, limit, 1);
+    public static List<int> Range(int limit) => Range(0, limit);
 
     public static List<int> Range(int start, int limit, int step = 1)
     {

@@ -99,7 +99,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
-        builder.AddArrowMarker("journey-arrow", "#333");
+        builder.AddArrowMarker("journey-arrow");
 
         // Title
         if (!string.IsNullOrEmpty(model.Title))
