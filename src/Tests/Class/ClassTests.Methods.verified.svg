@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 140 90"
-  style="max-width: 140px;"
+  viewBox="0 0 175.5 131"
+  style="max-width: 175.5px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -69,17 +69,37 @@
     <rect
       x="0"
       y="0"
-      width="100"
-      height="50"
+      width="135.5"
+      height="91"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="50"
+      x="67.75"
       y="20"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold">Animal</text>
+    <line
+      x1="0"
+      y1="40"
+      x2="135.5"
+      y2="40"
+      stroke="#333" />
+    <text
+      x="10"
+      y="51"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ makeSound()</text>
+    <text
+      x="10"
+      y="71"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ move() : void</text>
   </g>
 </svg>

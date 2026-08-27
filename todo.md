@@ -1,0 +1,102 @@
+# Diagram correctness review — TODO
+
+Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline under `src/Tests/` (~190 renders across 22 diagram types plus the Skia/ImageSharp raster backends), each checked against its Mermaid input for semantic correctness (elements present, shapes/markers/directions right, data positions verified arithmetically, text legible). Items are grouped by diagram type, most broken first. `bug` = output is semantically wrong or illegible; `cosmetic` = correct but visibly off.
+
+Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
+
+**Status:** the Class section is fixed and its baselines re-accepted (594 tests green). Everything else below is still open.
+
+## Class — FIXED (2026-08-27)
+
+- [x] **bug** Class body members are never rendered. `+String name` / `+int age` (`ClassTests.Members`), `+makeSound()` / `+move() : void` (`Methods`), and all four in `MembersAndMethods` are silently dropped — the render is a bare one-compartment name box (SVG contains one rect + one text). Should be the three-compartment box with attribute and method sections. Same root cause drops the `<<interface>>` stereotype and method in `InterfaceAnnotation`.
+  - *Cause*: the class-body parser's blank-line branch consumed the indent before the closing `}` and then failed, so `Many()` failed mid-body; the whole `{ … }` was backtracked away as an optional body and the remaining lines were left unparsed (Pidgin does not require EOF). Fixed by wrapping that branch in `Try` and ending it on a newline rather than `LineEnd`.
+- [x] **bug** `ClassTests.Complex` renders a single box: of 9 declared classes and 6 relationships, only "IRepository" appears — everything after (or while) parsing the first class with a `~T~` generic parameter is lost, and the generic marker itself (`IRepository~T~` → `IRepository<T>`) is not rendered.
+  - *Cause*: the identifier parser had no notion of `~T~`, so parsing stopped dead at the first generic and silently discarded the rest of the document. Class names, member types and relationship endpoints now accept a `~…~` argument; the class is keyed on its bare name and displays as `IRepository<T>` / `List<Item>`. Also fixed along the way: `name: Type` parameters, the trailing `$`/`*` classifier, space-separated return types (`+getId() int`), and cardinality in Mermaid's position (`User "1" --> "1..*" Address`).
+- [x] **bug** Relationship markers attach to the wrong end. `Animal <|-- Dog` puts the hollow inheritance triangle on Dog/Cat (subclass) instead of Animal — semantics inverted. Same end-swap for composition `Car *-- Engine` and aggregation `Library o-- Book`.
+  - *Cause*: `RelationshipType` recorded only the *kind* of relationship, not which end carried the glyph, and the renderer always drew it at the target. Each end now carries its own `RelationshipMarker`, parsed from the token on that side of the line, so `<|--`/`--|>`, `*--`/`--*`, `o--`/`--o` and `<--`/`-->` all mark the end the author wrote. Regression test: `ClassTests.ReversedRelationships`.
+- [x] **bug** (found while fixing the above) From-cardinality labels were positioned by a fixed `-10` Y offset, which put them *inside* the source class box; since boxes paint after edges, every `"1"` in `Complex` was invisible. Labels now step along the edge direction, clear of both the border and the marker.
+
+## Sequence
+
+- [ ] **bug** Deactivation applies to the wrong participant: the `-` suffix is treated as deactivating the message *receiver*; Mermaid semantics deactivate the *sender*. `Bob-->>-Alice: Hi` therefore tries to deactivate Alice and Bob's activation bar runs to the diagram bottom (`SequenceTests.Activation`). In `Complex`, four bars end at the wrong message or never end.
+- [ ] **bug** Activation rects are drawn after (on top of) messages and notes, so a long bar paints over note and label text (`Complex`: "Validate credentials" / "Token expires in 24h" notes split, message labels hidden). Bars belong beneath text.
+- [ ] **bug** `Note right of Bob` overflows the canvas: note box at x=280–400 in a 290-wide viewBox — the text is entirely outside the visible area (`SequenceTests.Notes`). Diagram width must grow to fit right-of notes.
+- [ ] **bug** `Note over A,B` does not span the named participants: rendered as a fixed 120-unit box centered between them (`Complex`: over User,DB spans x 235–355 instead of x 70–520), so it reads as a note over the wrong participants. Mermaid stretches the note across the full A→B range.
+- [ ] **bug** The `actor` stick figure is malformed: legs are drawn upward-and-outward from the bottom of the body line, producing a circle-with-chevron glyph whose vertex collides with the participant label (`Actors`, `Complex`). Legs should extend downward below the body.
+- [ ] **cosmetic** Notes are fixed-width (120 units); longer text touches/overflows the box border. Size notes to their text.
+
+## Requirement — structure right, data lost
+
+- [ ] **bug** Declared attributes are silently dropped from requirement/element boxes in all 6 tests: `id:`, `verifymethod:`, and `docref:` never appear, `text:` is truncated with an ellipsis ("The system shall do so…"), and `risk:` is reduced to an unlabeled colored dot. Mermaid renders explicit `Id:` / `Text:` / `Risk:` / `Verification:` / `Doc Ref:` rows. (`Simple`, `Functional`, `Element`, `Multiple`, `Complex`, `AllTypes`.)
+- [ ] **bug** `AllTypes`: req1/req2 declare no risk yet display an orange (medium) risk dot — the render asserts a risk level the input never stated.
+- [ ] **cosmetic** Non-`contains` relationships (satisfies/derives/verifies/…) are solid; Mermaid draws them dashed (dasharray 10,7).
+- [ ] **cosmetic** Diagonal edges clip to a radius around node centers instead of the rectangle borders (`AllTypes`: the `<<verifies>>` edge starts inside elem1's fill and its arrowhead lands inside req2).
+- [ ] **cosmetic** Type headers abbreviate Mermaid's names (`<<Functional>>` vs `<<Functional Requirement>>`, `<<Performance>>` vs `<<Performance Requirement>>`).
+- [ ] **cosmetic** Canvas much larger than content (`Simple`/`Functional`: viewBox 520×180 with content ~220×120 — right half empty; similar in `Multiple`).
+
+## GitGraph — topology right, labels illegible
+
+- [ ] **bug** Commit id labels are white text centered *on* the r=12 commit circle; anything wider than ~24px overhangs onto the white background and the overhanging glyphs vanish — every auto-id renders as "ommit0" / "erge3" / "herry2" (9 of 11 tests). Mermaid puts commit labels below the lane in a grey label box. Move labels off the circle (or give them a background).
+- [ ] **bug** `type: REVERSE` renders as a plain white-filled circle with no cross glyph — the type is not communicated, and its white label on the white fill is completely invisible (`Types`).
+- [ ] **bug** Cherry-pick commits lose the source reference: rendered as an ordinary commit with the meaningless auto-id "cherry2" (clipped) instead of Mermaid's "cherry-pick:two" label + cherry glyph (`CherryPick`).
+- [ ] **cosmetic** Merge commits look identical to normal commits (Mermaid uses a distinct double-circle); HIGHLIGHT renders as a yellow circle rather than Mermaid's squarish highlight (still distinct, readable).
+
+## EntityRelationship — crow's-foot markers mirrored
+
+- [ ] **bug** Cardinality marker groups are mirrored along the edge in every many/zero end: the crow's-foot fork points *away* from the entity (reads as an arrowhead) and the min-cardinality glyph (circle/bar) sits nearest the box. Correct order: fork/bar (max) adjacent to and touching the entity, circle/bar (min) farther out. Affects `Simple`, `MultipleRelationships`, `ZeroOrOne`, `NonIdentifying`, `Compelx` — every relationship end except `||` (OneToOne is correct).
+- [ ] **cosmetic** Quote delimiters are rendered literally: attribute comments show `int id "Primary key"` (`Comments`) and quoted relationship labels show `"ships to"` (`Compelx`). Mermaid strips the quotes.
+
+## Timeline
+
+- [ ] **bug** Period spacing is fixed at 120 units while event-box width is text-driven, so adjacent event boxes overlap: `Title` ("First Computer" ↔ "Personal Computers" ↔ "Internet Era"), `TextPeriods` (all four boxes chain into one strip with merged borders), and `MultipleSections` (the "Industrial Revolution" box starts left of its own "Modern" section band, painting over the "Medieval" band and overlapping neighbors on both sides). Widen column spacing to the widest label or wrap text in fixed-width boxes.
+
+## Sankey — geometry right, presentation broken
+
+- [ ] **bug** Left-column node labels are clipped off the canvas: anchored `text-anchor="end"` at x=15 (`SankeyRenderer.cs` ~line 133), so "Input"→"ut", "Source"→"rce", "Coal"→"al", "Gas"→"as", "Nuclear"→"ear" (`SingleLink`, `ThreeColumns`, `EnergyFlow`). Mermaid places left-half labels to the right of the bar.
+- [ ] **bug** Canvas height scales with raw data magnitude: `chartHeight = Math.Max(300, totalValue * 2)` (`SankeyRenderer.cs` line 48) turns `BudgetFlow` (totals 4000) into a 740×8040 SVG with microscopic labels. Chart size must not depend on the unit scale — use fixed default dimensions and normalize.
+- [ ] **bug** Node values are never displayed; Mermaid's sankey-beta defaults to `showValues: true` (value printed beneath the name).
+
+## C4
+
+- [ ] **bug** `Rel_L` / `Rel_R` layout hints are ignored (`DirectionalRelationships`): "Left Service" lands directly below Core, "Right Service" lands below-*left* (visually the opposite of right), and "Downstream" is pushed below-right. Only `Rel_U` is honored. The test's own comment documents the intended same-rank left/right placement.
+- [ ] **bug** Element descriptions are truncated with an ellipsis instead of wrapped ("Allows customers to…", "External email prov…", etc. across `External`, `Complex`, `Boundaries`, `DuplicateElementIds`). Mermaid wraps the description and grows the box.
+- [ ] **cosmetic** Boundary titles are centered at the top edge, exactly where vertical edges enter, so the customer→web edge strikes through the "Internet Banking [System]" caption (`DuplicateElementIds`; grazes in `NestedBoundaries`). Mermaid puts boundary labels top-left.
+- [ ] **cosmetic** Duplicate element ids draw both boxes at identical coordinates — the first ("Web App") is completely hidden under the second ("Duplicate"), which contradicts the test's comment that relationships resolve to the first (`DuplicateElementIds`).
+
+## Naiad.ImageSharp backend
+
+- [ ] **bug** Every stroke renders at exactly 2× the intended width at `Png.Scale=2`: `ImageSharpSurface.StrokePath` (`src/Naiad.ImageSharp/ImageSharpSurface.cs` line 30) passes `width * Scale(transform)` to the pen while `DrawingOptions.Transform` applies the same transform to the stroked outline — the scale hits the width twice (Skia matches the Svg.Skia reference exactly; dash lengths are unaffected because the `dash[i]/width` normalization cancels). Fix, then regenerate all 7 `ImageSharp*` baselines.
+
+## Flowchart
+
+- [ ] **bug** Asymmetric node `>text]` has mirrored left-edge geometry: Naiad draws a convex point protruding left (arrow-tip silhouette); Mermaid's `rect_left_inv_arrow` has protruding top/bottom-left corners with an inset mid-left vertex (concave notch). `ShapePathGenerator.Asymmetric`, `src/Naiad/Rendering/ShapePathGenerator.cs:153` (`ComplexPipeline`).
+- [ ] **bug** Subroutine `[[...]]` inner bars collide with the label: bars are inset 10% of node width but the label spans the full width, so the bars cut through glyphs ("**4**29 Too Many Request**s**"). Size the node so label + padding fits between the bars (`ShapePathGenerator.Subroutine`; `ComplexPipeline`, milder in `FullFeaturedSyntax`).
+- [ ] **cosmetic** Edge routing through node bodies/titles: `SVCA <--> PG` and `SVCC <--> PG` cross the "Transactional outbox" cylinder cap; ORCH→Pricing cuts the "Resilience layer" subgraph title; User→Controller runs through both subgraph titles in `NestedSubgraphs`.
+
+## Block
+
+- [ ] **bug** Rounded `b("Rounded")` and stadium `c(["Stadium"])` are indistinguishable: both emit `rx=20` on a 40-high rect (i.e. both are stadiums). `(...)` should get a small (~5px) corner radius (`DifferentShapes`).
+- [ ] **bug** Circle `d(("Circle"))` is a fixed r=20 circle not sized to its label — the text already touches the stroke on both sides, and any longer label overflows the shape. Grow the radius to fit the label (`DifferentShapes`).
+
+## State
+
+- [ ] **bug** `TransitionLabels`: both curved labeled edges contain a backwards retrace at the label junction — the path descends past the label, jumps back up in a straight line, then descends again (e.g. `… 35.2 218.05 L 35.2 141.95 …`), producing stray vertical slashes through the "timeout"/"reset" labels and doubled strokes. The two curve/line junction points appear swapped (compare the correct forward mid-segment in `MultipleStates`).
+- [ ] **cosmetic** `TransitionLabels`: the "reset" edge passes through the final-state marker's stroke ring; route clear of unrelated nodes.
+- [ ] **cosmetic** `Complex`: `note right of Processing` renders below-left of the state — the side keyword is not honored (`note left of Error` is correct).
+
+## Tooling
+
+- [ ] **bug** `DocGeneratorTests.Generate` deletes `src/test-renders/` and rebuilds it, but it extracts inputs only from inline `const string input` literals. `StateTests` calls `VerifySvg(StateSamples.Simple)` instead, so the generator finds no State tests and **deletes `State.md` and its entry in `renders.include.md`**. Running the generator today silently drops that page. Teach the extractor to resolve `*Samples` references (or inline the State inputs) before running it again.
+- [ ] Regenerating also adds five sections that are currently missing from the committed docs (`Architecture.GroupEdge`, `C4.DuplicateElementIds`, `Flowchart.ComplexPipeline`, `Flowchart.FullFeaturedSyntax`, `Gantt.DuplicateIds`) plus `Class.ReversedRelationships` — the docs are stale, but regeneration is blocked on the State issue above.
+
+## Small fidelity items
+
+- [ ] **cosmetic** Gantt: task bars display the internal task **id** ("a1", "b1") centered in the bar (`GanttRenderer.cs` ~line 263); Mermaid never shows ids — it shows the task name in/next to the bar. All 9 gantt renders are otherwise positionally exact.
+- [ ] **cosmetic** Mindmap: `(rounded)` nodes render identically to default (no-bracket) nodes; Mermaid's default style (borderless band) is distinct from the rounded rect (`RoundedShape`, visible suite-wide).
+- [ ] **cosmetic** Quadrant: point labels at x=1 clip at the viewBox edge ("Top Right"→"Top R") (`EdgePositions`). Mermaid clips identically, so lowest priority — but the text is unreadable.
+
+## Reviewed clean — no action
+
+- **Architecture** (8/8), **Kanban** (5/5), **Packet** (7/7, bit spans verified), **Pie** (3/3, angles verified), **Radar** (6/6, vertex radii/angles verified), **Treemap** (6/6, areas verified), **XYChart** (7/7, bar/line values verified), **UserJourney** (8/8, faces/scores/actors verified), **Gantt** (9/9 positionally exact — one cosmetic above).
+- Raster backends: apart from the ImageSharp stroke bug, the two backends match each other and the Svg.Skia reference in geometry, color, text, markers, and dashes.
+- Deliberate design differences left alone: left-to-right mindmap layout (vs radial), slice/strip treemap tiling (vs squarify), grouped XYChart bar series (vs overlapped), architecture service boxes, single 0–31 packet ruler, "1." autonumber prefixes.

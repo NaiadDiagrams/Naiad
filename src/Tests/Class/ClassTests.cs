@@ -109,6 +109,23 @@ public class ClassTests : TestBase
         return VerifySvg(input);
     }
 
+    // The mirrored spelling of each relationship: every marker belongs on the opposite end to the
+    // Inheritance/Composition/Aggregation tests above.
+    [Test]
+    public Task ReversedRelationships()
+    {
+        const string input =
+            """
+            classDiagram
+                Dog --|> Animal
+                Engine --* Car
+                Book --o Library
+                Course <-- Student
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task InterfaceAnnotation()
     {
