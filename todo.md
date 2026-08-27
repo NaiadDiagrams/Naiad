@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph and EntityRelationship sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship and Sankey sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -69,11 +69,15 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 
 - [ ] **bug** Period spacing is fixed at 120 units while event-box width is text-driven, so adjacent event boxes overlap: `Title` ("First Computer" ↔ "Personal Computers" ↔ "Internet Era"), `TextPeriods` (all four boxes chain into one strip with merged borders), and `MultipleSections` (the "Industrial Revolution" box starts left of its own "Modern" section band, painting over the "Medieval" band and overlapping neighbors on both sides). Widen column spacing to the widest label or wrap text in fixed-width boxes.
 
-## Sankey — geometry right, presentation broken
+## Sankey — FIXED (2026-08-27)
 
-- [ ] **bug** Left-column node labels are clipped off the canvas: anchored `text-anchor="end"` at x=15 (`SankeyRenderer.cs` ~line 133), so "Input"→"ut", "Source"→"rce", "Coal"→"al", "Gas"→"as", "Nuclear"→"ear" (`SingleLink`, `ThreeColumns`, `EnergyFlow`). Mermaid places left-half labels to the right of the bar.
-- [ ] **bug** Canvas height scales with raw data magnitude: `chartHeight = Math.Max(300, totalValue * 2)` (`SankeyRenderer.cs` line 48) turns `BudgetFlow` (totals 4000) into a 740×8040 SVG with microscopic labels. Chart size must not depend on the unit scale — use fixed default dimensions and normalize.
-- [ ] **bug** Node values are never displayed; Mermaid's sankey-beta defaults to `showValues: true` (value printed beneath the name).
+- [x] **bug** Left-column node labels are clipped off the canvas: anchored `text-anchor="end"` at x=15, so "Input"→"ut", "Source"→"rce", "Coal"→"al", "Gas"→"as", "Nuclear"→"ear" (`SingleLink`, `ThreeColumns`, `EnergyFlow`).
+  - *Cause*: the label side keyed off "is this the last column?", which put every other column's label to the *left* — fine in the gaps between columns, off the canvas for column 0. It now keys off which half of the plot the node is in, as Mermaid does, so a label always runs into the diagram rather than off its edge. The 100px right margin that existed to hold the last column's labels is no longer needed.
+- [x] **bug** Canvas height scales with raw data magnitude: `chartHeight = Math.Max(300, totalValue * 2)` turns `BudgetFlow` (totals 4000) into a 740×8040 SVG with microscopic labels.
+  - *Fixed*: the plot is a fixed 400px that values scale into, so the same diagram is the same size whether its numbers are in units or thousands. Only the busiest column's node count can push it taller, so stacked bars can't collapse below their minimum height. BudgetFlow is now 460×440.
+- [x] **bug** Node values are never displayed; Mermaid's sankey-beta defaults to `showValues: true`.
+  - *Fixed*: the value is drawn under the node name.
+- [x] **cosmetic** (found while fixing the above) Ribbons were fully opaque, so the labels now sitting over them were hard to read — "Nuclear 30" in grey on crimson — and crossing ribbons merged into one shape. They are translucent now, as in Mermaid, which fixes both.
 
 ## C4
 

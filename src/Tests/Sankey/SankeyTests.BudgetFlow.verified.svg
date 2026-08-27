@@ -2,138 +2,200 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 740 8040"
-  style="max-width: 740px;"
+  viewBox="0 0 460 440"
+  style="max-width: 460px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 20 220 20 L 220 2017.5 C 130 2017.5 130 2020 40 2020 Z"
+    d="M 40 20 C 130 20 130 20 220 20 L 220 117.5 C 130 117.5 130 120 40 120 Z"
     fill="#4CAF50"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 40 2020 C 130 2020 130 2027.5 220 2027.5 L 220 8020 C 130 8020 130 8020 40 8020 Z"
+    d="M 40 120 C 130 120 130 127.5 220 127.5 L 220 420 C 130 420 130 420 40 420 Z"
     fill="#4CAF50"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 2027.5 C 330 2027.5 330 20 420 20 L 420 4005 C 330 4005 330 5023.75 240 5023.75 Z"
+    d="M 240 127.5 C 330 127.5 330 20 420 20 L 420 205 C 330 205 330 273.75 240 273.75 Z"
     fill="#FF9800"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 5023.75 C 330 5023.75 330 4015 420 4015 L 420 6140.33 C 330 6140.33 330 6621.75 240 6621.75 Z"
+    d="M 240 273.75 C 330 273.75 330 215 420 215 L 420 313.67 C 330 313.67 330 351.75 240 351.75 Z"
     fill="#FF9800"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 6621.75 C 330 6621.75 330 6150.33 420 6150.33 L 420 7213 C 330 7213 330 7420.75 240 7420.75 Z"
+    d="M 240 351.75 C 330 351.75 330 323.67 420 323.67 L 420 373 C 330 373 330 390.75 240 390.75 Z"
     fill="#FF9800"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 7420.75 C 330 7420.75 330 7223 420 7223 L 420 8020 C 330 8020 330 8020 240 8020 Z"
+    d="M 240 390.75 C 330 390.75 330 383 420 383 L 420 420 C 330 420 330 420 240 420 Z"
     fill="#FF9800"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <rect
     x="20"
     y="20"
     width="20"
-    height="8000"
+    height="400"
     fill="#4CAF50"
     stroke="#333" />
   <text
-    x="15"
-    y="4020"
-    text-anchor="end"
+    x="46"
+    y="214"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Salary</text>
+  <text
+    x="46"
+    y="228"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">4000</text>
   <rect
     x="220"
     y="20"
     width="20"
-    height="1997.5"
+    height="97.5"
     fill="#2196F3"
     stroke="#333" />
   <text
-    x="215"
-    y="1018.75"
+    x="214"
+    y="62.75"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Savings</text>
+  <text
+    x="214"
+    y="76.75"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">1000</text>
   <rect
     x="220"
-    y="2027.5"
+    y="127.5"
     width="20"
-    height="5992.5"
+    height="292.5"
     fill="#FF9800"
     stroke="#333" />
   <text
-    x="215"
-    y="5023.75"
+    x="214"
+    y="267.75"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Expenses</text>
+  <text
+    x="214"
+    y="281.75"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">3000</text>
   <rect
     x="420"
     y="20"
     width="20"
-    height="3985"
+    height="185"
     fill="#E91E63"
     stroke="#333" />
   <text
-    x="445"
-    y="2012.5"
-    text-anchor="start"
+    x="414"
+    y="106.5"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Housing</text>
+  <text
+    x="414"
+    y="120.5"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">1500</text>
   <rect
     x="420"
-    y="4015"
+    y="215"
     width="20"
-    height="2125.33"
+    height="98.67"
     fill="#9C27B0"
     stroke="#333" />
   <text
-    x="445"
-    y="5077.67"
-    text-anchor="start"
+    x="414"
+    y="258.33"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Food</text>
+  <text
+    x="414"
+    y="272.33"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">800</text>
   <rect
     x="420"
-    y="6150.33"
+    y="323.67"
     width="20"
-    height="1062.67"
+    height="49.33"
     fill="#00BCD4"
     stroke="#333" />
   <text
-    x="445"
-    y="6681.67"
-    text-anchor="start"
+    x="414"
+    y="342.33"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Transport</text>
+  <text
+    x="414"
+    y="356.33"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">400</text>
   <rect
     x="420"
-    y="7223"
+    y="383"
     width="20"
-    height="797"
+    height="37"
     fill="#FF5722"
     stroke="#333" />
   <text
-    x="445"
-    y="7621.5"
-    text-anchor="start"
+    x="414"
+    y="395.5"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Other</text>
+  <text
+    x="414"
+    y="409.5"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">300</text>
 </svg>

@@ -2,62 +2,88 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 540 340"
-  style="max-width: 540px;"
+  viewBox="0 0 260 440"
+  style="max-width: 260px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 20 220 20 L 220 116.67 C 130 116.67 130 120 40 120 Z"
+    d="M 40 20 C 130 20 130 20 220 20 L 220 150 C 130 150 130 153.33 40 153.33 Z"
     fill="#4CAF50"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 40 120 C 130 120 130 126.67 220 126.67 L 220 320 C 130 320 130 320 40 320 Z"
+    d="M 40 153.33 C 130 153.33 130 160 220 160 L 220 420 C 130 420 130 420 40 420 Z"
     fill="#4CAF50"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <rect
     x="20"
     y="20"
     width="20"
-    height="300"
+    height="400"
     fill="#4CAF50"
     stroke="#333" />
   <text
-    x="15"
-    y="170"
-    text-anchor="end"
+    x="46"
+    y="214"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">A</text>
+  <text
+    x="46"
+    y="228"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">30</text>
   <rect
     x="220"
     y="20"
     width="20"
-    height="96.67"
+    height="130"
     fill="#2196F3"
     stroke="#333" />
   <text
-    x="245"
-    y="68.33"
-    text-anchor="start"
+    x="214"
+    y="79"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">B</text>
+  <text
+    x="214"
+    y="93"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">10</text>
   <rect
     x="220"
-    y="126.67"
+    y="160"
     width="20"
-    height="193.33"
+    height="260"
     fill="#FF9800"
     stroke="#333" />
   <text
-    x="245"
-    y="223.33"
-    text-anchor="start"
+    x="214"
+    y="284"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">C</text>
+  <text
+    x="214"
+    y="298"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">20</text>
 </svg>

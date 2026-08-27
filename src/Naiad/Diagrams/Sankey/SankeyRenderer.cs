@@ -8,6 +8,13 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
     const double minNodeHeight = 20;
     const double titleHeight = 40;
 
+    // The plot is a fixed size that values are scaled into, the way Mermaid does it. Deriving the height
+    // from the data's magnitude instead would make the same shape of diagram tall or short purely
+    // according to the units its numbers happen to be in.
+    const double defaultChartHeight = 400;
+    const double labelGap = 6;
+    const double linkOpacity = 0.45;
+
     static string[] nodeColors =
     [
         "#4CAF50",
@@ -42,13 +49,23 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
 
         // Calculate scale
         var maxColumn = nodes.Values.Max(_ => _.Column);
-        var totalValue = nodes.Values.Where(_ => _.Column == 0).Sum(_ => _.OutputValue);
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
-        var chartHeight = Math.Max(300, totalValue * 2);
-        var chartWidth = (maxColumn + 1) * columnSpacing;
 
-        var width = chartWidth + options.Padding * 2 + 100;
+        // Only the busiest column's node count can force the plot taller, so that stacked bars never
+        // collapse below their minimum height.
+        var mostNodesInAColumn = nodes.Values
+            .GroupBy(_ => _.Column)
+            .Max(_ => _.Count());
+        var chartHeight = Math.Max(
+            defaultChartHeight,
+            mostNodesInAColumn * (minNodeHeight + nodePadding));
+
+        // Spans the first bar's left edge to the last bar's right edge; the labels sit in the gaps
+        // between columns rather than outside them, so no extra margin is reserved.
+        var chartWidth = maxColumn * columnSpacing + nodeWidth;
+
+        var width = chartWidth + options.Padding * 2;
         var height = chartHeight + options.Padding * 2 + titleOffset;
 
         var builder = new SvgBuilder();
@@ -105,10 +122,14 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             // Draw bezier curve for link (tapers from source band to target band so each end meets its node edge exactly)
             var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, sourceBand, targetBand);
             var colorIndex = nodeColorIndices[link.Source] % nodeColors.Length;
+
+            // Translucent, as Mermaid draws them: node labels lie over the ribbons, and overlapping
+            // ribbons stay distinguishable where they cross.
             builder.AddPath(
                 pathData,
                 fill: nodeColors[colorIndex],
-                stroke: "none");
+                stroke: "none",
+                opacity: linkOpacity);
         }
 
         // Draw nodes
@@ -127,15 +148,16 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 stroke: "#333",
                 strokeWidth: 1);
 
-            // Node label
-            var labelX = node.Column == maxColumn
-                ? x + nodeWidth + 5
-                : x - 5;
-            var anchor = node.Column == maxColumn ? "start" : "end";
+            // Nodes in the left half of the plot are labelled to the right of the bar and vice versa, so a
+            // label always runs into the diagram rather than off the edge of the canvas.
+            var labelOnRight = x + nodeWidth / 2 < options.Padding + chartWidth / 2;
+            var labelX = labelOnRight ? x + nodeWidth + labelGap : x - labelGap;
+            var anchor = labelOnRight ? "start" : "end";
+            var centerY = node.Y + node.Height / 2;
 
             builder.AddText(
                 labelX,
-                node.Y + node.Height / 2,
+                centerY - 6,
                 name,
                 anchor: anchor,
                 baseline: "middle",
@@ -143,11 +165,25 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 fontFamily: options.FontFamily,
                 fill: "#333");
 
+            // Mermaid's sankey shows node values by default.
+            builder.AddText(
+                labelX,
+                centerY + 8,
+                FormatValue(Math.Max(node.InputValue, node.OutputValue)),
+                anchor: anchor,
+                baseline: "middle",
+                fontSize: options.FontSize - 3,
+                fontFamily: options.FontFamily,
+                fill: "#666");
+
             nodeIndex++;
         }
 
         return builder.Build();
     }
+
+    static string FormatValue(double value) =>
+        value.ToString("0.##", CultureInfo.InvariantCulture);
 
     static Dictionary<string, SankeyNode> BuildNodes(SankeyModel model)
     {
