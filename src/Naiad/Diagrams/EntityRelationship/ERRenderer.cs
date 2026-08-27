@@ -9,6 +9,10 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     const double lineHeight = 20;
     const double minEntityWidth = 120;
     const double attributeIndent = 10;
+    const double commentGap = 10;
+
+    // The gutter the PK/FK/UK indicator sits in, left of the attribute text.
+    const double keyColumnWidth = 20;
     const double headerHeight = 30;
 
     public SvgDocument Render(ERModel model, RenderOptions options)
@@ -110,11 +114,13 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         foreach (var attr in entity.Attributes)
         {
-            var attrText = FormatAttribute(attr);
-            maxTextWidth = Math.Max(maxTextWidth, MeasureText(attrText, options.FontSize));
+            maxTextWidth = Math.Max(maxTextWidth, MeasureAttribute(attr, options));
         }
 
-        var width = Math.Max(minEntityWidth, maxTextWidth + entityPadding * 2 + attributeIndent);
+        // Must match where the attribute text is actually drawn, or the longest row overflows the box.
+        var width = Math.Max(
+            minEntityWidth,
+            maxTextWidth + entityPadding * 2 + attributeIndent + keyColumnWidth);
 
         // Calculate height
         var height = headerHeight; // Entity name header
@@ -207,13 +213,26 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#666");
             }
 
+            var attrX = x + entityPadding + attributeIndent + keyColumnWidth;
             builder.AddText(
-                x + entityPadding + attributeIndent + 20,
+                attrX,
                 attrY + lineHeight / 2, attrText,
                 anchor: "start",
                 baseline: "middle",
                 fontSize: options.FontSize,
                 fontFamily: options.FontFamily);
+
+            if (!string.IsNullOrEmpty(attr.Comment))
+            {
+                builder.AddText(
+                    attrX + MeasureText(attrText, options.FontSize) + commentGap,
+                    attrY + lineHeight / 2, attr.Comment,
+                    anchor: "start",
+                    baseline: "middle",
+                    fontSize: options.FontSize - 2,
+                    fontFamily: options.FontFamily,
+                    fill: "#888");
+            }
 
             attrY += lineHeight;
         }
@@ -329,6 +348,23 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
+    // Crow's-foot marks, as distances out from the entity border along the edge.
+    const double markerSpan = 10;      // perpendicular width of a bar and of the foot's mouth
+    const double forkLength = 12;      // how far the foot's apex sits from the border
+    const double nearBar = 7;
+    const double farBar = 13;
+    const double optionalCircleRadius = 4;
+    const double optionalCircle = 15;  // the "zero" of |o, clear of the bar at nearBar
+    const double barBeyondFork = 17;   // the "one" of |{, clear of the foot's apex
+    const double circleBeyondFork = 18;
+
+    /// <summary>
+    /// Draws one end's cardinality. <paramref name="x"/>/<paramref name="y"/> is on the entity border and
+    /// the angle to <paramref name="toX"/>/<paramref name="toY"/> points away along the edge. Crow's-foot
+    /// notation reads outwards from the entity: the maximum-cardinality mark (the foot, or the bar of a
+    /// "one") sits against the border and the minimum (the circle of a "zero", or the second bar) beyond
+    /// it — so the foot opens onto the entity rather than pointing at it like an arrowhead.
+    /// </summary>
     static void DrawCardinalityMarker(
         SvgBuilder builder,
         double x,
@@ -338,99 +374,101 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         Cardinality cardinality)
     {
         var angle = Math.Atan2(toY - y, toX - x);
-        const double markerDistance = 15.0;
-        const double perpDistance = 8.0;
-
-        // Position for the marker (offset from the entity)
-        var mx = x + markerDistance * Math.Cos(angle);
-        var my = y + markerDistance * Math.Sin(angle);
-
-        // Perpendicular direction
-        var perpX = Math.Cos(angle + Math.PI / 2);
-        var perpY = Math.Sin(angle + Math.PI / 2);
 
         switch (cardinality)
         {
             case Cardinality.ExactlyOne:
-                // Two vertical lines ||
-                DrawLine(builder, mx, my, perpX, perpY, perpDistance);
-                var mx2 = mx + 5 * Math.Cos(angle);
-                var my2 = my + 5 * Math.Sin(angle);
-                DrawLine(builder, mx2, my2, perpX, perpY, perpDistance);
+                // ||
+                DrawBar(builder, x, y, angle, nearBar);
+                DrawBar(builder, x, y, angle, farBar);
                 break;
 
             case Cardinality.ZeroOrOne:
-                // Circle and line o|
-                builder.AddCircle(mx, my, 4, fill: "#fff", stroke: "#333", strokeWidth: 1);
-                var lineX = mx + 8 * Math.Cos(angle);
-                var lineY = my + 8 * Math.Sin(angle);
-                DrawLine(builder, lineX, lineY, perpX, perpY, perpDistance);
+                // |o - bar against the entity, then the optional circle
+                DrawBar(builder, x, y, angle, nearBar);
+                DrawOptionalCircle(builder, x, y, angle, optionalCircle);
                 break;
 
             case Cardinality.OneOrMore:
-                // Three-pronged crow's foot with line |{
-                DrawLine(builder, mx, my, perpX, perpY, perpDistance);
-                DrawCrowFoot(builder, mx + 5 * Math.Cos(angle), my + 5 * Math.Sin(angle),
-                    angle, perpDistance);
+                // |{ - foot against the entity, then the bar
+                DrawCrowFoot(builder, x, y, angle);
+                DrawBar(builder, x, y, angle, barBeyondFork);
                 break;
 
             case Cardinality.ZeroOrMore:
-                // Circle and crow's foot o{
-                builder.AddCircle(mx, my, 4, fill: "#fff", stroke: "#333", strokeWidth: 1);
-                DrawCrowFoot(builder, mx + 8 * Math.Cos(angle), my + 8 * Math.Sin(angle),
-                    angle, perpDistance);
+                // o{ - foot against the entity, then the optional circle
+                DrawCrowFoot(builder, x, y, angle);
+                DrawOptionalCircle(builder, x, y, angle, circleBeyondFork);
                 break;
         }
     }
 
-    static void DrawLine(SvgBuilder builder, double x, double y, double perpX, double perpY, double length) =>
-        builder.AddLine(
-            x - perpX * length / 2,
-            y - perpY * length / 2,
-            x + perpX * length / 2,
-            y + perpY * length / 2,
-            stroke: "#333",
-            strokeWidth: 1);
-
-    static void DrawCrowFoot(SvgBuilder builder, double x, double y, double angle, double spread)
+    static void DrawBar(SvgBuilder builder, double x, double y, double angle, double distance)
     {
-        // Draw three lines from center point spreading outward
-        var tipX = x + 8 * Math.Cos(angle);
-        var tipY = y + 8 * Math.Sin(angle);
-
-        // Center line
-        builder.AddLine(x, y, tipX, tipY, stroke: "#333", strokeWidth: 1);
-
-        // Upper line
+        var cx = x + distance * Math.Cos(angle);
+        var cy = y + distance * Math.Sin(angle);
         var perpX = Math.Cos(angle + Math.PI / 2);
         var perpY = Math.Sin(angle + Math.PI / 2);
-        builder.AddLine(
-            x,
-            y,
-            tipX + perpX * spread / 2,
-            tipY + perpY * spread / 2,
-            stroke: "#333",
-            strokeWidth: 1);
 
-        // Lower line
         builder.AddLine(
-            x,
-            y,
-            tipX - perpX * spread / 2,
-            tipY - perpY * spread / 2,
+            cx - perpX * markerSpan / 2,
+            cy - perpY * markerSpan / 2,
+            cx + perpX * markerSpan / 2,
+            cy + perpY * markerSpan / 2,
             stroke: "#333",
             strokeWidth: 1);
     }
 
-    static string FormatAttribute(EntityAttribute attr)
+    static void DrawOptionalCircle(SvgBuilder builder, double x, double y, double angle, double distance) =>
+        builder.AddCircle(
+            x + distance * Math.Cos(angle),
+            y + distance * Math.Sin(angle),
+            optionalCircleRadius,
+            fill: "#fff",
+            stroke: "#333",
+            strokeWidth: 1);
+
+    static void DrawCrowFoot(SvgBuilder builder, double x, double y, double angle)
     {
-        var result = $"{attr.Type} {attr.Name}";
+        // The three prongs converge at an apex away from the entity and fan out to meet the border.
+        var apexX = x + forkLength * Math.Cos(angle);
+        var apexY = y + forkLength * Math.Sin(angle);
+        var perpX = Math.Cos(angle + Math.PI / 2);
+        var perpY = Math.Sin(angle + Math.PI / 2);
+
+        builder.AddLine(apexX, apexY, x, y, stroke: "#333", strokeWidth: 1);
+        builder.AddLine(
+            apexX,
+            apexY,
+            x + perpX * markerSpan / 2,
+            y + perpY * markerSpan / 2,
+            stroke: "#333",
+            strokeWidth: 1);
+        builder.AddLine(
+            apexX,
+            apexY,
+            x - perpX * markerSpan / 2,
+            y - perpY * markerSpan / 2,
+            stroke: "#333",
+            strokeWidth: 1);
+    }
+
+    static string FormatAttribute(EntityAttribute attr) => $"{attr.Type} {attr.Name}";
+
+    /// <summary>
+    /// Width of an attribute row. The comment is a column of its own rather than part of the declaration
+    /// text — the quotes around it in the source are delimiters, so reproducing them would be wrong, but
+    /// running the words straight on from the attribute name would be unreadable.
+    /// </summary>
+    static double MeasureAttribute(EntityAttribute attr, RenderOptions options)
+    {
+        var width = MeasureText(FormatAttribute(attr), options.FontSize);
         if (!string.IsNullOrEmpty(attr.Comment))
         {
-            result += $" \"{attr.Comment}\"";
+            width += commentGap + MeasureText(attr.Comment, options.FontSize - 2);
         }
 
-        return result;
+        return width;
     }
 
     static string GetKeyIndicator(AttributeKeyType keyType) =>

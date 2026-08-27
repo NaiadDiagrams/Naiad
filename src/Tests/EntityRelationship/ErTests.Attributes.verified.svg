@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 162.4 140"
-  style="max-width: 162.4px;"
+  viewBox="0 0 182.4 140"
+  style="max-width: 182.4px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -12,7 +12,7 @@
     <rect
       x="0"
       y="0"
-      width="122.4"
+      width="142.4"
       height="100"
       fill="#ECECFF"
       stroke="#9370DB"
@@ -20,12 +20,12 @@
     <rect
       x="0"
       y="0"
-      width="122.4"
+      width="142.4"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="61.2"
+      x="71.2"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -36,7 +36,7 @@
     <line
       x1="0"
       y1="30"
-      x2="122.4"
+      x2="142.4"
       y2="30"
       stroke="#9370DB" />
     <text

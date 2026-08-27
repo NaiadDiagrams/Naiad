@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement and GitGraph sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph and EntityRelationship sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -57,10 +57,13 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 - [x] **cosmetic** Merge commits look identical to normal commits (Mermaid uses a distinct double-circle); HIGHLIGHT renders as a yellow circle rather than Mermaid's squarish highlight.
   - *Fixed*: merges are double circles and HIGHLIGHT is a block. How a commit came about (`IsMerge` / `IsCherryPick`) picks the glyph and its declared `type:` picks the fill, so a merge still reads as a merge whatever type it was given.
 
-## EntityRelationship — crow's-foot markers mirrored
+## EntityRelationship — FIXED (2026-08-27)
 
-- [ ] **bug** Cardinality marker groups are mirrored along the edge in every many/zero end: the crow's-foot fork points *away* from the entity (reads as an arrowhead) and the min-cardinality glyph (circle/bar) sits nearest the box. Correct order: fork/bar (max) adjacent to and touching the entity, circle/bar (min) farther out. Affects `Simple`, `MultipleRelationships`, `ZeroOrOne`, `NonIdentifying`, `Compelx` — every relationship end except `||` (OneToOne is correct).
-- [ ] **cosmetic** Quote delimiters are rendered literally: attribute comments show `int id "Primary key"` (`Comments`) and quoted relationship labels show `"ships to"` (`Compelx`). Mermaid strips the quotes.
+- [x] **bug** Cardinality marker groups are mirrored along the edge in every many/zero end: the crow's-foot fork points *away* from the entity (reads as an arrowhead) and the min-cardinality glyph (circle/bar) sits nearest the box. Correct order: fork/bar (max) adjacent to and touching the entity, circle/bar (min) farther out.
+  - *Cause*: every mark was placed by stepping *outwards* from a base 15px off the border, in declaration order — so the min glyph was always laid down first, nearest the entity, and the foot was drawn with its apex at the near end fanning outwards, which reads as an arrowhead. Marks are now positioned by an explicit distance from the border with the max-cardinality glyph against it, and the foot's three prongs converge at an apex away from the entity and fan out to meet the border.
+- [x] **cosmetic** Quote delimiters are rendered literally: attribute comments show `int id "Primary key"` (`Comments`) and quoted relationship labels show `"ships to"` (`Compelx`).
+  - *Cause*: two different ones. The parser already stripped an attribute comment's quotes and the *renderer* put them back when it concatenated the row; relationship labels were taken as the raw rest of the line, quotes included, so the parser now reads a quoted string where there is one. The comment is drawn as its own lighter column rather than concatenated, since without the quotes it would otherwise run straight on from the attribute name.
+- [x] **bug** (found while fixing the above) Entity width omitted the 20px PK/FK/UK gutter that the attribute text is actually indented by, so the longest row overflowed the box — visible as soon as comments became a separate column.
 
 ## Timeline
 
