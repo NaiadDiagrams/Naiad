@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 312 442"
+  viewBox="0 0 312 460"
   style="max-width: 312px;"
   role="graphics-document document">
   <style
@@ -23,30 +23,13 @@
         x="0"
         y="184"
         width="190"
-        height="168"
+        height="186"
         rx="5"
         ry="5"
         fill="#FFFFFF"
         stroke="#444444"
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
-      <text
-        x="95"
-        y="199"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="14px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#333333">Internet Banking</text>
-      <text
-        x="95"
-        y="214"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#666666">[System]</text>
       <path
         d="M 95 94 L 95 239"
         fill="none"
@@ -57,6 +40,23 @@
         d="M 95 239 L 91 232.07 L 99 232.07 Z"
         fill="#666"
         stroke="none" />
+      <text
+        x="15"
+        y="199"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#333333">Internet Banking</text>
+      <text
+        x="15"
+        y="214"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666666">[System]</text>
       <rect
         x="15"
         y="28"
@@ -93,7 +93,7 @@
         x="15"
         y="239"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#438DD5"
@@ -122,10 +122,18 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">Delivers content to...</text>
+        fill="#FFFFFF">Delivers content to</text>
+      <text
+        x="95"
+        y="324"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">the customer</text>
       <rect
         x="15"
-        y="239"
+        y="248"
         width="160"
         height="98"
         rx="5"
@@ -134,7 +142,7 @@
         stroke="none" />
       <text
         x="95"
-        y="270"
+        y="279"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -143,7 +151,7 @@
         fill="#FFFFFF">Duplicate</text>
       <text
         x="95"
-        y="288"
+        y="297"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -151,7 +159,7 @@
         fill="#FFFFFF">[React]</text>
       <text
         x="95"
-        y="306"
+        y="315"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

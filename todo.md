@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey and ImageSharp sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp and C4 sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -79,12 +79,17 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Fixed*: the value is drawn under the node name.
 - [x] **cosmetic** (found while fixing the above) Ribbons were fully opaque, so the labels now sitting over them were hard to read — "Nuclear 30" in grey on crimson — and crossing ribbons merged into one shape. They are translucent now, as in Mermaid, which fixes both.
 
-## C4
+## C4 — FIXED (2026-08-27)
 
-- [ ] **bug** `Rel_L` / `Rel_R` layout hints are ignored (`DirectionalRelationships`): "Left Service" lands directly below Core, "Right Service" lands below-*left* (visually the opposite of right), and "Downstream" is pushed below-right. Only `Rel_U` is honored. The test's own comment documents the intended same-rank left/right placement.
-- [ ] **bug** Element descriptions are truncated with an ellipsis instead of wrapped ("Allows customers to…", "External email prov…", etc. across `External`, `Complex`, `Boundaries`, `DuplicateElementIds`). Mermaid wraps the description and grows the box.
-- [ ] **cosmetic** Boundary titles are centered at the top edge, exactly where vertical edges enter, so the customer→web edge strikes through the "Internet Banking [System]" caption (`DuplicateElementIds`; grazes in `NestedBoundaries`). Mermaid puts boundary labels top-left.
-- [ ] **cosmetic** Duplicate element ids draw both boxes at identical coordinates — the first ("Web App") is completely hidden under the second ("Duplicate"), which contradicts the test's comment that relationships resolve to the first (`DuplicateElementIds`).
+- [x] **bug** `Rel_L` / `Rel_R` layout hints are ignored (`DirectionalRelationships`): "Left Service" lands directly below Core, "Right Service" lands below-*left*, and "Downstream" is pushed below-right.
+  - *Cause*: `Edge.RankConstraint` is written by the C4 renderer and **never read by anything** — the layout engine has no notion of rank constraints, so Left/Right/Neighbor had no effect on placement at all. Rather than teach the shared Dagre engine about constraints, the targets are now placed against their source after layout (`ApplyPositionalDirections`), which is where C4 already special-cased these relationships for *drawing*. `Rel_D` is aligned under its source too, since the rank ordering could otherwise leave it off to one side. The four keywords now render as a compass around the source.
+  - The `RankConstraint` assignments are left in place (removing them would leave the shared `Edge` property with no producers) but the call site now says plainly that nothing reads them.
+  - Still open: boundary layouts use a separate nested-layout path that does not apply positional directions. No test covers `Rel_L`/`Rel_R` inside a boundary.
+- [x] **bug** Element descriptions are truncated with an ellipsis instead of wrapped ("Allows customers to…", "External email prov…", etc. across `External`, `Complex`, `Boundaries`, `DuplicateElementIds`).
+  - *Fixed*: descriptions word-wrap to the box width and the box grows by line count, via the existing `ContentLineCount`/`NodeHeight` sizing. A word longer than the line is broken rather than allowed to overflow.
+- [x] **cosmetic** Boundary titles are centered at the top edge, exactly where vertical edges enter, so the customer→web edge strikes through the "Internet Banking [System]" caption.
+  - *Fixed*: two causes. Captions now sit top-left as Mermaid places them, and they are drawn *after* the edges rather than before — boundary boxes have to be painted first so their fills don't cover nested content, which was also putting their captions under every edge.
+- [ ] **cosmetic** Duplicate element ids draw both boxes at identical coordinates — the first ("Web App") is completely hidden under the second ("Duplicate"). Left as-is: the *visible* result already matches Mermaid, which merges duplicate aliases with the last declaration winning. Deduplicating in the model would remove the invisible box but change nothing on screen.
 
 ## Naiad.ImageSharp backend — FIXED (2026-08-27)
 

@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 700 527"
+  viewBox="0 0 700 510"
   style="max-width: 700px;"
   role="graphics-document document">
   <style
@@ -30,33 +30,33 @@
         fill="#666"
         stroke="none" />
       <path
-        d="M 410 239.92 L 580 303.5 L 580 357"
+        d="M 330 250 L 330 340"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 580 357 L 576 350.07 L 584 350.07 Z"
+        d="M 330 340 L 326 333.07 L 334 333.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 330 250 L 330 357"
+        d="M 250 210 L 160 210"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 330 357 L 326 350.07 L 334 350.07 Z"
+        d="M 160 210 L 166.93 206 L 166.93 214 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 265.94 233.96 L 144.06 373.04"
+        d="M 410 210 L 500 210"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 144.06 373.04 L 145.62 365.19 L 151.64 370.47 Z"
+        d="M 500 210 L 493.07 214 L 493.07 206 Z"
         fill="#666"
         stroke="none" />
       <rect
@@ -112,8 +112,8 @@
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Above the core</text>
       <rect
-        x="500"
-        y="357"
+        x="250"
+        y="340"
         width="160"
         height="80"
         rx="5"
@@ -121,8 +121,8 @@
         fill="#1168BD"
         stroke="none" />
       <text
-        x="580"
-        y="388"
+        x="330"
+        y="371"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -130,16 +130,16 @@
         font-weight="bold"
         fill="#FFFFFF">Downstream</text>
       <text
-        x="580"
-        y="406"
+        x="330"
+        y="389"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Below the core</text>
       <rect
-        x="250"
-        y="357"
+        x="0"
+        y="170"
         width="160"
         height="80"
         rx="5"
@@ -147,8 +147,8 @@
         fill="#1168BD"
         stroke="none" />
       <text
-        x="330"
-        y="388"
+        x="80"
+        y="201"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -156,16 +156,16 @@
         font-weight="bold"
         fill="#FFFFFF">Left Service</text>
       <text
-        x="330"
-        y="406"
+        x="80"
+        y="219"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Left of the core</text>
       <rect
-        x="0"
-        y="357"
+        x="500"
+        y="170"
         width="160"
         height="80"
         rx="5"
@@ -173,8 +173,8 @@
         fill="#1168BD"
         stroke="none" />
       <text
-        x="80"
-        y="388"
+        x="580"
+        y="201"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -182,8 +182,8 @@
         font-weight="bold"
         fill="#FFFFFF">Right Service</text>
       <text
-        x="80"
-        y="406"
+        x="580"
+        y="219"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -207,8 +207,8 @@
         font-family="Arial, sans-serif"
         fill="#666">Publishes to</text>
       <rect
-        x="559.5"
-        y="295"
+        x="309.5"
+        y="278.5"
         width="41"
         height="17"
         rx="3"
@@ -216,16 +216,16 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="580"
-        y="303.5"
+        x="330"
+        y="287"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Calls</text>
       <rect
-        x="293"
-        y="287"
+        x="168"
+        y="193.5"
         width="74"
         height="17"
         rx="3"
@@ -233,16 +233,16 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="330"
-        y="295.5"
+        x="205"
+        y="202"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Reads from</text>
       <rect
-        x="171.3"
-        y="287"
+        x="421.3"
+        y="193.5"
         width="67.4"
         height="17"
         rx="3"
@@ -250,8 +250,8 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="205"
-        y="295.5"
+        x="455"
+        y="202"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

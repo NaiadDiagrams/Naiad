@@ -30,23 +30,6 @@
         stroke="#444444"
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
-      <text
-        x="360"
-        y="199"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="14px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#333333">Internet Banking</text>
-      <text
-        x="360"
-        y="214"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#666666">[System]</text>
       <rect
         x="15"
         y="239"
@@ -58,23 +41,6 @@
         stroke="#444444"
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
-      <text
-        x="235"
-        y="254"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="14px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#333333">API Application</text>
-      <text
-        x="235"
-        y="269"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#666666">[Container]</text>
       <path
         d="M 308.38 82.91 L 161.62 305.57"
         fill="none"
@@ -105,6 +71,40 @@
         d="M 545.23 326.69 L 538.82 331.48 L 537.87 323.54 Z"
         fill="#666"
         stroke="none" />
+      <text
+        x="15"
+        y="199"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#333333">Internet Banking</text>
+      <text
+        x="15"
+        y="214"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666666">[System]</text>
+      <text
+        x="30"
+        y="254"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#333333">API Application</text>
+      <text
+        x="30"
+        y="269"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666666">[Container]</text>
       <rect
         x="280"
         y="28"
