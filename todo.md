@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block and Timeline sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block, Timeline and Tooling sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -116,10 +116,11 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 - [ ] **cosmetic** `TransitionLabels`: the "reset" edge passes through the final-state marker's stroke ring; route clear of unrelated nodes.
 - [ ] **cosmetic** `Complex`: `note right of Processing` renders below-left of the state — the side keyword is not honored (`note left of Error` is correct).
 
-## Tooling
+## Tooling — FIXED (2026-08-27)
 
-- [ ] **bug** `DocGeneratorTests.Generate` deletes `src/test-renders/` and rebuilds it, but it extracts inputs only from inline `const string input` literals. `StateTests` calls `VerifySvg(StateSamples.Simple)` instead, so the generator finds no State tests and **deletes `State.md` and its entry in `renders.include.md`**. Running the generator today silently drops that page. Teach the extractor to resolve `*Samples` references (or inline the State inputs) before running it again.
-- [ ] Regenerating also adds five sections that are currently missing from the committed docs (`Architecture.GroupEdge`, `C4.DuplicateElementIds`, `Flowchart.ComplexPipeline`, `Flowchart.FullFeaturedSyntax`, `Gantt.DuplicateIds`) plus `Class.ReversedRelationships` — the docs are stale, but regeneration is blocked on the State issue above.
+- [x] **bug** `DocGeneratorTests.Generate` deletes `src/test-renders/` and rebuilds it, but extracted inputs only from inline `const string input` literals. `StateTests` calls `VerifySvg(StateSamples.Simple)`, so the generator found no State tests and **deleted `State.md` and its entry in `renders.include.md`**.
+  - *Fixed*: the extractor now resolves an input passed as a shared constant by parsing the sibling `*Samples.cs` file. `State.md` survives a regeneration with all 9 sections.
+- [x] Regenerating also restored the sections that were missing from the committed docs. The regenerated output is now purely additive — 435 lines added, none removed.
 
 ## Small fidelity items
 

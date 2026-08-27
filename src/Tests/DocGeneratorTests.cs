@@ -1,4 +1,4 @@
-public class DocGeneratorTests
+﻿public class DocGeneratorTests
 {
     [Test]
     [Explicit]
@@ -173,7 +173,7 @@ public class DocGeneratorTests
                 continue;
             }
 
-            var input = ExtractInputString(method);
+            var input = ExtractInputString(method) ?? await ResolveSharedSample(method, filePath);
             if (string.IsNullOrEmpty(input))
             {
                 continue;
@@ -196,6 +196,57 @@ public class DocGeneratorTests
         }
 
         return results;
+    }
+
+    /// <summary>
+    /// Resolves an input passed as a shared constant, e.g. <c>VerifySvg(StateSamples.Simple)</c>. Without
+    /// this the test looks input-less, its whole category comes out empty, and the category's page is
+    /// deleted by the rebuild.
+    /// </summary>
+    static async Task<string?> ResolveSharedSample(MethodDeclarationSyntax method, string testFilePath)
+    {
+        var access = method.DescendantNodes()
+            .OfType<MemberAccessExpressionSyntax>()
+            .FirstOrDefault(_ => _.Expression is IdentifierNameSyntax);
+
+        if (access?.Expression is not IdentifierNameSyntax owner)
+        {
+            return null;
+        }
+
+        var directory = Path.GetDirectoryName(testFilePath);
+        if (directory is null)
+        {
+            return null;
+        }
+
+        var samplesPath = Path.Combine(directory, $"{owner.Identifier.Text}.cs");
+        if (!File.Exists(samplesPath))
+        {
+            return null;
+        }
+
+        var tree = CSharpSyntaxTree.ParseText(await File.ReadAllTextAsync(samplesPath));
+        var root = await tree.GetRootAsync();
+        var wanted = access.Name.Identifier.Text;
+
+        foreach (var field in root.DescendantNodes().OfType<FieldDeclarationSyntax>())
+        {
+            foreach (var declarator in field.Declaration.Variables)
+            {
+                if (declarator.Identifier.Text != wanted)
+                {
+                    continue;
+                }
+
+                if (declarator.Initializer?.Value is LiteralExpressionSyntax literal)
+                {
+                    return literal.Token.ValueText;
+                }
+            }
+        }
+
+        return null;
     }
 
     private static string? ExtractInputString(MethodDeclarationSyntax method)

@@ -109,6 +109,31 @@ test_entity - satisfies -> test_req
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IHRlc3RfcmVxIHtcbiAgICBpZDogMVxuICAgIHRleHQ6IFN5c3RlbSByZXF1aXJlbWVudFxuICAgIHJpc2s6IGxvd1xufVxuXG5lbGVtZW50IHRlc3RfZW50aXR5IHtcbiAgICB0eXBlOiBzaW11bGF0aW9uXG59XG5cbnRlc3RfZW50aXR5IC0gc2F0aXNmaWVzIC1cdTAwM0UgdGVzdF9yZXEiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## NoProperties
+
+**Input:**
+```
+requirementDiagram
+
+requirement bare_req {
+}
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Requirement/RequirementTests.NoProperties.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+requirementDiagram
+
+requirement bare_req {
+}
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoicmVxdWlyZW1lbnREaWFncmFtXG5cbnJlcXVpcmVtZW50IGJhcmVfcmVxIHtcbn0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
 ## Multiple
 
 **Input:**

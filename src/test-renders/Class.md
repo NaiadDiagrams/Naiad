@@ -194,6 +194,33 @@ classDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgU3R1ZGVudCAtLVx1MDAzRSBDb3Vyc2UgOiBlbnJvbGxzIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+## ReversedRelationships
+
+**Input:**
+```
+classDiagram
+    Dog --|> Animal
+    Engine --* Car
+    Book --o Library
+    Course <-- Student
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Class/ClassTests.ReversedRelationships.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+classDiagram
+    Dog --|> Animal
+    Engine --* Car
+    Book --o Library
+    Course <-- Student
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICAgRG9nIC0tfFx1MDAzRSBBbmltYWxcbiAgICBFbmdpbmUgLS0qIENhclxuICAgIEJvb2sgLS1vIExpYnJhcnlcbiAgICBDb3Vyc2UgXHUwMDNDLS0gU3R1ZGVudCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
 ## InterfaceAnnotation
 
 **Input:**

@@ -230,3 +230,30 @@ gantt
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBXZWVrbHkgVGFza3NcbiAgICBXZWVrIFRhc2sgOncxLCAyMDI0LTAxLTAxLCAyd1xuICAgIERheSBUYXNrIDpkMSwgYWZ0ZXIgdzEsIDVkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
 
+## DuplicateIds
+
+**Input:**
+```
+gantt
+    title Duplicate Ids
+    Task A :a1, 2024-01-01, 10d
+    Task B :a1, 2024-01-15, 10d
+    Task C :c1, after a1, 5d
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Gantt/GanttTests.DuplicateIds.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+gantt
+    title Duplicate Ids
+    Task A :a1, 2024-01-01, 10d
+    Task B :a1, 2024-01-15, 10d
+    Task C :c1, after a1, 5d
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBEdXBsaWNhdGUgSWRzXG4gICAgVGFzayBBIDphMSwgMjAyNC0wMS0wMSwgMTBkXG4gICAgVGFzayBCIDphMSwgMjAyNC0wMS0xNSwgMTBkXG4gICAgVGFzayBDIDpjMSwgYWZ0ZXIgYTEsIDVkIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
