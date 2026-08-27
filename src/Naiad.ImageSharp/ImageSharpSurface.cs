@@ -89,10 +89,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
             {
                 Antialias = true
             },
-            ShapeOptions = new()
-            {
-                IntersectionRule = rule == FillRule.EvenOdd ? IntersectionRule.EvenOdd : IntersectionRule.NonZero
-            },
+            IntersectionRule = rule == FillRule.EvenOdd ? IntersectionRule.EvenOdd : IntersectionRule.NonZero,
         };
 
     // Uniform scale factor of the affine transform — used to keep stroke widths proportional.
