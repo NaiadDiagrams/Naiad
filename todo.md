@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence and Requirement sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement and GitGraph sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -46,12 +46,16 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Fixed*: the canvas is measured from the laid-out columns (and the title, which could previously overflow it), so the second column is no longer reserved when there are no elements.
 - [x] **cosmetic** (found while fixing the above) Relation labels sat on top of their line. The label is now pushed along the line's perpendicular by half its own width or height depending on the edge's direction, and always to the upper side regardless of which way the relation was declared.
 
-## GitGraph — topology right, labels illegible
+## GitGraph — FIXED (2026-08-27)
 
-- [ ] **bug** Commit id labels are white text centered *on* the r=12 commit circle; anything wider than ~24px overhangs onto the white background and the overhanging glyphs vanish — every auto-id renders as "ommit0" / "erge3" / "herry2" (9 of 11 tests). Mermaid puts commit labels below the lane in a grey label box. Move labels off the circle (or give them a background).
-- [ ] **bug** `type: REVERSE` renders as a plain white-filled circle with no cross glyph — the type is not communicated, and its white label on the white fill is completely invisible (`Types`).
-- [ ] **bug** Cherry-pick commits lose the source reference: rendered as an ordinary commit with the meaningless auto-id "cherry2" (clipped) instead of Mermaid's "cherry-pick:two" label + cherry glyph (`CherryPick`).
-- [ ] **cosmetic** Merge commits look identical to normal commits (Mermaid uses a distinct double-circle); HIGHLIGHT renders as a yellow circle rather than Mermaid's squarish highlight (still distinct, readable).
+- [x] **bug** Commit id labels are white text centered *on* the r=12 commit circle; anything wider than ~24px overhangs onto the white background and the overhanging glyphs vanish — every auto-id renders as "ommit0" / "erge3" / "herry2" (9 of 11 tests).
+  - *Fixed*: captions are now dark text on a grey chip below the commit. Lane spacing grows to the widest caption so neighbouring chips can't run together, and the canvas reserves what the captions below and the tags above actually need — a tag on the first lane previously sat inside the padding.
+- [x] **bug** `type: REVERSE` renders as a plain white-filled circle with no cross glyph — the type is not communicated, and its white label on the white fill is completely invisible (`Types`).
+  - *Fixed*: REVERSE is a crossed circle. (The invisible label went with the caption move.)
+- [x] **bug** Cherry-pick commits lose the source reference: rendered as an ordinary commit with the meaningless auto-id "cherry2" (clipped) instead of Mermaid's "cherry-pick:two" label + cherry glyph (`CherryPick`).
+  - *Fixed*: `GitCommit.Label` carries a caption distinct from the id, so a cherry-pick is captioned `cherry-pick:two` while keeping a unique key, and it draws as a pair of cherries.
+- [x] **cosmetic** Merge commits look identical to normal commits (Mermaid uses a distinct double-circle); HIGHLIGHT renders as a yellow circle rather than Mermaid's squarish highlight.
+  - *Fixed*: merges are double circles and HIGHLIGHT is a block. How a commit came about (`IsMerge` / `IsCherryPick`) picks the glyph and its declared `type:` picks the fill, so a merge still reads as a merge whatever type it was given.
 
 ## EntityRelationship — crow's-foot markers mirrored
 
