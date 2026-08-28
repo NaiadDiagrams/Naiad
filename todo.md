@@ -125,11 +125,14 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Fixed*: routed edges now slide their exit along the source's border, nearest the centre first, until the curve they produce clears every state parked in the corridor. `reset` leaves `Inactive` 12 units above centre and passes above the marker.
   - *Correcting the earlier note*: it claimed only ~6 units of slack were available, so no reliable rule existed. That measured the wrong thing - a flat horizontal stub at the exit height. The exit is a cubic that climbs away from the source immediately, so it is already above the marker by the time it reaches it; the check now samples the actual curve rather than approximating it as a stub, and finds comfortable clearance.
 
-## Tooling — FIXED (2026-08-27)
+## Tooling — FIXED (2026-08-27, 2026-08-28)
 
 - [x] **bug** `DocGeneratorTests.Generate` deletes `src/test-renders/` and rebuilds it, but extracted inputs only from inline `const string input` literals. `StateTests` calls `VerifySvg(StateSamples.Simple)`, so the generator found no State tests and **deleted `State.md` and its entry in `renders.include.md`**.
   - *Fixed*: the extractor now resolves an input passed as a shared constant by parsing the sibling `*Samples.cs` file. `State.md` survives a regeneration with all 9 sections.
 - [x] Regenerating also restored the sections that were missing from the committed docs. The regenerated output is now purely additive — 435 lines added, none removed.
+- [x] **bug** (2026-08-28) The PNG leg of every `VerifySvg` test was vacuous. `TestBase.GetOrCreatePngAsync` skipped rasterizing whenever the freshly-rendered SVG matched the committed `.verified.svg`, and handed Verify **the committed `.verified.png` itself** as the received value — so the file was compared against itself and passed regardless of its contents. Proven by painting a red rectangle across `TimelineTests.Simple.verified.png`: the test still passed. This is backwards, because a rasterization regression is by definition the case where the SVG does *not* change, so the ~190 PNG baselines were only ever checked on the runs where they were least likely to catch anything.
+  - *Fixed*: `VerifySvg` always rasterizes. The defaced baseline now fails. PNGs are compared by SSIM, so incidental anti-aliasing differences still pass; the cost is roughly 10s on a ~20s suite.
+  - This was first mis-reported as non-determinism in `PngRegenerator`, because running it kept rewriting the same five baselines. It is deterministic — two consecutive runs produce byte-identical output. Those five committed PNGs were simply **stale**: they no longer matched what the current pipeline rasterizes (16–38 pixels differing by at most 17/255), and the self-comparison above is what let them stay stale. Regenerated once, so the tree now matches its own output and a `PngRegenerator` run is a no-op.
 
 ## Small fidelity items — FIXED (2026-08-28)
 

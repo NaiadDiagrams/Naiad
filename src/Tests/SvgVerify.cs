@@ -5,13 +5,13 @@
     [Before(Test)]
     public void ResetIconPacks() => IconPackRegistry.Reset();
 
-    public Task VerifySvg(
+    public static Task VerifySvg(
         string input,
         [CallerFilePath] string sourceFile = "",
         [CallerMemberName] string testMethod = "") =>
         VerifySvg(input, null, sourceFile, testMethod);
 
-    public async Task VerifySvg(
+    public static async Task VerifySvg(
         string input,
         RenderOptions? options,
         [CallerFilePath] string sourceFile = "",
@@ -19,29 +19,19 @@
     {
         var svg = options is null ? Mermaid.Render(input) : Mermaid.Render(input, options);
         svg = PrettyPrint(svg);
-        var png = await GetOrCreatePngAsync(svg, sourceFile, testMethod);
+
+        // Always rasterize. Reusing the committed .verified.png whenever the SVG was unchanged handed Verify
+        // that file as the received value and so compared it against itself: the PNG leg passed whatever the
+        // file held. That is backwards, because a rasterization regression is precisely the case where the
+        // SVG does not change. PNGs are compared by SSIM (see ModuleInitializer), so incidental
+        // anti-aliasing differences still pass.
+        var png = new MemoryStream(SvgRenderer.RenderToPng(svg));
+
         await Verify(
                 svg,
                 extension: "svg",
                 sourceFile: sourceFile)
             .AppendFile(png, "png");
-    }
-
-    async Task<Stream> GetOrCreatePngAsync(string svg, string sourceFile, string testMethod)
-    {
-        var directory = Path.GetDirectoryName(sourceFile)!;
-        var prefix = $"{GetType().Name}.{testMethod}.verified";
-        var verifiedSvg = Path.Combine(directory, $"{prefix}.svg");
-        var verifiedPng = Path.Combine(directory, $"{prefix}.png");
-
-        if (File.Exists(verifiedSvg) &&
-            File.Exists(verifiedPng) &&
-            (await File.ReadAllTextAsync(verifiedSvg)).ReplaceLineEndings("\n") == svg.ReplaceLineEndings("\n"))
-        {
-            return File.OpenRead(verifiedPng);
-        }
-
-        return new MemoryStream(SvgRenderer.RenderToPng(svg));
     }
 
     static string PrettyPrint(string svg)
