@@ -48,14 +48,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Square Child</text>
-  <rect
-    x="174.7"
-    y="70"
-    width="122.4"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M174.7,105 V75 Q174.7,70 179.7,70 H292.1 Q297.1,70 297.1,75 V105 Z"
     fill="#87CEEB"
+    stroke="none" />
+  <line
+    x1="174.7"
+    y1="105"
+    x2="297.1"
+    y2="105"
     stroke="#5E90A4"
     stroke-width="2" />
   <text

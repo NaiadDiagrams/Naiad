@@ -177,7 +177,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">w1</text>
+    fill="#fff">Week Task</text>
   <text
     x="30"
     y="135"
@@ -201,5 +201,5 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">d1</text>
+    fill="#fff">Day Task</text>
 </svg>

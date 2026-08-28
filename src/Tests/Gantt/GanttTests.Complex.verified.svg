@@ -344,7 +344,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">p1</text>
+    fill="#fff">Planning</text>
   <text
     x="30"
     y="165"
@@ -368,7 +368,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">p2</text>
+    fill="#fff">Design</text>
   <rect
     x="20"
     y="180"
@@ -407,7 +407,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">d1</text>
+    fill="#fff">Development</text>
   <text
     x="30"
     y="255"
@@ -431,7 +431,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">d2</text>
+    fill="#fff">Code Review</text>
   <rect
     x="20"
     y="270"
@@ -470,7 +470,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">t1</text>
+    fill="#fff">Testing</text>
   <text
     x="30"
     y="345"
@@ -488,13 +488,13 @@
     fill="#4CAF50"
     stroke="#333" />
   <text
-    x="1640"
+    x="1604"
     y="345"
-    text-anchor="middle"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">t2</text>
+    fill="#333">Deployment</text>
   <text
     x="30"
     y="375"
@@ -506,4 +506,12 @@
     d="M 1670 363 L 1682 375 L 1670 387 L 1658 375 Z"
     fill="#FF9800"
     stroke="#333" />
+  <text
+    x="1652"
+    y="375"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Go Live</text>
 </svg>

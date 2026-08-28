@@ -1,4 +1,4 @@
-namespace Naiad.Diagrams.Gantt;
+﻿namespace Naiad.Diagrams.Gantt;
 
 public class GanttRenderer : IDiagramRenderer<GanttModel>
 {
@@ -122,7 +122,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             // Tasks
             foreach (var task in section.Tasks)
             {
-                DrawTask(builder, task, minDate, currentRow, offsetX, offsetY, options);
+                DrawTask(builder, task, minDate, currentRow, offsetX, offsetY, chartWidth, options);
                 currentRow++;
             }
         }
@@ -209,6 +209,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         int row,
         double offsetX,
         double offsetY,
+        double chartWidth,
         RenderOptions options)
     {
         var y = offsetY + row * rowHeight;
@@ -244,6 +245,8 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 CultureInfo.InvariantCulture,
                 $"M {taskX:0.##} {cy - milestoneSize:0.##} L {taskX + milestoneSize:0.##} {cy:0.##} L {taskX:0.##} {cy + milestoneSize:0.##} L {taskX - milestoneSize:0.##} {cy:0.##} Z");
             builder.AddPath(path, fill: milestoneColor, stroke: "#333", strokeWidth: 1);
+
+            DrawTaskLabel(builder, task.Name, taskX - milestoneSize, milestoneSize * 2, cy, offsetX, chartWidth, options);
         }
         else
         {
@@ -259,21 +262,71 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 stroke: "#333",
                 strokeWidth: 1);
 
-            // Task ID or duration inside bar if fits
-            if (task.Id != null && taskWidth > 40)
-            {
-                builder.AddText(
-                    taskX + taskWidth / 2,
-                    barY + taskBarHeight / 2,
-                    task.Id,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily,
-                    fill: "#fff");
-            }
+            DrawTaskLabel(builder, task.Name, taskX, taskWidth, barY + taskBarHeight / 2, offsetX, chartWidth, options);
         }
     }
+
+    /// <summary>
+    /// Labels a bar or milestone with the task's name, as Mermaid does: centred inside when it fits, and
+    /// otherwise just past the shape - to its right, or to its left when the chart has no room on the right.
+    /// The internal task id was shown here instead, which Mermaid never displays.
+    /// </summary>
+    static void DrawTaskLabel(
+        SvgBuilder builder,
+        string name,
+        double shapeX,
+        double shapeWidth,
+        double centerY,
+        double chartLeft,
+        double chartWidth,
+        RenderOptions options)
+    {
+        const double gap = 6;
+        var fontSize = options.FontSize - 2;
+        var textWidth = MeasureText(name, fontSize);
+
+        if (textWidth + gap * 2 <= shapeWidth)
+        {
+            builder.AddText(
+                shapeX + shapeWidth / 2,
+                centerY,
+                name,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: fontSize,
+                fontFamily: options.FontFamily,
+                fill: "#fff");
+            return;
+        }
+
+        // Outside the shape the text sits on the chart background, so it needs the dark fill.
+        if (shapeX + shapeWidth + gap + textWidth <= chartLeft + chartWidth)
+        {
+            builder.AddText(
+                shapeX + shapeWidth + gap,
+                centerY,
+                name,
+                anchor: "start",
+                baseline: "middle",
+                fontSize: fontSize,
+                fontFamily: options.FontFamily,
+                fill: "#333");
+            return;
+        }
+
+        builder.AddText(
+            shapeX - gap,
+            centerY,
+            name,
+            anchor: "end",
+            baseline: "middle",
+            fontSize: fontSize,
+            fontFamily: options.FontFamily,
+            fill: "#333");
+    }
+
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 
     static List<GanttTask> ComputeTaskDates(GanttModel model)
     {

@@ -167,7 +167,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">d1</text>
+    fill="#fff">Done Task</text>
   <text
     x="30"
     y="135"
@@ -191,7 +191,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">a1</text>
+    fill="#fff">Active Task</text>
   <text
     x="30"
     y="165"
@@ -215,5 +215,5 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">n1</text>
+    fill="#fff">Normal Task</text>
 </svg>

@@ -15,14 +15,15 @@
     fill="none"
     stroke="#87CEEB"
     stroke-width="2" />
-  <rect
-    x="20"
-    y="45"
-    width="60.8"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M20,80 V50 Q20,45 25,45 H75.8 Q80.8,45 80.8,50 V80 Z"
     fill="#FFB6C1"
+    stroke="none" />
+  <line
+    x1="20"
+    y1="80"
+    x2="80.8"
+    y2="80"
     stroke="#B27F87"
     stroke-width="2" />
   <text
@@ -33,14 +34,15 @@
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold">Root</text>
-  <rect
-    x="120.8"
-    y="20"
-    width="123.3"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M120.8,55 V25 Q120.8,20 125.8,20 H239.1 Q244.1,20 244.1,25 V55 Z"
     fill="#87CEEB"
+    stroke="none" />
+  <line
+    x1="120.8"
+    y1="55"
+    x2="244.1"
+    y2="55"
     stroke="#5E90A4"
     stroke-width="2" />
   <text
@@ -50,14 +52,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Transport</text>
-  <rect
-    x="120.8"
-    y="70"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M120.8,105 V75 Q120.8,70 125.8,70 H199.7 Q204.7,70 204.7,75 V105 Z"
     fill="#87CEEB"
+    stroke="none" />
+  <line
+    x1="120.8"
+    y1="105"
+    x2="204.7"
+    y2="105"
     stroke="#5E90A4"
     stroke-width="2" />
   <text

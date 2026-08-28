@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block, Timeline, Tooling, Flowchart and State sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** every section is fixed and its baselines re-accepted (597 tests green). Three items remain open, all of them the same underlying gap: neither the Dagre edge router nor the State renderer's corridor routing avoids obstacles, so edges still cross unrelated nodes and subgraph title bands. The C4 duplicate-element-id cosmetic is left deliberately.
 
 ## Class — FIXED (2026-08-27)
 
@@ -127,14 +127,17 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Fixed*: the extractor now resolves an input passed as a shared constant by parsing the sibling `*Samples.cs` file. `State.md` survives a regeneration with all 9 sections.
 - [x] Regenerating also restored the sections that were missing from the committed docs. The regenerated output is now purely additive — 435 lines added, none removed.
 
-## Small fidelity items
+## Small fidelity items — FIXED (2026-08-28)
 
-- [ ] **cosmetic** Gantt: task bars display the internal task **id** ("a1", "b1") centered in the bar (`GanttRenderer.cs` ~line 263); Mermaid never shows ids — it shows the task name in/next to the bar. All 9 gantt renders are otherwise positionally exact.
-- [ ] **cosmetic** Mindmap: `(rounded)` nodes render identically to default (no-bracket) nodes; Mermaid's default style (borderless band) is distinct from the rounded rect (`RoundedShape`, visible suite-wide).
-- [ ] **cosmetic** Quadrant: point labels at x=1 clip at the viewBox edge ("Top Right"→"Top R") (`EdgePositions`). Mermaid clips identically, so lowest priority — but the text is unreadable.
+- [x] **cosmetic** Gantt: task bars display the internal task **id** ("a1", "b1") centered in the bar (`GanttRenderer.cs` ~line 263); Mermaid never shows ids — it shows the task name in/next to the bar. All 9 gantt renders are otherwise positionally exact.
+  - *Fixed*: bars carry the task **name**, placed as Mermaid places it — centred inside the bar when it fits, otherwise immediately past the bar (to its right, or to its left when the chart has no room on the right), switching from white to dark text when it lands on the background. Milestones are labelled too; they previously had no label at all, so a milestone was identifiable only by its row heading.
+- [x] **cosmetic** Mindmap: `(rounded)` nodes render identically to default (no-bracket) nodes; Mermaid's default style (borderless band) is distinct from the rounded rect (`RoundedShape`, visible suite-wide).
+  - *Fixed*: a bracket-less node is now Mermaid's band — rounded top corners, square bottom, no border, and an underline along the bottom edge — while `(rounded)` keeps a bordered rect with Mermaid's `rx = padding`. The two syntaxes now render differently.
+- [x] **cosmetic** Quadrant: point labels at x=1 clip at the viewBox edge ("Top Right"→"Top R") (`EdgePositions`). Mermaid clips identically, so lowest priority — but the text is unreadable.
+  - *Fixed*: a point label that would run off either side is nudged back inside the canvas instead of being clipped. Deliberately diverges from Mermaid, which clips.
 
 ## Reviewed clean — no action
 
-- **Architecture** (8/8), **Kanban** (5/5), **Packet** (7/7, bit spans verified), **Pie** (3/3, angles verified), **Radar** (6/6, vertex radii/angles verified), **Treemap** (6/6, areas verified), **XYChart** (7/7, bar/line values verified), **UserJourney** (8/8, faces/scores/actors verified), **Gantt** (9/9 positionally exact — one cosmetic above).
+- **Architecture** (8/8), **Kanban** (5/5), **Packet** (7/7, bit spans verified), **Pie** (3/3, angles verified), **Radar** (6/6, vertex radii/angles verified), **Treemap** (6/6, areas verified), **XYChart** (7/7, bar/line values verified), **UserJourney** (8/8, faces/scores/actors verified), **Gantt** (9/9 positionally exact).
 - Raster backends: apart from the ImageSharp stroke bug, the two backends match each other and the Svg.Skia reference in geometry, color, text, markers, and dashes.
 - Deliberate design differences left alone: left-to-right mindmap layout (vs radial), slice/strip treemap tiling (vs squarify), grouped XYChart bar series (vs overlapped), architecture service boxes, single 0–31 packet ruler, "1." autonumber prefixes.
