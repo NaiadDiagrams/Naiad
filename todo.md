@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** every item is fixed and its baselines re-accepted (597 tests green), bar one left deliberately: the C4 duplicate-element-id cosmetic, whose *visible* output already matches Mermaid.
+**Status:** every item from the original review is fixed and its baselines re-accepted (597 tests green), bar one left deliberately: the C4 duplicate-element-id cosmetic, whose *visible* output already matches Mermaid. Auditing the State renderer's layout self-checks then turned up three further defects, listed under "Found by the audit" and not yet fixed.
 
 ## Class — FIXED (2026-08-27)
 
@@ -136,7 +136,19 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
   - *Exemption by proximity*: a segment was treated as attached to a node — and so exempt from the crossing check — whenever either endpoint fell within 10 units of the node's box. That exempted the overlaps most worth catching, since a segment crossing a node usually passes near it. The renderer knows which states each segment joins, so `TrackLine` now carries those ids and the check exempts a node only when it is genuinely an endpoint. A note carries no id and is always checked.
   - *Chord instead of curve*: the routed edges are drawn as cubics but were tracked as the straight chords between their ends. The chord for `reset`'s exit stopped at x=212.4, exactly on the marker's border, while the curve it stood in for swept on through the marker — so even without the proximity exemption there was nothing to detect. `TrackCubic` now records the flares as 12 short segments along the drawn curve.
   - *Verified by regression*: with `ClearExitY`'s search disabled so the old geometry returns, the check now throws `Line passes under node: "reset" from (207.8,234.8) to (216.8,231.1) passes under "[*]_end"`. Before this change the same geometry passed.
+- [x] **bug** (2026-08-28) Audit of the remaining `TrackText` / `TrackLine` sites against what is actually drawn. Each gap below let the self-checks describe something other than the rendered output.
+  - *Edge labels measured as glyphs, not chips*: all four label sites draw `AddEdgeLabel(x, y, labelWidth, labelHeight, …)` with `labelWidth = MeasureText(…) + 8` and `labelHeight = 16`, but tracked the label by re-measuring the text — 8 units narrower and 1.6 shorter than what was painted. Two chips could touch while the check saw a gap. `TrackTextBox` now records the drawn box.
+  - *Composite title measured as regular*: drawn `fontWeight: "bold"`, measured unbolded. `MeasureText` takes a `bold` flag now, matching the Class and ER renderers.
+  - *Note connector untracked*: the dashed state-to-note curve is a drawn path that was never handed to `TrackLine` at all, so it could run under any state unnoticed. Now tracked via `TrackQuadratic`. **No failing case found** — 24 generated note layouts all place it clear — so this closes a hole rather than fixing an observed defect. Notes gained an id so the connector is exempted from its own note while still checked against everything else.
+  - *Verified correct, left alone*: the five orthogonal segments of the routed-around-obstacle path mirror their path string exactly, as does the straight-transition line. The note's fold-corner lines are untracked but lie inside their own tracked box.
+
   - This was first mis-reported as non-determinism in `PngRegenerator`, because running it kept rewriting the same five baselines. It is deterministic — two consecutive runs produce byte-identical output. Those five committed PNGs were simply **stale**: they no longer matched what the current pipeline rasterizes (16–38 pixels differing by at most 17/255), and the self-comparison above is what let them stay stale. Regenerated once, so the tree now matches its own output and a `PngRegenerator` run is a no-op.
+
+## Found by the audit — not fixed
+
+- [ ] **bug** `direction LR` draws states on top of each other. `[*] --> A / A --> B / B --> C` with `direction LR` emits rects at `(220,0)`, `(220,0)` and `(340,0)` — A and B share a position exactly. No test covers `direction LR`; the layout self-check now reports it as `Text overlap detected: "A" … overlaps with "B"` at identical bounds.
+- [ ] **bug** A composite state is drawn twice when it is also a transition endpoint. `state Outer { … }` together with `Outer --> Finished` emits the `(12.6,100 72x40)` rect twice — once through `RenderCompositeState`, once through `RenderNormalState` — so "Outer" appears as both a container and a plain state. The two paths are an either/or on `IsComposite`, so the model holds two entries for it. No sample in the suite uses composite states, so nothing exercises this.
+- [ ] **bug** Composite state boxes are never passed to `TrackNode`, so they are invisible to all three self-checks: an edge may cross one, or another node overlap one, with no report. Tracking one naively would be wrong — a composite *contains* its children, which `CheckForNodeOverlaps` would read as overlaps — so this wants containment-aware checking rather than a one-line addition.
 
 ## Small fidelity items — FIXED (2026-08-28)
 

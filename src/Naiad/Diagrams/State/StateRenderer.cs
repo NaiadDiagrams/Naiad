@@ -134,14 +134,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
-    void TrackText(double x, double y, string text, string anchor, double fontSize)
+    void TrackText(double x, double y, string text, string anchor, double fontSize, bool bold = false)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        var width = MeasureText(text, fontSize);
+        var width = MeasureText(text, fontSize, bold);
         var height = fontSize * 1.2; // Approximate line height
 
         // Adjust x based on anchor
@@ -157,6 +157,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var top = y - height / 2;
 
         textBounds.Add(new(left, top, width, height, text));
+    }
+
+    /// <summary>
+    /// Records a label that is drawn inside a sized background chip. Re-measuring the glyphs instead
+    /// understates what was painted - the chip is wider and taller than the text it holds - so two chips
+    /// could touch while the check saw a gap between them.
+    /// </summary>
+    void TrackTextBox(double centerX, double centerY, double width, double height, string text)
+    {
+        if (!ValidateLayout)
+        {
+            return;
+        }
+
+        textBounds.Add(new(centerX - width / 2, centerY - height / 2, width, height, text));
     }
 
     void CheckForTextOverlaps()
@@ -235,6 +250,24 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             previousY = y;
         }
     }
+
+    /// <summary>Records a drawn quadratic, by way of its equivalent cubic.</summary>
+    void TrackQuadratic(
+        double x0,
+        double y0,
+        double controlX,
+        double controlY,
+        double x1,
+        double y1,
+        string label,
+        string? fromId,
+        string? toId) =>
+        TrackCubic(
+            x0, y0,
+            x0 + 2 * (controlX - x0) / 3, y0 + 2 * (controlY - y0) / 3,
+            x1 + 2 * (controlX - x1) / 3, y1 + 2 * (controlY - y1) / 3,
+            x1, y1,
+            label, fromId, toId);
 
     void TrackNode(double x, double y, double width, double height, string label, string? id = null)
     {
@@ -1027,7 +1060,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
-        TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize);
+        TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize, bold: true);
 
         // Separator line
         builder.AddLine(
@@ -1247,7 +1280,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     options.FontSize - 2,
                     options.FontFamily,
                     fill: "#666");
-                TrackText(rightEdge, labelY, transition.Label, "middle", options.FontSize - 2);
+                TrackTextBox(rightEdge, labelY, labelWidth, labelHeight, transition.Label);
             }
         }
         else
@@ -1319,7 +1352,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     transition.Label,
                     options.FontSize - 2,
                     options.FontFamily);
-                TrackText(leftEdge, labelY, transition.Label, "middle", options.FontSize - 2);
+                TrackTextBox(leftEdge, labelY, labelWidth, labelHeight, transition.Label);
             }
         }
     }
@@ -1505,7 +1538,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     transition.Label,
                     options.FontSize - 2,
                     options.FontFamily);
-                TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+                TrackTextBox(labelX, labelY, labelWidth, labelHeight, transition.Label);
             }
         }
         else
@@ -1777,7 +1810,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 transition.Label,
                 options.FontSize - 2,
                 options.FontFamily);
-            TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+            TrackTextBox(labelX, labelY, labelWidth, labelHeight, transition.Label);
         }
     }
 
@@ -1993,8 +2026,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
-            // Track note as a node for line-under-node detection
-            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}");
+            // Track note as a node for line-under-node detection. The id is what lets the connector below
+            // be exempted from its own note while still being checked against everything else.
+            var noteId = $"note:{note.StateId}:{note.Text}";
+            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}", noteId);
 
             // Fold corner
             builder.AddLine(
@@ -2048,9 +2083,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 $"M {stateConnectX:0.##} {stateConnectY:0.##} Q {stateConnectX:0.##} {midY:0.##}, {noteConnectX:0.##} {noteConnectY:0.##}");
 
             builder.AddPath(curvePath, fill: "none", stroke: "#333", strokeWidth: 1, strokeDasharray: "5,5");
+
+            // The connector is a drawn line like any other. It went untracked, so it was free to run under
+            // any state on its way to the note without the self-checks noticing.
+            TrackQuadratic(
+                stateConnectX, stateConnectY,
+                stateConnectX, midY,
+                noteConnectX, noteConnectY,
+                $"note connector for {state.Id}",
+                state.Id,
+                noteId);
         }
     }
 
-    static double MeasureText(string text, double fontSize) =>
-        text.Length * fontSize * 0.6;
+    static double MeasureText(string text, double fontSize, bool bold = false) =>
+        text.Length * fontSize * (bold ? 0.7 : 0.6);
 }
