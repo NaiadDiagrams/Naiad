@@ -144,6 +144,12 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 
   - This was first mis-reported as non-determinism in `PngRegenerator`, because running it kept rewriting the same five baselines. It is deterministic — two consecutive runs produce byte-identical output. Those five committed PNGs were simply **stale**: they no longer matched what the current pipeline rasterizes (16–38 pixels differing by at most 17/255), and the self-comparison above is what let them stay stale. Regenerated once, so the tree now matches its own output and a `PngRegenerator` run is a no-op.
 
+## Naiad.Web — FIXED (2026-08-28)
+
+- [x] **bug** `Naiad.Web` intermittently failed to build with `RZ1021` on `ThemeToggle.razor` lines 4 and 8 ("Markup in a code block must start with a tag and all start tags must be matched with end tags"), plus `CS8802` inside the generated `ThemeToggle_razor.g.cs`.
+  - *Cause*: two sibling elements written adjacent with no whitespace between them — `</span><span class="text">` — inside an `@if` block. Emitting the generated file to disk (`-p:EmitCompilerGeneratedFiles=true`) shows the Razor source generator losing the thread at that adjacency and writing the second tag's attributes into the output **as C# source**: ` class="text"> Dark</span> } else {` appears as a statement, which is what `CS8802` is complaining about. Putting each element on its own line fixes it. Blazor drops whitespace-only content between elements, so the rendered HTML is unchanged — the snapshot tests pass untouched.
+  - *Two earlier readings of this were wrong, and are recorded here so they are not repeated.* First, that it was transient build state: it did clear once after a rebuild, but it recurs and an `obj`/`bin` wipe does not shift it. Second, that the emoji were to blame: `ThemeToggle.razor` was the only `.razor` file in the project containing a character outside the BMP (🌙 is U+1F319, a surrogate pair), and it was the only one failing, which made for a tidy but false story. Replacing the emoji with an `@Icon` expression left the build broken; restoring them after separating the elements left it green. The glyphs were never involved.
+
 ## Found by the audit — not fixed
 
 - [x] **bug** `direction LR` draws states on top of each other. `[*] --> A / A --> B / B --> C` with `direction LR` emits rects at `(220,0)`, `(220,0)` and `(340,0)` — A and B share a position exactly.
