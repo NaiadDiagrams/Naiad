@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block, Timeline, Tooling and Flowchart sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block, Timeline, Tooling, Flowchart and State sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -113,11 +113,13 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 - [x] **bug** Circle `d(("Circle"))` is a fixed r=20 circle not sized to its label — the text already touches the stroke on both sides, and any longer label overflows the shape.
   - *Cause*: the circle is inscribed in its grid cell (`Math.Min(width, height) / 2`), and the grid was a fixed 120x60, so the radius could never exceed 20 whatever the label. The grid now grows to the diameter the largest circle label needs, which leaves the inscribed-circle rule intact and correct.
 
-## State
+## State — FIXED (2026-08-28)
 
-- [ ] **bug** `TransitionLabels`: both curved labeled edges contain a backwards retrace at the label junction — the path descends past the label, jumps back up in a straight line, then descends again (e.g. `… 35.2 218.05 L 35.2 141.95 …`), producing stray vertical slashes through the "timeout"/"reset" labels and doubled strokes. The two curve/line junction points appear swapped (compare the correct forward mid-segment in `MultipleStates`).
-- [ ] **cosmetic** `TransitionLabels`: the "reset" edge passes through the final-state marker's stroke ring; route clear of unrelated nodes.
-- [ ] **cosmetic** `Complex`: `note right of Processing` renders below-left of the state — the side keyword is not honored (`note left of Error` is correct).
+- [x] **bug** `TransitionLabels`: both curved labeled edges contain a backwards retrace at the label junction — the path descends past the label, jumps back up in a straight line, then descends again (e.g. `… 35.2 218.05 L 35.2 141.95 …`), producing stray vertical slashes through the "timeout"/"reset" labels and doubled strokes. The two curve/line junction points appear swapped (compare the correct forward mid-segment in `MultipleStates`).
+  - *Cause*: not swapped junctions — the corner radius was bounded only by the edge's *horizontal* run (`Math.Min(80, (startX - leftEdge) / 2)`). Each of the two quarter-circle flares consumes `2 * radius` of the vertical run, so once the radius passed a quarter of that run the second flare began above the first flare's end and the straight segment joining them ran backwards. `MultipleStates` looked correct only because its states are further apart horizontally, which happened to keep the radius small. The radius is now also bounded by `verticalRun / 4`, so the flares can meet but never cross.
+- [x] **cosmetic** `Complex`: `note right of Processing` renders below-left of the state — the side keyword is not honored (`note left of Error` is correct).
+  - *Cause*: the declared side was never read. Note placement was purely geometric (which half of the diagram the state sat in), then overridden to whichever side was clear of the routed-edge corridor. The declared side now decides, and a note on a side carrying a corridor is pushed out past that corridor instead of being flipped to the other side — so the keyword is honoured without a corridor line running under the note. The two places that position notes (canvas reservation and rendering) now share one `NoteX` helper rather than duplicating the arithmetic.
+- [ ] **cosmetic** `TransitionLabels`: the "reset" edge passes through the final-state marker's stroke ring. The layout places that marker on the same rank as `Inactive` and immediately to its right, directly in the corridor the edge must exit through, and the edge leaves the state horizontally from its centre. Clearing it by moving the exit point up or down leaves about 6 units of slack on a 40-unit state, which is too tight to be a reliable rule; routing around it properly is the same obstacle-avoidance work the Flowchart section defers.
 
 ## Tooling — FIXED (2026-08-27)
 

@@ -1,4 +1,4 @@
-// ReSharper disable MemberCanBeMadeStatic.Local
+﻿// ReSharper disable MemberCanBeMadeStatic.Local
 namespace Naiad.Diagrams.State;
 
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
@@ -34,6 +34,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     const double noteHeight = 40;
     const double notePadding = 20;
     const double noteHorizontalOffset = 60;
+
+    // Clearance kept between a routed-edge corridor and a note pushed out past it.
+    const double noteCorridorGap = 20;
     const double noteVerticalOffset = 50;
 
     public SvgDocument Render(StateModel model, RenderOptions options)
@@ -496,28 +499,36 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0;
     }
 
-    // Notes sit on the side away from the routed-edge corridor (back-edges curve right, bidirectional
-    // forward edges curve left) so a corridor line never passes under the note. Falls back to the
-    // geometric side when neither side - or both sides - carry a corridor. Shared by CalculateNoteExtraSpace
-    // (space reservation) and RenderNotes (placement) so the two agree on where each note lands.
-    static bool PlaceNoteToRight(StateModel model, State state, Dictionary<string, State> stateMap)
+    // Where a note's box starts. The side is the one the diagram asked for - `note right of X` /
+    // `note left of X` - and a note on a side carrying a routed-edge corridor (back-edges curve right,
+    // bidirectional forward edges curve left) is pushed out past that corridor rather than flipped to the
+    // other side, so the declared side survives without a corridor line running under the note. Shared by
+    // CalculateNoteExtraSpace (space reservation) and RenderNotes (placement) so the two agree on where
+    // each note lands.
+    static double NoteX(StateModel model, StateNote note, State state, double noteWidth, Dictionary<string, State> stateMap)
     {
-        var diagramCenterX = model.States.Average(_ => _.Position.X);
-        var preferRight = state.Position.X >= diagramCenterX;
-        var hasRightCorridor = CalculateCurveExtraRight(model, stateMap) > 0;
-        var hasLeftCorridor = CalculateCurveExtraLeft(model, stateMap) > 0;
-
-        if (preferRight && hasRightCorridor && !hasLeftCorridor)
+        if (note.Position == NotePosition.RightOf)
         {
-            return false;
+            var x = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
+            var corridor = CalculateCurveExtraRight(model, stateMap);
+            if (corridor > 0)
+            {
+                var statesRight = model.States.Max(_ => _.Position.X + _.Width / 2);
+                x = Math.Max(x, statesRight + corridor + noteCorridorGap);
+            }
+
+            return x;
         }
 
-        if (!preferRight && hasLeftCorridor && !hasRightCorridor)
+        var leftX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
+        var leftCorridor = CalculateCurveExtraLeft(model, stateMap);
+        if (leftCorridor > 0)
         {
-            return true;
+            var statesLeft = model.States.Min(_ => _.Position.X - _.Width / 2);
+            leftX = Math.Min(leftX, statesLeft - leftCorridor - noteCorridorGap - noteWidth);
         }
 
-        return preferRight;
+        return leftX;
     }
 
     static (double extraWidth, double extraHeight, double extraLeft) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
@@ -535,17 +546,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
-            // Check horizontal space needed - notes go to outside of diagram, on the corridor-free side
-            var placeToRight = PlaceNoteToRight(model, state, stateMap);
-            double noteX;
-            if (placeToRight)
-            {
-                noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
-            }
-            else
-            {
-                noteX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
-            }
+            // Check horizontal space needed - notes go outside the diagram, clear of any edge corridor
+            var noteX = NoteX(model, note, state, noteWidth, stateMap);
 
             // Check if note extends past right edge
             var noteRightEdge = noteX + noteWidth;
@@ -1144,7 +1146,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var endY = toState.Position.Y - backEdgeIndex * entrySpacing;
 
             // Radius for the quarter-circle curves at corners
-            var curveRadius = Math.Min(80, (rightEdge - startX) / 2);
+            var curveRadius = CurveRadius(rightEdge - startX, startY - endY);
 
             // Path: smooth curve out, vertical line, smooth curve in
             // Curves gradually transition - tangent horizontal at state, tangent vertical at line
@@ -1212,7 +1214,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var endY = toState.Position.Y + backEdgeIndex * entrySpacing;
 
             // Radius for the quarter-circle curves at corners (mirror of back-edge)
-            var curveRadius = Math.Min(80, (startX - leftEdge) / 2);
+            var curveRadius = CurveRadius(startX - leftEdge, endY - startY);
 
             // Path: smooth curve out to left, vertical line down, smooth curve in
             // Mirror of back-edge algorithm
@@ -1254,6 +1256,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             }
         }
     }
+
+    /// <summary>
+    /// Corner radius for a routed edge's two quarter-circle flares. Each flare consumes
+    /// <c>2 * radius</c> of the vertical run, and the straight segment joins where they end, so a radius
+    /// past a quarter of that run puts the second flare's start *above* the first flare's end and the
+    /// straight segment doubles back over the label.
+    /// </summary>
+    static double CurveRadius(double horizontalRun, double verticalRun) =>
+        Math.Min(Math.Min(80, horizontalRun / 2), Math.Abs(verticalRun) / 4);
 
     static Dictionary<string, State> BuildStateMap(List<State> states)
     {
@@ -1763,20 +1774,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var spaceBelow = maxY - state.Position.Y;
             var placeBelow = spaceBelow >= spaceAbove;
 
-            // Position note to the outside of the diagram, on the side clear of the routed-edge corridor
-            var placeToRight = PlaceNoteToRight(model, state, stateMap);
-            double noteX;
-
-            if (placeToRight)
-            {
-                // Place to the right of the state (outside edge)
-                noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
-            }
-            else
-            {
-                // Place to the left of the state (outside edge)
-                noteX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
-            }
+            // Position note outside the diagram on its declared side, clear of any edge corridor
+            var noteX = NoteX(model, note, state, noteWidth, stateMap);
 
             var noteY = placeBelow
                 ? state.Position.Y + state.Height / 2 + noteVerticalOffset
