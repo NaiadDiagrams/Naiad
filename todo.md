@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** every item from the original review is fixed and its baselines re-accepted (597 tests green), bar one left deliberately: the C4 duplicate-element-id cosmetic, whose *visible* output already matches Mermaid. Auditing the State renderer's layout self-checks then turned up three further defects, listed under "Found by the audit" and not yet fixed.
+**Status:** every item from the original review is fixed and its baselines re-accepted (597 tests green), bar one left deliberately: the C4 duplicate-element-id cosmetic, whose *visible* output already matches Mermaid. Auditing the State renderer's layout self-checks then turned up three further defects, listed under "Found by the audit"; the `direction LR` one is fixed and the two composite-state ones are open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -146,7 +146,9 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 
 ## Found by the audit — not fixed
 
-- [ ] **bug** `direction LR` draws states on top of each other. `[*] --> A / A --> B / B --> C` with `direction LR` emits rects at `(220,0)`, `(220,0)` and `(340,0)` — A and B share a position exactly. No test covers `direction LR`; the layout self-check now reports it as `Text overlap detected: "A" … overlaps with "B"` at identical bounds.
+- [x] **bug** `direction LR` draws states on top of each other. `[*] --> A / A --> B / B --> C` with `direction LR` emits rects at `(220,0)`, `(220,0)` and `(340,0)` — A and B share a position exactly.
+  - *Cause*: `AlignSingleChildNodes` lines the start marker up with its only child, and the end marker up with its only parent, so a terminal marker sits on the run it belongs to. It did that on X unconditionally. X is the *cross* axis only for a top-down diagram; under `direction LR` X is what separates the ranks, so forcing the start's child to the diagram's centre X moved it onto its own neighbour. The alignment now works on whichever axis the ranks do not advance along — X for TD/BT, Y for LR/RL.
+  - *Coverage*: nothing exercised `direction LR` at all, which is why this shipped. `StateSamples.DirectionLeftToRight` now feeds both the snapshot test and the overlap guard. Reverting the fix makes both fail, the guard with `Text overlap detected: "Queued" … overlaps with "Running"` at identical bounds.
 - [ ] **bug** A composite state is drawn twice when it is also a transition endpoint. `state Outer { … }` together with `Outer --> Finished` emits the `(12.6,100 72x40)` rect twice — once through `RenderCompositeState`, once through `RenderNormalState` — so "Outer" appears as both a container and a plain state. The two paths are an either/or on `IsComposite`, so the model holds two entries for it. No sample in the suite uses composite states, so nothing exercises this.
 - [ ] **bug** Composite state boxes are never passed to `TrackNode`, so they are invisible to all three self-checks: an edge may cross one, or another node overlap one, with no report. Tracking one naively would be wrong — a composite *contains* its children, which `CheckForNodeOverlaps` would read as overlaps — so this wants containment-aware checking rather than a one-line addition.
 

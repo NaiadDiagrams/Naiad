@@ -1,4 +1,4 @@
-// Shared State diagram inputs, used by both the snapshot tests (StateTests) and the layout
+﻿// Shared State diagram inputs, used by both the snapshot tests (StateTests) and the layout
 // overlap guard (StateOverlapTests) so every sampled diagram is covered by both.
 static class StateSamples
 {
@@ -26,6 +26,18 @@ static class StateSamples
             Active --> Inactive : timeout
             Inactive --> Active : reset
             Active --> [*] : shutdown
+        """;
+
+    // `direction LR` ranks along X, so the terminal-marker alignment has to work on the cross axis.
+    // Aligning it on X unconditionally put the start's child on top of its own neighbour.
+    public const string DirectionLeftToRight =
+        """
+        stateDiagram-v2
+            direction LR
+            [*] --> Queued
+            Queued --> Running
+            Running --> Done
+            Done --> [*]
         """;
 
     public const string Description =

@@ -79,6 +79,35 @@ stateDiagram-v2
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic3RhdGVEaWFncmFtLXYyXG4gICAgWypdIC0tXHUwMDNFIEFjdGl2ZVxuICAgIEFjdGl2ZSAtLVx1MDAzRSBJbmFjdGl2ZSA6IHRpbWVvdXRcbiAgICBJbmFjdGl2ZSAtLVx1MDAzRSBBY3RpdmUgOiByZXNldFxuICAgIEFjdGl2ZSAtLVx1MDAzRSBbKl0gOiBzaHV0ZG93biIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+## DirectionLeftToRight
+
+**Input:**
+```
+stateDiagram-v2
+    direction LR
+    [*] --> Queued
+    Queued --> Running
+    Running --> Done
+    Done --> [*]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/State/StateTests.DirectionLeftToRight.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Queued
+    Queued --> Running
+    Running --> Done
+    Done --> [*]
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic3RhdGVEaWFncmFtLXYyXG4gICAgZGlyZWN0aW9uIExSXG4gICAgWypdIC0tXHUwMDNFIFF1ZXVlZFxuICAgIFF1ZXVlZCAtLVx1MDAzRSBSdW5uaW5nXG4gICAgUnVubmluZyAtLVx1MDAzRSBEb25lXG4gICAgRG9uZSAtLVx1MDAzRSBbKl0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
 ## Description
 
 **Input:**

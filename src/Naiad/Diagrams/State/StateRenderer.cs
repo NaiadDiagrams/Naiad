@@ -67,7 +67,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         CopyPositionsToModel(model, graphModel);
 
         // Align start/end nodes and their single children
-        AlignSingleChildNodes(model);
+        AlignSingleChildNodes(model, model.Direction);
 
         // Resize fork/join bars to span their connected states
         AdjustForkJoinWidths(model);
@@ -766,9 +766,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void AlignSingleChildNodes(StateModel model)
+    /// <summary>
+    /// Lines the start marker up with its only child, and the end marker up with its only parent, so a
+    /// terminal marker sits squarely on the run it belongs to instead of wherever the ranking left it.
+    /// The alignment is along the <em>cross</em> axis - the one ranks do not advance along - which is X for
+    /// a top-down diagram and Y for a left-to-right one. Doing it on X unconditionally moved a start's child
+    /// onto its own neighbour under <c>direction LR</c>, where X is what separates the ranks.
+    /// </summary>
+    static void AlignSingleChildNodes(StateModel model, Direction direction)
     {
-        // Find the horizontal center of the diagram
         var contentStates = model.States
             .Where(_ => _.Type != StateType.Start && _.Type != StateType.End)
             .ToList();
@@ -777,13 +783,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             return;
         }
 
-        var diagramCenterX = (contentStates.Min(_ => _.Position.X) + contentStates.Max(_ => _.Position.X)) / 2;
+        var horizontalRanks = direction is Direction.LeftToRight or Direction.RightToLeft;
 
-        // Center start node
+        var center = horizontalRanks
+            ? (contentStates.Min(_ => _.Position.Y) + contentStates.Max(_ => _.Position.Y)) / 2
+            : (contentStates.Min(_ => _.Position.X) + contentStates.Max(_ => _.Position.X)) / 2;
+
         var startNode = model.States.FirstOrDefault(_ => _.Type == StateType.Start);
         if (startNode != null)
         {
-            startNode.Position = startNode.Position with {X = diagramCenterX};
+            startNode.Position = WithCrossAxis(startNode.Position, center, horizontalRanks);
 
             // If start has only one child, align that child with start
             var startChildren = model.Transitions.Where(_ => _.FromId == startNode.Id).ToList();
@@ -793,7 +802,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 if (childState != null &&
                     childState.Type != StateType.Fork)
                 {
-                    childState.Position = childState.Position with {X = diagramCenterX};
+                    childState.Position = WithCrossAxis(childState.Position, center, horizontalRanks);
                 }
             }
         }
@@ -808,11 +817,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var parentState = model.States.FirstOrDefault(_ => _.Id == endParents[0].FromId);
                 if (parentState != null)
                 {
-                    endNode.Position = new(parentState.Position.X, endNode.Position.Y);
+                    var parentCross = horizontalRanks ? parentState.Position.Y : parentState.Position.X;
+                    endNode.Position = WithCrossAxis(endNode.Position, parentCross, horizontalRanks);
                 }
             }
         }
     }
+
+    static Position WithCrossAxis(Position position, double value, bool horizontalRanks) =>
+        horizontalRanks
+            ? position with {Y = value}
+            : position with {X = value};
 
     static void AdjustEndNodePosition(StateModel model)
     {

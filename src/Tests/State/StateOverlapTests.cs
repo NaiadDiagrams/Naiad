@@ -1,4 +1,4 @@
-using Naiad.Diagrams.State;
+﻿using Naiad.Diagrams.State;
 
 // Drives the State renderer with ValidateLayout enabled, which makes Render throw when a label, line,
 // or node overlaps another (or falls outside the SVG bounds). This is the Release-config guard for the
@@ -9,6 +9,7 @@ public class StateOverlapTests
     [Arguments(StateSamples.Simple)]
     [Arguments(StateSamples.MultipleStates)]
     [Arguments(StateSamples.TransitionLabels)]
+    [Arguments(StateSamples.DirectionLeftToRight)]
     [Arguments(StateSamples.Description)]
     [Arguments(StateSamples.ForkJoinState)]
     [Arguments(StateSamples.ChoiceState)]

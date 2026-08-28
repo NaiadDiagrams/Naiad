@@ -1,4 +1,4 @@
-public class StateTests : TestBase
+﻿public class StateTests : TestBase
 {
     [Test]
     public Task Simple() => VerifySvg(StateSamples.Simple);
@@ -8,6 +8,9 @@ public class StateTests : TestBase
 
     [Test]
     public Task TransitionLabels() => VerifySvg(StateSamples.TransitionLabels);
+
+    [Test]
+    public Task DirectionLeftToRight() => VerifySvg(StateSamples.DirectionLeftToRight);
 
     [Test]
     public Task Description() => VerifySvg(StateSamples.Description);
