@@ -13,6 +13,12 @@
     public Task DirectionLeftToRight() => VerifySvg(StateSamples.DirectionLeftToRight);
 
     [Test]
+    public Task CompositeState() => VerifySvg(StateSamples.CompositeState);
+
+    [Test]
+    public Task NestedCompositeState() => VerifySvg(StateSamples.NestedCompositeState);
+
+    [Test]
     public Task Description() => VerifySvg(StateSamples.Description);
 
     [Test]

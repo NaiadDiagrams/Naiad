@@ -10,6 +10,8 @@ public partial class StateOverlapTests
     [Arguments(StateSamples.MultipleStates)]
     [Arguments(StateSamples.TransitionLabels)]
     [Arguments(StateSamples.DirectionLeftToRight)]
+    [Arguments(StateSamples.CompositeState)]
+    [Arguments(StateSamples.NestedCompositeState)]
     [Arguments(StateSamples.Description)]
     [Arguments(StateSamples.ForkJoinState)]
     [Arguments(StateSamples.ChoiceState)]

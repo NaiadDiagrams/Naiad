@@ -40,6 +40,38 @@ static class StateSamples
             Done --> [*]
         """;
 
+    // A composite is laid out from its own contents and drawn as a container around them. Nested states
+    // used to join the outer layout as flat siblings, so the box came out empty with its children beside it.
+    public const string CompositeState =
+        """
+        stateDiagram-v2
+            [*] --> Ready
+            Ready --> Working
+            state Working {
+                [*] --> Fetch
+                Fetch --> Parse : ok
+                Parse --> [*]
+            }
+            Working --> Done
+            Done --> [*]
+        """;
+
+    // `[*]` names the start of whichever region it sits in, so the markers have to be scoped per composite.
+    public const string NestedCompositeState =
+        """
+        stateDiagram-v2
+            [*] --> Outer
+            state Outer {
+                [*] --> Mid
+                state Mid {
+                    [*] --> Leaf
+                    Leaf --> [*]
+                }
+                Mid --> [*]
+            }
+            Outer --> [*]
+        """;
+
     public const string Description =
         """
         stateDiagram-v2

@@ -1,0 +1,201 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 183.6 700"
+  style="max-width: 183.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="100"
+      width="143.6"
+      height="460"
+      rx="5"
+      ry="5"
+      fill="#F4F4F4"
+      stroke="#666"
+      stroke-width="2" />
+    <text
+      x="71.8"
+      y="115"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Outer</text>
+    <line
+      x1="0"
+      y1="130"
+      x2="143.6"
+      y2="130"
+      stroke="#666" />
+    <rect
+      x="20"
+      y="220"
+      width="103.6"
+      height="250"
+      rx="5"
+      ry="5"
+      fill="#F4F4F4"
+      stroke="#666"
+      stroke-width="2" />
+    <text
+      x="71.8"
+      y="235"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Mid</text>
+    <line
+      x1="20"
+      y1="250"
+      x2="123.6"
+      y2="250"
+      stroke="#666" />
+    <line
+      x1="71.8"
+      y1="20"
+      x2="71.8"
+      y2="100"
+      stroke="#333" />
+    <polygon
+      points="71.8,100 67.8,93.07 75.8,93.07"
+      fill="#333" />
+    <line
+      x1="71.8"
+      y1="560"
+      x2="71.8"
+      y2="640"
+      stroke="#333" />
+    <polygon
+      points="71.8,640 67.8,633.07 75.8,633.07"
+      fill="#333" />
+    <line
+      x1="71.8"
+      y1="170"
+      x2="71.8"
+      y2="220"
+      stroke="#333" />
+    <polygon
+      points="71.8,220 67.8,213.07 75.8,213.07"
+      fill="#333" />
+    <line
+      x1="71.8"
+      y1="470"
+      x2="71.8"
+      y2="520"
+      stroke="#333" />
+    <polygon
+      points="71.8,520 67.8,513.07 75.8,513.07"
+      fill="#333" />
+    <line
+      x1="71.8"
+      y1="290"
+      x2="71.8"
+      y2="340"
+      stroke="#333" />
+    <polygon
+      points="71.8,340 67.8,333.07 75.8,333.07"
+      fill="#333" />
+    <line
+      x1="71.8"
+      y1="380"
+      x2="71.8"
+      y2="430"
+      stroke="#333" />
+    <polygon
+      points="71.8,430 67.8,423.07 75.8,423.07"
+      fill="#333" />
+    <circle
+      cx="71.8"
+      cy="10"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <circle
+      cx="71.8"
+      cy="160"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <circle
+      cx="71.8"
+      cy="280"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="40"
+      y="340"
+      width="63.6"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="71.8"
+      y="360"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Leaf</text>
+    <circle
+      cx="71.8"
+      cy="440"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="71.8"
+      cy="440"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+    <circle
+      cx="71.8"
+      cy="530"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="71.8"
+      cy="530"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+    <circle
+      cx="71.8"
+      cy="650"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="71.8"
+      cy="650"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+  </g>
+</svg>

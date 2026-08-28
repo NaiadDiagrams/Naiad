@@ -31,6 +31,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     const double stateRadius = 5;
     const double specialStateSize = 20;
 
+    // A composite's box: the band its title sits in, and the clearance around its laid-out contents.
+    const double compositeTitleHeight = 30;
+    const double compositePadding = 20;
+
     // Kept between a routed edge's exit and a state it has to clear, and how far apart the exits tried are.
     const double exitClearance = 5;
     const double exitStep = 6;
@@ -50,6 +54,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         lineBounds.Clear();
         nodeBounds.Clear();
 
+        // Size every composite from its own contents before the outer layout runs, so it takes part as a
+        // node of the right size rather than one sized from its label.
+        LayoutCompositeInteriors(model.States, model.Direction, options);
+
         // Convert to graph model for layout
         var graphModel = ConvertToGraphModel(model, options);
 
@@ -65,6 +73,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
+
+        // The interior layout left nested states positioned relative to their own container; now that the
+        // containers have their final places, move the contents into them.
+        PlaceCompositeChildren(model.States);
 
         // Align start/end nodes and their single children
         AlignSingleChildNodes(model, model.Direction);
@@ -113,6 +125,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         builder.Size(svgWidth, svgHeight);
         builder.Padding(options.Padding);
         builder.AddArrowMarker();
+
+        // Composite boxes are filled, so they go down before the transitions that run inside them -
+        // drawing a container after its own contents painted over them.
+        RenderCompositeBoxes(builder, model.States, options);
 
         // Render transitions first (behind states)
         RenderTransitions(builder, model, options);
@@ -661,6 +677,106 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         );
     }
 
+    /// <summary>
+    /// Lays out each composite's contents in a graph of their own, depth first, and sizes the composite to
+    /// the result. Nested states were previously added to the outer layout as flat siblings, so a composite
+    /// rendered as an empty box with its own contents beside it. Laying the interior out separately also
+    /// keeps a transition that names the composite pointing at a real node, which a cluster is not: aiming
+    /// such an edge at a state inside the cluster instead drags the outside endpoint into the box.
+    /// </summary>
+    void LayoutCompositeInteriors(List<State> states, Direction direction, RenderOptions options)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            // Depth first, so a nested composite is already sized when its parent lays out.
+            LayoutCompositeInteriors(state.NestedStates, direction, options);
+
+            var interior = new StateLayoutGraph
+            {
+                Direction = direction
+            };
+
+            foreach (var nested in state.NestedStates)
+            {
+                var (width, height) = nested.IsComposite
+                    ? (nested.Width, nested.Height)
+                    : CalculateStateSize(nested, options);
+
+                interior.AddNode(new()
+                {
+                    Id = nested.Id,
+                    Label = nested.Description ?? nested.Id,
+                    Width = width,
+                    Height = height
+                });
+            }
+
+            foreach (var transition in state.NestedTransitions)
+            {
+                interior.AddEdge(new()
+                {
+                    SourceId = transition.FromId,
+                    TargetId = transition.ToId,
+                    Label = transition.Label
+                });
+            }
+
+            var result = layoutEngine.BuildLayout(interior, new()
+            {
+                Direction = direction,
+                NodeSeparation = 60,
+                RankSeparation = 50
+            });
+
+            // Held relative to the interior's own origin until PlaceCompositeChildren moves them. Sizes
+            // come from here too: a nested state takes no part in the outer layout, so nothing else sets
+            // them and its box would be drawn zero-sized.
+            foreach (var nested in state.NestedStates)
+            {
+                var node = interior.GetNode(nested.Id);
+                if (node != null)
+                {
+                    nested.Position = node.Position;
+                    nested.Width = node.Width;
+                    nested.Height = node.Height;
+                }
+            }
+
+            state.Width = result.Width + compositePadding * 2;
+            state.Height = result.Height + compositePadding * 2 + compositeTitleHeight;
+        }
+    }
+
+    /// <summary>
+    /// Translates each composite's contents from the interior layout's own coordinates into the box's final
+    /// position. Runs parent-first, so a nested composite is absolute before its own children are moved.
+    /// </summary>
+    static void PlaceCompositeChildren(List<State> states)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            var originX = state.Position.X - state.Width / 2 + compositePadding;
+            var originY = state.Position.Y - state.Height / 2 + compositeTitleHeight + compositePadding;
+
+            foreach (var nested in state.NestedStates)
+            {
+                nested.Position = new(originX + nested.Position.X, originY + nested.Position.Y);
+            }
+
+            PlaceCompositeChildren(state.NestedStates);
+        }
+    }
+
     static GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
     {
         var graph = new StateLayoutGraph
@@ -668,53 +784,41 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             Direction = model.Direction
         };
 
-        // Add nodes for each state
         AddStatesToGraph(graph, model.States, options);
 
-        // Add edges for transitions
         foreach (var transition in model.Transitions)
         {
-            var edge = new Edge
+            graph.AddEdge(new()
             {
                 SourceId = transition.FromId,
                 TargetId = transition.ToId,
                 Label = transition.Label
-            };
-            graph.AddEdge(edge);
+            });
         }
 
         return graph;
     }
 
+    /// <summary>
+    /// Only the states at this level become layout nodes. A composite enters as a single node already sized
+    /// to its contents by <see cref="LayoutCompositeInteriors"/>; its children are placed inside it
+    /// afterwards and take no part in the outer layout.
+    /// </summary>
     static void AddStatesToGraph(StateLayoutGraph graph, List<State> states, RenderOptions options)
     {
         foreach (var state in states)
         {
-            var (width, height) = CalculateStateSize(state, options);
-            var node = new Node
+            var (width, height) = state.IsComposite
+                ? (state.Width, state.Height)
+                : CalculateStateSize(state, options);
+
+            graph.AddNode(new()
             {
                 Id = state.Id,
                 Label = state.Description ?? state.Id,
                 Width = width,
                 Height = height
-            };
-            graph.AddNode(node);
-
-            // Add nested states for composite states
-            if (state.IsComposite)
-            {
-                AddStatesToGraph(graph, state.NestedStates, options);
-                foreach (var nestedTransition in state.NestedTransitions)
-                {
-                    var edge = new Edge
-                    {
-                        SourceId = nestedTransition.FromId,
-                        TargetId = nestedTransition.ToId,
-                        Label = nestedTransition.Label
-                    };
-                    graph.AddEdge(edge);
-                }
-            }
+            });
         }
     }
 
@@ -759,10 +863,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 state.Height = node.Height;
             }
 
-            if (state.IsComposite)
-            {
-                CopyPositionsToStates(state.NestedStates, graph);
-            }
+            // Nested states keep their interior-relative positions here; PlaceCompositeChildren moves
+            // them once every container has its final place.
         }
     }
 
@@ -935,6 +1037,25 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
+    /// <summary>
+    /// Draws every composite's container - box, title and separator - ahead of the transitions, so a filled
+    /// container cannot paint over the contents it holds. The states inside are drawn afterwards, with the
+    /// rest.
+    /// </summary>
+    void RenderCompositeBoxes(SvgBuilder builder, List<State> states, RenderOptions options)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            RenderCompositeState(builder, state, options);
+            RenderCompositeBoxes(builder, state.NestedStates, options);
+        }
+    }
+
     void RenderState(SvgBuilder builder, State state, RenderOptions options)
     {
         var x = state.Position.X;
@@ -1004,8 +1125,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             default:
                 if (state.IsComposite)
                 {
-                    // Composite state - render as container with nested content
-                    RenderCompositeState(builder, state, options);
+                    // The container went down with the other composite boxes, before the transitions.
+                    RenderStates(builder, state.NestedStates, options);
                 }
                 else
                 {
@@ -1085,9 +1206,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             y + 30,
             stroke: "#666",
             strokeWidth: 1);
-
-        // Render nested states
-        RenderStates(builder, state.NestedStates, options);
     }
 
     void RenderTransitions(SvgBuilder builder, StateModel model, RenderOptions options)
@@ -1134,42 +1252,60 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         // Render nested transitions
-        foreach (var state in model.States)
+        RenderNestedTransitions(builder, model.States, stateMap, model, options);
+    }
+
+    /// <summary>
+    /// Draws the transitions declared inside each composite, descending into nested composites. Only the
+    /// top level was walked before, so a composite inside a composite had its own transitions dropped.
+    /// </summary>
+    void RenderNestedTransitions(
+        SvgBuilder builder,
+        List<State> states,
+        Dictionary<string, State> outerMap,
+        StateModel model,
+        RenderOptions options)
+    {
+        foreach (var state in states)
         {
-            if (state.IsComposite)
+            if (!state.IsComposite)
             {
-                var nestedMap = BuildStateMap(state.NestedStates);
-                foreach (var map in stateMap)
+                continue;
+            }
+
+            var nestedMap = BuildStateMap(state.NestedStates);
+            foreach (var map in outerMap)
+            {
+                nestedMap.TryAdd(map.Key, map.Value);
+            }
+
+            var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
+
+            var nestedBackEdges = state.NestedTransitions
+                .Where(_ => IsBackEdge(_, nestedMap) && !nestedBidirectional.Contains(GetPairKey(_.FromId, _.ToId)))
+                .OrderBy(_ => nestedMap.TryGetValue(_.FromId, out var from) ? from.Position.X : 0)
+                .ToList();
+
+            foreach (var transition in state.NestedTransitions)
+            {
+                var pairKey = GetPairKey(transition.FromId, transition.ToId);
+                if (nestedBidirectional.Contains(pairKey))
                 {
-                    nestedMap.TryAdd(map.Key, map.Value);
+                    var isBackEdge = IsBackEdge(transition, nestedMap);
+                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, model, 0, options);
                 }
-
-                var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
-
-                var nestedBackEdges = state.NestedTransitions
-                    .Where(_ => IsBackEdge(_, nestedMap) && !nestedBidirectional.Contains(GetPairKey(_.FromId, _.ToId)))
-                    .OrderBy(_ => nestedMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
-                    .ToList();
-
-                foreach (var transition in state.NestedTransitions)
+                else if (IsBackEdge(transition, nestedMap))
                 {
-                    var pairKey = GetPairKey(transition.FromId, transition.ToId);
-                    if (nestedBidirectional.Contains(pairKey))
-                    {
-                        var isBackEdge = IsBackEdge(transition, nestedMap);
-                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, model, 0, options);
-                    }
-                    else if (IsBackEdge(transition, nestedMap))
-                    {
-                        var backEdgeIndex = nestedBackEdges.IndexOf(transition);
-                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, model, backEdgeIndex, options);
-                    }
-                    else
-                    {
-                        RenderTransition(builder, transition, nestedMap, options);
-                    }
+                    var backEdgeIndex = nestedBackEdges.IndexOf(transition);
+                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, model, backEdgeIndex, options);
+                }
+                else
+                {
+                    RenderTransition(builder, transition, nestedMap, options);
                 }
             }
+
+            RenderNestedTransitions(builder, state.NestedStates, nestedMap, model, options);
         }
     }
 
@@ -1694,6 +1830,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var right = state.Position.X + state.Width / 2 + 5;
             var top = state.Position.Y - state.Height / 2 - 5;
             var bottom = state.Position.Y + state.Height / 2 + 5;
+
+            // A box holding both ends is the container the transition runs inside, not something in its
+            // way. Without this every transition inside a composite treated the composite as an obstacle
+            // and was routed out around it.
+            if (x1 > left && x1 < right && y1 > top && y1 < bottom &&
+                x2 > left && x2 < right && y2 > top && y2 < bottom)
+            {
+                continue;
+            }
 
             // Sample points along the line
             for (var i = 1; i < 20; i++)
