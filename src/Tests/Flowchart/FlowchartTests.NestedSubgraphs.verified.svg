@@ -121,16 +121,6 @@
       fill="#ffffde"
       stroke="#aaaa33"
       class="cluster" />
-    <text
-      x="108.5"
-      y="132"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold"
-      fill="#333333"
-      class="cluster-label">Banking System</text>
     <rect
       x="20"
       y="153"
@@ -141,16 +131,6 @@
       fill="#ffffde"
       stroke="#aaaa33"
       class="cluster" />
-    <text
-      x="108.5"
-      y="167"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold"
-      fill="#333333"
-      class="cluster-label">API Application</text>
     <path
       d="M108.5,48 L108.5,53.83 C108.5,59.67 108.5,71.33 108.5,83 C108.5,94.67 108.5,106.33 108.5,118 C108.5,129.67 108.5,141.33 108.5,153 C108.5,164.67 108.5,176.33 108.5,182.17 L108.5,188"
       fill="none"
@@ -244,5 +224,25 @@
         </span>
       </div>
     </foreignObject>
+    <text
+      x="108.5"
+      y="132"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333"
+      class="cluster-label">Banking System</text>
+    <text
+      x="108.5"
+      y="167"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333"
+      class="cluster-label">API Application</text>
   </g>
 </svg>

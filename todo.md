@@ -4,7 +4,7 @@ Review date: 2026-08-27. Scope: every `.verified.png`/`.verified.svg` baseline u
 
 Note: the checked-in baselines pin the buggy output, so every fix below requires re-accepting the affected `.verified.svg` files and re-running `PngRegenerator` (and the fixes themselves invalidate the corresponding `src/test-renders/` images).
 
-**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block, Timeline and Tooling sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
+**Status:** the Class, Sequence, Requirement, GitGraph, EntityRelationship, Sankey, ImageSharp, C4, Block, Timeline, Tooling and Flowchart sections are fixed and their baselines re-accepted (597 tests green). Everything else below is still open.
 
 ## Class — FIXED (2026-08-27)
 
@@ -97,11 +97,14 @@ Note: the checked-in baselines pin the buggy output, so every fix below requires
 - [x] **bug** Every stroke renders at exactly 2× the intended width at `Png.Scale=2`: `ImageSharpSurface.StrokePath` passed `width * Scale(transform)` to the pen while `DrawingOptions.Transform` applies the same transform to the stroked outline — the scale hit the width twice.
   - *Fixed*: the pen width stays in path units and the transform scales the outline, as it already did for geometry and text. Verified by measurement rather than eye: the class-box border is now 2px in both backends, where ImageSharp was 4px against Skia's 2px. Dash lengths were unaffected either way, since `ToPen` normalises the pattern against whatever width it is handed. `Scale` had no other caller and is gone. All 7 `ImageSharp*` baselines re-accepted.
 
-## Flowchart
+## Flowchart — FIXED (2026-08-28)
 
-- [ ] **bug** Asymmetric node `>text]` has mirrored left-edge geometry: Naiad draws a convex point protruding left (arrow-tip silhouette); Mermaid's `rect_left_inv_arrow` has protruding top/bottom-left corners with an inset mid-left vertex (concave notch). `ShapePathGenerator.Asymmetric`, `src/Naiad/Rendering/ShapePathGenerator.cs:153` (`ComplexPipeline`).
-- [ ] **bug** Subroutine `[[...]]` inner bars collide with the label: bars are inset 10% of node width but the label spans the full width, so the bars cut through glyphs ("**4**29 Too Many Request**s**"). Size the node so label + padding fits between the bars (`ShapePathGenerator.Subroutine`; `ComplexPipeline`, milder in `FullFeaturedSyntax`).
-- [ ] **cosmetic** Edge routing through node bodies/titles: `SVCA <--> PG` and `SVCC <--> PG` cross the "Transactional outbox" cylinder cap; ORCH→Pricing cuts the "Resilience layer" subgraph title; User→Controller runs through both subgraph titles in `NestedSubgraphs`.
+- [x] **bug** Asymmetric node `>text]` has mirrored left-edge geometry: Naiad draws a convex point protruding left (arrow-tip silhouette); Mermaid's `rect_left_inv_arrow` has protruding top/bottom-left corners with an inset mid-left vertex (concave notch). `ShapePathGenerator.Asymmetric`, `src/Naiad/Rendering/ShapePathGenerator.cs:153` (`ComplexPipeline`).
+  - *Fixed*: the corners are now the leftmost points and the mid-left vertex sits back between them, so the left edge reads as a notch cut into the box. The notch depth is Mermaid's `height / 2` rather than a share of the width, and the node grows by that depth on both sides so the centred label keeps Mermaid's 15-unit clearance from the vertex.
+- [x] **bug** Subroutine `[[...]]` inner bars collide with the label: bars are inset 10% of node width but the label spans the full width, so the bars cut through glyphs ("**4**29 Too Many Request**s**"). Size the node so label + padding fits between the bars (`ShapePathGenerator.Subroutine`; `ComplexPipeline`, milder in `FullFeaturedSyntax`).
+  - *Fixed*: the bars are a fixed 8 units in (Mermaid's inset) instead of a share of the width — the old proportional inset pushed the bars *further* across the label the wider the node got — and the node is widened by that inset on both sides so the label sits between them.
+- [x] **cosmetic** (part) Subgraph titles were painted before the edges, so an edge crossing into a subgraph drew over the title and left it unreadable (`ComplexPipeline`'s "Resilience layer", both titles in `NestedSubgraphs`). Titles now draw last, as Mermaid does, so the text stays legible where an edge crosses its band.
+- [ ] **cosmetic** Edges still route through unrelated node bodies: `SVCA <--> PG` and `SVCC <--> PG` cross the "Transactional outbox" cylinder, and edges still cross subgraph title bands (they are merely no longer drawn over the text). Fixing this properly means giving the Dagre edge router obstacle avoidance against node and cluster-header rectangles, which is a layout-engine change rather than a renderer one.
 
 ## Block — FIXED (2026-08-27)
 

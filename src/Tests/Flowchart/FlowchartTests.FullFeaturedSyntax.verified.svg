@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 415.94 975"
-  style="max-width: 415.94px;"
+  viewBox="0 0 424.14 975"
+  style="max-width: 424.14px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -114,32 +114,22 @@
     <rect
       x="0"
       y="460.2"
-      width="214.22"
+      width="210.32"
       height="474.8"
       rx="6"
       ry="6"
       fill="#ffffde"
       stroke="#aaaa33"
       class="cluster" />
-    <text
-      x="107.11"
-      y="474.2"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold"
-      fill="#333333"
-      class="cluster-label">Async Worker</text>
     <path
-      d="M213.62,48 L213.62,56.25 C213.62,64.5 213.62,81 213.62,97.5 C213.62,114 213.62,130.5 213.62,138.75 L213.62,147"
+      d="M213.72,48 L213.72,56.25 C213.72,64.5 213.72,81 213.72,97.5 C213.72,114 213.72,130.5 213.72,138.75 L213.72,147"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="182.52"
+      x="182.62"
       y="83"
       width="62.2"
       height="29"
@@ -147,7 +137,7 @@
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="182.52"
+      x="182.62"
       y="83"
       width="62.2"
       height="29"
@@ -161,14 +151,14 @@
       </div>
     </foreignObject>
     <path
-      d="M248.28,214.2 L256.79,222.45 C265.3,230.7 282.32,247.2 290.83,263.7 C299.34,280.2 299.34,296.7 299.34,304.95 L299.34,313.2"
+      d="M248.42,214.2 L256.94,222.45 C265.46,230.7 282.5,247.2 291.02,263.7 C299.54,280.2 299.54,296.7 299.54,304.95 L299.54,313.2"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="283.64"
+      x="283.84"
       y="249.2"
       width="31.4"
       height="29"
@@ -176,7 +166,7 @@
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="283.64"
+      x="283.84"
       y="249.2"
       width="31.4"
       height="29"
@@ -190,14 +180,14 @@
       </div>
     </foreignObject>
     <path
-      d="M166.12,214.2 L154.45,222.45 C142.79,230.7 119.47,247.2 107.8,263.7 C96.14,280.2 96.14,296.7 96.14,304.95 L96.14,313.2"
+      d="M163.02,214.2 L150.57,222.45 C138.13,230.7 113.23,247.2 100.79,263.7 C88.34,280.2 88.34,296.7 88.34,304.95 L88.34,313.2"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="76.59"
+      x="68.79"
       y="249.2"
       width="39.1"
       height="29"
@@ -205,7 +195,7 @@
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="76.59"
+      x="68.79"
       y="249.2"
       width="39.1"
       height="29"
@@ -219,14 +209,14 @@
       </div>
     </foreignObject>
     <path
-      d="M96.14,361.2 L96.14,369.45 C96.14,377.7 96.14,394.2 96.14,410.7 C96.14,427.2 96.14,443.7 96.14,457.78 C96.14,471.87 96.14,483.53 96.14,489.37 L96.14,495.2"
+      d="M88.34,361.2 L88.34,369.45 C88.34,377.7 88.34,394.2 88.34,410.7 C88.34,427.2 88.34,443.7 88.34,457.78 C88.34,471.87 88.34,483.53 88.34,489.37 L88.34,495.2"
       fill="none"
       stroke="#333333"
       stroke-width="3.5"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="61.19"
+      x="53.39"
       y="420.95"
       width="69.9"
       height="29"
@@ -234,7 +224,7 @@
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="61.19"
+      x="53.39"
       y="420.95"
       width="69.9"
       height="29"
@@ -248,7 +238,7 @@
       </div>
     </foreignObject>
     <path
-      d="M118.01,543.2 L125.53,551.45 C133.04,559.7 148.08,576.2 169.95,594.36 C191.82,612.52 220.52,632.33 234.87,642.24 L249.22,652.15"
+      d="M111.48,543.2 L119.44,551.45 C127.39,559.7 143.3,576.2 165.61,594.36 C187.92,612.52 216.62,632.33 230.97,642.24 L245.32,652.15"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -256,7 +246,7 @@
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="132.02"
+      x="128.12"
       y="578.2"
       width="62.2"
       height="29"
@@ -264,7 +254,7 @@
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="132.02"
+      x="128.12"
       y="578.2"
       width="62.2"
       height="29"
@@ -278,21 +268,21 @@
       </div>
     </foreignObject>
     <path
-      d="M101.32,543.2 L103.11,551.45 C104.89,559.7 108.45,576.2 107.88,592.7 C107.31,609.2 102.61,625.7 100.26,633.95 L97.91,642.2"
+      d="M94.8,543.2 L97.02,551.45 C99.24,559.7 103.68,576.2 103.93,592.7 C104.19,609.2 100.26,625.7 98.3,633.95 L96.34,642.2"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <path
-      d="M80.05,642.2 L78.02,633.95 C75.98,625.7 71.91,609.2 73.06,592.7 C74.2,576.2 80.55,559.7 83.72,551.45 L86.9,543.2"
+      d="M78.48,642.2 L76.05,633.95 C73.63,625.7 68.79,609.2 69.11,592.7 C69.42,576.2 74.9,559.7 77.64,551.45 L80.37,543.2"
       fill="none"
       stroke="#333333"
       stroke-width="2"
       marker-end="url(#naiad_flowchart-pointEnd)"
       class="flowchart-link" />
     <rect
-      x="48.3"
+      x="44.4"
       y="578.2"
       width="39.1"
       height="29"
@@ -300,7 +290,7 @@
       stroke="none"
       class="edgeLabel" />
     <foreignObject
-      x="48.3"
+      x="44.4"
       y="578.2"
       width="39.1"
       height="29"
@@ -343,12 +333,12 @@
       </div>
     </foreignObject>
     <path
-      d="M195.67,0 H231.57 A24,24 0 0 1 231.57,48 H195.67 A24,24 0 0 1 195.67,0 Z"
+      d="M195.77,0 H231.67 A24,24 0 0 1 231.67,48 H195.77 A24,24 0 0 1 195.77,0 Z"
       fill="#dbeafe"
       stroke="#2563eb"
       stroke-width="2" />
     <foreignObject
-      x="171.67"
+      x="171.77"
       y="0"
       width="83.9"
       height="48"
@@ -362,11 +352,11 @@
       </div>
     </foreignObject>
     <path
-      d="M213.62,147 L310.08,180.6 L213.62,214.2 L117.16,180.6 Z"
+      d="M213.72,147 L310.18,180.6 L213.72,214.2 L117.26,180.6 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="117.16"
+      x="117.26"
       y="147"
       width="192.92"
       height="67.2"
@@ -380,30 +370,30 @@
       </div>
     </foreignObject>
     <path
-      d="M222.74,313.2 H375.94 V361.2 H222.74 Z M238.06,313.2 V361.2 M360.62,313.2 V361.2"
+      d="M214.94,313.2 H384.14 V361.2 H214.94 Z M222.94,313.2 V361.2 M376.14,313.2 V361.2"
       fill="#fee2e2"
       stroke="#dc2626"
       stroke-width="2" />
     <foreignObject
-      x="222.74"
+      x="214.94"
       y="313.2"
-      width="153.2"
+      width="169.2"
       height="48"
       class="nodeLabel">
       <div
         xmlns="http://www.w3.org/1999/xhtml"
-        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 48px;">
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 169.2px; height: 48px;">
         <span>
           <p>401 Unauthorized</p>
         </span>
       </div>
     </foreignObject>
     <path
-      d="M50.18,313.2 L172.74,313.2 L142.1,361.2 L19.54,361.2 Z"
+      d="M42.38,313.2 L164.94,313.2 L134.3,361.2 L11.74,361.2 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="19.54"
+      x="11.74"
       y="313.2"
       width="153.2"
       height="48"
@@ -417,11 +407,11 @@
       </div>
     </foreignObject>
     <path
-      d="M59.19,495.2 H133.09 Q138.09,495.2 138.09,500.2 V538.2 Q138.09,543.2 133.09,543.2 H59.19 Q54.19,543.2 54.19,538.2 V500.2 Q54.19,495.2 59.19,495.2 Z"
+      d="M51.39,495.2 H125.29 Q130.29,495.2 130.29,500.2 V538.2 Q130.29,543.2 125.29,543.2 H51.39 Q46.39,543.2 46.39,538.2 V500.2 Q46.39,495.2 51.39,495.2 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="54.19"
+      x="46.39"
       y="495.2"
       width="83.9"
       height="48"
@@ -435,11 +425,11 @@
       </div>
     </foreignObject>
     <path
-      d="M249.22,656.6 A34.25,4.8 0 0 1 317.72,656.6 V695 A34.25,4.8 0 0 1 249.22,695 V656.6 Z M249.22,656.6 A34.25,4.8 0 0 0 317.72,656.6"
+      d="M245.32,656.6 A34.25,4.8 0 0 1 313.82,656.6 V695 A34.25,4.8 0 0 1 245.32,695 V656.6 Z M245.32,656.6 A34.25,4.8 0 0 0 313.82,656.6"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
-      x="249.22"
+      x="245.32"
       y="651.8"
       width="68.5"
       height="48"
@@ -488,5 +478,15 @@
         </span>
       </div>
     </foreignObject>
+    <text
+      x="105.16"
+      y="474.2"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333"
+      class="cluster-label">Async Worker</text>
   </g>
 </svg>
