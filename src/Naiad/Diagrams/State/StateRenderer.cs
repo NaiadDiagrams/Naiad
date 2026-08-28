@@ -22,8 +22,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     double svgHeight;
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
-    record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
-    record NodeBounds(double X, double Y, double Width, double Height, string Label);
+    record LineBounds(double X1, double Y1, double X2, double Y2, string Label, string? FromId, string? ToId);
+    record NodeBounds(double X, double Y, double Width, double Height, string Label, string? Id);
 
     const double stateMinWidth = 40;
     const double stateHeight = 40;
@@ -181,24 +181,69 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    void TrackLine(double x1, double y1, double x2, double y2, string label)
+    /// <summary>
+    /// Records a drawn segment for the layout self-checks. <paramref name="fromId"/> and
+    /// <paramref name="toId"/> are the states the segment actually joins, so the crossing check can tell an
+    /// attachment from an overlap by identity instead of guessing from proximity.
+    /// </summary>
+    void TrackLine(double x1, double y1, double x2, double y2, string label, string? fromId = null, string? toId = null)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        lineBounds.Add(new(x1, y1, x2, y2, label));
+        lineBounds.Add(new(x1, y1, x2, y2, label, fromId, toId));
     }
 
-    void TrackNode(double x, double y, double width, double height, string label)
+    /// <summary>
+    /// Records a drawn cubic as a chain of short segments. Tracking a flare by the straight chord between
+    /// its ends describes a path that was never drawn: the chord stops where the curve is only starting to
+    /// bend away, so everything the curve sweeps past is invisible to the self-checks.
+    /// </summary>
+    void TrackCubic(
+        double x0,
+        double y0,
+        double x1,
+        double y1,
+        double x2,
+        double y2,
+        double x3,
+        double y3,
+        string label,
+        string? fromId,
+        string? toId)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
+        const int segments = 12;
+        var previousX = x0;
+        var previousY = y0;
+
+        for (var i = 1; i <= segments; i++)
+        {
+            var t = (double) i / segments;
+            var u = 1 - t;
+            var x = u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3;
+            var y = u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3;
+
+            TrackLine(previousX, previousY, x, y, label, fromId, toId);
+            previousX = x;
+            previousY = y;
+        }
+    }
+
+    void TrackNode(double x, double y, double width, double height, string label, string? id = null)
+    {
+        if (!ValidateLayout)
+        {
+            return;
+        }
+
+        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label, id));
     }
 
     void CheckForLinesUnderNodes()
@@ -207,21 +252,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             foreach (var node in nodeBounds)
             {
-                // Notes are checked alongside state nodes. Note placement (PlaceNoteToRight) keeps them
-                // off the routed back-edge / forward-edge corridors, so a line under a note is a real defect.
+                // Notes are checked alongside state nodes. Note placement keeps them off the routed
+                // back-edge / forward-edge corridors, so a line under a note is a real defect.
 
-                // Skip if line is connected to this node (endpoint is near/inside the node)
-                var nodeRight = node.X + node.Width;
-                var nodeBottom = node.Y + node.Height;
-                const double margin = 10.0; // Allow endpoints near edges
-
-                var startInNode = line.X1 >= node.X - margin && line.X1 <= nodeRight + margin &&
-                                  line.Y1 >= node.Y - margin && line.Y1 <= nodeBottom + margin;
-                var endInNode = line.X2 >= node.X - margin && line.X2 <= nodeRight + margin &&
-                                line.Y2 >= node.Y - margin && line.Y2 <= nodeBottom + margin;
-
-                if (startInNode || endInNode)
-                    continue; // This line is connected to this node, not passing under it
+                // A segment is exempt from this node only when it genuinely attaches to it. This used to be
+                // inferred from proximity - any endpoint within 10 units of the box counted as attached -
+                // which exempted the very overlaps worth catching: the `reset` edge in TransitionLabels left
+                // Inactive at a point sitting exactly on the final-state marker's border, so its run straight
+                // through that marker was read as an attachment and never reported. A note is never an edge
+                // endpoint, so it carries no id and is always checked.
+                if (node.Id != null && (node.Id == line.FromId || node.Id == line.ToId))
+                {
+                    continue;
+                }
 
                 // Check if line segment passes through node's bounding box
                 if (LineIntersectsRect(line.X1, line.Y1, line.X2, line.Y2,
@@ -860,7 +903,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#333",
                     stroke: "#333",
                     strokeWidth: 1);
-                TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
+                TrackNode(x, y, specialStateSize, specialStateSize, state.Id, state.Id);
                 break;
 
             case StateType.End:
@@ -879,7 +922,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#333",
                     stroke: "#333",
                     strokeWidth: 1);
-                TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
+                TrackNode(x, y, specialStateSize, specialStateSize, state.Id, state.Id);
                 break;
 
             case StateType.Fork:
@@ -892,7 +935,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     state.Height,
                     fill: "#333",
                     stroke: "#333");
-                TrackNode(x, y, state.Width, state.Height, state.Id);
+                TrackNode(x, y, state.Width, state.Height, state.Id, state.Id);
                 break;
 
             case StateType.Choice:
@@ -907,7 +950,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#fff",
                     stroke: "#333",
                     strokeWidth: 1);
-                TrackNode(x, y, state.Width, state.Height, state.Id);
+                TrackNode(x, y, state.Width, state.Height, state.Id, state.Id);
                 break;
 
             default:
@@ -940,7 +983,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id);
+        TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id, state.Id);
 
         var label = state.Description ?? state.Id;
         if (state.Type == StateType.Normal)
@@ -1163,11 +1206,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track segments for collision detection (symmetric at both ends)
             // Exit: only track initial horizontal portion before curve rises
-            TrackLine(startX, startY, startX + curveRadius, startY, lineLabel);
+            TrackCubic(
+                startX, startY,
+                startX + curveRadius, startY,
+                rightEdge, startY - curveRadius,
+                rightEdge, startY - curveRadius * 2,
+                lineLabel, transition.FromId, transition.ToId);
             // Vertical segment
-            TrackLine(rightEdge, startY - curveRadius * 2, rightEdge, endY + curveRadius * 2, lineLabel);
+            TrackLine(rightEdge, startY - curveRadius * 2, rightEdge, endY + curveRadius * 2, lineLabel, transition.FromId, transition.ToId);
             // Entry: only track final horizontal portion after curve flattens
-            TrackLine(endX + curveRadius, endY, endX, endY, lineLabel);
+            TrackCubic(
+                rightEdge, endY + curveRadius * 2,
+                rightEdge, endY + curveRadius,
+                endX + curveRadius, endY,
+                endX, endY,
+                lineLabel, transition.FromId, transition.ToId);
 
             // Arrowhead comes in horizontally from the right
             DrawArrowhead(builder, endX + curveRadius, endY, endX, endY);
@@ -1230,9 +1283,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track segments for collision detection (mirror of back-edge)
-            TrackLine(startX, startY, startX - curveRadius, startY, lineLabel);
-            TrackLine(leftEdge, startY + curveRadius * 2, leftEdge, endY - curveRadius * 2, lineLabel);
-            TrackLine(endX - curveRadius, endY, endX, endY, lineLabel);
+            TrackCubic(
+                startX, startY,
+                startX - curveRadius, startY,
+                leftEdge, startY + curveRadius,
+                leftEdge, startY + curveRadius * 2,
+                lineLabel, transition.FromId, transition.ToId);
+            TrackLine(leftEdge, startY + curveRadius * 2, leftEdge, endY - curveRadius * 2, lineLabel, transition.FromId, transition.ToId);
+            TrackCubic(
+                leftEdge, endY - curveRadius * 2,
+                leftEdge, endY - curveRadius,
+                endX - curveRadius, endY,
+                endX, endY,
+                lineLabel, transition.FromId, transition.ToId);
 
             // Arrowhead comes in horizontally from the left
             DrawArrowhead(builder, endX - curveRadius, endY, endX, endY);
@@ -1416,7 +1479,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddLine(startX, startY, endX, endY, stroke: "#333", strokeWidth: 1);
 
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
-            TrackLine(startX, startY, endX, endY, lineLabel);
+            TrackLine(startX, startY, endX, endY, lineLabel, transition.FromId, transition.ToId);
 
             // Draw arrowhead
             DrawArrowhead(builder, startX, startY, endX, endY);
@@ -1683,11 +1746,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
         // Track the segments
-        TrackLine(startX, startY, startX, obstacleTop - margin, lineLabel);
-        TrackLine(startX, obstacleTop - margin, routeX, obstacleTop - margin, lineLabel);
-        TrackLine(routeX, obstacleTop - margin, routeX, horizontalY, lineLabel);
-        TrackLine(routeX, horizontalY, endX, horizontalY, lineLabel);
-        TrackLine(endX, horizontalY, endX, endY, lineLabel);
+        TrackLine(startX, startY, startX, obstacleTop - margin, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(startX, obstacleTop - margin, routeX, obstacleTop - margin, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(routeX, obstacleTop - margin, routeX, horizontalY, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(routeX, horizontalY, endX, horizontalY, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(endX, horizontalY, endX, endY, lineLabel, transition.FromId, transition.ToId);
 
         // Draw arrowhead (pointing up since we approach from below)
         DrawArrowhead(builder, endX, horizontalY, endX, endY);
