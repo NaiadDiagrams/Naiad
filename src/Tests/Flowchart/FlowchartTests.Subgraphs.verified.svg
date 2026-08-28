@@ -256,6 +256,13 @@
         </span>
       </div>
     </foreignObject>
+    <rect
+      x="79.98"
+      y="119.5"
+      width="73.6"
+      height="25"
+      fill="#ffffde"
+      stroke="none" />
     <text
       x="116.78"
       y="132"
@@ -266,6 +273,13 @@
       font-weight="bold"
       fill="#333333"
       class="cluster-label">Frontend</text>
+    <rect
+      x="64.78"
+      y="425.5"
+      width="65.9"
+      height="25"
+      fill="#ffffde"
+      stroke="none" />
     <text
       x="97.73"
       y="438"

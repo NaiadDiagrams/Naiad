@@ -30,6 +30,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     const double statePadding = 30;
     const double stateRadius = 5;
     const double specialStateSize = 20;
+
+    // Kept between a routed edge's exit and a state it has to clear, and how far apart the exits tried are.
+    const double exitClearance = 5;
+    const double exitStep = 6;
     const double noteMinWidth = 60;
     const double noteHeight = 40;
     const double notePadding = 20;
@@ -1136,14 +1140,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var rightEdge = baseRightEdge + backEdgeIndex * lineSpacing;
 
             // Back-edges use smooth curves: angle out, go vertical, angle back in
-            // Exit from right side of source state (center Y)
             var startX = fromState.Position.X + fromState.Width / 2;
-            var startY = fromState.Position.Y;
             // Enter right side of target state - offset each line so they don't overlap
             // Outer lines (higher index, further right) enter higher to avoid crossing
             var endX = toState.Position.X + toState.Width / 2;
             const double entrySpacing = 15.0;
             var endY = toState.Position.Y - backEdgeIndex * entrySpacing;
+            // Exit from the right side of the source, clear of anything parked beside it
+            var startY = ClearExitY(model, fromState, toState, startX, rightEdge, endY);
 
             // Radius for the quarter-circle curves at corners
             var curveRadius = CurveRadius(rightEdge - startX, startY - endY);
@@ -1205,13 +1209,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             const int lineSpacing = 50;
             var leftEdge = baseLeftEdge - backEdgeIndex * lineSpacing;
 
-            // Exit from left side of source state (center Y)
             var startX = fromState.Position.X - fromState.Width / 2;
-            var startY = fromState.Position.Y;
             // Enter left side of target state
             var endX = toState.Position.X - toState.Width / 2;
             const double entrySpacing = 15.0;
             var endY = toState.Position.Y + backEdgeIndex * entrySpacing;
+            // Exit from the left side of the source, clear of anything parked beside it
+            var startY = ClearExitY(model, fromState, toState, startX, leftEdge, endY);
 
             // Radius for the quarter-circle curves at corners (mirror of back-edge)
             var curveRadius = CurveRadius(startX - leftEdge, endY - startY);
@@ -1255,6 +1259,111 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 TrackText(leftEdge, labelY, transition.Label, "middle", options.FontSize - 2);
             }
         }
+    }
+
+    /// <summary>
+    /// Y at which a routed edge leaves its source. The exit sweeps horizontally out to the corridor at the
+    /// source's centre height, so a state parked beside the source is cut through - the final-state marker
+    /// sits directly right of Inactive in TransitionLabels, and the reset edge ran through its ring. Slides
+    /// the exit along the source's border, nearest the centre first, until the curve it produces is clear.
+    /// Keeps the centre when nothing clears, rather than pushing the exit off the border.
+    /// </summary>
+    static double ClearExitY(StateModel model, State from, State to, double startX, double corridorX, double endY)
+    {
+        var left = Math.Min(startX, corridorX);
+        var right = Math.Max(startX, corridorX);
+
+        var blockers = new List<(double Left, double Top, double Right, double Bottom)>();
+        foreach (var state in model.States)
+        {
+            if (state.Id == from.Id || state.Id == to.Id)
+            {
+                continue;
+            }
+
+            var halfWidth = state.Width / 2;
+            if (state.Position.X + halfWidth < left || state.Position.X - halfWidth > right)
+            {
+                continue;
+            }
+
+            var halfHeight = state.Height / 2;
+            blockers.Add((
+                state.Position.X - halfWidth - exitClearance,
+                state.Position.Y - halfHeight - exitClearance,
+                state.Position.X + halfWidth + exitClearance,
+                state.Position.Y + halfHeight + exitClearance));
+        }
+
+        if (blockers.Count == 0)
+        {
+            return from.Position.Y;
+        }
+
+        // Stay far enough inside the source's border that the exit lands on its straight part, not a corner.
+        var reach = from.Height / 2 - exitClearance;
+        foreach (var candidate in ExitCandidates(from.Position.Y, reach))
+        {
+            if (ExitCurveClear(startX, candidate, corridorX, endY, blockers))
+            {
+                return candidate;
+            }
+        }
+
+        return from.Position.Y;
+    }
+
+    static IEnumerable<double> ExitCandidates(double centerY, double reach)
+    {
+        yield return centerY;
+
+        for (var offset = exitStep; offset <= reach; offset += exitStep)
+        {
+            yield return centerY - offset;
+            yield return centerY + offset;
+        }
+    }
+
+    /// <summary>
+    /// Whether the exit flare leaving <paramref name="startY"/> stays out of every blocker. Samples the same
+    /// cubic the path is built from, so the test sees the curve that will actually be drawn rather than a
+    /// straight-line approximation of it - the curve climbs away from the source quickly, and treating it as
+    /// a horizontal stub rejects exits that are in fact clear.
+    /// </summary>
+    static bool ExitCurveClear(
+        double startX,
+        double startY,
+        double corridorX,
+        double endY,
+        List<(double Left, double Top, double Right, double Bottom)> blockers)
+    {
+        var radius = CurveRadius(Math.Abs(corridorX - startX), endY - startY);
+        var towardCorridor = Math.Sign(corridorX - startX);
+        var towardTarget = endY < startY ? -1 : 1;
+
+        double x0 = startX, y0 = startY;
+        double x1 = startX + towardCorridor * radius, y1 = startY;
+        double x2 = corridorX, y2 = startY + towardTarget * radius;
+        double x3 = corridorX, y3 = startY + towardTarget * radius * 2;
+
+        const int samples = 24;
+        for (var i = 0; i <= samples; i++)
+        {
+            var t = (double) i / samples;
+            var u = 1 - t;
+            var x = u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3;
+            var y = u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3;
+
+            foreach (var blocker in blockers)
+            {
+                if (x > blocker.Left && x < blocker.Right && y > blocker.Top && y < blocker.Bottom)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /// <summary>

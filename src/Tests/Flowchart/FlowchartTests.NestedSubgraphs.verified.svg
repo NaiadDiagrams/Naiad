@@ -224,6 +224,13 @@
         </span>
       </div>
     </foreignObject>
+    <rect
+      x="48.6"
+      y="119.5"
+      width="119.8"
+      height="25"
+      fill="#ffffde"
+      stroke="none" />
     <text
       x="108.5"
       y="132"
@@ -234,6 +241,13 @@
       font-weight="bold"
       fill="#333333"
       class="cluster-label">Banking System</text>
+    <rect
+      x="44.75"
+      y="154.5"
+      width="127.5"
+      height="25"
+      fill="#ffffde"
+      stroke="none" />
     <text
       x="108.5"
       y="167"

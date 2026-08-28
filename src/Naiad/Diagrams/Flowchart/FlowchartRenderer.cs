@@ -165,9 +165,23 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         var style = subgraph.Style;
+        var titleY = subgraph.Bounds.Y + 14;
+
+        // An edge entering the subgraph crosses the title band, and lands on the title itself whenever the
+        // node it targets is the one the box is centred on. Backing the text with the box's own fill hides
+        // the line behind it - invisible against the box, but the title stays readable.
+        var titleSize = MeasureText(title, options.FontSize);
+        builder.AddRect(
+            subgraph.Position.X - titleSize.Width / 2 - 6,
+            titleY - titleSize.Height / 2 - 2,
+            titleSize.Width + 12,
+            titleSize.Height + 4,
+            fill: style?.Fill ?? subgraphFill,
+            stroke: "none");
+
         builder.AddText(
             subgraph.Position.X,
-            subgraph.Bounds.Y + 14,
+            titleY,
             title,
             anchor: "middle",
             baseline: "middle",
