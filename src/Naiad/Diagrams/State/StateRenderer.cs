@@ -11,6 +11,39 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     record LabelBounds(double Left, double Top, double Width, double Height);
     List<LabelBounds> placedLabels = [];
 
+    // Composite id -> every state id inside it, transitively. Lets the self-checks tell containment from
+    // collision: a child sitting inside its container, or an edge crossing its own container's border, is
+    // the drawing working as intended, not an overlap.
+    Dictionary<string, HashSet<string>> compositeContents = new(StringComparer.Ordinal);
+
+    void CollectCompositeContents(List<State> states)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            var contents = new HashSet<string>(StringComparer.Ordinal);
+            AddDescendants(state, contents);
+            compositeContents[state.Id] = contents;
+            CollectCompositeContents(state.NestedStates);
+        }
+    }
+
+    static void AddDescendants(State composite, HashSet<string> contents)
+    {
+        foreach (var nested in composite.NestedStates)
+        {
+            contents.Add(nested.Id);
+            if (nested.IsComposite)
+            {
+                AddDescendants(nested, contents);
+            }
+        }
+    }
+
     // Layout self-checks (label/line/node overlaps, out-of-bounds). Opt-in via ValidateLayout so the
     // tracking and O(n^2) checks stay off the production render path; the test suite turns it on to guard
     // against regressions. When false, the Track* calls below short-circuit and the checks never run.
@@ -53,6 +86,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         textBounds.Clear();
         lineBounds.Clear();
         nodeBounds.Clear();
+        compositeContents.Clear();
+        if (ValidateLayout)
+        {
+            CollectCompositeContents(model.States);
+        }
 
         // Size every composite from its own contents before the outer layout runs, so it takes part as a
         // node of the right size rather than one sized from its label.
@@ -315,6 +353,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     continue;
                 }
 
+                // Any line with an endpoint inside a composite must cross that composite's border, so the
+                // container is exempt for it. Other composites stay checked: a nested transition escaping
+                // sideways through an unrelated box is still a defect.
+                if (node.Id != null &&
+                    compositeContents.TryGetValue(node.Id, out var containedStates) &&
+                    ((line.FromId != null && containedStates.Contains(line.FromId)) ||
+                     (line.ToId != null && containedStates.Contains(line.ToId))))
+                {
+                    continue;
+                }
+
                 // Check if line segment passes through node's bounding box
                 if (LineIntersectsRect(line.X1, line.Y1, line.X2, line.Y2,
                     node.X, node.Y, node.Width, node.Height))
@@ -353,10 +402,45 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     continue;
                 }
 
+                // A composite and one of its own descendants are supposed to intersect - but then the child
+                // must sit entirely inside the container's content region, below the title band. A partial
+                // overlap here is a child escaping its box, which is exactly what the unimplemented-
+                // containment bug looked like.
+                if (IsInsideDeclaredContainer(a, b) || IsInsideDeclaredContainer(b, a))
+                {
+                    continue;
+                }
+
                 throw new InvalidOperationException(
                     $"Node overlap detected: \"{a.Label}\" at ({a.X:F1},{a.Y:F1},{a.Width:F1}x{a.Height:F1}) overlaps with \"{b.Label}\" at ({b.X:F1},{b.Y:F1},{b.Width:F1}x{b.Height:F1})");
             }
         }
+    }
+
+    bool IsInsideDeclaredContainer(NodeBounds container, NodeBounds child)
+    {
+        if (container.Id == null ||
+            child.Id == null ||
+            !compositeContents.TryGetValue(container.Id, out var contents) ||
+            !contents.Contains(child.Id))
+        {
+            return false;
+        }
+
+        const double tolerance = 1;
+        var contentTop = container.Y + compositeTitleHeight;
+        var fullyInside = child.X >= container.X - tolerance &&
+                          child.Y >= contentTop - tolerance &&
+                          child.X + child.Width <= container.X + container.Width + tolerance &&
+                          child.Y + child.Height <= container.Y + container.Height + tolerance;
+
+        if (!fullyInside)
+        {
+            throw new InvalidOperationException(
+                $"Node escapes its composite: \"{child.Label}\" at ({child.X:F1},{child.Y:F1},{child.Width:F1}x{child.Height:F1}) is not fully inside \"{container.Label}\"'s content region ({container.X:F1},{contentTop:F1},{container.Width:F1}x{container.Height - compositeTitleHeight:F1})");
+        }
+
+        return true;
     }
 
     void CheckForElementsOutsideBounds()
@@ -1052,6 +1136,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             }
 
             RenderCompositeState(builder, state, options);
+            TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id, state.Id);
             RenderCompositeBoxes(builder, state.NestedStates, options);
         }
     }
