@@ -2,262 +2,364 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 938.3 205"
-  style="max-width: 938.3px;"
+  viewBox="0 0 1530 478.48"
+  style="max-width: 1530px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <rect
-    x="20"
-    y="20"
-    width="279.2"
-    height="165"
-    rx="5"
-    ry="5"
-    fill="#E3F2FD"
-    stroke="none" />
-  <text
-    x="159.6"
-    y="35"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Ancient History</text>
-  <circle
-    cx="99.6"
-    cy="100"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="99.6"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#2196F3">3000 BC</text>
-  <rect
-    x="28"
-    y="130"
-    width="143.2"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#2196F3" />
-  <text
-    x="99.6"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Writing invented</text>
-  <circle
-    cx="239.2"
-    cy="100"
-    r="8"
-    fill="#9C27B0"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="239.2"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#9C27B0">500 BC</text>
-  <rect
-    x="194.55"
-    y="130"
-    width="89.3"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#9C27B0" />
-  <text
-    x="239.2"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Democracy</text>
-  <rect
-    x="319.2"
-    y="20"
-    width="240.7"
-    height="165"
-    rx="5"
-    ry="5"
-    fill="#F3E5F5"
-    stroke="none" />
-  <text
-    x="439.55"
-    y="35"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Medieval</text>
-  <circle
-    cx="379.2"
-    cy="100"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="379.2"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#4CAF50">500 AD</text>
-  <rect
-    x="334.55"
-    y="130"
-    width="89.3"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="379.2"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Dark Ages</text>
-  <circle
-    cx="499.55"
-    cy="100"
-    r="8"
-    fill="#FF9800"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="499.55"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FF9800">1400</text>
-  <rect
-    x="447.2"
-    y="130"
-    width="104.7"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#FF9800" />
-  <text
-    x="499.55"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Renaissance</text>
-  <rect
-    x="579.9"
-    y="20"
-    width="318.4"
-    height="165"
-    rx="5"
-    ry="5"
-    fill="#E8F5E9"
-    stroke="none" />
-  <text
-    x="739.1"
-    y="35"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Modern</text>
-  <circle
-    cx="678.75"
-    cy="100"
-    r="8"
-    fill="#E91E63"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="678.75"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#E91E63">1800</text>
-  <rect
-    x="587.9"
-    y="130"
-    width="181.7"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#E91E63" />
-  <text
-    x="678.75"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Industrial Revolution</text>
-  <circle
-    cx="837.95"
-    cy="100"
-    r="8"
-    fill="#00BCD4"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="837.95"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#00BCD4">2000</text>
-  <rect
-    x="785.6"
-    y="130"
-    width="104.7"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#00BCD4" />
-  <text
-    x="837.95"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Digital Age</text>
-  <line
-    x1="99.6"
-    y1="100"
-    x2="837.95"
-    y2="100"
-    stroke="#333"
-    stroke-width="3" />
+  <defs>
+    <marker
+      id="timeline-arrow"
+      refX="20"
+      refY="8"
+      markerUnits="userSpaceOnUse"
+      markerWidth="24"
+      markerHeight="16"
+      orient="auto">
+      <path
+        d="M0,0 V16 L24,8 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="timeline-connector-arrow"
+      refX="10"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="12"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M0,0 V8 L12,4 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M50 59.36 v-54.36 q0,-5,5,-5 h380 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="64.36"
+      x2="440"
+      y2="64.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="245"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Ancient History</text>
+    <path
+      d="M50 173.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="178.72"
+      x2="240"
+      y2="178.72"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="138.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">3000 BC</text>
+    <path
+      d="M 145 178.72 L 145 438.48"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M50 359.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H50 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="50"
+      y1="364.36"
+      x2="240"
+      y2="364.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="338.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Writing invented</text>
+    <path
+      d="M250 173.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H250 Z"
+      fill="#8686FF" />
+    <line
+      x1="250"
+      y1="178.72"
+      x2="440"
+      y2="178.72"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="138.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">500 BC</text>
+    <path
+      d="M 345 178.72 L 345 438.48"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M250 359.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H250 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="250"
+      y1="364.36"
+      x2="440"
+      y2="364.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="338.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Democracy</text>
+    <path
+      d="M450 59.36 v-54.36 q0,-5,5,-5 h380 q5,0,5,5 v59.36 H450 Z"
+      fill="#FFFF78" />
+    <line
+      x1="450"
+      y1="64.36"
+      x2="840"
+      y2="64.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="645"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Medieval</text>
+    <path
+      d="M450 173.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H450 Z"
+      fill="#FFFF78" />
+    <line
+      x1="450"
+      y1="178.72"
+      x2="640"
+      y2="178.72"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="138.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">500 AD</text>
+    <path
+      d="M 545 178.72 L 545 438.48"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M450 359.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFF90" />
+    <line
+      x1="450"
+      y1="364.36"
+      x2="640"
+      y2="364.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="338.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Dark Ages</text>
+    <path
+      d="M650 173.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H650 Z"
+      fill="#FFFF78" />
+    <line
+      x1="650"
+      y1="178.72"
+      x2="840"
+      y2="178.72"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="745"
+      y="138.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">1400</text>
+    <path
+      d="M 745 178.72 L 745 438.48"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M650 359.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H650 Z"
+      fill="#FFFF90" />
+    <line
+      x1="650"
+      y1="364.36"
+      x2="840"
+      y2="364.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="745"
+      y="338.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Renaissance</text>
+    <path
+      d="M850 59.36 v-54.36 q0,-5,5,-5 h380 q5,0,5,5 v59.36 H850 Z"
+      fill="#D7FF86" />
+    <line
+      x1="850"
+      y1="64.36"
+      x2="1240"
+      y2="64.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1045"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Modern</text>
+    <path
+      d="M850 173.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H850 Z"
+      fill="#D7FF86" />
+    <line
+      x1="850"
+      y1="178.72"
+      x2="1040"
+      y2="178.72"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="945"
+      y="138.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">1800</text>
+    <path
+      d="M 945 178.72 L 945 438.48"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M850 369.12 v-49.76 q0,-5,5,-5 h180 q5,0,5,5 v54.76 H850 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="850"
+      y1="374.12"
+      x2="1040"
+      y2="374.12"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="945"
+      y="338.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Industrial</text>
+    <text
+      x="945"
+      y="353.76"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Revolution</text>
+    <path
+      d="M1050 173.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H1050 Z"
+      fill="#D7FF86" />
+    <line
+      x1="1050"
+      y1="178.72"
+      x2="1240"
+      y2="178.72"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1145"
+      y="138.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2000</text>
+    <path
+      d="M 1145 178.72 L 1145 438.48"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M1050 359.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H1050 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="1050"
+      y1="364.36"
+      x2="1240"
+      y2="364.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1145"
+      y="338.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Digital Age</text>
+    <path
+      d="M 0 228.72 L 1490 228.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="4"
+      marker-end="url(#timeline-arrow)" />
+  </g>
 </svg>

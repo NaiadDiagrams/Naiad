@@ -2,120 +2,181 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 506.8 245"
-  style="max-width: 506.8px;"
+  viewBox="0 0 930 396.36"
+  style="max-width: 930px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <text
-    x="253.4"
-    y="40"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="18px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">History of Computing</text>
-  <circle
-    cx="91.9"
-    cy="140"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="91.9"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#2196F3">1940</text>
-  <rect
-    x="28"
-    y="170"
-    width="127.8"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#2196F3" />
-  <text
-    x="91.9"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">First Computer</text>
-  <circle
-    cx="251.1"
-    cy="140"
-    r="8"
-    fill="#9C27B0"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="251.1"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#9C27B0">1970</text>
-  <rect
-    x="171.8"
-    y="170"
-    width="158.6"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#9C27B0" />
-  <text
-    x="251.1"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Personal Computers</text>
-  <circle
-    cx="402.6"
-    cy="140"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="402.6"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#4CAF50">2000</text>
-  <rect
-    x="346.4"
-    y="170"
-    width="112.4"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="402.6"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Internet Era</text>
-  <line
-    x1="91.9"
-    y1="140"
-    x2="402.6"
-    y2="140"
-    stroke="#333"
-    stroke-width="3" />
+  <defs>
+    <marker
+      id="timeline-arrow"
+      refX="20"
+      refY="8"
+      markerUnits="userSpaceOnUse"
+      markerWidth="24"
+      markerHeight="16"
+      orient="auto">
+      <path
+        d="M0,0 V16 L24,8 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="timeline-connector-arrow"
+      refX="10"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="12"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M0,0 V8 L12,4 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="445"
+      y="21"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="28px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">History of Computing</text>
+    <path
+      d="M50 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="106.36"
+      x2="240"
+      y2="106.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">1940</text>
+    <path
+      d="M 145 106.36 L 145 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M50 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H50 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="50"
+      y1="292"
+      x2="240"
+      y2="292"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">First Computer</text>
+    <path
+      d="M250 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H250 Z"
+      fill="#FFFF78" />
+    <line
+      x1="250"
+      y1="106.36"
+      x2="440"
+      y2="106.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">1970</text>
+    <path
+      d="M 345 106.36 L 345 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M250 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H250 Z"
+      fill="#FFFF90" />
+    <line
+      x1="250"
+      y1="292"
+      x2="440"
+      y2="292"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Personal Computers</text>
+    <path
+      d="M450 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H450 Z"
+      fill="#D7FF86" />
+    <line
+      x1="450"
+      y1="106.36"
+      x2="640"
+      y2="106.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2000</text>
+    <path
+      d="M 545 106.36 L 545 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M450 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="450"
+      y1="292"
+      x2="640"
+      y2="292"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Internet Era</text>
+    <path
+      d="M 0 156.36 L 890 156.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="4"
+      marker-end="url(#timeline-arrow)" />
+  </g>
 </svg>

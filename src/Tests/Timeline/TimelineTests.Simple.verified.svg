@@ -2,112 +2,173 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 420.7 205"
-  style="max-width: 420.7px;"
+  viewBox="0 0 930 354.36"
+  style="max-width: 930px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <circle
-    cx="80"
-    cy="100"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="80"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#2196F3">2020</text>
-  <rect
-    x="35.35"
-    y="130"
-    width="89.3"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#2196F3" />
-  <text
-    x="80"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Event One</text>
-  <circle
-    cx="200"
-    cy="100"
-    r="8"
-    fill="#9C27B0"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="200"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#9C27B0">2021</text>
-  <rect
-    x="155.35"
-    y="130"
-    width="89.3"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#9C27B0" />
-  <text
-    x="200"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Event Two</text>
-  <circle
-    cx="320.35"
-    cy="100"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="320.35"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#4CAF50">2022</text>
-  <rect
-    x="268"
-    y="130"
-    width="104.7"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="320.35"
-    y="140"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Event Three</text>
-  <line
-    x1="80"
-    y1="100"
-    x2="320.35"
-    y2="100"
-    stroke="#333"
-    stroke-width="3" />
+  <defs>
+    <marker
+      id="timeline-arrow"
+      refX="20"
+      refY="8"
+      markerUnits="userSpaceOnUse"
+      markerWidth="24"
+      markerHeight="16"
+      orient="auto">
+      <path
+        d="M0,0 V16 L24,8 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="timeline-connector-arrow"
+      refX="10"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="12"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M0,0 V8 L12,4 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M50 59.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="64.36"
+      x2="240"
+      y2="64.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">2020</text>
+    <path
+      d="M 145 64.36 L 145 314.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M50 245 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H50 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="50"
+      y1="250"
+      x2="240"
+      y2="250"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="224"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Event One</text>
+    <path
+      d="M250 59.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H250 Z"
+      fill="#FFFF78" />
+    <line
+      x1="250"
+      y1="64.36"
+      x2="440"
+      y2="64.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2021</text>
+    <path
+      d="M 345 64.36 L 345 314.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M250 245 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H250 Z"
+      fill="#FFFF90" />
+    <line
+      x1="250"
+      y1="250"
+      x2="440"
+      y2="250"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="224"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Event Two</text>
+    <path
+      d="M450 59.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H450 Z"
+      fill="#D7FF86" />
+    <line
+      x1="450"
+      y1="64.36"
+      x2="640"
+      y2="64.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="24"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2022</text>
+    <path
+      d="M 545 64.36 L 545 314.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M450 245 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="450"
+      y1="250"
+      x2="640"
+      y2="250"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="224"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Event Three</text>
+    <path
+      d="M 0 114.36 L 890 114.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="4"
+      marker-end="url(#timeline-arrow)" />
+  </g>
 </svg>

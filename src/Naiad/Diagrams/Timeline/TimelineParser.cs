@@ -100,24 +100,29 @@ class TimelineParser : IDiagramParser<TimelineModel>
                     {
                         Label = period.Period
                     };
-                    if (!string.IsNullOrEmpty(period.EventText))
-                    {
-                        currentPeriod.Events.Add(period.EventText);
-                    }
+                    currentPeriod.Events.AddRange(SplitEvents(period.EventText));
                     currentSection.Periods.Add(currentPeriod);
                     break;
 
-                case ContinuationItem cont:
-                    if (currentPeriod != null && !string.IsNullOrEmpty(cont.EventText))
-                    {
-                        currentPeriod.Events.Add(cont.EventText);
-                    }
+                case ContinuationItem continuation:
+                    currentPeriod?.Events.AddRange(SplitEvents(continuation.EventText));
                     break;
             }
         }
 
         return model;
     }
+
+    /// <summary>
+    /// Everything past a period's colon is itself a colon-separated list of events, so
+    /// <c>2004 : Facebook : Gmail</c> hangs two events off 2004 rather than one reading
+    /// "Facebook : Gmail". Blank entries — a trailing colon, or a period declared with no event at
+    /// all — contribute nothing.
+    /// </summary>
+    static IEnumerable<string> SplitEvents(string text) =>
+        text.Split(':')
+            .Select(_ => _.Trim())
+            .Where(_ => _.Length > 0);
 
     public Result<char, TimelineModel> Parse(string input) => parser.Parse(input);
 
