@@ -98,7 +98,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         builder.AddStyles(MermaidStyles.FlowchartStyles);
 
         // Render subgraph boxes first (behind everything), outermost first.
-        RenderSubgraphBoxes(builder, model.Subgraphs, options);
+        RenderSubgraphBoxes(builder, model.Subgraphs);
 
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
@@ -119,14 +119,14 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
-    static void RenderSubgraphBoxes(SvgBuilder builder, IEnumerable<Subgraph> subgraphs, RenderOptions options)
+    static void RenderSubgraphBoxes(SvgBuilder builder, IEnumerable<Subgraph> subgraphs)
     {
         foreach (var subgraph in subgraphs)
         {
-            RenderSubgraphBox(builder, subgraph, options);
+            RenderSubgraphBox(builder, subgraph);
 
             // Nested subgraphs after their parent so they sit on top of it.
-            RenderSubgraphBoxes(builder, subgraph.NestedSubgraphs, options);
+            RenderSubgraphBoxes(builder, subgraph.NestedSubgraphs);
         }
     }
 
@@ -139,10 +139,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void RenderSubgraphBox(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    static void RenderSubgraphBox(SvgBuilder builder, Subgraph graph)
     {
-        var bounds = subgraph.Bounds;
-        var style = subgraph.Style;
+        var bounds = graph.Bounds;
+        var style = graph.Style;
 
         builder.AddRect(
             bounds.X,
@@ -156,23 +156,23 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             cssClass: "cluster");
     }
 
-    static void RenderSubgraphTitle(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    static void RenderSubgraphTitle(SvgBuilder builder, Subgraph graph, RenderOptions options)
     {
-        var title = subgraph.Title ?? subgraph.Id;
+        var title = graph.Title ?? graph.Id;
         if (string.IsNullOrEmpty(title))
         {
             return;
         }
 
-        var style = subgraph.Style;
-        var titleY = subgraph.Bounds.Y + 14;
+        var style = graph.Style;
+        var titleY = graph.Bounds.Y + 14;
 
         // An edge entering the subgraph crosses the title band, and lands on the title itself whenever the
         // node it targets is the one the box is centred on. Backing the text with the box's own fill hides
         // the line behind it - invisible against the box, but the title stays readable.
         var titleSize = MeasureText(title, options.FontSize);
         builder.AddRect(
-            subgraph.Position.X - titleSize.Width / 2 - 6,
+            graph.Position.X - titleSize.Width / 2 - 6,
             titleY - titleSize.Height / 2 - 2,
             titleSize.Width + 12,
             titleSize.Height + 4,
@@ -180,7 +180,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "none");
 
         builder.AddText(
-            subgraph.Position.X,
+            graph.Position.X,
             titleY,
             title,
             anchor: "middle",

@@ -444,7 +444,7 @@ static class Layout
                             Width = selfEdge.Label.Width,
                             Height = selfEdge.Label.Height,
                             Rank = node.Rank,
-                            Order = i + (++orderShift),
+                            Order = i + ++orderShift,
                             EdgeKey = selfEdge.E,
                             EdgeLabel = selfEdge.Label
                         },
