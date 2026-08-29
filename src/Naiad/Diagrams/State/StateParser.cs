@@ -287,7 +287,7 @@ class StateParser : IDiagramParser<StateModel>
                     // renderer drew it twice - once as a plain state, once as a container.
                     if (!stateMap.TryGetValue(cs.Id, out var compositeState))
                     {
-                        compositeState = new State
+                        compositeState = new()
                         {
                             Id = cs.Id
                         };

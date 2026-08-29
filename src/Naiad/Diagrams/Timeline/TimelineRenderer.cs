@@ -52,7 +52,6 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         }
 
         // Calculate layout
-        var totalPeriods = model.Sections.Sum(_ => _.Periods.Count);
         var maxEvents = model.Sections.SelectMany(_ => _.Periods).Max(_ => _.Events.Count);
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;

@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
-
 namespace Naiad.Web.Pages;
 
 public partial class Index : IDisposable
@@ -107,7 +103,7 @@ public partial class Index : IDisposable
 
     // One decimal place keeps a sub-millisecond render legible as e.g. "0.4 ms" instead of collapsing to "0 ms".
     static string FormatMilliseconds(double value) =>
-        $"{value.ToString("0.#")} ms";
+        $"{value:0.#} ms";
 
     static string FormatDimensions((double Width, double Height) dimensions) =>
         $"{(int) Math.Round(dimensions.Width)} × {(int) Math.Round(dimensions.Height)}";
@@ -121,8 +117,8 @@ public partial class Index : IDisposable
 
         var kilobytes = bytes / 1024d;
         return kilobytes < 1024
-            ? $"{kilobytes.ToString("0.#")} KB"
-            : $"{(kilobytes / 1024d).ToString("0.#")} MB";
+            ? $"{kilobytes:0.#} KB"
+            : $"{kilobytes / 1024d:0.#} MB";
     }
 
     sealed record RenderStats(string? TypeName, (double Width, double Height)? Dimensions, int SvgByteCount, double Milliseconds);

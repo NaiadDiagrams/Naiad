@@ -1,34 +1,38 @@
-using Naiad.Diagrams.State;
-
 public class StateParserTests
 {
     // A composite block names a state that a transition has usually already introduced. Creating a second
     // State for it left the id in model.States twice, and the renderer drew it twice - once as a plain
     // state and once as a container. Declaration order must not change the outcome.
     [Test]
-    [Arguments("transition first", """
-                                   stateDiagram-v2
-                                       [*] --> Outer
-                                       state Outer {
-                                           [*] --> Inner
-                                       }
-                                       Outer --> Finished
-                                   """)]
-    [Arguments("block first", """
-                              stateDiagram-v2
-                                  state Outer {
-                                      [*] --> Inner
-                                  }
-                                  Outer --> Finished
-                              """)]
-    [Arguments("described first", """
-                                  stateDiagram-v2
-                                      state "The outer one" as Outer
-                                      [*] --> Outer
-                                      state Outer {
-                                          [*] --> Inner
-                                      }
-                                  """)]
+    [Arguments(
+        "transition first",
+        """
+        stateDiagram-v2
+            [*] --> Outer
+            state Outer {
+                [*] --> Inner
+            }
+            Outer --> Finished
+        """)]
+    [Arguments(
+        "block first",
+        """
+        stateDiagram-v2
+            state Outer {
+                [*] --> Inner
+            }
+            Outer --> Finished
+        """)]
+    [Arguments(
+        "described first",
+        """
+        stateDiagram-v2
+            state "The outer one" as Outer
+            [*] --> Outer
+            state Outer {
+                [*] --> Inner
+            }
+        """)]
     public async Task CompositeStateIsDeclaredOnce(string name, string input)
     {
         var result = new StateParser().Parse(input);
