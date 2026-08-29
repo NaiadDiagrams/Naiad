@@ -1,36 +1,62 @@
-﻿namespace Naiad.Diagrams.Timeline;
+namespace Naiad.Diagrams.Timeline;
 
 public class TimelineRenderer : IDiagramRenderer<TimelineModel>
 {
-    const double periodWidth = 120;
+    // Geometry taken from Mermaid's timeline renderer (timelineRenderer.ts / svgDraw.js). Every box is
+    // a fixed width sitting on a fixed pitch — only its height follows the text it holds — and each
+    // period drops a dashed connector through the activity line to its events.
+    const double textWidth = 150;
+    const double nodePadding = 20;
+    const double nodeWidth = textWidth + nodePadding * 2;
+    const double nodePitch = 200;
+    const double cornerRadius = 5;
 
-    // Clearance kept between one period's content and the next.
-    const double periodGap = 16;
-    const double periodMarkerRadius = 8;
-    const double eventHeight = 25;
-    const double eventPadding = 10;
-    const double timelineY = 80;
-    const double sectionPadding = 20;
-    const double titleHeight = 40;
+    // The activity line starts this far left of the first box and runs this far past the last one.
+    const double lineLeadIn = 50;
+    const double lineRunOff = 250;
 
-    static string[] sectionColors =
+    // Row gaps: section headers to periods, periods to the activity line, a period's top to its first
+    // event's top, and between stacked events.
+    const double sectionGap = 50;
+    const double activityLineGap = 50;
+    const double eventDrop = 200;
+    const double eventGap = 10;
+
+    // Every box in a row is padded out to the tallest in that row, plus this much slack.
+    const double rowSlack = 20;
+    const double minEventHeight = 50;
+
+    // Mermaid's line-height for wrapped label text, in ems.
+    const double lineHeight = 1.1;
+
+    const double activityStrokeWidth = 4;
+    const double connectorStrokeWidth = 2;
+    const double underlineStrokeWidth = 3;
+
+    const string activityArrowId = "timeline-arrow";
+    const string connectorArrowId = "timeline-connector-arrow";
+
+    /// <summary>
+    /// Mermaid's default-theme colour scale as it lands on a timeline: <c>Fill</c> is
+    /// <c>cScale{n}</c>, <c>Text</c> is <c>cScaleLabel{n}</c>, and <c>Underline</c> is
+    /// <c>cScaleInv{n}</c> — the rule Mermaid draws along each box's bottom edge. <c>EventFill</c> is
+    /// <c>Fill</c> put through the <c>filter:brightness(120%)</c> Mermaid applies to event boxes,
+    /// folded in here because Naiad emits colours as attributes rather than running CSS filters.
+    /// </summary>
+    static NodeColors[] palette =
     [
-        "#E3F2FD", // light blue
-        "#F3E5F5", // light purple
-        "#E8F5E9", // light green
-        "#FFF3E0", // light orange
-        "#FCE4EC", // light pink
-        "#E0F7FA"  // light cyan
-    ];
-
-    static string[] periodColors =
-    [
-        "#2196F3", // blue
-        "#9C27B0", // purple
-        "#4CAF50", // green
-        "#FF9800", // orange
-        "#E91E63", // pink
-        "#00BCD4"  // cyan
+        new("#8686FF", "#A1A1FF", "#FFFFFF", "#FFFFB9"),
+        new("#FFFF78", "#FFFF90", "#000000", "#ABABFF"),
+        new("#D7FF86", "#FFFFA1", "#000000", "#D0B9FF"),
+        new("#C386FF", "#EAA1FF", "#FFFFFF", "#DCFFB9"),
+        new("#FF86FF", "#FFA1FF", "#000000", "#B9FFB9"),
+        new("#FF86C3", "#FFA1EA", "#000000", "#B9FFDC"),
+        new("#FF8686", "#FFA1A1", "#000000", "#B9FFFF"),
+        new("#FFC386", "#FFEAA1", "#000000", "#B9DCFF"),
+        new("#C3FF86", "#EAFFA1", "#000000", "#DCB9FF"),
+        new("#86FFC3", "#A1FFEA", "#000000", "#FFB9DC"),
+        new("#86FFFF", "#A1FFFF", "#000000", "#FFB9B9"),
+        new("#86C3FF", "#A1EAFF", "#000000", "#FFDCB9")
     ];
 
     public SvgDocument Render(TimelineModel model, RenderOptions options)
@@ -51,172 +77,255 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             return emptyBuilder.Build();
         }
 
-        // Calculate layout
-        var totalPeriods = model.Sections.Sum(_ => _.Periods.Count);
-        var maxEvents = model.Sections.SelectMany(_ => _.Periods).Max(_ => _.Events.Count);
+        var sections = model.Sections;
+        var periods = sections.SelectMany(_ => _.Periods).ToList();
 
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
-        var eventsHeight = maxEvents * eventHeight + eventPadding * 2;
-        var timelineYPos = titleOffset + timelineY + options.Padding;
+        // A timeline written without any `section` line still parses into one (unnamed) section. That
+        // is the case Mermaid colours per period; once there are named sections the colour belongs to
+        // the section, and every period under it shares it.
+        var hasSections = sections.Any(_ => !string.IsNullOrEmpty(_.Name));
 
-        var sectionWidths = model.Sections
-            .Select(section => section.Periods.Sum(period => PeriodWidth(period, options)))
-            .ToList();
+        // An empty section still claims a slot, so the header of a trailing empty one is what sets the
+        // right edge — which makes the slot count, not the period count, the width to lay out against.
+        var slotCount = sections.Sum(_ => Math.Max(_.Periods.Count, 1));
 
-        var width = sectionWidths.Sum() + options.Padding * 2 + sectionPadding * model.Sections.Count;
-        var height = titleOffset + timelineY + eventsHeight + options.Padding * 2 + 40;
+        var headerHeight = hasSections
+            ? sections.Max(_ => NodeHeight(WrapLines(_.Name, options).Count, options)) + rowSlack
+            : 0;
+        var periodHeight = periods.Max(_ => NodeHeight(WrapLines(_.Label, options).Count, options)) + rowSlack;
+        var eventStackHeight = periods.Max(_ => EventStackHeight(_, options));
+
+        var titleFontSize = options.FontSize * 2.0;
+        var titleHeight = string.IsNullOrEmpty(model.Title) ? 0 : titleFontSize * 1.5;
+
+        var headerY = titleHeight;
+        var periodY = headerY + (hasSections ? headerHeight + sectionGap : 0);
+        var activityLineY = periodY + periodHeight + activityLineGap;
+        var eventY = periodY + eventDrop;
+        var connectorTop = periodY + periodHeight;
+        var connectorBottom = connectorTop + eventDrop + eventStackHeight;
+
+        var contentRight = lineLeadIn + (slotCount - 1) * nodePitch + nodeWidth;
+        var width = contentRight + lineRunOff;
 
         var builder = new SvgBuilder();
-        builder.Size(width, height);
+        builder.Size(width, connectorBottom);
+        builder.Padding(options.Padding);
+        AddArrowMarkers(builder);
 
-        // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
                 width / 2,
-                options.Padding + titleHeight / 2,
+                titleHeight / 2,
                 model.Title,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: options.FontSize + 4,
+                fontSize: titleFontSize,
                 fontFamily: options.FontFamily,
                 fontWeight: "bold");
         }
 
-        // Draw sections and periods
-        var currentX = options.Padding;
-        var sectionIndex = 0;
-        var globalPeriodIndex = 0;
-
-        foreach (var section in model.Sections)
+        var slot = 0;
+        var periodIndex = 0;
+        for (var sectionIndex = 0; sectionIndex < sections.Count; sectionIndex++)
         {
-            var sectionWidth = sectionWidths[sectionIndex];
-            var sectionColor = sectionColors[sectionIndex % sectionColors.Length];
+            var section = sections[sectionIndex];
+            var sectionColors = palette[sectionIndex % palette.Length];
+            var slots = Math.Max(section.Periods.Count, 1);
 
-            // Draw section background
-            if (!string.IsNullOrEmpty(section.Name))
+            if (hasSections)
             {
-                builder.AddRect(
-                    currentX,
-                    titleOffset + options.Padding,
-                    sectionWidth,
-                    height - titleOffset - options.Padding * 2,
-                    fill: sectionColor,
-                    stroke: "none",
-                    rx: 5);
-
-                // Section name
-                builder.AddText(
-                    currentX + sectionWidth / 2,
-                    titleOffset + options.Padding + 15,
-                    section.Name,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize,
-                    fontFamily: options.FontFamily,
-                    fontWeight: "bold",
-                    fill: "#333");
+                // The header spans its periods exactly: the first one's left edge to the last one's right.
+                DrawNode(
+                    builder,
+                    SlotX(slot),
+                    headerY,
+                    (slots - 1) * nodePitch + nodeWidth,
+                    headerHeight,
+                    WrapLines(section.Name, options),
+                    sectionColors.Fill,
+                    sectionColors,
+                    options);
             }
 
-            // Draw periods in this section
-            var periodStart = currentX;
             foreach (var period in section.Periods)
             {
-                var thisPeriodWidth = PeriodWidth(period, options);
-                var periodX = periodStart + thisPeriodWidth / 2;
-                periodStart += thisPeriodWidth;
-                var periodColor = periodColors[globalPeriodIndex % periodColors.Length];
+                var colors = hasSections ? sectionColors : palette[periodIndex % palette.Length];
+                var periodX = SlotX(slot);
 
-                // Period marker
-                builder.AddCircle(
+                DrawNode(
+                    builder,
                     periodX,
-                    timelineYPos,
-                    periodMarkerRadius,
-                    fill: periodColor,
-                    stroke: "#333",
-                    strokeWidth: 2);
+                    periodY,
+                    nodeWidth,
+                    periodHeight,
+                    WrapLines(period.Label, options),
+                    colors.Fill,
+                    colors,
+                    options);
 
-                // Period label
-                builder.AddText(
-                    periodX,
-                    timelineYPos - 25,
-                    period.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize,
-                    fontFamily: options.FontFamily,
-                    fontWeight: "bold",
-                    fill: periodColor);
+                // Drawn before the event boxes so they cover it, the way Mermaid stacks them: the
+                // connector reads as dashes between the boxes rather than through them.
+                var centreX = periodX + nodeWidth / 2;
+                builder.AddPath(
+                    LinePath(centreX, connectorTop, centreX, connectorBottom),
+                    fill: "none",
+                    stroke: "#000000",
+                    strokeWidth: connectorStrokeWidth,
+                    strokeDasharray: "5,5",
+                    markerEnd: $"url(#{connectorArrowId})");
 
-                // Draw events
-                var eventY = timelineYPos + 30;
-                foreach (var evt in period.Events)
+                var nextEventY = eventY;
+                foreach (var periodEvent in period.Events)
                 {
-                    // Event box
-                    var eventWidth = MeasureText(evt, options.FontSize) + eventPadding * 2;
-                    var eventX = periodX - eventWidth / 2;
-
-                    builder.AddRect(
-                        eventX,
-                        eventY,
-                        eventWidth,
-                        eventHeight - 5,
-                        rx: 4,
-                        fill: "#fff",
-                        stroke: periodColor,
-                        strokeWidth: 1);
-
-                    builder.AddText(
-                        periodX,
-                        eventY + (eventHeight - 5) / 2,
-                        evt,
-                        anchor: "middle",
-                        baseline: "middle",
-                        fontSize: options.FontSize - 2,
-                        fontFamily: options.FontFamily);
-
-                    eventY += eventHeight;
+                    var lines = WrapLines(periodEvent, options);
+                    var height = EventHeight(lines.Count, options);
+                    DrawNode(builder, periodX, nextEventY, nodeWidth, height, lines, colors.EventFill, colors, options);
+                    nextEventY += height + eventGap;
                 }
 
-                globalPeriodIndex++;
+                slot++;
+                periodIndex++;
             }
 
-            currentX += sectionWidth + sectionPadding;
-            sectionIndex++;
+            slot += slots - section.Periods.Count;
         }
 
-        // Draw timeline line, between the first and last period centres.
-        var firstPeriod = model.Sections.SelectMany(_ => _.Periods).First();
-        var lastPeriod = model.Sections.SelectMany(_ => _.Periods).Last();
-        var lineStartX = options.Padding + PeriodWidth(firstPeriod, options) / 2;
-        var lineEndX = currentX - sectionPadding - PeriodWidth(lastPeriod, options) / 2;
-        builder.AddLine(
-            lineStartX,
-            timelineYPos,
-            lineEndX,
-            timelineYPos,
-            stroke: "#333",
-            strokeWidth: 3);
+        // Last, so it sits over the dashed connectors it crosses.
+        builder.AddPath(
+            LinePath(0, activityLineY, width, activityLineY),
+            fill: "none",
+            stroke: "#000000",
+            strokeWidth: activityStrokeWidth,
+            markerEnd: $"url(#{activityArrowId})");
 
         return builder.Build();
     }
 
-    /// <summary>
-    /// How much horizontal room a period needs. Event boxes are sized to their text and centred on the
-    /// period, so a period narrower than its widest event would let that box run into its neighbours —
-    /// and, at a section edge, out of its own section band.
-    /// </summary>
-    static double PeriodWidth(TimePeriod period, RenderOptions options)
+    static double SlotX(int slot) => lineLeadIn + slot * nodePitch;
+
+    static void AddArrowMarkers(SvgBuilder builder)
     {
-        var widest = MeasureText(period.Label, options.FontSize);
-        foreach (var evt in period.Events)
+        // Mermaid's arrowhead is 6x4 at refX 5 / refY 2, sized in stroke-width units. Naiad's
+        // rasterizers read every marker as userSpaceOnUse, so the multiplication by the line's stroke
+        // width is baked in here — one marker per line weight — leaving browsers and both PNG backends
+        // drawing the same arrow. The fill is the SVG default black, stated explicitly because the
+        // rasterizers fall back to #333 for a marker that does not name one.
+        builder.AddMarker(activityArrowId, "M0,0 V16 L24,8 Z", 24, 16, 20, 8, "#000000", "userSpaceOnUse");
+        builder.AddMarker(connectorArrowId, "M0,0 V8 L12,4 Z", 12, 8, 10, 4, "#000000", "userSpaceOnUse");
+    }
+
+    /// <summary>
+    /// Draws one box: Mermaid's rounded-top-corner background, the inverted-colour rule along its
+    /// bottom edge, and the wrapped label.
+    /// </summary>
+    static void DrawNode(
+        SvgBuilder builder,
+        double x,
+        double y,
+        double width,
+        double height,
+        List<string> lines,
+        string fill,
+        NodeColors colors,
+        RenderOptions options)
+    {
+        builder.AddPath(NodePath(x, y, width, height), fill: fill);
+
+        // The stroke straddles the bottom edge, so the rule reads as a band under the box.
+        builder.AddLine(
+            x,
+            y + height,
+            x + width,
+            y + height,
+            stroke: colors.Underline,
+            strokeWidth: underlineStrokeWidth);
+
+        // Mermaid hangs the label off the top of the box rather than centring it: the first line's
+        // centre sits one em below half the padding, and each further line one line-height on.
+        for (var index = 0; index < lines.Count; index++)
         {
-            widest = Math.Max(widest, MeasureText(evt, options.FontSize) + eventPadding * 2);
+            builder.AddText(
+                x + width / 2,
+                y + nodePadding / 2 + options.FontSize * (1 + lineHeight * index),
+                lines[index],
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
+                fill: colors.Text);
+        }
+    }
+
+    /// <summary>A rectangle with rounded top corners and square bottom ones.</summary>
+    static string NodePath(double x, double y, double width, double height) =>
+        string.Create(
+            CultureInfo.InvariantCulture,
+            $"M{x:0.##} {y + height - cornerRadius:0.##} v{-(height - 2 * cornerRadius):0.##} " +
+            $"q0,-{cornerRadius:0.##},{cornerRadius:0.##},-{cornerRadius:0.##} " +
+            $"h{width - 2 * cornerRadius:0.##} " +
+            $"q{cornerRadius:0.##},0,{cornerRadius:0.##},{cornerRadius:0.##} " +
+            $"v{height - cornerRadius:0.##} H{x:0.##} Z");
+
+    static string LinePath(double x1, double y1, double x2, double y2) =>
+        string.Create(CultureInfo.InvariantCulture, $"M {x1:0.##} {y1:0.##} L {x2:0.##} {y2:0.##}");
+
+    static double EventStackHeight(TimePeriod period, RenderOptions options)
+    {
+        if (period.Events.Count == 0)
+        {
+            return 0;
         }
 
-        return Math.Max(periodWidth, widest + periodGap);
+        return period.Events.Sum(_ => EventHeight(WrapLines(_, options).Count, options)) +
+               eventGap * (period.Events.Count - 1);
+    }
+
+    static double EventHeight(int lineCount, RenderOptions options) =>
+        Math.Max(NodeHeight(lineCount, options), minEventHeight);
+
+    /// <summary>
+    /// The height Mermaid gives a box holding a label of <paramref name="lineCount"/> lines: the text's
+    /// own height, plus half a line of leading, plus the box padding.
+    /// </summary>
+    static double NodeHeight(int lineCount, RenderOptions options) =>
+        options.FontSize * (1.19 + lineHeight * (Math.Max(lineCount, 1) - 1) + lineHeight * 0.5) + nodePadding;
+
+    /// <summary>Greedy word wrap at the box's text width, as Mermaid's <c>wrap</c> does.</summary>
+    static List<string> WrapLines(string? text, RenderOptions options)
+    {
+        var lines = new List<string>();
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return lines;
+        }
+
+        var line = new StringBuilder();
+        foreach (var word in text.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (line.Length > 0)
+            {
+                if (MeasureText($"{line} {word}", options.FontSize) > textWidth)
+                {
+                    lines.Add(line.ToString());
+                    line.Clear();
+                }
+                else
+                {
+                    line.Append(' ');
+                }
+            }
+
+            line.Append(word);
+        }
+
+        lines.Add(line.ToString());
+        return lines;
     }
 
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.55;
+
+    readonly record struct NodeColors(string Fill, string EventFill, string Text, string Underline);
 }

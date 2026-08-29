@@ -51,7 +51,8 @@ public class SvgBuilder
         double height,
         double refX,
         double refY,
-        string? fill = null) =>
+        string? fill = null,
+        string? markerUnits = null) =>
         document.Defs.Markers.Add(
             new()
             {
@@ -61,7 +62,8 @@ public class SvgBuilder
                 MarkerHeight = height,
                 RefX = refX,
                 RefY = refY,
-                Fill = fill
+                Fill = fill,
+                MarkerUnits = markerUnits
             });
 
     public void AddArrowMarker(

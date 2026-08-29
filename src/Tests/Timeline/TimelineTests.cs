@@ -46,6 +46,20 @@ public class TimelineTests : TestBase
     }
 
     [Test]
+    public Task MultipleEventsOnOneLine()
+    {
+        const string input =
+            """
+            timeline
+                2004 : Facebook : Gmail
+                     : Orkut : Flickr
+                2005 : YouTube
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task Sections()
     {
         const string input =

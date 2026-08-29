@@ -81,6 +81,31 @@ timeline
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidGltZWxpbmVcbiAgICAyMDA0IDogRmFjZWJvb2tcbiAgICAgICAgIDogR21haWxcbiAgICAyMDA1IDogWW91VHViZVxuICAgIDIwMDYgOiBUd2l0dGVyXG4gICAgICAgICA6IFNwb3RpZnkiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## MultipleEventsOnOneLine
+
+**Input:**
+```
+timeline
+    2004 : Facebook : Gmail
+         : Orkut : Flickr
+    2005 : YouTube
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Timeline/TimelineTests.MultipleEventsOnOneLine.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+timeline
+    2004 : Facebook : Gmail
+         : Orkut : Flickr
+    2005 : YouTube
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoidGltZWxpbmVcbiAgICAyMDA0IDogRmFjZWJvb2sgOiBHbWFpbFxuICAgICAgICAgOiBPcmt1dCA6IEZsaWNrclxuICAgIDIwMDUgOiBZb3VUdWJlIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
 ## Sections
 
 **Input:**

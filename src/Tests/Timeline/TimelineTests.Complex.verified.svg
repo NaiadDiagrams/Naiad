@@ -2,382 +2,511 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 1181.4 270"
-  style="max-width: 1181.4px;"
+  viewBox="0 0 2130 570.72"
+  style="max-width: 2130px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <text
-    x="590.7"
-    y="40"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="18px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">Social Media Evolution</text>
-  <rect
-    x="20"
-    y="60"
-    width="241.4"
-    height="190"
-    rx="5"
-    ry="5"
-    fill="#E3F2FD"
-    stroke="none" />
-  <text
-    x="140.7"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Web 1.0</text>
-  <circle
-    cx="80.35"
-    cy="140"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="80.35"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#2196F3">1997</text>
-  <rect
-    x="28"
-    y="170"
-    width="104.7"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#2196F3" />
-  <text
-    x="80.35"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Six Degrees</text>
-  <circle
-    cx="201.05"
-    cy="140"
-    r="8"
-    fill="#9C27B0"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="201.05"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#9C27B0">1999</text>
-  <rect
-    x="148.7"
-    y="170"
-    width="104.7"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#9C27B0" />
-  <text
-    x="201.05"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">LiveJournal</text>
-  <rect
-    x="281.4"
-    y="60"
-    width="480"
-    height="190"
-    rx="5"
-    ry="5"
-    fill="#F3E5F5"
-    stroke="none" />
-  <text
-    x="521.4"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Web 2.0</text>
-  <circle
-    cx="341.4"
-    cy="140"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="341.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#4CAF50">2003</text>
-  <rect
-    x="304.45"
-    y="170"
-    width="73.9"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="341.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">MySpace</text>
-  <rect
-    x="300.6"
-    y="195"
-    width="81.6"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="341.4"
-    y="205"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">LinkedIn</text>
-  <circle
-    cx="461.4"
-    cy="140"
-    r="8"
-    fill="#FF9800"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="461.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FF9800">2004</text>
-  <rect
-    x="420.6"
-    y="170"
-    width="81.6"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#FF9800" />
-  <text
-    x="461.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Facebook</text>
-  <circle
-    cx="581.4"
-    cy="140"
-    r="8"
-    fill="#E91E63"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="581.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#E91E63">2005</text>
-  <rect
-    x="544.45"
-    y="170"
-    width="73.9"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#E91E63" />
-  <text
-    x="581.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">YouTube</text>
-  <circle
-    cx="701.4"
-    cy="140"
-    r="8"
-    fill="#00BCD4"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="701.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#00BCD4">2006</text>
-  <rect
-    x="664.45"
-    y="170"
-    width="73.9"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#00BCD4" />
-  <text
-    x="701.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Twitter</text>
-  <rect
-    x="781.4"
-    y="60"
-    width="360"
-    height="190"
-    rx="5"
-    ry="5"
-    fill="#E8F5E9"
-    stroke="none" />
-  <text
-    x="961.4"
-    y="75"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Mobile Era</text>
-  <circle
-    cx="841.4"
-    cy="140"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="841.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#2196F3">2010</text>
-  <rect
-    x="796.75"
-    y="170"
-    width="89.3"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#2196F3" />
-  <text
-    x="841.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Instagram</text>
-  <circle
-    cx="961.4"
-    cy="140"
-    r="8"
-    fill="#9C27B0"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="961.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#9C27B0">2011</text>
-  <rect
-    x="920.6"
-    y="170"
-    width="81.6"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#9C27B0" />
-  <text
-    x="961.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Snapchat</text>
-  <circle
-    cx="1081.4"
-    cy="140"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="1081.4"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#4CAF50">2016</text>
-  <rect
-    x="1048.3"
-    y="170"
-    width="66.2"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="1081.4"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">TikTok</text>
-  <line
-    x1="80.35"
-    y1="140"
-    x2="1081.4"
-    y2="140"
-    stroke="#333"
-    stroke-width="3" />
+  <defs>
+    <marker
+      id="timeline-arrow"
+      refX="20"
+      refY="8"
+      markerUnits="userSpaceOnUse"
+      markerWidth="24"
+      markerHeight="16"
+      orient="auto">
+      <path
+        d="M0,0 V16 L24,8 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="timeline-connector-arrow"
+      refX="10"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="12"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M0,0 V8 L12,4 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="1045"
+      y="21"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="28px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Social Media Evolution</text>
+    <path
+      d="M50 101.36 v-54.36 q0,-5,5,-5 h380 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="106.36"
+      x2="440"
+      y2="106.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="245"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Web 1.0</text>
+    <path
+      d="M50 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="220.72"
+      x2="240"
+      y2="220.72"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">1997</text>
+    <path
+      d="M 145 220.72 L 145 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M50 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H50 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="50"
+      y1="406.36"
+      x2="240"
+      y2="406.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Six Degrees</text>
+    <path
+      d="M250 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H250 Z"
+      fill="#8686FF" />
+    <line
+      x1="250"
+      y1="220.72"
+      x2="440"
+      y2="220.72"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">1999</text>
+    <path
+      d="M 345 220.72 L 345 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M250 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H250 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="250"
+      y1="406.36"
+      x2="440"
+      y2="406.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">LiveJournal</text>
+    <path
+      d="M450 101.36 v-54.36 q0,-5,5,-5 h780 q5,0,5,5 v59.36 H450 Z"
+      fill="#FFFF78" />
+    <line
+      x1="450"
+      y1="106.36"
+      x2="1240"
+      y2="106.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="845"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Web 2.0</text>
+    <path
+      d="M450 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H450 Z"
+      fill="#FFFF78" />
+    <line
+      x1="450"
+      y1="220.72"
+      x2="640"
+      y2="220.72"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2003</text>
+    <path
+      d="M 545 220.72 L 545 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M450 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFF90" />
+    <line
+      x1="450"
+      y1="406.36"
+      x2="640"
+      y2="406.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">MySpace</text>
+    <path
+      d="M450 461.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFF90" />
+    <line
+      x1="450"
+      y1="466.36"
+      x2="640"
+      y2="466.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="440.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">LinkedIn</text>
+    <path
+      d="M650 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H650 Z"
+      fill="#FFFF78" />
+    <line
+      x1="650"
+      y1="220.72"
+      x2="840"
+      y2="220.72"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="745"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2004</text>
+    <path
+      d="M 745 220.72 L 745 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M650 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H650 Z"
+      fill="#FFFF90" />
+    <line
+      x1="650"
+      y1="406.36"
+      x2="840"
+      y2="406.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="745"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Facebook</text>
+    <path
+      d="M850 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H850 Z"
+      fill="#FFFF78" />
+    <line
+      x1="850"
+      y1="220.72"
+      x2="1040"
+      y2="220.72"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="945"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2005</text>
+    <path
+      d="M 945 220.72 L 945 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M850 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H850 Z"
+      fill="#FFFF90" />
+    <line
+      x1="850"
+      y1="406.36"
+      x2="1040"
+      y2="406.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="945"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">YouTube</text>
+    <path
+      d="M1050 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H1050 Z"
+      fill="#FFFF78" />
+    <line
+      x1="1050"
+      y1="220.72"
+      x2="1240"
+      y2="220.72"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="1145"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2006</text>
+    <path
+      d="M 1145 220.72 L 1145 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M1050 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H1050 Z"
+      fill="#FFFF90" />
+    <line
+      x1="1050"
+      y1="406.36"
+      x2="1240"
+      y2="406.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="1145"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Twitter</text>
+    <path
+      d="M1250 101.36 v-54.36 q0,-5,5,-5 h580 q5,0,5,5 v59.36 H1250 Z"
+      fill="#D7FF86" />
+    <line
+      x1="1250"
+      y1="106.36"
+      x2="1840"
+      y2="106.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1545"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Mobile Era</text>
+    <path
+      d="M1250 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H1250 Z"
+      fill="#D7FF86" />
+    <line
+      x1="1250"
+      y1="220.72"
+      x2="1440"
+      y2="220.72"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1345"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2010</text>
+    <path
+      d="M 1345 220.72 L 1345 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M1250 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H1250 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="1250"
+      y1="406.36"
+      x2="1440"
+      y2="406.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1345"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Instagram</text>
+    <path
+      d="M1450 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H1450 Z"
+      fill="#D7FF86" />
+    <line
+      x1="1450"
+      y1="220.72"
+      x2="1640"
+      y2="220.72"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1545"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2011</text>
+    <path
+      d="M 1545 220.72 L 1545 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M1450 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H1450 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="1450"
+      y1="406.36"
+      x2="1640"
+      y2="406.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1545"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Snapchat</text>
+    <path
+      d="M1650 215.72 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H1650 Z"
+      fill="#D7FF86" />
+    <line
+      x1="1650"
+      y1="220.72"
+      x2="1840"
+      y2="220.72"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1745"
+      y="180.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2016</text>
+    <path
+      d="M 1745 220.72 L 1745 530.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M1650 401.36 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H1650 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="1650"
+      y1="406.36"
+      x2="1840"
+      y2="406.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="1745"
+      y="380.36"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">TikTok</text>
+    <path
+      d="M 0 270.72 L 2090 270.72"
+      fill="none"
+      stroke="#000000"
+      stroke-width="4"
+      marker-end="url(#timeline-arrow)" />
+  </g>
 </svg>

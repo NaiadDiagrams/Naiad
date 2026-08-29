@@ -2,152 +2,224 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 642.9 245"
-  style="max-width: 642.9px;"
+  viewBox="0 0 1130 396.36"
+  style="max-width: 1130px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <text
-    x="321.45"
-    y="40"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="18px"
-    font-family="Arial, sans-serif"
-    font-weight="bold">Project Phases</text>
-  <circle
-    cx="84.2"
-    cy="140"
-    r="8"
-    fill="#2196F3"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="84.2"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#2196F3">Planning</text>
-  <rect
-    x="28"
-    y="170"
-    width="112.4"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#2196F3" />
-  <text
-    x="84.2"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Define scope</text>
-  <circle
-    cx="220.3"
-    cy="140"
-    r="8"
-    fill="#9C27B0"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="220.3"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#9C27B0">Design</text>
-  <rect
-    x="156.4"
-    y="170"
-    width="127.8"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#9C27B0" />
-  <text
-    x="220.3"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Create mockups</text>
-  <circle
-    cx="364.1"
-    cy="140"
-    r="8"
-    fill="#4CAF50"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="364.1"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#4CAF50">Development</text>
-  <rect
-    x="300.2"
-    y="170"
-    width="127.8"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#4CAF50" />
-  <text
-    x="364.1"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Build features</text>
-  <circle
-    cx="519.45"
-    cy="140"
-    r="8"
-    fill="#FF9800"
-    stroke="#333"
-    stroke-width="2" />
-  <text
-    x="519.45"
-    y="115"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="14px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#FF9800">Testing</text>
-  <rect
-    x="444"
-    y="170"
-    width="150.9"
-    height="20"
-    rx="4"
-    ry="4"
-    fill="#fff"
-    stroke="#FF9800" />
-  <text
-    x="519.45"
-    y="180"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif">Quality assurance</text>
-  <line
-    x1="84.2"
-    y1="140"
-    x2="519.45"
-    y2="140"
-    stroke="#333"
-    stroke-width="3" />
+  <defs>
+    <marker
+      id="timeline-arrow"
+      refX="20"
+      refY="8"
+      markerUnits="userSpaceOnUse"
+      markerWidth="24"
+      markerHeight="16"
+      orient="auto">
+      <path
+        d="M0,0 V16 L24,8 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="timeline-connector-arrow"
+      refX="10"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="12"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M0,0 V8 L12,4 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="545"
+      y="21"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="28px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Project Phases</text>
+    <path
+      d="M50 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="106.36"
+      x2="240"
+      y2="106.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Planning</text>
+    <path
+      d="M 145 106.36 L 145 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M50 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H50 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="50"
+      y1="292"
+      x2="240"
+      y2="292"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Define scope</text>
+    <path
+      d="M250 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H250 Z"
+      fill="#FFFF78" />
+    <line
+      x1="250"
+      y1="106.36"
+      x2="440"
+      y2="106.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Design</text>
+    <path
+      d="M 345 106.36 L 345 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M250 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H250 Z"
+      fill="#FFFF90" />
+    <line
+      x1="250"
+      y1="292"
+      x2="440"
+      y2="292"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Create mockups</text>
+    <path
+      d="M450 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H450 Z"
+      fill="#D7FF86" />
+    <line
+      x1="450"
+      y1="106.36"
+      x2="640"
+      y2="106.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Development</text>
+    <path
+      d="M 545 106.36 L 545 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M450 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="450"
+      y1="292"
+      x2="640"
+      y2="292"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Build features</text>
+    <path
+      d="M650 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H650 Z"
+      fill="#C386FF" />
+    <line
+      x1="650"
+      y1="106.36"
+      x2="840"
+      y2="106.36"
+      stroke="#DCFFB9"
+      stroke-width="3" />
+    <text
+      x="745"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Testing</text>
+    <path
+      d="M 745 106.36 L 745 356.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M650 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H650 Z"
+      fill="#EAA1FF" />
+    <line
+      x1="650"
+      y1="292"
+      x2="840"
+      y2="292"
+      stroke="#DCFFB9"
+      stroke-width="3" />
+    <text
+      x="745"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">Quality assurance</text>
+    <path
+      d="M 0 156.36 L 1090 156.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="4"
+      marker-end="url(#timeline-arrow)" />
+  </g>
 </svg>
