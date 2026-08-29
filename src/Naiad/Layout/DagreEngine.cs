@@ -1,9 +1,11 @@
-/// <summary>
+﻿/// <summary>
 /// Lays out a node/edge diagram with the faithful C# port of dagre (<c>Naiad.Dagre</c>) — the same
 /// layered/Sugiyama engine Mermaid uses. The diagram is mapped to a compound dagre graph (subgraphs become
 /// compound parent nodes), laid out, and the resulting node positions, cluster boxes and routed edge points
 /// are read back. This gives Mermaid-equivalent ranking, crossing minimisation, cluster nesting and
-/// shape-avoiding edge routing.
+/// shape-avoiding edge routing. Dagre aims an edge's end segment straight at its target's border without
+/// checking what lies in between, so <see cref="EdgeObstacleRouter"/> re-aims the few that would cut across
+/// a node sharing the target's rank.
 /// </summary>
 /// <remarks>
 /// Read-back relies on a contract of <see cref="Layout.Run"/>: it writes the final layout
@@ -87,6 +89,8 @@ class DagreEngine : ILayoutEngine
                 edge.Points.AddRange(label.Points);
             }
         }
+
+        EdgeObstacleRouter.Route(diagram);
 
         var graphLabel = graph.Label;
         return new()

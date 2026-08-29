@@ -130,3 +130,24 @@ server:B -- T>:db
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiYXJjaGl0ZWN0dXJlLWJldGFcbnNlcnZpY2UgY2xpZW50KGludGVybmV0KVtDbGllbnRdXG5zZXJ2aWNlIHNlcnZlcihzZXJ2ZXIpW1NlcnZlcl1cbnNlcnZpY2UgZGIoZGF0YWJhc2UpW0RhdGFiYXNlXVxuXHUwMDNDY2xpZW50OlIgLS0gTFx1MDAzRTpzZXJ2ZXJcbnNlcnZlcjpCIC0tIFRcdTAwM0U6ZGIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## GroupEdge
+
+**Input:**
+```
+architecture-beta
+group api(cloud)[API]
+service db(database)[Database] in api
+service server(server)[Server] in api
+service gateway(internet)[Gateway]
+db:L -- R:server
+server{group}:B -- T>:gateway
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Architecture/ArchitectureTests.GroupEdge.verified.png" />
+</p>
+
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiYXJjaGl0ZWN0dXJlLWJldGFcbmdyb3VwIGFwaShjbG91ZClbQVBJXVxuc2VydmljZSBkYihkYXRhYmFzZSlbRGF0YWJhc2VdIGluIGFwaVxuc2VydmljZSBzZXJ2ZXIoc2VydmVyKVtTZXJ2ZXJdIGluIGFwaVxuc2VydmljZSBnYXRld2F5KGludGVybmV0KVtHYXRld2F5XVxuZGI6TCAtLSBSOnNlcnZlclxuc2VydmVye2dyb3VwfTpCIC0tIFRcdTAwM0U6Z2F0ZXdheSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+

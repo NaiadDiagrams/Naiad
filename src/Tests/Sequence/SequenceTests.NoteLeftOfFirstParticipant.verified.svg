@@ -1,0 +1,162 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 535.6 270"
+  style="max-width: 535.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <rect
+    x="265.6"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="315.6"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <rect
+    x="415.6"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="465.6"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <line
+    x1="315.6"
+    y1="60"
+    x2="315.6"
+    y2="210"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="465.6"
+    y1="60"
+    x2="465.6"
+    y2="210"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="315.6"
+    y1="110"
+    x2="465.6"
+    y2="110"
+    stroke="#333" />
+  <polygon
+    points="465.6,110 457.6,106 457.6,114"
+    fill="#333" />
+  <text
+    x="390.6"
+    y="102"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Hello</text>
+  <path
+    d="M20,160 L247.6,160 L255.6,168 L255.6,200 L20,200 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="247.6"
+    y1="160"
+    x2="247.6"
+    y2="168"
+    stroke="#AAAA33" />
+  <line
+    x1="247.6"
+    y1="168"
+    x2="255.6"
+    y2="168"
+    stroke="#AAAA33" />
+  <text
+    x="137.8"
+    y="180"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice considers it at length</text>
+  <rect
+    x="265.6"
+    y="210"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="315.6"
+    y="230"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <rect
+    x="415.6"
+    y="210"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="465.6"
+    y="230"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+</svg>

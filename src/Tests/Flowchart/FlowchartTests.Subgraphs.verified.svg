@@ -121,16 +121,6 @@
       fill="#ffffde"
       stroke="#aaaa33"
       class="cluster" />
-    <text
-      x="116.78"
-      y="132"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold"
-      fill="#333333"
-      class="cluster-label">Frontend</text>
     <rect
       x="0"
       y="424"
@@ -141,16 +131,6 @@
       fill="#ffffde"
       stroke="#aaaa33"
       class="cluster" />
-    <text
-      x="97.73"
-      y="438"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold"
-      fill="#333333"
-      class="cluster-label">Backend</text>
     <path
       d="M102.73,48 L102.73,53.83 C102.73,59.67 102.73,71.33 102.73,83 C102.73,94.67 102.73,106.33 102.73,118 C102.73,129.67 102.73,141.33 102.73,147.17 L102.73,153"
       fill="none"
@@ -276,5 +256,39 @@
         </span>
       </div>
     </foreignObject>
+    <rect
+      x="79.98"
+      y="119.5"
+      width="73.6"
+      height="25"
+      fill="#ffffde"
+      stroke="none" />
+    <text
+      x="116.78"
+      y="132"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333"
+      class="cluster-label">Frontend</text>
+    <rect
+      x="64.78"
+      y="425.5"
+      width="65.9"
+      height="25"
+      fill="#ffffde"
+      stroke="none" />
+    <text
+      x="97.73"
+      y="438"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333333"
+      class="cluster-label">Backend</text>
   </g>
 </svg>

@@ -1,0 +1,50 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 200 104"
+  style="max-width: 200px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="reqarrow"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <rect
+    x="20"
+    y="20"
+    width="160"
+    height="64"
+    rx="5"
+    ry="5"
+    fill="#C8E6C9"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <text
+    x="100"
+    y="41"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;Requirement&gt;&gt;</text>
+  <text
+    x="100"
+    y="61"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">bare_req</text>
+</svg>

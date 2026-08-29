@@ -1,4 +1,4 @@
-namespace Naiad.Diagrams.Flowchart;
+﻿namespace Naiad.Diagrams.Flowchart;
 
 public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<FlowchartModel>
@@ -44,6 +44,18 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 node.Width *= 1.4;
                 node.Height *= 1.4;
             }
+            else if (node.Shape == NodeShape.Asymmetric)
+            {
+                // The left notch bites into the box, and the label is centred in it, so grow the box by the
+                // notch's depth on both sides rather than letting it cut across the text.
+                node.Width += ShapePathGenerator.AsymmetricNotch(node.Height) * 2;
+            }
+            else if (node.Shape == NodeShape.Subroutine)
+            {
+                // The vertical bars are drawn inside the node, so the label needs the space between them
+                // rather than the full width.
+                node.Width += ShapePathGenerator.SubroutineBarInset * 2;
+            }
         }
 
         // Reserve space for edge labels so the layout keeps a rank gap clear for them.
@@ -86,7 +98,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         builder.AddStyles(MermaidStyles.FlowchartStyles);
 
         // Render subgraph boxes first (behind everything), outermost first.
-        RenderSubgraphs(builder, model.Subgraphs, options);
+        RenderSubgraphBoxes(builder, model.Subgraphs, options);
 
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
@@ -100,17 +112,30 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             RenderNode(builder, node);
         }
 
+        // Titles go last: an edge crossing into a subgraph passes through the title band, and painting the
+        // edge over the text left the title unreadable.
+        RenderSubgraphTitles(builder, model.Subgraphs, options);
+
         return builder.Build();
     }
 
-    static void RenderSubgraphs(SvgBuilder builder, IEnumerable<Subgraph> subgraphs, RenderOptions options)
+    static void RenderSubgraphBoxes(SvgBuilder builder, IEnumerable<Subgraph> subgraphs, RenderOptions options)
     {
         foreach (var subgraph in subgraphs)
         {
             RenderSubgraphBox(builder, subgraph, options);
 
             // Nested subgraphs after their parent so they sit on top of it.
-            RenderSubgraphs(builder, subgraph.NestedSubgraphs, options);
+            RenderSubgraphBoxes(builder, subgraph.NestedSubgraphs, options);
+        }
+    }
+
+    static void RenderSubgraphTitles(SvgBuilder builder, IEnumerable<Subgraph> subgraphs, RenderOptions options)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            RenderSubgraphTitle(builder, subgraph, options);
+            RenderSubgraphTitles(builder, subgraph.NestedSubgraphs, options);
         }
     }
 
@@ -129,22 +154,42 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: style?.Stroke ?? subgraphStroke,
             strokeWidth: style?.StrokeWidth ?? 1,
             cssClass: "cluster");
+    }
 
+    static void RenderSubgraphTitle(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    {
         var title = subgraph.Title ?? subgraph.Id;
-        if (!string.IsNullOrEmpty(title))
+        if (string.IsNullOrEmpty(title))
         {
-            builder.AddText(
-                subgraph.Position.X,
-                bounds.Y + 14,
-                title,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize,
-                fontFamily: options.FontFamily,
-                fontWeight: "bold",
-                fill: style?.Color ?? edgeStroke,
-                cssClass: "cluster-label");
+            return;
         }
+
+        var style = subgraph.Style;
+        var titleY = subgraph.Bounds.Y + 14;
+
+        // An edge entering the subgraph crosses the title band, and lands on the title itself whenever the
+        // node it targets is the one the box is centred on. Backing the text with the box's own fill hides
+        // the line behind it - invisible against the box, but the title stays readable.
+        var titleSize = MeasureText(title, options.FontSize);
+        builder.AddRect(
+            subgraph.Position.X - titleSize.Width / 2 - 6,
+            titleY - titleSize.Height / 2 - 2,
+            titleSize.Width + 12,
+            titleSize.Height + 4,
+            fill: style?.Fill ?? subgraphFill,
+            stroke: "none");
+
+        builder.AddText(
+            subgraph.Position.X,
+            titleY,
+            title,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize,
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: style?.Color ?? edgeStroke,
+            cssClass: "cluster-label");
     }
 
     static void RenderNode(SvgBuilder builder, Node node)

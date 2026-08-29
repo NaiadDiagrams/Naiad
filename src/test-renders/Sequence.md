@@ -127,6 +127,56 @@ sequenceDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFQm9iOiBIZWxsb1xuICAgIE5vdGUgcmlnaHQgb2YgQm9iOiBCb2IgdGhpbmtzXG4gICAgQm9iLS1cdTAwM0VcdTAwM0VBbGljZTogSGlcbiAgICBOb3RlIG92ZXIgQWxpY2UsQm9iOiBDb252ZXJzYXRpb24iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## NoteLeftOfFirstParticipant
+
+**Input:**
+```
+sequenceDiagram
+    Alice->>Bob: Hello
+    Note left of Alice: Alice considers it at length
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.NoteLeftOfFirstParticipant.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+sequenceDiagram
+    Alice->>Bob: Hello
+    Note left of Alice: Alice considers it at length
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFQm9iOiBIZWxsb1xuICAgIE5vdGUgbGVmdCBvZiBBbGljZTogQWxpY2UgY29uc2lkZXJzIGl0IGF0IGxlbmd0aCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
+## ExplicitActivation
+
+**Input:**
+```
+sequenceDiagram
+    Alice->>Bob: Hello
+    activate Bob
+    Bob-->>Alice: Hi
+    deactivate Bob
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/Sequence/SequenceTests.ExplicitActivation.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+sequenceDiagram
+    Alice->>Bob: Hello
+    activate Bob
+    Bob-->>Alice: Hi
+    deactivate Bob
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQWxpY2UtXHUwMDNFXHUwMDNFQm9iOiBIZWxsb1xuICAgIGFjdGl2YXRlIEJvYlxuICAgIEJvYi0tXHUwMDNFXHUwMDNFQWxpY2U6IEhpXG4gICAgZGVhY3RpdmF0ZSBCb2IiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
 ## AutoNumber
 
 **Input:**

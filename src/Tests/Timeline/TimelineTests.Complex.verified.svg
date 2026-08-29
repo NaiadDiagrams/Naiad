@@ -2,13 +2,13 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 1180 270"
-  style="max-width: 1180px;"
+  viewBox="0 0 1181.4 270"
+  style="max-width: 1181.4px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <text
-    x="590"
+    x="590.7"
     y="40"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -18,14 +18,14 @@
   <rect
     x="20"
     y="60"
-    width="240"
+    width="241.4"
     height="190"
     rx="5"
     ry="5"
     fill="#E3F2FD"
     stroke="none" />
   <text
-    x="140"
+    x="140.7"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -34,14 +34,14 @@
     font-weight="bold"
     fill="#333">Web 1.0</text>
   <circle
-    cx="80"
+    cx="80.35"
     cy="140"
     r="8"
     fill="#2196F3"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="80"
+    x="80.35"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -50,7 +50,7 @@
     font-weight="bold"
     fill="#2196F3">1997</text>
   <rect
-    x="27.65"
+    x="28"
     y="170"
     width="104.7"
     height="20"
@@ -59,21 +59,21 @@
     fill="#fff"
     stroke="#2196F3" />
   <text
-    x="80"
+    x="80.35"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Six Degrees</text>
   <circle
-    cx="200"
+    cx="201.05"
     cy="140"
     r="8"
     fill="#9C27B0"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="200"
+    x="201.05"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -82,7 +82,7 @@
     font-weight="bold"
     fill="#9C27B0">1999</text>
   <rect
-    x="147.65"
+    x="148.7"
     y="170"
     width="104.7"
     height="20"
@@ -91,14 +91,14 @@
     fill="#fff"
     stroke="#9C27B0" />
   <text
-    x="200"
+    x="201.05"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">LiveJournal</text>
   <rect
-    x="280"
+    x="281.4"
     y="60"
     width="480"
     height="190"
@@ -107,7 +107,7 @@
     fill="#F3E5F5"
     stroke="none" />
   <text
-    x="520"
+    x="521.4"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -116,14 +116,14 @@
     font-weight="bold"
     fill="#333">Web 2.0</text>
   <circle
-    cx="340"
+    cx="341.4"
     cy="140"
     r="8"
     fill="#4CAF50"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="340"
+    x="341.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -132,7 +132,7 @@
     font-weight="bold"
     fill="#4CAF50">2003</text>
   <rect
-    x="303.05"
+    x="304.45"
     y="170"
     width="73.9"
     height="20"
@@ -141,14 +141,14 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="340"
+    x="341.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">MySpace</text>
   <rect
-    x="299.2"
+    x="300.6"
     y="195"
     width="81.6"
     height="20"
@@ -157,21 +157,21 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="340"
+    x="341.4"
     y="205"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">LinkedIn</text>
   <circle
-    cx="460"
+    cx="461.4"
     cy="140"
     r="8"
     fill="#FF9800"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="460"
+    x="461.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -180,7 +180,7 @@
     font-weight="bold"
     fill="#FF9800">2004</text>
   <rect
-    x="419.2"
+    x="420.6"
     y="170"
     width="81.6"
     height="20"
@@ -189,21 +189,21 @@
     fill="#fff"
     stroke="#FF9800" />
   <text
-    x="460"
+    x="461.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Facebook</text>
   <circle
-    cx="580"
+    cx="581.4"
     cy="140"
     r="8"
     fill="#E91E63"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="580"
+    x="581.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -212,7 +212,7 @@
     font-weight="bold"
     fill="#E91E63">2005</text>
   <rect
-    x="543.05"
+    x="544.45"
     y="170"
     width="73.9"
     height="20"
@@ -221,21 +221,21 @@
     fill="#fff"
     stroke="#E91E63" />
   <text
-    x="580"
+    x="581.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">YouTube</text>
   <circle
-    cx="700"
+    cx="701.4"
     cy="140"
     r="8"
     fill="#00BCD4"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="700"
+    x="701.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -244,7 +244,7 @@
     font-weight="bold"
     fill="#00BCD4">2006</text>
   <rect
-    x="663.05"
+    x="664.45"
     y="170"
     width="73.9"
     height="20"
@@ -253,14 +253,14 @@
     fill="#fff"
     stroke="#00BCD4" />
   <text
-    x="700"
+    x="701.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Twitter</text>
   <rect
-    x="780"
+    x="781.4"
     y="60"
     width="360"
     height="190"
@@ -269,7 +269,7 @@
     fill="#E8F5E9"
     stroke="none" />
   <text
-    x="960"
+    x="961.4"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -278,14 +278,14 @@
     font-weight="bold"
     fill="#333">Mobile Era</text>
   <circle
-    cx="840"
+    cx="841.4"
     cy="140"
     r="8"
     fill="#2196F3"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="840"
+    x="841.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -294,7 +294,7 @@
     font-weight="bold"
     fill="#2196F3">2010</text>
   <rect
-    x="795.35"
+    x="796.75"
     y="170"
     width="89.3"
     height="20"
@@ -303,21 +303,21 @@
     fill="#fff"
     stroke="#2196F3" />
   <text
-    x="840"
+    x="841.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Instagram</text>
   <circle
-    cx="960"
+    cx="961.4"
     cy="140"
     r="8"
     fill="#9C27B0"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="960"
+    x="961.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -326,7 +326,7 @@
     font-weight="bold"
     fill="#9C27B0">2011</text>
   <rect
-    x="919.2"
+    x="920.6"
     y="170"
     width="81.6"
     height="20"
@@ -335,21 +335,21 @@
     fill="#fff"
     stroke="#9C27B0" />
   <text
-    x="960"
+    x="961.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Snapchat</text>
   <circle
-    cx="1080"
+    cx="1081.4"
     cy="140"
     r="8"
     fill="#4CAF50"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="1080"
+    x="1081.4"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -358,7 +358,7 @@
     font-weight="bold"
     fill="#4CAF50">2016</text>
   <rect
-    x="1046.9"
+    x="1048.3"
     y="170"
     width="66.2"
     height="20"
@@ -367,16 +367,16 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="1080"
+    x="1081.4"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">TikTok</text>
   <line
-    x1="80"
+    x1="80.35"
     y1="140"
-    x2="1080"
+    x2="1081.4"
     y2="140"
     stroke="#333"
     stroke-width="3" />

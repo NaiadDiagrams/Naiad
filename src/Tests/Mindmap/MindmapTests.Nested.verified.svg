@@ -32,14 +32,15 @@
     fill="none"
     stroke="#98FB98"
     stroke-width="2" />
-  <rect
-    x="20"
-    y="70"
-    width="60.8"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M20,105 V75 Q20,70 25,70 H75.8 Q80.8,70 80.8,75 V105 Z"
     fill="#FFB6C1"
+    stroke="none" />
+  <line
+    x1="20"
+    y1="105"
+    x2="80.8"
+    y2="105"
     stroke="#B27F87"
     stroke-width="2" />
   <text
@@ -50,14 +51,15 @@
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold">Root</text>
-  <rect
-    x="120.8"
-    y="45"
-    width="91.6"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M120.8,80 V50 Q120.8,45 125.8,45 H207.4 Q212.4,45 212.4,50 V80 Z"
     fill="#87CEEB"
+    stroke="none" />
+  <line
+    x1="120.8"
+    y1="80"
+    x2="212.4"
+    y2="80"
     stroke="#5E90A4"
     stroke-width="2" />
   <text
@@ -67,14 +69,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Branch 1</text>
-  <rect
-    x="252.4"
-    y="20"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M252.4,55 V25 Q252.4,20 257.4,20 H331.3 Q336.3,20 336.3,25 V55 Z"
     fill="#98FB98"
+    stroke="none" />
+  <line
+    x1="252.4"
+    y1="55"
+    x2="336.3"
+    y2="55"
     stroke="#6AAF6A"
     stroke-width="2" />
   <text
@@ -84,14 +87,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Sub 1.1</text>
-  <rect
-    x="252.4"
-    y="70"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M252.4,105 V75 Q252.4,70 257.4,70 H331.3 Q336.3,70 336.3,75 V105 Z"
     fill="#98FB98"
+    stroke="none" />
+  <line
+    x1="252.4"
+    y1="105"
+    x2="336.3"
+    y2="105"
     stroke="#6AAF6A"
     stroke-width="2" />
   <text
@@ -101,14 +105,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Sub 1.2</text>
-  <rect
-    x="120.8"
-    y="120"
-    width="91.6"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M120.8,155 V125 Q120.8,120 125.8,120 H207.4 Q212.4,120 212.4,125 V155 Z"
     fill="#87CEEB"
+    stroke="none" />
+  <line
+    x1="120.8"
+    y1="155"
+    x2="212.4"
+    y2="155"
     stroke="#5E90A4"
     stroke-width="2" />
   <text
@@ -118,14 +123,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Branch 2</text>
-  <rect
-    x="252.4"
-    y="120"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M252.4,155 V125 Q252.4,120 257.4,120 H331.3 Q336.3,120 336.3,125 V155 Z"
     fill="#98FB98"
+    stroke="none" />
+  <line
+    x1="252.4"
+    y1="155"
+    x2="336.3"
+    y2="155"
     stroke="#6AAF6A"
     stroke-width="2" />
   <text

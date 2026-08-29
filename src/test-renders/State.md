@@ -79,6 +79,111 @@ stateDiagram-v2
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic3RhdGVEaWFncmFtLXYyXG4gICAgWypdIC0tXHUwMDNFIEFjdGl2ZVxuICAgIEFjdGl2ZSAtLVx1MDAzRSBJbmFjdGl2ZSA6IHRpbWVvdXRcbiAgICBJbmFjdGl2ZSAtLVx1MDAzRSBBY3RpdmUgOiByZXNldFxuICAgIEFjdGl2ZSAtLVx1MDAzRSBbKl0gOiBzaHV0ZG93biIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
+## DirectionLeftToRight
+
+**Input:**
+```
+stateDiagram-v2
+    direction LR
+    [*] --> Queued
+    Queued --> Running
+    Running --> Done
+    Done --> [*]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/State/StateTests.DirectionLeftToRight.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Queued
+    Queued --> Running
+    Running --> Done
+    Done --> [*]
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic3RhdGVEaWFncmFtLXYyXG4gICAgZGlyZWN0aW9uIExSXG4gICAgWypdIC0tXHUwMDNFIFF1ZXVlZFxuICAgIFF1ZXVlZCAtLVx1MDAzRSBSdW5uaW5nXG4gICAgUnVubmluZyAtLVx1MDAzRSBEb25lXG4gICAgRG9uZSAtLVx1MDAzRSBbKl0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
+## CompositeState
+
+**Input:**
+```
+stateDiagram-v2
+    [*] --> Ready
+    Ready --> Working
+    state Working {
+        [*] --> Fetch
+        Fetch --> Parse : ok
+        Parse --> [*]
+    }
+    Working --> Done
+    Done --> [*]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/State/StateTests.CompositeState.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+stateDiagram-v2
+    [*] --> Ready
+    Ready --> Working
+    state Working {
+        [*] --> Fetch
+        Fetch --> Parse : ok
+        Parse --> [*]
+    }
+    Working --> Done
+    Done --> [*]
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic3RhdGVEaWFncmFtLXYyXG4gICAgWypdIC0tXHUwMDNFIFJlYWR5XG4gICAgUmVhZHkgLS1cdTAwM0UgV29ya2luZ1xuICAgIHN0YXRlIFdvcmtpbmcge1xuICAgICAgICBbKl0gLS1cdTAwM0UgRmV0Y2hcbiAgICAgICAgRmV0Y2ggLS1cdTAwM0UgUGFyc2UgOiBva1xuICAgICAgICBQYXJzZSAtLVx1MDAzRSBbKl1cbiAgICB9XG4gICAgV29ya2luZyAtLVx1MDAzRSBEb25lXG4gICAgRG9uZSAtLVx1MDAzRSBbKl0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
+## NestedCompositeState
+
+**Input:**
+```
+stateDiagram-v2
+    [*] --> Outer
+    state Outer {
+        [*] --> Mid
+        state Mid {
+            [*] --> Leaf
+            Leaf --> [*]
+        }
+        Mid --> [*]
+    }
+    Outer --> [*]
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/State/StateTests.NestedCompositeState.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+stateDiagram-v2
+    [*] --> Outer
+    state Outer {
+        [*] --> Mid
+        state Mid {
+            [*] --> Leaf
+            Leaf --> [*]
+        }
+        Mid --> [*]
+    }
+    Outer --> [*]
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoic3RhdGVEaWFncmFtLXYyXG4gICAgWypdIC0tXHUwMDNFIE91dGVyXG4gICAgc3RhdGUgT3V0ZXIge1xuICAgICAgICBbKl0gLS1cdTAwM0UgTWlkXG4gICAgICAgIHN0YXRlIE1pZCB7XG4gICAgICAgICAgICBbKl0gLS1cdTAwM0UgTGVhZlxuICAgICAgICAgICAgTGVhZiAtLVx1MDAzRSBbKl1cbiAgICAgICAgfVxuICAgICAgICBNaWQgLS1cdTAwM0UgWypdXG4gICAgfVxuICAgIE91dGVyIC0tXHUwMDNFIFsqXSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
 ## Description
 
 **Input:**

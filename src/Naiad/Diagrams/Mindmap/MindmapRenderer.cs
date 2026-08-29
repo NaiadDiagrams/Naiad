@@ -1,4 +1,4 @@
-namespace Naiad.Diagrams.Mindmap;
+﻿namespace Naiad.Diagrams.Mindmap;
 
 public class MindmapRenderer : IDiagramRenderer<MindmapModel>
 {
@@ -164,6 +164,36 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         }
     }
 
+    /// <summary>
+    /// Mermaid's bracket-less node: a band with rounded top corners, a square bottom and an underline along
+    /// it, rather than a bordered box. Without this a `(rounded)` node and a bracket-less one rendered
+    /// identically, so the syntax made no visible difference.
+    /// </summary>
+    static void DrawDefaultBand(
+        SvgBuilder builder,
+        double x,
+        double y,
+        double width,
+        double height,
+        string fill,
+        string stroke)
+    {
+        const double corner = 5;
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"""
+             M{x:0.##},{y + height:0.##}
+             V{y + corner:0.##}
+             Q{x:0.##},{y:0.##} {x + corner:0.##},{y:0.##}
+             H{x + width - corner:0.##}
+             Q{x + width:0.##},{y:0.##} {x + width:0.##},{y + corner:0.##}
+             V{y + height:0.##} Z
+             """);
+
+        builder.AddPath(path, fill: fill, stroke: "none");
+        builder.AddLine(x, y + height, x + width, y + height, stroke: stroke, strokeWidth: 2);
+    }
+
     static void DrawNodes(SvgBuilder builder, MindmapNode node, RenderOptions options)
     {
         var x = node.Position.X - node.Width / 2;
@@ -221,17 +251,20 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
                 break;
 
             case MindmapShape.Rounded:
-            case MindmapShape.Default:
-            default:
                 builder.AddRect(
                     x,
                     y,
                     node.Width,
                     node.Height,
-                    rx: 8,
+                    rx: nodePadding,
                     fill: color,
                     stroke: strokeColor,
                     strokeWidth: 2);
+                break;
+
+            case MindmapShape.Default:
+            default:
+                DrawDefaultBand(builder, x, y, node.Width, node.Height, color, strokeColor);
                 break;
         }
 

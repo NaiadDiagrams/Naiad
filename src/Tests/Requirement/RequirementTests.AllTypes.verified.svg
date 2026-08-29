@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 520 320"
-  style="max-width: 520px;"
+  viewBox="0 0 465.25 310"
+  style="max-width: 465.25px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -21,174 +21,199 @@
     </marker>
   </defs>
   <rect
-    x="20"
+    x="27.63"
     y="20"
-    width="180"
-    height="80"
+    width="160"
+    height="110"
     rx="5"
     ry="5"
     fill="#C8E6C9"
     stroke="#4CAF50"
     stroke-width="2" />
   <text
-    x="110"
-    y="35"
+    x="107.63"
+    y="41"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;Requirement&gt;&gt;</text>
   <text
-    x="110"
-    y="55"
+    x="107.63"
+    y="61"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">req1</text>
-  <circle
-    cx="35"
-    cy="85"
-    r="6"
-    fill="#FF9800"
-    stroke="#333" />
+  <line
+    x1="27.63"
+    y1="77"
+    x2="187.63"
+    y2="77"
+    stroke="#4CAF50" />
   <text
-    x="110"
-    y="85"
-    text-anchor="middle"
+    x="39.63"
+    y="91"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#666">Main requirement</text>
+    fill="#333">Id: 1</text>
+  <text
+    x="39.63"
+    y="109"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Text: Main requirement</text>
   <rect
     x="20"
-    y="160"
-    width="180"
-    height="80"
+    y="180"
+    width="175.25"
+    height="110"
     rx="5"
     ry="5"
     fill="#C8E6C9"
     stroke="#4CAF50"
     stroke-width="2" />
   <text
-    x="110"
-    y="175"
+    x="107.63"
+    y="201"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;Requirement&gt;&gt;</text>
   <text
-    x="110"
-    y="195"
+    x="107.63"
+    y="221"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">req2</text>
-  <circle
-    cx="35"
-    cy="225"
-    r="6"
-    fill="#FF9800"
-    stroke="#333" />
+  <line
+    x1="20"
+    y1="237"
+    x2="195.25"
+    y2="237"
+    stroke="#4CAF50" />
   <text
-    x="110"
-    y="225"
-    text-anchor="middle"
+    x="32"
+    y="251"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#666">Derived requirement</text>
+    fill="#333">Id: 2</text>
+  <text
+    x="32"
+    y="269"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Text: Derived requirement</text>
   <rect
-    x="260"
+    x="285.25"
     y="20"
-    width="180"
-    height="80"
+    width="160"
+    height="92"
     rx="5"
     ry="5"
     fill="#BBDEFB"
     stroke="#2196F3"
     stroke-width="2" />
   <text
-    x="350"
-    y="35"
+    x="365.25"
+    y="41"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;Element&gt;&gt;</text>
   <text
-    x="350"
-    y="55"
+    x="365.25"
+    y="61"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">elem1</text>
+  <line
+    x1="285.25"
+    y1="77"
+    x2="445.25"
+    y2="77"
+    stroke="#2196F3" />
   <text
-    x="350"
-    y="75"
-    text-anchor="middle"
+    x="297.25"
+    y="91"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#666">Type: component</text>
+    fill="#333">Type: component</text>
   <line
-    x1="110"
-    y1="160"
-    x2="110"
-    y2="100"
+    x1="107.63"
+    y1="180"
+    x2="107.63"
+    y2="130"
     stroke="#666"
-    stroke-width="1.5" />
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
   <path
-    d="M 110 100 L 114 106.93 L 106 106.93 Z"
+    d="M 107.63 130 L 111.63 136.93 L 103.63 136.93 Z"
     fill="#666"
     stroke="none" />
   <text
-    x="110"
-    y="122"
+    x="68.35"
+    y="155"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;derives&gt;&gt;</text>
   <line
-    x1="260"
-    y1="60"
-    x2="200"
-    y2="60"
+    x1="285.25"
+    y1="68.79"
+    x2="187.63"
+    y2="72.21"
     stroke="#666"
-    stroke-width="1.5" />
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
   <path
-    d="M 200 60 L 206.93 56 L 206.93 64 Z"
+    d="M 187.63 72.21 L 194.41 67.97 L 194.69 75.96 Z"
     fill="#666"
     stroke="none" />
   <text
-    x="230"
-    y="52"
+    x="236"
+    y="57.93"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;satisfies&gt;&gt;</text>
   <line
-    x1="272.26"
-    y1="80.15"
-    x2="187.74"
-    y2="179.85"
+    x1="295.13"
+    y1="112"
+    x2="191.47"
+    y2="180"
     stroke="#666"
-    stroke-width="1.5" />
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
   <path
-    d="M 187.74 179.85 L 191.71 172.9 L 195.74 179.81 Z"
+    d="M 191.47 180 L 195.07 172.86 L 199.45 179.54 Z"
     fill="#666"
     stroke="none" />
   <text
-    x="230"
-    y="122"
+    x="225.53"
+    y="118.91"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"

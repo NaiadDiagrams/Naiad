@@ -1,4 +1,4 @@
-namespace Naiad.Diagrams.Quadrant;
+﻿namespace Naiad.Diagrams.Quadrant;
 
 // Renders a quadrant chart matching Mermaid's default theme: a fixed 500x500 grid of four lavender
 // quadrants (lightened diagonally so the top reads more saturated than the bottom), a thin border
@@ -81,7 +81,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             var pointX = plotLeft + point.X * plotWidth;
             var pointY = plotBottom - point.Y * plotHeight; // y grows upward
             builder.AddCircle(pointX, pointY, pointRadius, fill: pointFill);
-            AddCenteredText(pointX, pointY + pointTextPadding + pointLabelFontSize / 2, point.Name, pointLabelFontSize);
+            AddPointLabel(pointX, pointY + pointTextPadding + pointLabelFontSize / 2, point.Name);
         }
 
         // X-axis labels centred under each half; y-axis labels rotated beside each half.
@@ -97,6 +97,23 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         AddCenteredText(chartSize / 2, titlePadding + titleFontSize / 2, model.Title, titleFontSize);
 
         return builder.Build();
+
+        // A point at x=0 or x=1 sits on the plot border, so its centred label would run off the canvas and
+        // be clipped ("Top Right" came out as "Top R"). Nudge the label back inside instead.
+        void AddPointLabel(double textX, double textY, string? text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            var half = MeasureText(text, pointLabelFontSize) / 2;
+            var minX = quadrantPadding + half;
+            var maxX = chartSize - quadrantPadding - half;
+            var clampedX = maxX < minX ? chartSize / 2 : Math.Clamp(textX, minX, maxX);
+
+            AddCenteredText(clampedX, textY, text, pointLabelFontSize);
+        }
 
         void AddCenteredText(double textX, double textY, string? text, double fontSize)
         {
@@ -136,4 +153,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
             builder.EndGroup();
         }
     }
+
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 }

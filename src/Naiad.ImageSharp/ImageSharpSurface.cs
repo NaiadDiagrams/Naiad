@@ -1,11 +1,10 @@
-using Color = SixLabors.ImageSharp.Color;
+﻿using Color = SixLabors.ImageSharp.Color;
 
 /// <summary>
 /// ImageSharp-backed <see cref="IRenderSurface"/>: the shared SVG walker's fills, strokes and text paint
 /// into an <see cref="Image{Rgba32}"/>, then <see cref="Encode"/> writes a PNG. Each primitive's current
-/// transform is applied through <see cref="DrawingOptions.Transform"/> so geometry and text scale with
-/// the diagram's transforms; stroke widths are scaled to match (ImageSharp strokes in device space),
-/// mirroring the Skia backend.
+/// transform is applied through <see cref="DrawingOptions.Transform"/> so geometry, text and stroke
+/// widths all scale with the diagram's transforms, mirroring the Skia backend.
 /// </summary>
 sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompression compression) :
     IRenderSurface
@@ -25,9 +24,9 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
     public void StrokePath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Rgba color, float width, IReadOnlyList<float>? dash, float opacity)
     {
         var path = ToPath(subpaths);
-        // ImageSharp strokes in device space, so scale the width by the transform to stay consistent
-        // with the diagram (and with the Skia backend, where the canvas matrix scales it automatically).
-        var pen = ToPen(ToColor(color.MultiplyAlpha(opacity)), width * Scale(transform), dash);
+        // The width stays in path units: the transform passed to Options below scales the stroke
+        // outline along with the geometry, so scaling the width here too would apply it twice.
+        var pen = ToPen(ToColor(color.MultiplyAlpha(opacity)), width, dash);
         var options = Options(transform, FillRule.NonZero);
         image.Mutate(context => context.Paint(options, inner => inner.Draw(pen, path)));
     }
@@ -91,10 +90,6 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
             },
             IntersectionRule = rule == FillRule.EvenOdd ? IntersectionRule.EvenOdd : IntersectionRule.NonZero,
         };
-
-    // Uniform scale factor of the affine transform — used to keep stroke widths proportional.
-    static float Scale(Matrix3x2 m) =>
-        (float)Math.Sqrt(Math.Abs(m.M11 * m.M22 - m.M12 * m.M21));
 
     static IPath ToPath(IReadOnlyList<SubPath> subpaths)
     {

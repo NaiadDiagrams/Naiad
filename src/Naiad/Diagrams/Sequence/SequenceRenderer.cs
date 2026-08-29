@@ -7,15 +7,24 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     const double participantSpacing = 150;
     const double messageSpacing = 50;
     const double activationWidth = 10;
-    const double noteWidth = 120;
+    const double noteMinWidth = 120;
     const double noteHeight = 40;
-    const double actorHeadRadius = 15;
+    const double notePadding = 10;
+    const double noteGap = 10;
+    const double selfMessageLoopWidth = 40;
+    const double actorHeadRadius = 9;
+    const double actorArmSpread = 10;
+    const double actorLegSpread = 8;
+
+    // An actor's name is drawn under the figure rather than inside a box, so diagrams containing one
+    // need a taller header band to keep the label clear of the lifelines.
+    const double actorLabelHeight = 24;
 
     public SvgDocument Render(SequenceModel model, RenderOptions options)
     {
-        var participantPositions = CalculateParticipantPositions(model, options);
+        var (participantPositions, width) = CalculateLayout(model, options);
         var (height, elementYPositions) = CalculateHeight(model, options);
-        var width = CalculateWidth(model, options);
+        var headerHeight = HeaderHeight(model);
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
@@ -44,16 +53,17 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         DrawParticipants(builder, model, participantPositions, startY, options);
 
         // Draw lifelines
-        var lifelineStartY = startY + participantHeight;
-        var lifelineEndY = height - options.Padding - participantHeight;
+        var lifelineStartY = startY + headerHeight;
+        var lifelineEndY = height - options.Padding - headerHeight;
         DrawLifelines(builder, model, participantPositions, lifelineStartY, lifelineEndY);
 
-        // Draw elements (messages, notes, activations)
-        var activations = new Dictionary<string, List<(double startY, double endY)>>();
-        DrawElements(builder, model, participantPositions, elementYPositions, options, activations);
-
-        // Draw activation boxes
+        // Activation bars are backdrop for the conversation: they cover the lifeline but must sit under
+        // the message arrows, labels and notes that cross them.
+        var activations = CalculateActivations(model, elementYPositions);
         DrawActivations(builder, activations, participantPositions);
+
+        // Draw elements (messages, notes)
+        DrawElements(builder, model, participantPositions, elementYPositions, options);
 
         // Draw participants (bottom) - optional, mimics Mermaid behavior
         DrawParticipants(builder, model, participantPositions, lifelineEndY, options);
@@ -61,7 +71,18 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         return builder.Build();
     }
 
-    static Dictionary<string, double> CalculateParticipantPositions(SequenceModel model, RenderOptions options)
+    static double HeaderHeight(SequenceModel model) =>
+        model.Participants.Any(_ => _.Type == ParticipantType.Actor)
+            ? participantHeight + actorLabelHeight
+            : participantHeight;
+
+    /// <summary>
+    /// Places the participants and sizes the canvas around everything that hangs off them — notes beside
+    /// the outer lifelines and self-message loops. A note to the left of the first participant shifts the
+    /// whole diagram right instead of being clipped at the canvas edge.
+    /// </summary>
+    static (Dictionary<string, double> positions, double width) CalculateLayout(
+        SequenceModel model, RenderOptions options)
     {
         var positions = new Dictionary<string, double>();
         var x = options.Padding + participantWidth / 2;
@@ -72,14 +93,50 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             x += participantSpacing;
         }
 
-        return positions;
+        var minX = options.Padding;
+        var maxX = options.Padding + participantWidth;
+        if (model.Participants.Count > 0)
+        {
+            maxX = positions[model.Participants[^1].Id] + participantWidth / 2;
+        }
+
+        foreach (var element in model.Elements)
+        {
+            switch (element)
+            {
+                case Note note when positions.ContainsKey(note.ParticipantId):
+                    var (noteX, noteWidth) = NoteGeometry(note, positions, options);
+                    minX = Math.Min(minX, noteX);
+                    maxX = Math.Max(maxX, noteX + noteWidth);
+                    break;
+
+                case Message {Text: not null} msg
+                    when msg.FromId == msg.ToId && positions.TryGetValue(msg.FromId, out var selfX):
+                    maxX = Math.Max(
+                        maxX,
+                        selfX + selfMessageLoopWidth + 5 + MeasureText(msg.Text, options.FontSize));
+                    break;
+            }
+        }
+
+        var shift = Math.Max(0, options.Padding - minX);
+        if (shift > 0)
+        {
+            foreach (var id in positions.Keys.ToList())
+            {
+                positions[id] += shift;
+            }
+        }
+
+        return (positions, maxX + shift + options.Padding);
     }
 
     static (double height, Dictionary<int, double> elementYPositions) CalculateHeight(
         SequenceModel model, RenderOptions options)
     {
         var elementYPositions = new Dictionary<int, double>();
-        var y = options.Padding + participantHeight + messageSpacing;
+        var headerHeight = HeaderHeight(model);
+        var y = options.Padding + headerHeight + messageSpacing;
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
 
         for (var i = 0; i < model.Elements.Count; i++)
@@ -88,7 +145,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             y += GetElementHeight(model.Elements[i]);
         }
 
-        var totalHeight = y + participantHeight + options.Padding + titleOffset;
+        var totalHeight = y + headerHeight + options.Padding + titleOffset;
         return (totalHeight, elementYPositions);
     }
 
@@ -100,12 +157,6 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             Activation => 0, // Activations don't add height
             _ => messageSpacing
         };
-
-    static double CalculateWidth(SequenceModel model, RenderOptions options)
-    {
-        var participantCount = Math.Max(1, model.Participants.Count);
-        return options.Padding * 2 + participantWidth + (participantCount - 1) * participantSpacing;
-    }
 
     static void DrawParticipants(SvgBuilder builder, SequenceModel model,
         Dictionary<string, double> positions, double y, RenderOptions options)
@@ -151,11 +202,12 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     static void DrawActor(SvgBuilder builder, double cx, double y,
         string text, RenderOptions options)
     {
-        // Stick figure
+        // The whole figure is scaled to the participant band, so the legs reach the bottom of the band
+        // and the name sits clear beneath it.
         var headY = y + actorHeadRadius;
         var bodyTop = headY + actorHeadRadius;
-        var bodyBottom = bodyTop + 15;
-        var armY = bodyTop + 5;
+        var bodyBottom = y + participantHeight * 0.775;
+        var armY = bodyTop + 4;
         var legBottom = y + participantHeight;
 
         // Head
@@ -178,25 +230,25 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         // Arms
         builder.AddLine(
-            cx - 15,
+            cx - actorArmSpread,
             armY,
-            cx + 15,
+            cx + actorArmSpread,
             armY,
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        // Legs
+        // Legs, splaying down and out from the base of the body
         builder.AddLine(
             cx,
             bodyBottom,
-            cx - 10,
+            cx - actorLegSpread,
             legBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
         builder.AddLine(
             cx,
             bodyBottom,
-            cx + 10,
+            cx + actorLegSpread,
             legBottom,
             stroke: "#9370DB",
             strokeWidth: 1);
@@ -204,7 +256,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         // Label below
         builder.AddText(
             cx,
-            y + participantHeight + 15,
+            legBottom + 4,
             text,
             anchor: "middle",
             baseline: "top",
@@ -229,21 +281,96 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    static void DrawElements(SvgBuilder builder, SequenceModel model,
-        Dictionary<string, double> positions,
-        Dictionary<int, double> yPositions,
-        RenderOptions options,
-        Dictionary<string, List<(double startY, double endY)>> activations)
+    /// <summary>
+    /// Works out the span of every activation bar. Mermaid's <c>+</c> activates the message's target and
+    /// its <c>-</c> deactivates the message's <em>sender</em>, so <c>Bob--&gt;&gt;-Alice</c> closes Bob's bar.
+    /// </summary>
+    static Dictionary<string, List<(double startY, double endY)>> CalculateActivations(
+        SequenceModel model, Dictionary<int, double> yPositions)
     {
-        var messageNumber = 0;
-        var activeLifelines = new Dictionary<string, double>(); // participantId -> activation start Y
+        var activations = new Dictionary<string, List<(double startY, double endY)>>();
+        var activeLifelines = new Dictionary<string, double>();
+        double? lastMessageY = null;
 
         for (var i = 0; i < model.Elements.Count; i++)
         {
-            var element = model.Elements[i];
             var y = yPositions[i];
 
-            switch (element)
+            switch (model.Elements[i])
+            {
+                case Message msg:
+                    lastMessageY = y;
+
+                    if (msg.Activate)
+                    {
+                        activeLifelines[msg.ToId] = y;
+                    }
+
+                    if (msg.Deactivate)
+                    {
+                        Close(msg.FromId, y);
+                    }
+
+                    break;
+
+                case Activation activation:
+                    // A standalone `activate`/`deactivate` line takes no vertical space of its own, so it
+                    // would otherwise inherit the *next* message's slot. It refers to the message above it.
+                    var activationY = lastMessageY ?? y;
+
+                    if (activation.IsActivate)
+                    {
+                        activeLifelines[activation.ParticipantId] = activationY;
+                    }
+                    else
+                    {
+                        Close(activation.ParticipantId, activationY);
+                    }
+
+                    break;
+            }
+        }
+
+        // Close any remaining activations
+        // ReSharper disable once UseIndexFromEndExpression
+        var lastY = yPositions.Count > 0 ? yPositions[yPositions.Count - 1] + messageSpacing : 0;
+        foreach (var participantId in activeLifelines.Keys.ToList())
+        {
+            Close(participantId, lastY);
+        }
+
+        return activations;
+
+        void Close(string participantId, double endY)
+        {
+            if (!activeLifelines.TryGetValue(participantId, out var startY))
+            {
+                return;
+            }
+
+            if (!activations.TryGetValue(participantId, out var ranges))
+            {
+                ranges = [];
+                activations[participantId] = ranges;
+            }
+
+            ranges.Add((startY, endY));
+            activeLifelines.Remove(participantId);
+        }
+    }
+
+    static void DrawElements(SvgBuilder builder, SequenceModel model,
+        Dictionary<string, double> positions,
+        Dictionary<int, double> yPositions,
+        RenderOptions options)
+    {
+        var messageNumber = 0;
+
+        for (var i = 0; i < model.Elements.Count; i++)
+        {
+            var y = yPositions[i];
+
+            switch (model.Elements[i])
             {
                 case Message msg:
                     messageNumber++;
@@ -254,56 +381,12 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         y,
                         options,
                         model.AutoNumber ? messageNumber : null);
-
-                    // Handle activation on message
-                    if (msg.Activate)
-                    {
-                        activeLifelines[msg.ToId] = y;
-                    }
-
-                    if (msg.Deactivate && activeLifelines.TryGetValue(msg.ToId, out var startY))
-                    {
-                        if (!activations.ContainsKey(msg.ToId))
-                            activations[msg.ToId] = [];
-                        activations[msg.ToId].Add((startY, y));
-                        activeLifelines.Remove(msg.ToId);
-                    }
-
                     break;
 
                 case Note note:
                     DrawNote(builder, note, positions, y, options);
                     break;
-
-                case Activation activation:
-                    if (activation.IsActivate)
-                    {
-                        activeLifelines[activation.ParticipantId] = y;
-                    }
-                    else if (activeLifelines.TryGetValue(activation.ParticipantId, out var actStartY))
-                    {
-                        if (!activations.ContainsKey(activation.ParticipantId))
-                            activations[activation.ParticipantId] = [];
-                        activations[activation.ParticipantId].Add((actStartY, y));
-                        activeLifelines.Remove(activation.ParticipantId);
-                    }
-
-                    break;
             }
-        }
-
-        // Close any remaining activations
-        // ReSharper disable once UseIndexFromEndExpression
-        var lastY = yPositions.Count > 0 ? yPositions[yPositions.Count - 1] + messageSpacing : 0;
-        foreach (var (participantId, startY) in activeLifelines)
-        {
-            if (!activations.TryGetValue(participantId, out var value))
-            {
-                value = [];
-                activations[participantId] = value;
-            }
-
-            value.Add((startY, lastY));
         }
     }
 
@@ -330,11 +413,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         if (isSelfMessage)
         {
             // Self-referencing message - draw as a loop
-            const int loopWidth = 40;
             const int loopHeight = 30;
             var path = string.Create(
                 CultureInfo.InvariantCulture,
-                $"M{fromX:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y:0.##} L{fromX + loopWidth:0.##},{y + loopHeight:0.##} L{fromX:0.##},{y + loopHeight:0.##}");
+                $"M{fromX:0.##},{y:0.##} L{fromX + selfMessageLoopWidth:0.##},{y:0.##} L{fromX + selfMessageLoopWidth:0.##},{y + loopHeight:0.##} L{fromX:0.##},{y + loopHeight:0.##}");
             builder.AddPath(
                 path,
                 fill: "none",
@@ -348,7 +430,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             {
                 var labelText = number.HasValue ? $"{number}. {msg.Text}" : msg.Text;
                 builder.AddText(
-                    fromX + loopWidth + 5,
+                    fromX + selfMessageLoopWidth + 5,
                     y + loopHeight / 2,
                     labelText,
                     anchor: "start",
@@ -455,34 +537,45 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    static void DrawNote(SvgBuilder builder, Note note,
-        Dictionary<string, double> positions, double y, RenderOptions options)
+    /// <summary>
+    /// Where a note sits and how wide it is. Notes grow to fit their text, and a note "over" two
+    /// participants spans from one to the other rather than floating between them.
+    /// </summary>
+    static (double x, double width) NoteGeometry(Note note,
+        Dictionary<string, double> positions, RenderOptions options)
     {
         var participantX = positions[note.ParticipantId];
-        double noteX;
+        var textWidth = MeasureText(note.Text, options.FontSize) + notePadding * 2;
 
         switch (note.Position)
         {
             case NotePosition.RightOf:
-                noteX = participantX + participantWidth / 2 + 10;
-                break;
+                return (participantX + participantWidth / 2 + noteGap, Math.Max(noteMinWidth, textWidth));
+
             case NotePosition.LeftOf:
-                noteX = participantX - participantWidth / 2 - noteWidth - 10;
-                break;
+                var leftWidth = Math.Max(noteMinWidth, textWidth);
+                return (participantX - participantWidth / 2 - noteGap - leftWidth, leftWidth);
+
             case NotePosition.Over:
             default:
                 if (!string.IsNullOrEmpty(note.OverParticipantId2) &&
                     positions.TryGetValue(note.OverParticipantId2, out var participant2X))
                 {
-                    noteX = (participantX + participant2X) / 2 - noteWidth / 2;
-                }
-                else
-                {
-                    noteX = participantX - noteWidth / 2;
+                    var left = Math.Min(participantX, participant2X) - participantWidth / 2;
+                    var right = Math.Max(participantX, participant2X) + participantWidth / 2;
+                    var span = Math.Max(right - left, textWidth);
+                    return ((left + right) / 2 - span / 2, span);
                 }
 
-                break;
+                var overWidth = Math.Max(noteMinWidth, textWidth);
+                return (participantX - overWidth / 2, overWidth);
         }
+    }
+
+    static void DrawNote(SvgBuilder builder, Note note,
+        Dictionary<string, double> positions, double y, RenderOptions options)
+    {
+        var (noteX, noteWidth) = NoteGeometry(note, positions, options);
 
         // Note box (folded corner style)
         const int foldSize = 8;
@@ -541,4 +634,6 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 }

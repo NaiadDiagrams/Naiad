@@ -300,7 +300,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">a1</text>
+    fill="#fff">Research</text>
   <text
     x="30"
     y="165"
@@ -324,7 +324,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">a2</text>
+    fill="#fff">Design</text>
   <rect
     x="20"
     y="180"
@@ -363,7 +363,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">b1</text>
+    fill="#fff">Coding</text>
   <text
     x="30"
     y="255"
@@ -387,5 +387,5 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">b2</text>
+    fill="#fff">Testing</text>
 </svg>

@@ -4,13 +4,28 @@ class ClassParser : IDiagramParser<ClassModel>
 
     static ClassParser()
     {
-        // Identifier for class names (alphanumeric and underscore)
-        var classIdentifier =
+        // Spaces and tabs only. Whitespace that may span a newline would let a member's type bind to the
+        // name on the *following* line, merging bodies such as an enumeration's one-value-per-line list.
+        var inlineGap =
+            Token(_ => _ is ' ' or '\t').SkipAtLeastOnce();
+
+        var identifier =
             Token(_ => char.IsLetterOrDigit(_) || _ == '_')
                 .AtLeastOnceString()
                 .Labelled("class identifier");
 
-        // Visibility modifier
+        // Mermaid spells generics ~T~. The tilde form is display only, so a class is keyed on its bare
+        // name and `IRepository~T~` in a relationship resolves to the `class IRepository~T~` declaration.
+        var genericArgument =
+            Char('~')
+                .Then(Token(_ => _ != '~' && _ != '\r' && _ != '\n').AtLeastOnceString())
+                .Before(Char('~'));
+
+        var className =
+            from id in identifier
+            from generic in Try(genericArgument).Optional()
+            select new ClassName(id, generic.HasValue ? $"{id}<{generic.Value}>" : null);
+
         var visibilityParser =
             OneOf(
                 Char('+').ThenReturn(Visibility.Public),
@@ -19,15 +34,24 @@ class ClassParser : IDiagramParser<ClassModel>
                 Char('~').ThenReturn(Visibility.PackagePrivate)
             );
 
+        // A type name, including a ~T~ generic argument, which is normalised to angle brackets.
+        var typeName =
+            Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '<' or '>' or '[' or ']' or ',' or '~')
+                .AtLeastOnceString()
+                .Select(NormalizeGenerics);
+
         // Type annotation like : String or : int
         var typeAnnotation =
             CommonParsers.InlineWhitespace
                 .Then(Char(':'))
                 .Then(CommonParsers.InlineWhitespace)
-                .Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '<' || _ == '>' || _ == '[' || _ == ']' || _ == ',')
-                    .AtLeastOnceString());
+                .Then(typeName);
 
-        // Method parameters like (String name, int age)
+        // Mermaid's classifier suffix: $ marks a static member, * an abstract one. It trails the
+        // declaration, after the parentheses for a method (`+validate()$ bool`).
+        var classifier = OneOf(Char('$'), Char('*'));
+
+        // Method parameters like (String name, int age) or (id: int)
         var parametersParser =
             Char('(')
                 .Then(
@@ -37,22 +61,22 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Before(Char(')'))
                 .Select(ParseParameters);
 
-        // Member: +String name (type first) or +name : String (type after colon)
+        // Member: +String name (type first), +name : String (type after colon) or a bare enumeration value
         var memberParser =
             from _ in CommonParsers.InlineWhitespace
             from visibility in visibilityParser.Optional()
-            from isStatic in Char('$').Optional()
-            from firstWord in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '<' || _ == '>' || _ == '[' || _ == ']').AtLeastOnceString()
+            from firstWord in typeName
             from rest in Try(
                 // Type first format: +String name
-                from __ in CommonParsers.RequiredWhitespace
+                from __ in inlineGap
                 from memberName in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
-                select (Type: firstWord, Name: memberName)
+                select (Type: (string?) firstWord, Name: memberName)
             ).Or(
                 // Name only or name : Type format
-                from typeAnnotation in typeAnnotation.Optional()
-                select (Type: typeAnnotation.HasValue ? typeAnnotation.Value : null, Name: firstWord)
+                from annotation in typeAnnotation.Optional()
+                select (Type: annotation.HasValue ? annotation.Value : null, Name: firstWord)
             )
+            from suffix in classifier.Optional()
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
             select new ClassMember
@@ -60,28 +84,29 @@ class ClassParser : IDiagramParser<ClassModel>
                 Name = rest.Name,
                 Type = rest.Type,
                 Visibility = visibility.HasValue ? visibility.Value : Visibility.Public,
-                IsStatic = isStatic.HasValue
+                IsStatic = suffix is {HasValue: true, Value: '$'}
             };
 
-        // Method: +makeSound() void or +makeSound(String s) : void
+        // Method: +makeSound(), +move(int distance) : void, +getId() int or +validate()$ bool
         var methodParser =
             from _ in CommonParsers.InlineWhitespace
             from visibility in visibilityParser.Optional()
-            from isStatic in Char('$').Optional()
-            from isAbstract in Char('*').Optional()
             from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
             from parameters in parametersParser
-            from returnType in typeAnnotation.Optional()
+            from suffix in classifier.Optional()
+            from returnType in OneOf(
+                // `: void` and the bare `void` of `+getId() int` are both Mermaid return types.
+                Try(typeAnnotation),
+                Try(inlineGap.Then(typeName))
+            ).Optional()
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
-            select new ClassMethod
-            {
-                Name = name,
-                ReturnType = returnType.HasValue ? returnType.Value : null,
-                Visibility = visibility.HasValue ? visibility.Value : Visibility.Public,
-                IsStatic = isStatic.HasValue,
-                IsAbstract = isAbstract.HasValue
-            };
+            select CreateMethod(
+                name,
+                parameters,
+                returnType.HasValue ? returnType.Value : null,
+                visibility.HasValue ? visibility.Value : Visibility.Public,
+                suffix);
 
         // Class annotation: <<interface>>, <<abstract>>, etc.
         var annotationParser =
@@ -103,8 +128,14 @@ class ClassParser : IDiagramParser<ClassModel>
             var annotationLine = Try(annotationParser.Select<IClassBodyContent?>(_ => new AnnotationItem(_)));
             var methodLine = Try(methodParser.Select<IClassBodyContent?>(_ => new MethodItem(_)));
             var memberLine = Try(memberParser.Select<IClassBodyContent?>(_ => new MemberItem(_)));
-            var emptyLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)
-                .ThenReturn<IClassBodyContent?>(null);
+
+            // Try, and a newline rather than LineEnd: the indent before the closing brace must be given
+            // back so the body ends cleanly, and a parser that can match at EOF without consuming would
+            // spin here forever.
+            var emptyLine = Try(
+                CommonParsers.InlineWhitespace
+                    .Then(CommonParsers.Newline)
+                    .ThenReturn<IClassBodyContent?>(null));
 
             var contentLine = OneOf(annotationLine, methodLine, memberLine, emptyLine);
 
@@ -139,7 +170,7 @@ class ClassParser : IDiagramParser<ClassModel>
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("class")
             from __ in CommonParsers.RequiredWhitespace
-            from id in classIdentifier
+            from name in className
             from ___ in CommonParsers.InlineWhitespace
             from body in Try(
                 from open in Char('{')
@@ -151,25 +182,40 @@ class ClassParser : IDiagramParser<ClassModel>
                 select content
             ).Optional()
             from _______ in CommonParsers.LineEnd.Optional()
-            select CreateClassDefinition(id, body);
+            select CreateClassDefinition(name, body);
 
-        // Relationship arrows
-        var relationshipArrowParser =
+        // A marker token on each side of the line, so `<|--`, `--|>`, `*--`, `--o` and two-sided forms
+        // such as `<|--|>` each keep their glyph on the end the author wrote it on.
+        var fromMarker =
             OneOf(
-                Try(String("<|--")).ThenReturn(RelationshipType.Inheritance),
-                Try(String("--|>")).ThenReturn(RelationshipType.Inheritance),
-                Try(String("*--")).ThenReturn(RelationshipType.Composition),
-                Try(String("--*")).ThenReturn(RelationshipType.Composition),
-                Try(String("o--")).ThenReturn(RelationshipType.Aggregation),
-                Try(String("--o")).ThenReturn(RelationshipType.Aggregation),
-                Try(String("<..")).ThenReturn(RelationshipType.DependencyLeft),
-                Try(String("..>")).ThenReturn(RelationshipType.DependencyRight),
-                Try(String("..|>")).ThenReturn(RelationshipType.Realization),
-                Try(String("<|..")).ThenReturn(RelationshipType.Realization),
-                Try(String("-->")).ThenReturn(RelationshipType.Association),
-                Try(String("<--")).ThenReturn(RelationshipType.Association),
-                String("--").ThenReturn(RelationshipType.Link)
+                Try(String("<|")).ThenReturn(RelationshipMarker.Triangle),
+                Try(String("*")).ThenReturn(RelationshipMarker.FilledDiamond),
+                Try(String("o")).ThenReturn(RelationshipMarker.HollowDiamond),
+                Try(String("<")).ThenReturn(RelationshipMarker.Arrow)
             );
+
+        var toMarker =
+            OneOf(
+                Try(String("|>")).ThenReturn(RelationshipMarker.Triangle),
+                Try(String("*")).ThenReturn(RelationshipMarker.FilledDiamond),
+                Try(String("o")).ThenReturn(RelationshipMarker.HollowDiamond),
+                Try(String(">")).ThenReturn(RelationshipMarker.Arrow)
+            );
+
+        var relationshipLine =
+            OneOf(
+                Try(String("--")).ThenReturn(false),
+                String("..").ThenReturn(true)
+            );
+
+        var relationshipArrowParser =
+            from from_ in Try(fromMarker).Optional()
+            from dashed in relationshipLine
+            from to in Try(toMarker).Optional()
+            select new RelationshipArrow(
+                from_.HasValue ? from_.Value : RelationshipMarker.None,
+                to.HasValue ? to.Value : RelationshipMarker.None,
+                dashed);
 
         // Cardinality like "1", "0..1", "1..*", "*"
         var cardinalityParser =
@@ -177,33 +223,38 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Then(Token(_ => _ != '"').AtLeastOnceString())
                 .Before(Char('"'));
 
-        // Relationship: ClassA <|-- ClassB : label
+        // Relationship: ClassA "1" <|-- "*" ClassB : label
         var relationshipParser =
             from _ in CommonParsers.InlineWhitespace
-            from fromCardinality in Try(cardinalityParser.Before(CommonParsers.InlineWhitespace)).Optional()
-            from fromId in classIdentifier
+            from fromId in className
             from __ in CommonParsers.InlineWhitespace
+            from fromCardinality in Try(cardinalityParser.Before(CommonParsers.InlineWhitespace)).Optional()
             from arrow in relationshipArrowParser
             from ___ in CommonParsers.InlineWhitespace
-            from toId in classIdentifier
+            from toCardinality in Try(cardinalityParser.Before(inlineGap)).Optional()
+            from toId in className
             from ____ in CommonParsers.InlineWhitespace
-            from toCardinality in Try(cardinalityParser).Optional()
             from label in Try(
-                CommonParsers.InlineWhitespace
-                    .Then(Char(':'))
+                Char(':')
                     .Then(CommonParsers.InlineWhitespace)
                     .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
             ).Optional()
             from lineEnd in CommonParsers.LineEnd
-            select new ClassRelationship
-            {
-                FromId = fromId,
-                ToId = toId,
-                Type = arrow,
-                Label = label.HasValue ? label.Value : null,
-                FromCardinality = fromCardinality.HasValue ? fromCardinality.Value : null,
-                ToCardinality = toCardinality.HasValue ? toCardinality.Value : null
-            };
+            select new RelationshipItem(
+                new()
+                {
+                    FromId = fromId.Id,
+                    ToId = toId.Id,
+                    Type = Classify(arrow),
+                    FromMarker = arrow.From,
+                    ToMarker = arrow.To,
+                    IsDashed = arrow.Dashed,
+                    Label = label.HasValue ? label.Value.Trim() : null,
+                    FromCardinality = fromCardinality.HasValue ? fromCardinality.Value : null,
+                    ToCardinality = toCardinality.HasValue ? toCardinality.Value : null
+                },
+                fromId,
+                toId);
 
         // Direction directive
         var directionDirectiveParser =
@@ -222,7 +273,7 @@ class ClassParser : IDiagramParser<ClassModel>
             OneOf(
                 Try(directionDirectiveParser.Select<IClassContent?>(_ => new DirectionItem(_))),
                 Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
-                Try(relationshipParser.Select<IClassContent?>(_ => new RelationshipItem(_))),
+                Try(relationshipParser.Select<IClassContent?>(_ => _)),
                 skipLine.ThenReturn<IClassContent?>(null)
             ).Many();
 
@@ -235,6 +286,84 @@ class ClassParser : IDiagramParser<ClassModel>
             select BuildModel(content);
     }
 
+    /// <summary>
+    /// Rewrites Mermaid's tilde-delimited generics as angle brackets, so <c>List~Item~</c> displays as
+    /// <c>List&lt;Item&gt;</c>. Tildes alternate open/close, matching how Mermaid pairs them.
+    /// </summary>
+    static string NormalizeGenerics(string text)
+    {
+        if (!text.Contains('~'))
+        {
+            return text;
+        }
+
+        var builder = new StringBuilder(text.Length);
+        var open = true;
+        foreach (var ch in text)
+        {
+            if (ch == '~')
+            {
+                builder.Append(open ? '<' : '>');
+                open = !open;
+            }
+            else
+            {
+                builder.Append(ch);
+            }
+        }
+
+        return builder.ToString();
+    }
+
+    static RelationshipType Classify(RelationshipArrow arrow)
+    {
+        if (arrow.From is RelationshipMarker.Triangle || arrow.To is RelationshipMarker.Triangle)
+        {
+            return arrow.Dashed ? RelationshipType.Realization : RelationshipType.Inheritance;
+        }
+
+        if (arrow.From is RelationshipMarker.FilledDiamond || arrow.To is RelationshipMarker.FilledDiamond)
+        {
+            return RelationshipType.Composition;
+        }
+
+        if (arrow.From is RelationshipMarker.HollowDiamond || arrow.To is RelationshipMarker.HollowDiamond)
+        {
+            return RelationshipType.Aggregation;
+        }
+
+        if (arrow.From is RelationshipMarker.Arrow)
+        {
+            return arrow.Dashed ? RelationshipType.DependencyLeft : RelationshipType.Association;
+        }
+
+        if (arrow.To is RelationshipMarker.Arrow)
+        {
+            return arrow.Dashed ? RelationshipType.DependencyRight : RelationshipType.Association;
+        }
+
+        return RelationshipType.Link;
+    }
+
+    static ClassMethod CreateMethod(
+        string name,
+        List<MethodParameter> parameters,
+        string? returnType,
+        Visibility visibility,
+        Maybe<char> classifier)
+    {
+        var method = new ClassMethod
+        {
+            Name = name,
+            ReturnType = returnType,
+            Visibility = visibility,
+            IsStatic = classifier is {HasValue: true, Value: '$'},
+            IsAbstract = classifier is {HasValue: true, Value: '*'}
+        };
+        method.Parameters.AddRange(parameters);
+        return method;
+    }
+
     static List<MethodParameter> ParseParameters(string paramStr)
     {
         var parameters = new List<MethodParameter>();
@@ -245,27 +374,47 @@ class ClassParser : IDiagramParser<ClassModel>
 
         foreach (var param in paramStr.Split(','))
         {
-            var parts = param.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length >= 1)
+            var text = param.Trim();
+            if (text.Length == 0)
             {
-                var moreThan1 = parts.Length >= 2;
+                continue;
+            }
+
+            // Both `int age` and Mermaid's `age: int` spelling reach here.
+            var colon = text.IndexOf(':');
+            if (colon >= 0)
+            {
                 parameters.Add(
                     new()
                     {
-                        Name = moreThan1 ? parts[1] : parts[0],
-                        Type = moreThan1 ? parts[0] : null
+                        Name = NormalizeGenerics(text[..colon].Trim()),
+                        Type = NormalizeGenerics(text[(colon + 1)..].Trim())
                     });
+                continue;
             }
+
+            var parts = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var typed = parts.Length >= 2;
+            parameters.Add(
+                new()
+                {
+                    Name = NormalizeGenerics(typed ? parts[1] : parts[0]),
+                    Type = typed ? NormalizeGenerics(parts[0]) : null
+                });
         }
 
         return parameters;
     }
 
     static ClassDefinition CreateClassDefinition(
-        string id,
+        ClassName name,
         Maybe<(ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
-        var classDef = new ClassDefinition {Id = id};
+        var classDef = new ClassDefinition
+        {
+            Id = name.Id,
+            DisplayName = name.DisplayName
+        };
 
         if (body.HasValue)
         {
@@ -281,7 +430,7 @@ class ClassParser : IDiagramParser<ClassModel>
     static ClassModel BuildModel(IEnumerable<IClassContent?> content)
     {
         var model = new ClassModel();
-        var classIds = new HashSet<string>();
+        var classIds = new Dictionary<string, ClassDefinition>();
 
         foreach (var item in content)
         {
@@ -293,46 +442,56 @@ class ClassParser : IDiagramParser<ClassModel>
 
                 case ClassDefinitionItem cdef:
                     var c = cdef.Value;
-                    if (!classIds.Contains(c.Id))
+                    if (classIds.TryGetValue(c.Id, out var existing))
+                    {
+                        // A class referenced by an earlier relationship is a placeholder; the later
+                        // declaration is what carries the members, so fill the placeholder in.
+                        existing.DisplayName ??= c.DisplayName;
+                        existing.Annotation ??= c.Annotation;
+                        existing.Members.AddRange(c.Members);
+                        existing.Methods.AddRange(c.Methods);
+                    }
+                    else
                     {
                         model.Classes.Add(c);
-                        classIds.Add(c.Id);
+                        classIds.Add(c.Id, c);
                     }
 
                     break;
 
                 case RelationshipItem rel:
-                    var r = rel.Value;
                     // Auto-add classes from relationships
-                    if (!classIds.Contains(r.FromId))
-                    {
-                        model.Classes.Add(
-                            new()
-                            {
-                                Id = r.FromId
-                            });
-                        classIds.Add(r.FromId);
-                    }
-
-                    if (!classIds.Contains(r.ToId))
-                    {
-                        model.Classes.Add(
-                            new()
-                            {
-                                Id = r.ToId
-                            });
-                        classIds.Add(r.ToId);
-                    }
-
-                    model.Relationships.Add(r);
+                    AddPlaceholder(rel.From);
+                    AddPlaceholder(rel.To);
+                    model.Relationships.Add(rel.Value);
                     break;
             }
         }
 
         return model;
+
+        void AddPlaceholder(ClassName name)
+        {
+            if (classIds.ContainsKey(name.Id))
+            {
+                return;
+            }
+
+            var placeholder = new ClassDefinition
+            {
+                Id = name.Id,
+                DisplayName = name.DisplayName
+            };
+            model.Classes.Add(placeholder);
+            classIds.Add(name.Id, placeholder);
+        }
     }
 
     public Result<char, ClassModel> Parse(string input) => parser.Parse(input);
+
+    readonly record struct ClassName(string Id, string? DisplayName);
+
+    readonly record struct RelationshipArrow(RelationshipMarker From, RelationshipMarker To, bool Dashed);
 
     interface IClassBodyContent;
 
@@ -348,5 +507,5 @@ class ClassParser : IDiagramParser<ClassModel>
 
     readonly record struct ClassDefinitionItem(ClassDefinition Value) : IClassContent;
 
-    readonly record struct RelationshipItem(ClassRelationship Value) : IClassContent;
+    readonly record struct RelationshipItem(ClassRelationship Value, ClassName From, ClassName To) : IClassContent;
 }

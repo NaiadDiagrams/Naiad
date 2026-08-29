@@ -2,43 +2,43 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 188.3 216"
-  style="max-width: 188.3px;"
+  viewBox="0 0 208.3 216"
+  style="max-width: 208.3px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <path
-      d="M74.15,30 L74.15,39.67 C74.15,49.33 74.15,68.67 74.15,88 C74.15,107.33 74.15,126.67 74.15,136.33 L74.15,146"
+      d="M84.15,30 L84.15,39.67 C84.15,49.33 84.15,68.67 84.15,88 C84.15,107.33 84.15,126.67 84.15,136.33 L84.15,146"
       fill="none"
       stroke="#333" />
+    <line
+      x1="89.15"
+      y1="37"
+      x2="79.15"
+      y2="37"
+      stroke="#333" />
     <circle
-      cx="74.15"
+      cx="84.15"
       cy="45"
       r="4"
       fill="#fff"
       stroke="#333" />
     <line
-      x1="78.15"
-      y1="53"
-      x2="70.15"
-      y2="53"
+      x1="79.15"
+      y1="139"
+      x2="89.15"
+      y2="139"
       stroke="#333" />
     <circle
-      cx="74.15"
+      cx="84.15"
       cy="131"
       r="4"
       fill="#fff"
       stroke="#333" />
-    <line
-      x1="70.15"
-      y1="123"
-      x2="78.15"
-      y2="123"
-      stroke="#333" />
     <rect
-      x="56.95"
+      x="66.95"
       y="80"
       width="34.4"
       height="16"
@@ -46,7 +46,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="74.15"
+      x="84.15"
       y="88"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -54,22 +54,22 @@
       font-family="Arial, sans-serif"
       fill="#333">uses</text>
     <rect
-      x="14.15"
+      x="22.75"
       y="0"
-      width="120"
+      width="122.8"
       height="30"
       fill="#ECECFF"
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="14.15"
+      x="22.75"
       y="0"
-      width="120"
+      width="122.8"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="74.15"
+      x="84.15"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -80,7 +80,7 @@
     <rect
       x="0"
       y="146"
-      width="148.3"
+      width="168.3"
       height="30"
       fill="#ECECFF"
       stroke="#9370DB"
@@ -88,12 +88,12 @@
     <rect
       x="0"
       y="146"
-      width="148.3"
+      width="168.3"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="74.15"
+      x="84.15"
       y="161"
       text-anchor="middle"
       dominant-baseline="middle"

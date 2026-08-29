@@ -2,138 +2,200 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 740 400"
-  style="max-width: 740px;"
+  viewBox="0 0 460 440"
+  style="max-width: 460px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 20 220 20 L 220 220 C 130 220 130 208.89 40 208.89 Z"
+    d="M 40 20 C 130 20 130 20 220 20 L 220 242.22 C 130 242.22 130 231.11 40 231.11 Z"
     fill="#4CAF50"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 40 218.89 C 130 218.89 130 220 220 220 L 220 320 C 130 320 130 313.33 40 313.33 Z"
+    d="M 40 241.11 C 130 241.11 130 242.22 220 242.22 L 220 353.33 C 130 353.33 130 346.67 40 346.67 Z"
     fill="#FF9800"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 40 323.33 C 130 323.33 130 320 220 320 L 220 380 C 130 380 130 380 40 380 Z"
+    d="M 40 356.67 C 130 356.67 130 353.33 220 353.33 L 220 420 C 130 420 130 420 40 420 Z"
     fill="#E91E63"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 20 C 330 20 330 20 420 20 L 420 171.11 C 330 171.11 330 180 240 180 Z"
+    d="M 240 20 C 330 20 330 20 420 20 L 420 188.89 C 330 188.89 330 197.78 240 197.78 Z"
     fill="#2196F3"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 180 C 330 180 330 181.11 420 181.11 L 420 294.44 C 330 294.44 330 300 240 300 Z"
+    d="M 240 197.78 C 330 197.78 330 198.89 420 198.89 L 420 325.56 C 330 325.56 330 331.11 240 331.11 Z"
     fill="#2196F3"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <path
-    d="M 240 300 C 330 300 330 304.44 420 304.44 L 420 380 C 330 380 330 380 240 380 Z"
+    d="M 240 331.11 C 330 331.11 330 335.56 420 335.56 L 420 420 C 330 420 330 420 240 420 Z"
     fill="#2196F3"
-    stroke="none" />
+    stroke="none"
+    opacity="0.45" />
   <rect
     x="20"
     y="20"
     width="20"
-    height="188.89"
+    height="211.11"
     fill="#4CAF50"
     stroke="#333" />
   <text
-    x="15"
-    y="114.44"
-    text-anchor="end"
+    x="46"
+    y="119.56"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Coal</text>
+  <text
+    x="46"
+    y="133.56"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">100</text>
   <rect
     x="220"
     y="20"
     width="20"
-    height="360"
+    height="400"
     fill="#2196F3"
     stroke="#333" />
   <text
-    x="215"
-    y="200"
+    x="214"
+    y="214"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Electricity</text>
+  <text
+    x="214"
+    y="228"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">180</text>
   <rect
     x="20"
-    y="218.89"
+    y="241.11"
     width="20"
-    height="94.44"
+    height="105.56"
     fill="#FF9800"
     stroke="#333" />
   <text
-    x="15"
-    y="266.11"
-    text-anchor="end"
+    x="46"
+    y="287.89"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Gas</text>
+  <text
+    x="46"
+    y="301.89"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">50</text>
   <rect
     x="20"
-    y="323.33"
+    y="356.67"
     width="20"
-    height="56.67"
+    height="63.33"
     fill="#E91E63"
     stroke="#333" />
   <text
-    x="15"
-    y="351.67"
-    text-anchor="end"
+    x="46"
+    y="382.33"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Nuclear</text>
+  <text
+    x="46"
+    y="396.33"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">30</text>
   <rect
     x="420"
     y="20"
     width="20"
-    height="151.11"
+    height="168.89"
     fill="#9C27B0"
     stroke="#333" />
   <text
-    x="445"
-    y="95.56"
-    text-anchor="start"
+    x="414"
+    y="98.44"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Industry</text>
+  <text
+    x="414"
+    y="112.44"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">80</text>
   <rect
     x="420"
-    y="181.11"
+    y="198.89"
     width="20"
-    height="113.33"
+    height="126.67"
     fill="#00BCD4"
     stroke="#333" />
   <text
-    x="445"
-    y="237.78"
-    text-anchor="start"
+    x="414"
+    y="256.22"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Residential</text>
+  <text
+    x="414"
+    y="270.22"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">60</text>
   <rect
     x="420"
-    y="304.44"
+    y="335.56"
     width="20"
-    height="75.56"
+    height="84.44"
     fill="#FF5722"
     stroke="#333" />
   <text
-    x="445"
-    y="342.22"
-    text-anchor="start"
+    x="414"
+    y="371.78"
+    text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
     font-family="Arial, sans-serif"
     fill="#333">Commercial</text>
+  <text
+    x="414"
+    y="385.78"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">40</text>
 </svg>

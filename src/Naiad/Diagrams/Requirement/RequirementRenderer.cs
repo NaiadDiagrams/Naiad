@@ -2,13 +2,20 @@ namespace Naiad.Diagrams.Requirement;
 
 public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 {
-    const double boxWidth = 180;
-    const double boxHeight = 80;
-    const double boxSpacing = 60;
+    const double boxPadding = 12;
+    const double typeLineHeight = 18;
+    const double nameLineHeight = 22;
+    const double rowHeight = 18;
+    const double separatorGap = 10;
+    const double minBoxWidth = 160;
+    const double columnSpacing = 90;
+    const double rowSpacing = 50;
     const double titleHeight = 40;
 
     const string requirementColor = "#C8E6C9";
+    const string requirementStroke = "#4CAF50";
     const string elementColor = "#BBDEFB";
+    const string elementStroke = "#2196F3";
 
     public SvgDocument Render(RequirementModel model, RenderOptions options)
     {
@@ -29,18 +36,30 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
-        // Layout: requirements on left, elements on right
-        var maxItems = Math.Max(model.Requirements.Count, model.Elements.Count);
-        var height = maxItems * (boxHeight + boxSpacing) + options.Padding * 2 + titleOffset;
-        var width = 2 * (boxWidth + boxSpacing) + options.Padding * 2;
+        // Requirements go in the left column and elements in the right, each box sized to the rows it
+        // actually carries so the canvas ends up the size of its content.
+        var requirements = model.Requirements.Select(_ => BuildRequirementBox(_, options)).ToList();
+        var elements = model.Elements.Select(_ => BuildElementBox(_, options)).ToList();
+
+        var leftWidth = requirements.Count > 0 ? requirements.Max(_ => _.Width) : 0;
+        var rightWidth = elements.Count > 0 ? elements.Max(_ => _.Width) : 0;
+        var gap = leftWidth > 0 && rightWidth > 0 ? columnSpacing : 0;
+
+        var contentWidth = leftWidth + gap + rightWidth;
+        if (!string.IsNullOrEmpty(model.Title))
+        {
+            contentWidth = Math.Max(contentWidth, MeasureText(model.Title, options.FontSize + 4, true));
+        }
+
+        var contentHeight = Math.Max(StackHeight(requirements), StackHeight(elements));
+
+        var width = contentWidth + options.Padding * 2;
+        var height = contentHeight + options.Padding * 2 + titleOffset;
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
-
-        // Add arrow marker
         builder.AddArrowMarker("reqarrow", "#666");
 
-        // Draw title
         if (!string.IsNullOrEmpty(model.Title))
         {
             builder.AddText(
@@ -54,191 +73,206 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
                 fontWeight: "bold");
         }
 
-        // Track positions
-        var positions = new Dictionary<string, (double x, double y)>();
+        var boxes = new Dictionary<string, NodeBox>();
+        var top = options.Padding + titleOffset;
 
-        // Draw requirements (left column)
-        var reqX = options.Padding;
-        for (var i = 0; i < model.Requirements.Count; i++)
+        StackColumn(builder, requirements, options.Padding, leftWidth, top, boxes, options);
+        StackColumn(builder, elements, options.Padding + leftWidth + gap, rightWidth, top, boxes, options);
+
+        foreach (var relation in model.Relations)
         {
-            var req = model.Requirements[i];
-            var y = options.Padding + titleOffset + i * (boxHeight + boxSpacing);
-
-            positions[req.Name] = (reqX + boxWidth / 2, y + boxHeight / 2);
-            DrawRequirement(builder, req, reqX, y, options);
-        }
-
-        // Draw elements (right column)
-        var elemX = options.Padding + boxWidth + boxSpacing;
-        for (var i = 0; i < model.Elements.Count; i++)
-        {
-            var elem = model.Elements[i];
-            var y = options.Padding + titleOffset + i * (boxHeight + boxSpacing);
-
-            positions[elem.Name] = (elemX + boxWidth / 2, y + boxHeight / 2);
-            DrawElement(builder, elem, elemX, y, options);
-        }
-
-        // Draw relations
-        foreach (var rel in model.Relations)
-        {
-            if (positions.TryGetValue(rel.Source, out var from) &&
-                positions.TryGetValue(rel.Target, out var to))
+            if (boxes.TryGetValue(relation.Source, out var from) &&
+                boxes.TryGetValue(relation.Target, out var to))
             {
-                DrawRelation(builder, from, to, rel.Type, options);
+                DrawRelation(builder, from, to, relation.Type, options);
             }
         }
 
         return builder.Build();
     }
 
-    static void DrawRequirement(SvgBuilder builder, Requirement req, double x, double y, RenderOptions options)
-    {
-        // Box
-        builder.AddRect(
-            x,
-            y,
-            boxWidth,
-            boxHeight,
-            rx: 5,
-            fill: requirementColor,
-            stroke: "#4CAF50",
-            strokeWidth: 2);
+    static double StackHeight(List<Box> boxes) =>
+        boxes.Count == 0
+            ? 0
+            : boxes.Sum(_ => _.Height) + (boxes.Count - 1) * rowSpacing;
 
-        // Type label
-        var typeLabel = req.Type switch
+    static void StackColumn(SvgBuilder builder, List<Box> boxes, double columnX, double columnWidth,
+        double top, Dictionary<string, NodeBox> positions, RenderOptions options)
+    {
+        var y = top;
+        foreach (var box in boxes)
         {
-            RequirementType.FunctionalRequirement => "Functional",
-            RequirementType.InterfaceRequirement => "Interface",
-            RequirementType.PerformanceRequirement => "Performance",
-            RequirementType.PhysicalRequirement => "Physical",
-            RequirementType.DesignConstraint => "Constraint",
+            // Centre each box in its column so columns of differing widths still line up.
+            var x = columnX + (columnWidth - box.Width) / 2;
+            positions[box.Name] = new(x + box.Width / 2, y + box.Height / 2, box.Width, box.Height);
+            DrawBox(builder, box, x, y, options);
+            y += box.Height + rowSpacing;
+        }
+    }
+
+    static Box BuildRequirementBox(Requirement requirement, RenderOptions options)
+    {
+        var typeLabel = requirement.Type switch
+        {
+            RequirementType.FunctionalRequirement => "Functional Requirement",
+            RequirementType.InterfaceRequirement => "Interface Requirement",
+            RequirementType.PerformanceRequirement => "Performance Requirement",
+            RequirementType.PhysicalRequirement => "Physical Requirement",
+            RequirementType.DesignConstraint => "Design Constraint",
             _ => "Requirement"
         };
 
-        builder.AddText(
-            x + boxWidth / 2,
-            y + 15,
-            $"<<{typeLabel}>>",
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize - 3,
-            fontFamily: options.FontFamily,
-            fill: "#666");
-
-        // Name
-        builder.AddText(
-            x + boxWidth / 2,
-            y + 35,
-            req.Name,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize,
-            fontFamily: options.FontFamily,
-            fontWeight: "bold",
-            fill: "#333");
-
-        // Risk indicator
-        var riskColor = req.Risk switch
+        var rows = new List<string>();
+        if (!string.IsNullOrEmpty(requirement.Id))
         {
-            RiskLevel.Low => "#4CAF50",
-            RiskLevel.High => "#F44336",
-            _ => "#FF9800"
-        };
-        builder.AddCircle(x + 15, y + boxHeight - 15, 6, fill: riskColor, stroke: "#333", strokeWidth: 1);
-
-        // Text (truncated)
-        if (!string.IsNullOrEmpty(req.Text))
-        {
-            var text = req.Text.Length > 25 ? string.Concat(req.Text.AsSpan(0, 22), "...") : req.Text;
-            builder.AddText(
-                x + boxWidth / 2,
-                y + boxHeight - 15,
-                text,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 3,
-                fontFamily: options.FontFamily,
-                fill: "#666");
+            rows.Add($"Id: {requirement.Id}");
         }
+
+        if (!string.IsNullOrEmpty(requirement.Text))
+        {
+            rows.Add($"Text: {requirement.Text}");
+        }
+
+        if (requirement.Risk.HasValue)
+        {
+            rows.Add($"Risk: {requirement.Risk.Value}");
+        }
+
+        if (requirement.VerifyMethod.HasValue)
+        {
+            rows.Add($"Verification: {requirement.VerifyMethod.Value}");
+        }
+
+        return CreateBox(requirement.Name, typeLabel, rows, requirementColor, requirementStroke, options);
     }
 
-    static void DrawElement(SvgBuilder builder, RequirementElement elem, double x, double y, RenderOptions options)
+    static Box BuildElementBox(RequirementElement element, RenderOptions options)
     {
-        // Box
+        var rows = new List<string>();
+        if (!string.IsNullOrEmpty(element.Type))
+        {
+            rows.Add($"Type: {element.Type}");
+        }
+
+        if (!string.IsNullOrEmpty(element.DocRef))
+        {
+            rows.Add($"Doc Ref: {element.DocRef}");
+        }
+
+        return CreateBox(element.Name, "Element", rows, elementColor, elementStroke, options);
+    }
+
+    static Box CreateBox(string name, string typeLabel, List<string> rows, string fill, string stroke,
+        RenderOptions options)
+    {
+        var header = $"<<{typeLabel}>>";
+
+        var textWidth = Math.Max(
+            MeasureText(header, options.FontSize - 3),
+            MeasureText(name, options.FontSize, true));
+        foreach (var row in rows)
+        {
+            textWidth = Math.Max(textWidth, MeasureText(row, options.FontSize - 3));
+        }
+
+        var height = boxPadding + typeLineHeight + nameLineHeight;
+        if (rows.Count > 0)
+        {
+            height += separatorGap + rows.Count * rowHeight;
+        }
+
+        height += boxPadding;
+
+        return new(
+            name,
+            header,
+            rows,
+            fill,
+            stroke,
+            Math.Max(minBoxWidth, textWidth + boxPadding * 2),
+            height);
+    }
+
+    static void DrawBox(SvgBuilder builder, Box box, double x, double y, RenderOptions options)
+    {
         builder.AddRect(
             x,
             y,
-            boxWidth,
-            boxHeight,
+            box.Width,
+            box.Height,
             rx: 5,
-            fill: elementColor,
-            stroke: "#2196F3",
+            fill: box.Fill,
+            stroke: box.Stroke,
             strokeWidth: 2);
 
-        // Type label
+        var centerX = x + box.Width / 2;
+        var cursor = y + boxPadding;
+
         builder.AddText(
-            x + boxWidth / 2,
-            y + 15,
-            "<<Element>>",
+            centerX,
+            cursor + typeLineHeight / 2,
+            box.Header,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize - 3,
             fontFamily: options.FontFamily,
             fill: "#666");
+        cursor += typeLineHeight;
 
-        // Name
         builder.AddText(
-            x + boxWidth / 2,
-            y + 35,
-            elem.Name,
+            centerX,
+            cursor + nameLineHeight / 2,
+            box.Name,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold",
             fill: "#333");
+        cursor += nameLineHeight;
 
-        // Type
-        if (!string.IsNullOrEmpty(elem.Type))
+        if (box.Rows.Count == 0)
+        {
+            return;
+        }
+
+        cursor += separatorGap / 2;
+        builder.AddLine(x, cursor, x + box.Width, cursor, stroke: box.Stroke, strokeWidth: 1);
+        cursor += separatorGap / 2;
+
+        foreach (var row in box.Rows)
         {
             builder.AddText(
-                x + boxWidth / 2,
-                y + 55,
-                $"Type: {elem.Type}",
-                anchor: "middle",
+                x + boxPadding,
+                cursor + rowHeight / 2,
+                row,
+                anchor: "start",
                 baseline: "middle",
                 fontSize: options.FontSize - 3,
                 fontFamily: options.FontFamily,
-                fill: "#666");
+                fill: "#333");
+            cursor += rowHeight;
         }
     }
 
-    static void DrawRelation(
-        SvgBuilder builder,
-        (double x, double y) from,
-        (double x, double y) to,
-        RelationType type,
+    static void DrawRelation(SvgBuilder builder, NodeBox from, NodeBox to, RelationType type,
         RenderOptions options)
     {
-        // Calculate edge points
-        var dx = to.x - from.x;
-        var dy = to.y - from.y;
-        var angle = Math.Atan2(dy, dx);
+        var angle = Math.Atan2(to.CenterY - from.CenterY, to.CenterX - from.CenterX);
+        var (fromX, fromY) = ClipToBorder(from, angle);
+        var (toX, toY) = ClipToBorder(to, angle + Math.PI);
 
-        var fromX = from.x + Math.Cos(angle) * boxWidth / 2;
-        var fromY = from.y + Math.Sin(angle) * boxHeight / 2;
-        var toX = to.x - Math.Cos(angle) * boxWidth / 2;
-        var toY = to.y - Math.Sin(angle) * boxHeight / 2;
+        // Mermaid draws containment solid and every other relation dashed.
+        var dashArray = type == RelationType.Contains ? null : "10,7";
 
-        // Draw line
         builder.AddLine(
             fromX,
             fromY,
             toX,
             toY,
             stroke: "#666",
-            strokeWidth: 1.5);
+            strokeWidth: 1.5,
+            strokeDasharray: dashArray);
 
         // Draw arrowhead
         const int arrowSize = 8;
@@ -253,19 +287,61 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             fill: "#666",
             stroke: "none");
 
-        // Draw label
-        var midX = (fromX + toX) / 2;
-        var midY = (fromY + toY) / 2;
-        var label = type.ToString().ToLowerInvariant();
+        // Label, pushed off the line along its perpendicular. How far depends on which way the edge runs:
+        // clearing a vertical line means moving half the label's width, a horizontal one half its height.
+        var label = $"<<{type.ToString().ToLowerInvariant()}>>";
+        var labelFontSize = options.FontSize - 3;
+        var offset = Math.Abs(Math.Sin(angle)) * (MeasureText(label, labelFontSize) / 2 + 6) +
+                     Math.Abs(Math.Cos(angle)) * (labelFontSize / 2 + 6);
+
+        var perpX = Math.Sin(angle);
+        var perpY = -Math.Cos(angle);
+        if (perpY > 0)
+        {
+            // Keep labels on the upper side whichever way round the edge was declared.
+            perpX = -perpX;
+            perpY = -perpY;
+        }
 
         builder.AddText(
-            midX,
-            midY - 8,
-            $"<<{label}>>",
+            (fromX + toX) / 2 + perpX * offset,
+            (fromY + toY) / 2 + perpY * offset,
+            label,
             anchor: "middle",
             baseline: "middle",
-            fontSize: options.FontSize - 3,
+            fontSize: labelFontSize,
             fontFamily: options.FontFamily,
             fill: "#666");
     }
+
+    /// <summary>
+    /// The point where a ray leaving the box centre at <paramref name="angle"/> crosses the box border.
+    /// Scaling by the nearer of the two axis limits lands on the rectangle itself; scaling both by the
+    /// half-extents would trace the inscribed ellipse and leave diagonal edges starting inside the box.
+    /// </summary>
+    static (double x, double y) ClipToBorder(NodeBox box, double angle)
+    {
+        var dx = Math.Cos(angle);
+        var dy = Math.Sin(angle);
+
+        var scaleX = Math.Abs(dx) < 1e-9 ? double.PositiveInfinity : box.Width / 2 / Math.Abs(dx);
+        var scaleY = Math.Abs(dy) < 1e-9 ? double.PositiveInfinity : box.Height / 2 / Math.Abs(dy);
+        var scale = Math.Min(scaleX, scaleY);
+
+        return (box.CenterX + dx * scale, box.CenterY + dy * scale);
+    }
+
+    static double MeasureText(string text, double fontSize, bool bold = false) =>
+        text.Length * fontSize * (bold ? 0.65 : 0.55);
+
+    readonly record struct Box(
+        string Name,
+        string Header,
+        List<string> Rows,
+        string Fill,
+        string Stroke,
+        double Width,
+        double Height);
+
+    readonly record struct NodeBox(double CenterX, double CenterY, double Width, double Height);
 }

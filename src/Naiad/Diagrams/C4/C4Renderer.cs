@@ -1,4 +1,4 @@
-namespace Naiad.Diagrams.C4;
+﻿namespace Naiad.Diagrams.C4;
 
 public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<C4Model>
@@ -8,6 +8,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     const double elementWidth = 160;
     const double elementHeight = 100;
     const double lineHeight = 18;
+
+    // Characters per description line at the fixed element width.
+    const int descriptionWrapChars = 22;
     const double titleHeight = 50;
     const double boundaryPadding = 15;
     const double boundaryTitleHeight = 40;
@@ -97,8 +100,8 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
                 continue;
             }
 
-            // "Up" is honored by orienting the layout edge so the target ranks
-            // above the source; Left/Right/Neighbor become same-rank constraints.
+            // "Up" is honored by orienting the layout edge so the target ranks above the source.
+            // The other placement keywords are applied after layout, by ApplyPositionalDirections.
             var up = rel.Direction == C4RelationshipDirection.Up;
 
             // Reserve space for the label of a routed (non-positional) edge so a
@@ -125,6 +128,11 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             RankSeparation = 90
         };
         var layoutResult = layoutEngine.BuildLayout(graph, layoutOptions);
+
+        // Left/Right/Neighbor are same-rank hints, but the layout engine has no notion of rank
+        // constraints - Edge.RankConstraint is written and never read - so their targets are placed
+        // against the source here instead.
+        ApplyPositionalDirections(model, graph, layoutOptions.NodeSeparation);
 
         // Resolve each edge's polyline and label point. Positional relationships
         // (Up/Left/Right/Neighbor) are drawn as straight border-to-border lines
@@ -166,6 +174,16 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         double minY = 0;
         var maxX = layoutResult.Width;
         var maxY = layoutResult.Height;
+
+        // A node placed by a positional direction can sit outside the layout's reported extent.
+        foreach (var node in graph.Nodes)
+        {
+            minX = Math.Min(minX, node.Position.X - node.Width / 2);
+            maxX = Math.Max(maxX, node.Position.X + node.Width / 2);
+            minY = Math.Min(minY, node.Position.Y - node.Height / 2);
+            maxY = Math.Max(maxY, node.Position.Y + node.Height / 2);
+        }
+
         foreach (var (_, _, labelX, labelY, label, technology) in drawn)
         {
             if (string.IsNullOrEmpty(label))
@@ -376,7 +394,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         {
             if (boundaryAbs.TryGetValue(boundary.Id, out var b))
             {
-                DrawBoundaryBox(builder, boundary, b.x, b.y, b.w, b.h, options);
+                DrawBoundaryBox(builder, b.x, b.y, b.w, b.h);
             }
         }
 
@@ -387,6 +405,16 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             if (!string.IsNullOrEmpty(label))
             {
                 labels.Add((mx, my, label, technology));
+            }
+        }
+
+        // Captions after the edges: an edge entering a boundary crosses its top edge, and would
+        // otherwise be painted straight through the caption sitting there.
+        foreach (var boundary in model.Boundaries.OrderBy(BoundaryDepth))
+        {
+            if (boundaryAbs.TryGetValue(boundary.Id, out var b))
+            {
+                DrawBoundaryCaption(builder, boundary, b.x, b.y, options);
             }
         }
 
@@ -735,6 +763,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     /// </summary>
     static bool IsPositional(C4RelationshipDirection direction) =>
         direction is C4RelationshipDirection.Up
+            or C4RelationshipDirection.Down
             or C4RelationshipDirection.Left
             or C4RelationshipDirection.Right
             or C4RelationshipDirection.Neighbor;
@@ -842,13 +871,10 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
 
     static void DrawBoundaryBox(
         SvgBuilder builder,
-        C4Boundary boundary,
         double x,
         double y,
         double width,
-        double height,
-        RenderOptions options)
-    {
+        double height) =>
         builder.AddRect(
             x,
             y,
@@ -860,11 +886,22 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             strokeWidth: 2,
             style: "stroke-dasharray: 8 4");
 
+    static void DrawBoundaryCaption(
+        SvgBuilder builder,
+        C4Boundary boundary,
+        double x,
+        double y,
+        RenderOptions options)
+    {
+        // Top-left, as Mermaid places it. Centred on the top edge is exactly where an edge entering the
+        // boundary from above crosses it.
+        var captionX = x + boundaryPadding;
+
         builder.AddText(
-            x + width / 2,
+            captionX,
             y + boundaryTitleHeight / 2 - 5,
             boundary.Label,
-            anchor: "middle",
+            anchor: "start",
             baseline: "middle",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
@@ -883,10 +920,10 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         if (!string.IsNullOrEmpty(typeLabel))
         {
             builder.AddText(
-                x + width / 2,
+                captionX,
                 y + boundaryTitleHeight / 2 + 10,
                 typeLabel,
-                anchor: "middle",
+                anchor: "start",
                 baseline: "middle",
                 fontSize: options.FontSize - 3,
                 fontFamily: options.FontFamily,
@@ -898,7 +935,105 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     static int ContentLineCount(C4Element element) =>
         1
         + (string.IsNullOrEmpty(element.Technology) ? 0 : 1)
-        + (string.IsNullOrEmpty(element.Description) ? 0 : 1);
+        + DescriptionLines(element).Count;
+
+    /// <summary>
+    /// The description, wrapped to the box rather than cut off at an ellipsis. Elements are a fixed
+    /// width, so the limit is a character count; the box height follows from how many lines come back.
+    /// </summary>
+    static List<string> DescriptionLines(C4Element element) =>
+        string.IsNullOrEmpty(element.Description)
+            ? []
+            : WrapText(element.Description, descriptionWrapChars);
+
+    static List<string> WrapText(string text, int maxChars)
+    {
+        var lines = new List<string>();
+        var current = "";
+
+        foreach (var word in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var piece = word;
+
+            // A single word wider than the box is broken rather than allowed to overflow it.
+            while (piece.Length > maxChars)
+            {
+                if (current.Length > 0)
+                {
+                    lines.Add(current);
+                    current = "";
+                }
+
+                lines.Add(piece[..maxChars]);
+                piece = piece[maxChars..];
+            }
+
+            if (current.Length == 0)
+            {
+                current = piece;
+            }
+            else if (current.Length + 1 + piece.Length <= maxChars)
+            {
+                current += " " + piece;
+            }
+            else
+            {
+                lines.Add(current);
+                current = piece;
+            }
+        }
+
+        if (current.Length > 0)
+        {
+            lines.Add(current);
+        }
+
+        return lines;
+    }
+
+    /// <summary>
+    /// Places the targets of Rel_L/Rel_R/Rel_Neighbor beside their source on the same rank. Rel_U is
+    /// already honoured by orienting its layout edge upwards, so it is left where the engine put it.
+    /// </summary>
+    static void ApplyPositionalDirections(C4Model model, GraphDiagramBase graph, double separation)
+    {
+        // Several relationships can share a source and a keyword, so each successive target steps further out.
+        var placed = new Dictionary<(string, C4RelationshipDirection), int>();
+
+        foreach (var rel in model.Relationships)
+        {
+            if (graph.GetNode(rel.From) is not {} from ||
+                graph.GetNode(rel.To) is not {} to)
+            {
+                continue;
+            }
+
+            var key = (rel.From, rel.Direction);
+            placed.TryGetValue(key, out var index);
+
+            switch (rel.Direction)
+            {
+                case C4RelationshipDirection.Left:
+                case C4RelationshipDirection.Right:
+                case C4RelationshipDirection.Neighbor:
+                    var side = rel.Direction == C4RelationshipDirection.Left ? -1 : 1;
+                    var offset = (from.Width + to.Width) / 2 + separation + index * (to.Width + separation);
+                    to.Position = new(from.Position.X + side * offset, from.Position.Y);
+                    break;
+
+                // Down already ranks below the source; it only needs lining up under it, since the rank
+                // ordering can otherwise leave it off to one side.
+                case C4RelationshipDirection.Down:
+                    to.Position = new(from.Position.X + index * (to.Width + separation), to.Position.Y);
+                    break;
+
+                default:
+                    continue;
+            }
+
+            placed[key] = index + 1;
+        }
+    }
 
     /// <summary>Box height sized to the element's text rather than a fixed value.</summary>
     static double NodeHeight(C4Element element)
@@ -950,12 +1085,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
 
             // Center the text in the body region below the head.
             var textCenterY = (y + headRadius * 2 + (y + height)) / 2;
-            var hasDescription = !string.IsNullOrEmpty(element.Description);
+            var descriptionLines = DescriptionLines(element);
+            var textY = textCenterY - descriptionLines.Count * (lineHeight / 2);
 
             // Label
             builder.AddText(
                 centerX,
-                hasDescription ? textCenterY - 9 : textCenterY,
+                textY,
                 element.Label,
                 anchor: "middle",
                 baseline: "middle",
@@ -965,12 +1101,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
                 fontWeight: "bold");
 
             // Description
-            if (hasDescription)
+            foreach (var line in descriptionLines)
             {
+                textY += lineHeight;
                 builder.AddText(
                     centerX,
-                    textCenterY + 9,
-                    TruncateText(element.Description!, 22),
+                    textY,
+                    line,
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: options.FontSize - 3,
@@ -1071,13 +1208,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         }
 
         // Description
-        if (!string.IsNullOrEmpty(element.Description))
+        foreach (var line in DescriptionLines(element))
         {
             textY += lineHeight;
             builder.AddText(
                 centerX,
                 textY,
-                TruncateText(element.Description, 22),
+                line,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize - 3,
@@ -1106,15 +1243,6 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         };
     }
 
-    static string TruncateText(string text, int maxLength)
-    {
-        if (text.Length <= maxLength)
-        {
-            return text;
-        }
-
-        return string.Concat(text.AsSpan(0, maxLength - 3), "...");
-    }
 
     /// <summary>
     /// Concrete graph model used to feed C4 elements and relationships to the

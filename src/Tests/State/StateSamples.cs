@@ -1,4 +1,4 @@
-// Shared State diagram inputs, used by both the snapshot tests (StateTests) and the layout
+﻿// Shared State diagram inputs, used by both the snapshot tests (StateTests) and the layout
 // overlap guard (StateOverlapTests) so every sampled diagram is covered by both.
 static class StateSamples
 {
@@ -26,6 +26,50 @@ static class StateSamples
             Active --> Inactive : timeout
             Inactive --> Active : reset
             Active --> [*] : shutdown
+        """;
+
+    // `direction LR` ranks along X, so the terminal-marker alignment has to work on the cross axis.
+    // Aligning it on X unconditionally put the start's child on top of its own neighbour.
+    public const string DirectionLeftToRight =
+        """
+        stateDiagram-v2
+            direction LR
+            [*] --> Queued
+            Queued --> Running
+            Running --> Done
+            Done --> [*]
+        """;
+
+    // A composite is laid out from its own contents and drawn as a container around them. Nested states
+    // used to join the outer layout as flat siblings, so the box came out empty with its children beside it.
+    public const string CompositeState =
+        """
+        stateDiagram-v2
+            [*] --> Ready
+            Ready --> Working
+            state Working {
+                [*] --> Fetch
+                Fetch --> Parse : ok
+                Parse --> [*]
+            }
+            Working --> Done
+            Done --> [*]
+        """;
+
+    // `[*]` names the start of whichever region it sits in, so the markers have to be scoped per composite.
+    public const string NestedCompositeState =
+        """
+        stateDiagram-v2
+            [*] --> Outer
+            state Outer {
+                [*] --> Mid
+                state Mid {
+                    [*] --> Leaf
+                    Leaf --> [*]
+                }
+                Mid --> [*]
+            }
+            Outer --> [*]
         """;
 
     public const string Description =

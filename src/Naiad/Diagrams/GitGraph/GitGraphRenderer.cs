@@ -5,9 +5,15 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     const double commitRadius = 12;
     const double commitSpacingX = 60;
     const double commitSpacingY = 50;
-    const double branchLabelWidth = 80;
     const double tagHeight = 20;
     const double tagPadding = 5;
+
+    // Commit captions: a chip under the commit, rather than text laid over the circle where anything
+    // longer than the diameter spills onto the page background and disappears.
+    const double labelGap = 6;
+    const double labelHeight = 16;
+    const double labelPadding = 5;
+    const double labelSpacing = 12;
 
     static string[] branchColors =
     [
@@ -30,17 +36,35 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(_ => _.Row) : 0;
         var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
 
-        var graphWidth = (maxRow + 1) * commitSpacingX + branchLabelWidth;
-        var graphHeight = (maxColumn + 1) * commitSpacingY;
+        var labelFontSize = options.FontSize - 4;
+        var maxLabelWidth = computed.Commits.Count > 0
+            ? computed.Commits.Max(_ => LabelWidth(_.DisplayLabel, labelFontSize))
+            : 0;
 
-        var width = graphWidth + options.Padding * 2;
-        var height = graphHeight + options.Padding * 2;
+        // Captions sit under their commit, so the lane has to be at least as wide as the widest one for
+        // neighbouring captions not to run together.
+        var spacingX = Math.Max(commitSpacingX, maxLabelWidth + labelSpacing);
+
+        var labelsWidth = Math.Max(80, computed.Branches.Count > 0
+            ? computed.Branches.Max(_ => MeasureText(_.Name, options.FontSize - 2)) + 10
+            : 0);
+
+        // Reserve whatever the tags above and the captions below actually need, so neither is clipped.
+        var hasTag = computed.Commits.Any(_ => !string.IsNullOrEmpty(_.Tag));
+        var topPad = Math.Max(
+            commitSpacingY / 2,
+            hasTag ? commitRadius + tagHeight + 5 : commitRadius);
+        var bottomPad = Math.Max(commitSpacingY / 2, commitRadius + labelGap + labelHeight);
+
+        var offsetX = options.Padding + labelsWidth;
+        var offsetY = options.Padding + topPad;
+
+        var width = offsetX + maxRow * spacingX +
+                    Math.Max(commitRadius, maxLabelWidth / 2) + options.Padding;
+        var height = options.Padding * 2 + topPad + maxColumn * commitSpacingY + bottomPad;
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
-
-        var offsetX = options.Padding + branchLabelWidth;
-        var offsetY = options.Padding + commitSpacingY / 2;
 
         // Draw branch labels
         foreach (var branch in computed.Branches)
@@ -72,8 +96,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             var firstCommit = branch.Commits.MinBy(_ => _.Row)!;
             var lastCommit = branch.Commits.MaxBy(_ => _.Row)!;
 
-            var startX = offsetX + firstCommit.Row * commitSpacingX;
-            var endX = offsetX + lastCommit.Row * commitSpacingX;
+            var startX = offsetX + firstCommit.Row * spacingX;
+            var endX = offsetX + lastCommit.Row * spacingX;
 
             builder.AddLine(
                 startX,
@@ -91,7 +115,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             {
                 if (computed.CommitMap.TryGetValue(parentId, out var parent))
                 {
-                    DrawConnection(builder, parent, commit, computed, offsetX, offsetY);
+                    DrawConnection(builder, parent, commit, computed, offsetX, offsetY, spacingX);
                 }
             }
         }
@@ -99,7 +123,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Draw commits
         foreach (var commit in computed.Commits)
         {
-            DrawCommit(builder, commit, computed, offsetX, offsetY, options);
+            DrawCommit(builder, commit, computed, offsetX, offsetY, spacingX, options);
         }
 
         return builder.Build();
@@ -111,7 +135,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         GitCommit to,
         ComputedGitGraph graph,
         double offsetX,
-        double offsetY)
+        double offsetY,
+        double spacingX)
     {
         var fromBranch = graph.FindBranch(from.Branch);
         var toBranch = graph.FindBranch(to.Branch);
@@ -121,9 +146,9 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             return;
         }
 
-        var fromX = offsetX + from.Row * commitSpacingX;
+        var fromX = offsetX + from.Row * spacingX;
         var fromY = offsetY + fromBranch.Column * commitSpacingY;
-        var toX = offsetX + to.Row * commitSpacingX;
+        var toX = offsetX + to.Row * spacingX;
         var toY = offsetY + toBranch.Column * commitSpacingY;
 
         var toColor = toBranch.Color ?? branchColors[toBranch.Column % branchColors.Length];
@@ -149,7 +174,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     }
 
     static void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
-        double offsetX, double offsetY, RenderOptions options)
+        double offsetX, double offsetY, double spacingX, RenderOptions options)
     {
         var branch = graph.FindBranch(commit.Branch);
         if (branch == null)
@@ -157,39 +182,12 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             return;
         }
 
-        var x = offsetX + commit.Row * commitSpacingX;
+        var x = offsetX + commit.Row * spacingX;
         var y = offsetY + branch.Column * commitSpacingY;
         var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
 
-        // Commit circle
-        var fill = commit.Type switch
-        {
-            CommitType.Reverse => "#fff",
-            CommitType.Highlight => "#FFD700",
-            _ => color
-        };
-
-        var strokeWidth = commit.Type == CommitType.Reverse ? 3 : 2;
-
-        builder.AddCircle(
-            x,
-            y,
-            commitRadius,
-            fill: fill,
-            stroke: color,
-            strokeWidth: strokeWidth);
-
-        // Commit ID (abbreviated)
-        var displayId = commit.Id.Length > 7 ? commit.Id[..7] : commit.Id;
-        builder.AddText(
-            x,
-            y,
-            displayId,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize - 4,
-            fontFamily: options.FontFamily,
-            fill: commit.Type == CommitType.Highlight ? "#000" : "#fff");
+        DrawCommitGlyph(builder, commit, x, y, color);
+        DrawCommitLabel(builder, commit.DisplayLabel, x, y, options);
 
         // Tag
         if (!string.IsNullOrEmpty(commit.Tag))
@@ -219,6 +217,100 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 fill: "#333");
         }
     }
+
+    /// <summary>
+    /// Draws the commit itself. How it came about wins over its declared type, so a merge still reads as a
+    /// merge whatever <c>type:</c> says, and the fill carries the type on top of that.
+    /// </summary>
+    static void DrawCommitGlyph(SvgBuilder builder, GitCommit commit, double x, double y, string color)
+    {
+        var fill = commit.Type switch
+        {
+            CommitType.Reverse => "#fff",
+            CommitType.Highlight => "#FFD700",
+            _ => color
+        };
+
+        if (commit.IsCherryPick)
+        {
+            // A pair of cherries: two dots on a white face.
+            builder.AddCircle(x, y, commitRadius, fill: "#fff", stroke: color, strokeWidth: 2);
+            builder.AddCircle(x - 4, y + 2, 3.5, fill: color, stroke: color, strokeWidth: 1);
+            builder.AddCircle(x + 4, y + 2, 3.5, fill: color, stroke: color, strokeWidth: 1);
+            return;
+        }
+
+        if (commit.IsMerge)
+        {
+            // Double circle, distinguishing a merge from an ordinary commit.
+            builder.AddCircle(x, y, commitRadius, fill: fill, stroke: color, strokeWidth: 2);
+            builder.AddCircle(x, y, commitRadius - 5, fill: "#fff", stroke: color, strokeWidth: 1.5);
+            return;
+        }
+
+        if (commit.Type == CommitType.Reverse)
+        {
+            // Crossed circle.
+            builder.AddCircle(x, y, commitRadius, fill: fill, stroke: color, strokeWidth: 3);
+
+            var arm = commitRadius * 0.55;
+            builder.AddLine(x - arm, y - arm, x + arm, y + arm, stroke: color, strokeWidth: 2.5);
+            builder.AddLine(x - arm, y + arm, x + arm, y - arm, stroke: color, strokeWidth: 2.5);
+            return;
+        }
+
+        if (commit.Type == CommitType.Highlight)
+        {
+            // Mermaid marks a highlighted commit with a block rather than a circle.
+            builder.AddRect(
+                x - commitRadius,
+                y - commitRadius,
+                commitRadius * 2,
+                commitRadius * 2,
+                rx: 3,
+                fill: fill,
+                stroke: color,
+                strokeWidth: 3);
+            return;
+        }
+
+        builder.AddCircle(x, y, commitRadius, fill: fill, stroke: color, strokeWidth: 2);
+    }
+
+    static void DrawCommitLabel(SvgBuilder builder, string label, double x, double y, RenderOptions options)
+    {
+        if (string.IsNullOrEmpty(label))
+        {
+            return;
+        }
+
+        var fontSize = options.FontSize - 4;
+        var width = LabelWidth(label, fontSize);
+        var top = y + commitRadius + labelGap;
+
+        builder.AddRect(
+            x - width / 2,
+            top,
+            width,
+            labelHeight,
+            rx: 3,
+            fill: "#F4F4F4",
+            stroke: "#CCC",
+            strokeWidth: 1);
+
+        builder.AddText(
+            x,
+            top + labelHeight / 2,
+            label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: fontSize,
+            fontFamily: options.FontFamily,
+            fill: "#333");
+    }
+
+    static double LabelWidth(string label, double fontSize) =>
+        MeasureText(label, fontSize) + labelPadding * 2;
 
     static ComputedGitGraph ComputeGraph(GitGraphModel model)
     {
@@ -313,7 +405,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                         Tag = merge.Tag,
                         Type = merge.Type,
                         Branch = currentBranch,
-                        Row = commitCounter
+                        Row = commitCounter,
+                        IsMerge = true
                     };
 
                     // Merge has two parents: current branch head and merged branch head
@@ -351,7 +444,10 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                             Tag = cherryPick.Tag,
                             Type = CommitType.Normal,
                             Branch = currentBranch,
-                            Row = commitCounter
+                            Row = commitCounter,
+                            IsCherryPick = true,
+                            // Name the commit that was copied; the generated id says nothing.
+                            Label = $"cherry-pick:{cherryPick.CommitId}"
                         };
 
                         if (branchHeads.TryGetValue(currentBranch, out var cherryHead))

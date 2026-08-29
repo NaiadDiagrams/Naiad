@@ -2,56 +2,56 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 160 216"
-  style="max-width: 160px;"
+  viewBox="0 0 162.8 216"
+  style="max-width: 162.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <path
-      d="M60,30 L60,39.67 C60,49.33 60,68.67 60,88 C60,107.33 60,126.67 60,136.33 L60,146"
+      d="M61.4,30 L61.4,39.67 C61.4,49.33 61.4,68.67 61.4,88 C61.4,107.33 61.4,126.67 61.4,136.33 L61.4,146"
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />
     <line
-      x1="64"
-      y1="45"
-      x2="56"
-      y2="45"
+      x1="66.4"
+      y1="37"
+      x2="56.4"
+      y2="37"
       stroke="#333" />
     <line
-      x1="64"
-      y1="50"
-      x2="56"
-      y2="50"
+      x1="66.4"
+      y1="43"
+      x2="56.4"
+      y2="43"
+      stroke="#333" />
+    <line
+      x1="61.4"
+      y1="134"
+      x2="61.4"
+      y2="146"
+      stroke="#333" />
+    <line
+      x1="61.4"
+      y1="134"
+      x2="66.4"
+      y2="146"
+      stroke="#333" />
+    <line
+      x1="61.4"
+      y1="134"
+      x2="56.4"
+      y2="146"
       stroke="#333" />
     <circle
-      cx="60"
-      cy="131"
+      cx="61.4"
+      cy="128"
       r="4"
       fill="#fff"
       stroke="#333" />
-    <line
-      x1="60"
-      y1="123"
-      x2="60"
-      y2="115"
-      stroke="#333" />
-    <line
-      x1="60"
-      y1="123"
-      x2="64"
-      y2="115"
-      stroke="#333" />
-    <line
-      x1="60"
-      y1="123"
-      x2="56"
-      y2="115"
-      stroke="#333" />
     <rect
-      x="36.2"
+      x="37.6"
       y="80"
       width="47.6"
       height="16"
@@ -59,7 +59,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="60"
+      x="61.4"
       y="88"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -69,7 +69,7 @@
     <rect
       x="0"
       y="0"
-      width="120"
+      width="122.8"
       height="30"
       fill="#ECECFF"
       stroke="#9370DB"
@@ -77,12 +77,12 @@
     <rect
       x="0"
       y="0"
-      width="120"
+      width="122.8"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="60"
+      x="61.4"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -91,7 +91,7 @@
       font-weight="bold"
       fill="#fff">CUSTOMER</text>
     <rect
-      x="0"
+      x="1.4"
       y="146"
       width="120"
       height="30"
@@ -99,14 +99,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="0"
+      x="1.4"
       y="146"
       width="120"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="60"
+      x="61.4"
       y="161"
       text-anchor="middle"
       dominant-baseline="middle"

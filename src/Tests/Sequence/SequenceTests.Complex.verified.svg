@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 740 800"
+  viewBox="0 0 740 848"
   style="max-width: 740px;"
   role="graphics-document document">
   <style
@@ -51,37 +51,37 @@
     font-weight="bold">Complete Authentication Flow</text>
   <circle
     cx="70"
-    cy="65"
-    r="15"
+    cy="59"
+    r="9"
     fill="#ECECFF"
     stroke="#9370DB" />
   <line
     x1="70"
-    y1="80"
+    y1="68"
     x2="70"
-    y2="95"
+    y2="81"
     stroke="#9370DB" />
   <line
-    x1="55"
-    y1="85"
-    x2="85"
-    y2="85"
+    x1="60"
+    y1="72"
+    x2="80"
+    y2="72"
     stroke="#9370DB" />
   <line
     x1="70"
-    y1="95"
-    x2="60"
+    y1="81"
+    x2="62"
     y2="90"
     stroke="#9370DB" />
   <line
     x1="70"
-    y1="95"
-    x2="80"
+    y1="81"
+    x2="78"
     y2="90"
     stroke="#9370DB" />
   <text
     x="70"
-    y="105"
+    y="94"
     text-anchor="middle"
     dominant-baseline="top"
     font-size="14px"
@@ -152,320 +152,320 @@
     font-family="Arial, sans-serif">Email Service</text>
   <line
     x1="70"
-    y1="90"
+    y1="114"
     x2="70"
-    y2="740"
+    y2="764"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="220"
-    y1="90"
+    y1="114"
     x2="220"
-    y2="740"
+    y2="764"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="370"
-    y1="90"
+    y1="114"
     x2="370"
-    y2="740"
+    y2="764"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="520"
-    y1="90"
+    y1="114"
     x2="520"
-    y2="740"
+    y2="764"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="670"
-    y1="90"
+    y1="114"
     x2="670"
-    y2="740"
+    y2="764"
     stroke="#999"
     stroke-dasharray="5,5" />
+  <rect
+    x="515"
+    y="264"
+    width="10"
+    height="50"
+    fill="#F4F4F4"
+    stroke="#666" />
+  <rect
+    x="365"
+    y="214"
+    width="10"
+    height="300"
+    fill="#F4F4F4"
+    stroke="#666" />
+  <rect
+    x="665"
+    y="564"
+    width="10"
+    height="50"
+    fill="#F4F4F4"
+    stroke="#666" />
+  <rect
+    x="215"
+    y="164"
+    width="10"
+    height="500"
+    fill="#F4F4F4"
+    stroke="#666" />
   <line
     x1="70"
-    y1="140"
+    y1="164"
     x2="220"
-    y2="140"
+    y2="164"
     stroke="#333" />
   <polygon
-    points="220,140 212,136 212,144"
+    points="220,164 212,160 212,168"
     fill="#333" />
   <text
     x="145"
-    y="132"
+    y="156"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">1. Enter credentials</text>
   <line
     x1="220"
-    y1="190"
+    y1="214"
     x2="370"
-    y2="190"
+    y2="214"
     stroke="#333" />
   <polygon
-    points="370,190 362,186 362,194"
+    points="370,214 362,210 362,218"
     fill="#333" />
   <text
     x="295"
-    y="182"
+    y="206"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">2. POST /login</text>
   <line
     x1="370"
-    y1="240"
+    y1="264"
     x2="520"
-    y2="240"
+    y2="264"
     stroke="#333" />
   <polygon
-    points="520,240 512,236 512,244"
+    points="520,264 512,260 512,268"
     fill="#333" />
   <text
     x="445"
-    y="232"
+    y="256"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">3. Query user</text>
   <line
     x1="520"
-    y1="290"
+    y1="314"
     x2="370"
-    y2="290"
+    y2="314"
     stroke="#333"
     stroke-dasharray="5,5" />
   <polygon
-    points="370,290 378,286 378,294"
+    points="370,314 378,310 378,318"
     fill="#333" />
   <text
     x="445"
-    y="282"
+    y="306"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">4. User data</text>
   <path
-    d="M430,340 L542,340 L550,348 L550,380 L430,380 Z"
+    d="M430,364 L596,364 L604,372 L604,404 L430,404 Z"
     fill="#FFFFCC"
     stroke="#AAAA33" />
   <line
-    x1="542"
-    y1="340"
-    x2="542"
-    y2="348"
+    x1="596"
+    y1="364"
+    x2="596"
+    y2="372"
     stroke="#AAAA33" />
   <line
-    x1="542"
-    y1="348"
-    x2="550"
-    y2="348"
+    x1="596"
+    y1="372"
+    x2="604"
+    y2="372"
     stroke="#AAAA33" />
   <text
-    x="490"
-    y="360"
+    x="517"
+    y="384"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Validate credentials</text>
   <path
-    d="M370,390 L410,390 L410,420 L370,420"
+    d="M370,414 L410,414 L410,444 L370,444"
     fill="none"
     stroke="#333"
     marker-end="url(#arrowhead)" />
   <text
     x="415"
-    y="405"
+    y="429"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">5. Generate JWT</text>
   <path
-    d="M430,440 L542,440 L550,448 L550,480 L430,480 Z"
+    d="M430,464 L596,464 L604,472 L604,504 L430,504 Z"
     fill="#FFFFCC"
     stroke="#AAAA33" />
   <line
-    x1="542"
-    y1="440"
-    x2="542"
-    y2="448"
+    x1="596"
+    y1="464"
+    x2="596"
+    y2="472"
     stroke="#AAAA33" />
   <line
-    x1="542"
-    y1="448"
-    x2="550"
-    y2="448"
+    x1="596"
+    y1="472"
+    x2="604"
+    y2="472"
     stroke="#AAAA33" />
   <text
-    x="490"
-    y="460"
+    x="517"
+    y="484"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Token expires in 24h</text>
   <line
     x1="370"
-    y1="490"
+    y1="514"
     x2="220"
-    y2="490"
+    y2="514"
     stroke="#333"
     stroke-dasharray="5,5" />
   <polygon
-    points="220,490 228,486 228,494"
+    points="220,514 228,510 228,518"
     fill="#333" />
   <text
     x="295"
-    y="482"
+    y="506"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">6. 200 OK + Token</text>
   <line
     x1="220"
-    y1="540"
+    y1="564"
     x2="670"
-    y2="540"
+    y2="564"
     stroke="#333" />
   <polygon
-    points="670,540 662,536 662,544"
+    points="670,564 662,560 662,568"
     fill="#333" />
   <text
     x="445"
-    y="532"
+    y="556"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">7. Send welcome email</text>
   <line
     x1="670"
-    y1="590"
+    y1="614"
     x2="220"
-    y2="590"
+    y2="614"
     stroke="#333"
     stroke-dasharray="5,5" />
   <polygon
-    points="220,590 228,586 228,594"
+    points="220,614 228,610 228,618"
     fill="#333" />
   <text
     x="445"
-    y="582"
+    y="606"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">8. Email sent</text>
   <line
     x1="220"
-    y1="640"
+    y1="664"
     x2="70"
-    y2="640"
+    y2="664"
     stroke="#333"
     stroke-dasharray="5,5" />
   <polygon
-    points="70,640 78,636 78,644"
+    points="70,664 78,660 78,668"
     fill="#333" />
   <text
     x="145"
-    y="632"
+    y="656"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">9. Show dashboard</text>
   <path
-    d="M235,690 L347,690 L355,698 L355,730 L235,730 Z"
+    d="M20,714 L562,714 L570,722 L570,754 L20,754 Z"
     fill="#FFFFCC"
     stroke="#AAAA33" />
   <line
-    x1="347"
-    y1="690"
-    x2="347"
-    y2="698"
+    x1="562"
+    y1="714"
+    x2="562"
+    y2="722"
     stroke="#AAAA33" />
   <line
-    x1="347"
-    y1="698"
-    x2="355"
-    y2="698"
+    x1="562"
+    y1="722"
+    x2="570"
+    y2="722"
     stroke="#AAAA33" />
   <text
     x="295"
-    y="710"
+    y="734"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Session established</text>
-  <rect
-    x="365"
-    y="190"
-    width="10"
-    height="100"
-    fill="#F4F4F4"
-    stroke="#666" />
-  <rect
-    x="215"
-    y="140"
-    width="10"
-    height="350"
-    fill="#F4F4F4"
-    stroke="#666" />
-  <rect
-    x="665"
-    y="540"
-    width="10"
-    height="200"
-    fill="#F4F4F4"
-    stroke="#666" />
-  <rect
-    x="515"
-    y="240"
-    width="10"
-    height="500"
-    fill="#F4F4F4"
-    stroke="#666" />
   <circle
     cx="70"
-    cy="755"
-    r="15"
+    cy="773"
+    r="9"
     fill="#ECECFF"
     stroke="#9370DB" />
   <line
     x1="70"
-    y1="770"
+    y1="782"
     x2="70"
-    y2="785"
+    y2="795"
     stroke="#9370DB" />
   <line
-    x1="55"
-    y1="775"
-    x2="85"
-    y2="775"
-    stroke="#9370DB" />
-  <line
-    x1="70"
-    y1="785"
-    x2="60"
-    y2="780"
-    stroke="#9370DB" />
-  <line
-    x1="70"
-    y1="785"
+    x1="60"
+    y1="786"
     x2="80"
-    y2="780"
+    y2="786"
+    stroke="#9370DB" />
+  <line
+    x1="70"
+    y1="795"
+    x2="62"
+    y2="804"
+    stroke="#9370DB" />
+  <line
+    x1="70"
+    y1="795"
+    x2="78"
+    y2="804"
     stroke="#9370DB" />
   <text
     x="70"
-    y="795"
+    y="808"
     text-anchor="middle"
     dominant-baseline="top"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect
     x="170"
-    y="740"
+    y="764"
     width="100"
     height="40"
     rx="3"
@@ -474,14 +474,14 @@
     stroke="#9370DB" />
   <text
     x="220"
-    y="760"
+    y="784"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Web Client</text>
   <rect
     x="320"
-    y="740"
+    y="764"
     width="100"
     height="40"
     rx="3"
@@ -490,14 +490,14 @@
     stroke="#9370DB" />
   <text
     x="370"
-    y="760"
+    y="784"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Auth Service</text>
   <rect
     x="470"
-    y="740"
+    y="764"
     width="100"
     height="40"
     rx="3"
@@ -506,14 +506,14 @@
     stroke="#9370DB" />
   <text
     x="520"
-    y="760"
+    y="784"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Database</text>
   <rect
     x="620"
-    y="740"
+    y="764"
     width="100"
     height="40"
     rx="3"
@@ -522,7 +522,7 @@
     stroke="#9370DB" />
   <text
     x="670"
-    y="760"
+    y="784"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"

@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 520 180"
-  style="max-width: 520px;"
+  viewBox="0 0 459.2 168"
+  style="max-width: 459.2px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -23,93 +23,116 @@
   <rect
     x="20"
     y="20"
-    width="180"
-    height="80"
+    width="169.2"
+    height="128"
     rx="5"
     ry="5"
     fill="#C8E6C9"
     stroke="#4CAF50"
     stroke-width="2" />
   <text
-    x="110"
-    y="35"
+    x="104.6"
+    y="41"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;Requirement&gt;&gt;</text>
   <text
-    x="110"
-    y="55"
+    x="104.6"
+    y="61"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">test_req</text>
-  <circle
-    cx="35"
-    cy="85"
-    r="6"
-    fill="#4CAF50"
-    stroke="#333" />
+  <line
+    x1="20"
+    y1="77"
+    x2="189.2"
+    y2="77"
+    stroke="#4CAF50" />
   <text
-    x="110"
-    y="85"
-    text-anchor="middle"
+    x="32"
+    y="91"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#666">System requirement</text>
+    fill="#333">Id: 1</text>
+  <text
+    x="32"
+    y="109"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Text: System requirement</text>
+  <text
+    x="32"
+    y="127"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Risk: Low</text>
   <rect
-    x="260"
+    x="279.2"
     y="20"
-    width="180"
-    height="80"
+    width="160"
+    height="92"
     rx="5"
     ry="5"
     fill="#BBDEFB"
     stroke="#2196F3"
     stroke-width="2" />
   <text
-    x="350"
-    y="35"
+    x="359.2"
+    y="41"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
     fill="#666">&lt;&lt;Element&gt;&gt;</text>
   <text
-    x="350"
-    y="55"
+    x="359.2"
+    y="61"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold"
     fill="#333">test_entity</text>
+  <line
+    x1="279.2"
+    y1="77"
+    x2="439.2"
+    y2="77"
+    stroke="#2196F3" />
   <text
-    x="350"
-    y="75"
-    text-anchor="middle"
+    x="291.2"
+    y="91"
+    text-anchor="start"
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#666">Type: simulation</text>
+    fill="#333">Type: simulation</text>
   <line
-    x1="260"
-    y1="60"
-    x2="200"
-    y2="60"
+    x1="279.2"
+    y1="71.66"
+    x2="189.2"
+    y2="78.02"
     stroke="#666"
-    stroke-width="1.5" />
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
   <path
-    d="M 200 60 L 206.93 56 L 206.93 64 Z"
+    d="M 189.2 78.02 L 195.83 73.54 L 196.39 81.52 Z"
     fill="#666"
     stroke="none" />
   <text
-    x="230"
-    y="52"
+    x="233.2"
+    y="60.7"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="11px"

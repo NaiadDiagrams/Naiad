@@ -1,0 +1,129 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 632.8 80"
+  style="max-width: 632.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <line
+      x1="20"
+      y1="20"
+      x2="100"
+      y2="20"
+      stroke="#333" />
+    <polygon
+      points="100,20 93.07,24 93.07,16"
+      fill="#333" />
+    <line
+      x1="180.4"
+      y1="20"
+      x2="260.4"
+      y2="20"
+      stroke="#333" />
+    <polygon
+      points="260.4,20 253.47,24 253.47,16"
+      fill="#333" />
+    <line
+      x1="349.2"
+      y1="20"
+      x2="429.2"
+      y2="20"
+      stroke="#333" />
+    <polygon
+      points="429.2,20 422.27,24 422.27,16"
+      fill="#333" />
+    <line
+      x1="492.8"
+      y1="20"
+      x2="572.8"
+      y2="20"
+      stroke="#333" />
+    <polygon
+      points="572.8,20 565.87,24 565.87,16"
+      fill="#333" />
+    <circle
+      cx="10"
+      cy="20"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="100"
+      y="0"
+      width="80.4"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="140.2"
+      y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Queued</text>
+    <rect
+      x="260.4"
+      y="0"
+      width="88.8"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="304.8"
+      y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Running</text>
+    <rect
+      x="429.2"
+      y="0"
+      width="63.6"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="461"
+      y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Done</text>
+    <circle
+      cx="582.8"
+      cy="20"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="582.8"
+      cy="20"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+  </g>
+</svg>

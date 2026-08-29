@@ -1,4 +1,4 @@
-// ReSharper disable MemberCanBeMadeStatic.Local
+﻿// ReSharper disable MemberCanBeMadeStatic.Local
 namespace Naiad.Diagrams.State;
 
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
@@ -11,6 +11,39 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     record LabelBounds(double Left, double Top, double Width, double Height);
     List<LabelBounds> placedLabels = [];
 
+    // Composite id -> every state id inside it, transitively. Lets the self-checks tell containment from
+    // collision: a child sitting inside its container, or an edge crossing its own container's border, is
+    // the drawing working as intended, not an overlap.
+    Dictionary<string, HashSet<string>> compositeContents = new(StringComparer.Ordinal);
+
+    void CollectCompositeContents(List<State> states)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            var contents = new HashSet<string>(StringComparer.Ordinal);
+            AddDescendants(state, contents);
+            compositeContents[state.Id] = contents;
+            CollectCompositeContents(state.NestedStates);
+        }
+    }
+
+    static void AddDescendants(State composite, HashSet<string> contents)
+    {
+        foreach (var nested in composite.NestedStates)
+        {
+            contents.Add(nested.Id);
+            if (nested.IsComposite)
+            {
+                AddDescendants(nested, contents);
+            }
+        }
+    }
+
     // Layout self-checks (label/line/node overlaps, out-of-bounds). Opt-in via ValidateLayout so the
     // tracking and O(n^2) checks stay off the production render path; the test suite turns it on to guard
     // against regressions. When false, the Track* calls below short-circuit and the checks never run.
@@ -22,18 +55,29 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     double svgHeight;
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
-    record LineBounds(double X1, double Y1, double X2, double Y2, string Label);
-    record NodeBounds(double X, double Y, double Width, double Height, string Label);
+    record LineBounds(double X1, double Y1, double X2, double Y2, string Label, string? FromId, string? ToId);
+    record NodeBounds(double X, double Y, double Width, double Height, string Label, string? Id);
 
     const double stateMinWidth = 40;
     const double stateHeight = 40;
     const double statePadding = 30;
     const double stateRadius = 5;
     const double specialStateSize = 20;
+
+    // A composite's box: the band its title sits in, and the clearance around its laid-out contents.
+    const double compositeTitleHeight = 30;
+    const double compositePadding = 20;
+
+    // Kept between a routed edge's exit and a state it has to clear, and how far apart the exits tried are.
+    const double exitClearance = 5;
+    const double exitStep = 6;
     const double noteMinWidth = 60;
     const double noteHeight = 40;
     const double notePadding = 20;
     const double noteHorizontalOffset = 60;
+
+    // Clearance kept between a routed-edge corridor and a note pushed out past it.
+    const double noteCorridorGap = 20;
     const double noteVerticalOffset = 50;
 
     public SvgDocument Render(StateModel model, RenderOptions options)
@@ -42,6 +86,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         textBounds.Clear();
         lineBounds.Clear();
         nodeBounds.Clear();
+        compositeContents.Clear();
+        if (ValidateLayout)
+        {
+            CollectCompositeContents(model.States);
+        }
+
+        // Size every composite from its own contents before the outer layout runs, so it takes part as a
+        // node of the right size rather than one sized from its label.
+        LayoutCompositeInteriors(model.States, model.Direction, options);
 
         // Convert to graph model for layout
         var graphModel = ConvertToGraphModel(model, options);
@@ -59,8 +112,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Copy positions back to state model
         CopyPositionsToModel(model, graphModel);
 
+        // The interior layout left nested states positioned relative to their own container; now that the
+        // containers have their final places, move the contents into them.
+        PlaceCompositeChildren(model.States);
+
         // Align start/end nodes and their single children
-        AlignSingleChildNodes(model);
+        AlignSingleChildNodes(model, model.Direction);
 
         // Resize fork/join bars to span their connected states
         AdjustForkJoinWidths(model);
@@ -107,6 +164,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         builder.Padding(options.Padding);
         builder.AddArrowMarker();
 
+        // Composite boxes are filled, so they go down before the transitions that run inside them -
+        // drawing a container after its own contents painted over them.
+        RenderCompositeBoxes(builder, model.States, options);
+
         // Render transitions first (behind states)
         RenderTransitions(builder, model, options);
 
@@ -127,14 +188,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
-    void TrackText(double x, double y, string text, string anchor, double fontSize)
+    void TrackText(double x, double y, string text, string anchor, double fontSize, bool bold = false)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        var width = MeasureText(text, fontSize);
+        var width = MeasureText(text, fontSize, bold);
         var height = fontSize * 1.2; // Approximate line height
 
         // Adjust x based on anchor
@@ -150,6 +211,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var top = y - height / 2;
 
         textBounds.Add(new(left, top, width, height, text));
+    }
+
+    /// <summary>
+    /// Records a label that is drawn inside a sized background chip. Re-measuring the glyphs instead
+    /// understates what was painted - the chip is wider and taller than the text it holds - so two chips
+    /// could touch while the check saw a gap between them.
+    /// </summary>
+    void TrackTextBox(double centerX, double centerY, double width, double height, string text)
+    {
+        if (!ValidateLayout)
+        {
+            return;
+        }
+
+        textBounds.Add(new(centerX - width / 2, centerY - height / 2, width, height, text));
     }
 
     void CheckForTextOverlaps()
@@ -174,24 +250,87 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    void TrackLine(double x1, double y1, double x2, double y2, string label)
+    /// <summary>
+    /// Records a drawn segment for the layout self-checks. <paramref name="fromId"/> and
+    /// <paramref name="toId"/> are the states the segment actually joins, so the crossing check can tell an
+    /// attachment from an overlap by identity instead of guessing from proximity.
+    /// </summary>
+    void TrackLine(double x1, double y1, double x2, double y2, string label, string? fromId = null, string? toId = null)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        lineBounds.Add(new(x1, y1, x2, y2, label));
+        lineBounds.Add(new(x1, y1, x2, y2, label, fromId, toId));
     }
 
-    void TrackNode(double x, double y, double width, double height, string label)
+    /// <summary>
+    /// Records a drawn cubic as a chain of short segments. Tracking a flare by the straight chord between
+    /// its ends describes a path that was never drawn: the chord stops where the curve is only starting to
+    /// bend away, so everything the curve sweeps past is invisible to the self-checks.
+    /// </summary>
+    void TrackCubic(
+        double x0,
+        double y0,
+        double x1,
+        double y1,
+        double x2,
+        double y2,
+        double x3,
+        double y3,
+        string label,
+        string? fromId,
+        string? toId)
     {
         if (!ValidateLayout)
         {
             return;
         }
 
-        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label));
+        const int segments = 12;
+        var previousX = x0;
+        var previousY = y0;
+
+        for (var i = 1; i <= segments; i++)
+        {
+            var t = (double) i / segments;
+            var u = 1 - t;
+            var x = u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3;
+            var y = u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3;
+
+            TrackLine(previousX, previousY, x, y, label, fromId, toId);
+            previousX = x;
+            previousY = y;
+        }
+    }
+
+    /// <summary>Records a drawn quadratic, by way of its equivalent cubic.</summary>
+    void TrackQuadratic(
+        double x0,
+        double y0,
+        double controlX,
+        double controlY,
+        double x1,
+        double y1,
+        string label,
+        string? fromId,
+        string? toId) =>
+        TrackCubic(
+            x0, y0,
+            x0 + 2 * (controlX - x0) / 3, y0 + 2 * (controlY - y0) / 3,
+            x1 + 2 * (controlX - x1) / 3, y1 + 2 * (controlY - y1) / 3,
+            x1, y1,
+            label, fromId, toId);
+
+    void TrackNode(double x, double y, double width, double height, string label, string? id = null)
+    {
+        if (!ValidateLayout)
+        {
+            return;
+        }
+
+        nodeBounds.Add(new(x - width / 2, y - height / 2, width, height, label, id));
     }
 
     void CheckForLinesUnderNodes()
@@ -200,21 +339,30 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         {
             foreach (var node in nodeBounds)
             {
-                // Notes are checked alongside state nodes. Note placement (PlaceNoteToRight) keeps them
-                // off the routed back-edge / forward-edge corridors, so a line under a note is a real defect.
+                // Notes are checked alongside state nodes. Note placement keeps them off the routed
+                // back-edge / forward-edge corridors, so a line under a note is a real defect.
 
-                // Skip if line is connected to this node (endpoint is near/inside the node)
-                var nodeRight = node.X + node.Width;
-                var nodeBottom = node.Y + node.Height;
-                const double margin = 10.0; // Allow endpoints near edges
+                // A segment is exempt from this node only when it genuinely attaches to it. This used to be
+                // inferred from proximity - any endpoint within 10 units of the box counted as attached -
+                // which exempted the very overlaps worth catching: the `reset` edge in TransitionLabels left
+                // Inactive at a point sitting exactly on the final-state marker's border, so its run straight
+                // through that marker was read as an attachment and never reported. A note is never an edge
+                // endpoint, so it carries no id and is always checked.
+                if (node.Id != null && (node.Id == line.FromId || node.Id == line.ToId))
+                {
+                    continue;
+                }
 
-                var startInNode = line.X1 >= node.X - margin && line.X1 <= nodeRight + margin &&
-                                  line.Y1 >= node.Y - margin && line.Y1 <= nodeBottom + margin;
-                var endInNode = line.X2 >= node.X - margin && line.X2 <= nodeRight + margin &&
-                                line.Y2 >= node.Y - margin && line.Y2 <= nodeBottom + margin;
-
-                if (startInNode || endInNode)
-                    continue; // This line is connected to this node, not passing under it
+                // Any line with an endpoint inside a composite must cross that composite's border, so the
+                // container is exempt for it. Other composites stay checked: a nested transition escaping
+                // sideways through an unrelated box is still a defect.
+                if (node.Id != null &&
+                    compositeContents.TryGetValue(node.Id, out var containedStates) &&
+                    ((line.FromId != null && containedStates.Contains(line.FromId)) ||
+                     (line.ToId != null && containedStates.Contains(line.ToId))))
+                {
+                    continue;
+                }
 
                 // Check if line segment passes through node's bounding box
                 if (LineIntersectsRect(line.X1, line.Y1, line.X2, line.Y2,
@@ -254,10 +402,45 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     continue;
                 }
 
+                // A composite and one of its own descendants are supposed to intersect - but then the child
+                // must sit entirely inside the container's content region, below the title band. A partial
+                // overlap here is a child escaping its box, which is exactly what the unimplemented-
+                // containment bug looked like.
+                if (IsInsideDeclaredContainer(a, b) || IsInsideDeclaredContainer(b, a))
+                {
+                    continue;
+                }
+
                 throw new InvalidOperationException(
                     $"Node overlap detected: \"{a.Label}\" at ({a.X:F1},{a.Y:F1},{a.Width:F1}x{a.Height:F1}) overlaps with \"{b.Label}\" at ({b.X:F1},{b.Y:F1},{b.Width:F1}x{b.Height:F1})");
             }
         }
+    }
+
+    bool IsInsideDeclaredContainer(NodeBounds container, NodeBounds child)
+    {
+        if (container.Id == null ||
+            child.Id == null ||
+            !compositeContents.TryGetValue(container.Id, out var contents) ||
+            !contents.Contains(child.Id))
+        {
+            return false;
+        }
+
+        const double tolerance = 1;
+        var contentTop = container.Y + compositeTitleHeight;
+        var fullyInside = child.X >= container.X - tolerance &&
+                          child.Y >= contentTop - tolerance &&
+                          child.X + child.Width <= container.X + container.Width + tolerance &&
+                          child.Y + child.Height <= container.Y + container.Height + tolerance;
+
+        if (!fullyInside)
+        {
+            throw new InvalidOperationException(
+                $"Node escapes its composite: \"{child.Label}\" at ({child.X:F1},{child.Y:F1},{child.Width:F1}x{child.Height:F1}) is not fully inside \"{container.Label}\"'s content region ({container.X:F1},{contentTop:F1},{container.Width:F1}x{container.Height - compositeTitleHeight:F1})");
+        }
+
+        return true;
     }
 
     void CheckForElementsOutsideBounds()
@@ -496,28 +679,36 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0;
     }
 
-    // Notes sit on the side away from the routed-edge corridor (back-edges curve right, bidirectional
-    // forward edges curve left) so a corridor line never passes under the note. Falls back to the
-    // geometric side when neither side - or both sides - carry a corridor. Shared by CalculateNoteExtraSpace
-    // (space reservation) and RenderNotes (placement) so the two agree on where each note lands.
-    static bool PlaceNoteToRight(StateModel model, State state, Dictionary<string, State> stateMap)
+    // Where a note's box starts. The side is the one the diagram asked for - `note right of X` /
+    // `note left of X` - and a note on a side carrying a routed-edge corridor (back-edges curve right,
+    // bidirectional forward edges curve left) is pushed out past that corridor rather than flipped to the
+    // other side, so the declared side survives without a corridor line running under the note. Shared by
+    // CalculateNoteExtraSpace (space reservation) and RenderNotes (placement) so the two agree on where
+    // each note lands.
+    static double NoteX(StateModel model, StateNote note, State state, double noteWidth, Dictionary<string, State> stateMap)
     {
-        var diagramCenterX = model.States.Average(_ => _.Position.X);
-        var preferRight = state.Position.X >= diagramCenterX;
-        var hasRightCorridor = CalculateCurveExtraRight(model, stateMap) > 0;
-        var hasLeftCorridor = CalculateCurveExtraLeft(model, stateMap) > 0;
-
-        if (preferRight && hasRightCorridor && !hasLeftCorridor)
+        if (note.Position == NotePosition.RightOf)
         {
-            return false;
+            var x = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
+            var corridor = CalculateCurveExtraRight(model, stateMap);
+            if (corridor > 0)
+            {
+                var statesRight = model.States.Max(_ => _.Position.X + _.Width / 2);
+                x = Math.Max(x, statesRight + corridor + noteCorridorGap);
+            }
+
+            return x;
         }
 
-        if (!preferRight && hasLeftCorridor && !hasRightCorridor)
+        var leftX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
+        var leftCorridor = CalculateCurveExtraLeft(model, stateMap);
+        if (leftCorridor > 0)
         {
-            return true;
+            var statesLeft = model.States.Min(_ => _.Position.X - _.Width / 2);
+            leftX = Math.Min(leftX, statesLeft - leftCorridor - noteCorridorGap - noteWidth);
         }
 
-        return preferRight;
+        return leftX;
     }
 
     static (double extraWidth, double extraHeight, double extraLeft) CalculateNoteExtraSpace(StateModel model, Dictionary<string, State> stateMap, RenderOptions options)
@@ -535,17 +726,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
 
-            // Check horizontal space needed - notes go to outside of diagram, on the corridor-free side
-            var placeToRight = PlaceNoteToRight(model, state, stateMap);
-            double noteX;
-            if (placeToRight)
-            {
-                noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
-            }
-            else
-            {
-                noteX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
-            }
+            // Check horizontal space needed - notes go outside the diagram, clear of any edge corridor
+            var noteX = NoteX(model, note, state, noteWidth, stateMap);
 
             // Check if note extends past right edge
             var noteRightEdge = noteX + noteWidth;
@@ -579,6 +761,106 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         );
     }
 
+    /// <summary>
+    /// Lays out each composite's contents in a graph of their own, depth first, and sizes the composite to
+    /// the result. Nested states were previously added to the outer layout as flat siblings, so a composite
+    /// rendered as an empty box with its own contents beside it. Laying the interior out separately also
+    /// keeps a transition that names the composite pointing at a real node, which a cluster is not: aiming
+    /// such an edge at a state inside the cluster instead drags the outside endpoint into the box.
+    /// </summary>
+    void LayoutCompositeInteriors(List<State> states, Direction direction, RenderOptions options)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            // Depth first, so a nested composite is already sized when its parent lays out.
+            LayoutCompositeInteriors(state.NestedStates, direction, options);
+
+            var interior = new StateLayoutGraph
+            {
+                Direction = direction
+            };
+
+            foreach (var nested in state.NestedStates)
+            {
+                var (width, height) = nested.IsComposite
+                    ? (nested.Width, nested.Height)
+                    : CalculateStateSize(nested, options);
+
+                interior.AddNode(new()
+                {
+                    Id = nested.Id,
+                    Label = nested.Description ?? nested.Id,
+                    Width = width,
+                    Height = height
+                });
+            }
+
+            foreach (var transition in state.NestedTransitions)
+            {
+                interior.AddEdge(new()
+                {
+                    SourceId = transition.FromId,
+                    TargetId = transition.ToId,
+                    Label = transition.Label
+                });
+            }
+
+            var result = layoutEngine.BuildLayout(interior, new()
+            {
+                Direction = direction,
+                NodeSeparation = 60,
+                RankSeparation = 50
+            });
+
+            // Held relative to the interior's own origin until PlaceCompositeChildren moves them. Sizes
+            // come from here too: a nested state takes no part in the outer layout, so nothing else sets
+            // them and its box would be drawn zero-sized.
+            foreach (var nested in state.NestedStates)
+            {
+                var node = interior.GetNode(nested.Id);
+                if (node != null)
+                {
+                    nested.Position = node.Position;
+                    nested.Width = node.Width;
+                    nested.Height = node.Height;
+                }
+            }
+
+            state.Width = result.Width + compositePadding * 2;
+            state.Height = result.Height + compositePadding * 2 + compositeTitleHeight;
+        }
+    }
+
+    /// <summary>
+    /// Translates each composite's contents from the interior layout's own coordinates into the box's final
+    /// position. Runs parent-first, so a nested composite is absolute before its own children are moved.
+    /// </summary>
+    static void PlaceCompositeChildren(List<State> states)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            var originX = state.Position.X - state.Width / 2 + compositePadding;
+            var originY = state.Position.Y - state.Height / 2 + compositeTitleHeight + compositePadding;
+
+            foreach (var nested in state.NestedStates)
+            {
+                nested.Position = new(originX + nested.Position.X, originY + nested.Position.Y);
+            }
+
+            PlaceCompositeChildren(state.NestedStates);
+        }
+    }
+
     static GraphDiagramBase ConvertToGraphModel(StateModel model, RenderOptions options)
     {
         var graph = new StateLayoutGraph
@@ -586,53 +868,41 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             Direction = model.Direction
         };
 
-        // Add nodes for each state
         AddStatesToGraph(graph, model.States, options);
 
-        // Add edges for transitions
         foreach (var transition in model.Transitions)
         {
-            var edge = new Edge
+            graph.AddEdge(new()
             {
                 SourceId = transition.FromId,
                 TargetId = transition.ToId,
                 Label = transition.Label
-            };
-            graph.AddEdge(edge);
+            });
         }
 
         return graph;
     }
 
+    /// <summary>
+    /// Only the states at this level become layout nodes. A composite enters as a single node already sized
+    /// to its contents by <see cref="LayoutCompositeInteriors"/>; its children are placed inside it
+    /// afterwards and take no part in the outer layout.
+    /// </summary>
     static void AddStatesToGraph(StateLayoutGraph graph, List<State> states, RenderOptions options)
     {
         foreach (var state in states)
         {
-            var (width, height) = CalculateStateSize(state, options);
-            var node = new Node
+            var (width, height) = state.IsComposite
+                ? (state.Width, state.Height)
+                : CalculateStateSize(state, options);
+
+            graph.AddNode(new()
             {
                 Id = state.Id,
                 Label = state.Description ?? state.Id,
                 Width = width,
                 Height = height
-            };
-            graph.AddNode(node);
-
-            // Add nested states for composite states
-            if (state.IsComposite)
-            {
-                AddStatesToGraph(graph, state.NestedStates, options);
-                foreach (var nestedTransition in state.NestedTransitions)
-                {
-                    var edge = new Edge
-                    {
-                        SourceId = nestedTransition.FromId,
-                        TargetId = nestedTransition.ToId,
-                        Label = nestedTransition.Label
-                    };
-                    graph.AddEdge(edge);
-                }
-            }
+            });
         }
     }
 
@@ -677,16 +947,20 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 state.Height = node.Height;
             }
 
-            if (state.IsComposite)
-            {
-                CopyPositionsToStates(state.NestedStates, graph);
-            }
+            // Nested states keep their interior-relative positions here; PlaceCompositeChildren moves
+            // them once every container has its final place.
         }
     }
 
-    static void AlignSingleChildNodes(StateModel model)
+    /// <summary>
+    /// Lines the start marker up with its only child, and the end marker up with its only parent, so a
+    /// terminal marker sits squarely on the run it belongs to instead of wherever the ranking left it.
+    /// The alignment is along the <em>cross</em> axis - the one ranks do not advance along - which is X for
+    /// a top-down diagram and Y for a left-to-right one. Doing it on X unconditionally moved a start's child
+    /// onto its own neighbour under <c>direction LR</c>, where X is what separates the ranks.
+    /// </summary>
+    static void AlignSingleChildNodes(StateModel model, Direction direction)
     {
-        // Find the horizontal center of the diagram
         var contentStates = model.States
             .Where(_ => _.Type != StateType.Start && _.Type != StateType.End)
             .ToList();
@@ -695,13 +969,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             return;
         }
 
-        var diagramCenterX = (contentStates.Min(_ => _.Position.X) + contentStates.Max(_ => _.Position.X)) / 2;
+        var horizontalRanks = direction is Direction.LeftToRight or Direction.RightToLeft;
 
-        // Center start node
+        var center = horizontalRanks
+            ? (contentStates.Min(_ => _.Position.Y) + contentStates.Max(_ => _.Position.Y)) / 2
+            : (contentStates.Min(_ => _.Position.X) + contentStates.Max(_ => _.Position.X)) / 2;
+
         var startNode = model.States.FirstOrDefault(_ => _.Type == StateType.Start);
         if (startNode != null)
         {
-            startNode.Position = startNode.Position with {X = diagramCenterX};
+            startNode.Position = WithCrossAxis(startNode.Position, center, horizontalRanks);
 
             // If start has only one child, align that child with start
             var startChildren = model.Transitions.Where(_ => _.FromId == startNode.Id).ToList();
@@ -711,7 +988,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 if (childState != null &&
                     childState.Type != StateType.Fork)
                 {
-                    childState.Position = childState.Position with {X = diagramCenterX};
+                    childState.Position = WithCrossAxis(childState.Position, center, horizontalRanks);
                 }
             }
         }
@@ -726,11 +1003,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 var parentState = model.States.FirstOrDefault(_ => _.Id == endParents[0].FromId);
                 if (parentState != null)
                 {
-                    endNode.Position = new(parentState.Position.X, endNode.Position.Y);
+                    var parentCross = horizontalRanks ? parentState.Position.Y : parentState.Position.X;
+                    endNode.Position = WithCrossAxis(endNode.Position, parentCross, horizontalRanks);
                 }
             }
         }
     }
+
+    static Position WithCrossAxis(Position position, double value, bool horizontalRanks) =>
+        horizontalRanks
+            ? position with {Y = value}
+            : position with {X = value};
 
     static void AdjustEndNodePosition(StateModel model)
     {
@@ -838,6 +1121,26 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
+    /// <summary>
+    /// Draws every composite's container - box, title and separator - ahead of the transitions, so a filled
+    /// container cannot paint over the contents it holds. The states inside are drawn afterwards, with the
+    /// rest.
+    /// </summary>
+    void RenderCompositeBoxes(SvgBuilder builder, List<State> states, RenderOptions options)
+    {
+        foreach (var state in states)
+        {
+            if (!state.IsComposite)
+            {
+                continue;
+            }
+
+            RenderCompositeState(builder, state, options);
+            TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id, state.Id);
+            RenderCompositeBoxes(builder, state.NestedStates, options);
+        }
+    }
+
     void RenderState(SvgBuilder builder, State state, RenderOptions options)
     {
         var x = state.Position.X;
@@ -854,7 +1157,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#333",
                     stroke: "#333",
                     strokeWidth: 1);
-                TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
+                TrackNode(x, y, specialStateSize, specialStateSize, state.Id, state.Id);
                 break;
 
             case StateType.End:
@@ -873,7 +1176,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#333",
                     stroke: "#333",
                     strokeWidth: 1);
-                TrackNode(x, y, specialStateSize, specialStateSize, state.Id);
+                TrackNode(x, y, specialStateSize, specialStateSize, state.Id, state.Id);
                 break;
 
             case StateType.Fork:
@@ -886,7 +1189,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     state.Height,
                     fill: "#333",
                     stroke: "#333");
-                TrackNode(x, y, state.Width, state.Height, state.Id);
+                TrackNode(x, y, state.Width, state.Height, state.Id, state.Id);
                 break;
 
             case StateType.Choice:
@@ -901,14 +1204,14 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#fff",
                     stroke: "#333",
                     strokeWidth: 1);
-                TrackNode(x, y, state.Width, state.Height, state.Id);
+                TrackNode(x, y, state.Width, state.Height, state.Id, state.Id);
                 break;
 
             default:
                 if (state.IsComposite)
                 {
-                    // Composite state - render as container with nested content
-                    RenderCompositeState(builder, state, options);
+                    // The container went down with the other composite boxes, before the transitions.
+                    RenderStates(builder, state.NestedStates, options);
                 }
                 else
                 {
@@ -934,7 +1237,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id);
+        TrackNode(state.Position.X, state.Position.Y, state.Width, state.Height, state.Id, state.Id);
 
         var label = state.Description ?? state.Id;
         if (state.Type == StateType.Normal)
@@ -978,7 +1281,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
-        TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize);
+        TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize, bold: true);
 
         // Separator line
         builder.AddLine(
@@ -988,9 +1291,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             y + 30,
             stroke: "#666",
             strokeWidth: 1);
-
-        // Render nested states
-        RenderStates(builder, state.NestedStates, options);
     }
 
     void RenderTransitions(SvgBuilder builder, StateModel model, RenderOptions options)
@@ -1037,42 +1337,60 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         // Render nested transitions
-        foreach (var state in model.States)
+        RenderNestedTransitions(builder, model.States, stateMap, model, options);
+    }
+
+    /// <summary>
+    /// Draws the transitions declared inside each composite, descending into nested composites. Only the
+    /// top level was walked before, so a composite inside a composite had its own transitions dropped.
+    /// </summary>
+    void RenderNestedTransitions(
+        SvgBuilder builder,
+        List<State> states,
+        Dictionary<string, State> outerMap,
+        StateModel model,
+        RenderOptions options)
+    {
+        foreach (var state in states)
         {
-            if (state.IsComposite)
+            if (!state.IsComposite)
             {
-                var nestedMap = BuildStateMap(state.NestedStates);
-                foreach (var map in stateMap)
+                continue;
+            }
+
+            var nestedMap = BuildStateMap(state.NestedStates);
+            foreach (var map in outerMap)
+            {
+                nestedMap.TryAdd(map.Key, map.Value);
+            }
+
+            var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
+
+            var nestedBackEdges = state.NestedTransitions
+                .Where(_ => IsBackEdge(_, nestedMap) && !nestedBidirectional.Contains(GetPairKey(_.FromId, _.ToId)))
+                .OrderBy(_ => nestedMap.TryGetValue(_.FromId, out var from) ? from.Position.X : 0)
+                .ToList();
+
+            foreach (var transition in state.NestedTransitions)
+            {
+                var pairKey = GetPairKey(transition.FromId, transition.ToId);
+                if (nestedBidirectional.Contains(pairKey))
                 {
-                    nestedMap.TryAdd(map.Key, map.Value);
+                    var isBackEdge = IsBackEdge(transition, nestedMap);
+                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, model, 0, options);
                 }
-
-                var nestedBidirectional = FindBidirectionalPairs(state.NestedTransitions);
-
-                var nestedBackEdges = state.NestedTransitions
-                    .Where(_ => IsBackEdge(_, nestedMap) && !nestedBidirectional.Contains(GetPairKey(_.FromId, _.ToId)))
-                    .OrderBy(_ => nestedMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
-                    .ToList();
-
-                foreach (var transition in state.NestedTransitions)
+                else if (IsBackEdge(transition, nestedMap))
                 {
-                    var pairKey = GetPairKey(transition.FromId, transition.ToId);
-                    if (nestedBidirectional.Contains(pairKey))
-                    {
-                        var isBackEdge = IsBackEdge(transition, nestedMap);
-                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, model, 0, options);
-                    }
-                    else if (IsBackEdge(transition, nestedMap))
-                    {
-                        var backEdgeIndex = nestedBackEdges.IndexOf(transition);
-                        RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, model, backEdgeIndex, options);
-                    }
-                    else
-                    {
-                        RenderTransition(builder, transition, nestedMap, options);
-                    }
+                    var backEdgeIndex = nestedBackEdges.IndexOf(transition);
+                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, model, backEdgeIndex, options);
+                }
+                else
+                {
+                    RenderTransition(builder, transition, nestedMap, options);
                 }
             }
+
+            RenderNestedTransitions(builder, state.NestedStates, nestedMap, model, options);
         }
     }
 
@@ -1134,17 +1452,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var rightEdge = baseRightEdge + backEdgeIndex * lineSpacing;
 
             // Back-edges use smooth curves: angle out, go vertical, angle back in
-            // Exit from right side of source state (center Y)
             var startX = fromState.Position.X + fromState.Width / 2;
-            var startY = fromState.Position.Y;
             // Enter right side of target state - offset each line so they don't overlap
             // Outer lines (higher index, further right) enter higher to avoid crossing
             var endX = toState.Position.X + toState.Width / 2;
             const double entrySpacing = 15.0;
             var endY = toState.Position.Y - backEdgeIndex * entrySpacing;
+            // Exit from the right side of the source, clear of anything parked beside it
+            var startY = ClearExitY(model, fromState, toState, startX, rightEdge, endY);
 
             // Radius for the quarter-circle curves at corners
-            var curveRadius = Math.Min(80, (rightEdge - startX) / 2);
+            var curveRadius = CurveRadius(rightEdge - startX, startY - endY);
 
             // Path: smooth curve out, vertical line, smooth curve in
             // Curves gradually transition - tangent horizontal at state, tangent vertical at line
@@ -1157,11 +1475,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track segments for collision detection (symmetric at both ends)
             // Exit: only track initial horizontal portion before curve rises
-            TrackLine(startX, startY, startX + curveRadius, startY, lineLabel);
+            TrackCubic(
+                startX, startY,
+                startX + curveRadius, startY,
+                rightEdge, startY - curveRadius,
+                rightEdge, startY - curveRadius * 2,
+                lineLabel, transition.FromId, transition.ToId);
             // Vertical segment
-            TrackLine(rightEdge, startY - curveRadius * 2, rightEdge, endY + curveRadius * 2, lineLabel);
+            TrackLine(rightEdge, startY - curveRadius * 2, rightEdge, endY + curveRadius * 2, lineLabel, transition.FromId, transition.ToId);
             // Entry: only track final horizontal portion after curve flattens
-            TrackLine(endX + curveRadius, endY, endX, endY, lineLabel);
+            TrackCubic(
+                rightEdge, endY + curveRadius * 2,
+                rightEdge, endY + curveRadius,
+                endX + curveRadius, endY,
+                endX, endY,
+                lineLabel, transition.FromId, transition.ToId);
 
             // Arrowhead comes in horizontally from the right
             DrawArrowhead(builder, endX + curveRadius, endY, endX, endY);
@@ -1188,7 +1516,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     options.FontSize - 2,
                     options.FontFamily,
                     fill: "#666");
-                TrackText(rightEdge, labelY, transition.Label, "middle", options.FontSize - 2);
+                TrackTextBox(rightEdge, labelY, labelWidth, labelHeight, transition.Label);
             }
         }
         else
@@ -1203,16 +1531,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             const int lineSpacing = 50;
             var leftEdge = baseLeftEdge - backEdgeIndex * lineSpacing;
 
-            // Exit from left side of source state (center Y)
             var startX = fromState.Position.X - fromState.Width / 2;
-            var startY = fromState.Position.Y;
             // Enter left side of target state
             var endX = toState.Position.X - toState.Width / 2;
             const double entrySpacing = 15.0;
             var endY = toState.Position.Y + backEdgeIndex * entrySpacing;
+            // Exit from the left side of the source, clear of anything parked beside it
+            var startY = ClearExitY(model, fromState, toState, startX, leftEdge, endY);
 
             // Radius for the quarter-circle curves at corners (mirror of back-edge)
-            var curveRadius = Math.Min(80, (startX - leftEdge) / 2);
+            var curveRadius = CurveRadius(startX - leftEdge, endY - startY);
 
             // Path: smooth curve out to left, vertical line down, smooth curve in
             // Mirror of back-edge algorithm
@@ -1224,9 +1552,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
             // Track segments for collision detection (mirror of back-edge)
-            TrackLine(startX, startY, startX - curveRadius, startY, lineLabel);
-            TrackLine(leftEdge, startY + curveRadius * 2, leftEdge, endY - curveRadius * 2, lineLabel);
-            TrackLine(endX - curveRadius, endY, endX, endY, lineLabel);
+            TrackCubic(
+                startX, startY,
+                startX - curveRadius, startY,
+                leftEdge, startY + curveRadius,
+                leftEdge, startY + curveRadius * 2,
+                lineLabel, transition.FromId, transition.ToId);
+            TrackLine(leftEdge, startY + curveRadius * 2, leftEdge, endY - curveRadius * 2, lineLabel, transition.FromId, transition.ToId);
+            TrackCubic(
+                leftEdge, endY - curveRadius * 2,
+                leftEdge, endY - curveRadius,
+                endX - curveRadius, endY,
+                endX, endY,
+                lineLabel, transition.FromId, transition.ToId);
 
             // Arrowhead comes in horizontally from the left
             DrawArrowhead(builder, endX - curveRadius, endY, endX, endY);
@@ -1250,10 +1588,124 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     transition.Label,
                     options.FontSize - 2,
                     options.FontFamily);
-                TrackText(leftEdge, labelY, transition.Label, "middle", options.FontSize - 2);
+                TrackTextBox(leftEdge, labelY, labelWidth, labelHeight, transition.Label);
             }
         }
     }
+
+    /// <summary>
+    /// Y at which a routed edge leaves its source. The exit sweeps horizontally out to the corridor at the
+    /// source's centre height, so a state parked beside the source is cut through - the final-state marker
+    /// sits directly right of Inactive in TransitionLabels, and the reset edge ran through its ring. Slides
+    /// the exit along the source's border, nearest the centre first, until the curve it produces is clear.
+    /// Keeps the centre when nothing clears, rather than pushing the exit off the border.
+    /// </summary>
+    static double ClearExitY(StateModel model, State from, State to, double startX, double corridorX, double endY)
+    {
+        var left = Math.Min(startX, corridorX);
+        var right = Math.Max(startX, corridorX);
+
+        var blockers = new List<(double Left, double Top, double Right, double Bottom)>();
+        foreach (var state in model.States)
+        {
+            if (state.Id == from.Id || state.Id == to.Id)
+            {
+                continue;
+            }
+
+            var halfWidth = state.Width / 2;
+            if (state.Position.X + halfWidth < left || state.Position.X - halfWidth > right)
+            {
+                continue;
+            }
+
+            var halfHeight = state.Height / 2;
+            blockers.Add((
+                state.Position.X - halfWidth - exitClearance,
+                state.Position.Y - halfHeight - exitClearance,
+                state.Position.X + halfWidth + exitClearance,
+                state.Position.Y + halfHeight + exitClearance));
+        }
+
+        if (blockers.Count == 0)
+        {
+            return from.Position.Y;
+        }
+
+        // Stay far enough inside the source's border that the exit lands on its straight part, not a corner.
+        var reach = from.Height / 2 - exitClearance;
+        foreach (var candidate in ExitCandidates(from.Position.Y, reach))
+        {
+            if (ExitCurveClear(startX, candidate, corridorX, endY, blockers))
+            {
+                return candidate;
+            }
+        }
+
+        return from.Position.Y;
+    }
+
+    static IEnumerable<double> ExitCandidates(double centerY, double reach)
+    {
+        yield return centerY;
+
+        for (var offset = exitStep; offset <= reach; offset += exitStep)
+        {
+            yield return centerY - offset;
+            yield return centerY + offset;
+        }
+    }
+
+    /// <summary>
+    /// Whether the exit flare leaving <paramref name="startY"/> stays out of every blocker. Samples the same
+    /// cubic the path is built from, so the test sees the curve that will actually be drawn rather than a
+    /// straight-line approximation of it - the curve climbs away from the source quickly, and treating it as
+    /// a horizontal stub rejects exits that are in fact clear.
+    /// </summary>
+    static bool ExitCurveClear(
+        double startX,
+        double startY,
+        double corridorX,
+        double endY,
+        List<(double Left, double Top, double Right, double Bottom)> blockers)
+    {
+        var radius = CurveRadius(Math.Abs(corridorX - startX), endY - startY);
+        var towardCorridor = Math.Sign(corridorX - startX);
+        var towardTarget = endY < startY ? -1 : 1;
+
+        double x0 = startX, y0 = startY;
+        double x1 = startX + towardCorridor * radius, y1 = startY;
+        double x2 = corridorX, y2 = startY + towardTarget * radius;
+        double x3 = corridorX, y3 = startY + towardTarget * radius * 2;
+
+        const int samples = 24;
+        for (var i = 0; i <= samples; i++)
+        {
+            var t = (double) i / samples;
+            var u = 1 - t;
+            var x = u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3;
+            var y = u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3;
+
+            foreach (var blocker in blockers)
+            {
+                if (x > blocker.Left && x < blocker.Right && y > blocker.Top && y < blocker.Bottom)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Corner radius for a routed edge's two quarter-circle flares. Each flare consumes
+    /// <c>2 * radius</c> of the vertical run, and the straight segment joins where they end, so a radius
+    /// past a quarter of that run puts the second flare's start *above* the first flare's end and the
+    /// straight segment doubles back over the label.
+    /// </summary>
+    static double CurveRadius(double horizontalRun, double verticalRun) =>
+        Math.Min(Math.Min(80, horizontalRun / 2), Math.Abs(verticalRun) / 4);
 
     static Dictionary<string, State> BuildStateMap(List<State> states)
     {
@@ -1296,7 +1748,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddLine(startX, startY, endX, endY, stroke: "#333", strokeWidth: 1);
 
             var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
-            TrackLine(startX, startY, endX, endY, lineLabel);
+            TrackLine(startX, startY, endX, endY, lineLabel, transition.FromId, transition.ToId);
 
             // Draw arrowhead
             DrawArrowhead(builder, startX, startY, endX, endY);
@@ -1322,7 +1774,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     transition.Label,
                     options.FontSize - 2,
                     options.FontFamily);
-                TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+                TrackTextBox(labelX, labelY, labelWidth, labelHeight, transition.Label);
             }
         }
         else
@@ -1464,6 +1916,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var top = state.Position.Y - state.Height / 2 - 5;
             var bottom = state.Position.Y + state.Height / 2 + 5;
 
+            // A box holding both ends is the container the transition runs inside, not something in its
+            // way. Without this every transition inside a composite treated the composite as an obstacle
+            // and was routed out around it.
+            if (x1 > left && x1 < right && y1 > top && y1 < bottom &&
+                x2 > left && x2 < right && y2 > top && y2 < bottom)
+            {
+                continue;
+            }
+
             // Sample points along the line
             for (var i = 1; i < 20; i++)
             {
@@ -1563,11 +2024,11 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
         var lineLabel = transition.Label ?? $"{transition.FromId}->{transition.ToId}";
         // Track the segments
-        TrackLine(startX, startY, startX, obstacleTop - margin, lineLabel);
-        TrackLine(startX, obstacleTop - margin, routeX, obstacleTop - margin, lineLabel);
-        TrackLine(routeX, obstacleTop - margin, routeX, horizontalY, lineLabel);
-        TrackLine(routeX, horizontalY, endX, horizontalY, lineLabel);
-        TrackLine(endX, horizontalY, endX, endY, lineLabel);
+        TrackLine(startX, startY, startX, obstacleTop - margin, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(startX, obstacleTop - margin, routeX, obstacleTop - margin, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(routeX, obstacleTop - margin, routeX, horizontalY, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(routeX, horizontalY, endX, horizontalY, lineLabel, transition.FromId, transition.ToId);
+        TrackLine(endX, horizontalY, endX, endY, lineLabel, transition.FromId, transition.ToId);
 
         // Draw arrowhead (pointing up since we approach from below)
         DrawArrowhead(builder, endX, horizontalY, endX, endY);
@@ -1594,7 +2055,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 transition.Label,
                 options.FontSize - 2,
                 options.FontFamily);
-            TrackText(labelX, labelY, transition.Label, "middle", options.FontSize - 2);
+            TrackTextBox(labelX, labelY, labelWidth, labelHeight, transition.Label);
         }
     }
 
@@ -1763,20 +2224,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var spaceBelow = maxY - state.Position.Y;
             var placeBelow = spaceBelow >= spaceAbove;
 
-            // Position note to the outside of the diagram, on the side clear of the routed-edge corridor
-            var placeToRight = PlaceNoteToRight(model, state, stateMap);
-            double noteX;
-
-            if (placeToRight)
-            {
-                // Place to the right of the state (outside edge)
-                noteX = state.Position.X + state.Width / 2 + noteHorizontalOffset - noteWidth / 2;
-            }
-            else
-            {
-                // Place to the left of the state (outside edge)
-                noteX = state.Position.X - state.Width / 2 - noteHorizontalOffset - noteWidth / 2;
-            }
+            // Position note outside the diagram on its declared side, clear of any edge corridor
+            var noteX = NoteX(model, note, state, noteWidth, stateMap);
 
             var noteY = placeBelow
                 ? state.Position.Y + state.Height / 2 + noteVerticalOffset
@@ -1822,8 +2271,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             builder.AddPath(path, fill: "#FFFFCC", stroke: "#AAAA33", strokeWidth: 1);
 
-            // Track note as a node for line-under-node detection
-            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}");
+            // Track note as a node for line-under-node detection. The id is what lets the connector below
+            // be exempted from its own note while still being checked against everything else.
+            var noteId = $"note:{note.StateId}:{note.Text}";
+            TrackNode(noteX + noteWidth / 2, noteY + noteHeight / 2, noteWidth, noteHeight, $"Note: {note.Text}", noteId);
 
             // Fold corner
             builder.AddLine(
@@ -1877,9 +2328,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 $"M {stateConnectX:0.##} {stateConnectY:0.##} Q {stateConnectX:0.##} {midY:0.##}, {noteConnectX:0.##} {noteConnectY:0.##}");
 
             builder.AddPath(curvePath, fill: "none", stroke: "#333", strokeWidth: 1, strokeDasharray: "5,5");
+
+            // The connector is a drawn line like any other. It went untracked, so it was free to run under
+            // any state on its way to the note without the self-checks noticing.
+            TrackQuadratic(
+                stateConnectX, stateConnectY,
+                stateConnectX, midY,
+                noteConnectX, noteConnectY,
+                $"note connector for {state.Id}",
+                state.Id,
+                noteId);
         }
     }
 
-    static double MeasureText(string text, double fontSize) =>
-        text.Length * fontSize * 0.6;
+    static double MeasureText(string text, double fontSize, bool bold = false) =>
+        text.Length * fontSize * (bold ? 0.7 : 0.6);
 }

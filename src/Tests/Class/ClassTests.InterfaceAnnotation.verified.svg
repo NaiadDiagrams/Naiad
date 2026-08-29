@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 140 90"
-  style="max-width: 140px;"
+  viewBox="0 0 167.8 131"
+  style="max-width: 167.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -69,17 +69,38 @@
     <rect
       x="0"
       y="0"
-      width="100"
-      height="50"
-      fill="#FFFFDE"
+      width="127.8"
+      height="91"
+      fill="#E8F4FD"
       stroke="#333" />
     <text
-      x="50"
+      x="63.9"
       y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">&lt;&lt;interface&gt;&gt;</text>
+    <text
+      x="63.9"
+      y="40"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif"
       font-weight="bold">IFlyable</text>
+    <line
+      x1="0"
+      y1="60"
+      x2="127.8"
+      y2="60"
+      stroke="#333" />
+    <text
+      x="10"
+      y="71"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ fly() : void</text>
   </g>
 </svg>

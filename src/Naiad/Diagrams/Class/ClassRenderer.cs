@@ -8,6 +8,10 @@ public class ClassRenderer :
     const double minWidth = 100;
     const double separatorHeight = 1;
 
+    // Far enough along the edge to clear both the class border and the relationship marker.
+    const double cardinalityDistance = 22;
+    const double cardinalityOffset = 10;
+
     public SvgDocument Render(ClassModel model, RenderOptions options)
     {
         // Convert to graph diagram for layout
@@ -263,8 +267,7 @@ public class ClassRenderer :
             return;
         }
 
-        var isDotted = rel.Type is RelationshipType.DependencyLeft or RelationshipType.DependencyRight or RelationshipType.Realization;
-        var dashArray = isDotted ? "5,5" : null;
+        var dashArray = rel.IsDashed ? "5,5" : null;
 
         // Dagre-routed, B-spline-smoothed path shared with the other graph diagrams.
         builder.AddPath(
@@ -274,10 +277,12 @@ public class ClassRenderer :
             strokeWidth: 1,
             strokeDasharray: dashArray);
 
-        // Relationship marker sits at the target end, oriented by the curve's tangent there.
+        // Each marker sits on the end the author wrote it on — the triangle of `Animal <|-- Dog` belongs
+        // to Animal — oriented by the curve's tangent as it arrives there.
         var start = points[0];
         var end = points[^1];
-        DrawRelationshipMarker(builder, rel.Type, end.X, end.Y, points[^2].X, points[^2].Y);
+        DrawRelationshipMarker(builder, rel.FromMarker, start.X, start.Y, points[1].X, points[1].Y);
+        DrawRelationshipMarker(builder, rel.ToMarker, end.X, end.Y, points[^2].X, points[^2].Y);
 
         // Draw label if present
         if (!string.IsNullOrEmpty(rel.Label))
@@ -295,61 +300,66 @@ public class ClassRenderer :
         }
 
         // Draw cardinalities near each end
-        if (!string.IsNullOrEmpty(rel.FromCardinality))
-        {
-            builder.AddText(
-                start.X + 10,
-                start.Y - 10,
-                rel.FromCardinality,
-                anchor: "start",
-                baseline: "bottom",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
-        }
-
-        if (!string.IsNullOrEmpty(rel.ToCardinality))
-        {
-            builder.AddText(
-                end.X - 10,
-                end.Y - 10,
-                rel.ToCardinality,
-                anchor: "end",
-                baseline: "bottom",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily);
-        }
+        DrawCardinality(builder, rel.FromCardinality, start, points[1], options);
+        DrawCardinality(builder, rel.ToCardinality, end, points[^2], options);
     }
 
-    static void DrawRelationshipMarker(SvgBuilder builder, RelationshipType type, double x, double y, double fromX, double fromY)
+    /// <summary>
+    /// Places a cardinality beside the line just clear of the node it belongs to. The offset follows the
+    /// edge's own direction rather than a fixed screen direction, so the label stays outside the class box
+    /// (which paints over it) whichever way the edge leaves.
+    /// </summary>
+    static void DrawCardinality(SvgBuilder builder, string? text, Position at, Position toward, RenderOptions options)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return;
+        }
+
+        var dx = toward.X - at.X;
+        var dy = toward.Y - at.Y;
+        var length = Math.Sqrt(dx * dx + dy * dy);
+        if (length < 0.001)
+        {
+            return;
+        }
+
+        dx /= length;
+        dy /= length;
+
+        builder.AddText(
+            at.X + dx * cardinalityDistance - dy * cardinalityOffset,
+            at.Y + dy * cardinalityDistance + dx * cardinalityOffset,
+            text,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 2,
+            fontFamily: options.FontFamily);
+    }
+
+    static void DrawRelationshipMarker(SvgBuilder builder, RelationshipMarker marker, double x, double y, double fromX, double fromY)
     {
         var angle = Math.Atan2(y - fromY, x - fromX);
         const double markerSize = 10.0;
 
-        switch (type)
+        switch (marker)
         {
-            case RelationshipType.Inheritance:
-            case RelationshipType.Realization:
-                // Hollow triangle
+            case RelationshipMarker.Triangle:
                 var points = GetTrianglePoints(x, y, angle, markerSize);
                 builder.AddPolygon(points, fill: "#fff", stroke: "#333");
                 break;
 
-            case RelationshipType.Composition:
-                // Filled diamond
+            case RelationshipMarker.FilledDiamond:
                 var diamondPoints = GetDiamondPoints(x, y, angle, markerSize);
                 builder.AddPolygon(diamondPoints, fill: "#333", stroke: "#333");
                 break;
 
-            case RelationshipType.Aggregation:
-                // Hollow diamond
+            case RelationshipMarker.HollowDiamond:
                 var aggDiamondPoints = GetDiamondPoints(x, y, angle, markerSize);
                 builder.AddPolygon(aggDiamondPoints, fill: "#fff", stroke: "#333");
                 break;
 
-            case RelationshipType.Association:
-            case RelationshipType.DependencyLeft:
-            case RelationshipType.DependencyRight:
-                // Arrow
+            case RelationshipMarker.Arrow:
                 var arrowPoints = GetArrowPoints(x, y, angle, markerSize);
                 builder.AddPolygon(arrowPoints, fill: "#333");
                 break;
@@ -409,19 +419,29 @@ public class ClassRenderer :
     static string FormatMember(ClassMember member)
     {
         var visibility = GetVisibilitySymbol(member.Visibility);
-        var staticPrefix = member.IsStatic ? "$ " : "";
         var typeStr = !string.IsNullOrEmpty(member.Type) ? $" : {member.Type}" : "";
-        return $"{visibility}{staticPrefix}{member.Name}{typeStr}";
+        return $"{visibility}{member.Name}{typeStr}{Classifier(member.IsStatic, false)}";
     }
 
     static string FormatMethod(ClassMethod method)
     {
         var visibility = GetVisibilitySymbol(method.Visibility);
-        var staticPrefix = method.IsStatic ? "$ " : "";
-        var abstractPrefix = method.IsAbstract ? "* " : "";
+        var parameters = string.Join(", ", method.Parameters.Select(FormatParameter));
         var returnTypeStr = !string.IsNullOrEmpty(method.ReturnType) ? $" : {method.ReturnType}" : "";
-        return $"{visibility}{staticPrefix}{abstractPrefix}{method.Name}(){returnTypeStr}";
+        return $"{visibility}{method.Name}({parameters}){Classifier(method.IsStatic, method.IsAbstract)}{returnTypeStr}";
     }
+
+    static string FormatParameter(MethodParameter parameter) =>
+        string.IsNullOrEmpty(parameter.Type) ? parameter.Name : $"{parameter.Name}: {parameter.Type}";
+
+    // Mermaid's trailing classifier: $ for static, * for abstract.
+    static string Classifier(bool isStatic, bool isAbstract) =>
+        (isStatic, isAbstract) switch
+        {
+            (true, _) => "$",
+            (_, true) => "*",
+            _ => ""
+        };
 
     static string GetVisibilitySymbol(Visibility visibility) =>
         visibility switch

@@ -1,4 +1,4 @@
-namespace Naiad;
+﻿namespace Naiad;
 
 public static class ShapePathGenerator
 {
@@ -150,23 +150,41 @@ public static class ShapePathGenerator
              """);
     }
 
+    /// <summary>
+    /// Mermaid's <c>rect_left_inv_arrow</c>: the top- and bottom-left corners are the leftmost points and
+    /// the mid-left vertex is pushed back in between them, so the left edge is a notch cut into the box —
+    /// not a point sticking out of it.
+    /// </summary>
     static string Asymmetric(double x, double y, double width, double height)
     {
-        var notch = width * 0.15;
+        var notch = AsymmetricNotch(height);
         return string.Create(
             culture,
             $"""
-             M{x + notch:0.##},{y:0.##}
+             M{x:0.##},{y:0.##}
              L{x + width:0.##},{y:0.##}
              L{x + width:0.##},{y + height:0.##}
-             L{x + notch:0.##},{y + height:0.##}
-             L{x:0.##},{y + height / 2:0.##} Z
+             L{x:0.##},{y + height:0.##}
+             L{x + notch:0.##},{y + height / 2:0.##} Z
              """);
     }
 
+    /// <summary>
+    /// How far <see cref="NodeShape.Asymmetric"/>'s left notch reaches into the box. Callers size the node
+    /// so the label clears it.
+    /// </summary>
+    public static double AsymmetricNotch(double height) =>
+        height / 2;
+
+    /// <summary>
+    /// How far <see cref="NodeShape.Subroutine"/>'s vertical bars sit in from each side. Fixed rather than a
+    /// share of the width, so a wide node does not push its bars further across its own label.
+    /// </summary>
+    public const double SubroutineBarInset = 8;
+
     static string Subroutine(double x, double y, double width, double height)
     {
-        var inset = width * 0.1;
+        const double inset = SubroutineBarInset;
         return string.Create(
             culture,
             $"""

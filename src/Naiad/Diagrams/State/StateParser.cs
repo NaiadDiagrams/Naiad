@@ -1,4 +1,4 @@
-using NotePosition = Naiad.Diagrams.State.NotePosition;
+﻿using NotePosition = Naiad.Diagrams.State.NotePosition;
 
 class StateParser : IDiagramParser<StateModel>
 {
@@ -234,9 +234,15 @@ class StateParser : IDiagramParser<StateModel>
                     var fromId = t.FromId;
                     var toId = t.ToId;
 
+                    // `[*]` means "the start/end of the enclosing region", so the id has to name that region
+                    // too. Keying every marker as plain "[*]_start" made a composite's own initial state and
+                    // the diagram's share one entry: the composite's transition then ran from the outer
+                    // marker, across the composite's border, to a state inside it.
+                    var scope = compositeStack.TryPeek(out var scopeState) ? $"{scopeState.Id}." : "";
+
                     if (fromId == "[*]")
                     {
-                        fromId = "[*]_start";
+                        fromId = $"{scope}[*]_start";
                         EnsureSpecialState(fromId, StateType.Start, stateMap, model, compositeStack);
                     }
                     else
@@ -246,7 +252,7 @@ class StateParser : IDiagramParser<StateModel>
 
                     if (toId == "[*]")
                     {
-                        toId = "[*]_end";
+                        toId = $"{scope}[*]_end";
                         EnsureSpecialState(toId, StateType.End, stateMap, model, compositeStack);
                     }
                     else
@@ -275,19 +281,26 @@ class StateParser : IDiagramParser<StateModel>
                     break;
 
                 case CompositeStartItem cs:
-                    var compositeState = new State
+                    // A composite block often names a state a transition has already introduced, as in
+                    // `[*] --> Outer` above `state Outer { … }`. Reuse that entry the way every other
+                    // branch here does: creating a second one left the id in model.States twice, and the
+                    // renderer drew it twice - once as a plain state, once as a container.
+                    if (!stateMap.TryGetValue(cs.Id, out var compositeState))
                     {
-                        Id = cs.Id
-                    };
-                    stateMap[cs.Id] = compositeState;
+                        compositeState = new State
+                        {
+                            Id = cs.Id
+                        };
+                        stateMap[cs.Id] = compositeState;
 
-                    if (compositeStack.TryPeek(out var compositeParent))
-                    {
-                        compositeParent.NestedStates.Add(compositeState);
-                    }
-                    else
-                    {
-                        model.States.Add(compositeState);
+                        if (compositeStack.TryPeek(out var compositeParent))
+                        {
+                            compositeParent.NestedStates.Add(compositeState);
+                        }
+                        else
+                        {
+                            model.States.Add(compositeState);
+                        }
                     }
 
                     compositeStack.Push(compositeState);

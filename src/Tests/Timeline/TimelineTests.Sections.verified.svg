@@ -2,13 +2,13 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 560 245"
-  style="max-width: 560px;"
+  viewBox="0 0 583.8 245"
+  style="max-width: 583.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <text
-    x="280"
+    x="291.9"
     y="40"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -18,14 +18,14 @@
   <rect
     x="20"
     y="60"
-    width="240"
+    width="263.8"
     height="165"
     rx="5"
     ry="5"
     fill="#E3F2FD"
     stroke="none" />
   <text
-    x="140"
+    x="151.9"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -34,14 +34,14 @@
     font-weight="bold"
     fill="#333">Early Era</text>
   <circle
-    cx="80"
+    cx="91.9"
     cy="140"
     r="8"
     fill="#2196F3"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="80"
+    x="91.9"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -50,7 +50,7 @@
     font-weight="bold"
     fill="#2196F3">1990</text>
   <rect
-    x="16.1"
+    x="28"
     y="170"
     width="127.8"
     height="20"
@@ -59,21 +59,21 @@
     fill="#fff"
     stroke="#2196F3" />
   <text
-    x="80"
+    x="91.9"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">World Wide Web</text>
   <circle
-    cx="200"
+    cx="223.8"
     cy="140"
     r="8"
     fill="#9C27B0"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="200"
+    x="223.8"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -82,7 +82,7 @@
     font-weight="bold"
     fill="#9C27B0">1995</text>
   <rect
-    x="151.5"
+    x="175.3"
     y="170"
     width="97"
     height="20"
@@ -91,14 +91,14 @@
     fill="#fff"
     stroke="#9C27B0" />
   <text
-    x="200"
+    x="223.8"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">Windows 95</text>
   <rect
-    x="280"
+    x="303.8"
     y="60"
     width="240"
     height="165"
@@ -107,7 +107,7 @@
     fill="#F3E5F5"
     stroke="none" />
   <text
-    x="400"
+    x="423.8"
     y="75"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -116,14 +116,14 @@
     font-weight="bold"
     fill="#333">Modern Era</text>
   <circle
-    cx="340"
+    cx="363.8"
     cy="140"
     r="8"
     fill="#4CAF50"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="340"
+    x="363.8"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -132,7 +132,7 @@
     font-weight="bold"
     fill="#4CAF50">2007</text>
   <rect
-    x="306.9"
+    x="330.7"
     y="170"
     width="66.2"
     height="20"
@@ -141,21 +141,21 @@
     fill="#fff"
     stroke="#4CAF50" />
   <text
-    x="340"
+    x="363.8"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">iPhone</text>
   <circle
-    cx="460"
+    cx="483.8"
     cy="140"
     r="8"
     fill="#FF9800"
     stroke="#333"
     stroke-width="2" />
   <text
-    x="460"
+    x="483.8"
     y="115"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -164,7 +164,7 @@
     font-weight="bold"
     fill="#FF9800">2010</text>
   <rect
-    x="434.6"
+    x="458.4"
     y="170"
     width="50.8"
     height="20"
@@ -173,16 +173,16 @@
     fill="#fff"
     stroke="#FF9800" />
   <text
-    x="460"
+    x="483.8"
     y="180"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif">iPad</text>
   <line
-    x1="80"
+    x1="91.9"
     y1="140"
-    x2="460"
+    x2="483.8"
     y2="140"
     stroke="#333"
     stroke-width="3" />

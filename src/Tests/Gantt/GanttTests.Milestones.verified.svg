@@ -161,7 +161,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">d1</text>
+    fill="#fff">Development</text>
   <text
     x="30"
     y="135"
@@ -173,4 +173,12 @@
     d="M 770 123 L 782 135 L 770 147 L 758 135 Z"
     fill="#FF9800"
     stroke="#333" />
+  <text
+    x="752"
+    y="135"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Release</text>
 </svg>

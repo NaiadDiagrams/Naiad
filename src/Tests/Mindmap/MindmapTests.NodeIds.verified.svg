@@ -52,8 +52,8 @@
     y="70"
     width="91.6"
     height="35"
-    rx="8"
-    ry="8"
+    rx="15"
+    ry="15"
     fill="#87CEEB"
     stroke="#5E90A4"
     stroke-width="2" />

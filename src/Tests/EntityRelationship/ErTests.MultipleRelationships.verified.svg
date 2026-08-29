@@ -2,55 +2,55 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 360 362"
-  style="max-width: 360px;"
+  viewBox="0 0 361.4 362"
+  style="max-width: 361.4px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <path
-      d="M60,30 L60,39.67 C60,49.33 60,68.67 60,88 C60,107.33 60,126.67 60,136.33 L60,146"
+      d="M61.4,30 L61.4,39.67 C61.4,49.33 61.4,68.67 61.4,88 C61.4,107.33 61.4,126.67 61.4,136.33 L61.4,146"
       fill="none"
       stroke="#333" />
     <line
-      x1="64"
-      y1="45"
-      x2="56"
-      y2="45"
+      x1="66.4"
+      y1="37"
+      x2="56.4"
+      y2="37"
       stroke="#333" />
     <line
-      x1="64"
-      y1="50"
-      x2="56"
-      y2="50"
+      x1="66.4"
+      y1="43"
+      x2="56.4"
+      y2="43"
+      stroke="#333" />
+    <line
+      x1="61.4"
+      y1="134"
+      x2="61.4"
+      y2="146"
+      stroke="#333" />
+    <line
+      x1="61.4"
+      y1="134"
+      x2="66.4"
+      y2="146"
+      stroke="#333" />
+    <line
+      x1="61.4"
+      y1="134"
+      x2="56.4"
+      y2="146"
       stroke="#333" />
     <circle
-      cx="60"
-      cy="131"
+      cx="61.4"
+      cy="128"
       r="4"
       fill="#fff"
       stroke="#333" />
-    <line
-      x1="60"
-      y1="123"
-      x2="60"
-      y2="115"
-      stroke="#333" />
-    <line
-      x1="60"
-      y1="123"
-      x2="64"
-      y2="115"
-      stroke="#333" />
-    <line
-      x1="60"
-      y1="123"
-      x2="56"
-      y2="115"
-      stroke="#333" />
     <rect
-      x="36.2"
+      x="37.6"
       y="80"
       width="47.6"
       height="16"
@@ -58,7 +58,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="60"
+      x="61.4"
       y="88"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -66,47 +66,47 @@
       font-family="Arial, sans-serif"
       fill="#333">places</text>
     <path
-      d="M60,176 L60,185.67 C60,195.33 60,214.67 73.24,234 C86.48,253.33 112.97,272.67 126.21,282.33 L139.45,292"
+      d="M61.4,176 L61.4,185.67 C61.4,195.33 61.4,214.67 74.64,234 C87.88,253.33 114.37,272.67 127.61,282.33 L140.85,292"
       fill="none"
       stroke="#333" />
     <line
-      x1="64"
-      y1="191"
-      x2="56"
-      y2="191"
+      x1="66.4"
+      y1="183"
+      x2="56.4"
+      y2="183"
       stroke="#333" />
     <line
-      x1="64"
-      y1="196"
-      x2="56"
-      y2="196"
+      x1="66.4"
+      y1="189"
+      x2="56.4"
+      y2="189"
       stroke="#333" />
     <line
-      x1="124.98"
-      y1="286.39"
-      x2="129.7"
-      y2="279.93"
+      x1="131.16"
+      y1="284.92"
+      x2="140.85"
+      y2="292"
       stroke="#333" />
     <line
-      x1="123.3"
-      y1="280.21"
-      x2="116.84"
-      y2="275.49"
+      x1="131.16"
+      y1="284.92"
+      x2="143.8"
+      y2="287.96"
       stroke="#333" />
     <line
-      x1="123.3"
-      y1="280.21"
-      x2="119.2"
-      y2="272.26"
+      x1="131.16"
+      y1="284.92"
+      x2="137.9"
+      y2="296.04"
       stroke="#333" />
     <line
-      x1="123.3"
-      y1="280.21"
-      x2="114.48"
-      y2="278.72"
+      x1="124.17"
+      y1="286.02"
+      x2="130.07"
+      y2="277.94"
       stroke="#333" />
     <rect
-      x="29.6"
+      x="31"
       y="226"
       width="60.8"
       height="16"
@@ -114,7 +114,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="60"
+      x="61.4"
       y="234"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -122,47 +122,47 @@
       font-family="Arial, sans-serif"
       fill="#333">contains</text>
     <path
-      d="M260,176 L260,185.67 C260,195.33 260,214.67 246.76,234 C233.52,253.33 207.03,272.67 193.79,282.33 L180.55,292"
+      d="M261.4,176 L261.4,185.67 C261.4,195.33 261.4,214.67 248.16,234 C234.92,253.33 208.43,272.67 195.19,282.33 L181.95,292"
       fill="none"
       stroke="#333" />
     <line
-      x1="264"
-      y1="191"
-      x2="256"
-      y2="191"
+      x1="266.4"
+      y1="183"
+      x2="256.4"
+      y2="183"
       stroke="#333" />
     <line
-      x1="264"
-      y1="196"
-      x2="256"
-      y2="196"
+      x1="266.4"
+      y1="189"
+      x2="256.4"
+      y2="189"
+      stroke="#333" />
+    <line
+      x1="191.64"
+      y1="284.92"
+      x2="181.95"
+      y2="292"
+      stroke="#333" />
+    <line
+      x1="191.64"
+      y1="284.92"
+      x2="184.9"
+      y2="296.04"
+      stroke="#333" />
+    <line
+      x1="191.64"
+      y1="284.92"
+      x2="179"
+      y2="287.96"
       stroke="#333" />
     <circle
-      cx="192.66"
-      cy="283.16"
+      cx="196.49"
+      cy="281.39"
       r="4"
       fill="#fff"
       stroke="#333" />
-    <line
-      x1="199.12"
-      y1="278.44"
-      x2="205.59"
-      y2="273.72"
-      stroke="#333" />
-    <line
-      x1="199.12"
-      y1="278.44"
-      x2="207.94"
-      y2="276.95"
-      stroke="#333" />
-    <line
-      x1="199.12"
-      y1="278.44"
-      x2="203.23"
-      y2="270.49"
-      stroke="#333" />
     <rect
-      x="229.6"
+      x="231"
       y="226"
       width="60.8"
       height="16"
@@ -170,7 +170,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="260"
+      x="261.4"
       y="234"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -180,7 +180,7 @@
     <rect
       x="0"
       y="0"
-      width="120"
+      width="122.8"
       height="30"
       fill="#ECECFF"
       stroke="#9370DB"
@@ -188,12 +188,12 @@
     <rect
       x="0"
       y="0"
-      width="120"
+      width="122.8"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="60"
+      x="61.4"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -202,7 +202,7 @@
       font-weight="bold"
       fill="#fff">CUSTOMER</text>
     <rect
-      x="0"
+      x="1.4"
       y="146"
       width="120"
       height="30"
@@ -210,14 +210,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="0"
+      x="1.4"
       y="146"
       width="120"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="60"
+      x="61.4"
       y="161"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -226,22 +226,22 @@
       font-weight="bold"
       fill="#fff">ORDER</text>
     <rect
-      x="100"
+      x="95.45"
       y="292"
-      width="120"
+      width="131.9"
       height="30"
       fill="#ECECFF"
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="100"
+      x="95.45"
       y="292"
-      width="120"
+      width="131.9"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="160"
+      x="161.4"
       y="307"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -250,7 +250,7 @@
       font-weight="bold"
       fill="#fff">LINE-ITEM</text>
     <rect
-      x="200"
+      x="201.4"
       y="146"
       width="120"
       height="30"
@@ -258,14 +258,14 @@
       stroke="#9370DB"
       stroke-width="2" />
     <rect
-      x="200"
+      x="201.4"
       y="146"
       width="120"
       height="30"
       fill="#9370DB"
       stroke="#9370DB" />
     <text
-      x="260"
+      x="261.4"
       y="161"
       text-anchor="middle"
       dominant-baseline="middle"

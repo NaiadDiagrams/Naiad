@@ -1,4 +1,4 @@
-namespace Naiad.Diagrams.Block;
+﻿namespace Naiad.Diagrams.Block;
 
 public class BlockRenderer : IDiagramRenderer<BlockModel>
 {
@@ -42,8 +42,24 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         // Calculate rows needed
         var rows = CalculateRows(model.Elements, columns);
 
-        var width = columns * cellWidth + options.Padding * 2;
-        var height = rows * cellHeight + options.Padding * 2 + titleOffset;
+        // A circle is inscribed in its cell, so the grid has to be at least as big as the largest circle
+        // label needs; at the default cell size the text spills straight out of the shape.
+        var cellW = cellWidth;
+        var cellH = cellHeight;
+        foreach (var element in model.Elements)
+        {
+            if (element.Shape != BlockShape.Circle)
+            {
+                continue;
+            }
+
+            var diameter = CircleDiameter(element.Label ?? element.Id, options);
+            cellW = Math.Max(cellW, diameter + cellPadding * 2);
+            cellH = Math.Max(cellH, diameter + cellPadding * 2);
+        }
+
+        var width = columns * cellW + options.Padding * 2;
+        var height = rows * cellH + options.Padding * 2 + titleOffset;
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
@@ -78,10 +94,10 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 span = Math.Min(element.Span, columns);
             }
 
-            var x = options.Padding + currentColumn * cellWidth + cellPadding;
-            var y = titleOffset + options.Padding + currentRow * cellHeight + cellPadding;
-            var blockWidth = span * cellWidth - cellPadding * 2;
-            const double blockHeight = cellHeight - cellPadding * 2;
+            var x = options.Padding + currentColumn * cellW + cellPadding;
+            var y = titleOffset + options.Padding + currentRow * cellH + cellPadding;
+            var blockWidth = span * cellW - cellPadding * 2;
+            var blockHeight = cellH - cellPadding * 2;
 
             var color = blockColors[colorIndex % blockColors.Length];
             var label = element.Label ?? element.Id;
@@ -134,6 +150,16 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
         return rows - 1;
     }
 
+    /// <summary>
+    /// Diameter of the smallest circle that contains the label's text box, plus a little breathing room.
+    /// </summary>
+    static double CircleDiameter(string label, RenderOptions options)
+    {
+        var fontSize = options.FontSize - 1;
+        var textWidth = label.Length * fontSize * 0.55;
+        return Math.Sqrt(textWidth * textWidth + fontSize * fontSize) + 12;
+    }
+
     static void DrawBlock(
         SvgBuilder builder,
         double x,
@@ -163,6 +189,18 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 break;
 
             case BlockShape.Rounded:
+                // A small corner radius. Half the height would make this a stadium, which is the
+                // separate ([...]) shape.
+                builder.AddRect(
+                    x,
+                    y,
+                    width,
+                    height,
+                    rx: 8,
+                    fill: color,
+                    stroke: "#333",
+                    strokeWidth: 1);
+                break;
 
             case BlockShape.Stadium:
                 builder.AddRect(

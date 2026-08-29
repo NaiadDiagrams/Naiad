@@ -167,7 +167,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">n1</text>
+    fill="#fff">Normal</text>
   <text
     x="30"
     y="135"
@@ -191,7 +191,7 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">c1</text>
+    fill="#fff">Critical</text>
   <text
     x="30"
     y="165"
@@ -215,5 +215,5 @@
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
-    fill="#fff">c2</text>
+    fill="#fff">Also Critical</text>
 </svg>

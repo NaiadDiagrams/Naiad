@@ -49,7 +49,10 @@ class ERParser : IDiagramParser<ERModel>
                 CommonParsers.InlineWhitespace
                     .Then(Char(':'))
                     .Then(CommonParsers.InlineWhitespace)
-                    .Then(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString())
+                    // A quoted label's delimiters are syntax, so take the string's contents when there is
+                    // one and fall back to the bare rest of the line otherwise.
+                    .Then(CommonParsers.DoubleQuotedString
+                        .Or(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()))
             ).Optional()
             from ____ in CommonParsers.InlineWhitespace
             from _____ in CommonParsers.LineEnd

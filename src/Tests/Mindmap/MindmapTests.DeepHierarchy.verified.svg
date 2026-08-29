@@ -32,14 +32,15 @@
     fill="none"
     stroke="#E0FFFF"
     stroke-width="2" />
-  <rect
-    x="20"
-    y="20"
-    width="60.8"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M20,55 V25 Q20,20 25,20 H75.8 Q80.8,20 80.8,25 V55 Z"
     fill="#FFB6C1"
+    stroke="none" />
+  <line
+    x1="20"
+    y1="55"
+    x2="80.8"
+    y2="55"
     stroke="#B27F87"
     stroke-width="2" />
   <text
@@ -50,14 +51,15 @@
     font-size="14px"
     font-family="Arial, sans-serif"
     font-weight="bold">Root</text>
-  <rect
-    x="120.8"
-    y="20"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M120.8,55 V25 Q120.8,20 125.8,20 H199.7 Q204.7,20 204.7,25 V55 Z"
     fill="#87CEEB"
+    stroke="none" />
+  <line
+    x1="120.8"
+    y1="55"
+    x2="204.7"
+    y2="55"
     stroke="#5E90A4"
     stroke-width="2" />
   <text
@@ -67,14 +69,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Level 1</text>
-  <rect
-    x="244.7"
-    y="20"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M244.7,55 V25 Q244.7,20 249.7,20 H323.6 Q328.6,20 328.6,25 V55 Z"
     fill="#98FB98"
+    stroke="none" />
+  <line
+    x1="244.7"
+    y1="55"
+    x2="328.6"
+    y2="55"
     stroke="#6AAF6A"
     stroke-width="2" />
   <text
@@ -84,14 +87,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Level 2</text>
-  <rect
-    x="368.6"
-    y="20"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M368.6,55 V25 Q368.6,20 373.6,20 H447.5 Q452.5,20 452.5,25 V55 Z"
     fill="#DDA0DD"
+    stroke="none" />
+  <line
+    x1="368.6"
+    y1="55"
+    x2="452.5"
+    y2="55"
     stroke="#9A709A"
     stroke-width="2" />
   <text
@@ -101,14 +105,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Level 3</text>
-  <rect
-    x="492.5"
-    y="20"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M492.5,55 V25 Q492.5,20 497.5,20 H571.4 Q576.4,20 576.4,25 V55 Z"
     fill="#F0E68C"
+    stroke="none" />
+  <line
+    x1="492.5"
+    y1="55"
+    x2="576.4"
+    y2="55"
     stroke="#A8A162"
     stroke-width="2" />
   <text
@@ -118,14 +123,15 @@
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Level 4</text>
-  <rect
-    x="616.4"
-    y="20"
-    width="83.9"
-    height="35"
-    rx="8"
-    ry="8"
+  <path
+    d="M616.4,55 V25 Q616.4,20 621.4,20 H695.3 Q700.3,20 700.3,25 V55 Z"
     fill="#E0FFFF"
+    stroke="none" />
+  <line
+    x1="616.4"
+    y1="55"
+    x2="700.3"
+    y2="55"
     stroke="#9CB2B2"
     stroke-width="2" />
   <text
